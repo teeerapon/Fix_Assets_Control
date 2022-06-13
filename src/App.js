@@ -1,24 +1,69 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import { AnimatePresence } from "framer-motion";
+import Signin from './Page/Signin';
+import Report from './Page/Menu/Report/Report';
+import ReportAll from './Page/Menu/Report/report_all';
+import AssetPage from './Page/Menu/Report/Assets';
+import AssetPage2 from './Page/Menu/Report/AssetsAll';
+import Page404 from './Page/Page404';
+import HomePage from './Page/Menu/HomePage/HomePage';
+import CreatePeriod from './Page/Menu/Period/Create/main';
+import CreatePeriod2 from './Page/Menu/Period/Create/main2';
+import CreatePeriod3 from './Page/Menu/Period/Create/main3';
+import EditPeriod from './Page/Menu/Period/Edit/EditPeriod';
+import NAC_CREATE_MAIN1 from './Page/Menu/NAC/nac_create/page_nac/nac_main_stepCreate';
+import NAC_CREATE_WAIT_APPROVE from './Page/Menu/NAC/nac_create/page_nac/nac_main_wait_approve';
+import NAC_CREATE_STEP1 from './Page/Menu/NAC/nac_create/page_create/nac_create_step1';
+import NAC_CHANGE_STEP1 from './Page/Menu/NAC/nac_create/nac_change/nac_change_step1';
+import NAC_DELETE_STEP1 from './Page/Menu/NAC/nac_create/nac_delete/nac_delete_step1';
+import NAC_ROW from './Page/Menu/NAC/doc_nacs_me/nac_row';
+import NAC_WAIT_APPROVE from './Page/Menu/NAC/doc_nacs_approve/nac_wait_approve';
+import NAC_CHANGE_WAIT_APPROVE from './Page/Menu/NAC/nac_create/nac_change/nac_change_wait_approve';
+import NAC_CREATE_NEW_WAIT_APPROVE from './Page/Menu/NAC/nac_create/page_create/nac_create_wait_approve';
+import NAC_DELETE_WAIT_APPROVE from './Page/Menu/NAC/nac_create/nac_delete/nac_delete_wait_approve';
+import NavBar from './Page/Nav/Nav';
+import { Route, Routes, useLocation } from "react-router";
+
 
 function App() {
+
+  const location = useLocation();
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    return <Signin />
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <NavBar />
+      <AnimatePresence exitBeforeEnter>
+        <Routes key={location.pathname} location={location}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/HomePage" element={<HomePage />} />
+          <Route path="/Report" element={<Report />} />
+          <Route path="/ReportAll" element={<ReportAll />} />
+          <Route path="/AssetPage" element={<AssetPage />} />
+          <Route path="/AssetPage2" element={<AssetPage2 />} />
+          <Route path="/CreatePeriod" element={<CreatePeriod />} />
+          <Route path="/CreatePeriod2" element={<CreatePeriod2 />} />
+          <Route path="/CreatePeriod3" element={<CreatePeriod3 />} />
+          <Route path="/EditPeriod" element={<EditPeriod />} />
+          <Route path="/NAC_CREATE_MAIN1" element={<NAC_CREATE_MAIN1 />} />
+          <Route path="/NAC_ROW/NAC_CREATE_WAIT_APPROVE" element={<NAC_CREATE_WAIT_APPROVE />} />
+          <Route path="/NAC_CREATE_STEP1" element={<NAC_CREATE_STEP1 />} />
+          <Route path="/NAC_CHANGE_STEP1" element={<NAC_CHANGE_STEP1 />} />
+          <Route path="/NAC_DELETE_STEP1" element={<NAC_DELETE_STEP1 />} />
+          <Route path="/NAC_ROW" element={<NAC_ROW />} />
+          <Route path="/NAC_WAIT_APPROVE" element={<NAC_WAIT_APPROVE />} />
+          <Route path="NAC_ROW/NAC_CHANGE_WAIT_APPROVE" element={<NAC_CHANGE_WAIT_APPROVE />} />
+          <Route path="NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE" element={<NAC_CREATE_NEW_WAIT_APPROVE />} />
+          <Route path="NAC_ROW/NAC_DELETE_WAIT_APPROVE" element={<NAC_DELETE_WAIT_APPROVE />} />
+          <Route path="*" element={<Page404 />} />
+        </Routes>
+      </AnimatePresence>
+    </>
   );
 }
 
