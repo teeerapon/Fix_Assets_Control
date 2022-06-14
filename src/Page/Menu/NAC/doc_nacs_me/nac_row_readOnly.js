@@ -11,7 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import swal from 'sweetalert';
-import { Outlet, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
@@ -61,7 +61,7 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
   };
 
   const handleChackStatus = () => {
-    if (selectNAC.nac_status == 1) {
+    if (selectNAC.nac_status === 1) {
       setStatus('รอยื่นคำร้อง')
     } else if (selectNAC.nac_status === 2) {
       setStatus('รอตรวจสอบ')

@@ -117,9 +117,6 @@ export default function Report() {
         UserBranch
       });
       if (response['data'].length != 0 || response2[0].length != 0 || response3[0].length != 0) {
-        localStorage.removeItem("Allassets");
-        localStorage.removeItem("aseetsCounted");
-        localStorage.removeItem("assetsWrong");
         swal("ทำรายการสำเร็จ", "ค้นหาข้อมูลเสร็จสิ้น", "success", {
           buttons: false,
           timer: 2000,

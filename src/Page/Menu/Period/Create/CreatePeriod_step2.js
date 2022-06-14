@@ -52,7 +52,6 @@ export default function AddressForm() {
       });
       if (response['data'] != 'มีการเปิดช่วงเวลาทับกัน'){
         if(response['data'] != 'ข้อมูลสาขาที่บันทึกไม่ถูกต้อง'){
-          localStorage.removeItem("DataCreatePeriod");
           navigate("/CreatePeriod3")
         }else{
           swal("ทำรายการไม่สำเร็จ", response.data, "error");

@@ -13,6 +13,9 @@ import Button from '@mui/material/Button';
 import SvgIcon from '@mui/material/SvgIcon';
 import { Outlet, useNavigate } from "react-router";
 import swal from 'sweetalert';
+import Grid from '@mui/material/Grid';
+import ListIcon from '@mui/icons-material/List';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,83 +62,63 @@ export default function MenuAppBar() {
   // };
 
   function PeriodOpen() {
-    localStorage.removeItem("DataCreatePeriod");
-    localStorage.removeItem("NacCode");
     navigate('/CreatePeriod')
     setAnchorEl3(null);
   };
 
   function HomePage() {
-    localStorage.removeItem("DataCreatePeriod");
-    localStorage.removeItem("NacCode");
+
     navigate('/HomePage')
     setAnchorEl3(null);
   };
 
   function PeriodEdit() {
-    localStorage.removeItem("DataCreatePeriod");
-    localStorage.removeItem("NacCode");
     navigate('/EditPeriod')
     setAnchorEl3(null);
   };
 
   function REPORT() {
-    localStorage.removeItem("DataCreatePeriod");
-    localStorage.removeItem("NacCode");
     navigate('/Report')
     setAnchorEl3(null);
   };
   function REPORTAll() {
-    localStorage.removeItem("DataCreatePeriod");
-    localStorage.removeItem("NacCode");
+
     navigate('/ReportAll')
     setAnchorEl3(null);
   };
 
   function NAC_NAC() {
-    localStorage.removeItem("DataCreatePeriod");
-    localStorage.removeItem("NacCode");
     navigate('/NAC_CREATE_MAIN1')
     setAnchorEl3(null);
     setAnchorEl5(null);
   };
 
   function NAC_NEW() {
-    localStorage.removeItem("DataCreatePeriod");
-    localStorage.removeItem("NacCode");
     navigate('/NAC_CREATE_STEP1')
     setAnchorEl3(null);
     setAnchorEl5(null);
   };
 
   function NAC_CHANGE() {
-    localStorage.removeItem("DataCreatePeriod");
-    localStorage.removeItem("NacCode");
-    navigate('NAC_CHANGE_STEP1')
+    navigate('/NAC_CHANGE_STEP1')
     setAnchorEl3(null);
     setAnchorEl5(null);
   }
 
   function NAC_DELETE() {
-    localStorage.removeItem("DataCreatePeriod");
-    localStorage.removeItem("NacCode");
-    navigate('NAC_DELETE_STEP1')
+    navigate('/NAC_DELETE_STEP1')
     setAnchorEl3(null);
     setAnchorEl5(null);
   }
 
   function DOC_NAC_ME() {
-    localStorage.removeItem("DataCreatePeriod");
-    localStorage.removeItem("NacCode");
-    navigate('NAC_ROW')
+    navigate('/NAC_ROW')
     setAnchorEl3(null);
     setAnchorEl5(null);
   }
 
   function NAC_WAIT_APPROVE() {
-    localStorage.removeItem("DataCreatePeriod");
-    localStorage.removeItem("NacCode");
-    navigate('NAC_WAIT_APPROVE')
+    navigate('/NAC_WAIT_APPROVE')
     setAnchorEl3(null);
     setAnchorEl5(null);
   }
@@ -244,7 +227,16 @@ export default function MenuAppBar() {
                   >
                     {auth5 && (
                       <div>
-                        <MenuItem onClick={handleMenu5}>การเปลี่ยนแปลงทรัพย์สินถาวร</MenuItem>
+                        <MenuItem onClick={handleMenu5}>
+                          <Grid container spacing={2}>
+                            <Grid item xs={10}>
+                              เปลี่ยนแปลงทรัพย์สินถาวร
+                            </Grid>
+                            <Grid item xs={2}>
+                              <ArrowRightIcon />
+                            </Grid>
+                          </Grid>
+                        </MenuItem>
                         <Menu
                           id="menu-appbar"
                           anchorEl={anchorEl5}
@@ -268,8 +260,8 @@ export default function MenuAppBar() {
                         </Menu>
                       </div>
                     )}
-                    <MenuItem onClick={DOC_NAC_ME}>รายการเปลี่ยนแปลงทรัพย์สินถาวรของฉัน</MenuItem>
-                    <MenuItem onClick={NAC_WAIT_APPROVE}>รายการเปลี่ยนแปลงทรัพย์สินถาวรที่ต้องอนุมัติ</MenuItem>
+                    <MenuItem onClick={DOC_NAC_ME}>เปลี่ยนแปลงทรัพย์สินถาวร ของฉัน</MenuItem>
+                    <MenuItem onClick={NAC_WAIT_APPROVE}>อนุมัติ เปลี่ยนแปลงทรัพย์สินถาวร</MenuItem>
                   </Menu>
                 </div>
               )}
@@ -299,7 +291,7 @@ export default function MenuAppBar() {
               )}
               {auth4 && (
                 <div>
-                  <Button onClick={handleMenu4} sx={{ my: 2, color: 'white', display: 'block' }}>REPORT</Button>
+                  <Button onClick={REPORT} sx={{ my: 2, color: 'white', display: 'block' }}>REPORT</Button>
                   <Menu
                     sx={{ mt: '45px' }}
                     id="menu-appbar"

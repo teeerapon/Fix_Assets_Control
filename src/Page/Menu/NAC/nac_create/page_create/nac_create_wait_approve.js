@@ -44,7 +44,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import Input from '@mui/material/Input';
 import swal from 'sweetalert';
+import List from '@mui/material/List';
 
 function Copyright() {
   return (
@@ -204,6 +206,30 @@ async function store_FA_control_updateStatus(credentials) {
     .then(data => data.json())
 }
 
+async function store_FA_control_comment(credentials) {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_comment', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
+async function qureyNAC_comment(credentials) {
+  return fetch('http://192.168.220.1:32001/api/qureyNAC_comment', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 export default function Nac_Main_wait() {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
@@ -233,6 +259,8 @@ export default function Nac_Main_wait() {
   const [ExecApprove, setExecApprove] = React.useState([]);
   const [CheckApprove, setCheckApprove] = React.useState([]);
   const [CheckExamineApprove, setCheckExamineApprove] = React.useState([]);
+  const [comment, setComment] = React.useState();
+  const [commentFetch, setCommentFetch] = React.useState([]);
 
   const navigate = useNavigate();
   const [valuesVisibility, setValuesVisibility] = React.useState({
@@ -360,13 +388,20 @@ export default function Nac_Main_wait() {
     setExamineApprove(ExamineApprove)
 
     for (let i = 0; i < (responseExecDocID.data.length); i++) {
-      if (responseExecDocID.data[i].limitamount >= price_approve && responseExecDocID.data[i].limitamount !== null) {
+      if (responseExecDocID.data[i].limitamount === null) {
         ExecApprove[i] = { approverid: responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status }
         CheckApprove[i] = responseExecDocID.data[i].approverid
       }
     }
     setExecApprove(ExecApprove)
     setCheckApprove(CheckApprove)
+
+    const responseFetch = await qureyNAC_comment({
+      nac_code
+    })
+    if ('data' in responseFetch) {
+      setCommentFetch(responseFetch.data)
+    }
   }
 
 
@@ -388,7 +423,7 @@ export default function Nac_Main_wait() {
   };
 
   const handleClickShowPassword = () => {
-    if (data.branchid != 901) {
+    if (data.branchid !== 901) {
       setValuesVisibility(false);
     } else {
       setValuesVisibility({ ...valuesVisibility, showText: !valuesVisibility.showText });
@@ -431,7 +466,7 @@ export default function Nac_Main_wait() {
       const response = await SelectDTL_Control({
         Code
       });
-      if (response['data'].length != 0) {
+      if (response['data'].length !== 0) {
         list[index]['name'] = response['data'][0].Name
         list[index]['dtl'] = response['data'][0].Details
         list[index]['count'] = 1
@@ -447,41 +482,34 @@ export default function Nac_Main_wait() {
   const handleChangeSource_Department = (event) => {
     event.preventDefault();
     setSource_Department(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeSource_BU = (event) => {
     event.preventDefault();
     setSource_BU(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeSource_delivery2 = (event) => {
     event.preventDefault();
     setSource(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeSource_deliveryDate = (newValue) => {
     setSourceDate(newValue);
-    console.log(newValue)
   };
 
   const handleChangeSource_deliveryApprove = (event) => {
     event.preventDefault();
     setSource_Approve(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeSource_deliveryApproveDate = (newValue) => {
     setSource_DateApproveDate(newValue);
-    console.log(newValue)
   };
 
   const handleChangeSource_Description = (event) => {
     event.preventDefault();
     setSource_Description(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleAutoSource_DeapartMent = async (e, index) => {
@@ -494,62 +522,62 @@ export default function Nac_Main_wait() {
       setSource_Department('')
       setSource_BU('')
     } else {
-      if (response.data[0].DepID == null) {
+      if (response.data[0].DepID === null) {
         setSource_Department('CO')
         setSource_BU('Oil')
-      } else if (response.data[0].DepID == 1) {
+      } else if (response.data[0].DepID === 1) {
         setSource_Department('ITO')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 2) {
+      else if (response.data[0].DepID === 2) {
         setSource_Department('AFD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 3) {
+      else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 4) {
+      else if (response.data[0].DepID === 4) {
         setSource_Department('SSD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 5) {
+      else if (response.data[0].DepID === 5) {
         setSource_Department('HRD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 6) {
+      else if (response.data[0].DepID === 6) {
         setSource_Department('GAD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 7) {
+      else if (response.data[0].DepID === 7) {
         setSource_Department('SLD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 8) {
+      else if (response.data[0].DepID === 8) {
         setSource_Department('MMD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 9) {
+      else if (response.data[0].DepID === 9) {
         setSource_Department('PMD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 10) {
+      else if (response.data[0].DepID === 10) {
         setSource_Department('SCD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 11) {
+      else if (response.data[0].DepID === 11) {
         setSource_Department('BDO')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 12) {
+      else if (response.data[0].DepID === 12) {
         setSource_Department('MDO')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 14) {
+      else if (response.data[0].DepID === 14) {
         setSource_Department('CSO')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 15) {
+      else if (response.data[0].DepID === 15) {
         setSource_Department('MMD2')
         setSource_BU('Center')
       }
@@ -560,42 +588,35 @@ export default function Nac_Main_wait() {
   const handleChangeDes_Department = (event) => {
     event.preventDefault();
     setDes_Department(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleDes_ChangeBU = (event) => {
     event.preventDefault();
     setDes_BU(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeDes_delivery2 = (event) => {
     event.preventDefault();
     setDes_delivery(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeDes_deliveryDate = (newValue) => {
     setDes_deliveryDate(newValue);
-    console.log(newValue)
   };
 
-  const handleChangeDes_deliveryApprove = (event) => {
-    event.preventDefault();
-    setDes_deliveryApprove(event.target.value);
-    console.log(event.target.value)
-  };
+  // const handleChangeDes_deliveryApprove = (event) => {
+  //   event.preventDefault();
+  //   setDes_deliveryApprove(event.target.value);
+  // };
 
-  const handleChangeDes_deliveryApproveDate = (newValue) => {
-    setDes_deliveryApproveDate(newValue);
-    console.log(newValue)
-  };
+  // const handleChangeDes_deliveryApproveDate = (newValue) => {
+  //   setDes_deliveryApproveDate(newValue);
+  // };
 
-  const handleChangeDes_Description = (event) => {
-    event.preventDefault();
-    setDes_Description(event.target.value);
-    console.log(event.target.value)
-  };
+  // const handleChangeDes_Description = (event) => {
+  //   event.preventDefault();
+  //   setDes_Description(event.target.value);
+  // };
 
   const handleAutoDes_DeapartMent = async (e, index) => {
     const UserCode = e.target.innerText
@@ -607,62 +628,62 @@ export default function Nac_Main_wait() {
       setDes_Department('')
       setDes_BU('')
     } else {
-      if (response.data[0].DepID == null) {
+      if (response.data[0].DepID === null) {
         setDes_Department('CO')
         setDes_BU('Oil')
-      } else if (response.data[0].DepID == 1) {
+      } else if (response.data[0].DepID === 1) {
         setDes_Department('ITO')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 2) {
+      else if (response.data[0].DepID === 2) {
         setDes_Department('AFD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 3) {
+      else if (response.data[0].DepID === 3) {
         setDes_Department('ROD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 4) {
+      else if (response.data[0].DepID === 4) {
         setDes_Department('SSD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 5) {
+      else if (response.data[0].DepID === 5) {
         setDes_Department('HRD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 6) {
+      else if (response.data[0].DepID === 6) {
         setDes_Department('GAD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 7) {
+      else if (response.data[0].DepID === 7) {
         setDes_Department('SLD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 8) {
+      else if (response.data[0].DepID === 8) {
         setDes_Department('MMD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 9) {
+      else if (response.data[0].DepID === 9) {
         setDes_Department('PMD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 10) {
+      else if (response.data[0].DepID === 10) {
         setDes_Department('SCD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 11) {
+      else if (response.data[0].DepID === 11) {
         setDes_Department('BDO')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 12) {
+      else if (response.data[0].DepID === 12) {
         setDes_Department('MDO')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 14) {
+      else if (response.data[0].DepID === 14) {
         setDes_Department('CSO')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 15) {
+      else if (response.data[0].DepID === 15) {
         setDes_Department('MMD2')
         setDes_BU('Center')
       }
@@ -723,7 +744,6 @@ export default function Nac_Main_wait() {
                 nacdtl_assetsPrice,
                 asset_id
               });
-              console.log(responseDTL)
               if ('data' in responseDTL) {
                 swal("ทำรายการสำเร็จ", 'อัปเดตรายการ ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
                   buttons: false,
@@ -1007,6 +1027,28 @@ export default function Nac_Main_wait() {
       }
     }
   };
+
+  const handleChangeComment = (event) => {
+    event.preventDefault();
+    setComment(event.target.value);
+  };
+
+  const handleSubmitComment = async () => {
+    const usercode = data.UserCode
+    const responseComment = await store_FA_control_comment({
+      nac_code,
+      usercode,
+      comment
+    })
+    if ('data' in responseComment) {
+      swal("ทำรายการสำเร็จ", 'คุณได้แสดงความคิดเห็นแล้ว', "success", {
+        buttons: false,
+        timer: 2000,
+      }).then((value) => {
+        window.location.href = "/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE";
+      });
+    }
+  }
 
   return (
     <React.Fragment>
@@ -1466,7 +1508,7 @@ export default function Nac_Main_wait() {
                           <IconButton
                             size="large"
                             color='primary'
-                            disabled={(selectNAC >= 3) ? true : false}
+                            disabled={(selectNAC === 1) ? false : true}
                             onClick={handleServiceAdd}
                           >
                             <AddBoxIcon />
@@ -1574,10 +1616,10 @@ export default function Nac_Main_wait() {
                               {serviceList.length !== 0 && (
                                 <IconButton
                                   size="large"
-                                  disabled={(selectNAC >= 3) ? true : false}
+                                  disabled={(selectNAC === 1 ) ? false : true}
                                   aria-label="delete"
                                   color="error"
-                                  onClick={serviceList.length == 1 ? false : () => handleServiceRemove(index)}
+                                  onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
                                 >
                                   <DeleteIcon fontSize="inherit" />
                                 </IconButton>
@@ -1761,11 +1803,11 @@ export default function Nac_Main_wait() {
                         <Grid item xs={2}>
                           <Button
                             variant="contained"
-                            onClick={handleSave}
+                           //onClick={handleSave}
                             disabled={(selectNAC === 3 && (CheckApprove.indexOf(data.UserCode) !== -1)) ? false : (selectNAC === 2 && (CheckExamineApprove.indexOf(data.UserCode) !== -1)) ? false : true}
                             sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                             style={{ 'backgroundColor': 'orange' }}>
-                            บันทึกเอกสาร
+                            ตีกลับเอกสาร
                           </Button>
                         </Grid>
                         <Grid item xs={2}>
@@ -1826,9 +1868,14 @@ export default function Nac_Main_wait() {
                 </React.Fragment>
               )}
             </Paper>
-            <React.Fragment>
+   <React.Fragment>
               <React.Fragment>
-                <Grid container spacing={5} alignItems="flex-end" sx={{ pb: 2 }}>
+                <Grid
+                  container
+                  direction="row"
+                  spacing={5}
+                  alignItems="flex-start" sx={{ pb: 2 }}
+                >
                   <Grid
                     item
                     xs={12}
@@ -1850,7 +1897,7 @@ export default function Nac_Main_wait() {
                         <Box
                           sx={{
                             display: 'flex',
-                            justifyContent: 'center',
+                            justifyContent: 'start',
                             alignItems: 'baseline',
                             mb: 2,
                           }}
@@ -1862,11 +1909,9 @@ export default function Nac_Main_wait() {
                           subheaderTypographyProps={{
                             align: 'center',
                           }}
-                          sx={{
-                            backgroundColor: (theme) => theme.palette.info.main
-                          }}>
+                          style={{'backgroundColor': 'rgb(0, 120, 255)'}}>
                           <Button fullWidth
-                            sx={{ backgroundColor: (theme) => theme.palette.info.main }}
+                            style={{'backgroundColor': 'rgb(0, 120, 255)'}}
                             className='text-white'
                             startIcon={<AddCardIcon />}
                           >
@@ -1894,27 +1939,60 @@ export default function Nac_Main_wait() {
                             backgroundColor: (theme) => theme.palette.grey[200]
                           }}
                         />
-                        <Box
+                        <List
                           sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'baseline',
-                            mb: 2,
+                            width: '100%',
+                            bgcolor: 'background.paper',
+                            position: 'relative',
+                            overflow: 'auto',
+                            maxHeight: 300,
+                            '& ul': { padding: 0 },
                           }}
-                        >
-                          <CardContent>
+                          subheader={<li />}>
+                          <CardContent sx={{ height: 150 }} cols={3}>
+                            {commentFetch.map((res, index) => (
+                              <React.Fragment>
+                                <Box
+                                  sx={{
+                                    display: 'flex',
+                                    justifyContent: (res.userid === data.UserCode) ?'end' : 'start',
+                                    alignItems: 'baseline',
+                                    mb: 1
+                                  }}
+                                >
+                                   <Card
+                                    sx={{ p: 1 }}
+                                    style={{
+                                      'backgroundColor': (res.userid === data.UserCode) ? 'rgb(0, 120, 255)' : 'rgb(240, 240, 240)',
+                                      'color': (res.userid === data.UserCode) ? 'white' : 'black',
+                                      borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius:20, borderBottomRightRadius:20
+                                    }}
+                                  >
+                                    {res.userid}: {res.comment}
+                                  </Card>
+                                </Box>
+                              </React.Fragment>
+                            ))}
                           </CardContent>
-                        </Box>
+                        </List>
+                        <Input
+                          placeholder="Comment..."
+                          fullWidth
+                          sx={{ p: 0.5 }}
+                          value={comment}
+                          style={{'backgroundColor': 'rgb(240, 240, 240)'}}
+                          onChange={handleChangeComment}
+                        />
                         <CardActions titleTypographyProps={{ align: 'center' }}
                           subheaderTypographyProps={{
                             align: 'center',
                           }}
-                          sx={{
-                            backgroundColor: (theme) => theme.palette.info.main
-                          }}>
-                          <Button fullWidth
-                            sx={{ backgroundColor: (theme) => theme.palette.info.main }}
+                          style={{'backgroundColor': 'rgb(0, 120, 255)'}}>
+                          <Button
+                            fullWidth
+                            style={{'backgroundColor': 'rgb(0, 120, 255)'}}
                             className='text-white'
+                            onClick={handleSubmitComment}
                             startIcon={<ChatIcon />}
                           >
                             <Typography variant='h6'>แสดงความคิดเห็น</Typography>
@@ -1959,8 +2037,8 @@ export default function Nac_Main_wait() {
             <Copyright />
           </Container>
         </AnimatedPage>
+        <Outlet />
       </ThemeProvider>
-      <Outlet />
     </React.Fragment >
   );
 }

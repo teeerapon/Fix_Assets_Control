@@ -166,12 +166,12 @@ export default function NAC_ROW() {
     event.preventDefault();
     setEditSelectNAC(selectNAC.nac_code);
     localStorage.setItem('NacCode', JSON.stringify({ nac_code: selectNAC.nac_code, nac_status: selectNAC.nac_status }));
-    if (selectNAC.workflowtypeid === 2) {
+    if (selectNAC.workflowtypeid === 1) {
+      navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE')
+    } else if (selectNAC.workflowtypeid === 2) {
       navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE')
     } else if (selectNAC.workflowtypeid === 3) {
       navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
-    } else if (selectNAC.workflowtypeid === 1) {
-      navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE')
     } else if (selectNAC.workflowtypeid === 4) {
       navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE')
     } else {
@@ -184,8 +184,6 @@ export default function NAC_ROW() {
       buttons: false,
       timer: 2000,
     }).then((value) => {
-      localStorage.removeItem("DataCreatePeriod");
-      localStorage.removeItem("NacCode");
       window.location.href = "/HomePage";
     });
   } else {

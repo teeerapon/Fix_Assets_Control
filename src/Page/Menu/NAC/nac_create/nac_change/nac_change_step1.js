@@ -171,7 +171,7 @@ export default function Nac_Main() {
 
   const handleClickShowPassword = () => {
     console.log(data.branchid)
-    if (data.branchid != 901) {
+    if (data.branchid !== 901) {
       setValuesVisibility(false);
     } else {
       setValuesVisibility({ ...valuesVisibility, showText: !valuesVisibility.showText });
@@ -258,7 +258,7 @@ export default function Nac_Main() {
       const response = await SelectDTL_Control({
         Code
       });
-      if (response['data'].length != 0) {
+      if (response['data'].length !== 0) {
         list[index]['name'] = response['data'][0].Name
         list[index]['dtl'] = response['data'][0].Details
         list[index]['count'] = 1
@@ -284,7 +284,7 @@ export default function Nac_Main() {
       const response = await SelectDTL_Control({
         Code
       });
-      if (response['data'].length != 0) {
+      if (response['data'].length !== 0) {
         list_main[index]['name'] = response['data'][0].Name
         list_main[index]['dtl'] = response['data'][0].Details
         list_main[index]['count'] = 1
@@ -347,62 +347,62 @@ export default function Nac_Main() {
       setSource_Department('')
       setSource_BU('')
     } else {
-      if (response.data[0].DepID == null) {
+      if (response.data[0].DepID === null) {
         setSource_Department('CO')
         setSource_BU('Oil')
-      } else if (response.data[0].DepID == 1) {
+      } else if (response.data[0].DepID === 1) {
         setSource_Department('ITO')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 2) {
+      else if (response.data[0].DepID === 2) {
         setSource_Department('AFD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 3) {
+      else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 4) {
+      else if (response.data[0].DepID === 4) {
         setSource_Department('SSD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 5) {
+      else if (response.data[0].DepID === 5) {
         setSource_Department('HRD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 6) {
+      else if (response.data[0].DepID === 6) {
         setSource_Department('GAD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 7) {
+      else if (response.data[0].DepID === 7) {
         setSource_Department('SLD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 8) {
+      else if (response.data[0].DepID === 8) {
         setSource_Department('MMD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 9) {
+      else if (response.data[0].DepID === 9) {
         setSource_Department('PMD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 10) {
+      else if (response.data[0].DepID === 10) {
         setSource_Department('SCD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 11) {
+      else if (response.data[0].DepID === 11) {
         setSource_Department('BDO')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 12) {
+      else if (response.data[0].DepID === 12) {
         setSource_Department('MDO')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 14) {
+      else if (response.data[0].DepID === 14) {
         setSource_Department('CSO')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 15) {
+      else if (response.data[0].DepID === 15) {
         setSource_Department('MMD2')
         setSource_BU('Center')
       }
@@ -460,62 +460,62 @@ export default function Nac_Main() {
       setDes_Department('')
       setDes_BU('')
     } else {
-      if (response.data[0].DepID == null) {
+      if (response.data[0].DepID === null) {
         setDes_Department('CO')
         setDes_BU('Oil')
-      } else if (response.data[0].DepID == 1) {
+      } else if (response.data[0].DepID === 1) {
         setDes_Department('ITO')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 2) {
+      else if (response.data[0].DepID === 2) {
         setDes_Department('AFD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 3) {
+      else if (response.data[0].DepID === 3) {
         setDes_Department('ROD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 4) {
+      else if (response.data[0].DepID === 4) {
         setDes_Department('SSD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 5) {
+      else if (response.data[0].DepID === 5) {
         setDes_Department('HRD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 6) {
+      else if (response.data[0].DepID === 6) {
         setDes_Department('GAD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 7) {
+      else if (response.data[0].DepID === 7) {
         setDes_Department('SLD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 8) {
+      else if (response.data[0].DepID === 8) {
         setDes_Department('MMD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 9) {
+      else if (response.data[0].DepID === 9) {
         setDes_Department('PMD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 10) {
+      else if (response.data[0].DepID === 10) {
         setDes_Department('SCD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 11) {
+      else if (response.data[0].DepID === 11) {
         setDes_Department('BDO')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 12) {
+      else if (response.data[0].DepID === 12) {
         setDes_Department('MDO')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 14) {
+      else if (response.data[0].DepID === 14) {
         setDes_Department('CSO')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 15) {
+      else if (response.data[0].DepID === 15) {
         setDes_Department('MMD2')
         setDes_BU('Center')
       }
@@ -867,7 +867,7 @@ export default function Nac_Main() {
                                 value={des_delivery}
                                 sx={{ pt: 1 }}
                                 variant="standard"
-                                label='ผู้รับมอบ'
+                                label='ผู้รับคำร้อง'
                               />
                               <LocalizationProvider dateAdapter={DateAdapter}>
                                 <DatePicker
@@ -1142,7 +1142,7 @@ export default function Nac_Main() {
                                   size="large"
                                   aria-label="delete"
                                   color="error"
-                                  onClick={serviceList.length == 1 ? false : () => handleServiceRemove(index)}
+                                  onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
                                 >
                                   <DeleteIcon fontSize="inherit" />
                                 </IconButton>
@@ -1166,7 +1166,7 @@ export default function Nac_Main() {
                             required
                             fullWidth
                             type={valuesVisibility.showText ? "text" : "password"}
-                            value={result.toLocaleString() == 0 ? '' : result.toLocaleString()}
+                            value={result.toLocaleString() === 0 ? '' : result.toLocaleString()}
                             inputProps={{ style: { textAlign: 'center', color: 'red' } }}
                             InputProps={{
                               endAdornment: (

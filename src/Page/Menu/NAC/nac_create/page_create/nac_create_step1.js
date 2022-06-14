@@ -148,7 +148,6 @@ export default function Nac_Main() {
 
   const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "" }]);
   const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "" }])
-  console.log(serviceList_Main)
   const result = serviceList.reduce((total, serviceList) => total = total + serviceList.price * serviceList.count, 0);
   const navigate = useNavigate();
   const data = JSON.parse(localStorage.getItem('data'));
@@ -171,7 +170,7 @@ export default function Nac_Main() {
 
   const handleClickShowPassword = () => {
     console.log(data.branchid)
-    if (data.branchid != 901) {
+    if (data.branchid !== 901) {
       setValuesVisibility(false);
     } else {
       setValuesVisibility({ ...valuesVisibility, showText: !valuesVisibility.showText });
@@ -258,7 +257,7 @@ export default function Nac_Main() {
       const response = await SelectDTL_Control({
         Code
       });
-      if (response['data'].length != 0) {
+      if (response['data'].length !== 0) {
         list[index]['name'] = response['data'][0].Name
         list[index]['dtl'] = response['data'][0].Details
         list[index]['count'] = 1
@@ -284,7 +283,7 @@ export default function Nac_Main() {
       const response = await SelectDTL_Control({
         Code
       });
-      if (response['data'].length != 0) {
+      if (response['data'].length !== 0) {
         list_main[index]['name'] = response['data'][0].Name
         list_main[index]['dtl'] = response['data'][0].Details
         list_main[index]['count'] = 1
@@ -300,19 +299,16 @@ export default function Nac_Main() {
   const handleChangeSource_Department = (event) => {
     event.preventDefault();
     setSource_Department(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeSource_BU = (event) => {
     event.preventDefault();
     setSource_BU(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeSource_delivery2 = (event) => {
     event.preventDefault();
     setSource(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeSource_deliveryDate = (newValue) => {
@@ -323,7 +319,6 @@ export default function Nac_Main() {
   const handleChangeSource_deliveryApprove = (event) => {
     event.preventDefault();
     setSource_Approve(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeSource_deliveryApproveDate = (newValue) => {
@@ -334,7 +329,6 @@ export default function Nac_Main() {
   const handleChangeSource_Description = (event) => {
     event.preventDefault();
     setSource_Description(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleAutoSource_DeapartMent = async (e, index) => {
@@ -347,62 +341,62 @@ export default function Nac_Main() {
       setSource_Department('')
       setSource_BU('')
     } else {
-      if (response.data[0].DepID == null) {
+      if (response.data[0].DepID === null) {
         setSource_Department('CO')
         setSource_BU('Oil')
-      } else if (response.data[0].DepID == 1) {
+      } else if (response.data[0].DepID === 1) {
         setSource_Department('ITO')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 2) {
+      else if (response.data[0].DepID === 2) {
         setSource_Department('AFD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 3) {
+      else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 4) {
+      else if (response.data[0].DepID === 4) {
         setSource_Department('SSD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 5) {
+      else if (response.data[0].DepID === 5) {
         setSource_Department('HRD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 6) {
+      else if (response.data[0].DepID === 6) {
         setSource_Department('GAD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 7) {
+      else if (response.data[0].DepID === 7) {
         setSource_Department('SLD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 8) {
+      else if (response.data[0].DepID === 8) {
         setSource_Department('MMD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 9) {
+      else if (response.data[0].DepID === 9) {
         setSource_Department('PMD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 10) {
+      else if (response.data[0].DepID === 10) {
         setSource_Department('SCD')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 11) {
+      else if (response.data[0].DepID === 11) {
         setSource_Department('BDO')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 12) {
+      else if (response.data[0].DepID === 12) {
         setSource_Department('MDO')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 14) {
+      else if (response.data[0].DepID === 14) {
         setSource_Department('CSO')
         setSource_BU('Center')
       }
-      else if (response.data[0].DepID == 15) {
+      else if (response.data[0].DepID === 15) {
         setSource_Department('MMD2')
         setSource_BU('Center')
       }
@@ -413,19 +407,16 @@ export default function Nac_Main() {
   const handleChangeDes_Department = (event) => {
     event.preventDefault();
     setDes_Department(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleDes_ChangeBU = (event) => {
     event.preventDefault();
     setDes_BU(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeDes_delivery2 = (event) => {
     event.preventDefault();
     setDes_delivery(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeDes_deliveryDate = (newValue) => {
@@ -436,7 +427,6 @@ export default function Nac_Main() {
   const handleChangeDes_deliveryApprove = (event) => {
     event.preventDefault();
     setDes_deliveryApprove(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeDes_deliveryApproveDate = (newValue) => {
@@ -447,7 +437,6 @@ export default function Nac_Main() {
   const handleChangeDes_Description = (event) => {
     event.preventDefault();
     setDes_Description(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleAutoDes_DeapartMent = async (e, index) => {
@@ -460,62 +449,62 @@ export default function Nac_Main() {
       setDes_Department('')
       setDes_BU('')
     } else {
-      if (response.data[0].DepID == null) {
+      if (response.data[0].DepID === null) {
         setDes_Department('CO')
         setDes_BU('Oil')
-      } else if (response.data[0].DepID == 1) {
+      } else if (response.data[0].DepID === 1) {
         setDes_Department('ITO')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 2) {
+      else if (response.data[0].DepID === 2) {
         setDes_Department('AFD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 3) {
+      else if (response.data[0].DepID === 3) {
         setDes_Department('ROD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 4) {
+      else if (response.data[0].DepID === 4) {
         setDes_Department('SSD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 5) {
+      else if (response.data[0].DepID === 5) {
         setDes_Department('HRD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 6) {
+      else if (response.data[0].DepID === 6) {
         setDes_Department('GAD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 7) {
+      else if (response.data[0].DepID === 7) {
         setDes_Department('SLD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 8) {
+      else if (response.data[0].DepID === 8) {
         setDes_Department('MMD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 9) {
+      else if (response.data[0].DepID === 9) {
         setDes_Department('PMD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 10) {
+      else if (response.data[0].DepID === 10) {
         setDes_Department('SCD')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 11) {
+      else if (response.data[0].DepID === 11) {
         setDes_Department('BDO')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 12) {
+      else if (response.data[0].DepID === 12) {
         setDes_Department('MDO')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 14) {
+      else if (response.data[0].DepID === 14) {
         setDes_Department('CSO')
         setDes_BU('Center')
       }
-      else if (response.data[0].DepID == 15) {
+      else if (response.data[0].DepID === 15) {
         setDes_Department('MMD2')
         setDes_BU('Center')
       }
@@ -587,7 +576,7 @@ export default function Nac_Main() {
     //navigate("/NAC_CREATE_MAIN1/NAC_CREATE_MAIN1_STEP2")
   };
 
-  if (data.UserCode !== 'SSP') {
+  if (data.UserCode === 'PTEC83') {
     return (
       swal("ทำรายการไม่สำเร็จ", 'คุณไม่ได้รับอนุญาตให้ทำรายการนี้', "error", {
         buttons: false,
@@ -1105,7 +1094,7 @@ export default function Nac_Main() {
                                     size="large"
                                     aria-label="delete"
                                     color="error"
-                                    onClick={serviceList.length == 1 ? false : () => handleServiceRemove(index)}
+                                    onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
                                   >
                                     <DeleteIcon fontSize="inherit" />
                                   </IconButton>
@@ -1129,7 +1118,7 @@ export default function Nac_Main() {
                               required
                               fullWidth
                               type={valuesVisibility.showText ? "text" : "password"}
-                              value={result.toLocaleString() == 0 ? '' : result.toLocaleString()}
+                              value={result.toLocaleString() === 0 ? '' : result.toLocaleString()}
                               inputProps={{ style: { textAlign: 'center', color: 'red' } }}
                               InputProps={{
                                 endAdornment: (

@@ -80,9 +80,6 @@ export default function Report() {
                 RoundID,
             });
             if (response.length != 0) {
-                localStorage.removeItem("Allassets");
-                localStorage.removeItem("aseetsCounted");
-                localStorage.removeItem("assetsWrong");
                 swal("ทำรายการสำเร็จ", "ค้นหาข้อมูลเสร็จสิ้น", "success", {
                     buttons: false,
                     timer: 2000,

@@ -185,8 +185,6 @@ export default function NAC_ROW() {
       buttons: false,
       timer: 2000,
     }).then((value) => {
-      localStorage.removeItem("DataCreatePeriod");
-      localStorage.removeItem("NacCode");
       window.location.href = "/HomePage";
     });
   } else {

@@ -57,9 +57,9 @@ function App() {
           <Route path="/NAC_DELETE_STEP1" element={<NAC_DELETE_STEP1 />} />
           <Route path="/NAC_ROW" element={<NAC_ROW />} />
           <Route path="/NAC_WAIT_APPROVE" element={<NAC_WAIT_APPROVE />} />
-          <Route path="NAC_ROW/NAC_CHANGE_WAIT_APPROVE" element={<NAC_CHANGE_WAIT_APPROVE />} />
-          <Route path="NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE" element={<NAC_CREATE_NEW_WAIT_APPROVE />} />
-          <Route path="NAC_ROW/NAC_DELETE_WAIT_APPROVE" element={<NAC_DELETE_WAIT_APPROVE />} />
+          <Route path="/NAC_ROW/NAC_CHANGE_WAIT_APPROVE" element={<NAC_CHANGE_WAIT_APPROVE />} />
+          <Route path="/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE" element={<NAC_CREATE_NEW_WAIT_APPROVE />} />
+          <Route path="/NAC_ROW/NAC_DELETE_WAIT_APPROVE" element={<NAC_DELETE_WAIT_APPROVE />} />
           <Route path="*" element={<Page404 />} />
         </Routes>
       </AnimatePresence>
