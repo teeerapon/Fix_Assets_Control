@@ -134,6 +134,30 @@ async function store_FA_control_creat_Detail(credentials) {
     .then(data => data.json())
 }
 
+async function store_FA_control_updateDTL_seals(credentials) {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_updateDTL_seals', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
+async function store_FA_control_CheckAssetCode_Process(credentials) {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_CheckAssetCode_Process', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 export default function Nac_Main() {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
@@ -146,12 +170,12 @@ export default function Nac_Main() {
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
-  const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "" }]);
-  const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "" }])
-  console.log(serviceList_Main)
+  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
   const result = serviceList.reduce((total, serviceList) => total = total + serviceList.price * serviceList.count, 0);
   const navigate = useNavigate();
   const data = JSON.parse(localStorage.getItem('data'));
+  const dataDepID = data.depid
+  const [users_pureDep, setUsers_pureDep] = React.useState([]);
   const [AllAssetsControl, setAllAssetsControl] = React.useState([]);
   const [UserForAssetsControl, setUserForAssetsControl] = React.useState([]);
   const [valuesVisibility, setValuesVisibility] = React.useState({
@@ -170,7 +194,6 @@ export default function Nac_Main() {
   };
 
   const handleClickShowPassword = () => {
-    console.log(data.branchid)
     if (data.branchid !== 901) {
       setValuesVisibility(false);
     } else {
@@ -179,12 +202,12 @@ export default function Nac_Main() {
   };
 
   // ส่วนของผู้รับ
-  const [des_Department, setDes_Department] = React.useState('AFD');
-  const [des_BU, setDes_BU] = React.useState('Center');
-  const [des_delivery, setDes_delivery] = React.useState('SSP');
-  const [des_deliveryDate, setDes_deliveryDate] = React.useState(datenow);
-  const [des_deliveryApprove, setDes_deliveryApprove] = React.useState('SSP');
-  const [des_deliveryApproveDate, setDes_deliveryApproveDate] = React.useState(datenow);
+  const [des_Department, setDes_Department] = React.useState();
+  const [des_BU, setDes_BU] = React.useState();
+  const [des_delivery, setDes_delivery] = React.useState();
+  const [des_deliveryDate] = React.useState();
+  // const [des_deliveryApprove, setDes_deliveryApprove] = React.useState('SSP');
+  // const [des_deliveryApproveDate, setDes_deliveryApproveDate] = React.useState(datenow);
   const [des_Description, setDes_Description] = React.useState();
 
   // ส่วนของผู้ส่ง
@@ -192,8 +215,8 @@ export default function Nac_Main() {
   const [source_BU, setSource_BU] = React.useState();
   const [source, setSource] = React.useState();
   const [sourceDate, setSourceDate] = React.useState();
-  const [sourceApprove, setSource_Approve] = React.useState();
-  const [sourceDateApproveDate, setSource_DateApproveDate] = React.useState();
+  // const [sourceApprove, setSource_Approve] = React.useState();
+  // const [sourceDateApproveDate, setSource_DateApproveDate] = React.useState();
   const [source_Description, setSource_Description] = React.useState();
 
   const fetchUserForAssetsControl = async () => {
@@ -201,6 +224,13 @@ export default function Nac_Main() {
       "http://192.168.220.1:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
+    const users_pure = []
+    for (let i = 0; i < UserForAssetsControl.data.length; i++) {
+      if (UserForAssetsControl.data[i].DepID === dataDepID) {
+        users_pure[i] = UserForAssetsControl.data[i]
+      }
+    }
+    setUsers_pureDep(users_pure)
     setUserForAssetsControl(UserForAssetsControl.data);
   };
 
@@ -218,18 +248,13 @@ export default function Nac_Main() {
   }, []);
 
   const handleServiceAdd = () => {
-    setServiceList([...serviceList, { assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "" }]);
-    setServiceList_Main([...serviceList_Main, { assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "" }]);
+    setServiceList([...serviceList, { dtl_id: "", assetsCode: "", serialNo: "", name: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
   };
 
   const handleServiceRemove = (index) => {
     const list = [...serviceList];
     list.splice(index, 1);
     setServiceList(list);
-
-    const list_main = [...serviceList_Main];
-    list_main.splice(index, 1);
-    setServiceList_Main(list_main);
   };
 
   const handleServiceChange = (e, index) => {
@@ -252,6 +277,9 @@ export default function Nac_Main() {
       list[index]['count'] = ''
       list[index]['serialNo'] = ''
       list[index]['price'] = ''
+      list[index]['bookValue'] = ''
+      list[index]['priceSeals'] = ''
+      list[index]['profit'] = ''
       setServiceList(list);
     } else {
       const Code = list[index]['assetsCode'];
@@ -264,33 +292,10 @@ export default function Nac_Main() {
         list[index]['count'] = 1
         list[index]['serialNo'] = response['data'][0].SerialNo
         list[index]['price'] = response['data'][0].Price
+        list[index]['bookValue'] = ''
+        list[index]['priceSeals'] = ''
+        list[index]['profit'] = ''
         setServiceList(list);
-      }
-    }
-
-    const list_main = [...serviceList_Main];
-    list_main[index][name] = value;
-    list_main[index]['assetsCode'] = assetsCodeSelect;
-    if (list[index]['assetsCode'] === null || list[index]['assetsCode'] === undefined) {
-      list_main[index]['assetsCode'] = ''
-      list_main[index]['name'] = ''
-      list_main[index]['dtl'] = ''
-      list_main[index]['count'] = ''
-      list_main[index]['serialNo'] = ''
-      list_main[index]['price'] = ''
-      setServiceList_Main(list_main);
-    } else {
-      const Code = list[index]['assetsCode'];
-      const response = await SelectDTL_Control({
-        Code
-      });
-      if (response['data'].length !== 0) {
-        list_main[index]['name'] = response['data'][0].Name
-        list_main[index]['dtl'] = response['data'][0].Details
-        list_main[index]['count'] = 1
-        list_main[index]['serialNo'] = response['data'][0].SerialNo
-        list_main[index]['price'] = response['data'][0].Price
-        setServiceList_Main(list_main);
       }
     }
   };
@@ -300,19 +305,16 @@ export default function Nac_Main() {
   const handleChangeSource_Department = (event) => {
     event.preventDefault();
     setSource_Department(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeSource_BU = (event) => {
     event.preventDefault();
     setSource_BU(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeSource_delivery2 = (event) => {
     event.preventDefault();
     setSource(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeSource_deliveryDate = (newValue) => {
@@ -320,21 +322,9 @@ export default function Nac_Main() {
     console.log(newValue)
   };
 
-  const handleChangeSource_deliveryApprove = (event) => {
-    event.preventDefault();
-    setSource_Approve(event.target.value);
-    console.log(event.target.value)
-  };
-
-  const handleChangeSource_deliveryApproveDate = (newValue) => {
-    setSource_DateApproveDate(newValue);
-    console.log(newValue)
-  };
-
   const handleChangeSource_Description = (event) => {
     event.preventDefault();
     setSource_Description(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleAutoSource_DeapartMent = async (e, index) => {
@@ -348,7 +338,7 @@ export default function Nac_Main() {
       setSource_BU('')
     } else {
       if (response.data[0].DepID === null) {
-        setSource_Department('CO')
+        setSource_Department('ROD')
         setSource_BU('Oil')
       } else if (response.data[0].DepID === 1) {
         setSource_Department('ITO')
@@ -413,41 +403,16 @@ export default function Nac_Main() {
   const handleChangeDes_Department = (event) => {
     event.preventDefault();
     setDes_Department(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleDes_ChangeBU = (event) => {
     event.preventDefault();
     setDes_BU(event.target.value);
-    console.log(event.target.value)
-  };
-
-  const handleChangeDes_delivery2 = (event) => {
-    event.preventDefault();
-    setDes_delivery(event.target.value);
-    console.log(event.target.value)
-  };
-
-  const handleChangeDes_deliveryDate = (newValue) => {
-    setDes_deliveryDate(newValue);
-    console.log(newValue)
-  };
-
-  const handleChangeDes_deliveryApprove = (event) => {
-    event.preventDefault();
-    setDes_deliveryApprove(event.target.value);
-    console.log(event.target.value)
-  };
-
-  const handleChangeDes_deliveryApproveDate = (newValue) => {
-    setDes_deliveryApproveDate(newValue);
-    console.log(newValue)
   };
 
   const handleChangeDes_Description = (event) => {
     event.preventDefault();
     setDes_Description(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleAutoDes_DeapartMent = async (e, index) => {
@@ -461,7 +426,7 @@ export default function Nac_Main() {
       setDes_BU('')
     } else {
       if (response.data[0].DepID === null) {
-        setDes_Department('CO')
+        setDes_Department('ROD')
         setDes_BU('Oil')
       } else if (response.data[0].DepID === 1) {
         setDes_Department('ITO')
@@ -523,10 +488,14 @@ export default function Nac_Main() {
   };
 
   const handleNext = async () => {
-    if (!source && !source_Department && !source_BU && !sourceDate) {
+    if (!source || !source_Department || !source_BU || !sourceDate) {
       swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning");
     } else {
-      if (!serviceList[0].assetsCode) {
+      let checkValue_BV = []
+      for (let i = 0; i < serviceList.length; i++) {
+        checkValue_BV[i] = serviceList[i].priceSeals
+      }
+      if (!serviceList[0].assetsCode || checkValue_BV.includes('') === true) {
         swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning");
       } else {
         const usercode = data.UserCode
@@ -569,6 +538,22 @@ export default function Nac_Main() {
               nacdtl_assetsPrice,
             });
             if ('data' in responseDTL) {
+              const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
+              const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
+              const nacdtl_profit = !serviceList[i].profit ? undefined : serviceList[i].profit
+              const asset_id = responseDTL.data[0].nacdtl_id
+              const nac_status = 1
+              await store_FA_control_updateDTL_seals({
+                usercode,
+                nac_code,
+                nac_status,
+                nac_type,
+                nacdtl_bookV,
+                nacdtl_PriceSeals,
+                nacdtl_profit,
+                asset_id,
+                nacdtl_assetsCode
+              });
               swal("ทำรายการสำเร็จ", 'สร้างรายการเปลี่ยนแปลงทรัพย์สิน ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
                 buttons: false,
                 timer: 2000,
@@ -710,7 +695,7 @@ export default function Nac_Main() {
                                 freeSolo
                                 name='source'
                                 id='source'
-                                options={UserForAssetsControl}
+                                options={users_pureDep}
                                 getOptionLabel={(option) => option.UserCode}
                                 filterOptions={filterOptions2}
                                 onChange={handleAutoSource_DeapartMent}
@@ -738,51 +723,6 @@ export default function Nac_Main() {
                                       <InputAdornment position="start">
                                         <Typography color="black">
                                           วันที่ยื่นคำร้อง :
-                                        </Typography>
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  renderInput={(params) =>
-                                    <TextField
-                                      required
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      sx={{ pt: 1 }}
-                                      variant="standard"
-                                      {...params} />}
-                                />
-                              </LocalizationProvider>
-                              <TextField
-                                required
-                                fullWidth
-                                disabled
-                                onChange={handleChangeSource_deliveryApprove}
-                                value={sourceApprove}
-                                name='source_Approve'
-                                sx={{ pt: 1 }}
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      <Typography color="black">
-                                        ผู้ตรวจสอบ :
-                                      </Typography>
-                                    </InputAdornment>
-                                  ),
-                                }}
-                                variant="standard"
-                              />
-                              <LocalizationProvider dateAdapter={DateAdapter}>
-                                <DatePicker
-                                  inputFormat="yyyy-MM-dd"
-                                  onChange={handleChangeSource_deliveryApproveDate}
-                                  value={sourceDateApproveDate}
-                                  disabled
-                                  name='source_ApproveDate'
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          วันที่ตรวจสอบ :
                                         </Typography>
                                       </InputAdornment>
                                     ),
@@ -844,18 +784,18 @@ export default function Nac_Main() {
                                   align="center"
                                   name='des_Department'
                                   variant="standard"
-                                  value={des_Department}
+                                  value="none"
                                   inputProps={{ style: { textAlign: 'center' } }}
                                   onChange={handleChangeDes_Department}
                                 />
                                 <TextField
                                   required
                                   disabled
+                                  value="none"
                                   align='center'
                                   name='des_BU'
                                   fullWidth
                                   variant="standard"
-                                  value={des_BU}
                                   inputProps={{ style: { textAlign: 'center' } }}
                                   onChange={handleDes_ChangeBU}
                                 />
@@ -864,85 +804,34 @@ export default function Nac_Main() {
                                 fullWidth
                                 disabled
                                 autoComplete="family-name"
-                                value={des_delivery}
+                                value={!des_delivery ? 'none' : des_delivery}
                                 sx={{ pt: 1 }}
                                 variant="standard"
                                 label='ผู้รับคำร้อง'
                               />
-                              <LocalizationProvider dateAdapter={DateAdapter}>
-                                <DatePicker
-                                  inputFormat="yyyy-MM-dd"
-                                  value={des_deliveryDate}
-                                  disabled
-                                  name='des_deliveryDate'
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          วันที่รับคำร้อง :
-                                        </Typography>
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  renderInput={(params) =>
-                                    <TextField
-                                      required
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      sx={{ pt: 1 }}
-                                      variant="standard"
-                                      {...params} />}
-                                />
-                              </LocalizationProvider>
                               <TextField
                                 required
                                 fullWidth
                                 disabled
                                 name='des_deliveryApprove'
-                                value={des_deliveryApprove}
-                                onChange={handleChangeDes_deliveryApprove}
+                                value='none'
                                 sx={{ pt: 1 }}
                                 InputProps={{
                                   startAdornment: (
                                     <InputAdornment position="start">
                                       <Typography color="black">
-                                        ผู้ตรวจสอบ :
+                                        วันที่รับคำร้อง :
                                       </Typography>
                                     </InputAdornment>
                                   ),
                                 }}
                                 variant="standard"
                               />
-                              <LocalizationProvider dateAdapter={DateAdapter}>
-                                <DatePicker
-                                  inputFormat="yyyy-MM-dd"
-                                  value={des_deliveryApproveDate}
-                                  disabled
-                                  name='des_deliveryApproveDate'
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          วันที่ตรวจสอบ :
-                                        </Typography>
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  renderInput={(params) =>
-                                    <TextField
-                                      required
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      sx={{ pt: 1 }}
-                                      variant="standard"
-                                      {...params} />}
-                                />
-                              </LocalizationProvider>
                               <TextField
                                 required
                                 fullWidth
                                 disabled
-                                value='ไม่อนุญาต'
+                                value='none'
                                 name='des_Description'
                                 onChange={handleChangeDes_Description}
                                 sx={{ pt: 1 }}
@@ -968,12 +857,10 @@ export default function Nac_Main() {
                       <TableRow style={{ width: '100%' }}>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >Serial No.</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รายละเอียด</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >ชื่อ</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
-                          <Stack direction="row" alignItems="center" spacing={1}>
-                            <Typography>
+                          <Stack direction="row" alignItems="center" spacing={1} หป>
+                            <Typography sx={{ pl: 0.5 }}>
                               ราคา
                             </Typography>
                             <IconButton
@@ -985,6 +872,9 @@ export default function Nac_Main() {
                             </IconButton>
                           </Stack>
                         </StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >BV</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >ราคาขาย</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >กำไร/ขาดทุน</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >
                           <IconButton
                             size="large"
@@ -1000,10 +890,9 @@ export default function Nac_Main() {
                       <React.Fragment>
                         <TableBody>
                           <StyledTableRow>
-                            <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <Autocomplete
                                 freeSolo
-                                sx={{ pt: 1 }}
                                 key={index}
                                 name='assetsCode'
                                 id='assetsCode'
@@ -1028,58 +917,28 @@ export default function Nac_Main() {
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
                                 fullWidth
-                                sx={{ pt: 1 }}
                                 key={index}
                                 name="serialNo"
                                 id="serialNo"
-                                inputProps={{ style: { textAlign: 'center' } }}
-                                onChange={(e) => handleServiceChange(e, index)}
+                                //onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].serialNo}
+                                // value={serviceList[index].serialNo}
                                 variant="standard"
                               />
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-                                sx={{ pt: 1 }}
                                 fullWidth
                                 key={index}
                                 name="name"
                                 id="name"
-                                onChange={(e) => handleServiceChange(e, index)}
+                                //onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].name}
                                 variant="standard"
                               />
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-                                sx={{ pt: 1 }}
-                                fullWidth
-                                key={index}
-                                name="dtl"
-                                id="dtl"
-                                onChange={(e) => handleServiceChange(e, index)}
-                                value={serviceList[index].dtl}
-                                variant="standard"
-                              />
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                              <TextField
-                                fullWidth
-                                key={index}
-                                sx={{ pt: 1 }}
-                                name="count"
-                                id="count"
-                                type='number'
-                                onChange={(e) => handleServiceChange(e, index)}
-                                value={serviceList[index].count}
-                                inputProps={{ style: { textAlign: 'center' } }}
-                                InputProps={{ inputProps: { min: 1 } }}
-                                variant="standard"
-                              />
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                              <TextField
-                                sx={{ pt: 1 }}
                                 fullWidth
                                 key={index}
                                 name="price"
@@ -1087,6 +946,43 @@ export default function Nac_Main() {
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 // onChange={(e) => handleServiceChange(e, index)}
                                 value={!serviceList[index].price ? serviceList[index].price : (serviceList[index].price).toLocaleString()}
+                                inputProps={{ style: { textAlign: 'center' } }}
+                                variant="standard"
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
+                                fullWidth
+                                disabled
+                                key={index}
+                                value='none'
+                                name="bookValue"
+                                id="bookValue"
+                                inputProps={{ style: { textAlign: 'center' } }}
+                                variant="standard"
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
+                                fullWidth
+                                key={index}
+                                value={singleService.service}
+                                type={valuesVisibility.showText ? "text" : "password"}
+                                onChange={(e) => handleServiceChange(e, index)}
+                                name="priceSeals"
+                                id="priceSeals"
+                                inputProps={{ style: { textAlign: 'center' } }}
+                                variant="standard"
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
+                                fullWidth
+                                disabled
+                                key={index}
+                                value='none'
+                                name="profit"
+                                id="profit"
                                 inputProps={{ style: { textAlign: 'center' } }}
                                 variant="standard"
                               />
@@ -1111,12 +1007,12 @@ export default function Nac_Main() {
                   <Table aria-label="customized table" style={{ width: '100%' }}>
                     <TableBody>
                       <StyledTableRow>
-                        <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '75%' }}>
+                        <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '55%' }}>
                           <Typography>
                             มูลค่ารวมทั้งหมด
                           </Typography>
                         </StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '45%' }}>
                           <TextField
                             required
                             fullWidth
@@ -1145,60 +1041,32 @@ export default function Nac_Main() {
                           <TextField
                             required
                             fullWidth
-                            value={data.UserCode}
-                            sx={{ pt: 1 }}
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <Typography color="black">
-                                    ผู้จัดทำ :
-                                  </Typography>
-                                </InputAdornment>
-                              ),
-                            }}
-                            variant="standard"
-                          />
-                        </StyledTableCell>
-                        <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
-                          <LocalizationProvider dateAdapter={DateAdapter}>
-                            <DatePicker
-                              inputFormat="yyyy-MM-dd"
-                              disabled
-                              value={datenow}
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <Typography color="black">
-                                      วันที่บันทึก :
-                                    </Typography>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              renderInput={(params) =>
-                                <TextField
-                                  required
-                                  fullWidth
-                                  autoComplete="family-name"
-                                  sx={{ pt: 1 }}
-                                  variant="standard"
-                                  {...params} />}
-                            />
-                          </LocalizationProvider>
-                        </StyledTableCell>
-                        <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
-                          <TextField
-                            required
-                            fullWidth
                             disabled
                             sx={{ pt: 1 }}
-                            value='ไม่อนุญาต'
                             InputProps={{
                               startAdornment: (
-                                <InputAdornment position="start">
-                                  <Typography color="black">
-                                    ผู้อนุมัติ :
-                                  </Typography>
-                                </InputAdornment>
+                                <React.Fragment>
+                                  <Stack direction="row"
+                                    justifyContent="space-evenly"
+                                    alignItems="center"
+                                    spacing={0}>
+                                    <InputAdornment position="start">
+                                      <Typography color="black" >
+                                        ผู้จัดทำ :
+                                      </Typography>
+                                    </InputAdornment>
+                                    <InputAdornment position="start">
+                                      <Typography color="black" >
+                                        [{data.UserCode}]
+                                      </Typography>
+                                    </InputAdornment>
+                                    <InputAdornment position="start">
+                                      <Typography color="black" >
+                                        {datenow.split('T')[0]}
+                                      </Typography>
+                                    </InputAdornment>
+                                  </Stack>
+                                </React.Fragment>
                               ),
                             }}
                             variant="standard"
@@ -1209,16 +1077,97 @@ export default function Nac_Main() {
                             required
                             fullWidth
                             disabled
-                            name='verify_approve'
-                            value='ไม่อนุญาต'
+                            name='sourceApprove'
                             sx={{ pt: 1 }}
                             InputProps={{
                               startAdornment: (
-                                <InputAdornment position="start">
-                                  <Typography color="black">
-                                    วันที่อนุมัติ :
-                                  </Typography>
-                                </InputAdornment>
+                                <React.Fragment>
+                                  <Stack direction="row"
+                                    justifyContent="space-evenly"
+                                    alignItems="center"
+                                    spacing={0}>
+                                    <InputAdornment position="start">
+                                      <Typography color="black">
+                                        ผู้ตรวจสอบ :
+                                      </Typography>
+                                    </InputAdornment>
+                                    <InputAdornment position="start">
+                                      <Typography style={{ 'color': 'black' }}>
+                                        none
+                                      </Typography>
+                                    </InputAdornment>
+                                    <InputAdornment position="start">
+                                      <Typography color="black">
+
+                                      </Typography>
+                                    </InputAdornment>
+                                  </Stack>
+                                </React.Fragment>
+                              ),
+                            }}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                          <TextField
+                            required
+                            fullWidth
+                            disabled
+                            sx={{ pt: 1 }}
+                            InputProps={{
+                              startAdornment: (
+                                <React.Fragment>
+                                  <Stack direction="row"
+                                    justifyContent="space-evenly"
+                                    alignItems="center"
+                                    spacing={0}>
+                                    <InputAdornment position="start">
+                                      <Typography color="black">
+                                        ผู้อนุมัติ :
+                                      </Typography>
+                                    </InputAdornment>
+                                    <InputAdornment position="start">
+                                      <Typography color="black">
+                                        none
+                                      </Typography>
+                                    </InputAdornment>
+                                    <InputAdornment position="start">
+                                      <Typography color="black">
+
+                                      </Typography>
+                                    </InputAdornment>
+                                  </Stack>
+                                </React.Fragment>
+                              ),
+                            }}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }} >
+                          <TextField
+                            required
+                            fullWidth
+                            disabled
+                            sx={{ pt: 1 }}
+                            InputProps={{
+                              startAdornment: (
+                                <React.Fragment>
+                                  <Stack direction="row"
+                                    justifyContent="space-evenly"
+                                    alignItems="center"
+                                    spacing={0}>
+                                    <InputAdornment position="start">
+                                      <Typography color="black" >
+                                        บัญชี/การเงิน :
+                                      </Typography>
+                                    </InputAdornment>
+                                    <InputAdornment position="start">
+                                      <Typography color="black" >
+                                        none
+                                      </Typography>
+                                    </InputAdornment>
+                                  </Stack>
+                                </React.Fragment>
                               ),
                             }}
                             variant="standard"

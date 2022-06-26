@@ -4,34 +4,40 @@ import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
 import AnimatedPage from '../../../AnimatedPage.jsx'
 import React from 'react';
+import Box from '@mui/material/Box';
 
 export default function MenuAppBar() {
   return (
     <React.Fragment>
-      <div>
-        <AppBar
-          position="absolute"
-          color="default"
-          elevation={0}
+      <AppBar
+        position="absolute"
+        color="default"
+        elevation={0}
+        sx={{
+          position: 'relative',
+          borderBottom: (t) => `1px solid ${t.palette.divider}`,
+        }}
+      >
+        <Toolbar>
+          <AnimatedPage>
+            <Typography variant="h5" color="inherit" noWrap>
+              หน้าแรกเว็บไซต์
+            </Typography>
+          </AnimatedPage>
+        </Toolbar>
+      </AppBar>
+      <AnimatedPage>
+        <Box
           sx={{
-            position: 'relative',
-            borderBottom: (t) => `1px solid ${t.palette.divider}`,
+            marginTop: 20,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
-          <Toolbar>
-            <AnimatedPage>
-              <Typography variant="h5" color="inherit" noWrap>
-                หน้าแรกเว็บไซต์
-              </Typography>
-            </AnimatedPage>
-          </Toolbar>
-        </AppBar>
-        <AnimatedPage>
           <Container>
-            <body className="text-center text-dark bg-white" style={{ height: "100vh" }}>
-              <div className='pt-5'></div>
-              <div className='pt-5'></div>
-              <div className='container pt-5 bg-white' style={{ height: "50vh", width: "100vh" }}>
+            <body className="text-center text-dark bg-white" style={{ height: "50vh" }}>
+              <div className='container bg-white' style={{ height: "50vh", width: "100vh" }}>
                 <main className="px-3">
                   <h1>PURE THAI ENERGY CO.,LTD</h1>
                   <hr></hr>
@@ -44,8 +50,8 @@ export default function MenuAppBar() {
               </footer>
             </body>
           </Container>
-        </AnimatedPage>
-      </div>
+        </Box>
+      </AnimatedPage>
     </React.Fragment>
   );
 }

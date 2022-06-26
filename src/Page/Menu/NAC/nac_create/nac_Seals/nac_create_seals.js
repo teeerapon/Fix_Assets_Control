@@ -8,7 +8,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
-import AnimatedPage from '../../../../../AnimatedPage';
+import AnimatedPage from '../../../../../AnimatedPage.jsx';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -146,6 +146,18 @@ async function store_FA_control_CheckAssetCode_Process(credentials) {
     .then(data => data.json())
 }
 
+async function store_FA_control_updateDTL_seals(credentials) {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_updateDTL_seals', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 export default function Nac_Main() {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
@@ -158,10 +170,8 @@ export default function Nac_Main() {
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
-  const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "" }]);
-  const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "" }])
-  console.log(serviceList_Main)
-  const result = serviceList.reduce((total, serviceList) => total = total + serviceList.price * serviceList.count, 0);
+  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
+  const result = serviceList.reduce((total, serviceList) => total = total + serviceList.price, 0);
   const navigate = useNavigate();
   const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
@@ -172,7 +182,7 @@ export default function Nac_Main() {
     text: serviceList[0].price,
     showText: false,
   });
-  const nac_type = 3;
+  const nac_type = 5;
 
 
   // const handleClickShowPassword = () => {
@@ -193,12 +203,12 @@ export default function Nac_Main() {
   };
 
   // ส่วนของผู้รับ
-  const [des_Department, setDes_Department] = React.useState('AFD');
-  const [des_BU, setDes_BU] = React.useState('Center');
-  const [des_delivery, setDes_delivery] = React.useState('SSP');
-  const [des_deliveryDate] = React.useState(datenow);
-  // const [des_deliveryApprove, setDes_deliveryApprove] = React.useState('SSP');
-  // const [des_deliveryApproveDate, setDes_deliveryApproveDate] = React.useState(datenow);
+  const [des_Department, setDes_Department] = React.useState();
+  const [des_BU, setDes_BU] = React.useState();
+  const [des_delivery, setDes_delivery] = React.useState();
+  const [des_deliveryDate] = React.useState();
+  // const [des_deliveryApprove, setDes_deliveryApprove] = React.useState();
+  // const [des_deliveryApproveDate, setDes_deliveryApproveDate] = React.useState();
   const [des_Description, setDes_Description] = React.useState();
 
   // ส่วนของผู้ส่ง
@@ -239,18 +249,13 @@ export default function Nac_Main() {
   }, []);
 
   const handleServiceAdd = () => {
-    setServiceList([...serviceList, { assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "" }]);
-    setServiceList_Main([...serviceList_Main, { assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "" }]);
+    setServiceList([...serviceList, { dtl_id: "", assetsCode: "", serialNo: "", name: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
   };
 
   const handleServiceRemove = (index) => {
     const list = [...serviceList];
     list.splice(index, 1);
     setServiceList(list);
-
-    const list_main = [...serviceList_Main];
-    list_main.splice(index, 1);
-    setServiceList_Main(list_main);
   };
 
   const handleServiceChange = (e, index) => {
@@ -273,6 +278,9 @@ export default function Nac_Main() {
       list[index]['count'] = ''
       list[index]['serialNo'] = ''
       list[index]['price'] = ''
+      list[index]['bookValue'] = ''
+      list[index]['priceSeals'] = ''
+      list[index]['profit'] = ''
       setServiceList(list);
     } else {
       const Code = list[index]['assetsCode'];
@@ -285,33 +293,10 @@ export default function Nac_Main() {
         list[index]['count'] = 1
         list[index]['serialNo'] = response['data'][0].SerialNo
         list[index]['price'] = response['data'][0].Price
+        list[index]['bookValue'] = ''
+        list[index]['priceSeals'] = ''
+        list[index]['profit'] = ''
         setServiceList(list);
-      }
-    }
-
-    const list_main = [...serviceList_Main];
-    list_main[index][name] = value;
-    list_main[index]['assetsCode'] = assetsCodeSelect;
-    if (list[index]['assetsCode'] === null || list[index]['assetsCode'] === undefined) {
-      list_main[index]['assetsCode'] = ''
-      list_main[index]['name'] = ''
-      list_main[index]['dtl'] = ''
-      list_main[index]['count'] = ''
-      list_main[index]['serialNo'] = ''
-      list_main[index]['price'] = ''
-      setServiceList_Main(list_main);
-    } else {
-      const Code = list[index]['assetsCode'];
-      const response = await SelectDTL_Control({
-        Code
-      });
-      if (response['data'].length !== 0) {
-        list_main[index]['name'] = response['data'][0].Name
-        list_main[index]['dtl'] = response['data'][0].Details
-        list_main[index]['count'] = 1
-        list_main[index]['serialNo'] = response['data'][0].SerialNo
-        list_main[index]['price'] = response['data'][0].Price
-        setServiceList_Main(list_main);
       }
     }
   };
@@ -321,30 +306,25 @@ export default function Nac_Main() {
   const handleChangeSource_Department = (event) => {
     event.preventDefault();
     setSource_Department(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeSource_BU = (event) => {
     event.preventDefault();
     setSource_BU(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeSource_delivery2 = (event) => {
     event.preventDefault();
     setSource(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleChangeSource_deliveryDate = (newValue) => {
     setSourceDate(newValue);
-    console.log(newValue)
   };
 
   const handleChangeSource_Description = (event) => {
     event.preventDefault();
     setSource_Description(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleAutoSource_DeapartMent = async (e, index) => {
@@ -423,19 +403,21 @@ export default function Nac_Main() {
   const handleChangeDes_Department = (event) => {
     event.preventDefault();
     setDes_Department(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleDes_ChangeBU = (event) => {
     event.preventDefault();
     setDes_BU(event.target.value);
-    console.log(event.target.value)
+  };
+
+  const handleChangeDes_delivery2 = (event) => {
+    event.preventDefault();
+    setDes_delivery(event.target.value);
   };
 
   const handleChangeDes_Description = (event) => {
     event.preventDefault();
     setDes_Description(event.target.value);
-    console.log(event.target.value)
   };
 
   const handleAutoDes_DeapartMent = async (e, index) => {
@@ -449,7 +431,7 @@ export default function Nac_Main() {
       setDes_BU('')
     } else {
       if (response.data[0].DepID === null) {
-        setDes_Department('CO')
+        setDes_Department('ROD')
         setDes_BU('Oil')
       } else if (response.data[0].DepID === 1) {
         setDes_Department('ITO')
@@ -514,7 +496,11 @@ export default function Nac_Main() {
     if (!source || !source_Department || !source_BU || !sourceDate) {
       swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning");
     } else {
-      if (!serviceList[0].assetsCode) {
+      let checkValue_BV = []
+      for (let i = 0; i < serviceList.length; i++) {
+        checkValue_BV[i] = serviceList[i].priceSeals
+      }
+      if (!serviceList[0].assetsCode || checkValue_BV.includes('') === true) {
         swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning");
       } else {
         const usercode = data.UserCode
@@ -557,6 +543,22 @@ export default function Nac_Main() {
               nacdtl_assetsPrice,
             });
             if ('data' in responseDTL) {
+              const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
+              const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
+              const nacdtl_profit = !serviceList[i].profit ? undefined : serviceList[i].profit
+              const asset_id = responseDTL.data[0].nacdtl_id
+              const nac_status = 1
+              await store_FA_control_updateDTL_seals({
+                usercode,
+                nac_code,
+                nac_status,
+                nac_type,
+                nacdtl_bookV,
+                nacdtl_PriceSeals,
+                nacdtl_profit,
+                asset_id,
+                nacdtl_assetsCode
+              });
               swal("ทำรายการสำเร็จ", 'สร้างรายการเปลี่ยนแปลงทรัพย์สิน ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
                 buttons: false,
                 timer: 2000,
@@ -632,7 +634,7 @@ export default function Nac_Main() {
               </Grid>
               <React.Fragment>
                 <Typography sx={{ pb: 1, pt: 1 }} color='error'>
-                  * กรุณากรอกข้อมูลสำหรับเปลี่ยนแปลงรายละเอียดทรัพย์สิน
+                  * กรุณากรอกข้อมูลสำหรับขายทรัพย์สิน
                 </Typography>
                 <TableContainer component={Paper}>
                   <Table aria-label="customized table" style={{ width: '100%' }}>
@@ -649,8 +651,8 @@ export default function Nac_Main() {
                           <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                             <FormGroup>
                               <center>
-                                <Typography variant='h4' color='primary'>
-                                  เปลี่ยนแปลงรายละเอียดทรัพย์สิน
+                                <Typography variant='h4'>
+                                  ขายทรัพย์สิน
                                 </Typography>
                               </center>
                             </FormGroup>
@@ -787,18 +789,18 @@ export default function Nac_Main() {
                                   align="center"
                                   name='des_Department'
                                   variant="standard"
-                                  value={des_Department}
+                                  value="none"
                                   inputProps={{ style: { textAlign: 'center' } }}
                                   onChange={handleChangeDes_Department}
                                 />
                                 <TextField
                                   required
                                   disabled
+                                  value="none"
                                   align='center'
                                   name='des_BU'
                                   fullWidth
                                   variant="standard"
-                                  value={des_BU}
                                   inputProps={{ style: { textAlign: 'center' } }}
                                   onChange={handleDes_ChangeBU}
                                 />
@@ -807,36 +809,30 @@ export default function Nac_Main() {
                                 fullWidth
                                 disabled
                                 autoComplete="family-name"
-                                value={des_delivery}
+                                onChange={handleChangeDes_delivery2}
+                                value={!des_delivery ? 'none' : des_delivery}
                                 sx={{ pt: 1 }}
                                 variant="standard"
                                 label='ผู้รับคำร้อง'
                               />
-                              <LocalizationProvider dateAdapter={DateAdapter}>
-                                <DatePicker
-                                  inputFormat="yyyy-MM-dd"
-                                  value={des_deliveryDate}
-                                  disabled
-                                  name='des_deliveryDate'
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          วันที่รับคำร้อง :
-                                        </Typography>
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  renderInput={(params) =>
-                                    <TextField
-                                      required
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      sx={{ pt: 1 }}
-                                      variant="standard"
-                                      {...params} />}
-                                />
-                              </LocalizationProvider>
+                              <TextField
+                                required
+                                fullWidth
+                                disabled
+                                name='des_deliveryApprove'
+                                value='none'
+                                sx={{ pt: 1 }}
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      <Typography color="black">
+                                        วันที่รับคำร้อง :
+                                      </Typography>
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                variant="standard"
+                              />
                               <TextField
                                 required
                                 fullWidth
@@ -867,12 +863,10 @@ export default function Nac_Main() {
                       <TableRow style={{ width: '100%' }}>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >Serial No.</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รายละเอียด</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >ชื่อ</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
-                          <Stack direction="row" alignItems="center" spacing={1}>
-                            <Typography>
+                          <Stack direction="row" alignItems="center" spacing={1} หป>
+                            <Typography sx={{ pl: 0.5 }}>
                               ราคา
                             </Typography>
                             <IconButton
@@ -884,6 +878,9 @@ export default function Nac_Main() {
                             </IconButton>
                           </Stack>
                         </StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >BV</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >ราคาขาย</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >กำไร/ขาดทุน</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >
                           <IconButton
                             size="large"
@@ -899,17 +896,9 @@ export default function Nac_Main() {
                       <React.Fragment>
                         <TableBody>
                           <StyledTableRow>
-                            <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                              <TextField
-                                sx={{ pt: 1 }}
-                                fullWidth
-                                disabled
-                                variant="standard"
-                                value={serviceList_Main[index].assetsCode}
-                              />
+                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <Autocomplete
                                 freeSolo
-                                sx={{ pt: 1 }}
                                 key={index}
                                 name='assetsCode'
                                 id='assetsCode'
@@ -933,97 +922,29 @@ export default function Nac_Main() {
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-                                sx={{ pt: 1 }}
                                 fullWidth
-                                disabled
-                                variant="standard"
-                                inputProps={{ style: { textAlign: 'center' } }}
-                                value={serviceList_Main[index].serialNo}
-                              />
-                              <TextField
-                                fullWidth
-                                sx={{ pt: 1 }}
                                 key={index}
                                 name="serialNo"
                                 id="serialNo"
-                                inputProps={{ style: { textAlign: 'center' } }}
-                                onChange={(e) => handleServiceChange(e, index)}
+                                //onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].serialNo}
+                                // value={serviceList[index].serialNo}
                                 variant="standard"
                               />
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-                                sx={{ pt: 1 }}
-                                fullWidth
-                                disabled
-                                variant="standard"
-                                value={serviceList_Main[index].name}
-                              />
-                              <TextField
-                                sx={{ pt: 1 }}
                                 fullWidth
                                 key={index}
                                 name="name"
                                 id="name"
-                                onChange={(e) => handleServiceChange(e, index)}
+                                //onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].name}
                                 variant="standard"
                               />
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-                                sx={{ pt: 1 }}
-                                fullWidth
-                                disabled
-                                variant="standard"
-                                value={serviceList_Main[index].dtl}
-                              />
-                              <TextField
-                                sx={{ pt: 1 }}
-                                fullWidth
-                                key={index}
-                                name="dtl"
-                                id="dtl"
-                                onChange={(e) => handleServiceChange(e, index)}
-                                value={serviceList[index].dtl}
-                                variant="standard"
-                              />
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                              <TextField
-                                sx={{ pt: 1 }}
-                                fullWidth
-                                disabled
-                                variant="standard"
-                                value={serviceList_Main[index].count}
-                              />
-                              <TextField
-                                fullWidth
-                                key={index}
-                                sx={{ pt: 1 }}
-                                name="count"
-                                id="count"
-                                type='number'
-                                onChange={(e) => handleServiceChange(e, index)}
-                                value={serviceList[index].count}
-                                inputProps={{ style: { textAlign: 'center' } }}
-                                InputProps={{ inputProps: { min: 1 } }}
-                                variant="standard"
-                              />
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                              <TextField
-                                sx={{ pt: 1 }}
-                                fullWidth
-                                disabled
-                                type={valuesVisibility.showText ? "text" : "password"}
-                                variant="standard"
-                                value={(!serviceList_Main[index].price ? serviceList_Main[index].price : (serviceList_Main[index].price).toLocaleString())}
-                                inputProps={{ style: { textAlign: 'center' } }}
-                              />
-                              <TextField
-                                sx={{ pt: 1 }}
                                 fullWidth
                                 key={index}
                                 name="price"
@@ -1031,6 +952,43 @@ export default function Nac_Main() {
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 // onChange={(e) => handleServiceChange(e, index)}
                                 value={!serviceList[index].price ? serviceList[index].price : (serviceList[index].price).toLocaleString()}
+                                inputProps={{ style: { textAlign: 'center' } }}
+                                variant="standard"
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
+                                fullWidth
+                                disabled
+                                key={index}
+                                value='none'
+                                name="bookValue"
+                                id="bookValue"
+                                inputProps={{ style: { textAlign: 'center' } }}
+                                variant="standard"
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
+                                fullWidth
+                                key={index}
+                                value={singleService.service}
+                                onChange={(e) => handleServiceChange(e, index)}
+                                name="priceSeals"
+                                id="priceSeals"
+                                inputProps={{ style: { textAlign: 'center' } }}
+                                variant="standard"
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
+                                fullWidth
+                                disabled
+                                key={index}
+                                value='none'
+                                //type={valuesVisibility.showText ? "text" : "password"}
+                                name="profit"
+                                id="profit"
                                 inputProps={{ style: { textAlign: 'center' } }}
                                 variant="standard"
                               />

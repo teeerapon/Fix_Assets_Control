@@ -188,6 +188,30 @@ async function store_FA_control_updateStatus(credentials) {
     .then(data => data.json())
 }
 
+async function store_FA_control_seals_update(credentials) {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_seals_update', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
+async function store_FA_control_updateDTL_seals(credentials) {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_seals_update', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 async function store_FA_control_comment(credentials) {
   return fetch('http://192.168.220.1:32001/api/store_FA_control_comment', {
     method: 'POST',
@@ -236,19 +260,7 @@ async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
     .then(data => data.json())
 }
 
-async function store_FA_control_updateDTL_seals(credentials) {
-  return fetch('http://192.168.220.1:32001/api/store_FA_control_seals_update', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-export default function Nac_Main_wait() {
+export default function Nac_Seals_Approve() {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
   const d = new Date();
@@ -262,7 +274,7 @@ export default function Nac_Main_wait() {
 
   const navigate = useNavigate();
   const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
-  const sum_price = serviceList.reduce((total, serviceList) => total = total + serviceList.price * serviceList.count, 0);
+  const sum_price = serviceList.reduce((total, serviceList) => total = total + serviceList.price, 0);
   const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
@@ -390,13 +402,11 @@ export default function Nac_Main_wait() {
         , assetsCode: res.nacdtl_assetsCode
         , serialNo: res.nacdtl_assetsSeria
         , name: res.nacdtl_assetsName
-        , dtl: res.nacdtl_assetsDtl
-        , count: res.nacdtl_assetsCount
         , price: res.nacdtl_assetsPrice
         , asset_id: res.nacdtl_id
-        , bookValue: res.nacdtl_bookV
-        , priceSeals: res.nacdtl_PriceSeals
-        , profit: res.nacdtl_profit
+        , bookValue: ""
+        , priceSeals: ""
+        , profit: ""
       };
     }));
 
@@ -501,7 +511,7 @@ export default function Nac_Main_wait() {
   };
 
   const handleServiceAdd = () => {
-    setServiceList([...serviceList, { dtl_id: "", assetsCode: "", serialNo: "", name: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
+    setServiceList([...serviceList, { dtl_id: 0, assetsCode: "", serialNo: "", name: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
   };
 
   const handleServiceRemove = (index) => {
@@ -540,9 +550,6 @@ export default function Nac_Main_wait() {
         list[index]['count'] = ''
         list[index]['serialNo'] = ''
         list[index]['price'] = ''
-        list[index]['bookValue'] = ''
-        list[index]['priceSeals'] = ''
-        list[index]['profit'] = ''
         setServiceList(list);
       } else {
         const Code = list[index]['assetsCode'];
@@ -555,9 +562,6 @@ export default function Nac_Main_wait() {
           list[index]['count'] = 1
           list[index]['serialNo'] = response['data'][0].SerialNo
           list[index]['price'] = response['data'][0].Price
-          list[index]['bookValue'] = ''
-          list[index]['priceSeals'] = ''
-          list[index]['profit'] = ''
           setServiceList(list);
         }
       }
@@ -582,10 +586,6 @@ export default function Nac_Main_wait() {
 
   const handleChangeSource_deliveryDate = (newValue) => {
     setSourceDate(newValue);
-  };
-
-  const handleChangeSource_deliveryApproveDate = (newValue) => {
-    setSource_DateApproveDate(newValue);
   };
 
   const handleChangeSource_Description = (event) => {
@@ -683,10 +683,6 @@ export default function Nac_Main_wait() {
 
   };
 
-  const handleChangeDes_deliveryDate = (newValue) => {
-    setDes_deliveryDate(newValue);
-  };
-
   const handleAutoDes_DeapartMent = async (e, index) => {
     const UserCode = e.target.innerText
     const response = await AutoDeapartMent({
@@ -764,75 +760,71 @@ export default function Nac_Main_wait() {
     if (!source || !source_department || !source_BU || !sourceDate) {
       swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning");
     } else {
-      if (!des_department || !des_BU || !des_delivery || !des_deliveryDate) {
-        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้รับคำร้องให้ครบถ้วน', "warning");
+      if (!serviceList[0].assetsCode) {
+        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning");
       } else {
-        if (!serviceList[0].assetsCode) {
-          swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning");
-        } else {
-          const usercode = data.UserCode
-          const nac_status = 1
-          const sumPrice = sum_price
-          const nac_type = headers.nac_type
-          const response = await store_FA_control_update_DTLandHeaders({
-            usercode,
-            nac_code,
-            nac_status,
-            sumPrice,
-            nac_type,
-            des_department,
-            des_BU,
-            des_delivery,
-            des_deliveryDate,
-            des_description,
-            source_department,
-            source_BU,
-            source,
-            sourceDate,
-            source_description,
-          });
-          if ('data' in response) {
-            for (let i = 0; i < serviceList.length; i++) {
-              const dtl_id = serviceList[i].dtl_id
-              const nacdtl_row = i
-              const nacdtl_assetsCode = serviceList[i].assetsCode
-              const nacdtl_assetsName = serviceList[i].name
-              const nacdtl_assetsSeria = serviceList[i].serialNo
-              const nacdtl_assetsDtl = serviceList[i].dtl
-              const nacdtl_assetsCount = serviceList[i].count
-              const nacdtl_assetsPrice = serviceList[i].price
-              const asset_id = serviceList[i].asset_id
-              const responseDTL = await store_FA_control_update_DTL({
-                dtl_id,
-                usercode,
-                nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
-                nacdtl_row,
-                nacdtl_assetsCode,
-                nacdtl_assetsName,
-                nacdtl_assetsSeria,
-                nacdtl_assetsDtl,
-                nacdtl_assetsCount,
-                nacdtl_assetsPrice,
-                asset_id
+        const usercode = data.UserCode
+        const nac_status = 1
+        const sumPrice = sum_price
+        const nac_type = headers.nac_type
+        const response = await store_FA_control_update_DTLandHeaders({
+          usercode,
+          nac_code,
+          nac_status,
+          sumPrice,
+          nac_type,
+          des_department,
+          des_BU,
+          des_delivery,
+          des_deliveryDate,
+          des_description,
+          source_department,
+          source_BU,
+          source,
+          sourceDate,
+          source_description,
+        });
+        if ('data' in response) {
+          for (let i = 0; i < serviceList.length; i++) {
+            const dtl_id = serviceList[i].dtl_id
+            const nacdtl_row = i
+            const nacdtl_assetsCode = serviceList[i].assetsCode
+            const nacdtl_assetsName = serviceList[i].name
+            const nacdtl_assetsSeria = serviceList[i].serialNo
+            const nacdtl_assetsDtl = serviceList[i].dtl
+            const nacdtl_assetsCount = serviceList[i].count
+            const nacdtl_assetsPrice = serviceList[i].price
+            const asset_id = serviceList[i].asset_id
+            const responseDTL = await store_FA_control_update_DTL({
+              dtl_id,
+              usercode,
+              nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
+              nacdtl_row,
+              nacdtl_assetsCode,
+              nacdtl_assetsName,
+              nacdtl_assetsSeria,
+              nacdtl_assetsDtl,
+              nacdtl_assetsCount,
+              nacdtl_assetsPrice,
+              asset_id
+            });
+            if ('data' in responseDTL) {
+              swal("ทำรายการสำเร็จ", 'อัปเดตรายการ ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
+                buttons: false,
+                timer: 2000,
+              }).then((value) => {
+                if (data.UserCode === headers.create_by) {
+                  navigate('/NAC_ROW')
+                } else {
+                  navigate('/NAC_ROW')
+                }
               });
-              if ('data' in responseDTL) {
-                swal("ทำรายการสำเร็จ", 'อัปเดตรายการ ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
-                  buttons: false,
-                  timer: 2000,
-                }).then((value) => {
-                  if (checkUserWeb === 'true') {
-                    navigate('/NAC_OPERATOR')
-                  } else {
-                    navigate('/NAC_ROW')
-                  }
-                });
-              } else {
-                swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error");
-              }
+            } else {
+              swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error");
             }
-          } else {
-            swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error");
           }
+        } else {
+          swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error");
         }
       }
     }
@@ -843,66 +835,55 @@ export default function Nac_Main_wait() {
     if (!source || !source_department || !source_BU || !sourceDate) {
       swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning");
     } else {
-      if (!des_department || !des_BU || !des_delivery) {
-        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้รับคำร้องให้ครบถ้วน', "warning");
+      if (!serviceList[0].assetsCode) {
+        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning");
       } else {
-        if (!serviceList[0].assetsCode) {
-          swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning");
+        if (sum_price !== headers.sum_price || headers.source_userid !== source || headers.des_userid !== des_delivery) {
+          swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยื่นคำร้อง', "warning");
         } else {
-          if (sum_price !== headers.sum_price || headers.source_userid !== source || headers.des_userid !== des_delivery) {
-            swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยื่นคำร้อง', "warning");
-          } else {
-            if (data.UserCode === headers.create_by) {
-              const usercode = data.UserCode
-              const nac_status = 11
-              const source_approve = sourceApprove
-              const source_approve_date = sourceDateApproveDate
-              const des_approve = des_deliveryApprove
-              const des_approve_date = des_deliveryApproveDate
-              const verify_by = bossApprove
-              const verify_date = bossApproveDate
-              const nac_type = headers.nac_type
-              const responseForUpdate = await store_FA_control_updateStatus({
-                usercode,
-                nac_code,
-                nac_status,
-                nac_type,
-                source,
-                sourceDate,
-                des_delivery,
-                des_deliveryDate,
-                source_approve,
-                source_approve_date,
-                des_approve,
-                des_approve_date,
-                verify_by,
-                verify_date,
+          if (data.UserCode === headers.create_by) {
+            const usercode = data.UserCode
+            const nac_status = 10
+            const source_approve = sourceApprove
+            const source_approve_date = sourceDateApproveDate
+            const des_approve = des_deliveryApprove
+            const des_approve_date = des_deliveryApproveDate
+            const verify_by = bossApprove
+            const verify_date = bossApproveDate
+            const nac_type = headers.nac_type
+            const responseForUpdate = await store_FA_control_updateStatus({
+              usercode,
+              nac_code,
+              nac_status,
+              nac_type,
+              source,
+              sourceDate,
+              des_delivery,
+              des_deliveryDate,
+              source_approve,
+              source_approve_date,
+              des_approve,
+              des_approve_date,
+              verify_by,
+              verify_date,
+            });
+            const comment = 'ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+            const responseComment = await store_FA_control_comment({
+              nac_code,
+              usercode,
+              comment
+            })
+            if ('data' in responseComment) {
+              swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+                buttons: false,
+                timer: 2000,
+              }).then((value) => {
+                if (data.UserCode === headers.create_by) {
+                  navigate('/NAC_ROW')
+                } else {
+                  navigate('/NAC_ROW')
+                }
               });
-              const comment = 'ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว'
-              const responseComment = await store_FA_control_comment({
-                nac_code,
-                usercode,
-                comment
-              })
-              if ('data' in responseComment) {
-                swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
-                  buttons: false,
-                  timer: 2000,
-                }).then((value) => {
-                  if (checkUserWeb === 'true') {
-                    navigate('/NAC_OPERATOR')
-                  } else {
-                    navigate('/NAC_ROW')
-                  }
-                });
-              } else {
-                swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
-                  buttons: false,
-                  timer: 2000,
-                }).then((value) => {
-                  navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
-                });
-              }
             } else {
               swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
                 buttons: false,
@@ -911,6 +892,13 @@ export default function Nac_Main_wait() {
                 navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
               });
             }
+          } else {
+            swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+              buttons: false,
+              timer: 2000,
+            }).then((value) => {
+              navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
+            });
           }
         }
       }
@@ -1046,7 +1034,7 @@ export default function Nac_Main_wait() {
   const handleExecApprove = async () => {
     if (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'true') {
       const usercode = data.UserCode
-      const nac_status = 5
+      const nac_status = 21
       const source_approve = sourceApprove
       const source_approve_date = sourceDateApproveDate
       const des_approve = des_deliveryApprove
@@ -1295,7 +1283,7 @@ export default function Nac_Main_wait() {
       des_approve,
       des_approve_date,
       verify_by,
-      verify_date,
+      verify_date
     });
     if ('data' in responseForUpdate) {
       const comment = commentReply
@@ -1315,6 +1303,87 @@ export default function Nac_Main_wait() {
     }
   }
 
+  //store_FA_control_seals_update
+  const handleSubmitSeals = async () => {
+    if (!checkPath && selectNAC === 21) {
+      swal("แจ้งเตือน", 'กรุณาแนบเอกสารประกอบการขายทรัพย์สิน', "warning");
+    } else {
+      const usercode = data.UserCode
+      const nac_status = (selectNAC === 21 ? 22 : selectNAC === 22 ? 23 : 24)
+      const nac_type = headers.nac_type
+      const source = headers.source_userid
+      const sourceDate = headers.source_date
+      const source_approve = sourceApprove
+      const source_approve_date = sourceDateApproveDate
+      const des_approve = des_deliveryApprove
+      const des_approve_date = des_deliveryApproveDate
+      const verify_by = bossApprove
+      const verify_date = bossApproveDate
+      const responseUpdateSeals = await store_FA_control_seals_update({
+        usercode,
+        nac_code,
+        nac_status,
+        nac_type,
+        source,
+        sourceDate,
+        des_delivery,
+        des_deliveryDate,
+        source_approve,
+        source_approve_date,
+        des_approve,
+        des_approve_date,
+        verify_by,
+        verify_date
+      });
+      if ('data' in responseUpdateSeals) {
+        if (serviceList[0].bookValue !== '' || serviceList[0].priceSeals !== '' || serviceList[0].profit !== '' || serviceList[0].assetsCode !== '' || serviceList[0].asset_id !== '') {
+          for (let i = 0; i < serviceList.length; i++) {
+            const nacdtl_bookV = serviceList[i].bookValue
+            const nacdtl_PriceSeals = serviceList[i].priceSeals
+            const nacdtl_profit = serviceList[i].profit
+            const asset_id = serviceList[i].assetsCode
+            const nacdtl_assetsCode = serviceList[i].asset_id
+            const responseUpdateDTL_Seals = await store_FA_control_updateDTL_seals({
+              usercode,
+              nac_code,
+              nac_status,
+              nac_type,
+              nacdtl_bookV,
+              nacdtl_PriceSeals,
+              nacdtl_profit,
+              asset_id,
+              nacdtl_assetsCode
+            });
+            if ('data' in responseUpdateDTL_Seals) {
+              swal("ทำรายการสำเร็จ", 'อัปเดตรายการ ' + responseUpdateDTL_Seals.data[0].nac_code + ' แล้ว', "success", {
+                buttons: false,
+                timer: 2000,
+              }).then((value) => {
+                if (data.UserCode === headers.create_by) {
+                  navigate('/NAC_ROW')
+                } else {
+                  navigate('/NAC_ROW')
+                }
+              });
+            } else {
+              swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error");
+            }
+          }
+        }
+      } else {
+        swal("ทำรายการสำเร็จ", 'อัปเดตรายการ ' + responseUpdateSeals.data[0].nac_code + ' แล้ว', "success", {
+          buttons: false,
+          timer: 2000,
+        }).then((value) => {
+          if (checkUserWeb === 'true') {
+            navigate('/NAC_OPERATOR')
+          } else {
+            navigate('/NAC_ROW')
+          }
+        });
+      }
+    }
+  }
   if (headers.length === 0) {
     return (
       <React.Fragment>
@@ -1408,7 +1477,7 @@ export default function Nac_Main_wait() {
                 </Grid>
                 <React.Fragment>
                   <Typography sx={{ pb: 1, pt: 1 }} color='error'>
-                    * กรุณากรอกข้อมูลสำหรับตัดจากบัญชีทรัพย์สินถาวร
+                    * กรุณากรอกข้อมูลสำหรับขายทรัพย์สิน
                   </Typography>
                   <TableContainer component={Paper}>
                     <Table aria-label="customized table" style={{ width: '100%' }}>
@@ -1427,7 +1496,7 @@ export default function Nac_Main_wait() {
                                 <FormGroup>
                                   <center>
                                     <Typography variant='h4' color='black'>
-                                      ตัดจากบัญชีทรัพย์สินถาวร
+                                      ขายทรัพย์สิน
                                     </Typography>
                                     <Typography variant='h6' color='error'>
                                       (ไม่ผ่านการอนุมัติ)
@@ -1438,7 +1507,7 @@ export default function Nac_Main_wait() {
                                 <FormGroup>
                                   <center>
                                     <Typography variant='h4' color='black'>
-                                      ตัดจากบัญชีทรัพย์สินถาวร
+                                      ขายทรัพย์สิน
                                     </Typography>
                                     <Typography variant='h6' style={{ 'color': 'green' }}>
                                       (ดำเนินการเสร็จสิ้น)
@@ -1449,7 +1518,7 @@ export default function Nac_Main_wait() {
                                 <FormGroup>
                                   <center>
                                     <Typography variant='h4' color='black'>
-                                      ตัดจากบัญชีทรัพย์สินถาวร
+                                      ขายทรัพย์สิน
                                     </Typography>
                                   </center>
                                 </FormGroup>
@@ -1742,6 +1811,7 @@ export default function Nac_Main_wait() {
                                   disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                   name="name"
                                   id="name"
+
                                   variant="standard"
                                   onChange={(e) => handleServiceChange(e, index)}
                                   value={singleService.name}
@@ -1783,10 +1853,10 @@ export default function Nac_Main_wait() {
                                   name="priceSeals"
                                   id="priceSeals"
                                   inputProps={{ style: { textAlign: 'center' } }}
-                                  //type={valuesVisibility.showText ? "text" : "password"}
+                                  type={valuesVisibility.showText ? "text" : "password"}
                                   variant="standard"
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={!singleService.priceSeals ? '0' : (singleService.priceSeals).toLocaleString()}
+                                  value={!singleService.priceSeals ? '' : (singleService.priceSeals).toLocaleString()}
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>

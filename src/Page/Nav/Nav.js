@@ -14,7 +14,6 @@ import SvgIcon from '@mui/material/SvgIcon';
 import { Outlet, useNavigate } from "react-router";
 import swal from 'sweetalert';
 import Grid from '@mui/material/Grid';
-import ListIcon from '@mui/icons-material/List';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +40,18 @@ function HomeIcon(props) {
   );
 }
 
+async function ChackUserWeb(credentials) {
+  return fetch('http://192.168.220.1:32001/api/ChackUserWeb', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 
 export default function MenuAppBar() {
   const classes = useStyles();
@@ -55,11 +66,23 @@ export default function MenuAppBar() {
   const [anchorEl4, setAnchorEl4] = React.useState(null);
   const [anchorEl5, setAnchorEl5] = React.useState(null);
   const data = JSON.parse(localStorage.getItem('data'));
+  const [checkUserWeb,setCheckUserWeb] = React.useState();
   const navigate = useNavigate();
 
-  // const NAC = () => {
-  //   window.location.href = "/";
-  // };
+
+  const fetchCheckUser = async () => {
+    const usercode = data.UserCode;
+    const response = await ChackUserWeb({
+      usercode
+    });
+    if('data' in response){
+      setCheckUserWeb(response.data[0].approverid)
+    }
+  }
+
+  React.useEffect(() => {
+    fetchCheckUser();
+  }, []);
 
   function PeriodOpen() {
     navigate('/CreatePeriod')
@@ -79,11 +102,6 @@ export default function MenuAppBar() {
 
   function REPORT() {
     navigate('/Report')
-    setAnchorEl3(null);
-  };
-  function REPORTAll() {
-
-    navigate('/ReportAll')
     setAnchorEl3(null);
   };
 
@@ -111,14 +129,20 @@ export default function MenuAppBar() {
     setAnchorEl5(null);
   }
 
+  function NAC_SEALS() {
+    navigate('/NAC_SEALS_STEP1')
+    setAnchorEl3(null);
+    setAnchorEl5(null);
+  }
+
   function DOC_NAC_ME() {
     navigate('/NAC_ROW')
     setAnchorEl3(null);
     setAnchorEl5(null);
   }
 
-  function NAC_WAIT_APPROVE() {
-    navigate('/NAC_WAIT_APPROVE')
+  function NAC_OPERATOR() {
+    navigate('/NAC_OPERATOR')
     setAnchorEl3(null);
     setAnchorEl5(null);
   }
@@ -153,9 +177,9 @@ export default function MenuAppBar() {
     setAnchorEl3(event.currentTarget);
   };
 
-  const handleMenu4 = (event) => {
-    setAnchorEl4(event.currentTarget);
-  };
+  // const handleMenu4 = (event) => {
+  //   setAnchorEl4(event.currentTarget);
+  // };
 
   const handleClose4 = () => {
     setAnchorEl4(null);
@@ -190,176 +214,324 @@ export default function MenuAppBar() {
       },
     },
   });
-  return (
-    <>
-      <ThemeProvider theme={darkTheme}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 1, display: { xs: 'none', md: 'flex' } }}
-            >
-              <HomeIcon />
-            </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>HOME</Button>
-              {auth3 && (
-                <div>
-                  <Button onClick={handleMenu3} sx={{ my: 2, color: 'white', display: 'block' }}>NAC</Button>
-                  <Menu
-                    sx={{ mt: '45px' }}
-                    id="menu-appbar"
-                    anchorEl={anchorEl3}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}
-                    open={Boolean(anchorEl3)}
-                    onClose={handleClose3}
-                  >
-                    {auth5 && (
-                      <div>
-                        <MenuItem onClick={handleMenu5}>
-                          <Grid container spacing={2}>
-                            <Grid item xs={10}>
-                              เปลี่ยนแปลงทรัพย์สินถาวร
-                            </Grid>
-                            <Grid item xs={2}>
-                              <ArrowRightIcon />
-                            </Grid>
-                          </Grid>
-                        </MenuItem>
-                        <Menu
-                          id="menu-appbar"
-                          anchorEl={anchorEl5}
-                          anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                          }}
-                          keepMounted
-                          transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'left',
-                          }}
-                          open={Boolean(anchorEl5)}
-                          onClose={handleClose5}
-                        >
-                          <MenuItem onClick={NAC_NEW}>เพิ่มบัญชีทรัพย์สินถาวร</MenuItem>
-                          <MenuItem onClick={NAC_NAC}>โยกย้ายทรัพย์สิน</MenuItem>
-                          <MenuItem onClick={NAC_CHANGE}>เปลี่ยนแปลงรายละเอียดทรัพย์สิน</MenuItem>
-                          <MenuItem onClick={NAC_DELETE}>ตัดจากบัญชีทรัพย์สินถาวร</MenuItem>
-                          <MenuItem onClick={handleClose5}>ขายทรัพย์สิน</MenuItem>
-                        </Menu>
-                      </div>
-                    )}
-                    <MenuItem onClick={DOC_NAC_ME}>เปลี่ยนแปลงทรัพย์สินถาวร ของฉัน</MenuItem>
-                    <MenuItem onClick={NAC_WAIT_APPROVE}>อนุมัติ เปลี่ยนแปลงทรัพย์สินถาวร</MenuItem>
-                  </Menu>
-                </div>
-              )}
-              {auth2 && (
-                <div>
-                  <Button onClick={handleMenu2} sx={{ my: 2, color: 'white', display: 'block' }}>PERIOD</Button>
-                  <Menu
-                    sx={{ mt: '45px' }}
-                    id="menu-appbar"
-                    anchorEl={anchorEl2}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}
-                    open={Boolean(anchorEl2)}
-                    onClose={handleClose2}
-                  >
-                    <MenuItem onClick={PeriodOpen}>เพิ่มรอบตรวจนับ</MenuItem>
-                    <MenuItem onClick={PeriodEdit}>แก้ไขรอบตรวจนับ</MenuItem>
-                  </Menu>
-                </div>
-              )}
-              {auth4 && (
-                <div>
-                  <Button onClick={REPORT} sx={{ my: 2, color: 'white', display: 'block' }}>REPORT</Button>
-                  <Menu
-                    sx={{ mt: '45px' }}
-                    id="menu-appbar"
-                    anchorEl={anchorEl4}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}
-                    open={Boolean(anchorEl4)}
-                    onClose={handleClose4}
-                  >
-                    <MenuItem onClick={REPORT}>กำหนดสาขา</MenuItem>
-                    <MenuItem onClick={handleClose4}>แสดงทั้งหมด</MenuItem> {/* REPORTAll */}
-                  </Menu>
-                </div>
-              )}
-            </Box>
-            <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} className={classes.root} >
-                {data.name}
-              </Typography>
-            </div>
-            {auth && (
-              <div>
-                <Box sx={{ flexGrow: 0 }}>
-                  <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    onClick={handleMenu}
-                    color="inherit"
-                  >
 
-                    <AccountCircle />
-                  </IconButton>
-                  <Menu
-                    sx={{ mt: '45px' }}
-                    id="menu-appbar"
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                  >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
-                    <MenuItem onClick={handleLogout}>Log Out</MenuItem>
-                  </Menu>
-                </Box>
+  if(checkUserWeb === 'true'){
+    return (
+      <>
+        <ThemeProvider theme={darkTheme}>
+          <AppBar position="static">
+            <Toolbar>
+              <Typography
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 1, display: { xs: 'none', md: 'flex' } }}
+              >
+                <HomeIcon />
+              </Typography>
+              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>HOME</Button>
+                {auth3 && (
+                  <React.Fragment>
+                    <Button onClick={handleMenu3} sx={{ my: 2, color: 'white', display: 'block' }}>NAC</Button>
+                    <Menu
+                      sx={{ mt: '45px' }}
+                      id="menu-appbar"
+                      anchorEl={anchorEl3}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      open={Boolean(anchorEl3)}
+                      onClose={handleClose3}
+                    >
+                      {auth5 && (
+                        <React.Fragment>
+                          <MenuItem onClick={handleMenu5}>
+                            <Grid container spacing={1}>
+                              <Grid item xs={10}>
+                                จัดการทรัพย์สินถาวร
+                              </Grid>
+                              <Grid item xs={2}>
+                                <ArrowRightIcon />
+                              </Grid>
+                            </Grid>
+                          </MenuItem>
+                          <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl5}
+                            anchorOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                              vertical: 'top',
+                              horizontal: 'left',
+                            }}
+                            open={Boolean(anchorEl5)}
+                            onClose={handleClose5}
+                          >
+                            <MenuItem onClick={NAC_NEW}>เพิ่มบัญชีทรัพย์สินถาวร</MenuItem>
+                            <MenuItem onClick={NAC_NAC}>โยกย้ายทรัพย์สิน</MenuItem>
+                            <MenuItem onClick={NAC_CHANGE}>เปลี่ยนแปลงรายละเอียดทรัพย์สิน</MenuItem>
+                            <MenuItem onClick={NAC_DELETE}>ตัดจากบัญชีทรัพย์สินถาวร</MenuItem>
+                            <MenuItem onClick={NAC_SEALS}>ขายทรัพย์สิน</MenuItem>
+                          </Menu>
+                        </React.Fragment>
+                      )}
+                      <MenuItem onClick={DOC_NAC_ME}>สถานะรายการ NAC</MenuItem>
+                      <MenuItem onClick={NAC_OPERATOR}>สถานะรายการ NAC ทั้งหมด</MenuItem>
+                    </Menu>
+                  </React.Fragment>
+                )}
+                {auth2 && (
+                  <React.Fragment>
+                    <Button onClick={handleMenu2} sx={{ my: 2, color: 'white', display: 'block' }}>PERIOD</Button>
+                    <Menu
+                      sx={{ mt: '45px' }}
+                      id="menu-appbar"
+                      anchorEl={anchorEl2}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      open={Boolean(anchorEl2)}
+                      onClose={handleClose2}
+                    >
+                      <MenuItem onClick={PeriodOpen}>เพิ่มรอบตรวจนับ</MenuItem>
+                      <MenuItem onClick={PeriodEdit}>แก้ไขรอบตรวจนับ</MenuItem>
+                    </Menu>
+                  </React.Fragment>
+                )}
+                {auth4 && (
+                  <React.Fragment>
+                    <Button onClick={REPORT} sx={{ my: 2, color: 'white', display: 'block' }}>REPORT</Button>
+                    <Menu
+                      sx={{ mt: '45px' }}
+                      id="menu-appbar"
+                      anchorEl={anchorEl4}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      open={Boolean(anchorEl4)}
+                      onClose={handleClose4}
+                    >
+                      <MenuItem onClick={REPORT}>กำหนดสาขา</MenuItem>
+                      <MenuItem onClick={handleClose4}>แสดงทั้งหมด</MenuItem> {/* REPORTAll */}
+                    </Menu>
+                  </React.Fragment>
+                )}
+              </Box>
+              <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
+                  {data.name}
+                </Typography>
               </div>
-            )}
-          </Toolbar>
-        </AppBar>
-        <Outlet />
-      </ThemeProvider>
-    </>
-  );
+              {auth && (
+                <React.Fragment>
+                  <Box sx={{ flexGrow: 0 }}>
+                    <IconButton
+                      size="large"
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      color="inherit"
+                    >
+  
+                      <AccountCircle />
+                    </IconButton>
+                    <Menu
+                      sx={{ mt: '45px' }}
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+                    </Menu>
+                  </Box>
+                </React.Fragment>
+              )}
+            </Toolbar>
+          </AppBar>
+          <Outlet />
+        </ThemeProvider>
+      </>
+    );
+  }else{
+    return (
+      <>
+        <ThemeProvider theme={darkTheme}>
+          <AppBar position="static">
+            <Toolbar>
+              <Typography
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 1, display: { xs: 'none', md: 'flex' } }}
+              >
+                <HomeIcon />
+              </Typography>
+              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>HOME</Button>
+                {auth3 && (
+                  <React.Fragment>
+                    <Button onClick={handleMenu3} sx={{ my: 2, color: 'white', display: 'block' }}>NAC</Button>
+                    <Menu
+                      sx={{ mt: '45px' }}
+                      id="menu-appbar"
+                      anchorEl={anchorEl3}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      open={Boolean(anchorEl3)}
+                      onClose={handleClose3}
+                    >
+                      {auth5 && (
+                        <React.Fragment>
+                          <MenuItem onClick={handleMenu5}>
+                            <Grid container spacing={1}>
+                              <Grid item xs={10}>
+                                จัดการทรัพย์สินถาวร
+                              </Grid>
+                              <Grid item xs={2}>
+                                <ArrowRightIcon />
+                              </Grid>
+                            </Grid>
+                          </MenuItem>
+                          <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl5}
+                            anchorOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                              vertical: 'top',
+                              horizontal: 'left',
+                            }}
+                            open={Boolean(anchorEl5)}
+                            onClose={handleClose5}
+                          >
+                            <MenuItem onClick={NAC_NAC}>โยกย้ายทรัพย์สิน</MenuItem>
+                            <MenuItem onClick={NAC_CHANGE}>เปลี่ยนแปลงรายละเอียดทรัพย์สิน</MenuItem>
+                            <MenuItem onClick={NAC_DELETE}>ตัดจากบัญชีทรัพย์สินถาวร</MenuItem>
+                            <MenuItem onClick={handleClose5}>ขายทรัพย์สิน</MenuItem>
+                          </Menu>
+                        </React.Fragment>
+                      )}
+                      <MenuItem onClick={DOC_NAC_ME}>สถานะรายการ NAC</MenuItem>
+                    </Menu>
+                  </React.Fragment>
+                )}
+                {auth4 && (
+                  <React.Fragment>
+                    <Button onClick={REPORT} sx={{ my: 2, color: 'white', display: 'block' }}>REPORT</Button>
+                    <Menu
+                      sx={{ mt: '45px' }}
+                      id="menu-appbar"
+                      anchorEl={anchorEl4}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      open={Boolean(anchorEl4)}
+                      onClose={handleClose4}
+                    >
+                      <MenuItem onClick={REPORT}>กำหนดสาขา</MenuItem>
+                      <MenuItem onClick={handleClose4}>แสดงทั้งหมด</MenuItem> {/* REPORTAll */}
+                    </Menu>
+                  </React.Fragment>
+                )}
+              </Box>
+              <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
+                  {data.name}
+                </Typography>
+              </div>
+              {auth && (
+                <React.Fragment>
+                  <Box sx={{ flexGrow: 0 }}>
+                    <IconButton
+                      size="large"
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      color="inherit"
+                    >
+  
+                      <AccountCircle />
+                    </IconButton>
+                    <Menu
+                      sx={{ mt: '45px' }}
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+                    </Menu>
+                  </Box>
+                </React.Fragment>
+              )}
+            </Toolbar>
+          </AppBar>
+          <Outlet />
+        </ThemeProvider>
+      </>
+    );
+  }
 }

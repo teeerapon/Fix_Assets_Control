@@ -28,25 +28,19 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import DatePicker from '@mui/lab/DatePicker';
-import { Outlet, useNavigate } from "react-router";
 import Box from '@mui/material/Box';
 import Axios from "axios"
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import AddCardIcon from '@mui/icons-material/AddCard';
-import ChatIcon from '@mui/icons-material/Chat';
+import swal from 'sweetalert';
+import { Outlet, useNavigate } from "react-router";
+import CommentNAC from '../Comment'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Input from '@mui/material/Input';
-import swal from 'sweetalert';
-import List from '@mui/material/List';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function Copyright() {
   return (
@@ -92,18 +86,6 @@ async function store_FA_control_select_dtl(credentials) {
 
 async function store_FA_control_select_headers(credentials) {
   return fetch('http://192.168.220.1:32001/api/store_FA_control_select_headers', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-async function store_FA_control_select_NAC(credentials) {
-  return fetch('http://192.168.220.1:32001/api/store_FA_control_select_NAC', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -218,8 +200,32 @@ async function store_FA_control_comment(credentials) {
     .then(data => data.json())
 }
 
-async function qureyNAC_comment(credentials) {
-  return fetch('http://192.168.220.1:32001/api/qureyNAC_comment', {
+async function ChackUserWeb(credentials) {
+  return fetch('http://192.168.220.1:32001/api/ChackUserWeb', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
+async function store_FA_control_CheckAssetCode_Process(credentials) {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_CheckAssetCode_Process', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
+async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
+  return fetch('http://192.168.220.1:32001/api/stroe_FA_control_DTL_ConfirmSuccess', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -242,15 +248,18 @@ export default function Nac_Main_wait() {
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
   const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "", asset_id: "", code_main: "", no_main: "", name_main: "", dtl_main: "", price_main: "" }]);
-  const sum_price = (serviceList.reduce((total, serviceList) => total = total + (serviceList.price * serviceList.count), 0)).toFixed(3);
+  const sum_price = serviceList.reduce((total, serviceList) => total = total + serviceList.price * serviceList.count, 0);
   const data = JSON.parse(localStorage.getItem('data'));
+  const dataDepID = data.depid
+  const [users_pureDep, setUsers_pureDep] = React.useState([]);
   const data_nac = JSON.parse(localStorage.getItem('NacCode'));
   const nac_code = data_nac.nac_code
   const nac_status = data_nac.nac_status
   const [selectNAC, setSelectNAC] = React.useState(nac_status);
-  const [dtl, setDtl] = React.useState([]);
   const [headers, setHeaders] = React.useState([]);
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [openDialogReply, setOpenDialogReply] = React.useState(false);
+  const [commentReply, setCommentReply] = React.useState();
   const [UserForAssetsControl, setUserForAssetsControl] = React.useState([]);
   const [AllAssetsControl, setAllAssetsControl] = React.useState([]);
 
@@ -258,24 +267,28 @@ export default function Nac_Main_wait() {
   const [ExecApprove, setExecApprove] = React.useState([]);
   const [CheckApprove, setCheckApprove] = React.useState([]);
   const [CheckExamineApprove, setCheckExamineApprove] = React.useState([]);
-  const [comment, setComment] = React.useState();
-  const [commentFetch, setCommentFetch] = React.useState([]);
-
+  const [CheckExamineApproveDes, setCheckExamineApproveDes] = React.useState([]);
+  const [checked, setChecked] = React.useState([{ assets_code: "", statusCheck: "", asset_id: "" }]);
+  const [ExamineApproveDes, setExamineApproveDes] = React.useState([]);
+  const [path, setPath] = React.useState();
+  const [description, setDescription] = React.useState();
+  const [checkPath, setCheckPath] = React.useState(path);
+  const [checkUserWeb, setCheckUserWeb] = React.useState();
   const navigate = useNavigate();
   const [valuesVisibility, setValuesVisibility] = React.useState({
-    text: dtl.nacdtl_assetsPrice,
+    text: serviceList[0].price,
     showText: false,
   });
 
   // สำหรับหาค่า Index ของ UserCode of Auto Complete
-  let resultIndex = Array();
+  let resultIndex = []
   for (let i = 0; i < UserForAssetsControl.length; i++) {
     resultIndex[i] = UserForAssetsControl[i].UserCode;
   }
   resultIndex = [resultIndex]
 
   // สำหรับหาค่า Index ของ AssetsCode of Auto Complete
-  let resultIndexAssets = Array();
+  let resultIndexAssets = []
   for (let i = 0; i < AllAssetsControl.length; i++) {
     resultIndexAssets[i] = AllAssetsControl[i].Code;
   }
@@ -309,6 +322,13 @@ export default function Nac_Main_wait() {
       "http://192.168.220.1:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
+    const users_pure = []
+    for (let i = 0; i < UserForAssetsControl.data.length; i++) {
+      if (UserForAssetsControl.data[i].DepID === dataDepID) {
+        users_pure[i] = UserForAssetsControl.data[i]
+      }
+    }
+    setUsers_pureDep(users_pure)
     setUserForAssetsControl(UserForAssetsControl.data);
   };
 
@@ -349,10 +369,9 @@ export default function Nac_Main_wait() {
     const responseDTL = await store_FA_control_select_dtl({
       nac_code
     });
-    setDtl(responseDTL.data)
     const responseDTLs = responseDTL.data
-    const DataCodeDTL = Array()
-    const responesCode = Array()
+    const DataCodeDTL = []
+    const responesCode = []
     for (let i = 0; i < responseDTLs.length; i++) {
       const Code = responseDTLs[i].nacdtl_assetsCode
       DataCodeDTL[i] = await SelectDTL_Control({
@@ -362,7 +381,7 @@ export default function Nac_Main_wait() {
         responesCode[i] = DataCodeDTL[i].data[0]
       }
     }
-    let listPoST = Array()
+    let listPoST = []
     for (let i = 0; i < responesCode.length; i++) {
       listPoST[i] = {
         dtl_id: responseDTLs[i].nacdtl_id,
@@ -380,6 +399,14 @@ export default function Nac_Main_wait() {
         price_main: responesCode[i].Price
       }
     }
+
+    setChecked(responseDTLs.map((res) => {
+      return {
+        assets_code: res.nacdtl_assetsCode
+        , statusCheck: (!res.success_id || res.success_id === 0) ? 0 : res.success_id
+        , asset_id: res.nacdtl_id
+      };
+    }))
 
     setServiceList(listPoST.map((res) => {
       return {
@@ -406,42 +433,49 @@ export default function Nac_Main_wait() {
       nac_code,
     });
     // ผู้ตรวจสอบ
-    let ExamineApprove = Array();
-    let ExecApprove = Array();
-    let CheckApprove = Array();
-    let CheckExamineApprove = Array();
-    let price_approve = responseHeaders.data[0].sum_price;
+    const ExamineApprove = []
+    const ExamineApproveDes = []
+    const ExecApprove = []
+    const CheckApprove = []
+    const CheckExamineApprove = []
 
     for (let i = 0; i < (responseExecDocID.data.length); i++) {
-      if (responseExecDocID.data[i].limitamount === null) {
-        ExamineApprove[i] = { approverid: responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status }
+      if (responseExecDocID.data[i].limitamount === null && responseExecDocID.data[i].workflowlevel < 5) {
+        ExecApprove[i] = {
+          approverid: responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
+        }
+        CheckApprove[i] = responseExecDocID.data[i].approverid
+      }
+
+      if (responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 3) {
+        ExamineApprove[i] = {
+          approverid: responseExecDocID.data[i].workflowlevel === 1 ? 'SM' :
+            responseExecDocID.data[i].workflowlevel === 2 ? 'DM' :
+              responseExecDocID.data[i].workflowlevel === 3 ? 'FM' : 'MD', status: responseExecDocID.data[i].status
+        }
         CheckExamineApprove[i] = responseExecDocID.data[i].approverid
       }
     }
     setCheckExamineApprove(CheckExamineApprove)
     setExamineApprove(ExamineApprove)
-
-    for (let i = 0; i < (responseExecDocID.data.length); i++) {
-      if (responseExecDocID.data[i].limitamount === null) {
-        ExecApprove[i] = { approverid: responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status }
-        CheckApprove[i] = responseExecDocID.data[i].approverid
-      }
-    }
+    setExamineApproveDes(ExamineApproveDes)
     setExecApprove(ExecApprove)
     setCheckApprove(CheckApprove)
 
-    const responseFetch = await qureyNAC_comment({
-      nac_code
-    })
-    if ('data' in responseFetch) {
-      setCommentFetch(responseFetch.data)
+    // Operator Check
+    const usercode = data.UserCode;
+    const responseOperator = await ChackUserWeb({
+      usercode
+    });
+    if ('data' in responseOperator) {
+      setCheckUserWeb(responseOperator.data[0].approverid)
     }
   }
 
 
   React.useEffect(() => {
-    fetchSelectDTL_Headers();
     fetchUserForAssetsControl();
+    fetchSelectDTL_Headers();
   }, []);
 
   const handleClickOpenDialog = () => {
@@ -450,6 +484,14 @@ export default function Nac_Main_wait() {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+
+  const handleClickOpenDialogReply = () => {
+    setOpenDialogReply(true);
+  };
+
+  const handleCloseDialogReply = () => {
+    setOpenDialogReply(false);
   };
 
   const handleMouseDownPassword = (event) => {
@@ -485,34 +527,44 @@ export default function Nac_Main_wait() {
   const handleServiceChangeHeader = async (e, index) => {
     const { name, value } = e.target;
     const assetsCodeSelect = e.target.innerText
-    const list = [...serviceList];
-    list[index][name] = value;
-    list[index]['assetsCode'] = assetsCodeSelect;
-    if (list[index]['assetsCode'] === null || list[index]['assetsCode'] === undefined) {
-      list[index]['name'] = ''
-      list[index]['dtl'] = ''
-      list[index]['count'] = ''
-      list[index]['serialNo'] = ''
-      list[index]['price'] = ''
+    const nacdtl_assetsCode = e.target.innerText
+    const responseCheckAssetCode_Process = await store_FA_control_CheckAssetCode_Process({
+      nacdtl_assetsCode
+    });
+    if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
+      swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "warning");
+      const list = [...serviceList];
+      list.splice(index, 1);
       setServiceList(list);
     } else {
-      const Code = list[index]['assetsCode'];
-      const response = await SelectDTL_Control({
-        Code
-      });
-      if (response['data'].length !== 0) {
-        list[index]['name'] = response['data'][0].Name
-        list[index]['dtl'] = response['data'][0].Details
-        list[index]['count'] = 1
-        list[index]['serialNo'] = response['data'][0].SerialNo
-        list[index]['price'] = response['data'][0].Price
+      const list = [...serviceList];
+      list[index][name] = value;
+      list[index]['assetsCode'] = assetsCodeSelect;
+      if ((list[index]['assetsCode'] === null) || (list[index]['assetsCode'] === undefined)) {
+        list[index]['name'] = ''
+        list[index]['dtl'] = ''
+        list[index]['count'] = ''
+        list[index]['serialNo'] = ''
+        list[index]['price'] = ''
         setServiceList(list);
+      } else {
+        const Code = list[index]['assetsCode'];
+        const response = await SelectDTL_Control({
+          Code
+        });
+        if (response['data'].length !== 0) {
+          list[index]['name'] = response['data'][0].Name
+          list[index]['dtl'] = response['data'][0].Details
+          list[index]['count'] = 1
+          list[index]['serialNo'] = response['data'][0].SerialNo
+          list[index]['price'] = response['data'][0].Price
+          setServiceList(list);
+        }
       }
     }
   };
 
   //Source
-
   const handleChangeSource_Department = (event) => {
     event.preventDefault();
     setSource_Department(event.target.value);
@@ -532,15 +584,6 @@ export default function Nac_Main_wait() {
     setSourceDate(newValue);
   };
 
-  const handleChangeSource_deliveryApprove = (event) => {
-    event.preventDefault();
-    setSource_Approve(event.target.value);
-  };
-
-  const handleChangeSource_deliveryApproveDate = (newValue) => {
-    setSource_DateApproveDate(newValue);
-  };
-
   const handleChangeSource_Description = (event) => {
     event.preventDefault();
     setSource_Description(event.target.value);
@@ -557,7 +600,7 @@ export default function Nac_Main_wait() {
       setSource_BU('')
     } else {
       if (response.data[0].DepID === null) {
-        setSource_Department('CO')
+        setSource_Department('ROD')
         setSource_BU('Oil')
       } else if (response.data[0].DepID === 1) {
         setSource_Department('ITO')
@@ -627,30 +670,18 @@ export default function Nac_Main_wait() {
   const handleDes_ChangeBU = (event) => {
     event.preventDefault();
     setDes_BU(event.target.value);
+
   };
 
   const handleChangeDes_delivery2 = (event) => {
     event.preventDefault();
     setDes_delivery(event.target.value);
+
   };
 
   const handleChangeDes_deliveryDate = (newValue) => {
     setDes_deliveryDate(newValue);
   };
-
-  // const handleChangeDes_deliveryApprove = (event) => {
-  //   event.preventDefault();
-  //   setDes_deliveryApprove(event.target.value);
-  // };
-
-  // const handleChangeDes_deliveryApproveDate = (newValue) => {
-  //   setDes_deliveryApproveDate(newValue);
-  // };
-
-  // const handleChangeDes_Description = (event) => {
-  //   event.preventDefault();
-  //   setDes_Description(event.target.value);
-  // };
 
   const handleAutoDes_DeapartMent = async (e, index) => {
     const UserCode = e.target.innerText
@@ -663,7 +694,7 @@ export default function Nac_Main_wait() {
       setDes_BU('')
     } else {
       if (response.data[0].DepID === null) {
-        setDes_Department('CO')
+        setDes_Department('ROD')
         setDes_BU('Oil')
       } else if (response.data[0].DepID === 1) {
         setDes_Department('ITO')
@@ -724,12 +755,12 @@ export default function Nac_Main_wait() {
     }
   };
 
-  // Update Document
+  // Update Document||
   const handleSave = async () => {
-    if (!source && !source_department && !source_BU && !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning");
+    if (!source || !source_department || !source_BU || !sourceDate) {
+      swal("แจ้งเตือน", 'กรุณากรอกข้อมูล||ผู้ยื่นคำร้องให้ครบถ้วน', "warning");
     } else {
-      if (!des_department && !des_BU && !des_delivery && !des_deliveryDate) {
+      if (!des_department || !des_BU || !des_delivery || !des_deliveryDate) {
         swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้รับคำร้องให้ครบถ้วน', "warning");
       } else {
         if (!serviceList[0].assetsCode) {
@@ -738,11 +769,13 @@ export default function Nac_Main_wait() {
           const usercode = data.UserCode
           const nac_status = 1
           const sumPrice = sum_price
+          const nac_type = headers.nac_type
           const response = await store_FA_control_update_DTLandHeaders({
             usercode,
             nac_code,
             nac_status,
             sumPrice,
+            nac_type,
             des_department,
             des_BU,
             des_delivery,
@@ -778,16 +811,15 @@ export default function Nac_Main_wait() {
                 nacdtl_assetsPrice,
                 asset_id
               });
-              console.log(responseDTL)
               if ('data' in responseDTL) {
                 swal("ทำรายการสำเร็จ", 'อัปเดตรายการ ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
                   buttons: false,
                   timer: 2000,
                 }).then((value) => {
-                  if (data.UserCode === headers.create_by) {
-                    navigate('/NAC_ROW')
+                  if (checkUserWeb === 'true') {
+                    navigate('/NAC_OPERATOR')
                   } else {
-                    navigate('/NAC_WAIT_APPROVE')
+                    navigate('/NAC_ROW')
                   }
                 });
               } else {
@@ -804,11 +836,90 @@ export default function Nac_Main_wait() {
   };
 
   const handleSubmit = async () => {
-    if (data.UserCode === headers.create_by) {
+    if (!source || !source_department || !source_BU || !sourceDate) {
+      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning");
+    } else {
+      if (!des_department || !des_BU || !des_delivery) {
+        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้รับคำร้องให้ครบถ้วน', "warning");
+      } else {
+        if (!serviceList[0].assetsCode) {
+          swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning");
+        } else {
+          if (sum_price !== headers.sum_price || headers.source_userid !== source || headers.des_userid !== des_delivery) {
+            swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยื่นคำร้อง', "warning");
+          } else {
+            if (data.UserCode === headers.create_by) {
+              const usercode = data.UserCode
+              const nac_status = 3
+              const source_approve = sourceApprove
+              const source_approve_date = sourceDateApproveDate
+              const des_approve = des_deliveryApprove
+              const des_approve_date = des_deliveryApproveDate
+              const verify_by = bossApprove
+              const verify_date = bossApproveDate
+              const nac_type = headers.nac_type
+              const responseForUpdate = await store_FA_control_updateStatus({
+                usercode,
+                nac_code,
+                nac_status,
+                nac_type,
+                source,
+                sourceDate,
+                des_delivery,
+                des_deliveryDate,
+                source_approve,
+                source_approve_date,
+                des_approve,
+                des_approve_date,
+                verify_by,
+                verify_date,
+              });
+              const comment = 'ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+              const responseComment = await store_FA_control_comment({
+                nac_code,
+                usercode,
+                comment
+              })
+              if ('data' in responseComment) {
+                swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+                  buttons: false,
+                  timer: 2000,
+                }).then((value) => {
+                  if (checkUserWeb === 'true') {
+                    navigate('/NAC_OPERATOR')
+                  } else {
+                    navigate('/NAC_ROW')
+                  }
+                });
+              } else {
+                swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+                  buttons: false,
+                  timer: 2000,
+                }).then((value) => {
+                  navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
+                });
+              }
+            } else {
+              swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+                buttons: false,
+                timer: 2000,
+              }).then((value) => {
+                navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
+              });
+            }
+          }
+        }
+      }
+    }
+  };
+
+  // ExamineApprove
+  const handleExamineApprove = async () => {
+    if (CheckExamineApprove.length > 1 && ExamineApprove.includes(undefined) === false) {
       const usercode = data.UserCode
-      const nac_status = 3
-      const source_approve = sourceApprove
-      const source_approve_date = sourceDateApproveDate
+      const nac_status = (ExamineApprove.includes(data.UserCode) !== false && ExamineApprove[ExamineApprove.length - 2].status === 0) ? 2 : 3
+      const source_approve = data.UserCode
+      const source_approve_date = datenow
       const des_approve = des_deliveryApprove
       const des_approve_date = des_deliveryApproveDate
       const verify_by = bossApprove
@@ -831,25 +942,40 @@ export default function Nac_Main_wait() {
         verify_date,
       });
       if ('data' in responseForUpdate) {
-        swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+        const comment = 'ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+        const responseComment = await store_FA_control_comment({
+          nac_code,
+          usercode,
+          comment
+        })
+        if ('data' in responseComment) {
+          swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+            buttons: false,
+            timer: 2000,
+          }).then((value) => {
+            if (checkUserWeb === 'true') {
+              navigate('/NAC_OPERATOR')
+            } else {
+              navigate('/NAC_ROW')
+            }
+          });
+        } else {
+          swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+            buttons: false,
+            timer: 2000,
+          }).then((value) => {
+            navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
+          });
+        }
+      } else {
+        swal("ทำรายการไม่สำเร็จ", 'คุณไม่ได้รับอนุญาติให้ทำรายการนี้', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (data.UserCode === headers.create_by) {
-            navigate('/NAC_ROW')
-          } else {
-            navigate('/NAC_WAIT_APPROVE')
-          }
+          navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
         });
       }
     } else {
-      swal("ทำรายการไม่สำเร็จ", 'คุณไม่ได้รับอนุญาตให้ทำรายการนี้', "error")
-    }
-  };
-
-  // ExamineApprove
-  const handleExamineApprove = async () => {
-    if (CheckExamineApprove.indexOf(data.UserCode) !== -1) {
       const usercode = data.UserCode
       const nac_status = 3
       const source_approve = data.UserCode
@@ -876,29 +1002,47 @@ export default function Nac_Main_wait() {
         verify_date,
       });
       if ('data' in responseForUpdate) {
-        swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' อนุมัติรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+        const comment = 'ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+        const responseComment = await store_FA_control_comment({
+          nac_code,
+          usercode,
+          comment
+        })
+        if ('data' in responseComment) {
+          swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+            buttons: false,
+            timer: 2000,
+          }).then((value) => {
+            if (checkUserWeb === 'true') {
+              navigate('/NAC_OPERATOR')
+            } else {
+              navigate('/NAC_ROW')
+            }
+          });
+        } else {
+          swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+            buttons: false,
+            timer: 2000,
+          }).then((value) => {
+            navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
+          });
+        }
+      } else {
+        swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (data.UserCode === headers.create_by) {
-            navigate('/NAC_ROW')
-          } else {
-            navigate('/NAC_WAIT_APPROVE')
-          }
+          navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
         });
       }
-    } else {
-      swal("ทำรายการไม่สำเร็จ", 'คุณไม่ได้รับอนุญาตให้อนุมัติรายการนี้', "error")
     }
   };
 
   // ExecApprove
   const handleExecApprove = async () => {
-    if (CheckApprove.indexOf(data.UserCode) !== -1) {
-      setBossApprove(data.UserCode)
-      setBossApproveDate(datenow)
+    if (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'true') {
       const usercode = data.UserCode
-      const nac_status = 4
+      const nac_status = 5
       const source_approve = sourceApprove
       const source_approve_date = sourceDateApproveDate
       const des_approve = des_deliveryApprove
@@ -922,16 +1066,29 @@ export default function Nac_Main_wait() {
         verify_by,
         verify_date,
       });
-      if ('data' in responseForUpdate) {
+      const comment = 'อนุมัติรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+      const responseComment = await store_FA_control_comment({
+        nac_code,
+        usercode,
+        comment
+      })
+      if ('data' in responseComment) {
         swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' อนุมัติรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (data.UserCode === headers.create_by) {
-            navigate('/NAC_ROW')
+          if (checkUserWeb === 'true') {
+            navigate('/NAC_OPERATOR')
           } else {
-            navigate('/NAC_WAIT_APPROVE')
+            navigate('/NAC_ROW')
           }
+        });
+      } else {
+        swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+          buttons: false,
+          timer: 2000,
+        }).then((value) => {
+          navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
         });
       }
     }
@@ -939,16 +1096,23 @@ export default function Nac_Main_wait() {
 
   //
   const handleSubmitComplete = async () => {
-    if (data.UserCode === headers.des_userid) {
+    if (selectNAC === 4 || selectNAC === 5) {
       const usercode = data.UserCode
-      const nac_status = 5
+      const nac_status = selectNAC === 4 ? 5 : 6
       const source_approve = sourceApprove
       const source_approve_date = sourceDateApproveDate
-      const des_approve = data.UserCode
-      const des_approve_date = datenow
+      const des_delivery = data.UserCode
+      const des_deliveryDate = datenow
+      // const nac_status = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? 6 : 5
+      // const source_approve = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? data.UserCode : sourceApprove
+      // const source_approve_date = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? datenow : sourceDateApproveDate
+      // const des_delivery = (data.UserCode === headers.des_userid) ? data.UserCode : des_deliveryApprove
+      // const des_deliveryDate = (data.UserCode === headers.des_userid) ? datenow : des_deliveryApproveDate
       const verify_by = bossApprove
       const verify_date = bossApproveDate
       const nac_type = headers.nac_type
+      const des_approve = null
+      const des_approve_date = null
       const responseForUpdate = await store_FA_control_updateStatus({
         usercode,
         nac_code,
@@ -966,1165 +1130,1118 @@ export default function Nac_Main_wait() {
         verify_date,
       });
       if ('data' in responseForUpdate) {
-        swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้รับรองเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
-          if (data.UserCode === headers.create_by) {
-            navigate('/NAC_ROW')
-          } else {
-            navigate('/NAC_WAIT_APPROVE')
-          }
-        });
+        const comment = 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+        const responseComment = await store_FA_control_comment({
+          nac_code,
+          usercode,
+          comment
+        })
+        if ('data' in responseComment) {
+          swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+            buttons: false,
+            timer: 2000,
+          }).then((value) => {
+            if (checkUserWeb === 'true') {
+              navigate('/NAC_OPERATOR')
+            } else {
+              navigate('/NAC_ROW')
+            }
+          });
+        } else {
+          swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+            buttons: false,
+            timer: 2000,
+          }).then((value) => {
+            if (checkUserWeb === 'true') {
+              navigate('/NAC_OPERATOR')
+            } else {
+              navigate('/NAC_ROW')
+            }
+          });
+        }
+      }
+      if (nac_status === 5) {
+        for (let i = 0; i < checked.length; i++) {
+          const usercode = data.UserCode
+          const nacdtl_assetsCode = checked[i].assets_code
+          const asset_id = checked[i].asset_id
+          const statusCheck = checked[i].statusCheck
+          await stroe_FA_control_DTL_ConfirmSuccess({
+            nac_code,
+            usercode,
+            nacdtl_assetsCode,
+            asset_id,
+            statusCheck,
+          })
+        }
       }
     } else {
-      swal("ทำรายการไม่สำเร็จ", 'คุณไม่ได้รับอนุญาตให้ทำรายการนี้', "error")
+      swal("ทำรายการไม่สำเร็จ", 'สถานะการทำรายการผิด', "error", {
+        buttons: false,
+        timer: 2000,
+      }).then((value) => {
+        if (checkUserWeb === 'true') {
+          navigate('/NAC_OPERATOR')
+        } else {
+          navigate('/NAC_ROW')
+        }
+      });
     }
   };
 
   // CancelApprove
   const CancelApprove = async () => {
-    if (selectNAC === 3 && CheckApprove.indexOf(data.UserCode) !== -1) {
-      const usercode = data.UserCode
-      const nac_status = 0
-      const source_approve = sourceApprove
-      const source_approve_date = sourceDateApproveDate
-      const des_approve = des_deliveryApprove
-      const des_approve_date = des_deliveryApproveDate
-      const verify_by = data.UserCode
-      const verify_date = datenow
-      const nac_type = headers.nac_type
-      const responseForUpdate = await store_FA_control_updateStatus({
-        usercode,
-        nac_code,
-        nac_status,
-        nac_type,
-        source,
-        sourceDate,
-        des_delivery,
-        des_deliveryDate,
-        source_approve,
-        source_approve_date,
-        des_approve,
-        des_approve_date,
-        verify_by,
-        verify_date,
-      });
-      if ('data' in responseForUpdate) {
-        swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ยกเลิกรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
-          if (data.UserCode === headers.create_by) {
-            navigate('/NAC_ROW')
-          } else {
-            navigate('/NAC_WAIT_APPROVE')
-          }
-        });
-      }
-    } else if (selectNAC === 2 && CheckExamineApprove.indexOf(data.UserCode) !== -1) {
-      const usercode = data.UserCode
-      const nac_status = 0
-      const source_approve = data.UserCode
-      const source_approve_date = datenow
-      const des_approve = des_deliveryApprove
-      const des_approve_date = des_deliveryApproveDate
-      const verify_by = bossApprove
-      const verify_date = bossApproveDate
-      const nac_type = headers.nac_type
-      const responseForUpdate = await store_FA_control_updateStatus({
-        usercode,
-        nac_code,
-        nac_status,
-        nac_type,
-        source,
-        sourceDate,
-        des_delivery,
-        des_deliveryDate,
-        source_approve,
-        source_approve_date,
-        des_approve,
-        des_approve_date,
-        verify_by,
-        verify_date,
-      });
-      if ('data' in responseForUpdate) {
-        swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ยกเลิกรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
-          if (data.UserCode === headers.create_by) {
-            navigate('/NAC_ROW')
-          } else {
-            navigate('/NAC_WAIT_APPROVE')
-          }
-        });
-      }
-    }
-  };
-
-  const handleChangeComment = (event) => {
-    event.preventDefault();
-    setComment(event.target.value);
-  };
-
-  const handleSubmitComment = async () => {
     const usercode = data.UserCode
-    const responseComment = await store_FA_control_comment({
-      nac_code,
+    const nac_status = 0
+    const source_approve =
+      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'true')) ? sourceApprove : data.UserCode
+    const source_approve_date =
+      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'true')) ? sourceDateApproveDate : datenow
+    const des_approve = des_deliveryApprove
+    const des_approve_date = des_deliveryApproveDate
+    const verify_by = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'true')) ? data.UserCode : bossApprove
+    const verify_date = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'true')) ? datenow : bossApproveDate
+    const nac_type = headers.nac_type
+    const responseForUpdate = await store_FA_control_updateStatus({
       usercode,
-      comment
-    })
-    if ('data' in responseComment) {
-      swal("ทำรายการสำเร็จ", 'คุณได้แสดงความคิดเห็นแล้ว', "success", {
+      nac_code,
+      nac_status,
+      nac_type,
+      source,
+      sourceDate,
+      des_delivery,
+      des_deliveryDate,
+      source_approve,
+      source_approve_date,
+      des_approve,
+      des_approve_date,
+      verify_by,
+      verify_date,
+    });
+    if ('data' in responseForUpdate) {
+      const comment = 'ยกเลิกรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+      const responseComment = await store_FA_control_comment({
+        nac_code,
+        usercode,
+        comment
+      })
+      if ('data' in responseComment) {
+        swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ยกเลิกรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+          buttons: false,
+          timer: 2000,
+        }).then((value) => {
+          if (checkUserWeb === 'true') {
+            navigate('/NAC_OPERATOR')
+          } else {
+            navigate('/NAC_ROW')
+          }
+        });
+      } else {
+        swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+          buttons: false,
+          timer: 2000,
+        }).then((value) => {
+          if (checkUserWeb === 'true') {
+            navigate('/NAC_OPERATOR')
+          } else {
+            navigate('/NAC_ROW')
+          }
+        });
+      }
+    } else {
+      swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
         buttons: false,
         timer: 2000,
       }).then((value) => {
-        window.location.href = "/NAC_ROW/NAC_CHANGE_WAIT_APPROVE";
+        if (checkUserWeb === 'true') {
+          navigate('/NAC_OPERATOR')
+        } else {
+          navigate('/NAC_ROW')
+        }
       });
+    }
+  };
+
+  const handleChangeCommentReply = (event) => {
+    event.preventDefault();
+    setCommentReply(event.target.value)
+  }
+
+  const handleReply = async () => {
+    const usercode = data.UserCode
+    const nac_status = 7
+    const source_approve = sourceApprove
+    const source_approve_date = sourceDateApproveDate
+    const des_approve = des_deliveryApprove
+    const des_approve_date = des_deliveryApproveDate
+    const verify_by = bossApprove
+    const verify_date = bossApproveDate
+    const nac_type = headers.nac_type
+    const responseForUpdate = await store_FA_control_updateStatus({
+      usercode,
+      nac_code,
+      nac_status,
+      nac_type,
+      source,
+      sourceDate,
+      des_delivery,
+      des_deliveryDate,
+      source_approve,
+      source_approve_date,
+      des_approve,
+      des_approve_date,
+      verify_by,
+      verify_date,
+    });
+    if ('data' in responseForUpdate) {
+      const comment = commentReply
+      const responseComment = await store_FA_control_comment({
+        nac_code,
+        usercode,
+        comment
+      })
+      if ('data' in responseComment) {
+        setOpenDialogReply(false);
+        if (checkUserWeb === 'true') {
+          window.location.href = '/NAC_OPERATOR'
+        } else {
+          window.location.href = "/NAC_ROW";
+        }
+      }
     }
   }
 
-  return (
-    <React.Fragment>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <AppBar
-          position="absolute"
-          color="default"
-          elevation={0}
+  if (headers.length === 0) {
+    return (
+      <React.Fragment>
+        <Box
           sx={{
-            position: 'relative',
-            borderBottom: (t) => `1px solid ${t.palette.divider}`,
+            marginTop: 30,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
-          <Toolbar>
-            <AnimatedPage>
-              <Typography variant="h5" color="inherit" noWrap>
-                การเปลี่ยนแปลงทรัพย์สินถาวร
-              </Typography>
-            </AnimatedPage>
-          </Toolbar>
-        </AppBar>
-        <AnimatedPage>
-          <Container component="main" maxWidth="lg" sx={{ mb: 12 }}>
-            <Paper variant="outlined" sx={{ p: { xs: 1, md: 2 }, mt: 4 }}>
-              <Table aria-label="customized table">
-                <Grid container>
-                  ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ : {
-                    ExecApprove.map((Approve) => (
-                      <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'black' }}>
-                        &nbsp;[{Approve.approverid}]
-                      </Typography>
-                    ))}
+          <Stack direction="row" spacing={3}>
+            <CircularProgress disableShrink color="inherit" />
+            <Typography variant="h4" color="inherit" noWrap>
+              Loading...
+            </Typography>
+          </Stack>
+        </Box>
+      </React.Fragment>
+    );
+  } else {
+    return (
+      <React.Fragment>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <AppBar
+            position="absolute"
+            color="default"
+            elevation={0}
+            sx={{
+              position: 'relative',
+              borderBottom: (t) => `1px solid ${t.palette.divider}`,
+            }}
+          >
+            <Toolbar>
+              <AnimatedPage>
+                <Typography variant="h5" color="inherit" noWrap>
+                  การเปลี่ยนแปลงทรัพย์สินถาวร
+                </Typography>
+              </AnimatedPage>
+            </Toolbar>
+          </AppBar>
+          <AnimatedPage>
+            <Container component="main" maxWidth="lg" sx={{ mb: 12 }}>
+              <Paper variant="outlined" sx={{ p: { xs: 1, md: 2 }, mt: 4 }}>
+                <Table aria-label="customized table">
+                  <Grid container>
+                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ : {
+                      ExecApprove.map((Approve) => (
+                        <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'black' }}>
+                          &nbsp;[{Approve.approverid}]
+                        </Typography>
+                      ))}
+                  </Grid>
+                  <hr />
+                  <Grid container>
+                    ผู้มีสิทธิตรวจสอบเอกสารฉบับนี้ : {
+                      ExamineApprove.map((Approve) => (
+                        <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'red' }}>
+                          &nbsp;[{Approve.approverid}]
+                        </Typography>
+                      ))}
+                  </Grid>
+                </Table>
+              </Paper>
+              <Paper variant="outlined" sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 3 } }}>
+                <Grid container sx={{ pb: 1 }}>
+                  <Grid xs={2}>
+                  </Grid>
+                  <Grid xs={8}>
+                    <Typography component="h1" variant="h4" align="center">
+                      <b>PURE THAI ENERGY CO.,LTD.</b>
+                    </Typography>
+                    <Typography sx={{ mb: 1 }} component="h1" variant="h6" align="center" className='pt-2'>
+                      เปลี่ยนแปลงรายการทรัพย์สินถาวร (Notice of Asset Change - NAC)
+                    </Typography>
+                  </Grid>
+                  <Grid xs={2}>
+                    <TableContainer component={Paper}>
+                      <Table aria-label="customized table" style={{ width: '100%' }}>
+                        <TableBody>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <Typography align='center' color="inherit" noWrap>
+                              {nac_code}
+                            </Typography>
+                          </StyledTableCell>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Grid>
                 </Grid>
-                <hr />
-                <Grid container>
-                  ผู้มีสิทธิตรวจสอบเอกสารฉบับนี้ : {
-                    ExamineApprove.map((Approve) => (
-                      <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'red' }}>
-                        &nbsp;[{Approve.approverid}]
-                      </Typography>
-                    ))}
-                </Grid>
-              </Table>
-            </Paper>
-            <Paper variant="outlined" sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 3 } }}>
-              <Grid container sx={{ pb: 1 }}>
-                <Grid xs={2}>
-                </Grid>
-                <Grid xs={8}>
-                  <Typography component="h1" variant="h4" align="center">
-                    <b>PURE THAI ENERGY CO.,LTD.</b>
+                <React.Fragment>
+                  <Typography sx={{ pb: 1, pt: 1 }} color='error'>
+                    * กรุณากรอกข้อมูลสำหรับเปลี่ยนแปลงรายละเอียดทรัพย์สิน
                   </Typography>
-                  <Typography sx={{ mb: 1 }} component="h1" variant="h6" align="center" className='pt-2'>
-                    เปลี่ยนแปลงรายการทรัพย์สินถาวร (Notice of Asset Change - NAC)
-                  </Typography>
-                </Grid>
-                <Grid xs={2}>
                   <TableContainer component={Paper}>
                     <Table aria-label="customized table" style={{ width: '100%' }}>
-                      <TableBody>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                          <Typography align='center' color="inherit" noWrap>
-                            {nac_code}
-                          </Typography>
-                        </StyledTableCell>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Grid>
-              </Grid>
-              <React.Fragment>
-                <Typography sx={{ pb: 1, pt: 1 }} color='error'>
-                  * กรุณากรอกข้อมูลสำหรับเปลี่ยนแปลงรายละเอียดทรัพย์สิน
-                </Typography>
-                <TableContainer component={Paper}>
-                  <Table aria-label="customized table" style={{ width: '100%' }}>
-                    <TableHead>
-                      <TableRow>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ยื่นคำร้อง</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับคำร้อง</StyledTableCell>
-                      </TableRow>
-                    </TableHead>
-                    <React.Fragment>
-                      <TableBody>
-                        <StyledTableRow>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                            {selectNAC === 0 ? (
-                              <FormGroup>
-                                <center>
-                                  <Typography variant='h4' color='primary'>
-                                    เปลี่ยนแปลงรายละเอียดทรัพย์สิน
-                                  </Typography>
-                                  <Typography variant='h6' color='error'>
-                                    (ไม่ผ่านการอนุมัติ)
-                                  </Typography>
-                                </center>
-                              </FormGroup>
-                            ) : selectNAC === 5 ? (
-                              <FormGroup>
-                                <center>
-                                  <Typography variant='h4' color='primary'>
-                                    เปลี่ยนแปลงรายละเอียดทรัพย์สินวันที่รับคำร้อง :
-                                  </Typography>
-                                  <Typography variant='h6' style={{ 'color': 'green' }}>
-                                    (ดำเนินการเสร็จสิ้น)
-                                  </Typography>
-                                </center>
-                              </FormGroup>
-                            ) : (
-                              <FormGroup>
-                                <center>
-                                  <Typography variant='h4' color='primary'>
-                                    เปลี่ยนแปลงรายละเอียดทรัพย์สิน
-                                  </Typography>
-                                </center>
-                              </FormGroup>
-                            )}
-                          </StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                            <React.Fragment>
-                              <Grid container>
-                                <Grid xs={6}>
-                                  <Typography align='center' color="inherit" noWrap>
-                                    Department
-                                  </Typography>
-                                </Grid>
-                                <Grid xs={6}>
-                                  <Typography align='center' color="inherit" noWrap>
-                                    BU
-                                  </Typography>
-                                </Grid>
-                              </Grid>
-                              <Stack
-                                direction="row"
-                                divider={<Divider orientation="vertical" flexItem />}
-                                spacing={1}
-                                sx={{ pt: 1, pb: 1 }}
-                              >
-                                <TextField
-                                  required
-                                  fullWidth
-                                  disabled={selectNAC === 1 ? false : true}
-                                  name='source_department'
-                                  onChange={handleChangeSource_Department}
-                                  value={source_department}
-                                  inputProps={{ style: { textAlign: 'center' } }}
-                                  variant="standard"
-                                />
-                                <TextField
-                                  required
-                                  fullWidth
-                                  disabled={selectNAC === 1 ? false : true}
-                                  onChange={handleChangeSource_BU}
-                                  name='source_BU'
-                                  value={source_BU}
-                                  inputProps={{ style: { textAlign: 'center' } }}
-                                  variant="standard"
-                                />
-                              </Stack>
-                              <Autocomplete
-                                freeSolo
-                                name='source'
-                                id='source'
-                                size="small"
-                                disabled={selectNAC === 1 ? false : true}
-                                options={UserForAssetsControl}
-                                getOptionLabel={(option) => option.UserCode}
-                                filterOptions={filterOptions2}
-                                value={!source ? '' : UserForAssetsControl[resultIndex[0].indexOf(source)]}
-                                onChange={handleAutoSource_DeapartMent}
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    variant="standard"
-                                    label='ผู้ยื่นคำร้อง'
-                                    fullWidth
-                                    autoComplete="family-name"
-                                    onChange={handleChangeSource_delivery2}
-                                    sx={{ pt: 1 }}
-                                  />
-                                )}
-                              />
-                              <LocalizationProvider dateAdapter={DateAdapter}>
-                                <DatePicker
-                                  inputFormat="yyyy-MM-dd"
-                                  disabled={selectNAC === 1 ? false : true}
-                                  onChange={handleChangeSource_deliveryDate}
-                                  name='sourceDate'
-                                  value={sourceDate}
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          วันที่ยื่นคำร้อง :
-                                        </Typography>
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  renderInput={(params) =>
-                                    <TextField
-                                      required
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      sx={{ pt: 1 }}
-                                      variant="standard"
-                                      {...params} />}
-                                />
-                              </LocalizationProvider>
-                              <TextField
-                                required
-                                fullWidth
-                                disabled={(selectNAC === 2 && CheckExamineApprove.indexOf(data.UserCode) !== -1) ? false : true}
-                                name='sourceApprove'
-                                onChange={handleChangeSource_deliveryApprove}
-                                value='ไม่มีผู้ตรวจสอบ'
-                                sx={{ pt: 1 }}
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      <Typography color="black">
-                                        ผู้ตรวจสอบ :
-                                      </Typography>
-                                    </InputAdornment>
-                                  ),
-                                }}
-                                variant="standard"
-                              />
-                              <LocalizationProvider dateAdapter={DateAdapter}>
-                                <DatePicker
-                                  inputFormat="yyyy-MM-dd"
-                                  name='sourceDateApproveDate'
-                                  onChange={handleChangeSource_deliveryApproveDate}
-                                  disabled={(selectNAC === 2 && CheckExamineApprove.indexOf(data.UserCode) !== -1) ? false : true}
-                                  value={!sourceDateApproveDate ? datenow : sourceDateApproveDate}
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          วันที่ตรวจสอบ :
-                                        </Typography>
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  renderInput={(params) =>
-                                    <TextField
-                                      required
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      sx={{ pt: 1 }}
-                                      variant="standard"
-                                      {...params} />}
-                                />
-                              </LocalizationProvider>
-                              <TextField
-                                required
-                                fullWidth
-                                onChange={handleChangeSource_Description}
-                                value={source_description}
-                                name='source_description'
-                                sx={{ pt: 1 }}
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      <Typography color="black">
-                                        หมายเหตุ :
-                                      </Typography>
-                                    </InputAdornment>
-                                  ),
-                                }}
-                                variant="standard"
-                              />
-                            </React.Fragment>
-                          </StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                            <React.Fragment>
-                              <Grid container>
-                                <Grid xs={6}>
-                                  <Typography align='center' color="inherit" noWrap>
-                                    Department
-                                  </Typography>
-                                </Grid>
-                                <Grid xs={6}>
-                                  <Typography align='center' color="inherit" noWrap>
-                                    BU
-                                  </Typography>
-                                </Grid>
-                              </Grid>
-                              <Stack
-                                direction="row"
-                                spacing={1}
-                                divider={<Divider orientation="vertical" flexItem />}
-                                sx={{ pt: 1, pb: 1 }}
-                              >
-                                <TextField
-                                  required
-                                  fullWidth
-                                  disabled={selectNAC === 1 ? false : true}
-                                  align="center"
-                                  name='des_department'
-                                  variant="standard"
-                                  value={des_department}
-                                  inputProps={{ style: { textAlign: 'center' } }}
-                                  onChange={handleChangeDes_Department}
-                                />
-                                <TextField
-                                  required
-                                  fullWidth
-                                  disabled={selectNAC === 1 ? false : true}
-                                  align='center'
-                                  name='des_BU'
-                                  variant="standard"
-                                  value={des_BU}
-                                  inputProps={{ style: { textAlign: 'center' } }}
-                                  onChange={handleDes_ChangeBU}
-                                />
-                              </Stack>
-                              <Autocomplete
-                                freeSolo
-                                name='des_delivery'
-                                id='delivery'
-                                size="small"
-                                disabled={selectNAC === 1 ? false : true}
-                                options={UserForAssetsControl}
-                                getOptionLabel={(option) => option.UserCode}
-                                filterOptions={filterOptions2}
-                                value={!des_delivery ? '' : UserForAssetsControl[resultIndex[0].indexOf(des_delivery)]}
-                                onChange={handleAutoDes_DeapartMent}
-                                renderInput={(params) =>
-                                  <TextField
-                                    {...params}
-                                    variant="standard"
-                                    label='ผู้รับคำร้อง'
-                                    fullWidth
-                                    autoComplete="family-name"
-                                    onChange={handleChangeDes_delivery2}
-                                    sx={{ pt: 1 }}
-                                  />
-                                } />
-                              <LocalizationProvider dateAdapter={DateAdapter}>
-                                <DatePicker
-                                  inputFormat="yyyy-MM-dd"
-                                  name='des_deliveryDate'
-                                  disabled={(selectNAC === 4 && (des_deliveryDate === data.UserCode)) ? false : true}
-                                  value={!des_deliveryDate ? datenow : des_deliveryDate}
-                                  onChange={handleChangeDes_deliveryDate}
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          วันที่รับคำร้อง : :
-                                        </Typography>
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  renderInput={(params) =>
-                                    <TextField
-                                      required
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      sx={{ pt: 1 }}
-                                      variant="standard"
-                                      {...params} />}
-                                />
-                              </LocalizationProvider>
-                              <TextField
-                                required
-                                fullWidth
-                                disabled={selectNAC === 4 ? false : true}
-                                value='ไม่มีผู้ตรวจสอบ'
-                                name='des_deliveryApprove'
-                                sx={{ pt: 1 }}
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      <Typography color="black">
-                                        ผู้ตรวจสอบ :
-                                      </Typography>
-                                    </InputAdornment>
-                                  ),
-                                }}
-                                variant="standard"
-                              />
-                              <LocalizationProvider dateAdapter={DateAdapter}>
-                                <DatePicker
-                                  inputFormat="yyyy-MM-dd"
-                                  name='des_deliveryApproveDate'
-                                  disabled={selectNAC === 4 ? false : true}
-                                  value={!des_deliveryApproveDate ? datenow : des_deliveryApproveDate}
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          วันที่ตรวจสอบ :
-                                        </Typography>
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  renderInput={(params) =>
-                                    <TextField
-                                      required
-                                      fullWidth
-                                      disabled={selectNAC === 1 ? true : false}
-                                      autoComplete="family-name"
-                                      sx={{ pt: 1 }}
-                                      variant="standard"
-                                      {...params} />}
-                                />
-                              </LocalizationProvider>
-                              <TextField
-                                required
-                                fullWidth
-                                name='des_description'
-                                value={des_description}
-                                sx={{ pt: 1 }}
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      <Typography color="black">
-                                        หมายเหตุ :
-                                      </Typography>
-                                    </InputAdornment>
-                                  ),
-                                }}
-                                variant="standard"
-                              />
-                            </React.Fragment>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      </TableBody>
-                    </React.Fragment>
-                  </Table>
-                  <Table aria-label="customized table">
-                    <TableHead>
-                      <TableRow style={{ width: '100%' }}>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >Serial No.</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รายละเอียด</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
-                          <Stack direction="row" alignItems="center" spacing={1}>
-                            <Typography>
-                              ราคา
-                            </Typography>
-                            <IconButton
-                              sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
-                              onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
-                            >
-                              {valuesVisibility.showText ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
-                            </IconButton>
-                          </Stack>
-                        </StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >
-                          <IconButton
-                            size="large"
-                            color='primary'
-                            disabled={(selectNAC === 1) ? false : true}
-                            onClick={handleServiceAdd}
-                          >
-                            <AddBoxIcon />
-                          </IconButton>
-                        </StyledTableCell>
-                      </TableRow>
-                    </TableHead>
-                    {serviceList.map((singleService, index) => (
+                      <TableHead>
+                        <TableRow>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ยื่นคำร้อง</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับคำร้อง</StyledTableCell>
+                        </TableRow>
+                      </TableHead>
                       <React.Fragment>
                         <TableBody>
                           <StyledTableRow>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                              <TextField
-                                sx={{ pt: 1 }}
-                                fullWidth
-                                disabled
-                                name='assetsCode'
-                                variant="standard"
-                                value={singleService.code_main}
-                              />
-                              <Autocomplete
-                                freeSolo
-                                sx={{ pt: 1 }}
-                                key={index}
-                                disabled={(selectNAC >= 3) ? true : false}
-                                name='assetsCode'
-                                id='assetsCode'
-                                options={AllAssetsControl}
-                                getOptionLabel={(option) => option.Code || ''}
-                                filterOptions={filterOptions}
-                                onChange={(e) => handleServiceChangeHeader(e, index)}
-                                //value={!singleService.assetsCode? '' : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
-                                value={!singleService.assetsCode ? '' : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    variant="standard"
-                                    name='assetsCode'
-                                    id='assetsCode'
-                                  //onChange={(e) => handleServiceChange(e, index)}
-                                  />
-                                )}
-                              />
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                              <TextField
-                                sx={{ pt: 1 }}
-                                fullWidth
-                                disabled
-                                variant="standard"
-                                inputProps={{ style: { textAlign: 'center' } }}
-                                value={singleService.no_main}
-                              />
-                              <TextField
-                                key={index}
-                                fullWidth
-                                sx={{ pt: 1 }}
-                                disabled={(selectNAC >= 3) ? true : false}
-                                name="serialNo"
-                                id="serialNo"
-                                variant="standard"
-                                onChange={(e) => handleServiceChange(e, index)}
-                                inputProps={{ style: { textAlign: 'center', color: !singleService.serialNo ? 'red' : '' } }}
-                                value={!singleService.serialNo ? '' : singleService.serialNo}
-                              />
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                              <TextField
-                                sx={{ pt: 1 }}
-                                fullWidth
-                                disabled
-                                variant="standard"
-                                value={singleService.name_main}
-                              />
-                              <TextField
-                                sx={{ pt: 1 }}
-                                key={index}
-                                fullWidth
-                                disabled={(selectNAC >= 3) ? true : false}
-                                name="name"
-                                id="name"
-
-                                variant="standard"
-                                onChange={(e) => handleServiceChange(e, index)}
-                                value={singleService.name}
-                              />
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                              <TextField
-                                sx={{ pt: 1 }}
-                                fullWidth
-                                disabled
-                                variant="standard"
-                                value={singleService.dtl_main}
-                              />
-                              <TextField
-                                sx={{ pt: 1 }}
-                                key={index}
-                                fullWidth
-                                disabled={(selectNAC >= 3) ? true : false}
-                                name="dtl"
-                                id="dtl"
-
-                                variant="standard"
-                                onChange={(e) => handleServiceChange(e, index)}
-                                value={singleService.dtl}
-                              />
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                              <TextField
-                                sx={{ pt: 1 }}
-                                fullWidth
-                                disabled
-                                variant="standard"
-                                value={singleService.count}
-                              />
-                              <TextField
-                                sx={{ pt: 1 }}
-                                key={index}
-                                fullWidth
-                                disabled={(selectNAC >= 3) ? true : false}
-                                name="count"
-                                id="count"
-                                type='number'
-                                inputProps={{ style: { textAlign: 'center' } }}
-                                InputProps={{ inputProps: { min: 1 } }}
-                                variant="standard"
-                                onChange={(e) => handleServiceChange(e, index)}
-                                value={singleService.count}
-                              />
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                              <TextField
-                                sx={{ pt: 1 }}
-                                fullWidth
-                                disabled
-                                type={valuesVisibility.showText ? "text" : "password"}
-                                variant="standard"
-                                value={!singleService.price_main ? '' : (singleService.price_main).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                                inputProps={{ style: { textAlign: 'center' } }}
-                              />
-                              <TextField
-                                sx={{ pt: 1 }}
-                                key={index}
-                                fullWidth
-                                disabled={(selectNAC >= 3) ? true : false}
-                                name="price"
-                                id="price"
-                                onChange={(e) => handleServiceChange(e, index)}
-                                type={valuesVisibility.showText ? "text" : "password"}
-                                value={!singleService.price ? '' : (singleService.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                                inputProps={{ style: { textAlign: 'center' } }}
-                                variant="standard"
-                              />
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                              {serviceList.length !== 0 && (
-                                <IconButton
-                                  size="large"
-                                  disabled={(selectNAC === 1) ? false : true}
-                                  aria-label="delete"
-                                  color="error"
-                                  onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
-                                >
-                                  <DeleteIcon fontSize="inherit" />
-                                </IconButton>
+                              {selectNAC === 0 ? (
+                                <FormGroup>
+                                  <center>
+                                    <Typography variant='h4' color='primary'>
+                                      เปลี่ยนแปลงรายละเอียดทรัพย์สิน
+                                    </Typography>
+                                    <Typography variant='h6' color='error'>
+                                      (ไม่ผ่านการอนุมัติ)
+                                    </Typography>
+                                  </center>
+                                </FormGroup>
+                              ) : selectNAC === 6 ? (
+                                <FormGroup>
+                                  <center>
+                                    <Typography variant='h4' color='primary'>
+                                      เปลี่ยนแปลงรายละเอียดทรัพย์สินวันที่รับคำร้อง :
+                                    </Typography>
+                                    <Typography variant='h6' style={{ 'color': 'green' }}>
+                                      (ดำเนินการเสร็จสิ้น)
+                                    </Typography>
+                                  </center>
+                                </FormGroup>
+                              ) : (
+                                <FormGroup>
+                                  <center>
+                                    <Typography variant='h4' color='primary'>
+                                      เปลี่ยนแปลงรายละเอียดทรัพย์สิน
+                                    </Typography>
+                                  </center>
+                                </FormGroup>
                               )}
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <React.Fragment>
+                                <Grid container>
+                                  <Grid xs={6}>
+                                    <Typography align='center' color="inherit" noWrap>
+                                      Department
+                                    </Typography>
+                                  </Grid>
+                                  <Grid xs={6}>
+                                    <Typography align='center' color="inherit" noWrap>
+                                      BU
+                                    </Typography>
+                                  </Grid>
+                                </Grid>
+                                <Stack
+                                  direction="row"
+                                  divider={<Divider orientation="vertical" flexItem />}
+                                  spacing={1}
+                                  sx={{ pt: 1, pb: 1 }}
+                                >
+                                  <TextField
+                                    required
+                                    fullWidth
+                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    name='source_department'
+                                    onChange={handleChangeSource_Department}
+                                    value={source_department}
+                                    inputProps={{ style: { textAlign: 'center' } }}
+                                    variant="standard"
+                                  />
+                                  <TextField
+                                    required
+                                    fullWidth
+                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    onChange={handleChangeSource_BU}
+                                    name='source_BU'
+                                    value={source_BU}
+                                    inputProps={{ style: { textAlign: 'center' } }}
+                                    variant="standard"
+                                  />
+                                </Stack>
+                                <Autocomplete
+                                  freeSolo
+                                  name='source'
+                                  id='source'
+                                  size="small"
+                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  options={users_pureDep}
+                                  getOptionLabel={(option) => option.UserCode}
+                                  filterOptions={filterOptions2}
+                                  value={!source ? '' : UserForAssetsControl[resultIndex[0].indexOf(source)]}
+                                  onChange={handleAutoSource_DeapartMent}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      variant="standard"
+                                      label='ผู้ยื่นคำร้อง'
+                                      fullWidth
+                                      autoComplete="family-name"
+                                      onChange={handleChangeSource_delivery2}
+                                      sx={{ pt: 1 }}
+                                    />
+                                  )}
+                                />
+                                <LocalizationProvider dateAdapter={DateAdapter}>
+                                  <DatePicker
+                                    inputFormat="yyyy-MM-dd"
+                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    onChange={handleChangeSource_deliveryDate}
+                                    name='sourceDate'
+                                    value={sourceDate}
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          <Typography color="black">
+                                            วันที่ยื่นคำร้อง :
+                                          </Typography>
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    renderInput={(params) =>
+                                      <TextField
+                                        required
+                                        fullWidth
+                                        autoComplete="family-name"
+                                        sx={{ pt: 1 }}
+                                        variant="standard"
+                                        {...params} />}
+                                  />
+                                </LocalizationProvider>
+                                <TextField
+                                  required
+                                  fullWidth
+                                  onChange={handleChangeSource_Description}
+                                  value={source_description}
+                                  name='source_description'
+                                  sx={{ pt: 1 }}
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <Typography color="black">
+                                          หมายเหตุ :
+                                        </Typography>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  variant="standard"
+                                />
+                              </React.Fragment>
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <React.Fragment>
+                                <Grid container>
+                                  <Grid xs={6}>
+                                    <Typography align='center' color="inherit" noWrap>
+                                      Department
+                                    </Typography>
+                                  </Grid>
+                                  <Grid xs={6}>
+                                    <Typography align='center' color="inherit" noWrap>
+                                      BU
+                                    </Typography>
+                                  </Grid>
+                                </Grid>
+                                <Stack
+                                  direction="row"
+                                  spacing={1}
+                                  divider={<Divider orientation="vertical" flexItem />}
+                                  sx={{ pt: 1, pb: 1 }}
+                                >
+                                  <TextField
+                                    required
+                                    fullWidth
+                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    align="center"
+                                    name='des_department'
+                                    variant="standard"
+                                    value={des_department}
+                                    inputProps={{ style: { textAlign: 'center' } }}
+                                    onChange={handleChangeDes_Department}
+                                  />
+                                  <TextField
+                                    required
+                                    fullWidth
+                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    align='center'
+                                    name='des_BU'
+                                    variant="standard"
+                                    value={des_BU}
+                                    inputProps={{ style: { textAlign: 'center' } }}
+                                    onChange={handleDes_ChangeBU}
+                                  />
+                                </Stack>
+                                <Autocomplete
+                                  freeSolo
+                                  name='des_delivery'
+                                  id='delivery'
+                                  size="small"
+                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  options={UserForAssetsControl}
+                                  getOptionLabel={(option) => option.UserCode}
+                                  filterOptions={filterOptions2}
+                                  value={!des_delivery ? '' : UserForAssetsControl[resultIndex[0].indexOf(des_delivery)]}
+                                  onChange={handleAutoDes_DeapartMent}
+                                  renderInput={(params) =>
+                                    <TextField
+                                      {...params}
+                                      variant="standard"
+                                      label='ผู้รับคำร้อง'
+                                      fullWidth
+                                      autoComplete="family-name"
+                                      onChange={handleChangeDes_delivery2}
+                                      sx={{ pt: 1 }}
+                                    />
+                                  } />
+                                <LocalizationProvider dateAdapter={DateAdapter}>
+                                  <DatePicker
+                                    inputFormat="yyyy-MM-dd"
+                                    name='des_deliveryDate'
+                                    disabled={(selectNAC === 4 && (des_deliveryDate === data.UserCode)) ? false : true}
+                                    value={!des_deliveryDate ? datenow : des_deliveryDate}
+                                    onChange={handleChangeDes_deliveryDate}
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          <Typography color="black">
+                                            วันที่รับคำร้อง :
+                                          </Typography>
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    renderInput={(params) =>
+                                      <TextField
+                                        required
+                                        fullWidth
+                                        autoComplete="family-name"
+                                        sx={{ pt: 1 }}
+                                        variant="standard"
+                                        {...params} />}
+                                  />
+                                </LocalizationProvider>
+                                <TextField
+                                  required
+                                  fullWidth
+                                  name='des_description'
+                                  value={des_description}
+                                  sx={{ pt: 1 }}
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <Typography color="black">
+                                          หมายเหตุ :
+                                        </Typography>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  variant="standard"
+                                />
+                              </React.Fragment>
                             </StyledTableCell>
                           </StyledTableRow>
                         </TableBody>
                       </React.Fragment>
-                    ))}
-                  </Table>
-                  <Table aria-label="customized table" style={{ width: '100%' }}>
-                    <TableBody>
-                      <StyledTableRow>
-                        <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '75%' }}>
-                          <Typography>
-                            มูลค่ารวมทั้งหมด
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
-                          <TextField
-                            required
-                            fullWidth
-                            type={valuesVisibility.showText ? "text" : "password"}
-                            inputProps={{ style: { textAlign: 'center', color: 'red' } }}
-                            value={!sum_price ? '' : (sum_price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                            InputProps={{
-                              endAdornment: (
-                                <InputAdornment position="start">
-                                  <Typography color="black">
-                                    บาท
-                                  </Typography>
-                                </InputAdornment>
-                              ),
-                            }}
-                            variant="standard"
-                          />
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    </TableBody>
-                  </Table>
-                  <Table aria-label="customized table" style={{ width: '100%' }}>
-                    <TableHead>
-                      <StyledTableRow>
-                        <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }} >
-                          <TextField
-                            required
-                            fullWidth
-                            disabled
-                            sx={{ pt: 1 }}
-                            value={headers.create_by}
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <Typography color="black">
-                                    ผู้จัดทำ :
-                                  </Typography>
-                                </InputAdornment>
-                              ),
-                            }}
-                            variant="standard"
-                          />
-                        </StyledTableCell>
-                        <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
-                          <LocalizationProvider dateAdapter={DateAdapter}>
-                            <DatePicker
-                              inputFormat="yyyy-MM-dd"
-                              disabled
-                              value={headers.create_date}
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <Typography color="black">
-                                      วันที่บันทึก :
-                                    </Typography>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              renderInput={(params) =>
-                                <TextField
-                                  required
-                                  fullWidth
-                                  autoComplete="family-name"
-                                  sx={{ pt: 1 }}
-                                  variant="standard"
-                                  {...params} />}
-                            />
-                          </LocalizationProvider>
-                        </StyledTableCell>
-                        <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
-                          <TextField
-                            required
-                            fullWidth
-                            disabled={(selectNAC === 3 && CheckApprove.indexOf(data.UserCode) !== -1) ? false : true}
-                            value={bossApprove}
-                            sx={{ pt: 1 }}
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <Typography color="black">
-                                    ผู้อนุมัติ :
-                                  </Typography>
-                                </InputAdornment>
-                              ),
-                            }}
-                            variant="standard"
-                          />
-                        </StyledTableCell>
-                        <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
-                          <LocalizationProvider dateAdapter={DateAdapter}>
-                            <DatePicker
-                              disabled={(selectNAC === 3 && CheckApprove.indexOf(data.UserCode) !== -1) ? false : true}
-                              value={!bossApproveDate ? datenow : bossApproveDate}
-                              inputFormat="yyyy-MM-dd"
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <Typography color="black">
-                                      วันที่อนุมัติ :
-                                    </Typography>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              renderInput={(params) =>
-                                <TextField
-                                  required
-                                  fullWidth
-                                  autoComplete="family-name"
-                                  sx={{ pt: 1 }}
-                                  variant="standard"
-                                  {...params} />}
-                            />
-                          </LocalizationProvider>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    </TableHead>
-                  </Table>
-                </TableContainer>
-              </React.Fragment>
-              {(selectNAC === 1 && (data.UserCode === headers.create_by)) ? (
-                <React.Fragment>
-                  <center>
-                    <Box sx={{ flexGrow: 1 }}>
-                      <Grid container>
-                        <Grid item xs>
-                        </Grid>
-                        <Grid item xs={2}>
-                          <Button
-                            variant="contained"
-                            onClick={handleSave}
-                            sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                            style={{ 'backgroundColor': 'orange' }}
-                            disabled={(data.UserCode === headers.create_by) ? false : true}>
-                            บันทึกเอกสาร
-                          </Button>
-                        </Grid>
-                        <Grid item xs={2}>
-                          <Button
-                            variant="contained"
-                            sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                            disabled={(data.UserCode === headers.create_by) ? false : true}
-                            onClick={handleSubmit}>
-                            <React.Fragment>
-                              ยื่นคำร้อง
-                            </React.Fragment>
-                          </Button>
-                        </Grid>
-                        <Grid item xs>
-                        </Grid>
-                      </Grid>
-                    </Box>
-                  </center>
-                </React.Fragment>
-              ) : (selectNAC > 1 && selectNAC < 4) ? (
-                <React.Fragment>
-                  <center>
-                    <Box sx={{ flexGrow: 1 }}>
-                      <Grid container>
-                        <Grid item xs>
-                        </Grid>
-                        <Grid item xs={2}>
-                          <Button
-                            variant="contained"
-                            //onClick={handleSave}
-                            disabled={(selectNAC === 3 && (CheckApprove.indexOf(data.UserCode) !== -1)) ? false : (selectNAC === 2 && (CheckExamineApprove.indexOf(data.UserCode) !== -1)) ? false : true}
-                            sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                            style={{ 'backgroundColor': 'orange' }}>
-                            ตีกลับเอกสาร
-                          </Button>
-                        </Grid>
-                        <Grid item xs={2}>
-                          <Button
-                            variant="contained"
-                            disabled={(selectNAC === 3 && (CheckApprove.indexOf(data.UserCode) !== -1)) ? false : (selectNAC === 2 && (CheckExamineApprove.indexOf(data.UserCode) !== -1)) ? false : true}
-                            onClick={selectNAC === 2 ? handleExamineApprove : handleExecApprove}
-                            sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                            color={selectNAC === 2 ? 'success' :
-                              selectNAC === 3 ? 'success' :
-                                'primary'}>
-                            <React.Fragment>
-                              {selectNAC === 2 ? 'อนุมัติ' :
-                                selectNAC === 3 ? 'อนุมัติ' :
-                                  'รับรองเอกสาร'
-                              }
-                            </React.Fragment>
-                          </Button>
-                        </Grid>
-                        <Grid item xs={2}>
-                          <Button
-                            variant="contained"
-                            color='error'
-                            disabled={(selectNAC === 3 && (CheckApprove.indexOf(data.UserCode) !== -1)) ? false : (selectNAC === 2 && (CheckExamineApprove.indexOf(data.UserCode) !== -1)) ? false : true}
-                            onClick={CancelApprove}
-                            sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}>
-                            ไม่อนุมัติ
-                          </Button>
-                        </Grid>
-                        <Grid item xs>
-                        </Grid>
-                      </Grid>
-                    </Box>
-                  </center>
-                </React.Fragment>
-              ) : (selectNAC === 4) ? (
-                <React.Fragment>
-                  <center>
-                    <Box sx={{ flexGrow: 1 }}>
-                      <Button
-                        variant="contained"
-                        sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                        disabled={(data.UserCode === headers.des_userid) ? false : true}
-                        onClick={handleSubmitComplete}>
+                    </Table>
+                    <Table aria-label="customized table">
+                      <TableHead>
+                        <TableRow style={{ width: '100%' }}>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >Serial No.</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รายละเอียด</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
+                            <Stack direction="row" alignItems="center" spacing={1}>
+                              <Typography>
+                                ราคา
+                              </Typography>
+                              <IconButton
+                                sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                              >
+                                {valuesVisibility.showText ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
+                              </IconButton>
+                            </Stack>
+                          </StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >
+                            <IconButton
+                              size="large"
+                              color='primary'
+                              disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                              onClick={handleServiceAdd}
+                            >
+                              <AddBoxIcon />
+                            </IconButton>
+                          </StyledTableCell>
+                        </TableRow>
+                      </TableHead>
+                      {serviceList.map((singleService, index) => (
                         <React.Fragment>
-                          รับรองเอกสาร
-                        </React.Fragment>
-                      </Button>
-                    </Box>
-                  </center>
-                </React.Fragment>
-              ) : (
-                <React.Fragment>
-                  <center>
-                    <Box sx={{ flexGrow: 1 }}>
-                    </Box>
-                  </center>
-                </React.Fragment>
-              )}
-            </Paper>
-            <React.Fragment>
-              <React.Fragment>
-                <Grid
-                  container
-                  direction="row"
-                  spacing={5}
-                  alignItems="flex-start" sx={{ pb: 2 }}
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={5}
-                  >
-                    <Paper>
-                      <Card>
-                        <CardHeader
-                          title='เอกสารแนบ'
-                          titleTypographyProps={{ align: 'center' }}
-                          subheaderTypographyProps={{
-                            align: 'center',
-                          }}
-                          sx={{
-                            backgroundColor: (theme) => theme.palette.grey[200]
-                          }}
-                        />
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            justifyContent: 'start',
-                            alignItems: 'baseline',
-                            mb: 2,
-                          }}
-                        >
-                          <CardContent>
-                          </CardContent>
-                        </Box>
-                        <CardActions titleTypographyProps={{ align: 'center' }}
-                          subheaderTypographyProps={{
-                            align: 'center',
-                          }}
-                          style={{ 'backgroundColor': 'rgb(0, 120, 255)' }}>
-                          <Button fullWidth
-                            style={{ 'backgroundColor': 'rgb(0, 120, 255)' }}
-                            className='text-white'
-                            startIcon={<AddCardIcon />}
-                          >
-                            <Typography variant='h6' onClick={handleClickOpenDialog}>แนบลิ้งเอกสาร</Typography>
-                          </Button>
-                        </CardActions>
-                      </Card>
-                    </Paper>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={7}
-                  >
-                    <Paper>
-                      <Card>
-                        <CardHeader
-                          title='ช่องแสดงความคิดเห็น'
-                          titleTypographyProps={{ align: 'center' }}
-                          subheaderTypographyProps={{
-                            align: 'center',
-                          }}
-                          sx={{
-                            backgroundColor: (theme) => theme.palette.grey[200]
-                          }}
-                        />
-                        <List
-                          sx={{
-                            width: '100%',
-                            bgcolor: 'background.paper',
-                            position: 'relative',
-                            overflow: 'auto',
-                            maxHeight: 300,
-                            '& ul': { padding: 0 },
-                          }}
-                          subheader={<li />}>
-                          <CardContent sx={{ height: 150 }} cols={3}>
-                            {commentFetch.map((res, index) => (
-                              <React.Fragment>
-                                <Box
-                                  sx={{
-                                    display: 'flex',
-                                    justifyContent: (res.userid === data.UserCode) ? 'end' : 'start',
-                                    alignItems: 'baseline',
-                                    mb: 0.5
-                                  }}
-                                >
-                                  <Card
-                                    sx={{ p: 1 }}
-                                    style={{
-                                      'backgroundColor': (res.userid === data.UserCode) ? 'rgb(0, 120, 255)' : 'rgb(240, 240, 240)',
-                                      'color': (res.userid === data.UserCode) ? 'white' : 'black',
-                                      borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20
-                                    }}
+                          <TableBody>
+                            <StyledTableRow>
+                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                <TextField
+                                  sx={{ pt: 1 }}
+                                  fullWidth
+                                  disabled
+                                  name='assetsCode'
+                                  variant="standard"
+                                  value={singleService.code_main}
+                                />
+                                <Autocomplete
+                                  freeSolo
+                                  sx={{ pt: 1 }}
+                                  key={index}
+                                  disabled={(selectNAC >= 3) ? true : false}
+                                  name='assetsCode'
+                                  id='assetsCode'
+                                  options={AllAssetsControl}
+                                  getOptionLabel={(option) => option.Code || ''}
+                                  filterOptions={filterOptions}
+                                  onChange={(e) => handleServiceChangeHeader(e, index)}
+                                  //value={!singleService.assetsCode? '' : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
+                                  value={!singleService.assetsCode ? '' : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      variant="standard"
+                                      name='assetsCode'
+                                      id='assetsCode'
+                                    //onChange={(e) => handleServiceChange(e, index)}
+                                    />
+                                  )}
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                <TextField
+                                  sx={{ pt: 1 }}
+                                  fullWidth
+                                  disabled
+                                  variant="standard"
+                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  value={singleService.no_main}
+                                />
+                                <TextField
+                                  key={index}
+                                  fullWidth
+                                  sx={{ pt: 1 }}
+                                  disabled={(selectNAC >= 3) ? true : false}
+                                  name="serialNo"
+                                  id="serialNo"
+                                  variant="standard"
+                                  onChange={(e) => handleServiceChange(e, index)}
+                                  inputProps={{ style: { textAlign: 'center', color: !singleService.serialNo ? 'red' : '' } }}
+                                  value={!singleService.serialNo ? '' : singleService.serialNo}
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                <TextField
+                                  sx={{ pt: 1 }}
+                                  fullWidth
+                                  disabled
+                                  variant="standard"
+                                  value={singleService.name_main}
+                                />
+                                <TextField
+                                  sx={{ pt: 1 }}
+                                  key={index}
+                                  fullWidth
+                                  disabled={(selectNAC >= 3) ? true : false}
+                                  name="name"
+                                  id="name"
+
+                                  variant="standard"
+                                  onChange={(e) => handleServiceChange(e, index)}
+                                  value={singleService.name}
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                <TextField
+                                  sx={{ pt: 1 }}
+                                  fullWidth
+                                  disabled
+                                  variant="standard"
+                                  value={singleService.dtl_main}
+                                />
+                                <TextField
+                                  sx={{ pt: 1 }}
+                                  key={index}
+                                  fullWidth
+                                  disabled={(selectNAC >= 3) ? true : false}
+                                  name="dtl"
+                                  id="dtl"
+
+                                  variant="standard"
+                                  onChange={(e) => handleServiceChange(e, index)}
+                                  value={singleService.dtl}
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                <TextField
+                                  sx={{ pt: 1 }}
+                                  fullWidth
+                                  disabled
+                                  variant="standard"
+                                  value={singleService.count}
+                                />
+                                <TextField
+                                  sx={{ pt: 1 }}
+                                  key={index}
+                                  fullWidth
+                                  disabled={(selectNAC >= 3) ? true : false}
+                                  name="count"
+                                  id="count"
+                                  type='number'
+                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  InputProps={{ inputProps: { min: 1 } }}
+                                  variant="standard"
+                                  onChange={(e) => handleServiceChange(e, index)}
+                                  value={singleService.count}
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                <TextField
+                                  sx={{ pt: 1 }}
+                                  fullWidth
+                                  disabled
+                                  type={valuesVisibility.showText ? "text" : "password"}
+                                  variant="standard"
+                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
+                                  inputProps={{ style: { textAlign: 'center' } }}
+                                />
+                                <TextField
+                                  sx={{ pt: 1 }}
+                                  key={index}
+                                  fullWidth
+                                  disabled={(selectNAC >= 3) ? true : false}
+                                  name="price"
+                                  id="price"
+                                  onChange={(e) => handleServiceChange(e, index)}
+                                  type={valuesVisibility.showText ? "text" : "password"}
+                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
+                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  variant="standard"
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                {serviceList.length !== 0 && (
+                                  <IconButton
+                                    size="large"
+                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    aria-label="delete"
+                                    color="error"
+                                    onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
                                   >
-                                    {res.userid}: {res.comment}
-                                  </Card>
-                                </Box>
+                                    <DeleteIcon fontSize="inherit" />
+                                  </IconButton>
+                                )}
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          </TableBody>
+                        </React.Fragment>
+                      ))}
+                    </Table>
+                    <Table aria-label="customized table" style={{ width: '100%' }}>
+                      <TableBody>
+                        <StyledTableRow>
+                          <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '55%' }}>
+                            <Typography>
+                              มูลค่ารวมทั้งหมด
+                            </Typography>
+                          </StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '45%' }}>
+                            <TextField
+                              required
+                              fullWidth
+                              type={valuesVisibility.showText ? "text" : "password"}
+                              inputProps={{ style: { textAlign: 'center', color: 'red' } }}
+                              value={sum_price.toLocaleString() === 0 ? '' : sum_price.toLocaleString()}
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="start">
+                                    <Typography color="black">
+                                      บาท
+                                    </Typography>
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="standard"
+                            />
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      </TableBody>
+                    </Table>
+                    <Table aria-label="customized table" style={{ width: '100%' }}>
+                      <TableHead>
+                        <StyledTableRow>
+                          <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }} >
+                            <TextField
+                              required
+                              fullWidth
+                              disabled
+                              sx={{ pt: 1 }}
+                              InputProps={{
+                                startAdornment: (
+                                  <React.Fragment>
+                                    <Stack direction="row"
+                                      justifyContent="space-evenly"
+                                      alignItems="center"
+                                      spacing={0}>
+                                      <InputAdornment position="start">
+                                        <Typography color="black" >
+                                          ผู้จัดทำ :
+                                        </Typography>
+                                      </InputAdornment>
+                                      <InputAdornment position="start">
+                                        <Typography color="black" >
+                                          {!headers.create_by ? '' : '[' + headers.create_by + ']'}
+                                        </Typography>
+                                      </InputAdornment>
+                                      <InputAdornment position="start">
+                                        <Typography color="black" >
+                                          {!headers.create_date ? '' : (headers.create_date).split('T')[0]}
+                                        </Typography>
+                                      </InputAdornment>
+                                    </Stack>
+                                  </React.Fragment>
+                                ),
+                              }}
+                              variant="standard"
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                            <TextField
+                              required
+                              fullWidth
+                              disabled={(selectNAC === 2 && CheckExamineApprove.includes(data.UserCode) !== false) ? false : true}
+                              name='sourceApprove'
+                              sx={{ pt: 1 }}
+                              InputProps={{
+                                startAdornment: (
+                                  <React.Fragment>
+                                    <Stack direction="row"
+                                      justifyContent="space-evenly"
+                                      alignItems="center"
+                                      spacing={0}>
+                                      <InputAdornment position="start">
+                                        <Typography color="black">
+                                          ผู้ตรวจสอบ :
+                                        </Typography>
+                                      </InputAdornment>
+                                      <InputAdornment position="start">
+                                        {
+                                          ExamineApprove.map((Approve) => (
+                                            <Typography style={{ 'color': 'black' }}>
+                                              {Approve.status === 1 ? '[' + [Approve.approverid] + ']' : ''}
+                                            </Typography>
+                                          ))}
+                                      </InputAdornment>
+                                      <InputAdornment position="start">
+                                        <Typography color="black">
+                                          {!sourceDateApproveDate ? '' : (sourceDateApproveDate).split('T')[0]}
+                                        </Typography>
+                                      </InputAdornment>
+                                    </Stack>
+                                  </React.Fragment>
+                                ),
+                              }}
+                              variant="standard"
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                            <TextField
+                              required
+                              fullWidth
+                              disabled={(selectNAC === 3 && CheckApprove.includes(data.UserCode) !== false) ? false : true}
+                              sx={{ pt: 1 }}
+                              InputProps={{
+                                startAdornment: (
+                                  <React.Fragment>
+                                    <Stack direction="row"
+                                      justifyContent="space-evenly"
+                                      alignItems="center"
+                                      spacing={0}>
+                                      <InputAdornment position="start">
+                                        <Typography color="black">
+                                          ผู้อนุมัติ :
+                                        </Typography>
+                                      </InputAdornment>
+                                      <InputAdornment position="start">
+                                        <Typography color="black">
+                                          {!bossApprove ? '' : '[' + bossApprove + ']'}
+                                        </Typography>
+                                      </InputAdornment>
+                                      <InputAdornment position="start">
+                                        <Typography color="black">
+                                          {!bossApproveDate ? '' : (bossApproveDate).split('T')[0]}
+                                        </Typography>
+                                      </InputAdornment>
+                                    </Stack>
+                                  </React.Fragment>
+                                ),
+                              }}
+                              variant="standard"
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }} >
+                            <TextField
+                              required
+                              fullWidth
+                              disabled
+                              sx={{ pt: 1 }}
+                              InputProps={{
+                                startAdornment: (
+                                  <React.Fragment>
+                                    <Stack direction="row"
+                                      justifyContent="space-evenly"
+                                      alignItems="center"
+                                      spacing={0}>
+                                      <InputAdornment position="start">
+                                        <Typography color="black" >
+                                          บัญชี/การเงิน :
+                                        </Typography>
+                                      </InputAdornment>
+                                      <InputAdornment position="start">
+                                        <Typography color="black" >
+                                          {!headers.account_aprrove_id ? '' : '[' + headers.account_aprrove_id + ']'}
+                                        </Typography>
+                                      </InputAdornment>
+                                    </Stack>
+                                  </React.Fragment>
+                                ),
+                              }}
+                              variant="standard"
+                            />
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      </TableHead>
+                    </Table>
+                  </TableContainer>
+                </React.Fragment>
+                {((selectNAC === 1 || selectNAC === 7) && (data.UserCode === headers.create_by || (checkUserWeb === 'true'))) ? (
+                  <React.Fragment>
+                    <center>
+                      <Box sx={{ flexGrow: 1 }}>
+                        <Grid container>
+                          <Grid item xs>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Button
+                              variant="contained"
+                              onClick={handleSave}
+                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                              style={{ 'backgroundColor': 'orange' }}
+                              disabled={(data.UserCode === headers.create_by || (checkUserWeb === 'true')) ? false : true}>
+                              อัปเดต
+                            </Button>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Button
+                              variant="contained"
+                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                              disabled={
+                                (data.UserCode === headers.create_by || (checkUserWeb === 'true')) ? false :
+                                  ExamineApprove.length === 0 ? false : true}
+                              onClick={handleSubmit
+                              }>
+                              <React.Fragment>
+                                ยื่นคำร้อง
                               </React.Fragment>
-                            ))}
-                          </CardContent>
-                        </List>
-                        <Input
-                          placeholder="Comment..."
-                          fullWidth
-                          sx={{ p: 0.5 }}
-                          value={comment}
-                          style={{ 'backgroundColor': 'rgb(240, 240, 240)' }}
-                          onChange={handleChangeComment}
-                        />
-                        <CardActions titleTypographyProps={{ align: 'center' }}
-                          subheaderTypographyProps={{
-                            align: 'center',
-                          }}
-                          style={{ 'backgroundColor': 'rgb(0, 120, 255)' }}>
-                          <Button
-                            fullWidth
-                            style={{ 'backgroundColor': 'rgb(0, 120, 255)' }}
-                            className='text-white'
-                            onClick={handleSubmitComment}
-                            startIcon={<ChatIcon />}
-                          >
-                            <Typography variant='h6'>แสดงความคิดเห็น</Typography>
-                          </Button>
-                        </CardActions>
-                      </Card>
-                    </Paper>
-                  </Grid>
-                </Grid>
-              </React.Fragment>
-            </React.Fragment>
-            <Dialog open={openDialog} onClose={handleCloseDialog} >
-              <DialogTitle>กรุณาแนบลิ้งเอกสาร</DialogTitle>
-              <DialogContent sx={{ width: 500 }}>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="link_document"
-                  label="ลิ้งเอกสารที่ต้องการ"
-                  type="text"
-                  fullWidth
-                  variant="standard"
-                  sx={{ pb: 2 }}
-                />
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="like_description"
-                  label="คำอธิบาย"
-                  type="text"
-                  fullWidth
-                  variant="standard"
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleCloseDialog} variant='contained'>บันทึก</Button>
-                <Button onClick={handleCloseDialog} variant='contained' color='error'>ยกเลิก</Button>
-              </DialogActions>
-            </Dialog>
-            <hr></hr>
-            <br />
-            <Copyright />
-          </Container>
-        </AnimatedPage>
-        <Outlet />
-      </ThemeProvider>
-    </React.Fragment >
-  );
+                            </Button>
+                          </Grid>
+                          <Grid item xs>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </center>
+                  </React.Fragment>
+                ) : ((selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) || (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true')))) ? (
+                  <React.Fragment>
+                    <center>
+                      <Box sx={{ flexGrow: 1 }}>
+                        <Grid container>
+                          <Grid item xs>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Button
+                              variant="contained"
+                              onClick={handleClickOpenDialogReply}
+                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                              style={{ 'backgroundColor': 'orange' }}
+                              disabled={
+                                (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
+                                  (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
+                                    true
+                              }>
+                              ตีกลับเอกสาร
+                            </Button>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Button
+                              variant="contained"
+                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                              color={selectNAC === 2 ? 'success' :
+                                selectNAC === 3 ? 'success' :
+                                  'primary'}
+                              onClick={selectNAC === 2 ? handleExamineApprove : handleExecApprove}
+                              disabled={
+                                (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
+                                  (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
+                                    true
+                              }>
+                              <React.Fragment>
+                                {selectNAC === 2 ? 'ตรวจสอบ' : 'อนุมัติ'}
+                              </React.Fragment>
+                            </Button>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Button
+                              variant="contained"
+                              color='error'
+                              disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false
+                                : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
+                                  true
+                              }
+                              onClick={CancelApprove}
+                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}>
+                              ไม่อนุมัติ
+                            </Button>
+                          </Grid>
+                          <Grid item xs>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </center>
+                  </React.Fragment>
+                ) : ((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'true')) && (!headers.des_date)) ? (
+                  <React.Fragment>
+                    <center>
+                      <Box sx={{ flexGrow: 1 }}>
+                        <Grid container>
+                          <Grid item xs>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Button
+                              variant="contained"
+                              style={{ 'backgroundColor': 'orange' }}
+                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                              disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'true')) && (!headers.des_date)) ? false : true}
+                            //</Grid>onClick={handleSubmitComplete}>
+                            >ไม่รับเอกสาร
+                            </Button>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Button
+                              variant="contained"
+                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                              disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'true')) && (!headers.des_date)) ? false : true}
+                              onClick={handleSubmitComplete}>
+                              ตรวจรับเอกสาร
+                            </Button>
+                          </Grid>
+                          <Grid item xs>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </center>
+                  </React.Fragment>
+                ) : ((selectNAC === 5) && (CheckExamineApproveDes.includes(data.UserCode) !== false || (checkUserWeb === 'true')) && (headers.des_date !== undefined)) ? (
+                  <React.Fragment>
+                    <center>
+                      <Box sx={{ flexGrow: 1 }}>
+                        <Button
+                          variant="contained"
+                          sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                          disabled={((selectNAC === 5) && (CheckExamineApproveDes.includes(data.UserCode) !== false || (checkUserWeb === 'true')) && (headers.des_date !== undefined)) ? false : true}
+                          onClick={handleSubmitComplete}>
+                          รับรองเอกสาร
+                        </Button>
+                      </Box>
+                    </center>
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <center>
+                      <Box sx={{ flexGrow: 1 }}>
+                      </Box>
+                    </center>
+                  </React.Fragment>
+                )}
+              </Paper>
+              <CommentNAC
+                handleClickOpenDialog={handleClickOpenDialog}
+                openDialog={openDialog}
+                handleCloseDialog={handleCloseDialog}
+                data={data}
+                nac_code={nac_code}
+                headers={headers}
+                path={path}
+                description={description}
+                setPath={setPath}
+                setDescription={setDescription}
+                setCheckPath={setCheckPath}
+                setOpenDialog={setOpenDialog}
+              />
+              <Copyright />
+              <Dialog open={openDialogReply} onClose={handleCloseDialogReply} >
+                <DialogTitle>กรุณาระบุข้อความ/เหตุผล ที่ตีกลับเอกสาร</DialogTitle>
+                <DialogContent sx={{ width: 500 }}>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="link_document"
+                    label="ข้อความ"
+                    type="text"
+                    onChange={handleChangeCommentReply}
+                    fullWidth
+                    variant="standard"
+                    sx={{ pb: 2 }}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleReply} variant='contained'>บันทึก</Button>
+                  <Button onClick={handleCloseDialogReply} variant='contained' color='error'>ยกเลิก</Button>
+                </DialogActions>
+              </Dialog>
+            </Container>
+          </AnimatedPage>
+          <Outlet />
+        </ThemeProvider>
+      </React.Fragment >
+    );
+  }
 }

@@ -78,9 +78,7 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
   };
 
   const handleChackStatus = () => {
-    if (selectNAC.nac_status === 0) {
-      setStatus('ไม่ผ่านการอนุมัติ')
-    } else if (selectNAC.nac_status === 1) {
+    if (selectNAC.nac_status === 1) {
       setStatus('รอยืนยันรายการ')
     } else if (selectNAC.nac_status === 2) {
       setStatus('รอตรวจสอบ')
@@ -102,6 +100,8 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
       setStatus('รอแนบเอกสาร')
     } else if (selectNAC.nac_status === 13) {
       setStatus('รอการเงินตรวจสอบ')
+    } else if (selectNAC.nac_status === 0) {
+      setStatus('ไม่ผ่านการอนุมัติ')
     }
   };
 
@@ -155,7 +155,7 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
         buttons: false,
         timer: 2000,
       }).then((value) => {
-        window.location.href = "/NAC_ROW";
+        window.location.href = "/NAC_OPERATOR";
       });
     } else {
       swal("ทำรายการไม่สำเร็จ", 'ไม่สามารถลบ ' + response.data[0].nac_code + ' ได้', "error")
@@ -208,7 +208,6 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
             <Button
               variant="contained"
               color="error"
-              disabled={(selectNAC.create_by === data.UserCode) && (selectNAC.nac_status < 4) ? false : true}
               onClick={handleClickOpen}
               sx={{ width: 50 }}>
               <DeleteIcon />
