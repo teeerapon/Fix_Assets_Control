@@ -215,7 +215,7 @@ export default function MenuAppBar() {
     },
   });
 
-  if(checkUserWeb === 'true'){
+  if(checkUserWeb === 'admin' || checkUserWeb === 'operatorII' || checkUserWeb === 'operatorI'){
     return (
       <>
         <ThemeProvider theme={darkTheme}>
@@ -453,7 +453,7 @@ export default function MenuAppBar() {
                             <MenuItem onClick={NAC_NAC}>โยกย้ายทรัพย์สิน</MenuItem>
                             <MenuItem onClick={NAC_CHANGE}>เปลี่ยนแปลงรายละเอียดทรัพย์สิน</MenuItem>
                             <MenuItem onClick={NAC_DELETE}>ตัดจากบัญชีทรัพย์สินถาวร</MenuItem>
-                            <MenuItem onClick={handleClose5}>ขายทรัพย์สิน</MenuItem>
+                            <MenuItem onClick={NAC_SEALS}>ขายทรัพย์สิน</MenuItem>
                           </Menu>
                         </React.Fragment>
                       )}

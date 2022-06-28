@@ -270,13 +270,10 @@ export default function Nac_Main_wait() {
   const [ExecApprove, setExecApprove] = React.useState([]);
   const [CheckApprove, setCheckApprove] = React.useState([]);
   const [CheckExamineApprove, setCheckExamineApprove] = React.useState([]);
-  const [CheckExamineApproveDes, setCheckExamineApproveDes] = React.useState([]);
-  const [ExamineApproveDes, setExamineApproveDes] = React.useState([]);
+  //const [CheckExamineApproveDes, setCheckExamineApproveDes] = React.useState([]);
+  //const [ExamineApproveDes, setExamineApproveDes] = React.useState([]);
   const [checked, setChecked] = React.useState([{ assets_code: "", statusCheck: "", asset_id: "" }]);
-  console.log(checked);
-  const [path, setPath] = React.useState();
   const [description, setDescription] = React.useState();
-  const [checkPath, setCheckPath] = React.useState(path);
   const [checkUserWeb, setCheckUserWeb] = React.useState();
   const [valuesVisibility, setValuesVisibility] = React.useState({
     text: serviceList[0].price,
@@ -420,8 +417,8 @@ export default function Nac_Main_wait() {
     }
     setCheckExamineApprove(CheckExamineApprove)
     setExamineApprove(ExamineApprove)
-    setExamineApproveDes(ExamineApproveDes)
-    setCheckExamineApproveDes(CheckExamineApproveDes)
+    //setExamineApproveDes(ExamineApproveDes)
+    //setCheckExamineApproveDes(CheckExamineApproveDes)
     setExecApprove(ExecApprove)
     setCheckApprove(CheckApprove)
 
@@ -779,7 +776,7 @@ export default function Nac_Main_wait() {
                   buttons: false,
                   timer: 2000,
                 }).then((value) => {
-                  if (checkUserWeb === 'true') {
+                  if (checkUserWeb === 'admin') {
                     navigate('/NAC_OPERATOR')
                   } else {
                     navigate('/NAC_ROW')
@@ -848,7 +845,7 @@ export default function Nac_Main_wait() {
                   buttons: false,
                   timer: 2000,
                 }).then((value) => {
-                  if (checkUserWeb === 'true') {
+                  if (checkUserWeb === 'admin') {
                     navigate('/NAC_OPERATOR')
                   } else {
                     navigate('/NAC_ROW')
@@ -878,65 +875,77 @@ export default function Nac_Main_wait() {
 
   // ExamineApprove
   const handleExamineApprove = async () => {
-    if (CheckExamineApprove.length > 1 && ExamineApprove.includes(undefined) === false) {
-      const usercode = data.UserCode
-      const nac_status = (CheckExamineApprove.includes(data.UserCode) !== false && ExamineApprove[ExamineApprove.length - 2].status === 0) ? 2 : 3
-      const source_approve = data.UserCode
-      const source_approve_date = datenow
-      const des_approve = des_deliveryApprove
-      const des_approve_date = des_deliveryApproveDate
-      const verify_by = bossApprove
-      const verify_date = bossApproveDate
-      const nac_type = headers.nac_type
-      const responseForUpdate = await store_FA_control_updateStatus({
-        usercode,
-        nac_code,
-        nac_status,
-        nac_type,
-        source,
-        sourceDate,
-        des_delivery,
-        des_deliveryDate,
-        source_approve,
-        source_approve_date,
-        des_approve,
-        des_approve_date,
-        verify_by,
-        verify_date,
-      });
-      if ('data' in responseForUpdate) {
-        const comment = 'ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
-        const responseComment = await store_FA_control_comment({
-          nac_code,
+    if ((CheckExamineApprove.length > 1 && ExamineApprove[ExamineApprove.length - 2] !== undefined)) {
+      if (headers.source_approve_userid === data.UserCode) {
+        swal("แจ้งเตือน", 'คุณได้ตรวจสอบรายการนี้ไปแล้ว', "warning")
+      } else {
+        const usercode = data.UserCode
+        const nac_status = (CheckExamineApprove.includes(data.UserCode) !== false && ExamineApprove[ExamineApprove.length - 2].status === 0) ? 2 : checkUserWeb === 'admin' ? 3 : 3
+        const source_approve = data.UserCode
+        const source_approve_date = datenow
+        const des_approve = des_deliveryApprove
+        const des_approve_date = des_deliveryApproveDate
+        const verify_by = bossApprove
+        const verify_date = bossApproveDate
+        const nac_type = headers.nac_type
+        const responseForUpdate = await store_FA_control_updateStatus({
           usercode,
-          comment
-        })
-        if ('data' in responseComment) {
-          swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+          nac_code,
+          nac_status,
+          nac_type,
+          source,
+          sourceDate,
+          des_delivery,
+          des_deliveryDate,
+          source_approve,
+          source_approve_date,
+          des_approve,
+          des_approve_date,
+          verify_by,
+          verify_date,
+        });
+        if ('data' in responseForUpdate) {
+          const comment = 'ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+          const responseComment = await store_FA_control_comment({
+            nac_code,
+            usercode,
+            comment
+          })
+          if ('data' in responseComment) {
+            swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+              buttons: false,
+              timer: 2000,
+            }).then((value) => {
+              if (checkUserWeb === 'admin') {
+                navigate('/NAC_OPERATOR')
+              } else {
+                navigate('/NAC_ROW')
+              }
+            });
+          } else {
+            swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+              buttons: false,
+              timer: 2000,
+            }).then((value) => {
+              if (checkUserWeb === 'admin') {
+                navigate('/NAC_OPERATOR')
+              } else {
+                navigate('/NAC_ROW')
+              }
+            });
+          }
+        } else {
+          swal("ทำรายการไม่สำเร็จ", 'คุณไม่ได้รับอนุญาติให้ทำรายการนี้', "error", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            if (checkUserWeb === 'true') {
+            if (checkUserWeb === 'admin') {
               navigate('/NAC_OPERATOR')
             } else {
               navigate('/NAC_ROW')
             }
           });
-        } else {
-          swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
-            navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE')
-          });
         }
-      } else {
-        swal("ทำรายการไม่สำเร็จ", 'คุณไม่ได้รับอนุญาติให้ทำรายการนี้', "error", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
-          navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE')
-        });
       }
     } else {
       const usercode = data.UserCode
@@ -976,7 +985,7 @@ export default function Nac_Main_wait() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            if (checkUserWeb === 'true') {
+            if (checkUserWeb === 'admin') {
               navigate('/NAC_OPERATOR')
             } else {
               navigate('/NAC_ROW')
@@ -987,7 +996,11 @@ export default function Nac_Main_wait() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE')
+            if (checkUserWeb === 'admin') {
+              navigate('/NAC_OPERATOR')
+            } else {
+              navigate('/NAC_ROW')
+            }
           });
         }
       } else {
@@ -995,7 +1008,11 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE')
+          if (checkUserWeb === 'admin') {
+            navigate('/NAC_OPERATOR')
+          } else {
+            navigate('/NAC_ROW')
+          }
         });
       }
     }
@@ -1003,7 +1020,7 @@ export default function Nac_Main_wait() {
 
   // ExecApprove
   const handleExecApprove = async () => {
-    if (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'true') {
+    if (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin') {
       const usercode = data.UserCode
       const nac_status = 4
       const source_approve = sourceApprove
@@ -1040,7 +1057,7 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'true') {
+          if (checkUserWeb === 'admin') {
             navigate('/NAC_OPERATOR')
           } else {
             navigate('/NAC_ROW')
@@ -1062,17 +1079,17 @@ export default function Nac_Main_wait() {
     if (selectNAC === 4 || selectNAC === 5) {
       const usercode = data.UserCode
       const nac_status = selectNAC === 4 ? 5 : 6
-      const source_approve = sourceApprove
-      const source_approve_date = sourceDateApproveDate
-      const des_delivery = data.UserCode
-      const des_deliveryDate = datenow
+      const source_approve = headers.source_approve_userid
+      const source_approve_date = headers.source_approve_date
+      const des_delivery = selectNAC === 4 ? data.UserCode : headers.des_userid
+      const des_deliveryDate = selectNAC === 4 ? datenow : headers.des_date
       // const nac_status = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? 6 : 5
       // const source_approve = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? data.UserCode : sourceApprove
       // const source_approve_date = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? datenow : sourceDateApproveDate
       // const des_delivery = (data.UserCode === headers.des_userid) ? data.UserCode : des_deliveryApprove
       // const des_deliveryDate = (data.UserCode === headers.des_userid) ? datenow : des_deliveryApproveDate
-      const verify_by = bossApprove
-      const verify_date = bossApproveDate
+      const verify_by = headers.verify_by_userid
+      const verify_date = headers.verify_date
       const nac_type = headers.nac_type
       const des_approve = null
       const des_approve_date = null
@@ -1093,7 +1110,7 @@ export default function Nac_Main_wait() {
         verify_date,
       });
       if ('data' in responseForUpdate) {
-        const comment = 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+        const comment = selectNAC === 4 ? 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว' : 'รับรองเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว'
         const responseComment = await store_FA_control_comment({
           nac_code,
           usercode,
@@ -1104,7 +1121,7 @@ export default function Nac_Main_wait() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            if (checkUserWeb === 'true') {
+            if (checkUserWeb === 'admin') {
               navigate('/NAC_OPERATOR')
             } else {
               navigate('/NAC_ROW')
@@ -1115,7 +1132,7 @@ export default function Nac_Main_wait() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            if (checkUserWeb === 'true') {
+            if (checkUserWeb === 'admin') {
               navigate('/NAC_OPERATOR')
             } else {
               navigate('/NAC_ROW')
@@ -1143,7 +1160,7 @@ export default function Nac_Main_wait() {
         buttons: false,
         timer: 2000,
       }).then((value) => {
-        if (checkUserWeb === 'true') {
+        if (checkUserWeb === 'admin') {
           navigate('/NAC_OPERATOR')
         } else {
           navigate('/NAC_ROW')
@@ -1181,18 +1198,18 @@ export default function Nac_Main_wait() {
       verify_date,
     });
     if ('data' in responseForUpdate) {
-      const comment = 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+      const comment = 'ไม่เจอทรัพย์สินบางอย่างในรายการ ' + responseForUpdate.data[0].nac_code
       const responseComment = await store_FA_control_comment({
         nac_code,
         usercode,
         comment
       })
       if ('data' in responseComment) {
-        swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+        swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ไม่ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'true') {
+          if (checkUserWeb === 'admin') {
             navigate('/NAC_OPERATOR')
           } else {
             navigate('/NAC_ROW')
@@ -1203,7 +1220,7 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'true') {
+          if (checkUserWeb === 'admin') {
             navigate('/NAC_OPERATOR')
           } else {
             navigate('/NAC_ROW')
@@ -1233,13 +1250,13 @@ export default function Nac_Main_wait() {
     const usercode = data.UserCode
     const nac_status = 0
     const source_approve =
-      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'true')) ? sourceApprove : data.UserCode
+      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? sourceApprove : data.UserCode
     const source_approve_date =
-      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'true')) ? sourceDateApproveDate : datenow
+      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? sourceDateApproveDate : datenow
     const des_approve = des_deliveryApprove
     const des_approve_date = des_deliveryApproveDate
-    const verify_by = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'true')) ? data.UserCode : bossApprove
-    const verify_date = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'true')) ? datenow : bossApproveDate
+    const verify_by = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? data.UserCode : bossApprove
+    const verify_date = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? datenow : bossApproveDate
     const nac_type = headers.nac_type
     const responseForUpdate = await store_FA_control_updateStatus({
       usercode,
@@ -1269,7 +1286,7 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'true') {
+          if (checkUserWeb === 'admin') {
             navigate('/NAC_OPERATOR')
           } else {
             navigate('/NAC_ROW')
@@ -1280,7 +1297,7 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'true') {
+          if (checkUserWeb === 'admin') {
             navigate('/NAC_OPERATOR')
           } else {
             navigate('/NAC_ROW')
@@ -1292,7 +1309,7 @@ export default function Nac_Main_wait() {
         buttons: false,
         timer: 2000,
       }).then((value) => {
-        if (checkUserWeb === 'true') {
+        if (checkUserWeb === 'admin') {
           navigate('/NAC_OPERATOR')
         } else {
           navigate('/NAC_ROW')
@@ -1353,7 +1370,7 @@ export default function Nac_Main_wait() {
       verify_date,
     });
     if ('data' in responseForUpdate) {
-      const comment = commentReply
+      const comment = 'ตีกลับรายการเนื่องจาก "' + commentReply + '"'
       const responseComment = await store_FA_control_comment({
         nac_code,
         usercode,
@@ -1361,7 +1378,7 @@ export default function Nac_Main_wait() {
       })
       if ('data' in responseComment) {
         setOpenDialogReply(false);
-        if (checkUserWeb === 'true') {
+        if (checkUserWeb === 'admin') {
           window.location.href = '/NAC_OPERATOR'
         } else {
           window.location.href = "/NAC_ROW";
@@ -1754,6 +1771,11 @@ export default function Nac_Main_wait() {
                           {(selectNAC >= 4 && selectNAC < 7) || selectNAC === 8 ? (
                             <React.Fragment>
                               <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >
+                                <Typography>
+                                  ตรวจสอบ
+                                </Typography>
+                              </StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >
                                 <IconButton
                                   size="large"
                                   color='primary'
@@ -1762,11 +1784,6 @@ export default function Nac_Main_wait() {
                                 >
                                   <AddBoxIcon />
                                 </IconButton>
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >
-                                <Typography>
-                                  ตรวจสอบ
-                                </Typography>
                               </StyledTableCell>
                             </React.Fragment>
                           ) : (
@@ -1790,27 +1807,44 @@ export default function Nac_Main_wait() {
                           <TableBody>
                             <StyledTableRow>
                               <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                                <Autocomplete
-                                  freeSolo
-                                  key={index}
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  name='assetsCode'
-                                  id='assetsCode'
-                                  options={AllAssetsControl}
-                                  getOptionLabel={(option) => option.Code || ''}
-                                  filterOptions={filterOptions}
-                                  onChange={(e) => handleServiceChangeHeader(e, index)}
-                                  value={!singleService.assetsCode ? '' : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
-                                  renderInput={(params) => (
+                                {(selectNAC === 1 && data.UserCode === headers.create_by) ? (
+                                  <React.Fragment>
+                                    <Autocomplete
+                                      freeSolo
+                                      key={index}
+                                      disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                      name='assetsCode'
+                                      id='assetsCode'
+                                      options={AllAssetsControl}
+                                      getOptionLabel={(option) => option.Code || ''}
+                                      filterOptions={filterOptions}
+                                      onChange={(e) => handleServiceChangeHeader(e, index)}
+                                      value={!singleService.assetsCode ? '' : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
+                                      renderInput={(params) => (
+                                        <TextField
+                                          {...params}
+                                          variant="standard"
+                                          name='assetsCode'
+                                          id='assetsCode'
+                                        //onChange={(e) => handleServiceChange(e, index)}
+                                        />
+                                      )}
+                                    />
+                                  </React.Fragment>
+                                ) : (
+                                  <React.Fragment>
                                     <TextField
-                                      {...params}
+                                      key={index}
+                                      fullWidth
+                                      disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                       variant="standard"
                                       name='assetsCode'
                                       id='assetsCode'
-                                    //onChange={(e) => handleServiceChange(e, index)}
+                                      onChange={(e) => handleServiceChange(e, index)}
+                                      value={!singleService.assetsCode ? '' : singleService.assetsCode}
                                     />
-                                  )}
-                                />
+                                  </React.Fragment>
+                                )}
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
@@ -1883,6 +1917,15 @@ export default function Nac_Main_wait() {
                               {(selectNAC >= 4 && selectNAC < 7) || selectNAC === 8 ? (
                                 <React.Fragment>
                                   <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                    <Checkbox
+                                      key={index}
+                                      name='checkBox'
+                                      disabled={selectNAC === 4 ? false : true}
+                                      checked={(checked[index] !== undefined && checked[index].statusCheck === 1) ? true : false}
+                                      onChange={(e) => handleCheckBox(e, index)}
+                                    />
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                                     {serviceList.length !== 0 && (
                                       <IconButton
                                         size="large"
@@ -1894,15 +1937,6 @@ export default function Nac_Main_wait() {
                                         <DeleteIcon fontSize="inherit" />
                                       </IconButton>
                                     )}
-                                  </StyledTableCell>
-                                  <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                                    <Checkbox
-                                      key={index}
-                                      name='checkBox'
-                                      disabled={selectNAC === 4 ? false : true}
-                                      checked={(checked[index] !== undefined && checked[index].statusCheck === 1) ? true : false}
-                                      onChange={(e) => handleCheckBox(e, index)}
-                                    />
                                   </StyledTableCell>
                                 </React.Fragment>
                               ) : (
@@ -2104,7 +2138,7 @@ export default function Nac_Main_wait() {
                     </Table>
                   </TableContainer>
                 </React.Fragment>
-                {((selectNAC === 1 || selectNAC === 7) && (data.UserCode === headers.create_by || (checkUserWeb === 'true'))) ? (
+                {((selectNAC === 1 || selectNAC === 7) && (data.UserCode === headers.create_by || (checkUserWeb === 'admin'))) ? (
                   <React.Fragment>
                     <center>
                       <Box sx={{ flexGrow: 1 }}>
@@ -2117,7 +2151,7 @@ export default function Nac_Main_wait() {
                               onClick={handleSave}
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                               style={{ 'backgroundColor': 'orange' }}
-                              disabled={(data.UserCode === headers.create_by || (checkUserWeb === 'true')) ? false : true}>
+                              disabled={(data.UserCode === headers.create_by || (checkUserWeb === 'admin')) ? false : true}>
                               อัปเดต
                             </Button>
                           </Grid>
@@ -2126,7 +2160,7 @@ export default function Nac_Main_wait() {
                               variant="contained"
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                               disabled={
-                                (data.UserCode === headers.create_by || (checkUserWeb === 'true')) ? false :
+                                (data.UserCode === headers.create_by || (checkUserWeb === 'admin')) ? false :
                                   ExamineApprove.length === 0 ? false : true}
                               onClick={handleSubmit
                               }>
@@ -2141,7 +2175,7 @@ export default function Nac_Main_wait() {
                       </Box>
                     </center>
                   </React.Fragment>
-                ) : ((selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) || (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true')))) ? (
+                ) : ((selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) || (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin')))) ? (
                   <React.Fragment>
                     <center>
                       <Box sx={{ flexGrow: 1 }}>
@@ -2155,8 +2189,8 @@ export default function Nac_Main_wait() {
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                               style={{ 'backgroundColor': 'orange' }}
                               disabled={
-                                (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
-                                  (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
+                                (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                  (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
                                     true
                               }>
                               ตีกลับเอกสาร
@@ -2171,8 +2205,8 @@ export default function Nac_Main_wait() {
                                   'primary'}
                               onClick={selectNAC === 2 ? handleExamineApprove : handleExecApprove}
                               disabled={
-                                (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
-                                  (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
+                                (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                  (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
                                     true
                               }>
                               <React.Fragment>
@@ -2184,8 +2218,8 @@ export default function Nac_Main_wait() {
                             <Button
                               variant="contained"
                               color='error'
-                              disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false
-                                : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
+                              disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false
+                                : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
                                   true
                               }
                               onClick={CancelApprove}
@@ -2199,7 +2233,7 @@ export default function Nac_Main_wait() {
                       </Box>
                     </center>
                   </React.Fragment>
-                ) : ((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'true')) && (!headers.des_date)) ? (
+                ) : ((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin')) && (!headers.des_date)) ? (
                   <React.Fragment>
                     <center>
                       <Box sx={{ flexGrow: 1 }}>
@@ -2211,7 +2245,7 @@ export default function Nac_Main_wait() {
                               variant="contained"
                               style={{ 'backgroundColor': 'orange' }}
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'true')) && (!headers.des_date)) ? false : true}
+                              disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin')) && (!headers.des_date)) ? false : true}
                               onClick={noneAssetsComplete}>
                               ไม่รับเอกสาร
                             </Button>
@@ -2220,7 +2254,7 @@ export default function Nac_Main_wait() {
                             <Button
                               variant="contained"
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'true')) && (!headers.des_date)) ? false : true}
+                              disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin')) && (!headers.des_date)) ? false : true}
                               onClick={handleSubmitComplete}>
                               ตรวจรับเอกสาร
                             </Button>
@@ -2231,14 +2265,14 @@ export default function Nac_Main_wait() {
                       </Box>
                     </center>
                   </React.Fragment>
-                ) : ((selectNAC === 5) && (CheckExamineApproveDes.includes(data.UserCode) !== false || (checkUserWeb === 'true')) && (headers.des_date !== undefined)) ? (
+                ) : (selectNAC === 5) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? (
                   <React.Fragment>
                     <center>
                       <Box sx={{ flexGrow: 1 }}>
                         <Button
                           variant="contained"
                           sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                          disabled={((selectNAC === 5) && (CheckExamineApproveDes.includes(data.UserCode) !== false || (checkUserWeb === 'true')) && (headers.des_date !== undefined)) ? false : true}
+                          disabled={(selectNAC === 5) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
                           onClick={handleSubmitComplete}>
                           รับรองเอกสาร
                         </Button>
@@ -2261,11 +2295,8 @@ export default function Nac_Main_wait() {
                 data={data}
                 nac_code={nac_code}
                 headers={headers}
-                path={path}
                 description={description}
-                setPath={setPath}
                 setDescription={setDescription}
-                setCheckPath={setCheckPath}
                 setOpenDialog={setOpenDialog}
               />
               <Copyright />

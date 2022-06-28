@@ -188,20 +188,20 @@ async function store_FA_control_updateStatus(credentials) {
     .then(data => data.json())
 }
 
-async function store_FA_control_seals_update(credentials) {
-  return fetch('http://192.168.220.1:32001/api/store_FA_control_seals_update', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
+// async function store_FA_control_seals_update(credentials) {
+//   return fetch('http://192.168.220.1:32001/api/store_FA_control_seals_update', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json; charset=utf-8',
+//       'Accept': 'application/json'
+//     },
+//     body: JSON.stringify(credentials)
+//   })
+//     .then(data => data.json())
+// }
 
 async function store_FA_control_updateDTL_seals(credentials) {
-  return fetch('http://192.168.220.1:32001/api/store_FA_control_seals_update', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_updateDTL_seals', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -293,13 +293,11 @@ export default function Nac_Seals_Approve() {
   const [ExecApprove, setExecApprove] = React.useState([]);
   const [CheckApprove, setCheckApprove] = React.useState([]);
   const [CheckExamineApprove, setCheckExamineApprove] = React.useState([]);
-  const [CheckExamineApproveDes, setCheckExamineApproveDes] = React.useState([]);
-  const [ExamineApproveDes, setExamineApproveDes] = React.useState([]);
+  //const [CheckExamineApproveDes, setCheckExamineApproveDes] = React.useState([]);
+  //const [ExamineApproveDes, setExamineApproveDes] = React.useState([]);
   const [checked, setChecked] = React.useState([{ assets_code: "", statusCheck: "", asset_id: "" }]);
   const [userBookValue] = React.useState(['SSP', 'JRK', 'TCM', 'TPD', 'TPS']);
-  const [path, setPath] = React.useState();
   const [description, setDescription] = React.useState();
-  const [checkPath, setCheckPath] = React.useState(path);
   const [checkUserWeb, setCheckUserWeb] = React.useState();
   const [valuesVisibility, setValuesVisibility] = React.useState({
     text: serviceList[0].price,
@@ -404,9 +402,9 @@ export default function Nac_Seals_Approve() {
         , name: res.nacdtl_assetsName
         , price: res.nacdtl_assetsPrice
         , asset_id: res.nacdtl_id
-        , bookValue: ""
-        , priceSeals: ""
-        , profit: ""
+        , bookValue: !res.nacdtl_bookV ? '' : res.nacdtl_bookV
+        , priceSeals: !res.nacdtl_PriceSeals ? '' : res.nacdtl_PriceSeals
+        , profit: !res.nacdtl_profit ? '' : res.nacdtl_profit
       };
     }));
 
@@ -461,8 +459,8 @@ export default function Nac_Seals_Approve() {
     }
     setCheckExamineApprove(CheckExamineApprove)
     setExamineApprove(ExamineApprove)
-    setExamineApproveDes(ExamineApproveDes)
-    setCheckExamineApproveDes(CheckExamineApproveDes)
+    //setExamineApproveDes(ExamineApproveDes)
+    //setCheckExamineApproveDes(CheckExamineApproveDes)
     setExecApprove(ExecApprove)
     setCheckApprove(CheckApprove)
 
@@ -550,6 +548,9 @@ export default function Nac_Seals_Approve() {
         list[index]['count'] = ''
         list[index]['serialNo'] = ''
         list[index]['price'] = ''
+        list[index]['bookValue'] = ''
+        list[index]['priceSeals'] = ''
+        list[index]['profit'] = ''
         setServiceList(list);
       } else {
         const Code = list[index]['assetsCode'];
@@ -562,6 +563,9 @@ export default function Nac_Seals_Approve() {
           list[index]['count'] = 1
           list[index]['serialNo'] = response['data'][0].SerialNo
           list[index]['price'] = response['data'][0].Price
+          list[index]['bookValue'] = ''
+          list[index]['priceSeals'] = ''
+          list[index]['profit'] = list[index]['priceSeals'] - list[index]['bookValue']
           setServiceList(list);
         }
       }
@@ -683,77 +687,77 @@ export default function Nac_Seals_Approve() {
 
   };
 
-  const handleAutoDes_DeapartMent = async (e, index) => {
-    const UserCode = e.target.innerText
-    const response = await AutoDeapartMent({
-      UserCode
-    });
-    setDes_delivery(UserCode)
-    if (!UserCode) {
-      setDes_Department('')
-      setDes_BU('')
-    } else {
-      if (response.data[0].DepID === null) {
-        setDes_Department('ROD')
-        setDes_BU('Oil')
-      } else if (response.data[0].DepID === 1) {
-        setDes_Department('ITO')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 2) {
-        setDes_Department('AFD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 3) {
-        setDes_Department('ROD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 4) {
-        setDes_Department('SSD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 5) {
-        setDes_Department('HRD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 6) {
-        setDes_Department('GAD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 7) {
-        setDes_Department('SLD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 8) {
-        setDes_Department('MMD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 9) {
-        setDes_Department('PMD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 10) {
-        setDes_Department('SCD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 11) {
-        setDes_Department('BDO')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 12) {
-        setDes_Department('MDO')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 14) {
-        setDes_Department('CSO')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 15) {
-        setDes_Department('MMD2')
-        setDes_BU('Center')
-      }
-    }
-  };
+  // const handleAutoDes_DeapartMent = async (e, index) => {
+  //   const UserCode = e.target.innerText
+  //   const response = await AutoDeapartMent({
+  //     UserCode
+  //   });
+  //   setDes_delivery(UserCode)
+  //   if (!UserCode) {
+  //     setDes_Department('')
+  //     setDes_BU('')
+  //   } else {
+  //     if (response.data[0].DepID === null) {
+  //       setDes_Department('ROD')
+  //       setDes_BU('Oil')
+  //     } else if (response.data[0].DepID === 1) {
+  //       setDes_Department('ITO')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 2) {
+  //       setDes_Department('AFD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 3) {
+  //       setDes_Department('ROD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 4) {
+  //       setDes_Department('SSD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 5) {
+  //       setDes_Department('HRD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 6) {
+  //       setDes_Department('GAD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 7) {
+  //       setDes_Department('SLD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 8) {
+  //       setDes_Department('MMD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 9) {
+  //       setDes_Department('PMD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 10) {
+  //       setDes_Department('SCD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 11) {
+  //       setDes_Department('BDO')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 12) {
+  //       setDes_Department('MDO')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 14) {
+  //       setDes_Department('CSO')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 15) {
+  //       setDes_Department('MMD2')
+  //       setDes_BU('Center')
+  //     }
+  //   }
+  // };
 
   // Update Document
   const handleSave = async () => {
@@ -764,7 +768,7 @@ export default function Nac_Seals_Approve() {
         swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning");
       } else {
         const usercode = data.UserCode
-        const nac_status = 1
+        const nac_status = (selectNAC === 11) ? 11 : 1
         const sumPrice = sum_price
         const nac_type = headers.nac_type
         const response = await store_FA_control_update_DTLandHeaders({
@@ -809,15 +813,27 @@ export default function Nac_Seals_Approve() {
               asset_id
             });
             if ('data' in responseDTL) {
-              swal("ทำรายการสำเร็จ", 'อัปเดตรายการ ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
+              const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
+              const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
+              const nacdtl_profit = serviceList[i].priceSeals - serviceList[i].bookValue
+              const asset_id = responseDTL.data[0].nacdtl_id
+              const nac_status = (selectNAC === 11) ? 11 : 1
+              await store_FA_control_updateDTL_seals({
+                usercode,
+                nac_code,
+                nac_status,
+                nac_type,
+                nacdtl_bookV,
+                nacdtl_PriceSeals,
+                nacdtl_profit,
+                asset_id,
+                nacdtl_assetsCode
+              });
+              swal("ทำรายการสำเร็จ", 'สร้างรายการเปลี่ยนแปลงทรัพย์สิน ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
                 buttons: false,
                 timer: 2000,
               }).then((value) => {
-                if (data.UserCode === headers.create_by) {
-                  navigate('/NAC_ROW')
-                } else {
-                  navigate('/NAC_ROW')
-                }
+                navigate('/NAC_ROW')
               });
             } else {
               swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error");
@@ -841,9 +857,9 @@ export default function Nac_Seals_Approve() {
         if (sum_price !== headers.sum_price || headers.source_userid !== source || headers.des_userid !== des_delivery) {
           swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยื่นคำร้อง', "warning");
         } else {
-          if (data.UserCode === headers.create_by) {
+          if (data.UserCode === headers.create_by || CheckExamineApprove.includes(data.UserCode) === true || CheckApprove.includes(data.UserCode) === true || checkUserWeb === 'admin') {
             const usercode = data.UserCode
-            const nac_status = 10
+            const nac_status = (selectNAC === 11) ? 10 : 11
             const source_approve = sourceApprove
             const source_approve_date = sourceDateApproveDate
             const des_approve = des_deliveryApprove
@@ -851,53 +867,189 @@ export default function Nac_Seals_Approve() {
             const verify_by = bossApprove
             const verify_date = bossApproveDate
             const nac_type = headers.nac_type
-            const responseForUpdate = await store_FA_control_updateStatus({
-              usercode,
-              nac_code,
-              nac_status,
-              nac_type,
-              source,
-              sourceDate,
-              des_delivery,
-              des_deliveryDate,
-              source_approve,
-              source_approve_date,
-              des_approve,
-              des_approve_date,
-              verify_by,
-              verify_date,
-            });
-            const comment = 'ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว'
-            const responseComment = await store_FA_control_comment({
-              nac_code,
-              usercode,
-              comment
-            })
-            if ('data' in responseComment) {
-              swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
-                buttons: false,
-                timer: 2000,
-              }).then((value) => {
-                if (data.UserCode === headers.create_by) {
-                  navigate('/NAC_ROW')
-                } else {
-                  navigate('/NAC_ROW')
+            if (selectNAC === 11) {
+              const checkBookValue_is_null = []
+              for (let i = 0; i < serviceList.length; i++) {
+                checkBookValue_is_null[i] = serviceList[i].bookValue
+              }
+              if (checkBookValue_is_null.includes('') !== true) {
+                const responseForUpdate = await store_FA_control_updateStatus({
+                  usercode,
+                  nac_code,
+                  nac_status,
+                  nac_type,
+                  source,
+                  sourceDate,
+                  des_delivery,
+                  des_deliveryDate,
+                  source_approve,
+                  source_approve_date,
+                  des_approve,
+                  des_approve_date,
+                  verify_by,
+                  verify_date,
+                });
+                for (let i = 0; i < serviceList.length; i++) {
+                  const dtl_id = serviceList[i].dtl_id
+                  const nacdtl_row = i
+                  const nacdtl_assetsCode = serviceList[i].assetsCode
+                  const nacdtl_assetsName = serviceList[i].name
+                  const nacdtl_assetsSeria = serviceList[i].serialNo
+                  const nacdtl_assetsDtl = serviceList[i].dtl
+                  const nacdtl_assetsCount = serviceList[i].count
+                  const nacdtl_assetsPrice = serviceList[i].price
+                  const asset_id = serviceList[i].asset_id
+                  const responseDTL = await store_FA_control_update_DTL({
+                    dtl_id,
+                    usercode,
+                    nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
+                    nacdtl_row,
+                    nacdtl_assetsCode,
+                    nacdtl_assetsName,
+                    nacdtl_assetsSeria,
+                    nacdtl_assetsDtl,
+                    nacdtl_assetsCount,
+                    nacdtl_assetsPrice,
+                    asset_id
+                  });
+                  if ('data' in responseDTL) {
+                    const nacdtl_bookV = serviceList[i].bookValue
+                    const nacdtl_PriceSeals = serviceList[i].priceSeals
+                    const nacdtl_profit = serviceList[i].priceSeals - serviceList[i].bookValue
+                    const asset_id = responseDTL.data[0].nacdtl_id
+                    const nac_status = (selectNAC === 11) ? 10 : 11
+                    await store_FA_control_updateDTL_seals({
+                      usercode,
+                      nac_code,
+                      nac_status,
+                      nac_type,
+                      nacdtl_bookV,
+                      nacdtl_PriceSeals,
+                      nacdtl_profit,
+                      asset_id,
+                      nacdtl_assetsCode
+                    });
+                    const comment = 'ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+                    const responseComment = await store_FA_control_comment({
+                      nac_code,
+                      usercode,
+                      comment
+                    })
+                    if ('data' in responseComment) {
+                      swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+                        buttons: false,
+                        timer: 2000,
+                      }).then((value) => {
+                        if (checkUserWeb === 'admin') {
+                          navigate('/NAC_OPERATOR')
+                        } else {
+                          navigate('/NAC_ROW')
+                        }
+                      });
+                    } else {
+                      swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+                        buttons: false,
+                        timer: 2000,
+                      }).then((value) => {
+                        navigate('/NAC_ROW/NAC_SEALS_APPROVE')
+                      });
+                    }
+                  }
                 }
-              });
+              } else {
+                swal("แจ้งเตือน", 'กรุณากรอก Book Value ของทรัพย์สินให้ครบถ้วน', "warning")
+              }
             } else {
-              swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
-                buttons: false,
-                timer: 2000,
-              }).then((value) => {
-                navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
+              const responseForUpdate = await store_FA_control_updateStatus({
+                usercode,
+                nac_code,
+                nac_status,
+                nac_type,
+                source,
+                sourceDate,
+                des_delivery,
+                des_deliveryDate,
+                source_approve,
+                source_approve_date,
+                des_approve,
+                des_approve_date,
+                verify_by,
+                verify_date,
               });
+              for (let i = 0; i < serviceList.length; i++) {
+                const dtl_id = serviceList[i].dtl_id
+                const nacdtl_row = i
+                const nacdtl_assetsCode = serviceList[i].assetsCode
+                const nacdtl_assetsName = serviceList[i].name
+                const nacdtl_assetsSeria = serviceList[i].serialNo
+                const nacdtl_assetsDtl = serviceList[i].dtl
+                const nacdtl_assetsCount = serviceList[i].count
+                const nacdtl_assetsPrice = serviceList[i].price
+                const asset_id = serviceList[i].asset_id
+                const responseDTL = await store_FA_control_update_DTL({
+                  dtl_id,
+                  usercode,
+                  nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
+                  nacdtl_row,
+                  nacdtl_assetsCode,
+                  nacdtl_assetsName,
+                  nacdtl_assetsSeria,
+                  nacdtl_assetsDtl,
+                  nacdtl_assetsCount,
+                  nacdtl_assetsPrice,
+                  asset_id
+                });
+                if ('data' in responseDTL) {
+                  const nacdtl_bookV = serviceList[i].bookValue
+                  const nacdtl_PriceSeals = serviceList[i].priceSeals
+                  const nacdtl_profit = serviceList[i].priceSeals - serviceList[i].bookValue
+                  const asset_id = responseDTL.data[0].nacdtl_id
+                  const nac_status = (selectNAC === 11) ? 10 : 11
+                  await store_FA_control_updateDTL_seals({
+                    usercode,
+                    nac_code,
+                    nac_status,
+                    nac_type,
+                    nacdtl_bookV,
+                    nacdtl_PriceSeals,
+                    nacdtl_profit,
+                    asset_id,
+                    nacdtl_assetsCode
+                  });
+                  const comment = 'ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+                  const responseComment = await store_FA_control_comment({
+                    nac_code,
+                    usercode,
+                    comment
+                  })
+                  if ('data' in responseComment) {
+                    swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+                      buttons: false,
+                      timer: 2000,
+                    }).then((value) => {
+                      if (checkUserWeb === 'admin') {
+                        navigate('/NAC_OPERATOR')
+                      } else {
+                        navigate('/NAC_ROW')
+                      }
+                    });
+                  } else {
+                    swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+                      buttons: false,
+                      timer: 2000,
+                    }).then((value) => {
+                      navigate('/NAC_ROW/NAC_SEALS_APPROVE')
+                    });
+                  }
+                }
+              }
             }
           } else {
             swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
+              navigate('/NAC_ROW/NAC_SEALS_APPROVE')
             });
           }
         }
@@ -907,65 +1059,77 @@ export default function Nac_Seals_Approve() {
 
   // ExamineApprove
   const handleExamineApprove = async () => {
-    if (CheckExamineApprove.length > 1 && ExamineApprove.includes(undefined) === false) {
-      const usercode = data.UserCode
-      const nac_status = (CheckExamineApprove.includes(data.UserCode) !== false && ExamineApprove[ExamineApprove.length - 2].status === 0) ? 2 : 3
-      const source_approve = data.UserCode
-      const source_approve_date = datenow
-      const des_approve = des_deliveryApprove
-      const des_approve_date = des_deliveryApproveDate
-      const verify_by = bossApprove
-      const verify_date = bossApproveDate
-      const nac_type = headers.nac_type
-      const responseForUpdate = await store_FA_control_updateStatus({
-        usercode,
-        nac_code,
-        nac_status,
-        nac_type,
-        source,
-        sourceDate,
-        des_delivery,
-        des_deliveryDate,
-        source_approve,
-        source_approve_date,
-        des_approve,
-        des_approve_date,
-        verify_by,
-        verify_date,
-      });
-      if ('data' in responseForUpdate) {
-        const comment = 'ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
-        const responseComment = await store_FA_control_comment({
-          nac_code,
+    if ((CheckExamineApprove.length > 1 && ExamineApprove[ExamineApprove.length - 2] !== undefined)) {
+      if (headers.source_approve_userid === data.UserCode) {
+        swal("แจ้งเตือน", 'คุณได้ตรวจสอบรายการนี้ไปแล้ว', "warning")
+      } else {
+        const usercode = data.UserCode
+        const nac_status = (CheckExamineApprove.includes(data.UserCode) !== false && ExamineApprove[ExamineApprove.length - 2].status === 0) ? 2 : checkUserWeb === 'admin' ? 3 : 3
+        const source_approve = data.UserCode
+        const source_approve_date = datenow
+        const des_approve = des_deliveryApprove
+        const des_approve_date = des_deliveryApproveDate
+        const verify_by = bossApprove
+        const verify_date = bossApproveDate
+        const nac_type = headers.nac_type
+        const responseForUpdate = await store_FA_control_updateStatus({
           usercode,
-          comment
-        })
-        if ('data' in responseComment) {
-          swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+          nac_code,
+          nac_status,
+          nac_type,
+          source,
+          sourceDate,
+          des_delivery,
+          des_deliveryDate,
+          source_approve,
+          source_approve_date,
+          des_approve,
+          des_approve_date,
+          verify_by,
+          verify_date,
+        });
+        if ('data' in responseForUpdate) {
+          const comment = 'ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+          const responseComment = await store_FA_control_comment({
+            nac_code,
+            usercode,
+            comment
+          })
+          if ('data' in responseComment) {
+            swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+              buttons: false,
+              timer: 2000,
+            }).then((value) => {
+              if (checkUserWeb === 'admin') {
+                navigate('/NAC_OPERATOR')
+              } else {
+                navigate('/NAC_ROW')
+              }
+            });
+          } else {
+            swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+              buttons: false,
+              timer: 2000,
+            }).then((value) => {
+              if (checkUserWeb === 'admin') {
+                navigate('/NAC_OPERATOR')
+              } else {
+                navigate('/NAC_ROW')
+              }
+            });
+          }
+        } else {
+          swal("ทำรายการไม่สำเร็จ", 'คุณไม่ได้รับอนุญาติให้ทำรายการนี้', "error", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            if (checkUserWeb === 'true') {
+            if (checkUserWeb === 'admin') {
               navigate('/NAC_OPERATOR')
             } else {
               navigate('/NAC_ROW')
             }
           });
-        } else {
-          swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
-            navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE')
-          });
         }
-      } else {
-        swal("ทำรายการไม่สำเร็จ", 'คุณไม่ได้รับอนุญาติให้ทำรายการนี้', "error", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
-          navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE')
-        });
       }
     } else {
       const usercode = data.UserCode
@@ -1005,7 +1169,7 @@ export default function Nac_Seals_Approve() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            if (checkUserWeb === 'true') {
+            if (checkUserWeb === 'admin') {
               navigate('/NAC_OPERATOR')
             } else {
               navigate('/NAC_ROW')
@@ -1016,7 +1180,11 @@ export default function Nac_Seals_Approve() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE')
+            if (checkUserWeb === 'admin') {
+              navigate('/NAC_OPERATOR')
+            } else {
+              navigate('/NAC_ROW')
+            }
           });
         }
       } else {
@@ -1024,7 +1192,11 @@ export default function Nac_Seals_Approve() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE')
+          if (checkUserWeb === 'admin') {
+            navigate('/NAC_OPERATOR')
+          } else {
+            navigate('/NAC_ROW')
+          }
         });
       }
     }
@@ -1032,9 +1204,9 @@ export default function Nac_Seals_Approve() {
 
   // ExecApprove
   const handleExecApprove = async () => {
-    if (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'true') {
+    if (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin') {
       const usercode = data.UserCode
-      const nac_status = 21
+      const nac_status = 12
       const source_approve = sourceApprove
       const source_approve_date = sourceDateApproveDate
       const des_approve = des_deliveryApprove
@@ -1069,7 +1241,7 @@ export default function Nac_Seals_Approve() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'true') {
+          if (checkUserWeb === 'admin') {
             navigate('/NAC_OPERATOR')
           } else {
             navigate('/NAC_ROW')
@@ -1080,7 +1252,11 @@ export default function Nac_Seals_Approve() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE')
+          if (checkUserWeb === 'admin') {
+            navigate('/NAC_OPERATOR')
+          } else {
+            navigate('/NAC_ROW')
+          }
         });
       }
     }
@@ -1088,20 +1264,20 @@ export default function Nac_Seals_Approve() {
 
   //
   const handleSubmitComplete = async () => {
-    if (selectNAC === 4 || selectNAC === 5) {
+    if (selectNAC === 4 || selectNAC === 5 || selectNAC === 12) {
       const usercode = data.UserCode
-      const nac_status = selectNAC === 4 ? 5 : 6
-      const source_approve = sourceApprove
-      const source_approve_date = sourceDateApproveDate
-      const des_delivery = data.UserCode
-      const des_deliveryDate = datenow
+      const nac_status = selectNAC === 4 ? 5 : selectNAC === 5 ? 6 : 13
+      const source_approve = headers.source_approve_userid
+      const source_approve_date = headers.source_approve_date
+      const des_delivery = selectNAC === 4 ? data.UserCode : headers.des_userid
+      const des_deliveryDate = selectNAC === 4 ? datenow : headers.des_date
       // const nac_status = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? 6 : 5
       // const source_approve = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? data.UserCode : sourceApprove
       // const source_approve_date = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? datenow : sourceDateApproveDate
       // const des_delivery = (data.UserCode === headers.des_userid) ? data.UserCode : des_deliveryApprove
       // const des_deliveryDate = (data.UserCode === headers.des_userid) ? datenow : des_deliveryApproveDate
-      const verify_by = bossApprove
-      const verify_date = bossApproveDate
+      const verify_by = headers.verify_by_userid
+      const verify_date = headers.verify_date
       const nac_type = headers.nac_type
       const des_approve = null
       const des_approve_date = null
@@ -1122,7 +1298,7 @@ export default function Nac_Seals_Approve() {
         verify_date,
       });
       if ('data' in responseForUpdate) {
-        const comment = 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+        const comment = selectNAC === 4 ? 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว' : 'รับรองเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว'
         const responseComment = await store_FA_control_comment({
           nac_code,
           usercode,
@@ -1133,7 +1309,7 @@ export default function Nac_Seals_Approve() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            if (checkUserWeb === 'true') {
+            if (checkUserWeb === 'admin') {
               navigate('/NAC_OPERATOR')
             } else {
               navigate('/NAC_ROW')
@@ -1144,7 +1320,7 @@ export default function Nac_Seals_Approve() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            if (checkUserWeb === 'true') {
+            if (checkUserWeb === 'admin') {
               navigate('/NAC_OPERATOR')
             } else {
               navigate('/NAC_ROW')
@@ -1172,7 +1348,7 @@ export default function Nac_Seals_Approve() {
         buttons: false,
         timer: 2000,
       }).then((value) => {
-        if (checkUserWeb === 'true') {
+        if (checkUserWeb === 'admin') {
           navigate('/NAC_OPERATOR')
         } else {
           navigate('/NAC_ROW')
@@ -1186,13 +1362,13 @@ export default function Nac_Seals_Approve() {
     const usercode = data.UserCode
     const nac_status = 0
     const source_approve =
-      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'true')) ? sourceApprove : data.UserCode
+      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? sourceApprove : data.UserCode
     const source_approve_date =
-      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'true')) ? sourceDateApproveDate : datenow
+      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? sourceDateApproveDate : datenow
     const des_approve = des_deliveryApprove
     const des_approve_date = des_deliveryApproveDate
-    const verify_by = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'true')) ? data.UserCode : bossApprove
-    const verify_date = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'true')) ? datenow : bossApproveDate
+    const verify_by = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? data.UserCode : bossApprove
+    const verify_date = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? datenow : bossApproveDate
     const nac_type = headers.nac_type
     const responseForUpdate = await store_FA_control_updateStatus({
       usercode,
@@ -1222,7 +1398,7 @@ export default function Nac_Seals_Approve() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'true') {
+          if (checkUserWeb === 'admin') {
             navigate('/NAC_OPERATOR')
           } else {
             navigate('/NAC_ROW')
@@ -1233,7 +1409,7 @@ export default function Nac_Seals_Approve() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'true') {
+          if (checkUserWeb === 'admin') {
             navigate('/NAC_OPERATOR')
           } else {
             navigate('/NAC_ROW')
@@ -1245,7 +1421,7 @@ export default function Nac_Seals_Approve() {
         buttons: false,
         timer: 2000,
       }).then((value) => {
-        if (checkUserWeb === 'true') {
+        if (checkUserWeb === 'admin') {
           navigate('/NAC_OPERATOR')
         } else {
           navigate('/NAC_ROW')
@@ -1286,7 +1462,7 @@ export default function Nac_Seals_Approve() {
       verify_date
     });
     if ('data' in responseForUpdate) {
-      const comment = commentReply
+      const comment = 'ตีกลับรายการเนื่องจาก "' + commentReply + '"'
       const responseComment = await store_FA_control_comment({
         nac_code,
         usercode,
@@ -1294,7 +1470,7 @@ export default function Nac_Seals_Approve() {
       })
       if ('data' in responseComment) {
         setOpenDialogReply(false);
-        if (checkUserWeb === 'true') {
+        if (checkUserWeb === 'admin') {
           window.location.href = '/NAC_OPERATOR'
         } else {
           window.location.href = "/NAC_ROW";
@@ -1303,87 +1479,7 @@ export default function Nac_Seals_Approve() {
     }
   }
 
-  //store_FA_control_seals_update
-  const handleSubmitSeals = async () => {
-    if (!checkPath && selectNAC === 21) {
-      swal("แจ้งเตือน", 'กรุณาแนบเอกสารประกอบการขายทรัพย์สิน', "warning");
-    } else {
-      const usercode = data.UserCode
-      const nac_status = (selectNAC === 21 ? 22 : selectNAC === 22 ? 23 : 24)
-      const nac_type = headers.nac_type
-      const source = headers.source_userid
-      const sourceDate = headers.source_date
-      const source_approve = sourceApprove
-      const source_approve_date = sourceDateApproveDate
-      const des_approve = des_deliveryApprove
-      const des_approve_date = des_deliveryApproveDate
-      const verify_by = bossApprove
-      const verify_date = bossApproveDate
-      const responseUpdateSeals = await store_FA_control_seals_update({
-        usercode,
-        nac_code,
-        nac_status,
-        nac_type,
-        source,
-        sourceDate,
-        des_delivery,
-        des_deliveryDate,
-        source_approve,
-        source_approve_date,
-        des_approve,
-        des_approve_date,
-        verify_by,
-        verify_date
-      });
-      if ('data' in responseUpdateSeals) {
-        if (serviceList[0].bookValue !== '' || serviceList[0].priceSeals !== '' || serviceList[0].profit !== '' || serviceList[0].assetsCode !== '' || serviceList[0].asset_id !== '') {
-          for (let i = 0; i < serviceList.length; i++) {
-            const nacdtl_bookV = serviceList[i].bookValue
-            const nacdtl_PriceSeals = serviceList[i].priceSeals
-            const nacdtl_profit = serviceList[i].profit
-            const asset_id = serviceList[i].assetsCode
-            const nacdtl_assetsCode = serviceList[i].asset_id
-            const responseUpdateDTL_Seals = await store_FA_control_updateDTL_seals({
-              usercode,
-              nac_code,
-              nac_status,
-              nac_type,
-              nacdtl_bookV,
-              nacdtl_PriceSeals,
-              nacdtl_profit,
-              asset_id,
-              nacdtl_assetsCode
-            });
-            if ('data' in responseUpdateDTL_Seals) {
-              swal("ทำรายการสำเร็จ", 'อัปเดตรายการ ' + responseUpdateDTL_Seals.data[0].nac_code + ' แล้ว', "success", {
-                buttons: false,
-                timer: 2000,
-              }).then((value) => {
-                if (data.UserCode === headers.create_by) {
-                  navigate('/NAC_ROW')
-                } else {
-                  navigate('/NAC_ROW')
-                }
-              });
-            } else {
-              swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error");
-            }
-          }
-        }
-      } else {
-        swal("ทำรายการสำเร็จ", 'อัปเดตรายการ ' + responseUpdateSeals.data[0].nac_code + ' แล้ว', "success", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
-          if (checkUserWeb === 'true') {
-            navigate('/NAC_OPERATOR')
-          } else {
-            navigate('/NAC_ROW')
-          }
-        });
-      }
-    }
-  }
+
   if (headers.length === 0) {
     return (
       <React.Fragment>
@@ -1430,8 +1526,17 @@ export default function Nac_Seals_Approve() {
             <Container component="main" maxWidth="lg" sx={{ mb: 12 }}>
               <Paper variant="outlined" sx={{ p: { xs: 1, md: 2 }, mt: 4 }}>
                 <Table aria-label="customized table">
+                  {/* <Grid container>
+                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ขารับ : {
+                      ExamineApproveDes.map((Approve) => (
+                        <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'black' }}>
+                          &nbsp;[{Approve.approverid}]
+                        </Typography>
+                      ))}
+                  </Grid>
+                  <hr /> */}
                   <Grid container>
-                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ : {
+                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ขาส่ง : {
                       ExecApprove.map((Approve) => (
                         <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'black' }}>
                           &nbsp;[{Approve.approverid}]
@@ -1547,7 +1652,7 @@ export default function Nac_Seals_Approve() {
                                   <TextField
                                     required
                                     fullWidth
-                                    disabled={(selectNAC === 1 || selectNAC ===7) ? false : true}
+                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                     name='source_department'
                                     onChange={handleChangeSource_Department}
                                     value={source_department}
@@ -1557,7 +1662,7 @@ export default function Nac_Seals_Approve() {
                                   <TextField
                                     required
                                     fullWidth
-                                    disabled={(selectNAC === 1 || selectNAC ===7) ? false : true}
+                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                     onChange={handleChangeSource_BU}
                                     name='source_BU'
                                     value={source_BU}
@@ -1570,7 +1675,7 @@ export default function Nac_Seals_Approve() {
                                   name='source'
                                   id='source'
                                   size="small"
-                                  disabled={(selectNAC === 1 || selectNAC ===7) ? false : true}
+                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                   options={users_pureDep}
                                   getOptionLabel={(option) => option.UserCode}
                                   filterOptions={filterOptions2}
@@ -1591,7 +1696,7 @@ export default function Nac_Seals_Approve() {
                                 <LocalizationProvider dateAdapter={DateAdapter}>
                                   <DatePicker
                                     inputFormat="yyyy-MM-dd"
-                                    disabled={(selectNAC === 1 || selectNAC ===7) ? false : true}
+                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                     onChange={handleChangeSource_deliveryDate}
                                     name='sourceDate'
                                     value={sourceDate}
@@ -1738,7 +1843,7 @@ export default function Nac_Seals_Approve() {
                           <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
                             <Stack direction="row" alignItems="center" spacing={1} หป>
                               <Typography sx={{ pl: 0.5 }}>
-                                ราคา
+                                ต้นทุน
                               </Typography>
                               <IconButton
                                 sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
@@ -1768,28 +1873,44 @@ export default function Nac_Seals_Approve() {
                           <TableBody>
                             <StyledTableRow>
                               <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                                <Autocomplete
-                                  freeSolo
-                                  key={index}
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  name='assetsCode'
-                                  id='assetsCode'
-                                  options={AllAssetsControl}
-                                  getOptionLabel={(option) => option.Code || ''}
-                                  filterOptions={filterOptions}
-                                  onChange={(e) => handleServiceChangeHeader(e, index)}
-                                  //value={!singleService.assetsCode? '' : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
-                                  value={!singleService.assetsCode ? '' : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
-                                  renderInput={(params) => (
+                                {(selectNAC === 1 && data.UserCode === headers.create_by) ? (
+                                  <React.Fragment>
+                                    <Autocomplete
+                                      freeSolo
+                                      key={index}
+                                      disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                      name='assetsCode'
+                                      id='assetsCode'
+                                      options={AllAssetsControl}
+                                      getOptionLabel={(option) => option.Code || ''}
+                                      filterOptions={filterOptions}
+                                      onChange={(e) => handleServiceChangeHeader(e, index)}
+                                      value={!singleService.assetsCode ? '' : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
+                                      renderInput={(params) => (
+                                        <TextField
+                                          {...params}
+                                          variant="standard"
+                                          name='assetsCode'
+                                          id='assetsCode'
+                                        //onChange={(e) => handleServiceChange(e, index)}
+                                        />
+                                      )}
+                                    />
+                                  </React.Fragment>
+                                ) : (
+                                  <React.Fragment>
                                     <TextField
-                                      {...params}
+                                      key={index}
+                                      fullWidth
+                                      disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                       variant="standard"
                                       name='assetsCode'
                                       id='assetsCode'
-                                    //onChange={(e) => handleServiceChange(e, index)}
+                                      onChange={(e) => handleServiceChange(e, index)}
+                                      value={!singleService.assetsCode ? '' : singleService.assetsCode}
                                     />
-                                  )}
-                                />
+                                  </React.Fragment>
+                                )}
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
@@ -1835,11 +1956,11 @@ export default function Nac_Seals_Approve() {
                                 <TextField
                                   key={index}
                                   fullWidth
-                                  disabled={(selectNAC === 22 && userBookValue.includes(data.UserCode) === true) ? false : true}
+                                  disabled={(selectNAC === 11 && (checkUserWeb === 'admin' || data.branchid === 901)) ? false : true}
                                   name="bookValue"
                                   id="bookValue"
-                                  type='number'
                                   variant="standard"
+                                  type={valuesVisibility.showText ? "text" : "password"}
                                   inputProps={{ style: { textAlign: 'center' } }}
                                   onChange={(e) => handleServiceChange(e, index)}
                                   value={singleService.bookValue}
@@ -1849,11 +1970,10 @@ export default function Nac_Seals_Approve() {
                                 <TextField
                                   key={index}
                                   fullWidth
-                                  disabled={(selectNAC === 22 && userBookValue.includes(data.UserCode) === true) ? false : true}
+                                  disabled
                                   name="priceSeals"
                                   id="priceSeals"
                                   inputProps={{ style: { textAlign: 'center' } }}
-                                  type={valuesVisibility.showText ? "text" : "password"}
                                   variant="standard"
                                   onChange={(e) => handleServiceChange(e, index)}
                                   value={!singleService.priceSeals ? '' : (singleService.priceSeals).toLocaleString()}
@@ -1863,14 +1983,14 @@ export default function Nac_Seals_Approve() {
                                 <TextField
                                   key={index}
                                   fullWidth
-                                  disabled={(selectNAC === 22 && userBookValue.includes(data.UserCode) === true) ? false : true}
+                                  disabled
                                   name="profit"
                                   id="profit"
                                   variant="standard"
-                                  inputProps={{ style: { textAlign: 'center' } }}
                                   type={valuesVisibility.showText ? "text" : "password"}
+                                  inputProps={{ style: { textAlign: 'center' } }}
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={!singleService.profit ? '' : (singleService.profit).toLocaleString()}
+                                  value={(serviceList[index].priceSeals - serviceList[index].bookValue).toLocaleString()}
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
@@ -2068,7 +2188,7 @@ export default function Nac_Seals_Approve() {
                     </Table>
                   </TableContainer>
                 </React.Fragment>
-                {((selectNAC === 1 || selectNAC === 7) && (data.UserCode === headers.create_by || (checkUserWeb === 'true'))) ? (
+                {((selectNAC === 1 || selectNAC === 7) && data.UserCode === headers.create_by) || (selectNAC === 11 && (checkUserWeb === 'admin')) || (selectNAC === 11 && userBookValue.includes(data.UserCode)) ? (
                   <React.Fragment>
                     <center>
                       <Box sx={{ flexGrow: 1 }}>
@@ -2080,8 +2200,7 @@ export default function Nac_Seals_Approve() {
                               variant="contained"
                               onClick={handleSave}
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              style={{ 'backgroundColor': 'orange' }}
-                              disabled={(data.UserCode === headers.create_by || (checkUserWeb === 'true')) ? false : true}>
+                              style={{ 'backgroundColor': 'orange' }}>
                               อัปเดต
                             </Button>
                           </Grid>
@@ -2090,7 +2209,9 @@ export default function Nac_Seals_Approve() {
                               variant="contained"
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                               disabled={
-                                (data.UserCode === headers.create_by || (checkUserWeb === 'true')) ? false :
+                                ((selectNAC === 1 || selectNAC === 7) && data.UserCode === headers.create_by) ||
+                                  (selectNAC === 11 && (checkUserWeb === 'admin')) ||
+                                  (selectNAC === 11 && userBookValue.includes(data.UserCode)) ? false :
                                   ExamineApprove.length === 0 ? false : true}
                               onClick={handleSubmit
                               }>
@@ -2105,7 +2226,7 @@ export default function Nac_Seals_Approve() {
                       </Box>
                     </center>
                   </React.Fragment>
-                ) : ((selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) || (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true')))) ? (
+                ) : ((selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) || (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin')))) ? (
                   <React.Fragment>
                     <center>
                       <Box sx={{ flexGrow: 1 }}>
@@ -2119,8 +2240,8 @@ export default function Nac_Seals_Approve() {
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                               style={{ 'backgroundColor': 'orange' }}
                               disabled={
-                                (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
-                                  (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
+                                (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                  (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
                                     true
                               }>
                               ตีกลับเอกสาร
@@ -2135,8 +2256,8 @@ export default function Nac_Seals_Approve() {
                                   'primary'}
                               onClick={selectNAC === 2 ? handleExamineApprove : handleExecApprove}
                               disabled={
-                                (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
-                                  (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
+                                (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                  (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
                                     true
                               }>
                               <React.Fragment>
@@ -2148,8 +2269,8 @@ export default function Nac_Seals_Approve() {
                             <Button
                               variant="contained"
                               color='error'
-                              disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false
-                                : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'true'))) ? false :
+                              disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false
+                                : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
                                   true
                               }
                               onClick={CancelApprove}
@@ -2163,7 +2284,7 @@ export default function Nac_Seals_Approve() {
                       </Box>
                     </center>
                   </React.Fragment>
-                ) : ((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'true')) && (!headers.des_date)) ? (
+                ) : ((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin')) && (!headers.des_date)) ? (
                   <React.Fragment>
                     <center>
                       <Box sx={{ flexGrow: 1 }}>
@@ -2175,7 +2296,7 @@ export default function Nac_Seals_Approve() {
                               variant="contained"
                               style={{ 'backgroundColor': 'orange' }}
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'true')) && (!headers.des_date)) ? false : true}
+                              disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin')) && (!headers.des_date)) ? false : true}
                             //</Grid>onClick={handleSubmitComplete}>
                             >ไม่รับเอกสาร
                             </Button>
@@ -2184,7 +2305,7 @@ export default function Nac_Seals_Approve() {
                             <Button
                               variant="contained"
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'true')) && (!headers.des_date)) ? false : true}
+                              disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin')) && (!headers.des_date)) ? false : true}
                               onClick={handleSubmitComplete}>
                               ตรวจรับเอกสาร
                             </Button>
@@ -2195,16 +2316,30 @@ export default function Nac_Seals_Approve() {
                       </Box>
                     </center>
                   </React.Fragment>
-                ) : ((selectNAC === 5) && (CheckExamineApproveDes.includes(data.UserCode) !== false || (checkUserWeb === 'true')) && (headers.des_date !== undefined)) ? (
+                ) : (selectNAC === 5) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? (
                   <React.Fragment>
                     <center>
                       <Box sx={{ flexGrow: 1 }}>
                         <Button
                           variant="contained"
                           sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                          disabled={((selectNAC === 5) && (CheckExamineApproveDes.includes(data.UserCode) !== false || (checkUserWeb === 'true')) && (headers.des_date !== undefined)) ? false : true}
+                          disabled={(selectNAC === 5) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
                           onClick={handleSubmitComplete}>
                           รับรองเอกสาร
+                        </Button>
+                      </Box>
+                    </center>
+                  </React.Fragment>
+                ) : (selectNAC === 12 && (headers.create_by === data.UserCode)) || ((checkUserWeb === 'admin') && (headers.des_date !== undefined)) || ((checkUserWeb === 'operatorI') && (headers.des_date !== undefined)) ? (
+                  <React.Fragment>
+                    <center>
+                      <Box sx={{ flexGrow: 1 }}>
+                        <Button
+                          variant="contained"
+                          sx={{ my: { xs: 3, md: 4 }, p: 2, width: 200 }}
+                          disabled={(selectNAC === 12) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined) || (headers.create_by === data.UserCode)) ? false : true}
+                          onClick={handleSubmitComplete}>
+                          ส่งรายงานไปยังผู้เกี่ยวข้อง
                         </Button>
                       </Box>
                     </center>
@@ -2225,11 +2360,8 @@ export default function Nac_Seals_Approve() {
                 data={data}
                 nac_code={nac_code}
                 headers={headers}
-                path={path}
                 description={description}
-                setPath={setPath}
                 setDescription={setDescription}
-                setCheckPath={setCheckPath}
                 setOpenDialog={setOpenDialog}
               />
               <Copyright />

@@ -146,17 +146,17 @@ async function store_FA_control_updateDTL_seals(credentials) {
     .then(data => data.json())
 }
 
-async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://192.168.220.1:32001/api/store_FA_control_CheckAssetCode_Process', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
+// async function store_FA_control_CheckAssetCode_Process(credentials) {
+//   return fetch('http://192.168.220.1:32001/api/store_FA_control_CheckAssetCode_Process', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json; charset=utf-8',
+//       'Accept': 'application/json'
+//     },
+//     body: JSON.stringify(credentials)
+//   })
+//     .then(data => data.json())
+// }
 
 export default function Nac_Main() {
 
@@ -292,9 +292,9 @@ export default function Nac_Main() {
         list[index]['count'] = 1
         list[index]['serialNo'] = response['data'][0].SerialNo
         list[index]['price'] = response['data'][0].Price
-        list[index]['bookValue'] = ''
-        list[index]['priceSeals'] = ''
-        list[index]['profit'] = ''
+        list[index]['bookValue'] = '1'
+        list[index]['priceSeals'] = '0'
+        list[index]['profit'] = list[index]['priceSeals'] - list[index]['bookValue']
         setServiceList(list);
       }
     }
@@ -540,7 +540,7 @@ export default function Nac_Main() {
             if ('data' in responseDTL) {
               const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
               const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
-              const nacdtl_profit = !serviceList[i].profit ? undefined : serviceList[i].profit
+              const nacdtl_profit = serviceList[i].priceSeals - serviceList[i].bookValue
               const asset_id = responseDTL.data[0].nacdtl_id
               const nac_status = 1
               await store_FA_control_updateDTL_seals({
@@ -859,9 +859,9 @@ export default function Nac_Main() {
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >Serial No.</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >ชื่อ</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
-                          <Stack direction="row" alignItems="center" spacing={1} หป>
+                          <Stack direction="row" alignItems="center" spacing={1}>
                             <Typography sx={{ pl: 0.5 }}>
-                              ราคา
+                              ต้นทุน
                             </Typography>
                             <IconButton
                               sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
@@ -955,9 +955,10 @@ export default function Nac_Main() {
                                 fullWidth
                                 disabled
                                 key={index}
-                                value='none'
+                                value={serviceList[index].bookValue}
                                 name="bookValue"
                                 id="bookValue"
+                                type={valuesVisibility.showText ? "text" : "password"}
                                 inputProps={{ style: { textAlign: 'center' } }}
                                 variant="standard"
                               />
@@ -966,11 +967,12 @@ export default function Nac_Main() {
                               <TextField
                                 fullWidth
                                 key={index}
-                                value={singleService.service}
-                                type={valuesVisibility.showText ? "text" : "password"}
-                                onChange={(e) => handleServiceChange(e, index)}
+                                disabled
                                 name="priceSeals"
                                 id="priceSeals"
+                                onChange={(e) => handleServiceChange(e, index)}
+                                type={valuesVisibility.showText ? "text" : "password"}
+                                value={serviceList[index].priceSeals}
                                 inputProps={{ style: { textAlign: 'center' } }}
                                 variant="standard"
                               />
@@ -980,9 +982,10 @@ export default function Nac_Main() {
                                 fullWidth
                                 disabled
                                 key={index}
-                                value='none'
                                 name="profit"
                                 id="profit"
+                                value={serviceList[index].profit}
+                                type={valuesVisibility.showText ? "text" : "password"}
                                 inputProps={{ style: { textAlign: 'center' } }}
                                 variant="standard"
                               />

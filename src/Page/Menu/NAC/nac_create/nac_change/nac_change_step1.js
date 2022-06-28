@@ -193,10 +193,10 @@ export default function Nac_Main() {
   };
 
   // ส่วนของผู้รับ
-  const [des_Department, setDes_Department] = React.useState('AFD');
-  const [des_BU, setDes_BU] = React.useState('Center');
-  const [des_delivery, setDes_delivery] = React.useState('SSP');
-  const [des_deliveryDate] = React.useState(datenow);
+  const [des_Department, setDes_Department] = React.useState();
+  const [des_BU, setDes_BU] = React.useState();
+  const [des_delivery, setDes_delivery] = React.useState();
+  const [des_deliveryDate] = React.useState();
   // const [des_deliveryApprove, setDes_deliveryApprove] = React.useState('SSP');
   // const [des_deliveryApproveDate, setDes_deliveryApproveDate] = React.useState(datenow);
   const [des_Description, setDes_Description] = React.useState();
@@ -787,7 +787,7 @@ export default function Nac_Main() {
                                   align="center"
                                   name='des_Department'
                                   variant="standard"
-                                  value={des_Department}
+                                  value='none'
                                   inputProps={{ style: { textAlign: 'center' } }}
                                   onChange={handleChangeDes_Department}
                                 />
@@ -798,7 +798,7 @@ export default function Nac_Main() {
                                   name='des_BU'
                                   fullWidth
                                   variant="standard"
-                                  value={des_BU}
+                                  value='none'
                                   inputProps={{ style: { textAlign: 'center' } }}
                                   onChange={handleDes_ChangeBU}
                                 />
@@ -807,36 +807,30 @@ export default function Nac_Main() {
                                 fullWidth
                                 disabled
                                 autoComplete="family-name"
-                                value={des_delivery}
+                                value='none'
                                 sx={{ pt: 1 }}
                                 variant="standard"
                                 label='ผู้รับคำร้อง'
                               />
-                              <LocalizationProvider dateAdapter={DateAdapter}>
-                                <DatePicker
-                                  inputFormat="yyyy-MM-dd"
-                                  value={des_deliveryDate}
-                                  disabled
-                                  name='des_deliveryDate'
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          วันที่รับคำร้อง :
-                                        </Typography>
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  renderInput={(params) =>
-                                    <TextField
-                                      required
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      sx={{ pt: 1 }}
-                                      variant="standard"
-                                      {...params} />}
-                                />
-                              </LocalizationProvider>
+                              <TextField
+                                required
+                                fullWidth
+                                disabled
+                                value='none'
+                                name='des_deliveryDate'
+                                onChange={handleChangeDes_Description}
+                                sx={{ pt: 1 }}
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      <Typography color="black">
+                                        วันที่รับคำร้อง :
+                                      </Typography>
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                variant="standard"
+                              />
                               <TextField
                                 required
                                 fullWidth

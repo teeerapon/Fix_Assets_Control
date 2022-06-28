@@ -134,17 +134,17 @@ async function store_FA_control_creat_Detail(credentials) {
     .then(data => data.json())
 }
 
-async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://192.168.220.1:32001/api/store_FA_control_CheckAssetCode_Process', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
+// async function store_FA_control_CheckAssetCode_Process(credentials) {
+//   return fetch('http://192.168.220.1:32001/api/store_FA_control_CheckAssetCode_Process', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json; charset=utf-8',
+//       'Accept': 'application/json'
+//     },
+//     body: JSON.stringify(credentials)
+//   })
+//     .then(data => data.json())
+// }
 
 async function store_FA_control_updateDTL_seals(credentials) {
   return fetch('http://192.168.220.1:32001/api/store_FA_control_updateDTL_seals', {
@@ -177,7 +177,6 @@ export default function Nac_Main() {
   const dataDepID = data.depid
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
   const [AllAssetsControl, setAllAssetsControl] = React.useState([]);
-  const [UserForAssetsControl, setUserForAssetsControl] = React.useState([]);
   const [valuesVisibility, setValuesVisibility] = React.useState({
     text: serviceList[0].price,
     showText: false,
@@ -232,7 +231,6 @@ export default function Nac_Main() {
       }
     }
     setUsers_pureDep(users_pure)
-    setUserForAssetsControl(UserForAssetsControl.data);
   };
 
   const fetchAssetsControl = async () => {
@@ -295,7 +293,7 @@ export default function Nac_Main() {
         list[index]['price'] = response['data'][0].Price
         list[index]['bookValue'] = ''
         list[index]['priceSeals'] = ''
-        list[index]['profit'] = ''
+        list[index]['profit'] = list[index]['priceSeals'] - list[index]['bookValue']
         setServiceList(list);
       }
     }
@@ -420,77 +418,77 @@ export default function Nac_Main() {
     setDes_Description(event.target.value);
   };
 
-  const handleAutoDes_DeapartMent = async (e, index) => {
-    const UserCode = e.target.innerText
-    const response = await AutoDeapartMent({
-      UserCode
-    });
-    setDes_delivery(UserCode)
-    if (!UserCode) {
-      setDes_Department('')
-      setDes_BU('')
-    } else {
-      if (response.data[0].DepID === null) {
-        setDes_Department('ROD')
-        setDes_BU('Oil')
-      } else if (response.data[0].DepID === 1) {
-        setDes_Department('ITO')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 2) {
-        setDes_Department('AFD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 3) {
-        setDes_Department('ROD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 4) {
-        setDes_Department('SSD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 5) {
-        setDes_Department('HRD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 6) {
-        setDes_Department('GAD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 7) {
-        setDes_Department('SLD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 8) {
-        setDes_Department('MMD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 9) {
-        setDes_Department('PMD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 10) {
-        setDes_Department('SCD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 11) {
-        setDes_Department('BDO')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 12) {
-        setDes_Department('MDO')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 14) {
-        setDes_Department('CSO')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 15) {
-        setDes_Department('MMD2')
-        setDes_BU('Center')
-      }
-    }
-  };
+  // const handleAutoDes_DeapartMent = async (e, index) => {
+  //   const UserCode = e.target.innerText
+  //   const response = await AutoDeapartMent({
+  //     UserCode
+  //   });
+  //   setDes_delivery(UserCode)
+  //   if (!UserCode) {
+  //     setDes_Department('')
+  //     setDes_BU('')
+  //   } else {
+  //     if (response.data[0].DepID === null) {
+  //       setDes_Department('ROD')
+  //       setDes_BU('Oil')
+  //     } else if (response.data[0].DepID === 1) {
+  //       setDes_Department('ITO')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 2) {
+  //       setDes_Department('AFD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 3) {
+  //       setDes_Department('ROD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 4) {
+  //       setDes_Department('SSD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 5) {
+  //       setDes_Department('HRD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 6) {
+  //       setDes_Department('GAD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 7) {
+  //       setDes_Department('SLD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 8) {
+  //       setDes_Department('MMD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 9) {
+  //       setDes_Department('PMD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 10) {
+  //       setDes_Department('SCD')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 11) {
+  //       setDes_Department('BDO')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 12) {
+  //       setDes_Department('MDO')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 14) {
+  //       setDes_Department('CSO')
+  //       setDes_BU('Center')
+  //     }
+  //     else if (response.data[0].DepID === 15) {
+  //       setDes_Department('MMD2')
+  //       setDes_BU('Center')
+  //     }
+  //   }
+  // };
 
   const handleNext = async () => {
     if (!source || !source_Department || !source_BU || !sourceDate) {
@@ -503,74 +501,82 @@ export default function Nac_Main() {
       if (!serviceList[0].assetsCode || checkValue_BV.includes('') === true) {
         swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning");
       } else {
-        const usercode = data.UserCode
-        const worktype = nac_type
-        const sumPrice = result
-        const response = await Store_FA_control_create_doc({
-          usercode,
-          worktype,
-          des_Department,
-          des_BU,
-          des_delivery,
-          des_deliveryDate,
-          source_Department,
-          source_BU,
-          source,
-          sourceDate,
-          des_Description,
-          source_Description,
-          sumPrice,
-        });
-        if ('data' in response) {
-          for (let i = 0; i < serviceList.length; i++) {
-            const nac_code = response.data[0].nac_code // ได้จาก Response ของ Store_FA_control_create_doc
-            const nacdtl_row = i
-            const nacdtl_assetsCode = serviceList[i].assetsCode
-            const nacdtl_assetsName = serviceList[i].name
-            const nacdtl_assetsSeria = serviceList[i].serialNo
-            const nacdtl_assetsDtl = serviceList[i].dtl
-            const nacdtl_assetsCount = serviceList[i].count
-            const nacdtl_assetsPrice = serviceList[i].price
-            const responseDTL = await store_FA_control_creat_Detail({
-              usercode,
-              nac_code,
-              nacdtl_row,
-              nacdtl_assetsCode,
-              nacdtl_assetsName,
-              nacdtl_assetsSeria,
-              nacdtl_assetsDtl,
-              nacdtl_assetsCount,
-              nacdtl_assetsPrice,
-            });
-            if ('data' in responseDTL) {
-              const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
-              const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
-              const nacdtl_profit = !serviceList[i].profit ? undefined : serviceList[i].profit
-              const asset_id = responseDTL.data[0].nacdtl_id
-              const nac_status = 1
-              await store_FA_control_updateDTL_seals({
+        const checkBookValue_is_null = []
+        for (let i = 0; i < serviceList.length; i++) {
+          checkBookValue_is_null[i] = serviceList[i].priceSeals
+        }
+        if (checkBookValue_is_null.includes('') !== true) {
+          const usercode = data.UserCode
+          const worktype = nac_type
+          const sumPrice = result
+          const response = await Store_FA_control_create_doc({
+            usercode,
+            worktype,
+            des_Department,
+            des_BU,
+            des_delivery,
+            des_deliveryDate,
+            source_Department,
+            source_BU,
+            source,
+            sourceDate,
+            des_Description,
+            source_Description,
+            sumPrice,
+          });
+          if ('data' in response) {
+            for (let i = 0; i < serviceList.length; i++) {
+              const nac_code = response.data[0].nac_code // ได้จาก Response ของ Store_FA_control_create_doc
+              const nacdtl_row = i
+              const nacdtl_assetsCode = serviceList[i].assetsCode
+              const nacdtl_assetsName = serviceList[i].name
+              const nacdtl_assetsSeria = serviceList[i].serialNo
+              const nacdtl_assetsDtl = serviceList[i].dtl
+              const nacdtl_assetsCount = serviceList[i].count
+              const nacdtl_assetsPrice = serviceList[i].price
+              const responseDTL = await store_FA_control_creat_Detail({
                 usercode,
                 nac_code,
-                nac_status,
-                nac_type,
-                nacdtl_bookV,
-                nacdtl_PriceSeals,
-                nacdtl_profit,
-                asset_id,
-                nacdtl_assetsCode
+                nacdtl_row,
+                nacdtl_assetsCode,
+                nacdtl_assetsName,
+                nacdtl_assetsSeria,
+                nacdtl_assetsDtl,
+                nacdtl_assetsCount,
+                nacdtl_assetsPrice,
               });
-              swal("ทำรายการสำเร็จ", 'สร้างรายการเปลี่ยนแปลงทรัพย์สิน ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
-                buttons: false,
-                timer: 2000,
-              }).then((value) => {
-                navigate('/NAC_ROW')
-              });
-            } else {
-              swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error");
+              if ('data' in responseDTL) {
+                const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
+                const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
+                const nacdtl_profit = !serviceList[i].profit ? undefined : serviceList[i].profit
+                const asset_id = responseDTL.data[0].nacdtl_id
+                const nac_status = 1
+                await store_FA_control_updateDTL_seals({
+                  usercode,
+                  nac_code,
+                  nac_status,
+                  nac_type,
+                  nacdtl_bookV,
+                  nacdtl_PriceSeals,
+                  nacdtl_profit,
+                  asset_id,
+                  nacdtl_assetsCode
+                });
+                swal("ทำรายการสำเร็จ", 'สร้างรายการเปลี่ยนแปลงทรัพย์สิน ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
+                  buttons: false,
+                  timer: 2000,
+                }).then((value) => {
+                  navigate('/NAC_ROW')
+                });
+              } else {
+                swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error");
+              }
             }
+          } else {
+            swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error");
           }
-        } else {
-          swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error");
+        }else{
+          swal("แจ้งเตือน", 'กรุณากรอกราคาขายของทรัพย์สินให้ครบถ้วน', "warning")
         }
       }
     }
@@ -867,7 +873,7 @@ export default function Nac_Main() {
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
                           <Stack direction="row" alignItems="center" spacing={1} หป>
                             <Typography sx={{ pl: 0.5 }}>
-                              ราคา
+                              ต้นทุน
                             </Typography>
                             <IconButton
                               sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
@@ -964,6 +970,7 @@ export default function Nac_Main() {
                                 value='none'
                                 name="bookValue"
                                 id="bookValue"
+                                type={valuesVisibility.showText ? "text" : "password"}
                                 inputProps={{ style: { textAlign: 'center' } }}
                                 variant="standard"
                               />
@@ -986,7 +993,7 @@ export default function Nac_Main() {
                                 disabled
                                 key={index}
                                 value='none'
-                                //type={valuesVisibility.showText ? "text" : "password"}
+                                type={valuesVisibility.showText ? "text" : "password"}
                                 name="profit"
                                 id="profit"
                                 inputProps={{ style: { textAlign: 'center' } }}

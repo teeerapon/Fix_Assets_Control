@@ -97,10 +97,11 @@ async function qureyNAC_path(credentials) {
 }
 
 export default function OutlinedCard({ handleClickOpenDialog, openDialog, handleCloseDialog, data
-  , nac_code, headers, path, description, setPath, setDescription, setCheckPath, setOpenDialog }) {
+  , nac_code, headers, description, setDescription, setOpenDialog }) {
 
   const [comment, setComment] = React.useState();
   const [commentFetch, setCommentFetch] = React.useState([]);
+  const [path, setPath] = React.useState();
   const [pathFetch, setPathFetch] = React.useState([]);
   const navigate = useNavigate();
 
@@ -183,7 +184,6 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
         linkpath,
         description
       })
-      setCheckPath(path)
       if ('data' in responsePath) {
         setPathFetch(responsePath.data)
         setPath(null)

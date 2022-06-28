@@ -13,8 +13,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import swal from 'sweetalert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArticleIcon from '@mui/icons-material/Article';
-import Typography from '@mui/material/Typography';
-import { useNavigate } from "react-router";
+// import Typography from '@mui/material/Typography';
+// import { useNavigate } from "react-router";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
@@ -60,6 +60,18 @@ async function store_FA_control_execDocID(credentials) {
     .then(data => data.json())
 }
 
+async function ChackUserWeb(credentials) {
+  return fetch('http://192.168.220.1:32001/api/ChackUserWeb', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 export default function ReadOnly({ selectNAC, handleEditClick }) {
 
   const [open, setOpen] = React.useState(false);
@@ -67,7 +79,22 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
   const data = JSON.parse(localStorage.getItem('data'));
   const [CheckApprove, setCheckApprove] = React.useState([]);
   const [CheckExamineApprove, setCheckExamineApprove] = React.useState([]);
+  const [checkUserWeb,setCheckUserWeb] = React.useState();
   // const navigate = useNavigate();
+
+  const fetchCheckUser = async () => {
+    const usercode = data.UserCode;
+    const response = await ChackUserWeb({
+      usercode
+    });
+    if('data' in response){
+      setCheckUserWeb(response.data[0].approverid)
+    }
+  }
+
+  React.useEffect(() => {
+    fetchCheckUser();
+  }, []);
 
   const handleClickOpen = (event, open) => {
     setOpen(true);
@@ -95,7 +122,7 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
     } else if (selectNAC.nac_status === 8) {
       setStatus('ได้รับทรัพย์สินไม่ครบ')
     } else if (selectNAC.nac_status === 11) {
-      setStatus('รอกรอกข้อมูล Book Value')
+      setStatus('รอกรอกข้อมูล BV')
     } else if (selectNAC.nac_status === 12) {
       setStatus('รอแนบเอกสาร')
     } else if (selectNAC.nac_status === 13) {
@@ -177,19 +204,24 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
         align="left"
         style={{
           'color': selectNAC.nac_status === 1 ?
-            'black' : selectNAC.nac_status === 2 ?
-              'orange' : selectNAC.nac_status === 3 ?
-                'orange' : selectNAC.nac_status === 4 ?
+            'blue' : selectNAC.nac_status === 2 ?
+              'blue' : selectNAC.nac_status === 3 ?
+                'blue' : selectNAC.nac_status === 4 ?
                   'blue' : selectNAC.nac_status === 5 ?
                     'blue' : selectNAC.nac_status === 6 ?
-                      'green' : 'red'
+                      'green' : selectNAC.nac_status === 7 ?
+                        'red' : selectNAC.nac_status === 8 ?
+                          'red' : selectNAC.nac_status === 11 ?
+                            'blue' : selectNAC.nac_status === 12 ?
+                              'blue' : selectNAC.nac_status === 13 ?
+                                'blue' : 'red'
         }}>
-        {status}
+        {((status === 'รออนุมัติ' || status === 'รอตรวจสอบ') && selectNAC.name === 'เพิ่มบัญชีทรัพย์สินถาวร') ? 'รอต้นสังกัดตรวจสอบ' : status}
       </StyledTableCell>
       <StyledTableCell align="left" >{
         (status === 'รอตรวจสอบ' && selectNAC.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && selectNAC.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + CheckExamineApprove.filter(x => x !== undefined) + '' :
           (status === 'รออนุมัติ' && selectNAC.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && selectNAC.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + CheckApprove.filter(x => x !== undefined) + '' :
-            ((status === 'รออนุมัติ' || status === 'รอตรวจสอบ') && (selectNAC.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || selectNAC.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? 'ต้นสังกัดตรวจสอบ' : 'none'
+            ((status === 'รอตรวจสอบ') && (selectNAC.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || selectNAC.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? 'ต้นสังกัดตรวจสอบ' : 'none'
       }</StyledTableCell>
       <StyledTableCell align="center" >
         <Grid container rowSpacing={1}>
@@ -208,6 +240,7 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
             <Button
               variant="contained"
               color="error"
+              disabled={checkUserWeb === 'admin' ? false : true}
               onClick={handleClickOpen}
               sx={{ width: 50 }}>
               <DeleteIcon />
