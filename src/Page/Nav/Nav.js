@@ -381,6 +381,11 @@ export default function MenuAppBar() {
                   </Box>
                 </React.Fragment>
               )}
+              <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
+                  {checkUserWeb === 'admin' ? 'ADMIN' : checkUserWeb === 'OPERATOR II' ? 'operatorII' : 'OPERATOR I'}
+                </Typography>
+              </div>
             </Toolbar>
           </AppBar>
           <Outlet />
@@ -527,6 +532,11 @@ export default function MenuAppBar() {
                   </Box>
                 </React.Fragment>
               )}
+               <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
+                  USER
+                </Typography>
+              </div>
             </Toolbar>
           </AppBar>
           <Outlet />

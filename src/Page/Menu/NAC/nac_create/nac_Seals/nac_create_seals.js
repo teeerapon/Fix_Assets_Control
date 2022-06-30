@@ -170,7 +170,7 @@ export default function Nac_Main() {
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
-  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
+  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
   const result = serviceList.reduce((total, serviceList) => total = total + serviceList.price, 0);
   const navigate = useNavigate();
   const data = JSON.parse(localStorage.getItem('data'));
@@ -247,7 +247,7 @@ export default function Nac_Main() {
   }, []);
 
   const handleServiceAdd = () => {
-    setServiceList([...serviceList, { dtl_id: "", assetsCode: "", serialNo: "", name: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
+    setServiceList([...serviceList, { dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
   };
 
   const handleServiceRemove = (index) => {
@@ -279,6 +279,7 @@ export default function Nac_Main() {
       list[index]['bookValue'] = ''
       list[index]['priceSeals'] = ''
       list[index]['profit'] = ''
+      list[index]['date_asset'] = ''
       setServiceList(list);
     } else {
       const Code = list[index]['assetsCode'];
@@ -292,8 +293,9 @@ export default function Nac_Main() {
         list[index]['serialNo'] = response['data'][0].SerialNo
         list[index]['price'] = response['data'][0].Price
         list[index]['bookValue'] = ''
-        list[index]['priceSeals'] = ''
+        list[index]['priceSeals'] = '0'
         list[index]['profit'] = list[index]['priceSeals'] - list[index]['bookValue']
+        list[index]['date_asset'] = response['data'][0].CreateDate
         setServiceList(list);
       }
     }
@@ -418,78 +420,6 @@ export default function Nac_Main() {
     setDes_Description(event.target.value);
   };
 
-  // const handleAutoDes_DeapartMent = async (e, index) => {
-  //   const UserCode = e.target.innerText
-  //   const response = await AutoDeapartMent({
-  //     UserCode
-  //   });
-  //   setDes_delivery(UserCode)
-  //   if (!UserCode) {
-  //     setDes_Department('')
-  //     setDes_BU('')
-  //   } else {
-  //     if (response.data[0].DepID === null) {
-  //       setDes_Department('ROD')
-  //       setDes_BU('Oil')
-  //     } else if (response.data[0].DepID === 1) {
-  //       setDes_Department('ITO')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 2) {
-  //       setDes_Department('AFD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 3) {
-  //       setDes_Department('ROD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 4) {
-  //       setDes_Department('SSD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 5) {
-  //       setDes_Department('HRD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 6) {
-  //       setDes_Department('GAD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 7) {
-  //       setDes_Department('SLD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 8) {
-  //       setDes_Department('MMD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 9) {
-  //       setDes_Department('PMD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 10) {
-  //       setDes_Department('SCD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 11) {
-  //       setDes_Department('BDO')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 12) {
-  //       setDes_Department('MDO')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 14) {
-  //       setDes_Department('CSO')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 15) {
-  //       setDes_Department('MMD2')
-  //       setDes_BU('Center')
-  //     }
-  //   }
-  // };
-
   const handleNext = async () => {
     if (!source || !source_Department || !source_BU || !sourceDate) {
       swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning");
@@ -534,6 +464,7 @@ export default function Nac_Main() {
               const nacdtl_assetsDtl = serviceList[i].dtl
               const nacdtl_assetsCount = serviceList[i].count
               const nacdtl_assetsPrice = serviceList[i].price
+              const nacdtl_date_asset = serviceList[i].date_asset
               const responseDTL = await store_FA_control_creat_Detail({
                 usercode,
                 nac_code,
@@ -544,6 +475,7 @@ export default function Nac_Main() {
                 nacdtl_assetsDtl,
                 nacdtl_assetsCount,
                 nacdtl_assetsPrice,
+                nacdtl_date_asset,
               });
               if ('data' in responseDTL) {
                 const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
@@ -575,7 +507,7 @@ export default function Nac_Main() {
           } else {
             swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error");
           }
-        }else{
+        } else {
           swal("แจ้งเตือน", 'กรุณากรอกราคาขายของทรัพย์สินให้ครบถ้วน', "warning")
         }
       }
@@ -866,12 +798,13 @@ export default function Nac_Main() {
                   </Table>
                   <Table aria-label="customized table">
                     <TableHead>
-                      <TableRow style={{ width: '100%' }}>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >Serial No.</StyledTableCell>
+                    <TableRow style={{ width: '100%' }}>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '18%' }} >รหัสทรัพย์สิน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '12.5%' }} >Serial No.</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >ชื่อ</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '12.5%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
-                          <Stack direction="row" alignItems="center" spacing={1} หป>
+                          <Stack direction="row" alignItems="center" spacing={1}>
                             <Typography sx={{ pl: 0.5 }}>
                               ต้นทุน
                             </Typography>
@@ -908,6 +841,14 @@ export default function Nac_Main() {
                                 key={index}
                                 name='assetsCode'
                                 id='assetsCode'
+                                sx={{
+                                  "& .MuiAutocomplete-input, & .MuiInputLabel-root": {
+                                    fontSize: 14
+                                  }
+                                }}
+                                ListboxProps={{
+                                  sx: { fontSize: 12 }
+                                }}
                                 options={AllAssetsControl}
                                 getOptionLabel={(option) => option.Code}
                                 filterOptions={filterOptions}
@@ -932,6 +873,7 @@ export default function Nac_Main() {
                                 key={index}
                                 name="serialNo"
                                 id="serialNo"
+                                inputProps={{ style: { fontSize: 14 } }}
                                 //onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].serialNo}
                                 // value={serviceList[index].serialNo}
@@ -945,7 +887,19 @@ export default function Nac_Main() {
                                 name="name"
                                 id="name"
                                 //onChange={(e) => handleServiceChange(e, index)}
+                                inputProps={{ style: { fontSize: 14 } }}
                                 value={serviceList[index].name}
+                                variant="standard"
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
+                                fullWidth
+                                key={index}
+                                name="date_asset"
+                                id="date_asset"
+                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
+                                value={!serviceList[index].date_asset ? '' : serviceList[index].date_asset.split('T')[0]}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -957,8 +911,8 @@ export default function Nac_Main() {
                                 id="price"
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 // onChange={(e) => handleServiceChange(e, index)}
-                                value={!serviceList[index].price ? serviceList[index].price : (serviceList[index].price).toLocaleString()}
-                                inputProps={{ style: { textAlign: 'center' } }}
+                                value={!serviceList[index].price ? '' : (serviceList[index].price).toLocaleString()}
+                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -971,7 +925,7 @@ export default function Nac_Main() {
                                 name="bookValue"
                                 id="bookValue"
                                 type={valuesVisibility.showText ? "text" : "password"}
-                                inputProps={{ style: { textAlign: 'center' } }}
+                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -983,7 +937,7 @@ export default function Nac_Main() {
                                 onChange={(e) => handleServiceChange(e, index)}
                                 name="priceSeals"
                                 id="priceSeals"
-                                inputProps={{ style: { textAlign: 'center' } }}
+                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -996,7 +950,7 @@ export default function Nac_Main() {
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 name="profit"
                                 id="profit"
-                                inputProps={{ style: { textAlign: 'center' } }}
+                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -1031,7 +985,7 @@ export default function Nac_Main() {
                             fullWidth
                             type={valuesVisibility.showText ? "text" : "password"}
                             value={result.toLocaleString() === 0 ? '' : result.toLocaleString()}
-                            inputProps={{ style: { textAlign: 'center', color: 'red' } }}
+                            inputProps={{ style: { textAlign: 'center', color: 'green' } }}
                             InputProps={{
                               endAdornment: (
                                 <InputAdornment position="start">

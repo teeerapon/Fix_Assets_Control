@@ -189,7 +189,7 @@ export default function Report() {
                     >
                       {
                         permission.map((item) =>
-                          <MenuItem value={item.BranchID}>สาขาที่ : {item.BranchID}</MenuItem>
+                          <MenuItem value={item.BranchID}>สาขาที่ : {!item.BranchID ? 'ไม่พบข้อมูลของสาขาที่สามารถเข้าถึงได้' : item.BranchID}</MenuItem>
                         )
                       }
                     </Select>

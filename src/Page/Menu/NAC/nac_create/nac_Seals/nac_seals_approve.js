@@ -260,6 +260,18 @@ async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
     .then(data => data.json())
 }
 
+async function store_FA_control_upadate_table(credentials) {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_upadate_table', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 export default function Nac_Seals_Approve() {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
@@ -273,7 +285,7 @@ export default function Nac_Seals_Approve() {
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
   const navigate = useNavigate();
-  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
+  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
   const sum_price = serviceList.reduce((total, serviceList) => total = total + serviceList.price, 0);
   const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
@@ -405,6 +417,7 @@ export default function Nac_Seals_Approve() {
         , bookValue: !res.nacdtl_bookV ? '' : res.nacdtl_bookV
         , priceSeals: !res.nacdtl_PriceSeals ? '' : res.nacdtl_PriceSeals
         , profit: !res.nacdtl_profit ? '' : res.nacdtl_profit
+        , date_asset: res.nacdtl_date_asset
       };
     }));
 
@@ -509,7 +522,7 @@ export default function Nac_Seals_Approve() {
   };
 
   const handleServiceAdd = () => {
-    setServiceList([...serviceList, { dtl_id: 0, assetsCode: "", serialNo: "", name: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
+    setServiceList([...serviceList, { dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
   };
 
   const handleServiceRemove = (index) => {
@@ -543,6 +556,7 @@ export default function Nac_Seals_Approve() {
       list[index][name] = value;
       list[index]['assetsCode'] = assetsCodeSelect;
       if ((list[index]['assetsCode'] === null) || (list[index]['assetsCode'] === undefined)) {
+        list[index]['assetsCode'] = ''
         list[index]['name'] = ''
         list[index]['dtl'] = ''
         list[index]['count'] = ''
@@ -551,6 +565,7 @@ export default function Nac_Seals_Approve() {
         list[index]['bookValue'] = ''
         list[index]['priceSeals'] = ''
         list[index]['profit'] = ''
+        list[index]['date_asset'] = ''
         setServiceList(list);
       } else {
         const Code = list[index]['assetsCode'];
@@ -564,8 +579,9 @@ export default function Nac_Seals_Approve() {
           list[index]['serialNo'] = response['data'][0].SerialNo
           list[index]['price'] = response['data'][0].Price
           list[index]['bookValue'] = ''
-          list[index]['priceSeals'] = ''
+          list[index]['priceSeals'] = '0'
           list[index]['profit'] = list[index]['priceSeals'] - list[index]['bookValue']
+          list[index]['date_asset'] = response['data'][0].CreateDate
           setServiceList(list);
         }
       }
@@ -687,78 +703,6 @@ export default function Nac_Seals_Approve() {
 
   };
 
-  // const handleAutoDes_DeapartMent = async (e, index) => {
-  //   const UserCode = e.target.innerText
-  //   const response = await AutoDeapartMent({
-  //     UserCode
-  //   });
-  //   setDes_delivery(UserCode)
-  //   if (!UserCode) {
-  //     setDes_Department('')
-  //     setDes_BU('')
-  //   } else {
-  //     if (response.data[0].DepID === null) {
-  //       setDes_Department('ROD')
-  //       setDes_BU('Oil')
-  //     } else if (response.data[0].DepID === 1) {
-  //       setDes_Department('ITO')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 2) {
-  //       setDes_Department('AFD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 3) {
-  //       setDes_Department('ROD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 4) {
-  //       setDes_Department('SSD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 5) {
-  //       setDes_Department('HRD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 6) {
-  //       setDes_Department('GAD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 7) {
-  //       setDes_Department('SLD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 8) {
-  //       setDes_Department('MMD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 9) {
-  //       setDes_Department('PMD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 10) {
-  //       setDes_Department('SCD')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 11) {
-  //       setDes_Department('BDO')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 12) {
-  //       setDes_Department('MDO')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 14) {
-  //       setDes_Department('CSO')
-  //       setDes_BU('Center')
-  //     }
-  //     else if (response.data[0].DepID === 15) {
-  //       setDes_Department('MMD2')
-  //       setDes_BU('Center')
-  //     }
-  //   }
-  // };
-
   // Update Document
   const handleSave = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
@@ -833,7 +777,11 @@ export default function Nac_Seals_Approve() {
                 buttons: false,
                 timer: 2000,
               }).then((value) => {
-                navigate('/NAC_ROW')
+                if (checkUserWeb === 'admin') {
+                  navigate('/NAC_OPERATOR')
+                } else {
+                  navigate('/NAC_ROW')
+                }
               });
             } else {
               swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error");
@@ -1264,18 +1212,13 @@ export default function Nac_Seals_Approve() {
 
   //
   const handleSubmitComplete = async () => {
-    if (selectNAC === 4 || selectNAC === 5 || selectNAC === 12) {
+    if (selectNAC === 4 || selectNAC === 5 || selectNAC === 12 || selectNAC === 13) {
       const usercode = data.UserCode
-      const nac_status = selectNAC === 4 ? 5 : selectNAC === 5 ? 6 : 13
+      const nac_status = selectNAC === 4 ? 5 : selectNAC === 12 ? 13 : 6
       const source_approve = headers.source_approve_userid
       const source_approve_date = headers.source_approve_date
       const des_delivery = selectNAC === 4 ? data.UserCode : headers.des_userid
       const des_deliveryDate = selectNAC === 4 ? datenow : headers.des_date
-      // const nac_status = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? 6 : 5
-      // const source_approve = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? data.UserCode : sourceApprove
-      // const source_approve_date = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? datenow : sourceDateApproveDate
-      // const des_delivery = (data.UserCode === headers.des_userid) ? data.UserCode : des_deliveryApprove
-      // const des_deliveryDate = (data.UserCode === headers.des_userid) ? datenow : des_deliveryApproveDate
       const verify_by = headers.verify_by_userid
       const verify_date = headers.verify_date
       const nac_type = headers.nac_type
@@ -1305,6 +1248,37 @@ export default function Nac_Seals_Approve() {
           comment
         })
         if ('data' in responseComment) {
+          if (nac_status === 5) {
+            for (let i = 0; i < checked.length; i++) {
+              const usercode = data.UserCode
+              const nacdtl_assetsCode = checked[i].assets_code
+              const asset_id = checked[i].asset_id
+              const statusCheck = checked[i].statusCheck
+              await stroe_FA_control_DTL_ConfirmSuccess({
+                nac_code,
+                usercode,
+                nacdtl_assetsCode,
+                asset_id,
+                statusCheck,
+              })
+            }
+          }
+          else if (nac_status === 6) {
+            for (let i = 0; i < serviceList.length; i++) {
+              const usercode = data.UserCode
+              const nacdtl_assetsCode = serviceList[i].assetsCode
+              const asset_id = serviceList[i].asset_id
+              console.log(usercode, nacdtl_assetsCode, asset_id, nac_status, nac_type, nac_code,);
+              await store_FA_control_upadate_table({
+                nac_code,
+                usercode,
+                nacdtl_assetsCode,
+                asset_id,
+                nac_type,
+                nac_status,
+              })
+            }
+          }
           swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
             buttons: false,
             timer: 2000,
@@ -1326,21 +1300,6 @@ export default function Nac_Seals_Approve() {
               navigate('/NAC_ROW')
             }
           });
-        }
-      }
-      if (nac_status === 5) {
-        for (let i = 0; i < checked.length; i++) {
-          const usercode = data.UserCode
-          const nacdtl_assetsCode = checked[i].assets_code
-          const asset_id = checked[i].asset_id
-          const statusCheck = checked[i].statusCheck
-          await stroe_FA_control_DTL_ConfirmSuccess({
-            nac_code,
-            usercode,
-            nacdtl_assetsCode,
-            asset_id,
-            statusCheck,
-          })
         }
       }
     } else {
@@ -1837,11 +1796,12 @@ export default function Nac_Seals_Approve() {
                     <Table aria-label="customized table">
                       <TableHead>
                         <TableRow style={{ width: '100%' }}>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >Serial No.</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '18%' }} >รหัสทรัพย์สิน</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '12.5%' }} >Serial No.</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >ชื่อ</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '12.5%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
-                            <Stack direction="row" alignItems="center" spacing={1} หป>
+                            <Stack direction="row" alignItems="center" spacing={1}>
                               <Typography sx={{ pl: 0.5 }}>
                                 ต้นทุน
                               </Typography>
@@ -1881,6 +1841,14 @@ export default function Nac_Seals_Approve() {
                                       disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                       name='assetsCode'
                                       id='assetsCode'
+                                      sx={{
+                                        "& .MuiAutocomplete-input, & .MuiInputLabel-root": {
+                                          fontSize: 14
+                                        }
+                                      }}
+                                      ListboxProps={{
+                                        sx: { fontSize: 12 }
+                                      }}
                                       options={AllAssetsControl}
                                       getOptionLabel={(option) => option.Code || ''}
                                       filterOptions={filterOptions}
@@ -1906,6 +1874,7 @@ export default function Nac_Seals_Approve() {
                                       variant="standard"
                                       name='assetsCode'
                                       id='assetsCode'
+                                      inputProps={{ style: { fontSize: 14 } }}
                                       onChange={(e) => handleServiceChange(e, index)}
                                       value={!singleService.assetsCode ? '' : singleService.assetsCode}
                                     />
@@ -1921,7 +1890,7 @@ export default function Nac_Seals_Approve() {
                                   id="serialNo"
                                   variant="standard"
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  inputProps={{ style: { textAlign: 'center', color: !singleService.serialNo ? 'red' : '' } }}
+                                  inputProps={{ style: { fontSize: 14 } }}
                                   value={!singleService.serialNo ? '' : singleService.serialNo}
                                 />
                               </StyledTableCell>
@@ -1932,10 +1901,21 @@ export default function Nac_Seals_Approve() {
                                   disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                   name="name"
                                   id="name"
-
+                                  inputProps={{ style: { fontSize: 14 } }}
                                   variant="standard"
                                   onChange={(e) => handleServiceChange(e, index)}
                                   value={singleService.name}
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                <TextField
+                                  fullWidth
+                                  key={index}
+                                  name="date_asset"
+                                  id="date_asset"
+                                  inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
+                                  value={!serviceList[index].date_asset ? '' : serviceList[index].date_asset.split('T')[0]}
+                                  variant="standard"
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
@@ -1948,7 +1928,7 @@ export default function Nac_Seals_Approve() {
                                   onChange={(e) => handleServiceChange(e, index)}
                                   type={valuesVisibility.showText ? "text" : "password"}
                                   value={!singleService.price ? '' : (singleService.price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
                                   variant="standard"
                                 />
                               </StyledTableCell>
@@ -1961,19 +1941,19 @@ export default function Nac_Seals_Approve() {
                                   id="bookValue"
                                   variant="standard"
                                   type={valuesVisibility.showText ? "text" : "password"}
-                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={singleService.bookValue}
+                                  value={!singleService.bookValue ? '' : (singleService.bookValue).toLocaleString()}
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
-                                  disabled
+                                  disabled={selectNAC === 1 && (data.UserCode === headers.create_by) ? false : true}
                                   name="priceSeals"
                                   id="priceSeals"
-                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
                                   variant="standard"
                                   onChange={(e) => handleServiceChange(e, index)}
                                   value={!singleService.priceSeals ? '' : (singleService.priceSeals).toLocaleString()}
@@ -1988,7 +1968,7 @@ export default function Nac_Seals_Approve() {
                                   id="profit"
                                   variant="standard"
                                   type={valuesVisibility.showText ? "text" : "password"}
-                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
                                   value={(serviceList[index].priceSeals - serviceList[index].bookValue).toLocaleString()}
                                 />
@@ -2024,7 +2004,7 @@ export default function Nac_Seals_Approve() {
                               required
                               fullWidth
                               type={valuesVisibility.showText ? "text" : "password"}
-                              inputProps={{ style: { textAlign: 'center', color: 'red' } }}
+                              inputProps={{ style: { textAlign: 'center', color: 'green' } }}
                               value={sum_price.toLocaleString() === 0 ? '' : sum_price.toLocaleString()}
                               InputProps={{
                                 endAdornment: (
@@ -2330,14 +2310,14 @@ export default function Nac_Seals_Approve() {
                       </Box>
                     </center>
                   </React.Fragment>
-                ) : (selectNAC === 12 && (headers.create_by === data.UserCode)) || ((checkUserWeb === 'admin') && (headers.des_date !== undefined)) || ((checkUserWeb === 'operatorI') && (headers.des_date !== undefined)) ? (
+                ) : (selectNAC === 12 || selectNAC === 13) && ((headers.create_by === data.UserCode) || (checkUserWeb === 'admin') || (checkUserWeb === 'operatorI')) ? (
                   <React.Fragment>
                     <center>
                       <Box sx={{ flexGrow: 1 }}>
                         <Button
                           variant="contained"
                           sx={{ my: { xs: 3, md: 4 }, p: 2, width: 200 }}
-                          disabled={(selectNAC === 12) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined) || (headers.create_by === data.UserCode)) ? false : true}
+                          disabled={(selectNAC === 12 || selectNAC === 13) && ((headers.create_by === data.UserCode) || (checkUserWeb === 'admin') || (checkUserWeb === 'operatorI')) ? false : true}
                           onClick={handleSubmitComplete}>
                           ส่งรายงานไปยังผู้เกี่ยวข้อง
                         </Button>

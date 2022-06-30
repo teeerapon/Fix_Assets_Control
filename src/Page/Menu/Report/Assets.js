@@ -112,18 +112,18 @@ export default function MenuAppBar() {
         <Toolbar>
           <AnimatedPage>
             <Typography variant="h5" color="inherit" noWrap>
-              รายงานการตรวจนับของสาขาที่
+              รายการการตรวจนับทรัพย์สินทั้งหมดของสาขาที่ {!aseetsCounted[0].BranchID ? AssetsAll[0].BranchID : aseetsCounted[0].BranchID}
             </Typography>
           </AnimatedPage>
         </Toolbar>
       </AppBar>
       <AnimatedPage>
         <Container maxWidth="1000px">
-          <Paper variant="outlined" sx={{ mt: 6, p: 1 }}>
+          <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             <Card style={{ height: '4rem', background: 'linear-gradient(45deg, #0226d8 30%, #a602d8 90%)' }} className="block-example text-white">
               <CardContent>
                 <Row>
-                  <Col className='col-md-8'><h3 align="left">ทั้งหมด ({!sumArray_assets ? 'Loading...' : sumArray_assets.length})</h3></Col>
+                  <Col className='col-md-8'><h3 align="left">รายการทั้งหมด ({!sumArray_assets ? 'Loading...' : sumArray_assets.length})</h3></Col>
                   <Col align="right" >
                     <Button variant="contained" onClick={ShowDataAll} className="bg-white text-dark">Show/Hide</Button>
                   </Col>
@@ -144,27 +144,28 @@ export default function MenuAppBar() {
                 <Table sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell align="left" sx={{ minWidth: 110 }}>
-                        Asset ID
+                      <StyledTableCell align="center" sx={{ width: 100 }}>
+                        ลำดับ
                       </StyledTableCell>
-                      <StyledTableCell align="left" sx={{ minWidth: 150 }}>Assets Code</StyledTableCell>
-                      <StyledTableCell align="left" >ชื่อทรัพย์สิน</StyledTableCell>
-                      <StyledTableCell align="center" sx={{ minWidth: 110 }}>รอบที่บันทึก</StyledTableCell>
-                      <StyledTableCell align="center" >สาขา</StyledTableCell>
-                      <StyledTableCell align="center" sx={{ minWidth: 90 }}>ผู้ตรวจนับ</StyledTableCell>
-                      <StyledTableCell align="center" sx={{ minWidth: 90 }}>อ้างอิง</StyledTableCell>
-                      <StyledTableCell align="center" sx={{ minWidth: 90 }}>หมายเหตุ</StyledTableCell>
+                      <StyledTableCell align="left" sx={{ width: 200 }}>รหัสทรัพย์สิน</StyledTableCell>
+                      <StyledTableCell align="left" sx={{ minWidth: 100 }}>ชื่อทรัพย์สิน</StyledTableCell>
+                      <StyledTableCell align="center" sx={{ width: 150 }}>วันที่ตรวจนับ</StyledTableCell>
+
+                      <StyledTableCell align="center" sx={{ width: 100 }}>สาขา</StyledTableCell>
+                      <StyledTableCell align="center" sx={{ width: 100 }}>ผู้ตรวจนับ</StyledTableCell>
+                      <StyledTableCell align="center" sx={{ width: 200 }}>สถานะรายการ</StyledTableCell>
+                      <StyledTableCell align="center" sx={{ width: 150 }}>หมายเหตุ</StyledTableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {sumArray_assets.map((sumArray_assets) => (
+                    {sumArray_assets.map((sumArray_assets, index) => (
                       <StyledTableRow key={sumArray_assets.Code}>
-                        <StyledTableCell component="th" scope="row" align="left">
-                          {sumArray_assets.AssetID}
+                        <StyledTableCell component="th" scope="row" align="center">
+                          {index + 1}
                         </StyledTableCell>
                         <StyledTableCell align="left" >{sumArray_assets.Code}</StyledTableCell>
                         <StyledTableCell align="left" >{sumArray_assets.Name}</StyledTableCell>
-                        <StyledTableCell align="center" >{sumArray_assets.RoundID}</StyledTableCell>
+                        <StyledTableCell align="center" >{sumArray_assets.Date.split('T')[0]}</StyledTableCell>
                         <StyledTableCell align="center" >{sumArray_assets.BranchID}</StyledTableCell>
                         <StyledTableCell align="center" >{sumArray_assets.UserID}</StyledTableCell>
                         <StyledTableCell align="center" >{sumArray_assets.Reference}</StyledTableCell>
@@ -174,18 +175,16 @@ export default function MenuAppBar() {
                           , 'color': 'white'
                         }}>
                           {
-                            forcheckAssetCount.includes(sumArray_assets.Code) === true ? 'นับแล้ว' :
-                              forcheckAssetWrong.includes(sumArray_assets.Code) === true ? 'ผิดสาขา' : 'ยังไม่ได้นับ'
+                            forcheckAssetCount.includes(sumArray_assets.Code) === true ? 'รายการนับแล้ว' :
+                              forcheckAssetWrong.includes(sumArray_assets.Code) === true ? 'สาขาอื่น' : 'ยังไม่ได้นับ'
                           }
                         </StyledTableCell>
                       </StyledTableRow>
                     ))}
                     <StyledTableRow>
-                      <StyledTableCell component="th" scope="row" align="left" >
-                        <b>นับแล้ว</b>
-                      </StyledTableCell>
-                      <StyledTableCell align="left" ></StyledTableCell>
-                      <StyledTableCell align="left" ></StyledTableCell>
+                      <StyledTableCell component="th" scope="row" align="left" ></StyledTableCell>
+                      <StyledTableCell align="center" ></StyledTableCell>
+                      <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
@@ -193,11 +192,9 @@ export default function MenuAppBar() {
                       <StyledTableCell align="center" ><b>รายการ</b></StyledTableCell>
                     </StyledTableRow>
                     <StyledTableRow>
-                      <StyledTableCell component="th" scope="row" align="left" >
-                        <b>นับแล้วต่างสาขา</b>
-                      </StyledTableCell>
-                      <StyledTableCell align="left" ></StyledTableCell>
-                      <StyledTableCell align="left" ></StyledTableCell>
+                      <StyledTableCell component="th" scope="row" align="left" ></StyledTableCell>
+                      <StyledTableCell align="center" ></StyledTableCell>
+                      <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
@@ -205,23 +202,19 @@ export default function MenuAppBar() {
                       <StyledTableCell align="center" ><b>รายการ</b></StyledTableCell>
                     </StyledTableRow>
                     <StyledTableRow>
-                      <StyledTableCell component="th" scope="row" align="left" >
-                        <b>คงเหลือที่ไม่ได้นับ</b>
-                      </StyledTableCell>
-                      <StyledTableCell align="left" ></StyledTableCell>
-                      <StyledTableCell align="left" ></StyledTableCell>
+                      <StyledTableCell component="th" scope="row" align="left" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
-                      <StyledTableCell align="center" ><b>{!sumArray_assets ? 'Loading...' : (sumArray_assets.length-(forcheckAssetWrong.length+forcheckAssetCount.length))}</b></StyledTableCell>
+                      <StyledTableCell align="center" ></StyledTableCell>
+                      <StyledTableCell align="center" ></StyledTableCell>
+                      <StyledTableCell align="center" ><b>{!sumArray_assets ? 'Loading...' : (sumArray_assets.length - (forcheckAssetWrong.length + forcheckAssetCount.length))}</b></StyledTableCell>
                       <StyledTableCell align="center" ><b>รายการ</b></StyledTableCell>
                     </StyledTableRow>
                     <StyledTableRow>
-                      <StyledTableCell component="th" scope="row" align="left" >
-                        <b>รวมทั้งหมด</b>
-                      </StyledTableCell>
-                      <StyledTableCell align="left" ></StyledTableCell>
-                      <StyledTableCell align="left" ></StyledTableCell>
+                      <StyledTableCell component="th" scope="row" align="left" > </StyledTableCell>
+                      <StyledTableCell align="center" ></StyledTableCell>
+                      <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
@@ -233,12 +226,10 @@ export default function MenuAppBar() {
               </TableContainer>
               : null
             }
-          </Paper>
-          <Paper variant="outlined" sx={{ mt: 1, p: 1 }}>
-            <Card style={{ height: '4rem', background: 'linear-gradient(45deg, #5cb85c 30%, #e5ff00 90%)' }} className="block-example text-white">
+            <Card sx={{ my: { md: 1 } }} style={{ height: '4rem', background: 'linear-gradient(45deg, #5cb85c 30%, #e5ff00 90%)' }} className="block-example text-white">
               <CardContent>
                 <Row>
-                  <Col className='col-md-8'><h3 align="left">นับแล้ว ({aseetsCounted_Count})</h3></Col>
+                  <Col className='col-md-8'><h3 align="left">รายการนับแล้ว ({aseetsCounted_Count})</h3></Col>
                   <Col align="right" >
                     <Button variant="contained" className='text-dark bg-white' onClick={ShowData1}>Show/Hide</Button>
                   </Col>
@@ -258,120 +249,41 @@ export default function MenuAppBar() {
                 <Table sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell align="left" sx={{ minWidth: 110 }}>
-                        Asset ID
+                      <StyledTableCell align="center" sx={{ width: 100 }}>
+                        ลำดับ
                       </StyledTableCell>
-                      <StyledTableCell align="left" sx={{ minWidth: 150 }}>Assets Code</StyledTableCell>
-                      <StyledTableCell align="left" >ชื่อทรัพย์สิน</StyledTableCell>
-                      <StyledTableCell align="center" sx={{ minWidth: 110 }}>รอบที่บันทึก</StyledTableCell>
-                      <StyledTableCell align="center" >สาขา</StyledTableCell>
-                      <StyledTableCell align="center" sx={{ minWidth: 90 }}>ผู้ตรวจนับ</StyledTableCell>
-                      <StyledTableCell align="center" sx={{ minWidth: 90 }}>อ้างอิง</StyledTableCell>
+                      <StyledTableCell align="left" sx={{ width: 200 }}>รหัสทรัพย์สิน</StyledTableCell>
+                      <StyledTableCell align="left" sx={{ minWidth: 100 }}>ชื่อทรัพย์สิน</StyledTableCell>
+                      <StyledTableCell align="center" sx={{ width: 150 }}>วันที่ตรวจนับ</StyledTableCell>
+
+                      <StyledTableCell align="center" sx={{ width: 100 }}>สาขา</StyledTableCell>
+                      <StyledTableCell align="center" sx={{ width: 100 }}>ผู้ตรวจนับ</StyledTableCell>
+                      <StyledTableCell align="center" sx={{ width: 200 }}>สถานะรายการ</StyledTableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {aseetsCounted.map((aseetsCounted) => (
+                    {aseetsCounted.map((aseetsCounted, index) => (
                       <StyledTableRow key={aseetsCounted.Code}>
-                        <StyledTableCell component="th" scope="row" align="left">
-                          {aseetsCounted.AssetID}
+                        <StyledTableCell component="th" scope="row" align="center">
+                          {index + 1}
                         </StyledTableCell>
                         <StyledTableCell align="left" >{aseetsCounted.Code}</StyledTableCell>
                         <StyledTableCell align="left" >{aseetsCounted.Name}</StyledTableCell>
-                        <StyledTableCell align="center" >{aseetsCounted.RoundID}</StyledTableCell>
+                        <StyledTableCell align="center" >{aseetsCounted.Date.split('T')[0]}</StyledTableCell>
+
                         <StyledTableCell align="center" >{aseetsCounted.BranchID}</StyledTableCell>
                         <StyledTableCell align="center" >{aseetsCounted.UserID}</StyledTableCell>
                         <StyledTableCell align="center" >{aseetsCounted.Reference}</StyledTableCell>
                       </StyledTableRow>
                     ))}
-                    <StyledTableRow>
-                      <StyledTableCell component="th" scope="row" align="left" >
-                        <b>รวมทั้งหมด</b>
-                      </StyledTableCell>
-                      <StyledTableCell align="left" ></StyledTableCell>
-                      <StyledTableCell align="left" ></StyledTableCell>
-                      <StyledTableCell align="center" ></StyledTableCell>
-                      <StyledTableCell align="center" ></StyledTableCell>
-                      <StyledTableCell align="center" ><b>{aseetsCounted_Count}</b></StyledTableCell>
-                      <StyledTableCell align="center" ><b>รายการ</b></StyledTableCell>
-                    </StyledTableRow>
                   </TableBody>
                 </Table>
               </TableContainer>
               : null}
-          </Paper>
-
-          <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: 1 }}>
-            <Card style={{ height: '4rem', background: 'linear-gradient(45deg, #e8241e 30%, #FF8E53 90%)' }} className='block-example text-white'>
+            <Card sx={{ my: { md: 1 } }} style={{ height: '4rem', background: 'linear-gradient(45deg, #0d2840 30%, #184c7a 90%)' }} className='block-example text-white'>
               <CardContent>
                 <Row>
-                  <Col className='col-md-8'><h3 align="left">นับแล้วต่างสาขา ({assetsWrongCount})</h3></Col>
-                  <Col align="right" >
-                    <Button variant="contained" className='text-dark bg-white' onClick={ShowData2}>Show/Hide</Button>
-                  </Col>
-                  <Col align="right" ><ReactHTMLTableToExcel
-                    id="test-table-xls-button"
-                    className="download-table-xls-button btn mb-3 text-dark bg-white"
-                    table="table-to-xls2"
-                    filename="Assets_Wrong"
-                    sheet="Assets_Wrong"
-                    buttonText="Export to Excel" />
-                  </Col>
-                </Row>
-              </CardContent>
-            </Card>
-            {
-              showResults2 ?
-                <TableContainer component={Paper} className='pt-1'>
-                  <Table sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls2">
-                    <TableHead>
-                      <TableRow>
-                        <StyledTableCell align="left" sx={{ minWidth: 110 }}>
-                          Asset ID
-                        </StyledTableCell>
-                        <StyledTableCell align="left" sx={{ minWidth: 150 }}>Assets Code</StyledTableCell>
-                        <StyledTableCell align="left" >ชื่อทรัพย์สิน</StyledTableCell>
-                        <StyledTableCell align="center" sx={{ minWidth: 110 }}>รอบที่บันทึก</StyledTableCell>
-                        <StyledTableCell align="center" >สาขา</StyledTableCell>
-                        <StyledTableCell align="center" sx={{ minWidth: 90 }}>ผู้ตรวจนับ</StyledTableCell>
-                        <StyledTableCell align="center" sx={{ minWidth: 90 }}>อ้างอิง</StyledTableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {assetsWrong.map((assetsWrong) => (
-                        <StyledTableRow key={assetsWrong.Code}>
-                          <StyledTableCell component="th" scope="row" align="left" >
-                            {assetsWrong.AssetID}
-                          </StyledTableCell>
-                          <StyledTableCell align="left" >{assetsWrong.Code}</StyledTableCell>
-                          <StyledTableCell align="left" >{assetsWrong.Name}</StyledTableCell>
-                          <StyledTableCell align="center" >{assetsWrong.RoundID}</StyledTableCell>
-                          <StyledTableCell align="center" >{assetsWrong.BranchID}</StyledTableCell>
-                          <StyledTableCell align="center" >{assetsWrong.UserID}</StyledTableCell>
-                          <StyledTableCell align="center" >{assetsWrong.Reference}</StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                      <StyledTableRow>
-                        <StyledTableCell component="th" scope="row" align="left" >
-                          <b>รวมทั้งหมด</b>
-                        </StyledTableCell>
-                        <StyledTableCell align="left" ></StyledTableCell>
-                        <StyledTableCell align="left" ></StyledTableCell>
-                        <StyledTableCell align="center" ></StyledTableCell>
-                        <StyledTableCell align="center" ></StyledTableCell>
-                        <StyledTableCell align="center" ><b>{assetsWrongCount}</b></StyledTableCell>
-                        <StyledTableCell align="center" ><b>รายการ</b></StyledTableCell>
-                      </StyledTableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                : null
-            }
-          </Paper>
-          <Paper variant="outlined" sx={{ my: { xs: 3, md: 2 }, p: 1 }}>
-            <Card style={{ height: '4rem', background: 'linear-gradient(45deg, #0d2840 30%, #184c7a 90%)' }} className='block-example text-white'>
-              <CardContent>
-                <Row>
-                  <Col className='col-md-8'><h3 align="left">คงเหลือที่ไม่ได้นับ ({AssetsAllCount})</h3></Col>
+                  <Col className='col-md-8'><h3 align="left">รายการคงเหลือ ({AssetsAllCount})</h3></Col>
                   <Col align="right" >
                     <Button variant="contained" className='text-dark bg-white' onClick={ShowData3}>Show/Hide</Button>
                   </Col>
@@ -392,42 +304,88 @@ export default function MenuAppBar() {
                   <Table sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls3">
                     <TableHead>
                       <TableRow>
-                        <StyledTableCell align="left" sx={{ minWidth: 110 }}>
-                          Asset ID
+                        <StyledTableCell align="center" sx={{ width: 100 }}>
+                          ลำดับ
                         </StyledTableCell>
-                        <StyledTableCell align="left" sx={{ minWidth: 150 }}>Assets Code</StyledTableCell>
-                        <StyledTableCell align="left">ชื่อทรัพย์สิน</StyledTableCell>
-                        <StyledTableCell align="center" sx={{ minWidth: 110 }}>รอบที่บันทึก</StyledTableCell>
-                        <StyledTableCell align="center" >สาขา</StyledTableCell>
-                        <StyledTableCell align="center" sx={{ minWidth: 90 }}>ผู้ตรวจนับ</StyledTableCell>
-                        <StyledTableCell align="center" sx={{ minWidth: 90 }}>อ้างอิง</StyledTableCell>
+                        <StyledTableCell align="left" sx={{ width: 200 }}>รหัสทรัพย์สิน</StyledTableCell>
+                        <StyledTableCell align="left" sx={{ minWidth: 100 }}>ชื่อทรัพย์สิน</StyledTableCell>
+                        <StyledTableCell align="center" sx={{ width: 150 }}>วันที่ตรวจนับ</StyledTableCell>
+
+                        <StyledTableCell align="center" sx={{ width: 100 }}>สาขา</StyledTableCell>
+                        <StyledTableCell align="center" sx={{ width: 100 }}>ผู้ตรวจนับ</StyledTableCell>
+                        <StyledTableCell align="center" sx={{ width: 200 }}>สถานะรายการ</StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {AssetsAll.map((AssetsAll) => (
+                      {AssetsAll.map((AssetsAll, index) => (
                         <StyledTableRow key={AssetsAll.Code}>
-                          <StyledTableCell component="th" scope="row" align="left" >
-                            {AssetsAll.AssetID}
+                          <StyledTableCell component="th" scope="row" align="center" >
+                            {index + 1}
                           </StyledTableCell>
                           <StyledTableCell align="left" >{AssetsAll.Code}</StyledTableCell>
                           <StyledTableCell align="left" >{AssetsAll.Name}</StyledTableCell>
-                          <StyledTableCell align="center" >{AssetsAll.RoundID}</StyledTableCell>
+                          <StyledTableCell align="center" >{AssetsAll.Date.split('T')[0]}</StyledTableCell>
+
                           <StyledTableCell align="center" >{AssetsAll.BranchID}</StyledTableCell>
                           <StyledTableCell align="center" >{AssetsAll.UserID}</StyledTableCell>
                           <StyledTableCell align="center" >{AssetsAll.Reference}</StyledTableCell>
                         </StyledTableRow>
                       ))}
-                      <StyledTableRow >
-                        <StyledTableCell component="th" scope="row" align="left" >
-                          <b>รวมทั้งหมด</b>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                : null
+            }
+            <Card sx={{ my: { md: 1 } }} style={{ height: '4rem', background: 'linear-gradient(45deg, #e8241e 30%, #FF8E53 90%)' }} className='block-example text-white'>
+              <CardContent>
+                <Row>
+                  <Col className='col-md-8'><h3 align="left">สาขาอื่น ๆ ({assetsWrongCount})</h3></Col>
+                  <Col align="right" >
+                    <Button variant="contained" className='text-dark bg-white' onClick={ShowData2}>Show/Hide</Button>
+                  </Col>
+                  <Col align="right" ><ReactHTMLTableToExcel
+                    id="test-table-xls-button"
+                    className="download-table-xls-button btn mb-3 text-dark bg-white"
+                    table="table-to-xls2"
+                    filename="Assets_Wrong"
+                    sheet="Assets_Wrong"
+                    buttonText="Export to Excel" />
+                  </Col>
+                </Row>
+              </CardContent>
+            </Card>
+            {
+              showResults2 ?
+                <TableContainer component={Paper} className='pt-1'>
+                  <Table sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls2">
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell align="center" sx={{ width: 100 }}>
+                          ลำดับ
                         </StyledTableCell>
-                        <StyledTableCell align="left" ></StyledTableCell>
-                        <StyledTableCell align="left" ></StyledTableCell>
-                        <StyledTableCell align="center" ></StyledTableCell>
-                        <StyledTableCell align="center" ></StyledTableCell>
-                        <StyledTableCell align="center" ><b>{AssetsAllCount}</b></StyledTableCell>
-                        <StyledTableCell align="center" ><b>รายการ</b></StyledTableCell>
-                      </StyledTableRow>
+                        <StyledTableCell align="left" sx={{ width: 200 }}>รหัสทรัพย์สิน</StyledTableCell>
+                        <StyledTableCell align="left" sx={{ minWidth: 100 }}>ชื่อทรัพย์สิน</StyledTableCell>
+                        <StyledTableCell align="center" sx={{ width: 150 }}>วันที่ตรวจนับ</StyledTableCell>
+
+                        <StyledTableCell align="center" sx={{ width: 100 }}>สาขา</StyledTableCell>
+                        <StyledTableCell align="center" sx={{ width: 100 }}>ผู้ตรวจนับ</StyledTableCell>
+                        <StyledTableCell align="center" sx={{ width: 200 }}>สถานะรายการ</StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {assetsWrong.map((assetsWrong, index) => (
+                        <StyledTableRow key={assetsWrong.Code}>
+                          <StyledTableCell component="th" scope="row" align="center" >
+                            {index + 1}
+                          </StyledTableCell>
+                          <StyledTableCell align="left" >{assetsWrong.Code}</StyledTableCell>
+                          <StyledTableCell align="left" >{assetsWrong.Name}</StyledTableCell>
+                          <StyledTableCell align="center" >{assetsWrong.Date.split('T')[0]}</StyledTableCell>
+                          <StyledTableCell align="center" >{assetsWrong.BranchID}</StyledTableCell>
+                          <StyledTableCell align="center" >{assetsWrong.UserID}</StyledTableCell>
+                          <StyledTableCell align="center" >{assetsWrong.Reference}</StyledTableCell>
+                        </StyledTableRow>
+                      ))}
                     </TableBody>
                   </Table>
                 </TableContainer>

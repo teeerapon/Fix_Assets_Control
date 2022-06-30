@@ -158,8 +158,8 @@ export default function Nac_Main() {
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
-  const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "" }]);
-  const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "" }])
+  const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
+  const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }])
   const result = serviceList.reduce((total, serviceList) => total = total + serviceList.price * serviceList.count, 0);
   const navigate = useNavigate();
   const data = JSON.parse(localStorage.getItem('data'));
@@ -238,8 +238,8 @@ export default function Nac_Main() {
   }, []);
 
   const handleServiceAdd = () => {
-    setServiceList([...serviceList, { assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "" }]);
-    setServiceList_Main([...serviceList_Main, { assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "" }]);
+    setServiceList([...serviceList, { assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
+    setServiceList_Main([...serviceList_Main, { assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
   };
 
   const handleServiceRemove = (index) => {
@@ -272,6 +272,7 @@ export default function Nac_Main() {
       list[index]['count'] = ''
       list[index]['serialNo'] = ''
       list[index]['price'] = ''
+      list[index]['date_asset'] = ''
       setServiceList(list);
     } else {
       const Code = list[index]['assetsCode'];
@@ -284,6 +285,7 @@ export default function Nac_Main() {
         list[index]['count'] = 1
         list[index]['serialNo'] = response['data'][0].SerialNo
         list[index]['price'] = response['data'][0].Price
+        list[index]['date_asset'] = response['data'][0].CreateDate
         setServiceList(list);
       }
     }
@@ -298,6 +300,7 @@ export default function Nac_Main() {
       list_main[index]['count'] = ''
       list_main[index]['serialNo'] = ''
       list_main[index]['price'] = ''
+      list_main[index]['date_asset'] = ''
       setServiceList_Main(list_main);
     } else {
       const Code = list[index]['assetsCode'];
@@ -310,6 +313,7 @@ export default function Nac_Main() {
         list_main[index]['count'] = 1
         list_main[index]['serialNo'] = response['data'][0].SerialNo
         list_main[index]['price'] = response['data'][0].Price
+        list_main[index]['date_asset'] = response['data'][0].CreateDate
         setServiceList_Main(list_main);
       }
     }
@@ -537,6 +541,7 @@ export default function Nac_Main() {
             const nacdtl_assetsDtl = serviceList[i].dtl
             const nacdtl_assetsCount = serviceList[i].count
             const nacdtl_assetsPrice = serviceList[i].price
+            const nacdtl_date_asset = serviceList[i].date_asset
             const responseDTL = await store_FA_control_creat_Detail({
               usercode,
               nac_code,
@@ -547,6 +552,7 @@ export default function Nac_Main() {
               nacdtl_assetsDtl,
               nacdtl_assetsCount,
               nacdtl_assetsPrice,
+              nacdtl_date_asset,
             });
             if ('data' in responseDTL) {
               swal("ทำรายการสำเร็จ", 'สร้างรายการเปลี่ยนแปลงทรัพย์สิน ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
@@ -874,14 +880,15 @@ export default function Nac_Main() {
                     <TableHead>
                       <TableRow style={{ width: '100%' }}>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >Serial No.</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >Serial No.</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รายละเอียด</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >รายละเอียด</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
                           <Stack direction="row" alignItems="center" spacing={1}>
                             <Typography>
-                              ราคา
+                              ต้นทุน
                             </Typography>
                             <IconButton
                               sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
@@ -910,10 +917,17 @@ export default function Nac_Main() {
                             <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <Autocomplete
                                 freeSolo
-                                sx={{ pt: 1 }}
                                 key={index}
                                 name='assetsCode'
                                 id='assetsCode'
+                                sx={{
+                                  "& .MuiAutocomplete-input, & .MuiInputLabel-root": {
+                                    fontSize: 14
+                                  }
+                                }}
+                                ListboxProps={{
+                                  sx: { fontSize: 12 }
+                                }}
                                 options={AllAssetsControl}
                                 getOptionLabel={(option) => option.Code}
                                 filterOptions={filterOptions}
@@ -935,11 +949,10 @@ export default function Nac_Main() {
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
                                 fullWidth
-                                sx={{ pt: 1 }}
                                 key={index}
                                 name="serialNo"
                                 id="serialNo"
-                                inputProps={{ style: { textAlign: 'center' } }}
+                                inputProps={{ style: { fontSize: 14 } }}
                                 onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].serialNo}
                                 variant="standard"
@@ -947,11 +960,11 @@ export default function Nac_Main() {
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-                                sx={{ pt: 1 }}
                                 fullWidth
                                 key={index}
                                 name="name"
                                 id="name"
+                                inputProps={{ style: { fontSize: 14 } }}
                                 onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].name}
                                 variant="standard"
@@ -959,11 +972,22 @@ export default function Nac_Main() {
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-                                sx={{ pt: 1 }}
+                                fullWidth
+                                key={index}
+                                name="date_asset"
+                                id="date_asset"
+                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
+                                value={!serviceList[index].date_asset ? '' : serviceList[index].date_asset.split('T')[0]}
+                                variant="standard"
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
                                 fullWidth
                                 key={index}
                                 name="dtl"
                                 id="dtl"
+                                inputProps={{ style: { fontSize: 14 } }}
                                 onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].dtl}
                                 variant="standard"
@@ -973,28 +997,26 @@ export default function Nac_Main() {
                               <TextField
                                 fullWidth
                                 key={index}
-                                sx={{ pt: 1 }}
                                 name="count"
                                 id="count"
                                 type='number'
                                 onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].count}
-                                inputProps={{ style: { textAlign: 'center' } }}
+                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
                                 InputProps={{ inputProps: { min: 1 } }}
                                 variant="standard"
                               />
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-                                sx={{ pt: 1 }}
                                 fullWidth
                                 key={index}
                                 name="price"
                                 id="price"
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 onChange={(e) => handleServiceChange(e, index)}
-                                value={!serviceList[index].price ? (serviceList[index].price).toLocaleString() : (serviceList[index].price).toLocaleString()}
-                                inputProps={{ style: { textAlign: 'center' } }}
+                                value={!serviceList[index].price ? '' : (serviceList[index].price).toLocaleString()}
+                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -1029,7 +1051,7 @@ export default function Nac_Main() {
                             fullWidth
                             type={valuesVisibility.showText ? "text" : "password"}
                             value={result.toLocaleString() === 0 ? '' : result.toLocaleString()}
-                            inputProps={{ style: { textAlign: 'center', color: 'red' } }}
+                            inputProps={{ style: { textAlign: 'center', color: 'green' } }}
                             InputProps={{
                               endAdornment: (
                                 <InputAdornment position="start">

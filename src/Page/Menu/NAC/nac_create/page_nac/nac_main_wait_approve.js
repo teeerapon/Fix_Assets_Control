@@ -213,17 +213,17 @@ async function ChackUserWeb(credentials) {
     .then(data => data.json())
 }
 
-// async function store_FA_control_CheckAssetCode_Process(credentials) {
-//   return fetch('http://192.168.220.1:32001/api/store_FA_control_CheckAssetCode_Process', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json; charset=utf-8',
-//       'Accept': 'application/json'
-//     },
-//     body: JSON.stringify(credentials)
-//   })
-//     .then(data => data.json())
-// }
+async function store_FA_control_upadate_table(credentials) {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_upadate_table', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
 
 async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
   return fetch('http://192.168.220.1:32001/api/stroe_FA_control_DTL_ConfirmSuccess', {
@@ -250,7 +250,7 @@ export default function Nac_Main_wait() {
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
   const navigate = useNavigate();
-  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "", asset_id: "" }]);
+  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: "" }]);
   const sum_price = serviceList.reduce((total, serviceList) => total = total + serviceList.price * serviceList.count, 0);
   const data = JSON.parse(localStorage.getItem('data'));
   const data_nac = JSON.parse(localStorage.getItem('NacCode'));
@@ -380,6 +380,7 @@ export default function Nac_Main_wait() {
         , count: res.nacdtl_assetsCount
         , price: res.nacdtl_assetsPrice
         , asset_id: res.nacdtl_id
+        , date_asset: res.nacdtl_date_asset
       };
     }));
 
@@ -484,7 +485,7 @@ export default function Nac_Main_wait() {
   };
 
   const handleServiceAdd = () => {
-    setServiceList([...serviceList, { dtl_id: 0, assetsCode: "", serialNo: "", name: "", dtl: "", count: "", price: "", asset_id: "" }]);
+    setServiceList([...serviceList, { dtl_id: 0, assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: "" }]);
   };
 
   const handleServiceRemove = (index) => {
@@ -513,6 +514,7 @@ export default function Nac_Main_wait() {
       list[index]['count'] = ''
       list[index]['serialNo'] = ''
       list[index]['price'] = ''
+      list[index]['date_asset'] = ''
       setServiceList(list);
     } else {
       const Code = list[index]['assetsCode'];
@@ -525,6 +527,7 @@ export default function Nac_Main_wait() {
         list[index]['count'] = 1
         list[index]['serialNo'] = response['data'][0].SerialNo
         list[index]['price'] = response['data'][0].Price
+        list[index]['date_asset'] = response['data'][0].CreateDate
         setServiceList(list);
       }
     }
@@ -1155,6 +1158,37 @@ export default function Nac_Main_wait() {
           comment
         })
         if ('data' in responseComment) {
+          if (nac_status === 5) {
+            for (let i = 0; i < checked.length; i++) {
+              const usercode = data.UserCode
+              const nacdtl_assetsCode = checked[i].assets_code
+              const asset_id = checked[i].asset_id
+              const statusCheck = checked[i].statusCheck
+              await stroe_FA_control_DTL_ConfirmSuccess({
+                nac_code,
+                usercode,
+                nacdtl_assetsCode,
+                asset_id,
+                statusCheck,
+              })
+            }
+          }
+          else if (nac_status === 6) {
+            for (let i = 0; i < serviceList.length; i++) {
+              const usercode = data.UserCode
+              const nacdtl_assetsCode = serviceList[i].assetsCode
+              const asset_id = serviceList[i].asset_id
+              console.log(usercode, nacdtl_assetsCode, asset_id, nac_status, nac_type, nac_code,);
+              await store_FA_control_upadate_table({
+                nac_code,
+                usercode,
+                nacdtl_assetsCode,
+                asset_id,
+                nac_type,
+                nac_status,
+              })
+            }
+          }
           swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
             buttons: false,
             timer: 2000,
@@ -1176,21 +1210,6 @@ export default function Nac_Main_wait() {
               navigate('/NAC_ROW')
             }
           });
-        }
-      }
-      if (nac_status === 5) {
-        for (let i = 0; i < checked.length; i++) {
-          const usercode = data.UserCode
-          const nacdtl_assetsCode = checked[i].assets_code
-          const asset_id = checked[i].asset_id
-          const statusCheck = checked[i].statusCheck
-          await stroe_FA_control_DTL_ConfirmSuccess({
-            nac_code,
-            usercode,
-            nacdtl_assetsCode,
-            asset_id,
-            statusCheck,
-          })
         }
       }
     } else {
@@ -1781,16 +1800,17 @@ export default function Nac_Main_wait() {
                     </Table>
                     <Table aria-label="customized table">
                       <TableHead>
-                        <TableRow style={{ width: '100%' }}>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >Serial No.</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รายละเอียด</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
-                            <Stack direction="row" alignItems="center" spacing={1}>
+                      <TableRow style={{ width: '100%' }}>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >Serial No.</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >รายละเอียด</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
+                          <Stack direction="row" alignItems="center" spacing={1}>
                               <Typography>
-                                ราคา
+                                ต้นทุน
                               </Typography>
                               <IconButton
                                 sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
@@ -1848,6 +1868,14 @@ export default function Nac_Main_wait() {
                                       disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                       name='assetsCode'
                                       id='assetsCode'
+                                      sx={{
+                                        "& .MuiAutocomplete-input, & .MuiInputLabel-root": {
+                                          fontSize: 14
+                                        }
+                                      }}
+                                      ListboxProps={{
+                                        sx: { fontSize: 12 }
+                                      }}
                                       options={AllAssetsControl}
                                       getOptionLabel={(option) => option.Code || ''}
                                       filterOptions={filterOptions}
@@ -1873,6 +1901,7 @@ export default function Nac_Main_wait() {
                                       variant="standard"
                                       name='assetsCode'
                                       id='assetsCode'
+                                      inputProps={{ style: { fontSize: 14 } }}
                                       onChange={(e) => handleServiceChange(e, index)}
                                       value={!singleService.assetsCode ? '' : singleService.assetsCode}
                                     />
@@ -1887,8 +1916,8 @@ export default function Nac_Main_wait() {
                                   name="serialNo"
                                   id="serialNo"
                                   variant="standard"
+                                  inputProps={{ style: { fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  inputProps={{ style: { textAlign: 'center', color: !singleService.serialNo ? 'red' : '' } }}
                                   value={!singleService.serialNo ? '' : singleService.serialNo}
                                 />
                               </StyledTableCell>
@@ -1899,10 +1928,21 @@ export default function Nac_Main_wait() {
                                   disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                   name="name"
                                   id="name"
-
+                                  inputProps={{ style: { fontSize: 14 } }}
                                   variant="standard"
                                   onChange={(e) => handleServiceChange(e, index)}
                                   value={singleService.name}
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                <TextField
+                                  fullWidth
+                                  key={index}
+                                  name="date_asset"
+                                  id="date_asset"
+                                  inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
+                                  value={!serviceList[index].date_asset ? '' : serviceList[index].date_asset.split('T')[0]}
+                                  variant="standard"
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
@@ -1912,7 +1952,7 @@ export default function Nac_Main_wait() {
                                   disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                   name="dtl"
                                   id="dtl"
-
+                                  inputProps={{ style: { fontSize: 14 } }}
                                   variant="standard"
                                   onChange={(e) => handleServiceChange(e, index)}
                                   value={singleService.dtl}
@@ -1926,7 +1966,7 @@ export default function Nac_Main_wait() {
                                   name="count"
                                   id="count"
                                   type='number'
-                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
                                   InputProps={{ inputProps: { min: 1 } }}
                                   variant="standard"
                                   onChange={(e) => handleServiceChange(e, index)}
@@ -1943,7 +1983,7 @@ export default function Nac_Main_wait() {
                                   onChange={(e) => handleServiceChange(e, index)}
                                   type={valuesVisibility.showText ? "text" : "password"}
                                   value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
-                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
                                   variant="standard"
                                 />
                               </StyledTableCell>
@@ -2007,7 +2047,7 @@ export default function Nac_Main_wait() {
                               required
                               fullWidth
                               type={valuesVisibility.showText ? "text" : "password"}
-                              inputProps={{ style: { textAlign: 'center', color: 'red' } }}
+                              inputProps={{ style: { textAlign: 'center', color: 'green' } }}
                               value={sum_price.toLocaleString() === 0 ? '' : sum_price.toLocaleString()}
                               InputProps={{
                                 endAdornment: (
