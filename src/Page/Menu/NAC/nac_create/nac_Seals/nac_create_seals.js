@@ -35,6 +35,7 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import swal from 'sweetalert';
+import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 
 function Copyright() {
   return (
@@ -169,7 +170,6 @@ export default function Nac_Main() {
   const mins = ((d.getMinutes()) + 100).toString().slice(-2);
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
-
   const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
   const result = serviceList.reduce((total, serviceList) => total = total + serviceList.price, 0);
   const navigate = useNavigate();
@@ -350,7 +350,11 @@ export default function Nac_Main() {
       }
       else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
-        setSource_BU('Center')
+        if(response.data[0].branchid !=901){
+          setSource_BU('Oil')
+        }else{
+          setSource_BU('Center')
+        }
       }
       else if (response.data[0].DepID === 4) {
         setSource_Department('SSD')
@@ -422,14 +426,20 @@ export default function Nac_Main() {
 
   const handleNext = async () => {
     if (!source || !source_Department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning");
+      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning", {
+          buttons: false,
+          timer: 2000,
+        })
     } else {
       let checkValue_BV = []
       for (let i = 0; i < serviceList.length; i++) {
         checkValue_BV[i] = serviceList[i].priceSeals
       }
       if (!serviceList[0].assetsCode || checkValue_BV.includes('') === true) {
-        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning");
+        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
+          buttons: false,
+          timer: 2000,
+        })
       } else {
         const checkBookValue_is_null = []
         for (let i = 0; i < serviceList.length; i++) {
@@ -481,7 +491,7 @@ export default function Nac_Main() {
                 const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
                 const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
                 const nacdtl_profit = !serviceList[i].profit ? undefined : serviceList[i].profit
-                const asset_id = responseDTL.data[0].nacdtl_id
+                const asset_id = responseDTL.data[i].nacdtl_id
                 const nac_status = 1
                 await store_FA_control_updateDTL_seals({
                   usercode,
@@ -494,18 +504,24 @@ export default function Nac_Main() {
                   asset_id,
                   nacdtl_assetsCode
                 });
-                swal("ทำรายการสำเร็จ", 'สร้างรายการเปลี่ยนแปลงทรัพย์สิน ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
-                  buttons: false,
-                  timer: 2000,
-                }).then((value) => {
-                  navigate('/NAC_ROW')
-                });
               } else {
-                swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error");
+                swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error", {
+          buttons: false,
+          timer: 2000,
+        })
               }
             }
+            swal("ทำรายการสำเร็จ", 'สร้างรายการเปลี่ยนแปลงทรัพย์สิน ' + response.data[0].nac_code + ' แล้ว', "success", {
+              buttons: false,
+              timer: 2000,
+            }).then((value) => {
+              navigate('/NAC_ROW')
+            });
           } else {
-            swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error");
+            swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error", {
+          buttons: false,
+          timer: 2000,
+        })
           }
         } else {
           swal("แจ้งเตือน", 'กรุณากรอกราคาขายของทรัพย์สินให้ครบถ้วน', "warning")
@@ -985,7 +1001,7 @@ export default function Nac_Main() {
                             fullWidth
                             type={valuesVisibility.showText ? "text" : "password"}
                             value={result.toLocaleString() === 0 ? '' : result.toLocaleString()}
-                            inputProps={{ style: { textAlign: 'center', color: 'green' } }}
+                            inputProps={{ style: { textAlign: 'center' } }}
                             InputProps={{
                               endAdornment: (
                                 <InputAdornment position="start">
@@ -1151,6 +1167,7 @@ export default function Nac_Main() {
                     <Button
                       variant="contained"
                       onClick={handleNext}
+                      endIcon={<BorderColorRoundedIcon/>}
                       sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 2 } }}
                     >
                       สร้างเอกสาร

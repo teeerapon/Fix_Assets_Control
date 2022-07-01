@@ -79,7 +79,7 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
   const data = JSON.parse(localStorage.getItem('data'));
   const [CheckApprove, setCheckApprove] = React.useState([]);
   const [CheckExamineApprove, setCheckExamineApprove] = React.useState([]);
-  const [checkUserWeb,setCheckUserWeb] = React.useState();
+  const [checkUserWeb, setCheckUserWeb] = React.useState();
   // const navigate = useNavigate();
 
   const fetchCheckUser = async () => {
@@ -87,7 +87,7 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
     const response = await ChackUserWeb({
       usercode
     });
-    if('data' in response){
+    if ('data' in response) {
       setCheckUserWeb(response.data[0].approverid)
     }
   }
@@ -112,21 +112,23 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
     } else if (selectNAC.nac_status === 3) {
       setStatus('รออนุมัติ')
     } else if (selectNAC.nac_status === 4) {
-      setStatus('ผ่านอนุมัติ รอตรวจรับ')
+      setStatus('รอผู้รับยืนยันรายการ')
     } else if (selectNAC.nac_status === 5) {
-      setStatus('รอบัญชีตรวจสอบ')
+      setStatus('รอปิดรายการ')
     } else if (selectNAC.nac_status === 6) {
       setStatus('ดำเนินการเสร็จสิ้น')
     } else if (selectNAC.nac_status === 7) {
       setStatus('โดนตีกลับรายการ')
     } else if (selectNAC.nac_status === 8) {
-      setStatus('ได้รับทรัพย์สินไม่ครบ')
+      setStatus('ไม่พบทรัพย์สิน')
     } else if (selectNAC.nac_status === 11) {
       setStatus('รอกรอกข้อมูล BV')
     } else if (selectNAC.nac_status === 12) {
-      setStatus('รอแนบเอกสาร')
+      setStatus('รอแนบเอกสารการขาย')
     } else if (selectNAC.nac_status === 13) {
-      setStatus('รอการเงินตรวจสอบ')
+      setStatus('รอปิดรายการ')
+    } else if (selectNAC.nac_status === 14) {
+      setStatus('ได้รับทรัพย์สินไม่ครบ')
     } else if (selectNAC.nac_status === 0) {
       setStatus('ไม่ผ่านการอนุมัติ')
     }
@@ -214,14 +216,16 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
                           'red' : selectNAC.nac_status === 11 ?
                             'blue' : selectNAC.nac_status === 12 ?
                               'blue' : selectNAC.nac_status === 13 ?
-                                'blue' : 'red'
+                                'blue' : selectNAC.nac_status === 14 ?
+                                  'orange' : 'red'
         }}>
         {((status === 'รออนุมัติ' || status === 'รอตรวจสอบ') && selectNAC.name === 'เพิ่มบัญชีทรัพย์สินถาวร') ? 'รอต้นสังกัดตรวจสอบ' : status}
       </StyledTableCell>
       <StyledTableCell align="left" >{
         (status === 'รอตรวจสอบ' && selectNAC.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && selectNAC.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + CheckExamineApprove.filter(x => x !== undefined) + '' :
           (status === 'รออนุมัติ' && selectNAC.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && selectNAC.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + CheckApprove.filter(x => x !== undefined) + '' :
-            ((status === 'รอตรวจสอบ') && (selectNAC.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || selectNAC.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? 'ต้นสังกัดตรวจสอบ' : 'none'
+            ((status === 'รอตรวจสอบ') && (selectNAC.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || selectNAC.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? 'ต้นสังกัดตรวจสอบ' : 
+            (status === 'รอปิดรายการ') ? 'บัญชี/การเงิน' : 'none'
       }</StyledTableCell>
       <StyledTableCell align="center" >
         <Grid container rowSpacing={1}>

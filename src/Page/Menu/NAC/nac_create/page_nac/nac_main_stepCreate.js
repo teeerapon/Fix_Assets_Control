@@ -35,6 +35,7 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import swal from 'sweetalert';
+import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 
 function Copyright() {
   return (
@@ -332,7 +333,11 @@ export default function Nac_Main() {
       }
       else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
-        setSource_BU('Center')
+        if(response.data[0].branchid !=901){
+          setSource_BU('Oil')
+        }else{
+          setSource_BU('Center')
+        }
       }
       else if (response.data[0].DepID === 4) {
         setSource_Department('SSD')
@@ -425,7 +430,11 @@ export default function Nac_Main() {
       }
       else if (response.data[0].DepID === 3) {
         setDes_Department('ROD')
-        setDes_BU('Center')
+        if(response.data[0].branchid !=901){
+          setDes_BU('Oil')
+        }else{
+          setDes_BU('Center')
+        }
       }
       else if (response.data[0].DepID === 4) {
         setDes_Department('SSD')
@@ -476,13 +485,22 @@ export default function Nac_Main() {
 
   const handleNext = async () => {
     if (!source || !source_Department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ส่งมอบให้ครบถ้วน', "warning");
+      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ส่งมอบให้ครบถ้วน', "warning", {
+        buttons: false,
+        timer: 2000,
+      })
     } else {
       if (!des_Department || !des_BU || !des_delivery) {
-        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้รับมอบให้ครบถ้วน', "warning");
+        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้รับมอบให้ครบถ้วน', "warning", {
+          buttons: false,
+          timer: 2000,
+        })
       } else {
         if (!serviceList[0].assetsCode) {
-          swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning");
+          swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
+            buttons: false,
+            timer: 2000,
+          })
         } else {
           const usercode = data.UserCode
           const worktype = nac_type
@@ -533,11 +551,17 @@ export default function Nac_Main() {
                   navigate('/NAC_ROW')
                 });
               } else {
-                swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error");
+                swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error", {
+                  buttons: false,
+                  timer: 2000,
+                })
               }
             }
           } else {
-            swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error");
+            swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error", {
+              buttons: false,
+              timer: 2000,
+            })
           }
         }
       }
@@ -1010,7 +1034,7 @@ export default function Nac_Main() {
                             fullWidth
                             type={valuesVisibility.showText ? "text" : "password"}
                             value={result.toLocaleString() === 0 ? '' : result.toLocaleString()}
-                            inputProps={{ style: { textAlign: 'center', color: 'green' } }}
+                            inputProps={{ style: { textAlign: 'center' } }}
                             InputProps={{
                               endAdornment: (
                                 <InputAdornment position="start">
@@ -1176,6 +1200,7 @@ export default function Nac_Main() {
                     <Button
                       variant="contained"
                       onClick={handleNext}
+                      endIcon={<BorderColorRoundedIcon/>}
                       sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 2 } }}
                     >
                       สร้างเอกสาร

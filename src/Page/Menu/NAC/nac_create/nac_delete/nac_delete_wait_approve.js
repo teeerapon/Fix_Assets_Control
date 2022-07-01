@@ -41,6 +41,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import CircularProgress from '@mui/material/CircularProgress';
+import SystemUpdateAltRoundedIcon from '@mui/icons-material/SystemUpdateAltRounded';
+import DoubleArrowRoundedIcon from '@mui/icons-material/DoubleArrowRounded';
+import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import ReplyAllRoundedIcon from '@mui/icons-material/ReplyAllRounded';
+import CloudDownloadRoundedIcon from '@mui/icons-material/CloudDownloadRounded';
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 
 function Copyright() {
   return (
@@ -547,7 +554,10 @@ export default function Nac_Seals_Approve() {
       nacdtl_assetsCode
     });
     if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
-      swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "warning");
+      swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "warning", {
+          buttons: false,
+          timer: 2000,
+        })
       const list = [...serviceList];
       list.splice(index, 1);
       setServiceList(list);
@@ -635,7 +645,11 @@ export default function Nac_Seals_Approve() {
       }
       else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
-        setSource_BU('Center')
+        if(response.data[0].branchid !=901){
+          setSource_BU('Oil')
+        }else{
+          setSource_BU('Center')
+        }
       }
       else if (response.data[0].DepID === 4) {
         setSource_Department('SSD')
@@ -705,10 +719,16 @@ export default function Nac_Seals_Approve() {
   // Update Document
   const handleSave = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning");
+      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning", {
+          buttons: false,
+          timer: 2000,
+        })
     } else {
       if (!serviceList[0].assetsCode) {
-        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning");
+        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
+          buttons: false,
+          timer: 2000,
+        })
       } else {
         const usercode = data.UserCode
         const nac_status = (selectNAC === 11) ? 11 : 1
@@ -759,7 +779,7 @@ export default function Nac_Seals_Approve() {
               const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
               const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
               const nacdtl_profit = !serviceList[i].priceSeals ? 0 - serviceList[i].bookValue : serviceList[i].priceSeals - serviceList[i].bookValue
-              const asset_id = responseDTL.data[0].nacdtl_id
+              const asset_id = responseDTL.data[i].nacdtl_id
               const nac_status = (selectNAC === 11) ? 11 : 1
               await store_FA_control_updateDTL_seals({
                 usercode,
@@ -783,11 +803,17 @@ export default function Nac_Seals_Approve() {
                 }
               });
             } else {
-              swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error");
+              swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error", {
+          buttons: false,
+          timer: 2000,
+        })
             }
           }
         } else {
-          swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error");
+          swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error", {
+          buttons: false,
+          timer: 2000,
+        })
         }
       }
     }
@@ -796,13 +822,22 @@ export default function Nac_Seals_Approve() {
 
   const handleSubmit = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning");
+      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning", {
+          buttons: false,
+          timer: 2000,
+        })
     } else {
       if (!serviceList[0].assetsCode) {
-        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning");
+        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
+          buttons: false,
+          timer: 2000,
+        })
       } else {
         if (sum_price !== headers.sum_price || headers.source_userid !== source || headers.des_userid !== des_delivery) {
-          swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยื่นคำร้อง', "warning");
+          swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยื่นคำร้อง', "warning", {
+          buttons: false,
+          timer: 2000,
+        })
         } else {
           if (data.UserCode === headers.create_by || CheckExamineApprove.includes(data.UserCode) === true || CheckApprove.includes(data.UserCode) === true || checkUserWeb === 'admin') {
             const usercode = data.UserCode
@@ -819,7 +854,6 @@ export default function Nac_Seals_Approve() {
               for (let i = 0; i < serviceList.length; i++) {
                 checkBookValue_is_null[i] = serviceList[i].bookValue
               }
-              console.log(checkBookValue_is_null);
               if (checkBookValue_is_null.includes('') !== true) {
                 const responseForUpdate = await store_FA_control_updateStatus({
                   usercode,
@@ -864,7 +898,7 @@ export default function Nac_Seals_Approve() {
                     const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
                     const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
                     const nacdtl_profit = !serviceList[i].priceSeals ? 0 - serviceList[i].bookValue : serviceList[i].priceSeals - serviceList[i].bookValue
-                    const asset_id = responseDTL.data[0].nacdtl_id
+                    const asset_id = responseDTL.data[i].nacdtl_id
                     const nac_status = (selectNAC === 11) ? 10 : 11
                     await store_FA_control_updateDTL_seals({
                       usercode,
@@ -877,32 +911,32 @@ export default function Nac_Seals_Approve() {
                       asset_id,
                       nacdtl_assetsCode
                     });
-                    const comment = 'ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว'
-                    const responseComment = await store_FA_control_comment({
-                      nac_code,
-                      usercode,
-                      comment
-                    })
-                    if ('data' in responseComment) {
-                      swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
-                        buttons: false,
-                        timer: 2000,
-                      }).then((value) => {
-                        if (checkUserWeb === 'admin') {
-                          navigate('/NAC_OPERATOR')
-                        } else {
-                          navigate('/NAC_ROW')
-                        }
-                      });
-                    } else {
-                      swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
-                        buttons: false,
-                        timer: 2000,
-                      }).then((value) => {
-                        navigate('/NAC_ROW/NAC_SEALS_APPROVE')
-                      });
-                    }
                   }
+                }
+                const comment = 'ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+                const responseComment = await store_FA_control_comment({
+                  nac_code,
+                  usercode,
+                  comment
+                })
+                if ('data' in responseComment) {
+                  swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+                    buttons: false,
+                    timer: 2000,
+                  }).then((value) => {
+                    if (checkUserWeb === 'admin') {
+                      navigate('/NAC_OPERATOR')
+                    } else {
+                      navigate('/NAC_ROW')
+                    }
+                  });
+                } else {
+                  swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+                    buttons: false,
+                    timer: 2000,
+                  }).then((value) => {
+                    navigate('/NAC_ROW/NAC_SEALS_APPROVE')
+                  });
                 }
               } else {
                 swal("แจ้งเตือน", 'กรุณากรอก Book Value ของทรัพย์สินให้ครบถ้วน', "warning")
@@ -951,7 +985,7 @@ export default function Nac_Seals_Approve() {
                   const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
                   const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
                   const nacdtl_profit = !serviceList[i].priceSeals ? 0 - serviceList[i].bookValue : serviceList[i].priceSeals - serviceList[i].bookValue
-                  const asset_id = responseDTL.data[0].nacdtl_id
+                  const asset_id = responseDTL.data[i].nacdtl_id
                   const nac_status = (selectNAC === 11) ? 10 : 11
                   await store_FA_control_updateDTL_seals({
                     usercode,
@@ -1241,7 +1275,7 @@ export default function Nac_Seals_Approve() {
         verify_date,
       });
       if ('data' in responseForUpdate) {
-        const comment = selectNAC === 4 ? 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว' : 'รับรองเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+        const comment = selectNAC === 4 ? 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว' : 'ปิดรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
         const responseComment = await store_FA_control_comment({
           nac_code,
           usercode,
@@ -1911,6 +1945,7 @@ export default function Nac_Seals_Approve() {
                                 <TextField
                                   fullWidth
                                   key={index}
+                                  disabled
                                   name="date_asset"
                                   id="date_asset"
                                   inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
@@ -2004,7 +2039,7 @@ export default function Nac_Seals_Approve() {
                               required
                               fullWidth
                               type={valuesVisibility.showText ? "text" : "password"}
-                              inputProps={{ style: { textAlign: 'center', color: 'green' } }}
+                              inputProps={{ style: { textAlign: 'center' } }}
                               value={sum_price.toLocaleString() === 0 ? '' : sum_price.toLocaleString()}
                               InputProps={{
                                 endAdornment: (
@@ -2080,9 +2115,9 @@ export default function Nac_Seals_Approve() {
                                       </InputAdornment>
                                       <InputAdornment position="start">
                                         {
-                                          ExamineApprove.map((Approve) => (
+                                          ExamineApprove.map((Approve,index) => (
                                             <Typography style={{ 'color': 'black' }}>
-                                              {Approve.status === 1 ? '[' + [Approve.approverid] + ']' : ''}
+                                              {Approve.status === 1 ? '[' + [CheckExamineApprove[index]] + ']' : ''}
                                             </Typography>
                                           ))}
                                       </InputAdornment>
@@ -2180,6 +2215,7 @@ export default function Nac_Seals_Approve() {
                               variant="contained"
                               onClick={handleSave}
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                              startIcon={<SystemUpdateAltRoundedIcon />}
                               style={{ 'backgroundColor': 'orange' }}>
                               อัปเดต
                             </Button>
@@ -2188,6 +2224,7 @@ export default function Nac_Seals_Approve() {
                             <Button
                               variant="contained"
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                              endIcon={<DoubleArrowRoundedIcon />}
                               disabled={
                                 ((selectNAC === 1 || selectNAC === 7) && data.UserCode === headers.create_by) ||
                                   (selectNAC === 11 && (checkUserWeb === 'admin')) ||
@@ -2219,6 +2256,7 @@ export default function Nac_Seals_Approve() {
                               onClick={handleClickOpenDialogReply}
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                               style={{ 'backgroundColor': 'orange' }}
+                              startIcon={<ReplyAllRoundedIcon />}
                               disabled={
                                 (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
                                   (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
@@ -2230,11 +2268,26 @@ export default function Nac_Seals_Approve() {
                           <Grid item xs={2}>
                             <Button
                               variant="contained"
+                              color='error'
+                              disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false
+                                : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                  true
+                              }
+                              onClick={CancelApprove}
+                              startIcon={<ClearRoundedIcon />}
+                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}>
+                              ไม่อนุมัติ
+                            </Button>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Button
+                              variant="contained"
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                               color={selectNAC === 2 ? 'success' :
                                 selectNAC === 3 ? 'success' :
                                   'primary'}
                               onClick={selectNAC === 2 ? handleExamineApprove : handleExecApprove}
+                              startIcon={selectNAC === 3 ?<CheckRoundedIcon /> : <VisibilityRoundedIcon/>}
                               disabled={
                                 (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
                                   (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
@@ -2243,19 +2296,6 @@ export default function Nac_Seals_Approve() {
                               <React.Fragment>
                                 {selectNAC === 2 ? 'ตรวจสอบ' : 'อนุมัติ'}
                               </React.Fragment>
-                            </Button>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Button
-                              variant="contained"
-                              color='error'
-                              disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false
-                                : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
-                                  true
-                              }
-                              onClick={CancelApprove}
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}>
-                              ไม่อนุมัติ
                             </Button>
                           </Grid>
                           <Grid item xs>
@@ -2302,10 +2342,11 @@ export default function Nac_Seals_Approve() {
                       <Box sx={{ flexGrow: 1 }}>
                         <Button
                           variant="contained"
+                          startIcon={<CloudDownloadRoundedIcon/>}
                           sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                           disabled={(selectNAC === 5) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
                           onClick={handleSubmitComplete}>
-                          รับรองเอกสาร
+                          ปิดรายการ
                         </Button>
                       </Box>
                     </center>
