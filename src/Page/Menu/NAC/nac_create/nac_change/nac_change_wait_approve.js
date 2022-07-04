@@ -80,7 +80,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function store_FA_control_select_dtl(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_select_dtl', {
+  return fetch('http://similan:32001/api/store_FA_control_select_dtl', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -92,7 +92,7 @@ async function store_FA_control_select_dtl(credentials) {
 }
 
 async function store_FA_control_select_headers(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_select_headers', {
+  return fetch('http://similan:32001/api/store_FA_control_select_headers', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -104,7 +104,7 @@ async function store_FA_control_select_headers(credentials) {
 }
 
 async function SelectDTL_Control(credentials) {
-  return fetch('http://192.168.1.108:32001/api/SelectDTL_Control', {
+  return fetch('http://similan:32001/api/SelectDTL_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -115,7 +115,7 @@ async function SelectDTL_Control(credentials) {
 }
 
 async function SelectAssetsControl(credentials) {
-  return fetch('http://192.168.1.108:32001/api/AssetsAll_Control', {
+  return fetch('http://similan:32001/api/AssetsAll_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -126,7 +126,7 @@ async function SelectAssetsControl(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://192.168.1.108:32001/api/AutoDeapartMent', {
+  return fetch('http://similan:32001/api/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -148,7 +148,7 @@ const filterOptions2 = createFilterOptions({
 });
 
 async function store_FA_control_update_DTLandHeaders(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_update_DTLandHeaders', {
+  return fetch('http://similan:32001/api/store_FA_control_update_DTLandHeaders', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -160,7 +160,7 @@ async function store_FA_control_update_DTLandHeaders(credentials) {
 }
 
 async function store_FA_control_update_DTL(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_update_DTL', {
+  return fetch('http://similan:32001/api/store_FA_control_update_DTL', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -172,7 +172,7 @@ async function store_FA_control_update_DTL(credentials) {
 }
 
 async function store_FA_control_execDocID(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_execDocID', {
+  return fetch('http://similan:32001/api/store_FA_control_execDocID', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -184,7 +184,7 @@ async function store_FA_control_execDocID(credentials) {
 }
 
 async function store_FA_control_updateStatus(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_updateStatus', {
+  return fetch('http://similan:32001/api/store_FA_control_updateStatus', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -196,7 +196,7 @@ async function store_FA_control_updateStatus(credentials) {
 }
 
 async function store_FA_control_comment(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_comment', {
+  return fetch('http://similan:32001/api/store_FA_control_comment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -208,7 +208,7 @@ async function store_FA_control_comment(credentials) {
 }
 
 async function ChackUserWeb(credentials) {
-  return fetch('http://192.168.1.108:32001/api/ChackUserWeb', {
+  return fetch('http://similan:32001/api/ChackUserWeb', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -220,7 +220,7 @@ async function ChackUserWeb(credentials) {
 }
 
 async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_CheckAssetCode_Process', {
+  return fetch('http://similan:32001/api/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -232,7 +232,7 @@ async function store_FA_control_CheckAssetCode_Process(credentials) {
 }
 
 async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
-  return fetch('http://192.168.1.108:32001/api/stroe_FA_control_DTL_ConfirmSuccess', {
+  return fetch('http://similan:32001/api/stroe_FA_control_DTL_ConfirmSuccess', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -244,7 +244,7 @@ async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
 }
 
 async function store_FA_control_upadate_table(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_upadate_table', {
+  return fetch('http://similan:32001/api/store_FA_control_upadate_table', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -267,7 +267,11 @@ export default function Nac_Main_wait() {
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
   const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: "", code_main: "", no_main: "", name_main: "", date_asset_main: "", dtl_main: "", price_main: "" }]);
-  const sum_price = serviceList.reduce((total, serviceList) => total = total + serviceList.price * serviceList.count, 0);
+  const sum_price = serviceList.map(function (elt) {
+    return /^\d+$/.test(elt.price * elt.count) ? parseInt(elt.price * elt.count) : 0;
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
   const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
@@ -336,7 +340,7 @@ export default function Nac_Main_wait() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://192.168.1.108:32001/api/getsUserForAssetsControl"
+      "http://similan:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []
@@ -555,11 +559,17 @@ export default function Nac_Main_wait() {
     });
     if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
       swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        buttons: false,
+        timer: 2000,
+      })
       const list = [...serviceList];
-      list.splice(index, 1);
+      list[index]['assetsCode'] = ''
+      list[index]['name'] = ''
+      list[index]['dtl'] = ''
+      list[index]['count'] = ''
+      list[index]['serialNo'] = ''
+      list[index]['price'] = ''
+      list[index]['date_asset'] = ''
       setServiceList(list);
     } else {
       const list = [...serviceList];
@@ -639,9 +649,9 @@ export default function Nac_Main_wait() {
       }
       else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
-        if(response.data[0].branchid !=901){
+        if (response.data[0].branchid != 901) {
           setSource_BU('Oil')
-        }else{
+        } else {
           setSource_BU('Center')
         }
       }
@@ -708,9 +718,9 @@ export default function Nac_Main_wait() {
   const handleSave = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
       swal("แจ้งเตือน", 'กรุณากรอกข้อมูล||ผู้ยื่นคำร้องให้ครบถ้วน', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        buttons: false,
+        timer: 2000,
+      })
     } else {
       if (!des_department || !des_BU || !des_delivery || !des_deliveryDate) {
         swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้รับคำร้องให้ครบถ้วน', "warning", {
@@ -720,9 +730,9 @@ export default function Nac_Main_wait() {
       } else {
         if (!serviceList[0].assetsCode) {
           swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+            buttons: false,
+            timer: 2000,
+          })
         } else {
           const usercode = data.UserCode
           const nac_status = 1
@@ -782,16 +792,16 @@ export default function Nac_Main_wait() {
                 });
               } else {
                 swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error", {
-          buttons: false,
-          timer: 2000,
-        })
+                  buttons: false,
+                  timer: 2000,
+                })
               }
             }
           } else {
             swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error", {
-          buttons: false,
-          timer: 2000,
-        })
+              buttons: false,
+              timer: 2000,
+            })
           }
         }
       }
@@ -802,9 +812,9 @@ export default function Nac_Main_wait() {
   const handleSubmit = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
       swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        buttons: false,
+        timer: 2000,
+      })
     } else {
       if (!serviceList[0].assetsCode) {
         swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
@@ -814,9 +824,9 @@ export default function Nac_Main_wait() {
       } else {
         if (sum_price !== headers.sum_price || headers.source_userid !== source || headers.des_userid !== des_delivery) {
           swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยื่นคำร้อง', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+            buttons: false,
+            timer: 2000,
+          })
         } else {
           if (data.UserCode === headers.create_by) {
             const usercode = data.UserCode
@@ -1709,7 +1719,7 @@ export default function Nac_Main_wait() {
                             <IconButton
                               size="large"
                               color='primary'
-                              disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                              disabled={(selectNAC === 1) ? false : true}
                               onClick={handleServiceAdd}
                             >
                               <AddBoxIcon />
@@ -1830,7 +1840,7 @@ export default function Nac_Main_wait() {
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
-                                  
+
                                   fullWidth
                                   disabled
                                   variant="standard"
@@ -1838,7 +1848,7 @@ export default function Nac_Main_wait() {
                                   value={singleService.dtl_main}
                                 />
                                 <TextField
-                                  
+
                                   key={index}
                                   fullWidth
                                   disabled={(selectNAC >= 3) ? true : false}
@@ -1852,7 +1862,7 @@ export default function Nac_Main_wait() {
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
-                                  
+
                                   fullWidth
                                   disabled
                                   type='number'
@@ -1861,7 +1871,7 @@ export default function Nac_Main_wait() {
                                   value={singleService.count}
                                 />
                                 <TextField
-                                  
+
                                   key={index}
                                   fullWidth
                                   disabled={(selectNAC >= 3) ? true : false}
@@ -1876,7 +1886,7 @@ export default function Nac_Main_wait() {
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
-                                  
+
                                   fullWidth
                                   disabled
                                   inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
@@ -1885,7 +1895,7 @@ export default function Nac_Main_wait() {
                                   value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
                                 />
                                 <TextField
-                                  
+
                                   key={index}
                                   fullWidth
                                   disabled={(selectNAC >= 3) ? true : false}
@@ -1930,7 +1940,7 @@ export default function Nac_Main_wait() {
                               fullWidth
                               type={valuesVisibility.showText ? "text" : "password"}
                               inputProps={{ style: { textAlign: 'center' } }}
-                              value={sum_price.toLocaleString() === 0 ? '' : sum_price.toLocaleString()}
+                              value={sum_price === 0 ? '' : sum_price.toLocaleString()}
                               InputProps={{
                                 endAdornment: (
                                   <InputAdornment position="start">
@@ -2005,7 +2015,7 @@ export default function Nac_Main_wait() {
                                       </InputAdornment>
                                       <InputAdornment position="start">
                                         {
-                                          ExamineApprove.map((Approve,index) => (
+                                          ExamineApprove.map((Approve, index) => (
                                             <Typography style={{ 'color': 'black' }}>
                                               {Approve.status === 1 ? '[' + [CheckExamineApprove[index]] + ']' : ''}
                                             </Typography>
@@ -2161,7 +2171,7 @@ export default function Nac_Main_wait() {
                                 selectNAC === 3 ? 'success' :
                                   'primary'}
                               onClick={selectNAC === 2 ? handleExamineApprove : handleExecApprove}
-                              startIcon={selectNAC === 3 ?<CheckRoundedIcon /> : <VisibilityRoundedIcon/>}
+                              startIcon={selectNAC === 3 ? <CheckRoundedIcon /> : <VisibilityRoundedIcon />}
                               disabled={
                                 (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
                                   (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
@@ -2230,7 +2240,7 @@ export default function Nac_Main_wait() {
                       <Box sx={{ flexGrow: 1 }}>
                         <Button
                           variant="contained"
-                          startIcon={<CloudDownloadRoundedIcon/>}
+                          startIcon={<CloudDownloadRoundedIcon />}
                           sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                           disabled={(selectNAC === 5) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
                           onClick={handleSubmitComplete}>

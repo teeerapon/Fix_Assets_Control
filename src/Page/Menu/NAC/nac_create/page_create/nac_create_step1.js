@@ -78,7 +78,7 @@ const filterOptions2 = createFilterOptions({
 });
 
 async function SelectDTL_Control(credentials) {
-  return fetch('http://192.168.1.108:32001/api/SelectDTL_Control', {
+  return fetch('http://similan:32001/api/SelectDTL_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -89,7 +89,7 @@ async function SelectDTL_Control(credentials) {
 }
 
 async function SelectAssetsControl(credentials) {
-  return fetch('http://192.168.1.108:32001/api/AssetsAll_Control', {
+  return fetch('http://similan:32001/api/AssetsAll_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -100,7 +100,7 @@ async function SelectAssetsControl(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://192.168.1.108:32001/api/AutoDeapartMent', {
+  return fetch('http://similan:32001/api/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -112,7 +112,7 @@ async function AutoDeapartMent(credentials) {
 }
 
 async function Store_FA_control_create_doc(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_create_doc', {
+  return fetch('http://similan:32001/api/store_FA_control_create_doc', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -124,7 +124,7 @@ async function Store_FA_control_create_doc(credentials) {
 }
 
 async function store_FA_control_creat_Detail(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_creat_Detail', {
+  return fetch('http://similan:32001/api/store_FA_control_creat_Detail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -136,7 +136,7 @@ async function store_FA_control_creat_Detail(credentials) {
 }
 
 async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_CheckAssetCode_Process', {
+  return fetch('http://similan:32001/api/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -161,7 +161,11 @@ export default function Nac_Main() {
 
   const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
   const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }])
-  const result = serviceList.reduce((total, serviceList) => total = total + serviceList.price * serviceList.count, 0);
+  const result = serviceList.map( function(elt){
+    return /^\d+$/.test(elt.price*elt.count) ? parseInt(elt.price*elt.count)  : 0; 
+  }).reduce( function(a,b){ // sum all resulting numbers
+    return a+b
+  })
   const navigate = useNavigate();
   const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
@@ -212,7 +216,7 @@ export default function Nac_Main() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://192.168.1.108:32001/api/getsUserForAssetsControl"
+      "http://similan:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []
@@ -263,10 +267,16 @@ export default function Nac_Main() {
   const handleServiceChangeHeader = async (e, index) => {
     const { name, value } = e.target;
     const assetsCodeSelect = e.target.innerText
-    const list = [...serviceList];
-    list[index][name] = value;
-    list[index]['assetsCode'] = assetsCodeSelect;
-    if (list[index]['assetsCode'] === null || list[index]['assetsCode'] === undefined) {
+    const nacdtl_assetsCode = e.target.innerText
+    const responseCheckAssetCode_Process = await store_FA_control_CheckAssetCode_Process({
+      nacdtl_assetsCode
+    });
+    if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
+      swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "warning", {
+        buttons: false,
+        timer: 2000,
+      })
+      const list = [...serviceList];
       list[index]['assetsCode'] = ''
       list[index]['name'] = ''
       list[index]['dtl'] = ''
@@ -276,46 +286,31 @@ export default function Nac_Main() {
       list[index]['date_asset'] = ''
       setServiceList(list);
     } else {
-      const Code = list[index]['assetsCode'];
-      const response = await SelectDTL_Control({
-        Code
-      });
-      if (response['data'].length !== 0) {
-        list[index]['name'] = response['data'][0].Name
-        list[index]['dtl'] = response['data'][0].Details
-        list[index]['count'] = 1
-        list[index]['serialNo'] = response['data'][0].SerialNo
-        list[index]['price'] = response['data'][0].Price
-        list[index]['date_asset'] = response['data'][0].CreateDate
+      const list = [...serviceList];
+      list[index][name] = value;
+      list[index]['assetsCode'] = assetsCodeSelect;
+      if ((list[index]['assetsCode'] === null) || (list[index]['assetsCode'] === undefined)) {
+        list[index]['name'] = ''
+        list[index]['dtl'] = ''
+        list[index]['count'] = ''
+        list[index]['serialNo'] = ''
+        list[index]['price'] = ''
+        list[index]['date_asset'] = ''
         setServiceList(list);
-      }
-    }
-
-    const list_main = [...serviceList_Main];
-    list_main[index][name] = value;
-    list_main[index]['assetsCode'] = assetsCodeSelect;
-    if (list[index]['assetsCode'] === null || list[index]['assetsCode'] === undefined) {
-      list_main[index]['assetsCode'] = ''
-      list_main[index]['name'] = ''
-      list_main[index]['dtl'] = ''
-      list_main[index]['count'] = ''
-      list_main[index]['serialNo'] = ''
-      list_main[index]['price'] = ''
-      list_main[index]['date_asset'] = ''
-      setServiceList_Main(list_main);
-    } else {
-      const Code = list[index]['assetsCode'];
-      const response = await SelectDTL_Control({
-        Code
-      });
-      if (response['data'].length !== 0) {
-        list_main[index]['name'] = response['data'][0].Name
-        list_main[index]['dtl'] = response['data'][0].Details
-        list_main[index]['count'] = 1
-        list_main[index]['serialNo'] = response['data'][0].SerialNo
-        list_main[index]['price'] = response['data'][0].Price
-        list_main[index]['date_asset'] = response['data'][0].CreateDate
-        setServiceList_Main(list_main);
+      } else {
+        const Code = list[index]['assetsCode'];
+        const response = await SelectDTL_Control({
+          Code
+        });
+        if (response['data'].length !== 0) {
+          list[index]['name'] = response['data'][0].Name
+          list[index]['dtl'] = response['data'][0].Details
+          list[index]['count'] = 1
+          list[index]['serialNo'] = response['data'][0].SerialNo
+          list[index]['price'] = response['data'][0].Price
+          list[index]['date_asset'] = response['data'][0].CreateDate
+          setServiceList(list);
+        }
       }
     }
   };
@@ -1071,7 +1066,7 @@ export default function Nac_Main() {
                             required
                             fullWidth
                             type={valuesVisibility.showText ? "text" : "password"}
-                            value={result.toLocaleString() === 0 ? '' : result.toLocaleString()}
+                            value={result === 0 ? '' : result.toLocaleString()}
                             inputProps={{ style: { textAlign: 'center' } }}
                             InputProps={{
                               endAdornment: (

@@ -78,7 +78,7 @@ const filterOptions2 = createFilterOptions({
 });
 
 async function SelectDTL_Control(credentials) {
-  return fetch('http://192.168.1.108:32001/api/SelectDTL_Control', {
+  return fetch('http://similan:32001/api/SelectDTL_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -89,7 +89,7 @@ async function SelectDTL_Control(credentials) {
 }
 
 async function SelectAssetsControl(credentials) {
-  return fetch('http://192.168.1.108:32001/api/AssetsAll_Control', {
+  return fetch('http://similan:32001/api/AssetsAll_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -100,7 +100,7 @@ async function SelectAssetsControl(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://192.168.1.108:32001/api/AutoDeapartMent', {
+  return fetch('http://similan:32001/api/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -112,7 +112,7 @@ async function AutoDeapartMent(credentials) {
 }
 
 async function Store_FA_control_create_doc(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_create_doc', {
+  return fetch('http://similan:32001/api/store_FA_control_create_doc', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -124,7 +124,7 @@ async function Store_FA_control_create_doc(credentials) {
 }
 
 async function store_FA_control_creat_Detail(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_creat_Detail', {
+  return fetch('http://similan:32001/api/store_FA_control_creat_Detail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -136,7 +136,7 @@ async function store_FA_control_creat_Detail(credentials) {
 }
 
 async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_CheckAssetCode_Process', {
+  return fetch('http://similan:32001/api/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -159,10 +159,13 @@ export default function Nac_Main() {
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
-  const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "",  date_asset: "",dtl: "", count: "", price: "" }]);
-  const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "",  date_asset: "",dtl: "", count: "", price: "" }])
-  console.log(serviceList_Main)
-  const result = serviceList.reduce((total, serviceList) => total = total + serviceList.price * serviceList.count, 0);
+  const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
+  const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }])
+  const result = serviceList.map(function (elt) {
+    return /^\d+$/.test(elt.price * elt.count) ? parseInt(elt.price * elt.count) : 0;
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
   const navigate = useNavigate();
   const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
@@ -213,7 +216,7 @@ export default function Nac_Main() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://192.168.1.108:32001/api/getsUserForAssetsControl"
+      "http://similan:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []
@@ -240,7 +243,7 @@ export default function Nac_Main() {
   }, []);
 
   const handleServiceAdd = () => {
-    setServiceList([...serviceList, { assetsCode: "", serialNo: "", name: "",  date_asset: "",dtl: "", count: "", price: "" }]);
+    setServiceList([...serviceList, { assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
     setServiceList_Main([...serviceList_Main, { assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
   };
 
@@ -264,10 +267,16 @@ export default function Nac_Main() {
   const handleServiceChangeHeader = async (e, index) => {
     const { name, value } = e.target;
     const assetsCodeSelect = e.target.innerText
-    const list = [...serviceList];
-    list[index][name] = value;
-    list[index]['assetsCode'] = assetsCodeSelect;
-    if (list[index]['assetsCode'] === null || list[index]['assetsCode'] === undefined) {
+    const nacdtl_assetsCode = e.target.innerText
+    const responseCheckAssetCode_Process = await store_FA_control_CheckAssetCode_Process({
+      nacdtl_assetsCode
+    });
+    if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
+      swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "warning", {
+        buttons: false,
+        timer: 2000,
+      })
+      const list = [...serviceList];
       list[index]['assetsCode'] = ''
       list[index]['name'] = ''
       list[index]['dtl'] = ''
@@ -276,26 +285,7 @@ export default function Nac_Main() {
       list[index]['price'] = ''
       list[index]['date_asset'] = ''
       setServiceList(list);
-    } else {
-      const Code = list[index]['assetsCode'];
-      const response = await SelectDTL_Control({
-        Code
-      });
-      if (response['data'].length !== 0) {
-        list[index]['name'] = response['data'][0].Name
-        list[index]['dtl'] = response['data'][0].Details
-        list[index]['count'] = 1
-        list[index]['serialNo'] = response['data'][0].SerialNo
-        list[index]['price'] = response['data'][0].Price
-        list[index]['date_asset'] = response['data'][0].CreateDate
-        setServiceList(list);
-      }
-    }
-
-    const list_main = [...serviceList_Main];
-    list_main[index][name] = value;
-    list_main[index]['assetsCode'] = assetsCodeSelect;
-    if (list[index]['assetsCode'] === null || list[index]['assetsCode'] === undefined) {
+      const list_main = [...serviceList_Main];
       list_main[index]['assetsCode'] = ''
       list_main[index]['name'] = ''
       list_main[index]['dtl'] = ''
@@ -305,18 +295,60 @@ export default function Nac_Main() {
       list_main[index]['date_asset'] = ''
       setServiceList_Main(list_main);
     } else {
-      const Code = list[index]['assetsCode'];
-      const response = await SelectDTL_Control({
-        Code
-      });
-      if (response['data'].length !== 0) {
-        list_main[index]['name'] = response['data'][0].Name
-        list_main[index]['dtl'] = response['data'][0].Details
-        list_main[index]['count'] = 1
-        list_main[index]['serialNo'] = response['data'][0].SerialNo
-        list_main[index]['price'] = response['data'][0].Price
-        list_main[index]['date_asset'] = response['data'][0].CreateDate
+      const list = [...serviceList];
+      list[index][name] = value;
+      list[index]['assetsCode'] = assetsCodeSelect;
+      if (list[index]['assetsCode'] === null || list[index]['assetsCode'] === undefined) {
+        list[index]['assetsCode'] = ''
+        list[index]['name'] = ''
+        list[index]['dtl'] = ''
+        list[index]['count'] = ''
+        list[index]['serialNo'] = ''
+        list[index]['price'] = ''
+        list[index]['date_asset'] = ''
+        setServiceList(list);
+      } else {
+        const Code = list[index]['assetsCode'];
+        const response = await SelectDTL_Control({
+          Code
+        });
+        if (response['data'].length !== 0) {
+          list[index]['name'] = response['data'][0].Name
+          list[index]['dtl'] = response['data'][0].Details
+          list[index]['count'] = 1
+          list[index]['serialNo'] = response['data'][0].SerialNo
+          list[index]['price'] = response['data'][0].Price
+          list[index]['date_asset'] = response['data'][0].CreateDate
+          setServiceList(list);
+        }
+      }
+
+      const list_main = [...serviceList_Main];
+      list_main[index][name] = value;
+      list_main[index]['assetsCode'] = assetsCodeSelect;
+      if (list[index]['assetsCode'] === null || list[index]['assetsCode'] === undefined) {
+        list_main[index]['assetsCode'] = ''
+        list_main[index]['name'] = ''
+        list_main[index]['dtl'] = ''
+        list_main[index]['count'] = ''
+        list_main[index]['serialNo'] = ''
+        list_main[index]['price'] = ''
+        list_main[index]['date_asset'] = ''
         setServiceList_Main(list_main);
+      } else {
+        const Code = list[index]['assetsCode'];
+        const response = await SelectDTL_Control({
+          Code
+        });
+        if (response['data'].length !== 0) {
+          list_main[index]['name'] = response['data'][0].Name
+          list_main[index]['dtl'] = response['data'][0].Details
+          list_main[index]['count'] = 1
+          list_main[index]['serialNo'] = response['data'][0].SerialNo
+          list_main[index]['price'] = response['data'][0].Price
+          list_main[index]['date_asset'] = response['data'][0].CreateDate
+          setServiceList_Main(list_main);
+        }
       }
     }
   };
@@ -375,9 +407,9 @@ export default function Nac_Main() {
       }
       else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
-        if(response.data[0].branchid !=901){
+        if (response.data[0].branchid != 901) {
           setSource_BU('Oil')
-        }else{
+        } else {
           setSource_BU('Center')
         }
       }
@@ -470,9 +502,9 @@ export default function Nac_Main() {
       }
       else if (response.data[0].DepID === 3) {
         setDes_Department('ROD')
-        if(response.data[0].branchid !=901){
+        if (response.data[0].branchid != 901) {
           setDes_BU('Oil')
-        }else{
+        } else {
           setDes_BU('Center')
         }
       }
@@ -526,9 +558,9 @@ export default function Nac_Main() {
   const handleNext = async () => {
     if (!source || !source_Department || !source_BU || !sourceDate) {
       swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        buttons: false,
+        timer: 2000,
+      })
     } else {
       if (!serviceList[0].assetsCode) {
         swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
@@ -586,16 +618,16 @@ export default function Nac_Main() {
               });
             } else {
               swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error", {
-          buttons: false,
-          timer: 2000,
-        })
+                buttons: false,
+                timer: 2000,
+              })
             }
           }
         } else {
           swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error", {
-          buttons: false,
-          timer: 2000,
-        })
+            buttons: false,
+            timer: 2000,
+          })
         }
       }
     }
@@ -955,7 +987,6 @@ export default function Nac_Main() {
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-                                
                                 fullWidth
                                 disabled
                                 variant="standard"
@@ -964,7 +995,6 @@ export default function Nac_Main() {
                               />
                               <TextField
                                 fullWidth
-                                
                                 key={index}
                                 name="serialNo"
                                 id="serialNo"
@@ -976,7 +1006,6 @@ export default function Nac_Main() {
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-                                
                                 fullWidth
                                 disabled
                                 variant="standard"
@@ -984,7 +1013,6 @@ export default function Nac_Main() {
                                 value={serviceList_Main[index].name}
                               />
                               <TextField
-                                
                                 fullWidth
                                 key={index}
                                 name="name"
@@ -997,7 +1025,6 @@ export default function Nac_Main() {
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-                                
                                 fullWidth
                                 disabled
                                 variant="standard"
@@ -1005,7 +1032,6 @@ export default function Nac_Main() {
                                 value={!serviceList_Main[index].date_asset ? '' : serviceList_Main[index].date_asset.split('T')[0]}
                               />
                               <TextField
-                                
                                 fullWidth
                                 key={index}
                                 name="date_asset"
@@ -1017,7 +1043,6 @@ export default function Nac_Main() {
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-                                
                                 fullWidth
                                 disabled
                                 variant="standard"
@@ -1025,7 +1050,6 @@ export default function Nac_Main() {
                                 value={serviceList_Main[index].dtl}
                               />
                               <TextField
-                                
                                 fullWidth
                                 key={index}
                                 name="dtl"
@@ -1038,7 +1062,6 @@ export default function Nac_Main() {
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-                                
                                 fullWidth
                                 disabled
                                 variant="standard"
@@ -1049,7 +1072,6 @@ export default function Nac_Main() {
                               <TextField
                                 fullWidth
                                 key={index}
-                                
                                 name="count"
                                 id="count"
                                 type='number'
@@ -1061,7 +1083,7 @@ export default function Nac_Main() {
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-                                
+
                                 fullWidth
                                 disabled
                                 inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
@@ -1070,7 +1092,7 @@ export default function Nac_Main() {
                                 value={(!serviceList_Main[index].price ? serviceList_Main[index].price : (serviceList_Main[index].price).toLocaleString())}
                               />
                               <TextField
-                                
+
                                 fullWidth
                                 key={index}
                                 name="price"
@@ -1112,7 +1134,7 @@ export default function Nac_Main() {
                             required
                             fullWidth
                             type={valuesVisibility.showText ? "text" : "password"}
-                            value={result.toLocaleString() === 0 ? '' : result.toLocaleString()}
+                            value={result === 0 ? '' : result.toLocaleString()}
                             inputProps={{ style: { textAlign: 'center' } }}
                             InputProps={{
                               endAdornment: (
@@ -1279,7 +1301,7 @@ export default function Nac_Main() {
                     <Button
                       variant="contained"
                       onClick={handleNext}
-                      endIcon={<BorderColorRoundedIcon/>}
+                      endIcon={<BorderColorRoundedIcon />}
                       sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 2 } }}
                     >
                       สร้างเอกสาร

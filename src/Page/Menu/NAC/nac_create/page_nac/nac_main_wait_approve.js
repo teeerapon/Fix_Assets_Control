@@ -81,7 +81,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function store_FA_control_select_dtl(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_select_dtl', {
+  return fetch('http://similan:32001/api/store_FA_control_select_dtl', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -93,7 +93,7 @@ async function store_FA_control_select_dtl(credentials) {
 }
 
 async function store_FA_control_select_headers(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_select_headers', {
+  return fetch('http://similan:32001/api/store_FA_control_select_headers', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -105,7 +105,7 @@ async function store_FA_control_select_headers(credentials) {
 }
 
 async function SelectDTL_Control(credentials) {
-  return fetch('http://192.168.1.108:32001/api/SelectDTL_Control', {
+  return fetch('http://similan:32001/api/SelectDTL_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -116,7 +116,7 @@ async function SelectDTL_Control(credentials) {
 }
 
 async function SelectAssetsControl(credentials) {
-  return fetch('http://192.168.1.108:32001/api/AssetsAll_Control', {
+  return fetch('http://similan:32001/api/AssetsAll_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -127,7 +127,7 @@ async function SelectAssetsControl(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://192.168.1.108:32001/api/AutoDeapartMent', {
+  return fetch('http://similan:32001/api/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -149,7 +149,7 @@ const filterOptions2 = createFilterOptions({
 });
 
 async function store_FA_control_update_DTLandHeaders(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_update_DTLandHeaders', {
+  return fetch('http://similan:32001/api/store_FA_control_update_DTLandHeaders', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -161,7 +161,7 @@ async function store_FA_control_update_DTLandHeaders(credentials) {
 }
 
 async function store_FA_control_update_DTL(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_update_DTL', {
+  return fetch('http://similan:32001/api/store_FA_control_update_DTL', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -173,7 +173,7 @@ async function store_FA_control_update_DTL(credentials) {
 }
 
 async function store_FA_control_execDocID(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_execDocID', {
+  return fetch('http://similan:32001/api/store_FA_control_execDocID', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -185,7 +185,7 @@ async function store_FA_control_execDocID(credentials) {
 }
 
 async function store_FA_control_updateStatus(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_updateStatus', {
+  return fetch('http://similan:32001/api/store_FA_control_updateStatus', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -197,7 +197,7 @@ async function store_FA_control_updateStatus(credentials) {
 }
 
 async function store_FA_control_comment(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_comment', {
+  return fetch('http://similan:32001/api/store_FA_control_comment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -209,7 +209,7 @@ async function store_FA_control_comment(credentials) {
 }
 
 async function ChackUserWeb(credentials) {
-  return fetch('http://192.168.1.108:32001/api/ChackUserWeb', {
+  return fetch('http://similan:32001/api/ChackUserWeb', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -221,7 +221,7 @@ async function ChackUserWeb(credentials) {
 }
 
 async function store_FA_control_upadate_table(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_upadate_table', {
+  return fetch('http://similan:32001/api/store_FA_control_upadate_table', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -233,7 +233,19 @@ async function store_FA_control_upadate_table(credentials) {
 }
 
 async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
-  return fetch('http://192.168.1.108:32001/api/stroe_FA_control_DTL_ConfirmSuccess', {
+  return fetch('http://similan:32001/api/stroe_FA_control_DTL_ConfirmSuccess', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
+async function store_FA_control_CheckAssetCode_Process(credentials) {
+  return fetch('http://similan:32001/api/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -258,7 +270,11 @@ export default function Nac_Main_wait() {
 
   const navigate = useNavigate();
   const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: "" }]);
-  const sum_price = serviceList.reduce((total, serviceList) => total = total + serviceList.price * serviceList.count, 0);
+  const sum_price = serviceList.map( function(elt){
+    return /^\d+$/.test(elt.price*elt.count) ? parseInt(elt.price*elt.count)  : 0; 
+  }).reduce( function(a,b){ // sum all resulting numbers
+    return a+b
+  })
   const data = JSON.parse(localStorage.getItem('data'));
   const data_nac = JSON.parse(localStorage.getItem('NacCode'));
   const nac_code = data_nac.nac_code
@@ -326,7 +342,7 @@ export default function Nac_Main_wait() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://192.168.1.108:32001/api/getsUserForAssetsControl"
+      "http://similan:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []
@@ -512,10 +528,17 @@ export default function Nac_Main_wait() {
   const handleServiceChangeHeader = async (e, index) => {
     const { name, value } = e.target;
     const assetsCodeSelect = e.target.innerText
-    const list = [...serviceList];
-    list[index][name] = value;
-    list[index]['assetsCode'] = assetsCodeSelect;
-    if ((list[index]['assetsCode'] === null) || (list[index]['assetsCode'] === undefined)) {
+    const nacdtl_assetsCode = e.target.innerText
+    const responseCheckAssetCode_Process = await store_FA_control_CheckAssetCode_Process({
+      nacdtl_assetsCode
+    });
+    if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
+      swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "warning", {
+        buttons: false,
+        timer: 2000,
+      })
+      const list = [...serviceList];
+      list[index]['assetsCode'] = ''
       list[index]['name'] = ''
       list[index]['dtl'] = ''
       list[index]['count'] = ''
@@ -524,18 +547,31 @@ export default function Nac_Main_wait() {
       list[index]['date_asset'] = ''
       setServiceList(list);
     } else {
-      const Code = list[index]['assetsCode'];
-      const response = await SelectDTL_Control({
-        Code
-      });
-      if (response['data'].length !== 0) {
-        list[index]['name'] = response['data'][0].Name
-        list[index]['dtl'] = response['data'][0].Details
-        list[index]['count'] = 1
-        list[index]['serialNo'] = response['data'][0].SerialNo
-        list[index]['price'] = response['data'][0].Price
-        list[index]['date_asset'] = response['data'][0].CreateDate
+      const list = [...serviceList];
+      list[index][name] = value;
+      list[index]['assetsCode'] = assetsCodeSelect;
+      if ((list[index]['assetsCode'] === null) || (list[index]['assetsCode'] === undefined)) {
+        list[index]['name'] = ''
+        list[index]['dtl'] = ''
+        list[index]['count'] = ''
+        list[index]['serialNo'] = ''
+        list[index]['price'] = ''
+        list[index]['date_asset'] = ''
         setServiceList(list);
+      } else {
+        const Code = list[index]['assetsCode'];
+        const response = await SelectDTL_Control({
+          Code
+        });
+        if (response['data'].length !== 0) {
+          list[index]['name'] = response['data'][0].Name
+          list[index]['dtl'] = response['data'][0].Details
+          list[index]['count'] = 1
+          list[index]['serialNo'] = response['data'][0].SerialNo
+          list[index]['price'] = response['data'][0].Price
+          list[index]['date_asset'] = response['data'][0].CreateDate
+          setServiceList(list);
+        }
       }
     }
   };
@@ -1194,12 +1230,6 @@ export default function Nac_Main_wait() {
         verify_date,
       });
       if ('data' in responseForUpdate) {
-        const comment = nac_status === 14 ? 'ไม่พบทรัพย์สินบางอย่าง ในรายการ ' + responseForUpdate.data[0].nac_code + ' อยู่ระหว่างรออัปเดต' : 'อัปเดตรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
-        await store_FA_control_comment({
-          nac_code,
-          usercode,
-          comment
-        })
         for (let i = 0; i < checked.length; i++) {
           const usercode = data.UserCode
           const nacdtl_assetsCode = checked[i].assets_code
@@ -1233,94 +1263,101 @@ export default function Nac_Main_wait() {
     for (let i = 0; i < checked.length; i++) {
       checkFullChecked[i] = checked[i].statusCheck
     }
-    if (selectNAC === 4 || selectNAC === 5) {
-      const usercode = data.UserCode
-      const nac_status = ((selectNAC === 4 || selectNAC === 14) && checkFullChecked.includes(0) === true) ? 14 : ((selectNAC === 4 || selectNAC === 14) && checkFullChecked.includes(0) === false) ? 5 : 6
-      const source_approve = headers.source_approve_userid
-      const source_approve_date = headers.source_approve_date
-      const des_delivery = selectNAC === 4 ? data.UserCode : headers.des_userid
-      const des_deliveryDate = selectNAC === 4 ? datenow : headers.des_date
-      const verify_by = headers.verify_by_userid
-      const verify_date = headers.verify_date
-      const nac_type = headers.nac_type
-      const des_approve = null
-      const des_approve_date = null
-      const responseForUpdate = await store_FA_control_updateStatus({
-        usercode,
-        nac_code,
-        nac_status,
-        nac_type,
-        source,
-        sourceDate,
-        des_delivery,
-        des_deliveryDate,
-        source_approve,
-        source_approve_date,
-        des_approve,
-        des_approve_date,
-        verify_by,
-        verify_date,
-      });
-      if ('data' in responseForUpdate) {
-        const comment = selectNAC === 4 ? 'ยืนยันรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว' : 'ปิดรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
-        const responseComment = await store_FA_control_comment({
-          nac_code,
-          usercode,
-          comment
+    if (selectNAC === 4 || selectNAC === 5 || selectNAC === 14) {
+      if (checkFullChecked.includes(0) === true){
+        swal("แจ้งเตือน", 'มีทรัพย์สินบางรายการที่ยังไม่ได้รับ กรุณาลองใหม่อีกครั้ง', "warning", {
+          buttons: false,
+          timer: 2000,
         })
-        if ('data' in responseComment) {
-          if (nac_status === 5) {
-            for (let i = 0; i < checked.length; i++) {
-              const usercode = data.UserCode
-              const nacdtl_assetsCode = checked[i].assets_code
-              const asset_id = checked[i].asset_id
-              const statusCheck = checked[i].statusCheck
-              await stroe_FA_control_DTL_ConfirmSuccess({
-                nac_code,
-                usercode,
-                nacdtl_assetsCode,
-                asset_id,
-                statusCheck,
-              })
+      }else{
+        const usercode = data.UserCode
+        const nac_status = ((selectNAC === 4 || selectNAC === 14) && checkFullChecked.includes(0) === true) ? 14 : ((selectNAC === 4 || selectNAC === 14) && checkFullChecked.includes(0) === false) ? 5 : 6
+        const source_approve = headers.source_approve_userid
+        const source_approve_date = headers.source_approve_date
+        const des_delivery = selectNAC === 4 ? data.UserCode : headers.des_userid
+        const des_deliveryDate = selectNAC === 4 ? datenow : headers.des_date
+        const verify_by = headers.verify_by_userid
+        const verify_date = headers.verify_date
+        const nac_type = headers.nac_type
+        const des_approve = null
+        const des_approve_date = null
+        const responseForUpdate = await store_FA_control_updateStatus({
+          usercode,
+          nac_code,
+          nac_status,
+          nac_type,
+          source,
+          sourceDate,
+          des_delivery,
+          des_deliveryDate,
+          source_approve,
+          source_approve_date,
+          des_approve,
+          des_approve_date,
+          verify_by,
+          verify_date,
+        });
+        if ('data' in responseForUpdate) {
+          const comment = selectNAC === 4 ? 'ยืนยันรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว' : 'ปิดรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+          const responseComment = await store_FA_control_comment({
+            nac_code,
+            usercode,
+            comment
+          })
+          if ('data' in responseComment) {
+            if (nac_status === 5) {
+              for (let i = 0; i < checked.length; i++) {
+                const usercode = data.UserCode
+                const nacdtl_assetsCode = checked[i].assets_code
+                const asset_id = checked[i].asset_id
+                const statusCheck = checked[i].statusCheck
+                await stroe_FA_control_DTL_ConfirmSuccess({
+                  nac_code,
+                  usercode,
+                  nacdtl_assetsCode,
+                  asset_id,
+                  statusCheck,
+                })
+              }
             }
+            else if (nac_status === 6 && checkFullChecked.includes(0) === false) {
+              for (let i = 0; i < serviceList.length; i++) {
+                const usercode = data.UserCode
+                const nacdtl_assetsCode = serviceList[i].assetsCode
+                const asset_id = serviceList[i].asset_id
+                console.log(usercode, nacdtl_assetsCode, asset_id, nac_status, nac_type, nac_code,);
+                await store_FA_control_upadate_table({
+                  nac_code,
+                  usercode,
+                  nacdtl_assetsCode,
+                  asset_id,
+                  nac_type,
+                  nac_status,
+                })
+              }
+            }
+            swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ยืนยันรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+              buttons: false,
+              timer: 2000,
+            }).then((value) => {
+              if (checkUserWeb === 'admin') {
+                navigate('/NAC_OPERATOR')
+              } else {
+                navigate('/NAC_ROW')
+              }
+            });
+          } else {
+            swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+              buttons: false,
+              timer: 2000,
+            }).then((value) => {
+              if (checkUserWeb === 'admin') {
+                navigate('/NAC_OPERATOR')
+              } else {
+                navigate('/NAC_ROW')
+              }
+            });
           }
-          else if (nac_status === 6 && checkFullChecked.includes(0) === false) {
-            for (let i = 0; i < serviceList.length; i++) {
-              const usercode = data.UserCode
-              const nacdtl_assetsCode = serviceList[i].assetsCode
-              const asset_id = serviceList[i].asset_id
-              console.log(usercode, nacdtl_assetsCode, asset_id, nac_status, nac_type, nac_code,);
-              await store_FA_control_upadate_table({
-                nac_code,
-                usercode,
-                nacdtl_assetsCode,
-                asset_id,
-                nac_type,
-                nac_status,
-              })
-            }
-          }
-          swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ยืนยันรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
-            if (checkUserWeb === 'admin') {
-              navigate('/NAC_OPERATOR')
-            } else {
-              navigate('/NAC_ROW')
-            }
-          });
-        } else {
-          swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
-            if (checkUserWeb === 'admin') {
-              navigate('/NAC_OPERATOR')
-            } else {
-              navigate('/NAC_ROW')
-            }
-          });
         }
       }
     } else {
@@ -2160,7 +2197,7 @@ export default function Nac_Main_wait() {
                               fullWidth
                               type={valuesVisibility.showText ? "text" : "password"}
                               inputProps={{ style: { textAlign: 'center' } }}
-                              value={sum_price.toLocaleString() === 0 ? '' : sum_price.toLocaleString()}
+                              value={sum_price === 0 ? '' : sum_price.toLocaleString()}
                               InputProps={{
                                 endAdornment: (
                                   <InputAdornment position="start">
@@ -2429,7 +2466,7 @@ export default function Nac_Main_wait() {
                         <Grid container>
                           <Grid item xs>
                           </Grid>
-                          <Grid item xs={2}>
+                          {/* <Grid item xs={2}>
                             <Button
                               variant="contained"
                               color='error'
@@ -2439,7 +2476,7 @@ export default function Nac_Main_wait() {
                               onClick={noneAssetsComplete}>
                               ไม่รับทรัพย์สิน
                             </Button>
-                          </Grid>
+                          </Grid> */}
                           <Grid item xs={2}>
                             <Button
                               variant="contained"

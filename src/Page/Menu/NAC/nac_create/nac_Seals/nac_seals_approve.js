@@ -80,7 +80,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function store_FA_control_select_dtl(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_select_dtl', {
+  return fetch('http://similan:32001/api/store_FA_control_select_dtl', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -92,7 +92,7 @@ async function store_FA_control_select_dtl(credentials) {
 }
 
 async function store_FA_control_select_headers(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_select_headers', {
+  return fetch('http://similan:32001/api/store_FA_control_select_headers', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -104,7 +104,7 @@ async function store_FA_control_select_headers(credentials) {
 }
 
 async function SelectDTL_Control(credentials) {
-  return fetch('http://192.168.1.108:32001/api/SelectDTL_Control', {
+  return fetch('http://similan:32001/api/SelectDTL_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -115,7 +115,7 @@ async function SelectDTL_Control(credentials) {
 }
 
 async function SelectAssetsControl(credentials) {
-  return fetch('http://192.168.1.108:32001/api/AssetsAll_Control', {
+  return fetch('http://similan:32001/api/AssetsAll_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -126,7 +126,7 @@ async function SelectAssetsControl(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://192.168.1.108:32001/api/AutoDeapartMent', {
+  return fetch('http://similan:32001/api/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -148,7 +148,7 @@ const filterOptions2 = createFilterOptions({
 });
 
 async function store_FA_control_update_DTLandHeaders(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_update_DTLandHeaders', {
+  return fetch('http://similan:32001/api/store_FA_control_update_DTLandHeaders', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -160,7 +160,7 @@ async function store_FA_control_update_DTLandHeaders(credentials) {
 }
 
 async function store_FA_control_update_DTL(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_update_DTL', {
+  return fetch('http://similan:32001/api/store_FA_control_update_DTL', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -172,7 +172,7 @@ async function store_FA_control_update_DTL(credentials) {
 }
 
 async function store_FA_control_execDocID(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_execDocID', {
+  return fetch('http://similan:32001/api/store_FA_control_execDocID', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -184,7 +184,7 @@ async function store_FA_control_execDocID(credentials) {
 }
 
 async function store_FA_control_updateStatus(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_updateStatus', {
+  return fetch('http://similan:32001/api/store_FA_control_updateStatus', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -196,7 +196,7 @@ async function store_FA_control_updateStatus(credentials) {
 }
 
 // async function store_FA_control_seals_update(credentials) {
-//   return fetch('http://192.168.1.108:32001/api/store_FA_control_seals_update', {
+//   return fetch('http://similan:32001/api/store_FA_control_seals_update', {
 //     method: 'POST',
 //     headers: {
 //       'Content-Type': 'application/json; charset=utf-8',
@@ -208,7 +208,7 @@ async function store_FA_control_updateStatus(credentials) {
 // }
 
 async function store_FA_control_updateDTL_seals(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_updateDTL_seals', {
+  return fetch('http://similan:32001/api/store_FA_control_updateDTL_seals', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -220,7 +220,7 @@ async function store_FA_control_updateDTL_seals(credentials) {
 }
 
 async function store_FA_control_comment(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_comment', {
+  return fetch('http://similan:32001/api/store_FA_control_comment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -232,7 +232,7 @@ async function store_FA_control_comment(credentials) {
 }
 
 async function ChackUserWeb(credentials) {
-  return fetch('http://192.168.1.108:32001/api/ChackUserWeb', {
+  return fetch('http://similan:32001/api/ChackUserWeb', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -244,7 +244,7 @@ async function ChackUserWeb(credentials) {
 }
 
 async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_CheckAssetCode_Process', {
+  return fetch('http://similan:32001/api/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -256,7 +256,7 @@ async function store_FA_control_CheckAssetCode_Process(credentials) {
 }
 
 async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
-  return fetch('http://192.168.1.108:32001/api/stroe_FA_control_DTL_ConfirmSuccess', {
+  return fetch('http://similan:32001/api/stroe_FA_control_DTL_ConfirmSuccess', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -268,7 +268,7 @@ async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
 }
 
 async function store_FA_control_upadate_table(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_upadate_table', {
+  return fetch('http://similan:32001/api/store_FA_control_upadate_table', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -325,6 +325,27 @@ export default function Nac_Seals_Approve() {
     showText: false,
   });
 
+  const result = serviceList.map(function (elt) {
+    return /^\d+$/.test(elt.price) ? parseInt(elt.price) : 0;
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+  const book_V = serviceList.map(function (elt) {
+    return /^\d+$/.test(elt.bookValue) ? parseInt(elt.bookValue) : 0;
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+  const price_seals = serviceList.map(function (elt) {
+    return /^\d+$/.test(elt.priceSeals) ? parseInt(elt.priceSeals) : 0;
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+  const profit_seals = serviceList.map(function (elt) {
+    return /^\d+$/.test(elt.priceSeals - elt.bookValue) ? parseInt(elt.priceSeals - elt.bookValue) : 0;
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+
   // สำหรับหาค่า Index ของ UserCode of Auto Complete
   let resultIndex = []
   for (let i = 0; i < UserForAssetsControl.length; i++) {
@@ -364,7 +385,7 @@ export default function Nac_Seals_Approve() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://192.168.1.108:32001/api/getsUserForAssetsControl"
+      "http://similan:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []
@@ -567,7 +588,16 @@ export default function Nac_Seals_Approve() {
         timer: 2000,
       })
       const list = [...serviceList];
-      list.splice(index, 1);
+      list[index]['assetsCode'] = ''
+      list[index]['name'] = ''
+      list[index]['dtl'] = ''
+      list[index]['count'] = ''
+      list[index]['serialNo'] = ''
+      list[index]['price'] = ''
+      list[index]['bookValue'] = ''
+      list[index]['priceSeals'] = ''
+      list[index]['profit'] = ''
+      list[index]['date_asset'] = ''
       setServiceList(list);
     } else {
       const list = [...serviceList];
@@ -654,9 +684,9 @@ export default function Nac_Seals_Approve() {
       }
       else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
-        if(response.data[0].branchid !=901){
+        if (response.data[0].branchid != 901) {
           setSource_BU('Oil')
-        }else{
+        } else {
           setSource_BU('Center')
         }
       }
@@ -1293,7 +1323,9 @@ export default function Nac_Seals_Approve() {
           new_Price,
         });
         if ('data' in responseForUpdate) {
-          const comment = selectNAC === 4 ? 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว' : 'ปิดรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+          const comment = selectNAC === 4 ? 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+            : (selectNAC === 99 || selectNAC === 13) ? 'ทำการแนบเอกสาร ในรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+              : 'ปิดรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
           const responseComment = await store_FA_control_comment({
             nac_code,
             usercode,
@@ -1331,7 +1363,9 @@ export default function Nac_Seals_Approve() {
                 })
               }
             }
-            swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+            swal("ทำรายการสำเร็จ", selectNAC === 4 ? 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+            : (selectNAC === 99 || selectNAC === 13) ? 'ทำการแนบเอกสาร ในรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+              : 'ปิดรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
@@ -1874,6 +1908,7 @@ export default function Nac_Seals_Approve() {
                             <IconButton
                               size="large"
                               color='primary'
+                              disabled={(selectNAC === 1) ? false : true}
                               onClick={handleServiceAdd}
                             >
                               <AddBoxIcon />
@@ -2044,60 +2079,64 @@ export default function Nac_Seals_Approve() {
                           </TableBody>
                         </React.Fragment>
                       ))}
+                      <StyledTableRow>
+                        <StyledTableCell align="start" style={{ "borderWidth": "1px", 'border-right': 0 }}>
+                          <Typography>
+                            รวมทั้งหมด
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="start" style={{ border: `none` }}>
+                        </StyledTableCell>
+                        <StyledTableCell align="start" style={{ border: `none` }}>
+                        </StyledTableCell>
+                        <StyledTableCell align="start" style={{ border: `none` }}>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                          <TextField
+                            required
+                            fullWidth
+                            type={valuesVisibility.showText ? "text" : "password"}
+                            value={result === 0 ? '' : result.toLocaleString()}
+                            inputProps={{ style: { textAlign: 'center' } }}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                          <TextField
+                            required
+                            fullWidth
+                            type={valuesVisibility.showText ? "text" : "password"}
+                            value={book_V === 0 ? '' : book_V.toLocaleString()}
+                            inputProps={{ style: { textAlign: 'center' } }}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                          <TextField
+                            required
+                            fullWidth
+                            type={valuesVisibility.showText ? "text" : "password"}
+                            value={price_seals === 0 ? '' : price_seals.toLocaleString()}
+                            inputProps={{ style: { textAlign: 'center' } }}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                          <TextField
+                            required
+                            fullWidth
+                            type={valuesVisibility.showText ? "text" : "password"}
+                            value={profit_seals === 0 ? '' : profit_seals.toLocaleString()}
+                            inputProps={{ style: { textAlign: 'center' } }}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                        </StyledTableCell>
+                      </StyledTableRow>
                     </Table>
                     <Table aria-label="customized table" style={{ width: '100%' }}>
                       <TableBody>
-                        <StyledTableRow>
-                          <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '64.3%' }}>
-                            <Typography>
-                              มูลค่ารวมทั้งหมด
-                            </Typography>
-                          </StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                            <TextField
-                              required
-                              fullWidth
-                              type={valuesVisibility.showText ? "text" : "password"}
-                              inputProps={{ style: { textAlign: 'center', color: 'black' } }}
-                              value={sum_price.toLocaleString() === 0 ? '' : sum_price.toLocaleString()}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="start">
-                                    <Typography color="black">
-                                      บาท
-                                    </Typography>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              variant="standard"
-                            />
-                          </StyledTableCell>
-                        </StyledTableRow>
-                        <StyledTableRow>
-                          <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                            <Typography>
-                              ราคาขายรวมทั้งหมด
-                            </Typography>
-                          </StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                            <TextField
-                              required
-                              fullWidth
-                              inputProps={{ style: { textAlign: 'center' } }}
-                              value={priceSeals.toLocaleString() === 0 ? '' : priceSeals.toLocaleString()}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="start">
-                                    <Typography color="black">
-                                      บาท
-                                    </Typography>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              variant="standard"
-                            />
-                          </StyledTableCell>
-                        </StyledTableRow>
                         {(selectNAC !== 12 && !headers.real_price) || ((selectNAC > 7 && selectNAC < 2) && headers.real_price !== undefined) ? (
                           <React.Fragment>
                             {/* ค่าว่าง */}
@@ -2105,7 +2144,7 @@ export default function Nac_Seals_Approve() {
                         ) : (
                           <React.Fragment>
                             <StyledTableRow>
-                              <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '53.1%' }}>
                                 <Typography>
                                   ราคาขายจริงรวมทั้งหมด
                                 </Typography>
@@ -2194,7 +2233,7 @@ export default function Nac_Seals_Approve() {
                                       </InputAdornment>
                                       <InputAdornment position="start">
                                         {
-                                          ExamineApprove.map((Approve,index) => (
+                                          ExamineApprove.map((Approve, index) => (
                                             <Typography style={{ 'color': 'black' }}>
                                               {Approve.status === 1 ? '[' + [CheckExamineApprove[index]] + ']' : ''}
                                             </Typography>

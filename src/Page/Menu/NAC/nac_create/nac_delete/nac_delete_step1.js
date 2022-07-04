@@ -78,7 +78,7 @@ const filterOptions2 = createFilterOptions({
 });
 
 async function SelectDTL_Control(credentials) {
-  return fetch('http://192.168.1.108:32001/api/SelectDTL_Control', {
+  return fetch('http://similan:32001/api/SelectDTL_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -89,7 +89,7 @@ async function SelectDTL_Control(credentials) {
 }
 
 async function SelectAssetsControl(credentials) {
-  return fetch('http://192.168.1.108:32001/api/AssetsAll_Control', {
+  return fetch('http://similan:32001/api/AssetsAll_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -100,7 +100,7 @@ async function SelectAssetsControl(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://192.168.1.108:32001/api/AutoDeapartMent', {
+  return fetch('http://similan:32001/api/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -112,7 +112,7 @@ async function AutoDeapartMent(credentials) {
 }
 
 async function Store_FA_control_create_doc(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_create_doc', {
+  return fetch('http://similan:32001/api/store_FA_control_create_doc', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -124,7 +124,7 @@ async function Store_FA_control_create_doc(credentials) {
 }
 
 async function store_FA_control_creat_Detail(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_creat_Detail', {
+  return fetch('http://similan:32001/api/store_FA_control_creat_Detail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -136,7 +136,7 @@ async function store_FA_control_creat_Detail(credentials) {
 }
 
 async function store_FA_control_updateDTL_seals(credentials) {
-  return fetch('http://192.168.1.108:32001/api/store_FA_control_updateDTL_seals', {
+  return fetch('http://similan:32001/api/store_FA_control_updateDTL_seals', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -147,17 +147,17 @@ async function store_FA_control_updateDTL_seals(credentials) {
     .then(data => data.json())
 }
 
-// async function store_FA_control_CheckAssetCode_Process(credentials) {
-//   return fetch('http://192.168.1.108:32001/api/store_FA_control_CheckAssetCode_Process', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json; charset=utf-8',
-//       'Accept': 'application/json'
-//     },
-//     body: JSON.stringify(credentials)
-//   })
-//     .then(data => data.json())
-// }
+async function store_FA_control_CheckAssetCode_Process(credentials) {
+  return fetch('http://similan:32001/api/store_FA_control_CheckAssetCode_Process', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
 
 export default function Nac_Main() {
 
@@ -172,7 +172,6 @@ export default function Nac_Main() {
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
   const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
-  const result = serviceList.reduce((total, serviceList) => total = total + serviceList.price * serviceList.count, 0);
   const navigate = useNavigate();
   const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
@@ -184,6 +183,27 @@ export default function Nac_Main() {
     showText: false,
   });
   const nac_type = 4;
+
+  const result = serviceList.map( function(elt){
+    return /^\d+$/.test(elt.price) ? parseInt(elt.price)  : 0; 
+  }).reduce( function(a,b){ // sum all resulting numbers
+    return a+b
+  })
+  const book_V = serviceList.map( function(elt){
+    return /^\d+$/.test(elt.bookValue) ? parseInt(elt.bookValue)  : 0; 
+  }).reduce( function(a,b){ // sum all resulting numbers
+    return a+b
+  })
+  const price_seals = serviceList.map( function(elt){
+    return /^\d+$/.test(elt.priceSeals) ? parseInt(elt.priceSeals)  : 0; 
+  }).reduce( function(a,b){ // sum all resulting numbers
+    return a+b
+  })
+  const profit_seals = serviceList.map( function(elt){
+    return /^\d+$/.test(elt.priceSeals - elt.bookValue) ? parseInt(elt.priceSeals - elt.bookValue) : 0;
+  }).reduce( function(a,b){ // sum all resulting numbers
+    return a+b
+  })
 
 
   // const handleClickShowPassword = () => {
@@ -222,7 +242,7 @@ export default function Nac_Main() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://192.168.1.108:32001/api/getsUserForAssetsControl"
+      "http://similan:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []
@@ -268,10 +288,16 @@ export default function Nac_Main() {
   const handleServiceChangeHeader = async (e, index) => {
     const { name, value } = e.target;
     const assetsCodeSelect = e.target.innerText
-    const list = [...serviceList];
-    list[index][name] = value;
-    list[index]['assetsCode'] = assetsCodeSelect;
-    if (list[index]['assetsCode'] === null || list[index]['assetsCode'] === undefined) {
+    const nacdtl_assetsCode = e.target.innerText
+    const responseCheckAssetCode_Process = await store_FA_control_CheckAssetCode_Process({
+      nacdtl_assetsCode
+    });
+    if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
+      swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "warning", {
+          buttons: false,
+          timer: 2000,
+        })
+      const list = [...serviceList];
       list[index]['assetsCode'] = ''
       list[index]['name'] = ''
       list[index]['dtl'] = ''
@@ -281,24 +307,40 @@ export default function Nac_Main() {
       list[index]['bookValue'] = ''
       list[index]['priceSeals'] = ''
       list[index]['profit'] = ''
-      list[index]['date_asset'] = ''
+      list[index]['date_asset'] = ""
       setServiceList(list);
     } else {
-      const Code = list[index]['assetsCode'];
-      const response = await SelectDTL_Control({
-        Code
-      });
-      if (response['data'].length !== 0) {
-        list[index]['name'] = response['data'][0].Name
-        list[index]['dtl'] = response['data'][0].Details
-        list[index]['count'] = 1
-        list[index]['serialNo'] = response['data'][0].SerialNo
-        list[index]['price'] = response['data'][0].Price
+      const list = [...serviceList];
+      list[index][name] = value;
+      list[index]['assetsCode'] = assetsCodeSelect;
+      if ((list[index]['assetsCode'] === null) || (list[index]['assetsCode'] === undefined)) {
+        list[index]['name'] = ''
+        list[index]['dtl'] = ''
+        list[index]['count'] = ''
+        list[index]['serialNo'] = ''
+        list[index]['price'] = ''
         list[index]['bookValue'] = ''
-        list[index]['priceSeals'] = '0'
-        list[index]['profit'] = list[index]['priceSeals'] - list[index]['bookValue']
-        list[index]['date_asset'] = response['data'][0].CreateDate
+        list[index]['priceSeals'] = ''
+        list[index]['profit'] = ''
+        list[index]['date_asset'] = ""
         setServiceList(list);
+      } else {
+        const Code = list[index]['assetsCode'];
+        const response = await SelectDTL_Control({
+          Code
+        });
+        if (response['data'].length !== 0) {
+          list[index]['name'] = response['data'][0].Name
+          list[index]['dtl'] = response['data'][0].Details
+          list[index]['count'] = 1
+          list[index]['serialNo'] = response['data'][0].SerialNo
+          list[index]['price'] = response['data'][0].Price
+          list[index]['bookValue'] = ''
+          list[index]['priceSeals'] = ''
+          list[index]['profit'] = list[index]['priceSeals'] - list[index]['bookValue']
+          list[index]['date_asset'] = response['data'][0].CreateDate
+          setServiceList(list);
+        }
       }
     }
   };
@@ -509,7 +551,7 @@ export default function Nac_Main() {
       for (let i = 0; i < serviceList.length; i++) {
         checkValue_BV[i] = serviceList[i].priceSeals
       }
-      if (!serviceList[0].assetsCode || checkValue_BV.includes('') === true) {
+      if (!serviceList[0].assetsCode) {
         swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
           buttons: false,
           timer: 2000,
@@ -1000,7 +1042,7 @@ export default function Nac_Main() {
                                 fullWidth
                                 disabled
                                 key={index}
-                                value={serviceList[index].bookValue}
+                                value={!serviceList[index].bookValue ? '' : serviceList[index].bookValue.toLocaleString()}
                                 name="bookValue"
                                 id="bookValue"
                                 type={valuesVisibility.showText ? "text" : "password"}
@@ -1017,7 +1059,7 @@ export default function Nac_Main() {
                                 id="priceSeals"
                                 onChange={(e) => handleServiceChange(e, index)}
                                 type={valuesVisibility.showText ? "text" : "password"}
-                                value={serviceList[index].priceSeals}
+                                value={!serviceList[index].priceSeals ? '' : serviceList[index].priceSeals.toLocaleString()}
                                 inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
@@ -1029,7 +1071,7 @@ export default function Nac_Main() {
                                 key={index}
                                 name="profit"
                                 id="profit"
-                                value={serviceList[index].profit}
+                                value={!serviceList[index].profit ? '' : serviceList[index].priceSeals.toLocaleString()}
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
@@ -1051,36 +1093,61 @@ export default function Nac_Main() {
                         </TableBody>
                       </React.Fragment>
                     ))}
-                  </Table>
-                  <Table aria-label="customized table" style={{ width: '100%' }}>
-                    <TableBody>
-                      <StyledTableRow>
-                        <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '55%' }}>
-                          <Typography>
-                            มูลค่ารวมทั้งหมด
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '45%' }}>
-                          <TextField
-                            required
-                            fullWidth
-                            type={valuesVisibility.showText ? "text" : "password"}
-                            value={result.toLocaleString() === 0 ? '' : result.toLocaleString()}
-                            inputProps={{ style: { textAlign: 'center' } }}
-                            InputProps={{
-                              endAdornment: (
-                                <InputAdornment position="start">
-                                  <Typography color="black">
-                                    บาท
-                                  </Typography>
-                                </InputAdornment>
-                              ),
-                            }}
-                            variant="standard"
-                          />
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    </TableBody>
+                                        <StyledTableRow>
+                      <StyledTableCell align="start" style={{ "borderWidth": "1px", 'border-right': 0 }}>
+                        <Typography>
+                          รวมทั้งหมด
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell align="start" style={{ border: `none` }}>
+                      </StyledTableCell>
+                      <StyledTableCell align="start" style={{ border: `none` }}>
+                      </StyledTableCell>
+                      <StyledTableCell align="start" style={{ border: `none` }}>
+                      </StyledTableCell>
+                      <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                        <TextField
+                          required
+                          fullWidth
+                          type={valuesVisibility.showText ? "text" : "password"}
+                          value={result === 0 ? '' : result.toLocaleString()}
+                          inputProps={{ style: { textAlign: 'center' } }}
+                          variant="standard"
+                        />
+                      </StyledTableCell>
+                      <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                        <TextField
+                          required
+                          fullWidth
+                          type={valuesVisibility.showText ? "text" : "password"}
+                          value={book_V === 0 ? '' : book_V.toLocaleString()}
+                          inputProps={{ style: { textAlign: 'center' } }}
+                          variant="standard"
+                        />
+                      </StyledTableCell>
+                      <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                        <TextField
+                          required
+                          fullWidth
+                          type={valuesVisibility.showText ? "text" : "password"}
+                          value={price_seals === 0 ? '' : price_seals.toLocaleString()}
+                          inputProps={{ style: { textAlign: 'center' } }}
+                          variant="standard"
+                        />
+                      </StyledTableCell>
+                      <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                        <TextField
+                          required
+                          fullWidth
+                          type={valuesVisibility.showText ? "text" : "password"}
+                          value={profit_seals === 0 ? '' : profit_seals.toLocaleString()}
+                          inputProps={{ style: { textAlign: 'center' } }}
+                          variant="standard"
+                        />
+                      </StyledTableCell>
+                      <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                      </StyledTableCell>
+                    </StyledTableRow>
                   </Table>
                   <Table aria-label="customized table" style={{ width: '100%' }}>
                     <TableHead>
