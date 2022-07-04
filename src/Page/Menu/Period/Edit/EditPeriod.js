@@ -55,7 +55,7 @@ export default function EditPeriod() {
 
   const fetchPeriodData = async () => {
     const { data } = await Axios.get(
-      "http://192.168.220.1:32001/api/period_round"
+      "http://49.0.64.71:32001/api/period_round"
     );
     const periodID = data;
     setPeriodData(periodID)
