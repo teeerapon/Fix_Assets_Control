@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 // เพื่อใช้ทดสอบ
 async function loginUser(credentials) {
-  return fetch('http://49.0.64.71:32001/api/login', {
+  return fetch('http://192.168.1.108:32001/api/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -50,7 +50,7 @@ async function loginUser(credentials) {
 }
 
 async function permission(credentials) {
-  return fetch('http://49.0.64.71:32001/api/permission_branch', {
+  return fetch('http://192.168.1.108:32001/api/permission_branch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'

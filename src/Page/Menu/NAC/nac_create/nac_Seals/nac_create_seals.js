@@ -78,7 +78,7 @@ const filterOptions2 = createFilterOptions({
 });
 
 async function SelectDTL_Control(credentials) {
-  return fetch('http://49.0.64.71:32001/api/SelectDTL_Control', {
+  return fetch('http://192.168.1.108:32001/api/SelectDTL_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -89,7 +89,7 @@ async function SelectDTL_Control(credentials) {
 }
 
 async function SelectAssetsControl(credentials) {
-  return fetch('http://49.0.64.71:32001/api/AssetsAll_Control', {
+  return fetch('http://192.168.1.108:32001/api/AssetsAll_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -100,7 +100,7 @@ async function SelectAssetsControl(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://49.0.64.71:32001/api/AutoDeapartMent', {
+  return fetch('http://192.168.1.108:32001/api/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -112,7 +112,7 @@ async function AutoDeapartMent(credentials) {
 }
 
 async function Store_FA_control_create_doc(credentials) {
-  return fetch('http://49.0.64.71:32001/api/store_FA_control_create_doc', {
+  return fetch('http://192.168.1.108:32001/api/store_FA_control_create_doc', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -124,7 +124,7 @@ async function Store_FA_control_create_doc(credentials) {
 }
 
 async function store_FA_control_creat_Detail(credentials) {
-  return fetch('http://49.0.64.71:32001/api/store_FA_control_creat_Detail', {
+  return fetch('http://192.168.1.108:32001/api/store_FA_control_creat_Detail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -136,7 +136,7 @@ async function store_FA_control_creat_Detail(credentials) {
 }
 
 // async function store_FA_control_CheckAssetCode_Process(credentials) {
-//   return fetch('http://49.0.64.71:32001/api/store_FA_control_CheckAssetCode_Process', {
+//   return fetch('http://192.168.1.108:32001/api/store_FA_control_CheckAssetCode_Process', {
 //     method: 'POST',
 //     headers: {
 //       'Content-Type': 'application/json; charset=utf-8',
@@ -148,7 +148,7 @@ async function store_FA_control_creat_Detail(credentials) {
 // }
 
 async function store_FA_control_updateDTL_seals(credentials) {
-  return fetch('http://49.0.64.71:32001/api/store_FA_control_updateDTL_seals', {
+  return fetch('http://192.168.1.108:32001/api/store_FA_control_updateDTL_seals', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -221,7 +221,7 @@ export default function Nac_Main() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://49.0.64.71:32001/api/getsUserForAssetsControl"
+      "http://192.168.1.108:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []
@@ -293,7 +293,7 @@ export default function Nac_Main() {
         list[index]['serialNo'] = response['data'][0].SerialNo
         list[index]['price'] = response['data'][0].Price
         list[index]['bookValue'] = ''
-        list[index]['priceSeals'] = '0'
+        list[index]['priceSeals'] = ''
         list[index]['profit'] = list[index]['priceSeals'] - list[index]['bookValue']
         list[index]['date_asset'] = response['data'][0].CreateDate
         setServiceList(list);
@@ -350,9 +350,9 @@ export default function Nac_Main() {
       }
       else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
-        if(response.data[0].branchid !=901){
+        if (response.data[0].branchid != 901) {
           setSource_BU('Oil')
-        }else{
+        } else {
           setSource_BU('Center')
         }
       }
@@ -431,11 +431,7 @@ export default function Nac_Main() {
           timer: 2000,
         })
     } else {
-      let checkValue_BV = []
-      for (let i = 0; i < serviceList.length; i++) {
-        checkValue_BV[i] = serviceList[i].priceSeals
-      }
-      if (!serviceList[0].assetsCode || checkValue_BV.includes('') === true) {
+      if (!serviceList[0].assetsCode) {
         swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
           buttons: false,
           timer: 2000,
@@ -524,7 +520,7 @@ export default function Nac_Main() {
         })
           }
         } else {
-          swal("แจ้งเตือน", 'กรุณากรอกราคาขายของทรัพย์สินให้ครบถ้วน', "warning")
+          swal("แจ้งเตือน", 'กรุณากรอก ราคาขายทรัพย์สิน ให้ครบถ้วน', "warning")
         }
       }
     }
@@ -814,7 +810,7 @@ export default function Nac_Main() {
                   </Table>
                   <Table aria-label="customized table">
                     <TableHead>
-                    <TableRow style={{ width: '100%' }}>
+                      <TableRow style={{ width: '100%' }}>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '18%' }} >รหัสทรัพย์สิน</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '12.5%' }} >Serial No.</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >ชื่อ</StyledTableCell>
@@ -1167,7 +1163,7 @@ export default function Nac_Main() {
                     <Button
                       variant="contained"
                       onClick={handleNext}
-                      endIcon={<BorderColorRoundedIcon/>}
+                      endIcon={<BorderColorRoundedIcon />}
                       sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 2 } }}
                     >
                       สร้างเอกสาร

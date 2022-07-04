@@ -113,7 +113,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function store_FA_control_select_NAC(credentials) {
-  return fetch('http://49.0.64.71:32001/api/store_FA_control_select_NAC', {
+  return fetch('http://192.168.1.108:32001/api/store_FA_control_select_NAC', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',

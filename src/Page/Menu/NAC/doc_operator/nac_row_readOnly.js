@@ -37,7 +37,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function store_FA_control_drop_NAC(credentials) {
-  return fetch('http://49.0.64.71:32001/api/store_FA_control_drop_NAC', {
+  return fetch('http://192.168.1.108:32001/api/store_FA_control_drop_NAC', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -49,7 +49,7 @@ async function store_FA_control_drop_NAC(credentials) {
 }
 
 async function store_FA_control_execDocID(credentials) {
-  return fetch('http://49.0.64.71:32001/api/store_FA_control_execDocID', {
+  return fetch('http://192.168.1.108:32001/api/store_FA_control_execDocID', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -61,7 +61,7 @@ async function store_FA_control_execDocID(credentials) {
 }
 
 async function ChackUserWeb(credentials) {
-  return fetch('http://49.0.64.71:32001/api/ChackUserWeb', {
+  return fetch('http://192.168.1.108:32001/api/ChackUserWeb', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',

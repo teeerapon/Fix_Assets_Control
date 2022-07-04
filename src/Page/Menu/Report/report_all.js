@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 async function Reported(credentials) {
-    return fetch('http://49.0.64.71:32001/api/ReportassetsAll', {
+    return fetch('http://192.168.1.108:32001/api/ReportassetsAll', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json; charset=utf-8'
@@ -66,7 +66,7 @@ export default function Report() {
 
     const fetchPeriodData = async () => {
         const { data } = await Axios.get(
-            "http://49.0.64.71:32001/api/period_round"
+            "http://192.168.1.108:32001/api/period_round"
         );
         const periodID = data;
         setPeriodData2(periodID);
