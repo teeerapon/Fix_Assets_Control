@@ -160,10 +160,10 @@ export default function Nac_Main() {
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
   const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
-  const result = serviceList.map( function(elt){
-    return /^\d+$/.test(elt.price*elt.count) ? parseInt(elt.price*elt.count)  : 0; 
-  }).reduce( function(a,b){ // sum all resulting numbers
-    return a+b
+  const result = serviceList.map(function (elt) {
+    return /^\d+$/.test(elt.price * elt.count) ? parseInt(elt.price * elt.count) : 0;
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
   })
   const navigate = useNavigate();
   const data = JSON.parse(localStorage.getItem('data'));
@@ -205,9 +205,9 @@ export default function Nac_Main() {
   const [des_Description, setDes_Description] = React.useState();
 
   // ส่วนของผู้ส่ง
-  const [source_Department, setSource_Department] = React.useState();
-  const [source_BU, setSource_BU] = React.useState();
-  const [source, setSource] = React.useState();
+  const [source_Department, setSource_Department] = React.useState(data.branchid === 901 ? null : 'ROD');
+  const [source_BU, setSource_BU] = React.useState(data.branchid === 901 ? null : 'Oil');
+  const [source, setSource] = React.useState(data.branchid === 901 ? null : data.UserCode);
   const [sourceDate, setSourceDate] = React.useState();
   // const [sourceApprove, setSource_Approve] = React.useState();
   // const [sourceDateApproveDate, setSource_DateApproveDate] = React.useState();
@@ -312,12 +312,20 @@ export default function Nac_Main() {
 
   const handleChangeSource_Department = (event) => {
     event.preventDefault();
-    setSource_Department(event.target.value);
+    if(data.branchid !==901){
+      setSource_Department('ROD');
+    }else{
+      setSource_Department(event.target.value);
+    }
   };
 
   const handleChangeSource_BU = (event) => {
     event.preventDefault();
-    setSource_BU(event.target.value);
+    if(data.branchid !==901){
+      setSource_BU('Oil');
+    }else{
+      setSource_BU(event.target.value);
+    }
   };
 
   const handleChangeSource_delivery2 = (event) => {
@@ -357,9 +365,9 @@ export default function Nac_Main() {
       }
       else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
-        if(response.data[0].branchid !=901){
+        if (response.data[0].branchid !== 901) {
           setSource_BU('Oil')
-        }else{
+        } else {
           setSource_BU('Center')
         }
       }
@@ -454,9 +462,9 @@ export default function Nac_Main() {
       }
       else if (response.data[0].DepID === 3) {
         setDes_Department('ROD')
-        if(response.data[0].branchid !=901){
+        if (response.data[0].branchid !== 901) {
           setDes_BU('Oil')
-        }else{
+        } else {
           setDes_BU('Center')
         }
       }
@@ -573,7 +581,8 @@ export default function Nac_Main() {
                   buttons: false,
                   timer: 2000,
                 }).then((value) => {
-                  navigate('/NAC_ROW')
+                  localStorage.setItem('NacCode', JSON.stringify({ nac_code: responseDTL.data[0].nac_code, nac_status: 1 }));
+                  navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE')
                 });
               } else {
                 swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error", {
@@ -713,27 +722,44 @@ export default function Nac_Main() {
                                   variant="standard"
                                 />
                               </Stack>
-                              <Autocomplete
-                                freeSolo
-                                name='source'
-                                id='source'
-                                options={users_pureDep}
-                                getOptionLabel={(option) => option.UserCode}
-                                filterOptions={filterOptions2}
-                                onChange={handleAutoSource_DeapartMent}
-                                value={source}
-                                renderInput={(params) =>
+                              {data.branchid === 901 ? (
+                                <React.Fragment>
+                                  <Autocomplete
+                                    freeSolo
+                                    name='source'
+                                    id='source'
+                                    options={users_pureDep}
+                                    getOptionLabel={(option) => option.UserCode}
+                                    filterOptions={filterOptions2}
+                                    onChange={handleAutoSource_DeapartMent}
+                                    value={source}
+                                    renderInput={(params) =>
+                                      <TextField
+                                        fullWidth
+                                        autoComplete="family-name"
+                                        onChange={handleChangeSource_delivery2}
+                                        value={source}
+                                        sx={{ pt: 1 }}
+                                        variant="standard"
+                                        label='ผู้ส่งมอบ'
+                                        {...params}
+                                      />}
+                                  />
+                                </React.Fragment>
+                              ) : (
+                                <React.Fragment>
                                   <TextField
+                                    required
                                     fullWidth
-                                    autoComplete="family-name"
-                                    onChange={handleChangeSource_delivery2}
+                                    name='source'
+                                    id='source'
+                                    label='ผู้ส่งมอบ'
                                     value={source}
                                     sx={{ pt: 1 }}
                                     variant="standard"
-                                    label='ผู้ส่งมอบ'
-                                    {...params}
-                                  />}
-                              />
+                                  />
+                                </React.Fragment>
+                              )}
                               <LocalizationProvider dateAdapter={DateAdapter}>
                                 <DatePicker
                                   inputFormat="yyyy-MM-dd"
@@ -1225,7 +1251,7 @@ export default function Nac_Main() {
                     <Button
                       variant="contained"
                       onClick={handleNext}
-                      endIcon={<BorderColorRoundedIcon/>}
+                      endIcon={<BorderColorRoundedIcon />}
                       sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 2 } }}
                     >
                       สร้างเอกสาร

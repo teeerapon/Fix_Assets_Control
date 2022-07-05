@@ -675,7 +675,7 @@ export default function Nac_Seals_Approve() {
       }
       else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
-        if(response.data[0].branchid !=901){
+        if(response.data[0].branchid !== 901){
           setSource_BU('Oil')
         }else{
           setSource_BU('Center')
@@ -1698,7 +1698,7 @@ export default function Nac_Seals_Approve() {
                                   name='source'
                                   id='source'
                                   size="small"
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  disabled={data.branchid === 901 && (selectNAC === 1 || selectNAC === 7) ? false : true}
                                   options={users_pureDep}
                                   getOptionLabel={(option) => option.UserCode}
                                   filterOptions={filterOptions2}

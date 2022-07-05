@@ -161,10 +161,10 @@ export default function Nac_Main() {
 
   const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
   const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }])
-  const result = serviceList.map( function(elt){
-    return /^\d+$/.test(elt.price*elt.count) ? parseInt(elt.price*elt.count)  : 0; 
-  }).reduce( function(a,b){ // sum all resulting numbers
-    return a+b
+  const result = serviceList.map(function (elt) {
+    return /^\d+$/.test(elt.price * elt.count) ? parseInt(elt.price * elt.count) : 0;
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
   })
   const navigate = useNavigate();
   const data = JSON.parse(localStorage.getItem('data'));
@@ -188,7 +188,6 @@ export default function Nac_Main() {
   };
 
   const handleClickShowPassword = () => {
-    console.log(data.branchid)
     if (data.branchid !== 901) {
       setValuesVisibility(false);
     } else {
@@ -206,8 +205,8 @@ export default function Nac_Main() {
   const [des_Description, setDes_Description] = React.useState();
 
   // ส่วนของผู้ส่ง
-  const [source_Department, setSource_Department] = React.useState();
-  const [source_BU, setSource_BU] = React.useState();
+  const [source_Department, setSource_Department] = React.useState(data.branchid === 901 ? null : 'ROD');
+  const [source_BU, setSource_BU] = React.useState(data.branchid === 901 ? null : 'Oil');
   const [source, setSource] = React.useState('SSP');
   const [sourceDate, setSourceDate] = React.useState(datenow);
   // const [sourceApprove, setSource_Approve] = React.useState('SSP');
@@ -319,12 +318,20 @@ export default function Nac_Main() {
 
   const handleChangeSource_Department = (event) => {
     event.preventDefault();
-    setSource_Department(event.target.value);
+    if(data.branchid !==901){
+      setSource_Department('ROD');
+    }else{
+      setSource_Department(event.target.value);
+    }
   };
 
   const handleChangeSource_BU = (event) => {
     event.preventDefault();
-    setSource_BU(event.target.value);
+    if(data.branchid !==901){
+      setSource_BU('Oil');
+    }else{
+      setSource_BU(event.target.value);
+    }
   };
 
   const handleChangeSource_deliveryDate = (newValue) => {
@@ -360,9 +367,9 @@ export default function Nac_Main() {
       }
       else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
-        if(response.data[0].branchid !=901){
+        if (response.data[0].branchid !== 901) {
           setSource_BU('Oil')
-        }else{
+        } else {
           setSource_BU('Center')
         }
       }
@@ -457,9 +464,9 @@ export default function Nac_Main() {
       }
       else if (response.data[0].DepID === 3) {
         setDes_Department('ROD')
-        if(response.data[0].branchid !=901){
+        if (response.data[0].branchid !== 901) {
           setDes_BU('Oil')
-        }else{
+        } else {
           setDes_BU('Center')
         }
       }
@@ -513,9 +520,9 @@ export default function Nac_Main() {
   const handleNext = async () => {
     if ((!source || !source_Department || !source_BU || !sourceDate) || (!des_delivery)) {
       swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ส่งมอบให้ครบถ้วน', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        buttons: false,
+        timer: 2000,
+      })
     } else {
       if (!serviceList[0].assetsCode) {
         swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
@@ -569,20 +576,21 @@ export default function Nac_Main() {
                 buttons: false,
                 timer: 2000,
               }).then((value) => {
-                navigate('/NAC_ROW')
+                localStorage.setItem('NacCode', JSON.stringify({ nac_code: responseDTL.data[0].nac_code, nac_status: 1 }));
+                navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE')
               });
             } else {
               swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+                buttons: false,
+                timer: 2000,
+              })
             }
           }
         } else {
           swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+            buttons: false,
+            timer: 2000,
+          })
         }
       }
     }
@@ -714,27 +722,44 @@ export default function Nac_Main() {
                                   variant="standard"
                                 />
                               </Stack>
-                              <Autocomplete
-                                freeSolo
-                                name='source'
-                                id='source'
-                                size="small"
-                                options={users_pureDep}
-                                getOptionLabel={(option) => option.UserCode}
-                                filterOptions={filterOptions2}
-                                value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
-                                onChange={handleAutoSource_DeapartMent}
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    variant="standard"
-                                    label='ผู้ส่งมอบ'
-                                    fullWidth
-                                    autoComplete="family-name"
-                                    sx={{ pt: 1 }}
+                              {data.branchid === 901 ? (
+                                <React.Fragment>
+                                  <Autocomplete
+                                    freeSolo
+                                    name='source'
+                                    id='source'
+                                    size="small"
+                                    options={users_pureDep}
+                                    getOptionLabel={(option) => option.UserCode}
+                                    filterOptions={filterOptions2}
+                                    value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
+                                    onChange={handleAutoSource_DeapartMent}
+                                    renderInput={(params) => (
+                                      <TextField
+                                        {...params}
+                                        variant="standard"
+                                        label='ผู้ส่งมอบ'
+                                        fullWidth
+                                        autoComplete="family-name"
+                                        sx={{ pt: 1 }}
+                                      />
+                                    )}
                                   />
-                                )}
-                              />
+                                </React.Fragment>
+                              ) : (
+                                <React.Fragment>
+                                  <TextField
+                                    required
+                                    fullWidth
+                                    name='source'
+                                    id='source'
+                                    label='ผู้ส่งมอบ'
+                                    value={source}
+                                    sx={{ pt: 1 }}
+                                    variant="standard"
+                                  />
+                                </React.Fragment>
+                              )}
                               <LocalizationProvider dateAdapter={DateAdapter}>
                                 <DatePicker
                                   inputFormat="yyyy-MM-dd"
@@ -1233,7 +1258,7 @@ export default function Nac_Main() {
                     <Button
                       variant="contained"
                       onClick={handleNext}
-                      endIcon={<BorderColorRoundedIcon/>}
+                      endIcon={<BorderColorRoundedIcon />}
                       sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 2 } }}
                     >
                       สร้างเอกสาร
