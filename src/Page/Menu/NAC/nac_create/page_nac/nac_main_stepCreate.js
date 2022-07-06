@@ -582,7 +582,7 @@ export default function Nac_Main() {
                   timer: 2000,
                 }).then((value) => {
                   localStorage.setItem('NacCode', JSON.stringify({ nac_code: responseDTL.data[0].nac_code, nac_status: 1 }));
-                  navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE')
+                  navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/'+responseDTL.data[0].nac_code+'='+1)
                 });
               } else {
                 swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error", {
@@ -1076,7 +1076,7 @@ export default function Nac_Main() {
                       <StyledTableRow>
                         <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '55%' }}>
                           <Typography>
-                            มูลค่ารวมทั้งหมด
+                            ต้นทุนรวมทั้งหมด
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '45%' }}>

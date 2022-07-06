@@ -628,7 +628,7 @@ export default function Nac_Main() {
                 timer: 2000,
               }).then((value) => {
                 localStorage.setItem('NacCode', JSON.stringify({ nac_code: responseDTL.data[0].nac_code, nac_status: 1 }));
-                navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE')
+                navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/'+responseDTL.data[0].nac_code+'='+1)
               });
             } else {
               swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error", {

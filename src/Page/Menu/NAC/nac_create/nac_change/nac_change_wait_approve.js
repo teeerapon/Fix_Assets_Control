@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useParams } from 'react-router';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
@@ -275,9 +276,9 @@ export default function Nac_Main_wait() {
   const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
-  const data_nac = JSON.parse(localStorage.getItem('NacCode'));
-  const nac_code = data_nac.nac_code
-  const nac_status = data_nac.nac_status
+  const { nac_id } = useParams()
+  const nac_code = nac_id.split('=')[0]
+  const nac_status = nac_id.split('=')[1]
   const [selectNAC] = React.useState(nac_status);
   const [headers, setHeaders] = React.useState([]);
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -390,7 +391,6 @@ export default function Nac_Main_wait() {
     const responseDTL = await store_FA_control_select_dtl({
       nac_code
     });
-    console.log(responseDTL);
     const responseDTLs = responseDTL.data
     const DataCodeDTL = []
     const responesCode = []
@@ -876,7 +876,7 @@ export default function Nac_Main_wait() {
                 buttons: false,
                 timer: 2000,
               }).then((value) => {
-                navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
+                navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/'+nac_code+'='+2)
               });
             }
           } else {
@@ -884,7 +884,7 @@ export default function Nac_Main_wait() {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
+              navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/'+nac_code+'='+2)
             });
           }
         }
@@ -1087,7 +1087,7 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE')
+          navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/'+nac_code+'='+5)
         });
       }
     }
@@ -1156,7 +1156,6 @@ export default function Nac_Main_wait() {
               const usercode = data.UserCode
               const nacdtl_assetsCode = serviceList[i].assetsCode
               const asset_id = serviceList[i].asset_id
-              console.log(usercode, nacdtl_assetsCode, asset_id, nac_status, nac_type, nac_code,);
               await store_FA_control_upadate_table({
                 nac_code,
                 usercode,
@@ -1931,7 +1930,7 @@ export default function Nac_Main_wait() {
                         <StyledTableRow>
                           <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '55%' }}>
                             <Typography>
-                              มูลค่ารวมทั้งหมด
+                              ต้นทุนรวมทั้งหมด
                             </Typography>
                           </StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '45%' }}>
