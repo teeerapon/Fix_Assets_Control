@@ -279,7 +279,7 @@ export default function Nac_Main_wait() {
   const { nac_id } = useParams()
   const nac_code = nac_id.split('=')[0]
   const nac_status = nac_id.split('=')[1]
-  const [selectNAC] = React.useState(nac_status);
+  const [selectNAC] = React.useState(parseInt(nac_status));
   const [headers, setHeaders] = React.useState([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openDialogReply, setOpenDialogReply] = React.useState(false);
@@ -876,7 +876,7 @@ export default function Nac_Main_wait() {
                 buttons: false,
                 timer: 2000,
               }).then((value) => {
-                navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/'+nac_code+'='+2)
+                navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + nac_code + '=' + 2)
               });
             }
           } else {
@@ -884,7 +884,7 @@ export default function Nac_Main_wait() {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/'+nac_code+'='+2)
+              navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + nac_code + '=' + 2)
             });
           }
         }
@@ -1087,7 +1087,7 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/'+nac_code+'='+5)
+          navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + nac_code + '=' + 5)
         });
       }
     }
@@ -1433,6 +1433,13 @@ export default function Nac_Main_wait() {
                           <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                             <Typography align='center' color="inherit" noWrap>
                               {nac_code}
+                            </Typography>
+                          </StyledTableCell>
+                        </TableBody>
+                        <TableBody>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <Typography align='center' color="inherit" noWrap>
+                              {!headers.create_date ? '' : (headers.create_date).split('T')[0]}
                             </Typography>
                           </StyledTableCell>
                         </TableBody>
@@ -2165,6 +2172,20 @@ export default function Nac_Main_wait() {
                           <Grid item xs={2}>
                             <Button
                               variant="contained"
+                              color='error'
+                              disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false
+                                : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                  true
+                              }
+                              onClick={CancelApprove}
+                              startIcon={<ClearRoundedIcon />}
+                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}>
+                              ไม่อนุมัติ
+                            </Button>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Button
+                              variant="contained"
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                               color={selectNAC === 2 ? 'success' :
                                 selectNAC === 3 ? 'success' :
@@ -2179,20 +2200,6 @@ export default function Nac_Main_wait() {
                               <React.Fragment>
                                 {selectNAC === 2 ? 'ตรวจสอบ' : 'อนุมัติ'}
                               </React.Fragment>
-                            </Button>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Button
-                              variant="contained"
-                              color='error'
-                              disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false
-                                : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
-                                  true
-                              }
-                              onClick={CancelApprove}
-                              startIcon={<ClearRoundedIcon />}
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}>
-                              ไม่อนุมัติ
                             </Button>
                           </Grid>
                           <Grid item xs>

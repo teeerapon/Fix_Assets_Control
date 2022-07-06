@@ -300,7 +300,7 @@ export default function Nac_Seals_Approve() {
   const { nac_id } = useParams()
   const nac_code = nac_id.split('=')[0]
   const nac_status = nac_id.split('=')[1]
-  const [selectNAC] = React.useState(nac_status);
+  const [selectNAC] = React.useState(parseInt(nac_status));
   const [headers, setHeaders] = React.useState([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openDialogReply, setOpenDialogReply] = React.useState(false);
@@ -577,9 +577,9 @@ export default function Nac_Seals_Approve() {
     });
     if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
       swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        buttons: false,
+        timer: 2000,
+      })
       const list = [...serviceList];
       list[index]['assetsCode'] = ''
       list[index]['name'] = ''
@@ -676,9 +676,9 @@ export default function Nac_Seals_Approve() {
       }
       else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
-        if(response.data[0].branchid !== 901){
+        if (response.data[0].branchid !== 901) {
           setSource_BU('Oil')
-        }else{
+        } else {
           setSource_BU('Center')
         }
       }
@@ -751,9 +751,9 @@ export default function Nac_Seals_Approve() {
   const handleSave = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
       swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        buttons: false,
+        timer: 2000,
+      })
     } else {
       if (!serviceList[0].assetsCode) {
         swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
@@ -835,16 +835,16 @@ export default function Nac_Seals_Approve() {
               });
             } else {
               swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error", {
-          buttons: false,
-          timer: 2000,
-        })
+                buttons: false,
+                timer: 2000,
+              })
             }
           }
         } else {
           swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error", {
-          buttons: false,
-          timer: 2000,
-        })
+            buttons: false,
+            timer: 2000,
+          })
         }
       }
     }
@@ -854,9 +854,9 @@ export default function Nac_Seals_Approve() {
   const handleSubmit = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
       swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        buttons: false,
+        timer: 2000,
+      })
     } else {
       if (!serviceList[0].assetsCode) {
         swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
@@ -866,9 +866,9 @@ export default function Nac_Seals_Approve() {
       } else {
         if (result !== headers.sum_price || headers.source_userid !== source || headers.des_userid !== des_delivery) {
           swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยื่นคำร้อง', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+            buttons: false,
+            timer: 2000,
+          })
         } else {
           if (data.UserCode === headers.create_by || CheckExamineApprove.includes(data.UserCode) === true || CheckApprove.includes(data.UserCode) === true || checkUserWeb === 'admin') {
             const usercode = data.UserCode
@@ -966,7 +966,7 @@ export default function Nac_Seals_Approve() {
                     buttons: false,
                     timer: 2000,
                   }).then((value) => {
-                    navigate('/NAC_ROW/NAC_SEALS_APPROVE/'+nac_code+'='+(selectNAC === 11) ? 10 : 11)
+                    navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code + '=' + (selectNAC === 11) ? 10 : 11)
                   });
                 }
               } else {
@@ -1051,7 +1051,7 @@ export default function Nac_Seals_Approve() {
                       buttons: false,
                       timer: 2000,
                     }).then((value) => {
-                      navigate('/NAC_ROW/NAC_SEALS_APPROVE/'+nac_code+'='+(selectNAC === 11) ? 10 : 11)
+                      navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code + '=' + (selectNAC === 11) ? 10 : 11)
                     });
                   }
                 }
@@ -1062,7 +1062,7 @@ export default function Nac_Seals_Approve() {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              navigate('/NAC_ROW/NAC_SEALS_APPROVE/'+nac_code+'='+(selectNAC === 11) ? 10 : 11)
+              navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code + '=' + (selectNAC === 11) ? 10 : 11)
             });
           }
         }
@@ -1599,6 +1599,13 @@ export default function Nac_Seals_Approve() {
                             </Typography>
                           </StyledTableCell>
                         </TableBody>
+                        <TableBody>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <Typography align='center' color="inherit" noWrap>
+                              {!headers.create_date ? '' : (headers.create_date).split('T')[0]}
+                            </Typography>
+                          </StyledTableCell>
+                        </TableBody>
                       </Table>
                     </TableContainer>
                   </Grid>
@@ -1882,7 +1889,7 @@ export default function Nac_Seals_Approve() {
                           <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >ราคาขาย</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >กำไร/ขาดทุน</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >
-                       <IconButton
+                            <IconButton
                               size="large"
                               color='primary'
                               disabled={(selectNAC === 1) ? false : true}
@@ -2056,7 +2063,7 @@ export default function Nac_Seals_Approve() {
                           </TableBody>
                         </React.Fragment>
                       ))}
-                                            <StyledTableRow>
+                      <StyledTableRow>
                         <StyledTableCell align="start" style={{ "borderWidth": "1px", 'border-right': 0 }}>
                           <Typography>
                             รวมทั้งหมด
@@ -2171,7 +2178,7 @@ export default function Nac_Seals_Approve() {
                                       </InputAdornment>
                                       <InputAdornment position="start">
                                         {
-                                          ExamineApprove.map((Approve,index) => (
+                                          ExamineApprove.map((Approve, index) => (
                                             <Typography style={{ 'color': 'black' }}>
                                               {Approve.status === 1 ? '[' + [CheckExamineApprove[index]] + ']' : ''}
                                             </Typography>
@@ -2343,7 +2350,7 @@ export default function Nac_Seals_Approve() {
                                 selectNAC === 3 ? 'success' :
                                   'primary'}
                               onClick={selectNAC === 2 ? handleExamineApprove : handleExecApprove}
-                              startIcon={selectNAC === 3 ?<CheckRoundedIcon /> : <VisibilityRoundedIcon/>}
+                              startIcon={selectNAC === 3 ? <CheckRoundedIcon /> : <VisibilityRoundedIcon />}
                               disabled={
                                 (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
                                   (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
@@ -2398,7 +2405,7 @@ export default function Nac_Seals_Approve() {
                       <Box sx={{ flexGrow: 1 }}>
                         <Button
                           variant="contained"
-                          startIcon={<CloudDownloadRoundedIcon/>}
+                          startIcon={<CloudDownloadRoundedIcon />}
                           sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                           disabled={(selectNAC === 5) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
                           onClick={handleSubmitComplete}>

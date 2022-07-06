@@ -302,7 +302,7 @@ export default function Nac_Seals_Approve() {
   const { nac_id } = useParams()
   const nac_code = nac_id.split('=')[0]
   const nac_status = nac_id.split('=')[1]
-  const [selectNAC] = React.useState(nac_status);
+    const [selectNAC] = React.useState(parseInt(nac_status));
   const [headers, setHeaders] = React.useState([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openDialogReply, setOpenDialogReply] = React.useState(false);
@@ -1611,12 +1611,19 @@ export default function Nac_Seals_Approve() {
                     </Typography>
                   </Grid>
                   <Grid xs={2}>
-                    <TableContainer component={Paper}>
+                  <TableContainer component={Paper}>
                       <Table aria-label="customized table" style={{ width: '100%' }}>
                         <TableBody>
                           <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
                             <Typography align='center' color="inherit" noWrap>
                               {nac_code}
+                            </Typography>
+                          </StyledTableCell>
+                        </TableBody>
+                        <TableBody>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <Typography align='center' color="inherit" noWrap>
+                              {!headers.create_date ? '' : (headers.create_date).split('T')[0]}
                             </Typography>
                           </StyledTableCell>
                         </TableBody>

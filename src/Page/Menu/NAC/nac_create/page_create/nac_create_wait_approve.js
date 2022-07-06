@@ -271,10 +271,10 @@ export default function Nac_Main_wait() {
 
   const navigate = useNavigate();
   const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: "" }]);
-  const sum_price =  serviceList.map( function(elt){
-    return /^\d+$/.test(elt.price*elt.count) ? parseInt(elt.price*elt.count)  : 0; 
-  }).reduce( function(a,b){ // sum all resulting numbers
-    return a+b
+  const sum_price = serviceList.map(function (elt) {
+    return /^\d+$/.test(elt.price * elt.count) ? parseInt(elt.price * elt.count) : 0;
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
   })
   const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
@@ -282,7 +282,7 @@ export default function Nac_Main_wait() {
   const { nac_id } = useParams()
   const nac_code = nac_id.split('=')[0]
   const nac_status = nac_id.split('=')[1]
-  const [selectNAC] = React.useState(nac_status);
+  const [selectNAC] = React.useState(parseInt(nac_status));
   const [headers, setHeaders] = React.useState([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openDialogReply, setOpenDialogReply] = React.useState(false);
@@ -608,9 +608,9 @@ export default function Nac_Main_wait() {
       }
       else if (response.data[0].DepID === 3) {
         setSource_Department('ROD')
-        if(response.data[0].branchid !== 901){
+        if (response.data[0].branchid !== 901) {
           setSource_BU('Oil')
-        }else{
+        } else {
           setSource_BU('Center')
         }
       }
@@ -706,9 +706,9 @@ export default function Nac_Main_wait() {
       }
       else if (response.data[0].DepID === 3) {
         setDes_Department('ROD')
-        if(response.data[0].branchid !== 901){
+        if (response.data[0].branchid !== 901) {
           setDes_BU('Oil')
-        }else{
+        } else {
           setDes_BU('Center')
         }
       }
@@ -927,7 +927,7 @@ export default function Nac_Main_wait() {
                   buttons: false,
                   timer: 2000,
                 }).then((value) => {
-                  navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/'+nac_code+'='+3)
+                  navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + nac_code + '=' + 3)
                 });
               }
             } else {
@@ -935,7 +935,7 @@ export default function Nac_Main_wait() {
                 buttons: false,
                 timer: 2000,
               }).then((value) => {
-                navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/'+nac_code+'='+3)
+                navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + nac_code + '=' + 3)
               });
             }
           }
@@ -1142,7 +1142,7 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/'+nac_code+'='+4)
+          navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/' + nac_code + '=' + 4)
         });
       }
     }
@@ -1216,12 +1216,12 @@ export default function Nac_Main_wait() {
       checkFullChecked[i] = checked[i].statusCheck
     }
     if (selectNAC === 4 || selectNAC === 5 || selectNAC === 14) {
-      if (checkFullChecked.includes(0) === true){
+      if (checkFullChecked.includes(0) === true) {
         swal("แจ้งเตือน", 'มีทรัพย์สินบางรายการที่ยังไม่ได้รับ กรุณาลองใหม่อีกครั้ง', "warning", {
           buttons: false,
           timer: 2000,
         })
-      }else{
+      } else {
         const usercode = data.UserCode
         const nac_status = ((selectNAC === 4 || selectNAC === 14) && checkFullChecked.includes(0) === true) ? 14 : ((selectNAC === 4 || selectNAC === 14) && checkFullChecked.includes(0) === false) ? 5 : 6
         const source_approve = headers.source_approve_userid
@@ -1625,6 +1625,13 @@ export default function Nac_Main_wait() {
                             </Typography>
                           </StyledTableCell>
                         </TableBody>
+                        <TableBody>
+                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <Typography align='center' color="inherit" noWrap>
+                              {!headers.create_date ? '' : (headers.create_date).split('T')[0]}
+                            </Typography>
+                          </StyledTableCell>
+                        </TableBody>
                       </Table>
                     </TableContainer>
                   </Grid>
@@ -1903,7 +1910,7 @@ export default function Nac_Main_wait() {
                       </React.Fragment>
                     </Table>
                     <Table aria-label="customized table">
-                    <TableHead>
+                      <TableHead>
                         <TableRow style={{ width: '100%' }}>
                           <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >Serial No.</StyledTableCell>
@@ -2228,7 +2235,7 @@ export default function Nac_Main_wait() {
                                       </InputAdornment>
                                       <InputAdornment position="start">
                                         {
-                                          ExamineApprove.map((Approve,index) => (
+                                          ExamineApprove.map((Approve, index) => (
                                             <Typography style={{ 'color': 'black' }}>
                                               {Approve.status === 1 ? '[' + [CheckExamineApprove[index]] + ']' : ''}
                                             </Typography>
