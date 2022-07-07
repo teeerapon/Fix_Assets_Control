@@ -68,12 +68,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const filterOptions = createFilterOptions({
-  matchFrom: 'start',
   stringify: (option) => option.Code,
 });
 
 const filterOptions2 = createFilterOptions({
-  matchFrom: 'start',
   stringify: (option) => option.UserCode,
 });
 
@@ -312,18 +310,18 @@ export default function Nac_Main() {
 
   const handleChangeSource_Department = (event) => {
     event.preventDefault();
-    if(data.branchid !==901){
+    if (data.branchid !== 901) {
       setSource_Department('ROD');
-    }else{
+    } else {
       setSource_Department(event.target.value);
     }
   };
 
   const handleChangeSource_BU = (event) => {
     event.preventDefault();
-    if(data.branchid !==901){
+    if (data.branchid !== 901) {
       setSource_BU('Oil');
-    }else{
+    } else {
       setSource_BU(event.target.value);
     }
   };
@@ -582,7 +580,7 @@ export default function Nac_Main() {
                   timer: 2000,
                 }).then((value) => {
                   localStorage.setItem('NacCode', JSON.stringify({ nac_code: responseDTL.data[0].nac_code, nac_status: 1 }));
-                  navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/'+responseDTL.data[0].nac_code+'='+1)
+                  navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + responseDTL.data[0].nac_code + '=' + 1)
                 });
               } else {
                 swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error", {
@@ -602,6 +600,13 @@ export default function Nac_Main() {
     }
     //navigate("/NAC_CREATE_MAIN1/NAC_CREATE_MAIN1_STEP2")
   };
+
+  // สำหรับหาค่า Index ของ UserCode of Auto Complete
+  let resultIndex = []
+  for (let i = 0; i < UserForAssetsControl.length; i++) {
+    resultIndex[i] = UserForAssetsControl[i].UserCode;
+  }
+  resultIndex = [resultIndex]
 
 
   return (
@@ -728,22 +733,22 @@ export default function Nac_Main() {
                                     freeSolo
                                     name='source'
                                     id='source'
+                                    size="small"
                                     options={users_pureDep}
                                     getOptionLabel={(option) => option.UserCode}
                                     filterOptions={filterOptions2}
+                                    value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
                                     onChange={handleAutoSource_DeapartMent}
-                                    value={source}
-                                    renderInput={(params) =>
+                                    renderInput={(params) => (
                                       <TextField
-                                        fullWidth
-                                        autoComplete="family-name"
-                                        onChange={handleChangeSource_delivery2}
-                                        value={source}
-                                        sx={{ pt: 1 }}
+                                        {...params}
                                         variant="standard"
                                         label='ผู้ส่งมอบ'
-                                        {...params}
-                                      />}
+                                        fullWidth
+                                        autoComplete="family-name"
+                                        sx={{ pt: 1 }}
+                                      />
+                                    )}
                                   />
                                 </React.Fragment>
                               ) : (

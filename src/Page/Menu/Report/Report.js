@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 async function Reported(credentials) {
-  return fetch('http://similan:32001/api/testGetBranch', {
+  return fetch('http://192.168.220.1:32001/api/testGetBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -45,7 +45,7 @@ async function Reported(credentials) {
 }
 
 async function Reported2(credentials) {
-  return fetch('http://similan:32001/api/getAssetbyUserBranch', {
+  return fetch('http://192.168.220.1:32001/api/getAssetbyUserBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -56,7 +56,7 @@ async function Reported2(credentials) {
 }
 
 async function Reported3(credentials) {
-  return fetch('http://similan:32001/api/wrongBranch', {
+  return fetch('http://192.168.220.1:32001/api/wrongBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -90,7 +90,7 @@ export default function Report() {
 
   const fetchPeriodData = async () => {
     const { data } = await Axios.get(
-      "http://similan:32001/api/period_round"
+      "http://192.168.220.1:32001/api/period_round"
     );
     const periodID = data;
     setPeriodData2(periodID);
@@ -101,7 +101,7 @@ export default function Report() {
     const BranchID = permissionData;
     const UserBranch = permissionData;
     e.preventDefault();
-    if (periodData != "" && permissionData != "" && permissionData != null && periodData != null) {
+    if (periodData !== "" && permissionData !== "" && permissionData !== undefined && periodData !== undefined) {
       const response = await Reported({
         RoundID,
         BranchID
@@ -116,7 +116,7 @@ export default function Report() {
         BranchID,
         UserBranch
       });
-      if (response['data'].length != 0 || response2[0].length != 0 || response3[0].length != 0) {
+      if ('data' in response || 'data' in response2 || 'data' in response3) {
         swal("ทำรายการสำเร็จ", "ค้นหาข้อมูลเสร็จสิ้น", "success", {
           buttons: false,
           timer: 2000,

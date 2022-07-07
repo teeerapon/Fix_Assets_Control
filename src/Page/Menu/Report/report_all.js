@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 async function Reported(credentials) {
-    return fetch('http://similan:32001/api/ReportassetsAll', {
+    return fetch('http://192.168.220.1:32001/api/ReportassetsAll', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json; charset=utf-8'
@@ -66,7 +66,7 @@ export default function Report() {
 
     const fetchPeriodData = async () => {
         const { data } = await Axios.get(
-            "http://similan:32001/api/period_round"
+            "http://192.168.220.1:32001/api/period_round"
         );
         const periodID = data;
         setPeriodData2(periodID);
@@ -75,11 +75,11 @@ export default function Report() {
     const handleSubmit = async e => {
         const RoundID = periodData;
         e.preventDefault();
-        if (periodData != "" && periodData != null) {
+        if (periodData !== "" && periodData !== undefined) {
             const response = await Reported({
                 RoundID,
             });
-            if (response.length != 0) {
+            if (response.length !== 0) {
                 swal("ทำรายการสำเร็จ", "ค้นหาข้อมูลเสร็จสิ้น", "success", {
                     buttons: false,
                     timer: 2000,

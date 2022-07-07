@@ -68,17 +68,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const filterOptions = createFilterOptions({
-  matchFrom: 'start',
   stringify: (option) => option.Code,
 });
 
 const filterOptions2 = createFilterOptions({
-  matchFrom: 'start',
   stringify: (option) => option.UserCode,
 });
 
 async function SelectDTL_Control(credentials) {
-  return fetch('http://similan:32001/api/SelectDTL_Control', {
+  return fetch('http://192.168.220.1:32001/api/SelectDTL_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -89,7 +87,7 @@ async function SelectDTL_Control(credentials) {
 }
 
 async function SelectAssetsControl(credentials) {
-  return fetch('http://similan:32001/api/AssetsAll_Control', {
+  return fetch('http://192.168.220.1:32001/api/AssetsAll_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -100,7 +98,7 @@ async function SelectAssetsControl(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://similan:32001/api/AutoDeapartMent', {
+  return fetch('http://192.168.220.1:32001/api/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -112,7 +110,7 @@ async function AutoDeapartMent(credentials) {
 }
 
 async function Store_FA_control_create_doc(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_create_doc', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_create_doc', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -124,7 +122,7 @@ async function Store_FA_control_create_doc(credentials) {
 }
 
 async function store_FA_control_creat_Detail(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_creat_Detail', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_creat_Detail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -136,7 +134,7 @@ async function store_FA_control_creat_Detail(credentials) {
 }
 
 async function store_FA_control_updateDTL_seals(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_updateDTL_seals', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_updateDTL_seals', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -148,7 +146,7 @@ async function store_FA_control_updateDTL_seals(credentials) {
 }
 
 async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_CheckAssetCode_Process', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -242,7 +240,7 @@ export default function Nac_Main() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://similan:32001/api/getsUserForAssetsControl"
+      "http://192.168.220.1:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []
@@ -648,6 +646,12 @@ export default function Nac_Main() {
     //navigate("/NAC_CREATE_MAIN1/NAC_CREATE_MAIN1_STEP2")
   };
 
+  let resultIndex = []
+  for (let i = 0; i < UserForAssetsControl.length; i++) {
+    resultIndex[i] = UserForAssetsControl[i].UserCode;
+  }
+  resultIndex = [resultIndex]
+
 
   return (
     <React.Fragment>
@@ -777,7 +781,7 @@ export default function Nac_Main() {
                                     getOptionLabel={(option) => option.UserCode}
                                     filterOptions={filterOptions2}
                                     onChange={handleAutoSource_DeapartMent}
-                                    value={source}
+                                    value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
                                     renderInput={(params) =>
                                       <TextField
                                         fullWidth

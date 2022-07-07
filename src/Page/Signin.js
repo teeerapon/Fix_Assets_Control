@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import swal from 'sweetalert';
+import { useLocation } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 // เพื่อใช้ทดสอบ
 async function loginUser(credentials) {
-  return fetch('http://similan:32001/api/login', {
+  return fetch('http://192.168.220.1:32001/api/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -50,7 +51,7 @@ async function loginUser(credentials) {
 }
 
 async function permission(credentials) {
-  return fetch('http://similan:32001/api/permission_branch', {
+  return fetch('http://192.168.220.1:32001/api/permission_branch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -62,6 +63,7 @@ async function permission(credentials) {
 
 export default function Signin() {
   const classes = useStyles();
+  const URL_LINK = useLocation()
   const [UserCode, setUserCode] = useState();
   const [Password, setPassword] = useState();
   const userCode = UserCode;
@@ -83,10 +85,17 @@ export default function Signin() {
           buttons: false,
           timer: 1500,
         }).then((value) => {
+          if(URL_LINK.pathname !== '/'){
+            localStorage.setItem('token', response['token']);
+            localStorage.setItem('data', JSON.stringify(response['data'][0]));
+            localStorage.setItem('permission', JSON.stringify(responseForPermission['data']));
+            window.location.href = URL_LINK.pathname;
+          }else{
           localStorage.setItem('token', response['token']);
           localStorage.setItem('data', JSON.stringify(response['data'][0]));
           localStorage.setItem('permission', JSON.stringify(responseForPermission['data']));
           window.location.href = "/HomePage";
+          }
         });
       } else {
         swal("ทำรายการไม่สำเร็จ", 'UserCode หรือ Password ไม่ถูกต้อง', "error");

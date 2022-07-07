@@ -41,6 +41,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+const StyledTableRow2 = styled(TableRow)(({ theme }) => ({
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
+
 export default function MenuAppBar() {
   const AssetsAll = JSON.parse(localStorage.getItem('Allaseets'));
   const aseetsCounted = JSON.parse(localStorage.getItem('aseetsCounted'));
@@ -112,7 +119,7 @@ export default function MenuAppBar() {
         <Toolbar>
           <AnimatedPage>
             <Typography variant="h5" color="inherit" noWrap>
-              รายการการตรวจนับทรัพย์สินทั้งหมดของสาขาที่ {!aseetsCounted[0].BranchID ? AssetsAll[0].BranchID : aseetsCounted[0].BranchID}
+              รายการการตรวจนับทรัพย์สินทั้งหมดของสาขาที่ {/*{!aseetsCounted[0].BranchID ? AssetsAll[0].BranchID : aseetsCounted[0].BranchID} */}
             </Typography>
           </AnimatedPage>
         </Toolbar>
@@ -163,12 +170,12 @@ export default function MenuAppBar() {
                         <StyledTableCell component="th" scope="row" align="center">
                           {index + 1}
                         </StyledTableCell>
-                        <StyledTableCell align="left" >{sumArray_assets.Code}</StyledTableCell>
-                        <StyledTableCell align="left" >{sumArray_assets.Name}</StyledTableCell>
-                        <StyledTableCell align="center" >{sumArray_assets.Date.split('T')[0]}</StyledTableCell>
-                        <StyledTableCell align="center" >{sumArray_assets.BranchID}</StyledTableCell>
-                        <StyledTableCell align="center" >{sumArray_assets.UserID}</StyledTableCell>
-                        <StyledTableCell align="center" >{sumArray_assets.Reference}</StyledTableCell>
+                        <StyledTableCell align="left" >{!sumArray_assets.Code ? 'none' : sumArray_assets.Code}</StyledTableCell>
+                        <StyledTableCell align="left" >{!sumArray_assets.Name ? 'none' : sumArray_assets.Name}</StyledTableCell>
+                        <StyledTableCell align="center" >{!sumArray_assets.Date ? 'none' : sumArray_assets.Date.split('T')[0]}</StyledTableCell>
+                        <StyledTableCell align="center" >{!sumArray_assets.BranchID ? 'none' : sumArray_assets.BranchID}</StyledTableCell>
+                        <StyledTableCell align="center" >{!sumArray_assets.UserID ? 'none' : sumArray_assets.UserID}</StyledTableCell>
+                        <StyledTableCell align="center" >{!sumArray_assets.Reference ? 'none' : sumArray_assets.Reference}</StyledTableCell>
                         <StyledTableCell align="center" style={{
                           'backgroundColor': forcheckAssetCount.includes(sumArray_assets.Code) === true ? 'green' :
                             forcheckAssetWrong.includes(sumArray_assets.Code) === true ? 'orange' : 'red'
@@ -181,46 +188,46 @@ export default function MenuAppBar() {
                         </StyledTableCell>
                       </StyledTableRow>
                     ))}
-                    <StyledTableRow>
-                      <StyledTableCell component="th" scope="row" align="left" ></StyledTableCell>
-                      <StyledTableCell align="center" ></StyledTableCell>
+                    <StyledTableRow2>
+                      <StyledTableCell component="th" scope="row" align="center" ><b>รวม</b></StyledTableCell>
+                      <StyledTableCell align="left" ><b>การรายที่นับแล้ว</b></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ><b>{!forcheckAssetCount ? 'Loading...' : forcheckAssetCount.length}</b></StyledTableCell>
                       <StyledTableCell align="center" ><b>รายการ</b></StyledTableCell>
-                    </StyledTableRow>
-                    <StyledTableRow>
-                      <StyledTableCell component="th" scope="row" align="left" ></StyledTableCell>
-                      <StyledTableCell align="center" ></StyledTableCell>
+                    </StyledTableRow2>
+                    <StyledTableRow2>
+                      <StyledTableCell component="th" scope="row" align="center" ><b>รวม</b></StyledTableCell>
+                      <StyledTableCell align="left" ><b>รายการคงเหลือ</b></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ><b>{!forcheckAssetWrong ? 'Loading...' : forcheckAssetWrong.length}</b></StyledTableCell>
                       <StyledTableCell align="center" ><b>รายการ</b></StyledTableCell>
-                    </StyledTableRow>
-                    <StyledTableRow>
-                      <StyledTableCell component="th" scope="row" align="left" ></StyledTableCell>
-                      <StyledTableCell align="center" ></StyledTableCell>
+                    </StyledTableRow2>
+                    <StyledTableRow2>
+                      <StyledTableCell component="th" scope="row" align="center" ><b>รวม</b></StyledTableCell>
+                      <StyledTableCell align="left" ><b>รายการที่ไม่ได้อยู่ในสาขา</b></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ><b>{!sumArray_assets ? 'Loading...' : (sumArray_assets.length - (forcheckAssetWrong.length + forcheckAssetCount.length))}</b></StyledTableCell>
                       <StyledTableCell align="center" ><b>รายการ</b></StyledTableCell>
-                    </StyledTableRow>
-                    <StyledTableRow>
-                      <StyledTableCell component="th" scope="row" align="left" > </StyledTableCell>
-                      <StyledTableCell align="center" ></StyledTableCell>
+                    </StyledTableRow2>
+                    <StyledTableRow2>
+                      <StyledTableCell component="th" scope="row" align="center" ><b>รวม</b></StyledTableCell>
+                      <StyledTableCell align="left" ><b>รวมรายการทั้งหมด</b></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ></StyledTableCell>
                       <StyledTableCell align="center" ><b>{!sumArray_assets ? 'Loading...' : sumArray_assets.length}</b></StyledTableCell>
                       <StyledTableCell align="center" ><b>รายการ</b></StyledTableCell>
-                    </StyledTableRow>
+                    </StyledTableRow2>
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -267,13 +274,13 @@ export default function MenuAppBar() {
                         <StyledTableCell component="th" scope="row" align="center">
                           {index + 1}
                         </StyledTableCell>
-                        <StyledTableCell align="left" >{aseetsCounted.Code}</StyledTableCell>
-                        <StyledTableCell align="left" >{aseetsCounted.Name}</StyledTableCell>
-                        <StyledTableCell align="center" >{aseetsCounted.Date.split('T')[0]}</StyledTableCell>
+                        <StyledTableCell align="left" >{!aseetsCounted.Code ? 'none': aseetsCounted.Code}</StyledTableCell>
+                        <StyledTableCell align="left" >{!aseetsCounted.Name ? 'none': aseetsCounted.Date}</StyledTableCell>
+                        <StyledTableCell align="center" >{!aseetsCounted.Date ? 'none' : aseetsCounted.Date.split('T')[0]}</StyledTableCell>
 
-                        <StyledTableCell align="center" >{aseetsCounted.BranchID}</StyledTableCell>
-                        <StyledTableCell align="center" >{aseetsCounted.UserID}</StyledTableCell>
-                        <StyledTableCell align="center" >{aseetsCounted.Reference}</StyledTableCell>
+                        <StyledTableCell align="center" >{!aseetsCounted.BranchID ? 'none': aseetsCounted.BranchID}</StyledTableCell>
+                        <StyledTableCell align="center" >{!aseetsCounted.UserID ? 'none': aseetsCounted.UserID}</StyledTableCell>
+                        <StyledTableCell align="center" >{!aseetsCounted.Reference ? 'none': aseetsCounted.Reference}</StyledTableCell>
                       </StyledTableRow>
                     ))}
                   </TableBody>
@@ -322,13 +329,13 @@ export default function MenuAppBar() {
                           <StyledTableCell component="th" scope="row" align="center" >
                             {index + 1}
                           </StyledTableCell>
-                          <StyledTableCell align="left" >{AssetsAll.Code}</StyledTableCell>
-                          <StyledTableCell align="left" >{AssetsAll.Name}</StyledTableCell>
-                          <StyledTableCell align="center" >{AssetsAll.Date.split('T')[0]}</StyledTableCell>
+                          <StyledTableCell align="left" >{!AssetsAll.Code ? 'none' : AssetsAll.Code}</StyledTableCell>
+                          <StyledTableCell align="left" >{!AssetsAll.Name ? 'none' : AssetsAll.Name}</StyledTableCell>
+                          <StyledTableCell align="center" >{!AssetsAll.Date ? 'none' : AssetsAll.Date.split('T')[0]}</StyledTableCell>
 
-                          <StyledTableCell align="center" >{AssetsAll.BranchID}</StyledTableCell>
-                          <StyledTableCell align="center" >{AssetsAll.UserID}</StyledTableCell>
-                          <StyledTableCell align="center" >{AssetsAll.Reference}</StyledTableCell>
+                          <StyledTableCell align="center" >{!AssetsAll.BranchID ? 'none' : AssetsAll.BranchID}</StyledTableCell>
+                          <StyledTableCell align="center" >{!AssetsAll.UserID ? 'none' : AssetsAll.UserID}</StyledTableCell>
+                          <StyledTableCell align="center" >{!AssetsAll.Reference ? 'none' : AssetsAll.Reference}</StyledTableCell>
                         </StyledTableRow>
                       ))}
                     </TableBody>
@@ -378,12 +385,12 @@ export default function MenuAppBar() {
                           <StyledTableCell component="th" scope="row" align="center" >
                             {index + 1}
                           </StyledTableCell>
-                          <StyledTableCell align="left" >{assetsWrong.Code}</StyledTableCell>
-                          <StyledTableCell align="left" >{assetsWrong.Name}</StyledTableCell>
-                          <StyledTableCell align="center" >{assetsWrong.Date.split('T')[0]}</StyledTableCell>
-                          <StyledTableCell align="center" >{assetsWrong.BranchID}</StyledTableCell>
-                          <StyledTableCell align="center" >{assetsWrong.UserID}</StyledTableCell>
-                          <StyledTableCell align="center" >{assetsWrong.Reference}</StyledTableCell>
+                          <StyledTableCell align="left" >{! assetsWrong.Code ? 'none' : assetsWrong.Code}</StyledTableCell>
+                          <StyledTableCell align="left" >{! assetsWrong.Name ? 'none' : assetsWrong.Name}</StyledTableCell>
+                          <StyledTableCell align="center" >{!assetsWrong.Date ? 'none' : assetsWrong.Date.split('T')[0]}</StyledTableCell>
+                          <StyledTableCell align="center" >{! assetsWrong.BranchID ? 'none' : assetsWrong.BranchID}</StyledTableCell>
+                          <StyledTableCell align="center" >{! assetsWrong.UserID ? 'none' : assetsWrong.UserID}</StyledTableCell>
+                          <StyledTableCell align="center" >{! assetsWrong.Reference ? 'none' : assetsWrong.Reference}</StyledTableCell>
                         </StyledTableRow>
                       ))}
                     </TableBody>

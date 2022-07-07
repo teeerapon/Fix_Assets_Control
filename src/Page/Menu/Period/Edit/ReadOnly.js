@@ -33,7 +33,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function DeletePeriodData(credentials) {
-    return fetch('http://similan:32001/api/delete_period', {
+    return fetch('http://192.168.220.1:32001/api/delete_period', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset=utf-8'
@@ -65,7 +65,7 @@ export default function ReadOnly({ periodData, handleEditClick}) {
           PeriodID,
           BranchID,
         });
-        if (response.message != 'ไม่สามารถลบได้ เนื่องจากมีการตรวจนับทรัพย์สิน') {
+        if (response.message !== 'ไม่สามารถลบได้ เนื่องจากมีการตรวจนับทรัพย์สิน') {
           swal("ทำรายการสำเร็จ", response.message, "success", {
             buttons: false,
             timer: 2000,
@@ -89,7 +89,7 @@ export default function ReadOnly({ periodData, handleEditClick}) {
             <StyledTableCell align="center" >{BeginDate.split(':')[0] +':'+ BeginDate.split(':')[1]}</StyledTableCell>
             <StyledTableCell align="center" >{EndDate.split(':')[0] +':'+ EndDate.split(':')[1]}</StyledTableCell>
             <StyledTableCell align="center" >{periodData.Description}</StyledTableCell>
-            <StyledTableCell align="center" >{periodData.BranchID == 0 ? 'ทุกสาขา' : periodData.BranchID}</StyledTableCell>
+            <StyledTableCell align="center" >{(periodData.BranchID === 0 || periodData.BranchID === '0') ? 'ทุกสาขา' : periodData.BranchID}</StyledTableCell>
             <StyledTableCell align="center" >
                 <Grid container rowSpacing={1}>
                     <Grid item xs={6}>

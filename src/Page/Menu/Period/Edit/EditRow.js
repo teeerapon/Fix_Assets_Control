@@ -36,7 +36,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function EditPeriodData(credentials) {
-  return fetch('http://similan:32001/api/update_period', {
+  return fetch('http://192.168.220.1:32001/api/update_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -51,8 +51,8 @@ export default function EditPeriod({ editFormData, handleEditClickCancel }) {
   const [PeriodID] = React.useState(editFormData.PeriodID);
   const [BeginDate, setBeginDate] = React.useState(editFormData.BeginDate);
   const [EndDate, setEndDate] = React.useState(editFormData.EndDate);
-  const [Description, setDescription] = React.useState(editFormData.Description);
-  const [BranchID, setBranchID] = React.useState(editFormData.BranchID);
+  const [Description] = React.useState(editFormData.Description);
+  const [BranchID] = React.useState(editFormData.BranchID);
   // const TimeZoneEndDate = moment.tz(EndDate, "Asia/Thailand").format();
 
   const handleSubmit = async e => {
@@ -64,8 +64,8 @@ export default function EditPeriod({ editFormData, handleEditClickCancel }) {
       Description,
       BranchID,
     });
-    if (response.message != 'ไม่สามารถแก้ไขได้ เนื่องจากมีการตรวจนับทรัพย์สิน') {
-      if (response['data'] != 'มีการเปิดช่วงเวลาทับกัน') {
+    if (response.message !== 'ไม่สามารถแก้ไขได้ เนื่องจากมีการตรวจนับทรัพย์สิน') {
+      if (response['data'] !== 'มีการเปิดช่วงเวลาทับกัน') {
         swal("ทำรายการสำเร็จ", response.message, "success", {
           buttons: false,
           timer: 2000,
@@ -93,16 +93,6 @@ export default function EditPeriod({ editFormData, handleEditClickCancel }) {
 
   const handleChangeEndDate = (newValue) => {
     setEndDate(newValue);
-  };
-
-  const handleChangeDescription = (event) => {
-    event.preventDefault();
-    setDescription(event.target.value);
-  };
-
-  const handleChangeBranchID = (event) => {
-    event.preventDefault();
-    setBranchID(event.target.value);
   };
 
   return (
@@ -155,7 +145,7 @@ export default function EditPeriod({ editFormData, handleEditClickCancel }) {
       </StyledTableCell>
       <StyledTableCell align="center" >
         <Typography focused color="inherit" name="BranchID" noWrap>
-          {BranchID == 0 ? 'ทุกสาขา' : BranchID}
+          {(BranchID === 0 || BranchID === '0') ? 'ทุกสาขา' : BranchID}
         </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" >

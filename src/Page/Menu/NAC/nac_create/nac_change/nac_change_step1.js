@@ -68,12 +68,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const filterOptions = createFilterOptions({
-  matchFrom: 'start',
   stringify: (option) => option.Code,
 });
 
 const filterOptions2 = createFilterOptions({
-  matchFrom: 'start',
   stringify: (option) => option.UserCode,
 });
 
@@ -635,6 +633,11 @@ export default function Nac_Main() {
     //navigate("/NAC_CREATE_MAIN1/NAC_CREATE_MAIN1_STEP2")
   };
 
+  let resultIndex = []
+  for (let i = 0; i < UserForAssetsControl.length; i++) {
+    resultIndex[i] = UserForAssetsControl[i].UserCode;
+  }
+  resultIndex = [resultIndex]
 
   return (
     <React.Fragment>
@@ -764,7 +767,7 @@ export default function Nac_Main() {
                                     getOptionLabel={(option) => option.UserCode}
                                     filterOptions={filterOptions2}
                                     onChange={handleAutoSource_DeapartMent}
-                                    value={source}
+                                    value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
                                     renderInput={(params) =>
                                       <TextField
                                         fullWidth

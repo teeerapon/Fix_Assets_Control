@@ -68,17 +68,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const filterOptions = createFilterOptions({
-  matchFrom: 'start',
   stringify: (option) => option.Code,
 });
 
 const filterOptions2 = createFilterOptions({
-  matchFrom: 'start',
   stringify: (option) => option.UserCode,
 });
 
 async function SelectDTL_Control(credentials) {
-  return fetch('http://similan:32001/api/SelectDTL_Control', {
+  return fetch('http://192.168.220.1:32001/api/SelectDTL_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -89,7 +87,7 @@ async function SelectDTL_Control(credentials) {
 }
 
 async function SelectAssetsControl(credentials) {
-  return fetch('http://similan:32001/api/AssetsAll_Control', {
+  return fetch('http://192.168.220.1:32001/api/AssetsAll_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -100,7 +98,7 @@ async function SelectAssetsControl(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://similan:32001/api/AutoDeapartMent', {
+  return fetch('http://192.168.220.1:32001/api/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -112,7 +110,7 @@ async function AutoDeapartMent(credentials) {
 }
 
 async function Store_FA_control_create_doc(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_create_doc', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_create_doc', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -124,7 +122,7 @@ async function Store_FA_control_create_doc(credentials) {
 }
 
 async function store_FA_control_creat_Detail(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_creat_Detail', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_creat_Detail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -136,7 +134,7 @@ async function store_FA_control_creat_Detail(credentials) {
 }
 
 async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_CheckAssetCode_Process', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -148,7 +146,7 @@ async function store_FA_control_CheckAssetCode_Process(credentials) {
 }
 
 async function store_FA_control_updateDTL_seals(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_updateDTL_seals', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_updateDTL_seals', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -176,6 +174,7 @@ export default function Nac_Main() {
   const dataDepID = data.depid
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
   const [AllAssetsControl, setAllAssetsControl] = React.useState([]);
+  const [UserForAssetsControl, setUserForAssetsControl] = React.useState([]);
   const [valuesVisibility, setValuesVisibility] = React.useState({
     text: serviceList[0].price,
     showText: false,
@@ -241,7 +240,7 @@ export default function Nac_Main() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://similan:32001/api/getsUserForAssetsControl"
+      "http://192.168.220.1:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []
@@ -251,6 +250,7 @@ export default function Nac_Main() {
       }
     }
     setUsers_pureDep(users_pure)
+    setUserForAssetsControl(UserForAssetsControl.data);
   };
 
   const fetchAssetsControl = async () => {
@@ -348,18 +348,18 @@ export default function Nac_Main() {
 
   const handleChangeSource_Department = (event) => {
     event.preventDefault();
-    if(data.branchid !==901){
+    if (data.branchid !== 901) {
       setSource_Department('ROD');
-    }else{
+    } else {
       setSource_Department(event.target.value);
     }
   };
 
   const handleChangeSource_BU = (event) => {
     event.preventDefault();
-    if(data.branchid !==901){
+    if (data.branchid !== 901) {
       setSource_BU('Oil');
-    }else{
+    } else {
       setSource_BU(event.target.value);
     }
   };
@@ -563,7 +563,7 @@ export default function Nac_Main() {
               timer: 2000,
             }).then((value) => {
               localStorage.setItem('NacCode', JSON.stringify({ nac_code: response.data[0].nac_code, nac_status: 1 }));
-              navigate('/NAC_ROW/NAC_SEALS_APPROVE/'+response.data[0].nac_code+'='+1)
+              navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + response.data[0].nac_code + '=' + 1)
             });
           } else {
             swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error", {
@@ -579,6 +579,12 @@ export default function Nac_Main() {
     //navigate("/NAC_CREATE_MAIN1/NAC_CREATE_MAIN1_STEP2")
   };
 
+  // สำหรับหาค่า Index ของ UserCode of Auto Complete
+  let resultIndex = []
+  for (let i = 0; i < UserForAssetsControl.length; i++) {
+    resultIndex[i] = UserForAssetsControl[i].UserCode;
+  }
+  resultIndex = [resultIndex]
 
   return (
     <React.Fragment>
@@ -704,22 +710,22 @@ export default function Nac_Main() {
                                     freeSolo
                                     name='source'
                                     id='source'
+                                    size="small"
                                     options={users_pureDep}
                                     getOptionLabel={(option) => option.UserCode}
                                     filterOptions={filterOptions2}
+                                    value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
                                     onChange={handleAutoSource_DeapartMent}
-                                    value={source}
-                                    renderInput={(params) =>
+                                    renderInput={(params) => (
                                       <TextField
+                                        {...params}
+                                        variant="standard"
+                                        label='ผู้ส่งมอบ'
                                         fullWidth
                                         autoComplete="family-name"
-                                        onChange={handleChangeSource_delivery2}
-                                        value={source}
                                         sx={{ pt: 1 }}
-                                        variant="standard"
-                                        label='ผู้ยื่นคำร้อง'
-                                        {...params}
-                                      />}
+                                      />
+                                    )}
                                   />
                                 </React.Fragment>
                               ) : (

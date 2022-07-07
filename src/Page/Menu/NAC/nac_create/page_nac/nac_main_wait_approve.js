@@ -140,12 +140,10 @@ async function AutoDeapartMent(credentials) {
 }
 
 const filterOptions = createFilterOptions({
-  matchFrom: 'start',
   stringify: (option) => option.Code,
 });
 
 const filterOptions2 = createFilterOptions({
-  matchFrom: 'start',
   stringify: (option) => option.UserCode,
 });
 

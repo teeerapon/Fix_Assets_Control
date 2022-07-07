@@ -81,7 +81,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function store_FA_control_select_dtl(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_select_dtl', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_select_dtl', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -93,7 +93,7 @@ async function store_FA_control_select_dtl(credentials) {
 }
 
 async function store_FA_control_select_headers(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_select_headers', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_select_headers', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -105,7 +105,7 @@ async function store_FA_control_select_headers(credentials) {
 }
 
 async function SelectDTL_Control(credentials) {
-  return fetch('http://similan:32001/api/SelectDTL_Control', {
+  return fetch('http://192.168.220.1:32001/api/SelectDTL_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -116,7 +116,7 @@ async function SelectDTL_Control(credentials) {
 }
 
 async function SelectAssetsControl(credentials) {
-  return fetch('http://similan:32001/api/AssetsAll_Control', {
+  return fetch('http://192.168.220.1:32001/api/AssetsAll_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -127,7 +127,7 @@ async function SelectAssetsControl(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://similan:32001/api/AutoDeapartMent', {
+  return fetch('http://192.168.220.1:32001/api/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -139,17 +139,15 @@ async function AutoDeapartMent(credentials) {
 }
 
 const filterOptions = createFilterOptions({
-  matchFrom: 'start',
   stringify: (option) => option.Code,
 });
 
 const filterOptions2 = createFilterOptions({
-  matchFrom: 'start',
   stringify: (option) => option.UserCode,
 });
 
 async function store_FA_control_update_DTLandHeaders(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_update_DTLandHeaders', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_update_DTLandHeaders', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -161,7 +159,7 @@ async function store_FA_control_update_DTLandHeaders(credentials) {
 }
 
 async function store_FA_control_update_DTL(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_update_DTL', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_update_DTL', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -173,7 +171,7 @@ async function store_FA_control_update_DTL(credentials) {
 }
 
 async function store_FA_control_execDocID(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_execDocID', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_execDocID', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -185,7 +183,7 @@ async function store_FA_control_execDocID(credentials) {
 }
 
 async function store_FA_control_updateStatus(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_updateStatus', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_updateStatus', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -197,7 +195,7 @@ async function store_FA_control_updateStatus(credentials) {
 }
 
 async function store_FA_control_comment(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_comment', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_comment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -209,7 +207,7 @@ async function store_FA_control_comment(credentials) {
 }
 
 async function ChackUserWeb(credentials) {
-  return fetch('http://similan:32001/api/ChackUserWeb', {
+  return fetch('http://192.168.220.1:32001/api/ChackUserWeb', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -221,7 +219,7 @@ async function ChackUserWeb(credentials) {
 }
 
 async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_CheckAssetCode_Process', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -233,7 +231,7 @@ async function store_FA_control_CheckAssetCode_Process(credentials) {
 }
 
 async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
-  return fetch('http://similan:32001/api/stroe_FA_control_DTL_ConfirmSuccess', {
+  return fetch('http://192.168.220.1:32001/api/stroe_FA_control_DTL_ConfirmSuccess', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -245,7 +243,7 @@ async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
 }
 
 async function store_FA_control_upadate_table(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_upadate_table', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_upadate_table', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -341,7 +339,7 @@ export default function Nac_Main_wait() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://similan:32001/api/getsUserForAssetsControl"
+      "http://192.168.220.1:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []

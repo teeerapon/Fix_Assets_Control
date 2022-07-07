@@ -15,6 +15,7 @@ import { Outlet, useNavigate } from "react-router";
 import swal from 'sweetalert';
 import Grid from '@mui/material/Grid';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import Image from '../../image/logo_purethai-450px-01.png'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,7 +42,7 @@ function HomeIcon(props) {
 }
 
 async function ChackUserWeb(credentials) {
-  return fetch('http://similan:32001/api/ChackUserWeb', {
+  return fetch('http://192.168.220.1:32001/api/ChackUserWeb', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -51,6 +52,7 @@ async function ChackUserWeb(credentials) {
   })
     .then(data => data.json())
 }
+
 
 
 export default function MenuAppBar() {
@@ -66,7 +68,7 @@ export default function MenuAppBar() {
   const [anchorEl4, setAnchorEl4] = React.useState(null);
   const [anchorEl5, setAnchorEl5] = React.useState(null);
   const data = JSON.parse(localStorage.getItem('data'));
-  const [checkUserWeb,setCheckUserWeb] = React.useState();
+  const [checkUserWeb, setCheckUserWeb] = React.useState();
   const navigate = useNavigate();
 
 
@@ -75,7 +77,7 @@ export default function MenuAppBar() {
     const response = await ChackUserWeb({
       usercode
     });
-    if('data' in response){
+    if ('data' in response) {
       setCheckUserWeb(response.data[0].approverid)
     }
   }
@@ -215,7 +217,7 @@ export default function MenuAppBar() {
     },
   });
 
-  if(checkUserWeb === 'admin' || checkUserWeb === 'operatorII' || checkUserWeb === 'operatorI'){
+  if (checkUserWeb === 'admin' || checkUserWeb === 'operatorII' || checkUserWeb === 'operatorI') {
     return (
       <>
         <ThemeProvider theme={darkTheme}>
@@ -312,6 +314,7 @@ export default function MenuAppBar() {
                     >
                       <MenuItem onClick={PeriodOpen}>เพิ่มรอบตรวจนับ</MenuItem>
                       <MenuItem onClick={PeriodEdit}>แก้ไขรอบตรวจนับ</MenuItem>
+                      {/* <MenuItem>กำหนดสิทธิ์</MenuItem> */}
                     </Menu>
                   </React.Fragment>
                 )}
@@ -356,7 +359,7 @@ export default function MenuAppBar() {
                       onClick={handleMenu}
                       color="inherit"
                     >
-  
+
                       <AccountCircle />
                     </IconButton>
                     <Menu
@@ -392,7 +395,7 @@ export default function MenuAppBar() {
         </ThemeProvider>
       </>
     );
-  }else{
+  } else {
     return (
       <>
         <ThemeProvider theme={darkTheme}>
@@ -507,7 +510,7 @@ export default function MenuAppBar() {
                       onClick={handleMenu}
                       color="inherit"
                     >
-  
+
                       <AccountCircle />
                     </IconButton>
                     <Menu
@@ -532,7 +535,7 @@ export default function MenuAppBar() {
                   </Box>
                 </React.Fragment>
               )}
-               <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+              <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
                 <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
                   USER
                 </Typography>
