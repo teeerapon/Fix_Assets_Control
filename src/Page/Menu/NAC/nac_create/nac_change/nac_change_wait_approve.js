@@ -254,6 +254,18 @@ async function store_FA_control_upadate_table(credentials) {
     .then(data => data.json())
 }
 
+async function store_FA_SendMail(credentials) {
+  return fetch('http://similan:32001/api/store_FA_SendMail', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 export default function Nac_Main_wait() {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
@@ -276,8 +288,8 @@ export default function Nac_Main_wait() {
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
   const { nac_id } = useParams()
   const nac_code = nac_id.split('=')[0]
-  const nac_status = nac_id.split('=')[1]
-  const [selectNAC] = React.useState(parseInt(nac_status));
+  const nac_status = parseInt(nac_id.split('=')[1])
+  const [selectNAC] = React.useState(nac_status);
   const [headers, setHeaders] = React.useState([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openDialogReply, setOpenDialogReply] = React.useState(false);
@@ -858,6 +870,9 @@ export default function Nac_Main_wait() {
               usercode,
               comment
             })
+            await store_FA_SendMail({
+              nac_code
+            })
             if ('data' in responseComment) {
               swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
                 buttons: false,
@@ -928,6 +943,9 @@ export default function Nac_Main_wait() {
             usercode,
             comment
           })
+          await store_FA_SendMail({
+            nac_code
+          })
           if ('data' in responseComment) {
             swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
               buttons: false,
@@ -996,6 +1014,9 @@ export default function Nac_Main_wait() {
           nac_code,
           usercode,
           comment
+        })
+        await store_FA_SendMail({
+          nac_code
         })
         if ('data' in responseComment) {
           swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
@@ -1069,6 +1090,9 @@ export default function Nac_Main_wait() {
         usercode,
         comment
       })
+      await store_FA_SendMail({
+        nac_code
+      })
       if ('data' in responseComment) {
         swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' อนุมัติรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
           buttons: false,
@@ -1100,11 +1124,6 @@ export default function Nac_Main_wait() {
       const source_approve_date = headers.source_approve_date
       const des_delivery = selectNAC === 4 ? data.UserCode : headers.des_userid
       const des_deliveryDate = selectNAC === 4 ? datenow : headers.des_date
-      // const nac_status = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? 6 : 5
-      // const source_approve = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? data.UserCode : sourceApprove
-      // const source_approve_date = (CheckExamineApproveDes.includes(data.UserCode) !== false) ? datenow : sourceDateApproveDate
-      // const des_delivery = (data.UserCode === headers.des_userid) ? data.UserCode : des_deliveryApprove
-      // const des_deliveryDate = (data.UserCode === headers.des_userid) ? datenow : des_deliveryApproveDate
       const verify_by = headers.verify_by_userid
       const verify_date = headers.verify_date
       const nac_type = headers.nac_type
@@ -1132,6 +1151,9 @@ export default function Nac_Main_wait() {
           nac_code,
           usercode,
           comment
+        })
+        await store_FA_SendMail({
+          nac_code
         })
         if ('data' in responseComment) {
           if (nac_status === 5) {

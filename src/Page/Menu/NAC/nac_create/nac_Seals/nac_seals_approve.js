@@ -278,6 +278,18 @@ async function store_FA_control_upadate_table(credentials) {
     .then(data => data.json())
 }
 
+async function store_FA_SendMail(credentials) {
+  return fetch('http://similan:32001/api/store_FA_SendMail', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 export default function Nac_Seals_Approve() {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
@@ -299,8 +311,8 @@ export default function Nac_Seals_Approve() {
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
   const { nac_id } = useParams()
   const nac_code = nac_id.split('=')[0]
-  const nac_status = nac_id.split('=')[1]
-    const [selectNAC] = React.useState(parseInt(nac_status));
+  const nac_status = parseInt(nac_id.split('=')[1])
+    const [selectNAC] = React.useState(nac_status);
   const [headers, setHeaders] = React.useState([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openDialogReply, setOpenDialogReply] = React.useState(false);
@@ -956,6 +968,9 @@ export default function Nac_Seals_Approve() {
                   usercode,
                   comment
                 })
+                await store_FA_SendMail({
+                  nac_code
+                })
                 if ('data' in responseComment) {
                   swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' กรอก Book Value ในรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
                     buttons: false,
@@ -1043,6 +1058,9 @@ export default function Nac_Seals_Approve() {
                 usercode,
                 comment
               })
+              await store_FA_SendMail({
+                nac_code
+              })
               if ('data' in responseComment) {
                 swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
                   buttons: false,
@@ -1114,6 +1132,9 @@ export default function Nac_Seals_Approve() {
             usercode,
             comment
           })
+          await store_FA_SendMail({
+            nac_code
+          })
           if ('data' in responseComment) {
             swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
               buttons: false,
@@ -1182,6 +1203,9 @@ export default function Nac_Seals_Approve() {
           nac_code,
           usercode,
           comment
+        })
+        await store_FA_SendMail({
+          nac_code
         })
         if ('data' in responseComment) {
           swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
@@ -1255,6 +1279,9 @@ export default function Nac_Seals_Approve() {
         usercode,
         comment
       })
+      await store_FA_SendMail({
+        nac_code
+      })
       if ('data' in responseComment) {
         swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' อนุมัติรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
           buttons: false,
@@ -1327,6 +1354,9 @@ export default function Nac_Seals_Approve() {
             nac_code,
             usercode,
             comment
+          })
+          await store_FA_SendMail({
+            nac_code
           })
           if ('data' in responseComment) {
             if (nac_status === 5) {
