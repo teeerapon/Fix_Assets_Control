@@ -27,6 +27,8 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import PropTypes from 'prop-types';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -113,7 +115,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function store_FA_control_select_NAC_approve(credentials) {
-  return fetch('http://192.168.220.1:32001/api/store_FA_control_select_NAC_approve', {
+  return fetch('http://similan.1:32001/api/store_FA_control_select_NAC_approve', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -127,6 +129,7 @@ async function store_FA_control_select_NAC_approve(credentials) {
 export default function NAC_ROW() {
 
   const [selectNAC, setSelectNAC] = React.useState([]);
+  const [search, setSearchTerm] = React.useState('');
   const data = JSON.parse(localStorage.getItem('data'));
   const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
@@ -162,15 +165,15 @@ export default function NAC_ROW() {
     event.preventDefault();
     localStorage.setItem('NacCode', JSON.stringify({ nac_code: selectNAC.nac_code, nac_status: selectNAC.nac_status }));
     if (selectNAC.workflowtypeid === 1) {
-      navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/'+selectNAC.nac_code+'='+selectNAC.nac_status )
+      navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/' + selectNAC.nac_code + '=' + selectNAC.nac_status)
     } else if (selectNAC.workflowtypeid === 2) {
-      navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/'+selectNAC.nac_code+'='+selectNAC.nac_status )
+      navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + selectNAC.nac_code + '=' + selectNAC.nac_status)
     } else if (selectNAC.workflowtypeid === 3) {
-      navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/'+selectNAC.nac_code+'='+selectNAC.nac_status )
+      navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + selectNAC.nac_code + '=' + selectNAC.nac_status)
     } else if (selectNAC.workflowtypeid === 4) {
-      navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/'+selectNAC.nac_code+'='+selectNAC.nac_status )
+      navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + selectNAC.nac_code + '=' + selectNAC.nac_status)
     } else if (selectNAC.workflowtypeid === 5) {
-      navigate('/NAC_ROW/NAC_SEALS_APPROVE/'+selectNAC.nac_code+'='+selectNAC.nac_status )
+      navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + selectNAC.nac_code + '=' + selectNAC.nac_status)
     } else {
       navigate('/HomePage')
     }
@@ -207,7 +210,21 @@ export default function NAC_ROW() {
           <AnimatedPage>
             <Container maxWidth="1000px">
               <React.Fragment>
-                <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', pl: 1 }}>
+                    <Typography variant="h6" color="inherit" noWrap>
+                      ค้นหา
+                    </Typography>
+                  </Box>
+                  <TextField
+                    id="outlined-basic"
+                    label="Search..."
+                    variant="outlined"
+                    size="small"
+                    onChange={event => {setSearchTerm(event.target.value)}}
+                  />
+                </Stack>
+                <Paper variant="outlined" sx={{ my: 2, p: { xs: 2, md: 3 } }}>
                   <Typography variant="h5" color="inherit" noWrap sx={{ pl: 1 }}>
                     รายการ NAC ทั้งหมด
                   </Typography>
@@ -230,8 +247,20 @@ export default function NAC_ROW() {
                       </TableHead>
                       <TableBody>
                         {(rowsPerPage > 0
-                          ? selectNAC.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                          : selectNAC
+                          ? selectNAC.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).filter((val) => {
+                            if (search === ''){
+                              return val
+                            }else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase())){
+                              return val
+                            }
+                          })
+                          : selectNAC.filter((val) => {
+                            if (search === ''){
+                              return val
+                            }else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase())){
+                              return val
+                            }
+                          })
                         ).map((selectNAC) => (
                           <React.Fragment>
                             <NAC_ReadOnly
@@ -253,7 +282,13 @@ export default function NAC_ROW() {
                         <TableRow>
                           <TablePagination
                             rowsPerPageOptions={[]}
-                            count={selectNAC.length}
+                            count={selectNAC.filter((val) => {
+                              if (search === ''){
+                                return val
+                              }else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase())){
+                                return val
+                              }
+                            }).length}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             SelectProps={{

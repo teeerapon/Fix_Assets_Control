@@ -33,7 +33,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function DeletePeriodData(credentials) {
-    return fetch('http://192.168.220.1:32001/api/delete_period', {
+    return fetch('http://similan.1:32001/api/delete_period', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset=utf-8'

@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 // เพื่อใช้ทดสอบ
 async function loginUser(credentials) {
-  return fetch('http://192.168.220.1:32001/api/login', {
+  return fetch('http://similan.1:32001/api/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -51,7 +51,7 @@ async function loginUser(credentials) {
 }
 
 async function permission(credentials) {
-  return fetch('http://192.168.220.1:32001/api/permission_branch', {
+  return fetch('http://similan.1:32001/api/permission_branch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
