@@ -55,7 +55,7 @@ export default function EditPeriod() {
 
   const fetchPeriodData = async () => {
     const { data } = await Axios.get(
-      "http://similan.1:32001/api/period_round"
+      "http://similan:32001/api/period_round"
     );
     const periodID = data;
     setPeriodData(periodID)

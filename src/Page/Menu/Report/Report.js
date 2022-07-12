@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 async function Reported(credentials) {
-  return fetch('http://similan.1:32001/api/testGetBranch', {
+  return fetch('http://similan:32001/api/testGetBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -45,7 +45,7 @@ async function Reported(credentials) {
 }
 
 async function Reported2(credentials) {
-  return fetch('http://similan.1:32001/api/getAssetbyUserBranch', {
+  return fetch('http://similan:32001/api/getAssetbyUserBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -56,7 +56,7 @@ async function Reported2(credentials) {
 }
 
 async function Reported3(credentials) {
-  return fetch('http://similan.1:32001/api/wrongBranch', {
+  return fetch('http://similan:32001/api/wrongBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -90,7 +90,7 @@ export default function Report() {
 
   const fetchPeriodData = async () => {
     const { data } = await Axios.get(
-      "http://similan.1:32001/api/period_round"
+      "http://similan:32001/api/period_round"
     );
     const periodID = data;
     setPeriodData2(periodID);

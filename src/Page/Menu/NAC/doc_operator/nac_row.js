@@ -115,7 +115,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function store_FA_control_select_NAC_approve(credentials) {
-  return fetch('http://similan.1:32001/api/store_FA_control_select_NAC_approve', {
+  return fetch('http://similan:32001/api/store_FA_control_select_NAC_approve', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
