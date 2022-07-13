@@ -213,7 +213,7 @@ export default function Report() {
                       {
                         periodData2.map((item) =>
                           <MenuItem value={item.PeriodID}>
-                            รายงานการตรวจนับรอบที่ {item.PeriodID} : {item.Description}
+                            รอบที่ {item.PeriodID} (วันที่ {item.BeginDate.split('T')[0]} - {item.EndDate.split('T')[0]}) : {item.Description}
                           </MenuItem>
                         )
                       }

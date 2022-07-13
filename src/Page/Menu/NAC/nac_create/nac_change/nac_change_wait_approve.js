@@ -1416,12 +1416,7 @@ export default function Nac_Main_wait() {
                   </Grid>
                   <hr /> */}
                   <Grid container>
-                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ขาส่ง : {
-                      ExecApprove.map((Approve) => (
-                        <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'black' }}>
-                          &nbsp;[{Approve.approverid}]
-                        </Typography>
-                      ))}
+                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ขาส่ง : บัญชีและการเงิน
                   </Grid>
                   <hr />
                   <Grid container>

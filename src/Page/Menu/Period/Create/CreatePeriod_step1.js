@@ -40,14 +40,17 @@ export default function AddressForm() {
   const [brachID1, setBrachID1] = React.useState()
   const [activeStep] = React.useState(0);
 
+
+  const handleDescription = (newValue) => {
+    setValueDescription(newValue.target.value);
+  };
+
   const toggleCheckbox = (event) => {
     setBrachID1(event.target.value)
     if (event.target.value == '0') {
-      setValueDescription('การนับทรัพย์สินทั้งหมด')
       setValueBrachID1(0);
       setShowResults(showResults => false)
     } else {
-      setValueDescription('การนับทรัพย์สินเฉพาะบางสาขา')
       setShowResults(showResults => true)
     }
   }
@@ -152,6 +155,7 @@ export default function AddressForm() {
               required
               id="discription"
               name="discription"
+              onChange={handleDescription}
               value={valueDescription == undefined ? '' : valueDescription}
               helperText="กรุณาเลือกตัวเลือกอย่างน้อย 1 อย่าง"
               fullWidth

@@ -133,18 +133,25 @@ export default function NAC_ROW() {
   const data = JSON.parse(localStorage.getItem('data'));
   const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(20);
 
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - selectNAC.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - selectNAC.filter((val) => {
+      if (search === ''){
+        return val
+      }else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase())|| val.create_by.toLowerCase().includes(search.toLowerCase())){
+        return val
+      }
+    }).length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    console.log(event.target.value, 20);
+    setRowsPerPage(parseInt(event.target.value, 20));
     setPage(0);
   };
 
@@ -153,7 +160,6 @@ export default function NAC_ROW() {
     const response = await store_FA_control_select_NAC_approve({
       usercode
     });
-    console.log(response);
     setSelectNAC(response.data);
   };
 
@@ -247,18 +253,18 @@ export default function NAC_ROW() {
                       </TableHead>
                       <TableBody>
                         {(rowsPerPage > 0
-                          ? selectNAC.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).filter((val) => {
+                          ? selectNAC.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).filter((selectNAC) => {
                             if (search === ''){
-                              return val
-                            }else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase())){
-                              return val
+                              return selectNAC
+                            }else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) || selectNAC.name.toLowerCase().includes(search.toLowerCase())|| selectNAC.create_by.toLowerCase().includes(search.toLowerCase())){
+                              return selectNAC
                             }
                           })
-                          : selectNAC.filter((val) => {
+                          : selectNAC.filter((selectNAC) => {
                             if (search === ''){
-                              return val
-                            }else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase())){
-                              return val
+                              return selectNAC
+                            }else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) || selectNAC.name.toLowerCase().includes(search.toLowerCase())|| selectNAC.create_by.toLowerCase().includes(search.toLowerCase())){
+                              return selectNAC
                             }
                           })
                         ).map((selectNAC) => (
@@ -285,7 +291,7 @@ export default function NAC_ROW() {
                             count={selectNAC.filter((val) => {
                               if (search === ''){
                                 return val
-                              }else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase())){
+                              }else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase())|| val.create_by.toLowerCase().includes(search.toLowerCase())){
                                 return val
                               }
                             }).length}
