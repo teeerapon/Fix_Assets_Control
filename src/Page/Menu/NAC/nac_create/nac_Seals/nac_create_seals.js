@@ -625,7 +625,7 @@ export default function Nac_Main() {
                   <TableContainer component={Paper}>
                     <Table aria-label="customized table" style={{ width: '100%' }}>
                       <TableBody>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
                           <TextField
                             required
                             fullWidth
@@ -648,15 +648,15 @@ export default function Nac_Main() {
                   <Table aria-label="customized table" style={{ width: '100%' }}>
                     <TableHead>
                       <TableRow>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ยื่นคำร้อง</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับคำร้อง</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ยื่นคำร้อง</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับคำร้อง</StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <React.Fragment>
                       <TableBody>
                         <StyledTableRow>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                             <FormGroup>
                               <center>
                                 <Typography variant='h4'>
@@ -665,7 +665,7 @@ export default function Nac_Main() {
                               </center>
                             </FormGroup>
                           </StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                             <React.Fragment>
                               <Grid container>
                                 <Grid xs={6}>
@@ -787,97 +787,14 @@ export default function Nac_Main() {
                               />
                             </React.Fragment>
                           </StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                            <React.Fragment>
-                              <Grid container>
-                                <Grid xs={6}>
-                                  <Typography align='center' color="inherit" noWrap>
-                                    Department
-                                  </Typography>
-                                </Grid>
-                                <Grid xs={6}>
-                                  <Typography align='center' color="inherit" noWrap>
-                                    BU
-                                  </Typography>
-                                </Grid>
-                              </Grid>
-                              <Stack
-                                direction="row"
-                                spacing={1}
-                                divider={<Divider orientation="vertical" flexItem />}
-                                sx={{ pt: 1, pb: 1 }}
-                              >
-                                <TextField
-                                  required
-                                  fullWidth
-                                  disabled
-                                  align="center"
-                                  name='des_Department'
-                                  variant="standard"
-                                  value="none"
-                                  inputProps={{ style: { textAlign: 'center' } }}
-                                  onChange={handleChangeDes_Department}
-                                />
-                                <TextField
-                                  required
-                                  disabled
-                                  value="none"
-                                  align='center'
-                                  name='des_BU'
-                                  fullWidth
-                                  variant="standard"
-                                  inputProps={{ style: { textAlign: 'center' } }}
-                                  onChange={handleDes_ChangeBU}
-                                />
-                              </Stack>
-                              <TextField
-                                fullWidth
-                                disabled
-                                autoComplete="family-name"
-                                onChange={handleChangeDes_delivery2}
-                                value={!des_delivery ? 'none' : des_delivery}
-                                sx={{ pt: 1 }}
-                                variant="standard"
-                                label='ผู้รับคำร้อง'
-                              />
-                              <TextField
-                                required
-                                fullWidth
-                                disabled
-                                name='des_deliveryApprove'
-                                value='none'
-                                sx={{ pt: 1 }}
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      <Typography color="black">
-                                        วันที่รับคำร้อง :
-                                      </Typography>
-                                    </InputAdornment>
-                                  ),
-                                }}
-                                variant="standard"
-                              />
-                              <TextField
-                                required
-                                fullWidth
-                                disabled
-                                value='none'
-                                name='des_Description'
-                                onChange={handleChangeDes_Description}
-                                sx={{ pt: 1 }}
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      <Typography color="black">
-                                        หมายเหตุ :
-                                      </Typography>
-                                    </InputAdornment>
-                                  ),
-                                }}
-                                variant="standard"
-                              />
-                            </React.Fragment>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                            <FormGroup>
+                              <center>
+                                <Typography variant='h4' color='#AAAAAA'>
+                                  none
+                                </Typography>
+                              </center>
+                            </FormGroup>
                           </StyledTableCell>
                         </StyledTableRow>
                       </TableBody>
@@ -886,11 +803,11 @@ export default function Nac_Main() {
                   <Table aria-label="customized table">
                     <TableHead>
                       <TableRow style={{ width: '100%' }}>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '18%' }} >รหัสทรัพย์สิน</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '12.5%' }} >Serial No.</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >ชื่อ</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '12.5%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '18%' }} >รหัสทรัพย์สิน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '12.5%' }} >Serial No.</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >ชื่อ</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '12.5%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >
                           <Stack direction="row" alignItems="center" spacing={1}>
                             <Typography sx={{ pl: 0.5 }}>
                               ต้นทุน
@@ -904,10 +821,10 @@ export default function Nac_Main() {
                             </IconButton>
                           </Stack>
                         </StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >BV</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >ราคาขาย</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >กำไร/ขาดทุน</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >BV</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >ราคาขาย</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >กำไร/ขาดทุน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
                           <IconButton
                             size="large"
                             color='primary'
@@ -922,7 +839,7 @@ export default function Nac_Main() {
                       <React.Fragment>
                         <TableBody>
                           <StyledTableRow>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <Autocomplete
                                 freeSolo
                                 key={index}
@@ -954,7 +871,7 @@ export default function Nac_Main() {
                                 )}
                               />
                             </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <TextField
                                 fullWidth
                                 key={index}
@@ -967,7 +884,7 @@ export default function Nac_Main() {
                                 variant="standard"
                               />
                             </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <TextField
                                 fullWidth
                                 key={index}
@@ -979,7 +896,7 @@ export default function Nac_Main() {
                                 variant="standard"
                               />
                             </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <TextField
                                 fullWidth
                                 key={index}
@@ -990,7 +907,7 @@ export default function Nac_Main() {
                                 variant="standard"
                               />
                             </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <TextField
                                 fullWidth
                                 key={index}
@@ -1003,7 +920,7 @@ export default function Nac_Main() {
                                 variant="standard"
                               />
                             </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <TextField
                                 fullWidth
                                 disabled
@@ -1016,7 +933,7 @@ export default function Nac_Main() {
                                 variant="standard"
                               />
                             </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <TextField
                                 fullWidth
                                 key={index}
@@ -1028,7 +945,7 @@ export default function Nac_Main() {
                                 variant="standard"
                               />
                             </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <TextField
                                 fullWidth
                                 disabled
@@ -1041,7 +958,7 @@ export default function Nac_Main() {
                                 variant="standard"
                               />
                             </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               {serviceList.length !== 0 && (
                                 <IconButton
                                   size="large"
@@ -1058,7 +975,7 @@ export default function Nac_Main() {
                       </React.Fragment>
                     ))}
                     <StyledTableRow>
-                      <StyledTableCell align="start" style={{ "borderWidth": "1px", 'border-right': 0 }}>
+                      <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'border-right': 0 }}>
                         <Typography>
                           รวมทั้งหมด
                         </Typography>
@@ -1069,7 +986,7 @@ export default function Nac_Main() {
                       </StyledTableCell>
                       <StyledTableCell align="start" style={{ border: `none` }}>
                       </StyledTableCell>
-                      <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                      <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                         <TextField
                           required
                           fullWidth
@@ -1079,7 +996,7 @@ export default function Nac_Main() {
                           variant="standard"
                         />
                       </StyledTableCell>
-                      <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                      <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                         <TextField
                           required
                           fullWidth
@@ -1089,7 +1006,7 @@ export default function Nac_Main() {
                           variant="standard"
                         />
                       </StyledTableCell>
-                      <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                      <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                         <TextField
                           required
                           fullWidth
@@ -1099,7 +1016,7 @@ export default function Nac_Main() {
                           variant="standard"
                         />
                       </StyledTableCell>
-                      <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                      <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                         <TextField
                           required
                           fullWidth
@@ -1109,14 +1026,14 @@ export default function Nac_Main() {
                           variant="standard"
                         />
                       </StyledTableCell>
-                      <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                      <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                       </StyledTableCell>
                     </StyledTableRow>
                   </Table>
                   <Table aria-label="customized table" style={{ width: '100%' }}>
                     <TableHead>
                       <StyledTableRow>
-                        <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }} >
+                        <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
                           <TextField
                             required
                             fullWidth
@@ -1151,7 +1068,7 @@ export default function Nac_Main() {
                             variant="standard"
                           />
                         </StyledTableCell>
-                        <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                        <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }}>
                           <TextField
                             required
                             fullWidth
@@ -1187,7 +1104,7 @@ export default function Nac_Main() {
                             variant="standard"
                           />
                         </StyledTableCell>
-                        <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                        <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }}>
                           <TextField
                             required
                             fullWidth
@@ -1222,7 +1139,7 @@ export default function Nac_Main() {
                             variant="standard"
                           />
                         </StyledTableCell>
-                        <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }} >
+                        <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
                           <TextField
                             required
                             fullWidth

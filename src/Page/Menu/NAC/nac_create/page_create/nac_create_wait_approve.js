@@ -1644,14 +1644,14 @@ export default function Nac_Main_wait() {
                     <TableContainer component={Paper}>
                       <Table aria-label="customized table" style={{ width: '100%' }}>
                         <TableBody>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                             <Typography align='center' color="inherit" noWrap>
                               {nac_code}
                             </Typography>
                           </StyledTableCell>
                         </TableBody>
                         <TableBody>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                             <Typography align='center' color="inherit" noWrap>
                               {!headers.create_date ? '' : (headers.create_date).split('T')[0]}
                             </Typography>
@@ -1669,15 +1669,15 @@ export default function Nac_Main_wait() {
                     <Table aria-label="customized table" style={{ width: '100%' }}>
                       <TableHead>
                         <TableRow>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ส่งมอบ</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับมอบ</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ส่งมอบ</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับมอบ</StyledTableCell>
                         </TableRow>
                       </TableHead>
                       <React.Fragment>
                         <TableBody>
                           <StyledTableRow>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               {selectNAC === 0 ? (
                                 <FormGroup>
                                   <center>
@@ -1710,7 +1710,7 @@ export default function Nac_Main_wait() {
                                 </FormGroup>
                               )}
                             </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <React.Fragment>
                                 <Grid container>
                                   <Grid xs={6}>
@@ -1820,7 +1820,7 @@ export default function Nac_Main_wait() {
                                 />
                               </React.Fragment>
                             </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <React.Fragment>
                                 <Grid container>
                                   <Grid xs={6}>
@@ -1937,13 +1937,13 @@ export default function Nac_Main_wait() {
                     <Table aria-label="customized table">
                       <TableHead>
                         <TableRow style={{ width: '100%' }}>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >Serial No.</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >รายละเอียด</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >Serial No.</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >รายละเอียด</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >
                             <Stack direction="row" alignItems="center" spacing={1}>
                               <Typography>
                                 ต้นทุน
@@ -1959,12 +1959,12 @@ export default function Nac_Main_wait() {
                           </StyledTableCell>
                           {(selectNAC >= 4 && selectNAC < 7) || selectNAC === 8 || selectNAC === 14 ? (
                             <React.Fragment>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
                                 <Typography>
                                   ตรวจสอบ
                                 </Typography>
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
                                 <IconButton
                                   size="large"
                                   color='primary'
@@ -1977,7 +1977,7 @@ export default function Nac_Main_wait() {
                             </React.Fragment>
                           ) : (
                             <React.Fragment>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
                                 <IconButton
                                   size="large"
                                   color='primary'
@@ -1995,7 +1995,7 @@ export default function Nac_Main_wait() {
                         <React.Fragment>
                           <TableBody>
                             <StyledTableRow>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 {(selectNAC === 1 && data.UserCode === headers.create_by) ? (
                                   <React.Fragment>
                                     <Autocomplete
@@ -2044,7 +2044,7 @@ export default function Nac_Main_wait() {
                                   </React.Fragment>
                                 )}
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -2057,7 +2057,7 @@ export default function Nac_Main_wait() {
                                   value={!singleService.serialNo ? '' : singleService.serialNo}
                                 />
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -2070,7 +2070,7 @@ export default function Nac_Main_wait() {
                                   value={singleService.name}
                                 />
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   fullWidth
                                   key={index}
@@ -2082,7 +2082,7 @@ export default function Nac_Main_wait() {
                                   variant="standard"
                                 />
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -2095,7 +2095,7 @@ export default function Nac_Main_wait() {
                                   value={singleService.dtl}
                                 />
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -2110,7 +2110,7 @@ export default function Nac_Main_wait() {
                                   value={singleService.count}
                                 />
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -2126,7 +2126,7 @@ export default function Nac_Main_wait() {
                               </StyledTableCell>
                               {(selectNAC >= 4 && selectNAC < 7) || selectNAC === 8 || selectNAC === 14 ? (
                                 <React.Fragment>
-                                  <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                  <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                     <Checkbox
                                       key={index}
                                       name='checkBox'
@@ -2135,7 +2135,7 @@ export default function Nac_Main_wait() {
                                       onChange={(e) => handleCheckBox(e, index)}
                                     />
                                   </StyledTableCell>
-                                  <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                  <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                     {serviceList.length !== 0 && (
                                       <IconButton
                                         size="large"
@@ -2151,7 +2151,7 @@ export default function Nac_Main_wait() {
                                 </React.Fragment>
                               ) : (
                                 <React.Fragment>
-                                  <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                  <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                     {serviceList.length !== 0 && (
                                       <IconButton
                                         size="large"
@@ -2174,12 +2174,12 @@ export default function Nac_Main_wait() {
                     <Table aria-label="customized table" style={{ width: '100%' }}>
                       <TableBody>
                         <StyledTableRow>
-                          <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '55%' }}>
+                          <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '55%' }}>
                             <Typography>
                               ต้นทุนรวมทั้งหมด
                             </Typography>
                           </StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '45%' }}>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '45%' }}>
                             <TextField
                               required
                               fullWidth
@@ -2204,7 +2204,7 @@ export default function Nac_Main_wait() {
                     <Table aria-label="customized table" style={{ width: '100%' }}>
                       <TableHead>
                         <StyledTableRow>
-                          <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }} >
+                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
                             <TextField
                               required
                               fullWidth
@@ -2239,7 +2239,7 @@ export default function Nac_Main_wait() {
                               variant="standard"
                             />
                           </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }}>
                             <TextField
                               required
                               fullWidth
@@ -2278,7 +2278,7 @@ export default function Nac_Main_wait() {
                               variant="standard"
                             />
                           </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }}>
                             <TextField
                               required
                               fullWidth
@@ -2313,7 +2313,7 @@ export default function Nac_Main_wait() {
                               variant="standard"
                             />
                           </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }} >
+                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
                             <TextField
                               required
                               fullWidth

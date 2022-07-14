@@ -130,6 +130,7 @@ export default function NAC_ROW() {
 
   const [selectNAC, setSelectNAC] = React.useState([]);
   const [search, setSearchTerm] = React.useState('');
+  const [tableSearch, setTableSearch] = React.useState([]);
   const data = JSON.parse(localStorage.getItem('data'));
   const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
@@ -137,20 +138,25 @@ export default function NAC_ROW() {
 
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - selectNAC.filter((val) => {
-      if (search === ''){
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (tableSearch.length === 0 ? selectNAC.filter((val) => {
+      if (search === '') {
         return val
-      }else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase())|| val.create_by.toLowerCase().includes(search.toLowerCase())){
+      } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase()) || val.create_by.toLowerCase().includes(search.toLowerCase())) {
         return val
       }
-    }).length) : 0;
+    }) : tableSearch.filter((val) => {
+      if (search === '') {
+        return val
+      } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase()) || val.create_by.toLowerCase().includes(search.toLowerCase())) {
+        return val
+      }
+    })).length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    console.log(event.target.value, 20);
     setRowsPerPage(parseInt(event.target.value, 20));
     setPage(0);
   };
@@ -162,6 +168,17 @@ export default function NAC_ROW() {
     });
     setSelectNAC(response.data);
   };
+
+  const handleSetSearch = (event) => {
+    setSearchTerm(event.target.value)
+    setTableSearch(selectNAC.filter((val) => {
+      if (event.target.value === '') {
+        return val
+      } else if (val.nac_code.toLowerCase().includes((event.target.value).toLowerCase()) || val.name.toLowerCase().includes((event.target.value).toLowerCase()) || val.create_by.toLowerCase().includes((event.target.value).toLowerCase())) {
+        return val
+      }
+    }));
+  }
 
   React.useEffect(() => {
     fetchMyNAC();
@@ -227,7 +244,8 @@ export default function NAC_ROW() {
                     label="Search..."
                     variant="outlined"
                     size="small"
-                    onChange={event => {setSearchTerm(event.target.value)}}
+                    onChange={handleSetSearch}
+                    value={search}
                   />
                 </Stack>
                 <Paper variant="outlined" sx={{ my: 2, p: { xs: 2, md: 3 } }}>
@@ -252,18 +270,18 @@ export default function NAC_ROW() {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {(rowsPerPage > 0
+                        {tableSearch.length === 0 ? (rowsPerPage > 0
                           ? selectNAC.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).filter((selectNAC) => {
-                            if (search === ''){
+                            if (search === '') {
                               return selectNAC
-                            }else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) || selectNAC.name.toLowerCase().includes(search.toLowerCase())|| selectNAC.create_by.toLowerCase().includes(search.toLowerCase())){
+                            } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) || selectNAC.name.toLowerCase().includes(search.toLowerCase()) || selectNAC.create_by.toLowerCase().includes(search.toLowerCase())) {
                               return selectNAC
                             }
                           })
                           : selectNAC.filter((selectNAC) => {
-                            if (search === ''){
+                            if (search === '') {
                               return selectNAC
-                            }else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) || selectNAC.name.toLowerCase().includes(search.toLowerCase())|| selectNAC.create_by.toLowerCase().includes(search.toLowerCase())){
+                            } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) || selectNAC.name.toLowerCase().includes(search.toLowerCase()) || selectNAC.create_by.toLowerCase().includes(search.toLowerCase())) {
                               return selectNAC
                             }
                           })
@@ -274,7 +292,30 @@ export default function NAC_ROW() {
                               handleEditClick={handleEditClick}
                             />
                           </React.Fragment>
-                        ))}
+                        ))
+                          : (rowsPerPage > 0
+                            ? tableSearch.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).filter((selectNAC) => {
+                              if (search === '') {
+                                return selectNAC
+                              } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) || selectNAC.name.toLowerCase().includes(search.toLowerCase()) || selectNAC.create_by.toLowerCase().includes(search.toLowerCase())) {
+                                return selectNAC
+                              }
+                            })
+                            : tableSearch.filter((selectNAC) => {
+                              if (search === '') {
+                                return selectNAC
+                              } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) || selectNAC.name.toLowerCase().includes(search.toLowerCase()) || selectNAC.create_by.toLowerCase().includes(search.toLowerCase())) {
+                                return selectNAC
+                              }
+                            })
+                          ).map((selectNAC) => (
+                            <React.Fragment>
+                              <NAC_ReadOnly
+                                selectNAC={selectNAC}
+                                handleEditClick={handleEditClick}
+                              />
+                            </React.Fragment>
+                          ))}
                         {emptyRows > 0 && (
                           <TableRow style={{ height: 53 * emptyRows }}>
                             <TableCell colSpan={6} />
@@ -288,10 +329,17 @@ export default function NAC_ROW() {
                         <TableRow>
                           <TablePagination
                             rowsPerPageOptions={[]}
-                            count={selectNAC.filter((val) => {
-                              if (search === ''){
+                            count={tableSearch.length === 0 ? selectNAC.filter((val) => {
+                              if (search === '') {
                                 return val
-                              }else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase())|| val.create_by.toLowerCase().includes(search.toLowerCase())){
+                              } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase()) || val.create_by.toLowerCase().includes(search.toLowerCase())) {
+                                return val
+                              }
+                            }).length 
+                            : tableSearch.filter((val) => {
+                              if (search === '') {
+                                return val
+                              } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase()) || val.create_by.toLowerCase().includes(search.toLowerCase())) {
                                 return val
                               }
                             }).length}

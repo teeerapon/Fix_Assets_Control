@@ -312,7 +312,7 @@ export default function Nac_Seals_Approve() {
   const { nac_id } = useParams()
   const nac_code = nac_id.split('=')[0]
   const nac_status = parseInt(nac_id.split('=')[1])
-    const [selectNAC] = React.useState(nac_status);
+  const [selectNAC] = React.useState(nac_status);
   const [headers, setHeaders] = React.useState([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openDialogReply, setOpenDialogReply] = React.useState(false);
@@ -987,7 +987,7 @@ export default function Nac_Seals_Approve() {
                     buttons: false,
                     timer: 2000,
                   }).then((value) => {
-                    navigate('/NAC_ROW/NAC_SEALS_APPROVE/'+nac_code+'='+(selectNAC === 11) ? 10 : 11)
+                    navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code + '=' + (selectNAC === 11) ? 10 : 11)
                   });
                 }
               } else {
@@ -1077,7 +1077,7 @@ export default function Nac_Seals_Approve() {
                   buttons: false,
                   timer: 2000,
                 }).then((value) => {
-                  navigate('/NAC_ROW/NAC_SEALS_APPROVE/'+nac_code+'='+(selectNAC === 11) ? 10 : 11)
+                  navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code + '=' + (selectNAC === 11) ? 10 : 11)
                 });
               }
             }
@@ -1086,7 +1086,7 @@ export default function Nac_Seals_Approve() {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              navigate('/NAC_ROW/NAC_SEALS_APPROVE/'+nac_code+'='+(selectNAC === 11) ? 10 : 11)
+              navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code + '=' + (selectNAC === 11) ? 10 : 11)
             });
           }
         }
@@ -1390,8 +1390,8 @@ export default function Nac_Seals_Approve() {
               }
             }
             swal("ทำรายการสำเร็จ", selectNAC === 4 ? 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว'
-            : (selectNAC === 99 || selectNAC === 13) ? 'ทำการแนบเอกสาร ในรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
-              : 'ปิดรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+              : (selectNAC === 99 || selectNAC === 13) ? 'ทำการแนบเอกสาร ในรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+                : 'ปิดรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
@@ -1639,17 +1639,17 @@ export default function Nac_Seals_Approve() {
                     </Typography>
                   </Grid>
                   <Grid xs={2}>
-                  <TableContainer component={Paper}>
+                    <TableContainer component={Paper}>
                       <Table aria-label="customized table" style={{ width: '100%' }}>
                         <TableBody>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                             <Typography align='center' color="inherit" noWrap>
                               {nac_code}
                             </Typography>
                           </StyledTableCell>
                         </TableBody>
                         <TableBody>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                             <Typography align='center' color="inherit" noWrap>
                               {!headers.create_date ? '' : (headers.create_date).split('T')[0]}
                             </Typography>
@@ -1667,15 +1667,15 @@ export default function Nac_Seals_Approve() {
                     <Table aria-label="customized table" style={{ width: '100%' }}>
                       <TableHead>
                         <TableRow>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ยื่นคำร้อง</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับคำร้อง</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ยื่นคำร้อง</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับคำร้อง</StyledTableCell>
                         </TableRow>
                       </TableHead>
                       <React.Fragment>
                         <TableBody>
                           <StyledTableRow>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               {selectNAC === 0 ? (
                                 <FormGroup>
                                   <center>
@@ -1708,7 +1708,7 @@ export default function Nac_Seals_Approve() {
                                 </FormGroup>
                               )}
                             </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <React.Fragment>
                                 <Grid container>
                                   <Grid xs={6}>
@@ -1818,96 +1818,14 @@ export default function Nac_Seals_Approve() {
                                 />
                               </React.Fragment>
                             </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                              <React.Fragment>
-                                <Grid container>
-                                  <Grid xs={6}>
-                                    <Typography align='center' color="inherit" noWrap>
-                                      Department
-                                    </Typography>
-                                  </Grid>
-                                  <Grid xs={6}>
-                                    <Typography align='center' color="inherit" noWrap>
-                                      BU
-                                    </Typography>
-                                  </Grid>
-                                </Grid>
-                                <Stack
-                                  direction="row"
-                                  spacing={1}
-                                  divider={<Divider orientation="vertical" flexItem />}
-                                  sx={{ pt: 1, pb: 1 }}
-                                >
-                                  <TextField
-                                    required
-                                    fullWidth
-                                    disabled
-                                    align="center"
-                                    name='des_Department'
-                                    variant="standard"
-                                    value="none"
-                                    inputProps={{ style: { textAlign: 'center' } }}
-                                    onChange={handleChangeDes_Department}
-                                  />
-                                  <TextField
-                                    required
-                                    disabled
-                                    value="none"
-                                    align='center'
-                                    name='des_BU'
-                                    fullWidth
-                                    variant="standard"
-                                    inputProps={{ style: { textAlign: 'center' } }}
-                                    onChange={handleDes_ChangeBU}
-                                  />
-                                </Stack>
-                                <TextField
-                                  fullWidth
-                                  disabled
-                                  autoComplete="family-name"
-                                  onChange={handleChangeDes_delivery2}
-                                  value={!des_delivery ? 'none' : des_delivery}
-                                  sx={{ pt: 1 }}
-                                  variant="standard"
-                                  label='ผู้รับคำร้อง'
-                                />
-                                <TextField
-                                  required
-                                  fullWidth
-                                  disabled
-                                  name='des_deliveryApprove'
-                                  value='none'
-                                  sx={{ pt: 1 }}
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          วันที่รับคำร้อง :
-                                        </Typography>
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  variant="standard"
-                                />
-                                <TextField
-                                  required
-                                  fullWidth
-                                  disabled
-                                  value='none'
-                                  name='des_Description'
-                                  sx={{ pt: 1 }}
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          หมายเหตุ :
-                                        </Typography>
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  variant="standard"
-                                />
-                              </React.Fragment>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              <FormGroup>
+                                <center>
+                                  <Typography variant='h4' color='#AAAAAA'>
+                                    none
+                                  </Typography>
+                                </center>
+                              </FormGroup>
                             </StyledTableCell>
                           </StyledTableRow>
                         </TableBody>
@@ -1916,11 +1834,11 @@ export default function Nac_Seals_Approve() {
                     <Table aria-label="customized table">
                       <TableHead>
                         <TableRow style={{ width: '100%' }}>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '18%' }} >รหัสทรัพย์สิน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '12.5%' }} >Serial No.</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '15%' }} >ชื่อ</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '12.5%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '18%' }} >รหัสทรัพย์สิน</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '12.5%' }} >Serial No.</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >ชื่อ</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '12.5%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >
                             <Stack direction="row" alignItems="center" spacing={1}>
                               <Typography sx={{ pl: 0.5 }}>
                                 ต้นทุน
@@ -1934,10 +1852,10 @@ export default function Nac_Seals_Approve() {
                               </IconButton>
                             </Stack>
                           </StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >BV</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >ราคาขาย</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '10%' }} >กำไร/ขาดทุน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }} >
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >BV</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >ราคาขาย</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >กำไร/ขาดทุน</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
                             <IconButton
                               size="large"
                               color='primary'
@@ -1953,7 +1871,7 @@ export default function Nac_Seals_Approve() {
                         <React.Fragment>
                           <TableBody>
                             <StyledTableRow>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 {(selectNAC === 1 && data.UserCode === headers.create_by) ? (
                                   <React.Fragment>
                                     <Autocomplete
@@ -2002,7 +1920,7 @@ export default function Nac_Seals_Approve() {
                                   </React.Fragment>
                                 )}
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -2015,7 +1933,7 @@ export default function Nac_Seals_Approve() {
                                   value={!singleService.serialNo ? '' : singleService.serialNo}
                                 />
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -2028,7 +1946,7 @@ export default function Nac_Seals_Approve() {
                                   value={singleService.name}
                                 />
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   fullWidth
                                   key={index}
@@ -2040,7 +1958,7 @@ export default function Nac_Seals_Approve() {
                                   variant="standard"
                                 />
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -2054,7 +1972,7 @@ export default function Nac_Seals_Approve() {
                                   variant="standard"
                                 />
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -2068,7 +1986,7 @@ export default function Nac_Seals_Approve() {
                                   value={!singleService.bookValue ? '' : (singleService.bookValue).toLocaleString()}
                                 />
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -2081,7 +1999,7 @@ export default function Nac_Seals_Approve() {
                                   value={!singleService.priceSeals ? '' : (singleService.priceSeals).toLocaleString()}
                                 />
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -2095,7 +2013,7 @@ export default function Nac_Seals_Approve() {
                                   value={(serviceList[index].priceSeals - serviceList[index].bookValue).toLocaleString()}
                                 />
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 {serviceList.length !== 0 && (
                                   <IconButton
                                     size="large"
@@ -2124,7 +2042,7 @@ export default function Nac_Seals_Approve() {
                         </StyledTableCell>
                         <StyledTableCell align="start" style={{ border: `none` }}>
                         </StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                           <TextField
                             required
                             fullWidth
@@ -2134,7 +2052,7 @@ export default function Nac_Seals_Approve() {
                             variant="standard"
                           />
                         </StyledTableCell>
-                        <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                        <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                           <TextField
                             required
                             fullWidth
@@ -2144,7 +2062,7 @@ export default function Nac_Seals_Approve() {
                             variant="standard"
                           />
                         </StyledTableCell>
-                        <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                        <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                           <TextField
                             required
                             fullWidth
@@ -2154,7 +2072,7 @@ export default function Nac_Seals_Approve() {
                             variant="standard"
                           />
                         </StyledTableCell>
-                        <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                        <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                           <TextField
                             required
                             fullWidth
@@ -2164,7 +2082,7 @@ export default function Nac_Seals_Approve() {
                             variant="standard"
                           />
                         </StyledTableCell>
-                        <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                        <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                         </StyledTableCell>
                       </StyledTableRow>
                     </Table>
@@ -2177,12 +2095,12 @@ export default function Nac_Seals_Approve() {
                         ) : (
                           <React.Fragment>
                             <StyledTableRow>
-                              <StyledTableCell align="start" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '53.1%' }}>
+                              <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '53.1%' }}>
                                 <Typography>
                                   ราคาขายจริงรวมทั้งหมด
                                 </Typography>
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   required
                                   fullWidth
@@ -2210,7 +2128,7 @@ export default function Nac_Seals_Approve() {
                     <Table aria-label="customized table" style={{ width: '100%' }}>
                       <TableHead>
                         <StyledTableRow>
-                          <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }} >
+                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
                             <TextField
                               required
                               fullWidth
@@ -2245,7 +2163,7 @@ export default function Nac_Seals_Approve() {
                               variant="standard"
                             />
                           </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }}>
                             <TextField
                               required
                               fullWidth
@@ -2284,7 +2202,7 @@ export default function Nac_Seals_Approve() {
                               variant="standard"
                             />
                           </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }}>
                             <TextField
                               required
                               fullWidth
@@ -2319,7 +2237,7 @@ export default function Nac_Seals_Approve() {
                               variant="standard"
                             />
                           </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa", width: '25%' }} >
+                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
                             <TextField
                               required
                               fullWidth

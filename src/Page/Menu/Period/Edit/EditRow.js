@@ -48,6 +48,16 @@ async function EditPeriodData(credentials) {
 
 export default function EditPeriod({ editFormData, handleEditClickCancel }) {
 
+  // ใช้สำหรับสร้างเวลาปัจจุบัน
+  const d = new Date();
+  const year = (d.getFullYear()).toString();
+  const month = ((d.getMonth()) + 101).toString().slice(-2);
+  const date = ((d.getDate()) + 100).toString().slice(-2);
+  const hours = ((d.getHours()) + 100).toString().slice(-2);
+  const mins = ((d.getMinutes()) + 100).toString().slice(-2);
+  const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
+  const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
+
   const [PeriodID] = React.useState(editFormData.PeriodID);
   const [BeginDate, setBeginDate] = React.useState(editFormData.BeginDate);
   const [EndDate, setEndDate] = React.useState(editFormData.EndDate);
@@ -98,11 +108,11 @@ export default function EditPeriod({ editFormData, handleEditClickCancel }) {
   return (
     <StyledTableRow >
       <StyledTableCell component="th" scope="row" align="center">
-        <Typography color="inherit" name="PeriodID" noWrap>
+        <Typography color="inherit" variant="body2" name="PeriodID" noWrap>
           {PeriodID}
         </Typography>
       </StyledTableCell>
-      <StyledTableCell align="center">
+      <StyledTableCell align="left">
         <LocalizationProvider dateAdapter={DateAdapter}>
           <DatePicker
             value={BeginDate}
@@ -120,7 +130,7 @@ export default function EditPeriod({ editFormData, handleEditClickCancel }) {
           />
         </LocalizationProvider>
       </StyledTableCell>
-      <StyledTableCell align="center">
+      <StyledTableCell align="left">
         <LocalizationProvider dateAdapter={DateAdapter}>
           <DatePicker
             value={EndDate}
@@ -138,14 +148,19 @@ export default function EditPeriod({ editFormData, handleEditClickCancel }) {
           />
         </LocalizationProvider>
       </StyledTableCell>
-      <StyledTableCell align="center" >
-        <Typography focused color="inherit" name="Description" noWrap>
+      <StyledTableCell align="left" >
+        <Typography focused color="inherit" variant="body2" name="Description" noWrap>
           {Description}
         </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" >
-        <Typography focused color="inherit" name="BranchID" noWrap>
+        <Typography focused color="inherit" variant="body2" name="BranchID" noWrap>
           {(BranchID === 0 || BranchID === '0') ? 'ทุกสาขา' : BranchID}
+        </Typography>
+      </StyledTableCell>
+      <StyledTableCell align="left" >
+        <Typography focused style={{'color': datenow >= BeginDate && datenow <=EndDate ? 'green' : 'red' }} name="Datetime" variant="body2" noWrap>
+          {datenow >= BeginDate && datenow <=EndDate ? 'อยู่ระหว่างเปิดใช้งาน' : 'ปิดการใช้งานแล้ว' }
         </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" >
