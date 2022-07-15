@@ -49,6 +49,7 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import ReplyAllRoundedIcon from '@mui/icons-material/ReplyAllRounded';
 import CloudDownloadRoundedIcon from '@mui/icons-material/CloudDownloadRounded';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
+import logoPure from '../../../../../image/Picture1.jpg'
 
 function Copyright() {
   return (
@@ -1629,6 +1630,9 @@ export default function Nac_Seals_Approve() {
               <Paper variant="outlined" sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 3 } }}>
                 <Grid container sx={{ pb: 1 }}>
                   <Grid xs={2}>
+                    <Box sx={{ flexGrow: 1, justifyContent: 'start' }}>
+                      <img src={logoPure} loading="lazy" />
+                    </Box>
                   </Grid>
                   <Grid xs={8}>
                     <Typography component="h1" variant="h4" align="center">

@@ -36,6 +36,7 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import swal from 'sweetalert';
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
+import logoPure from '../../../../../image/Picture1.jpg'
 
 function Copyright() {
   return (
@@ -316,18 +317,18 @@ export default function Nac_Main() {
 
   const handleChangeSource_Department = (event) => {
     event.preventDefault();
-    if(data.branchid !==901){
+    if (data.branchid !== 901) {
       setSource_Department('ROD');
-    }else{
+    } else {
       setSource_Department(event.target.value);
     }
   };
 
   const handleChangeSource_BU = (event) => {
     event.preventDefault();
-    if(data.branchid !==901){
+    if (data.branchid !== 901) {
       setSource_BU('Oil');
-    }else{
+    } else {
       setSource_BU(event.target.value);
     }
   };
@@ -575,7 +576,7 @@ export default function Nac_Main() {
                 timer: 2000,
               }).then((value) => {
                 localStorage.setItem('NacCode', JSON.stringify({ nac_code: responseDTL.data[0].nac_code, nac_status: 1 }));
-                navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/'+responseDTL.data[0].nac_code+'='+1)
+                navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/' + responseDTL.data[0].nac_code + '=' + 1)
               });
             } else {
               swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "warning", {
@@ -628,6 +629,9 @@ export default function Nac_Main() {
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
               <Grid container sx={{ pb: 1 }}>
                 <Grid xs={2}>
+                  <Box sx={{ flexGrow: 1, justifyContent: 'start' }}>
+                    <img src={logoPure} loading="lazy" />
+                  </Box>
                 </Grid>
                 <Grid xs={8}>
                   <Typography component="h1" variant="h4" align="center">

@@ -35,6 +35,7 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import swal from 'sweetalert';
+import logoPure from '../../../../../image/Picture1.jpg'
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 
 function Copyright() {
@@ -635,6 +636,9 @@ export default function Nac_Main() {
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
               <Grid container sx={{ pb: 1 }}>
                 <Grid xs={2}>
+                  <Box sx={{ flexGrow: 1, justifyContent: 'start' }}>
+                    <img src={logoPure} loading="lazy" />
+                  </Box>
                 </Grid>
                 <Grid xs={8}>
                   <Typography component="h1" variant="h4" align="center">
