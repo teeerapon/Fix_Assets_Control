@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import AnimatedPage from '../../../AnimatedPage.jsx'
 import React from 'react';
 import Box from '@mui/material/Box';
+import logoPure from '../../../image/Picture1.png'
 
 export default function MenuAppBar() {
   return (
@@ -29,15 +30,16 @@ export default function MenuAppBar() {
       <AnimatedPage>
         <Box
           sx={{
-            marginTop: 20,
+            marginTop: 10,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}
         >
-          <Container>
+          <img style={{ maxWidth: '30%' }} src={logoPure} loading="lazy" />
+          <Container sx={{pt:1}}>
             <body className="text-center text-dark bg-white" style={{ height: "50vh" }}>
-              <div className='container bg-white' style={{ height: "50vh", width: "100vh" }}>
+              <div className='container bg-white' style={{ height: "40vh", width: "100vh" }}>
                 <main className="px-3">
                   <h1>PURE THAI ENERGY CO.,LTD</h1>
                   <hr></hr>

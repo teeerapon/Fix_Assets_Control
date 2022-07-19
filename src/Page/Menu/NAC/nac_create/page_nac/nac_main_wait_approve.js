@@ -35,7 +35,7 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import swal from 'sweetalert';
-import logoPure from '../../../../../image/Picture1.jpg'
+import logoPure from '../../../../../image/Picture1.png'
 import { Outlet, useNavigate } from "react-router";
 import CommentNAC from '../Comment'
 import Checkbox from '@mui/material/Checkbox';
@@ -51,6 +51,7 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import ReplyAllRoundedIcon from '@mui/icons-material/ReplyAllRounded';
 import CloudDownloadRoundedIcon from '@mui/icons-material/CloudDownloadRounded';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 
 function Copyright() {
   return (
@@ -283,7 +284,7 @@ export default function Nac_Main_wait() {
   const navigate = useNavigate();
   const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: "" }]);
   const sum_price = serviceList.map(function (elt) {
-    return /^\d+$/.test(elt.price * elt.count) ? parseInt(elt.price * elt.count) : 0;
+    return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
@@ -445,25 +446,28 @@ export default function Nac_Main_wait() {
     for (let i = 0; i < (responseExecDocID.data.length); i++) {
       if (responseExecDocID.data[i].limitamount >= price_approve && responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 5) {
         ExecApprove[i] = {
-          approverid: responseExecDocID.data[i].workflowlevel === 1 ? 'SM' :
-            responseExecDocID.data[i].workflowlevel === 2 ? 'DM' :
-              responseExecDocID.data[i].workflowlevel === 3 ? 'FM' : 'MD', status: responseExecDocID.data[i].status
+          approverid: responseExecDocID.data[i].workflowlevel === 0 ? 'AM: ' + responseExecDocID.data[i].approverid :
+            responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
+              responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
+                responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
         }
         CheckApprove[i] = responseExecDocID.data[i].approverid
       }
 
       if (responseExecDocID.data[i].limitamount < price_approve && responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 5) {
         ExamineApprove[i] = {
-          approverid: responseExecDocID.data[i].workflowlevel === 1 ? 'SM' :
-            responseExecDocID.data[i].workflowlevel === 2 ? 'DM' :
-              responseExecDocID.data[i].workflowlevel === 3 ? 'FM' : 'MD', status: responseExecDocID.data[i].status
+          approverid: responseExecDocID.data[i].workflowlevel === 0 ? 'AM: ' + responseExecDocID.data[i].approverid :
+            responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
+              responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
+                responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
         }
         CheckExamineApprove[i] = responseExecDocID.data[i].approverid
       } else if (responseExecDocID.data[i].workflowlevel > 4) {
         ExamineApproveDes[i] = {
-          approverid: responseExecDocID.data[i].workflowlevel === 1 ? 'SM' :
-            responseExecDocID.data[i].workflowlevel === 2 ? 'DM' :
-              responseExecDocID.data[i].workflowlevel === 3 ? 'FM' : 'MD', status: responseExecDocID.data[i].status
+          approverid: responseExecDocID.data[i].workflowlevel === 0 ? 'AM: ' + responseExecDocID.data[i].approverid :
+            responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
+              responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
+                responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
         }
         CheckExamineApproveDes[i] = responseExecDocID.data[i].approverid
       }
@@ -587,6 +591,10 @@ export default function Nac_Main_wait() {
       }
     }
   };
+
+  function handleGoNAC() {
+    navigate('/NAC_ROW')
+  }
 
   //Source
   const handleChangeSource_Department = (event) => {
@@ -877,11 +885,7 @@ export default function Nac_Main_wait() {
                   buttons: false,
                   timer: 2000,
                 }).then((value) => {
-                  if (checkUserWeb === 'admin') {
-                    navigate('/NAC_OPERATOR')
-                  } else {
-                    navigate('/NAC_ROW')
-                  }
+                  navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + nac_status)
                 });
               } else {
                 swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error", {
@@ -967,22 +971,14 @@ export default function Nac_Main_wait() {
                   buttons: false,
                   timer: 2000,
                 }).then((value) => {
-                  if (checkUserWeb === 'admin') {
-                    navigate('/NAC_OPERATOR')
-                  } else {
-                    navigate('/NAC_ROW')
-                  }
+                  navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
                 });
               } else {
                 swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
                   buttons: false,
                   timer: 2000,
                 }).then((value) => {
-                  if (checkUserWeb === 'admin') {
-                    navigate('/NAC_OPERATOR')
-                  } else {
-                    navigate('/NAC_ROW')
-                  }
+                  navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
                 });
               }
             } else {
@@ -990,11 +986,7 @@ export default function Nac_Main_wait() {
                 buttons: false,
                 timer: 2000,
               }).then((value) => {
-                if (checkUserWeb === 'admin') {
-                  navigate('/NAC_OPERATOR')
-                } else {
-                  navigate('/NAC_ROW')
-                }
+                navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + nac_status)
               });
             }
           }
@@ -1052,22 +1044,14 @@ export default function Nac_Main_wait() {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              if (checkUserWeb === 'admin') {
-                navigate('/NAC_OPERATOR')
-              } else {
-                navigate('/NAC_ROW')
-              }
+              navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
             });
           } else {
             swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              if (checkUserWeb === 'admin') {
-                navigate('/NAC_OPERATOR')
-              } else {
-                navigate('/NAC_ROW')
-              }
+              navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
             });
           }
         } else {
@@ -1075,11 +1059,7 @@ export default function Nac_Main_wait() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            if (checkUserWeb === 'admin') {
-              navigate('/NAC_OPERATOR')
-            } else {
-              navigate('/NAC_ROW')
-            }
+            navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + nac_status)
           });
         }
       }
@@ -1124,22 +1104,14 @@ export default function Nac_Main_wait() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            if (checkUserWeb === 'admin') {
-              navigate('/NAC_OPERATOR')
-            } else {
-              navigate('/NAC_ROW')
-            }
+            navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
           });
         } else {
           swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            if (checkUserWeb === 'admin') {
-              navigate('/NAC_OPERATOR')
-            } else {
-              navigate('/NAC_ROW')
-            }
+            navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
           });
         }
       } else {
@@ -1147,11 +1119,7 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'admin') {
-            navigate('/NAC_OPERATOR')
-          } else {
-            navigate('/NAC_ROW')
-          }
+          navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + nac_status)
         });
       }
     }
@@ -1199,22 +1167,14 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'admin') {
-            navigate('/NAC_OPERATOR')
-          } else {
-            navigate('/NAC_ROW')
-          }
+          navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
         });
       } else {
         swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'admin') {
-            navigate('/NAC_OPERATOR')
-          } else {
-            navigate('/NAC_ROW')
-          }
+          navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
         });
       }
     }
@@ -1271,11 +1231,7 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'admin') {
-            navigate('/NAC_OPERATOR')
-          } else {
-            navigate('/NAC_ROW')
-          }
+          navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
         });
       }
     }
@@ -1366,22 +1322,14 @@ export default function Nac_Main_wait() {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              if (checkUserWeb === 'admin') {
-                navigate('/NAC_OPERATOR')
-              } else {
-                navigate('/NAC_ROW')
-              }
+              navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
             });
           } else {
             swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              if (checkUserWeb === 'admin') {
-                navigate('/NAC_OPERATOR')
-              } else {
-                navigate('/NAC_ROW')
-              }
+              navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
             });
           }
         }
@@ -1391,11 +1339,7 @@ export default function Nac_Main_wait() {
         buttons: false,
         timer: 2000,
       }).then((value) => {
-        if (checkUserWeb === 'admin') {
-          navigate('/NAC_OPERATOR')
-        } else {
-          navigate('/NAC_ROW')
-        }
+        navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + nac_status)
       });
     }
   };
@@ -1441,22 +1385,14 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'admin') {
-            navigate('/NAC_OPERATOR')
-          } else {
-            navigate('/NAC_ROW')
-          }
+          navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
         });
       } else {
         swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'admin') {
-            navigate('/NAC_OPERATOR')
-          } else {
-            navigate('/NAC_ROW')
-          }
+          navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
         });
       }
     } else {
@@ -1464,11 +1400,7 @@ export default function Nac_Main_wait() {
         buttons: false,
         timer: 2000,
       }).then((value) => {
-        if (checkUserWeb === 'admin') {
-          navigate('/NAC_OPERATOR')
-        } else {
-          navigate('/NAC_ROW')
-        }
+        navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + nac_status)
       });
     }
   };
@@ -1513,11 +1445,7 @@ export default function Nac_Main_wait() {
       })
       if ('data' in responseComment) {
         setOpenDialogReply(false);
-        if (checkUserWeb === 'admin') {
-          window.location.href = '/NAC_OPERATOR'
-        } else {
-          window.location.href = "/NAC_ROW";
-        }
+        navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + nac_status)
       }
     }
   }
@@ -1562,22 +1490,14 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'admin') {
-            navigate('/NAC_OPERATOR')
-          } else {
-            navigate('/NAC_ROW')
-          }
+          navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
         });
       } else {
         swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          if (checkUserWeb === 'admin') {
-            navigate('/NAC_OPERATOR')
-          } else {
-            navigate('/NAC_ROW')
-          }
+          navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
         });
       }
     }
@@ -1634,11 +1554,24 @@ export default function Nac_Main_wait() {
             }}
           >
             <Toolbar>
-              <AnimatedPage>
-                <Typography variant="h5" color="inherit" noWrap>
-                  การเปลี่ยนแปลงทรัพย์สินถาวร
-                </Typography>
-              </AnimatedPage>
+              <Box sx={{ width: 1 }}>
+                <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={17}>
+                  <Box gridColumn="span 10">
+                    <AnimatedPage>
+                      <Typography variant="h5" color="inherit" noWrap sx={{pt:1}}>
+                        การเปลี่ยนแปลงทรัพย์สินถาวร
+                      </Typography>
+                    </AnimatedPage>
+                  </Box>
+                  <Box gridColumn="span 0">
+                    <AnimatedPage>
+                      <IconButton sx={{ color: 'rgb(0,0,0)' }} component="label" size="large" onClick={handleGoNAC}>
+                        <SummarizeIcon />
+                      </IconButton>
+                    </AnimatedPage>
+                  </Box>
+                </Box>
+              </Box>
             </Toolbar>
           </AppBar>
           <AnimatedPage>
@@ -1649,7 +1582,7 @@ export default function Nac_Main_wait() {
                     ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ขารับ : {
                       ExamineApproveDes.map((Approve) => (
                         <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'black' }}>
-                          &nbsp;[{Approve.approverid}]
+                          &nbsp;({Approve.approverid})
                         </Typography>
                       ))}
                   </Grid>
@@ -1658,7 +1591,7 @@ export default function Nac_Main_wait() {
                     ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ขาส่ง : {
                       ExecApprove.map((Approve) => (
                         <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'black' }}>
-                          &nbsp;[{Approve.approverid}]
+                          &nbsp;({Approve.approverid})
                         </Typography>
                       ))}
                   </Grid>
@@ -1667,7 +1600,7 @@ export default function Nac_Main_wait() {
                     ผู้มีสิทธิตรวจสอบเอกสารฉบับนี้ : {
                       ExamineApprove.map((Approve) => (
                         <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'red' }}>
-                          &nbsp;[{Approve.approverid}]
+                          &nbsp;({Approve.approverid})
                         </Typography>
                       ))}
                   </Grid>
@@ -1677,7 +1610,7 @@ export default function Nac_Main_wait() {
                 <Grid container sx={{ pb: 1 }}>
                   <Grid xs={2}>
                     <Box sx={{ flexGrow: 1, justifyContent: 'start' }}>
-                      <img src={logoPure} loading="lazy" />
+                      <img style={{ maxWidth: '100%' }} src={logoPure} loading="lazy" />
                     </Box>
                   </Grid>
                   <Grid xs={8}>
@@ -1785,7 +1718,7 @@ export default function Nac_Main_wait() {
                                     name='source_department'
                                     onChange={handleChangeSource_Department}
                                     value={source_department}
-                                    inputProps={{ style: { textAlign: 'center' } }}
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                     variant="standard"
                                   />
                                   <TextField
@@ -1795,7 +1728,7 @@ export default function Nac_Main_wait() {
                                     onChange={handleChangeSource_BU}
                                     name='source_BU'
                                     value={source_BU}
-                                    inputProps={{ style: { textAlign: 'center' } }}
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                     variant="standard"
                                   />
                                 </Stack>
@@ -1896,7 +1829,7 @@ export default function Nac_Main_wait() {
                                     name='des_department'
                                     variant="standard"
                                     value={des_department}
-                                    inputProps={{ style: { textAlign: 'center' } }}
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                     onChange={handleChangeDes_Department}
                                   />
                                   <TextField
@@ -1907,7 +1840,7 @@ export default function Nac_Main_wait() {
                                     name='des_BU'
                                     variant="standard"
                                     value={des_BU}
-                                    inputProps={{ style: { textAlign: 'center' } }}
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                     onChange={handleDes_ChangeBU}
                                   />
                                 </Stack>
@@ -2085,7 +2018,7 @@ export default function Nac_Main_wait() {
                                       variant="standard"
                                       name='assetsCode'
                                       id='assetsCode'
-                                      inputProps={{ style: { fontSize: 14 } }}
+                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                       onChange={(e) => handleServiceChange(e, index)}
                                       value={!singleService.assetsCode ? '' : singleService.assetsCode}
                                     />
@@ -2100,7 +2033,7 @@ export default function Nac_Main_wait() {
                                   name="serialNo"
                                   id="serialNo"
                                   variant="standard"
-                                  inputProps={{ style: { fontSize: 14 } }}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
                                   value={!singleService.serialNo ? '' : singleService.serialNo}
                                 />
@@ -2112,7 +2045,7 @@ export default function Nac_Main_wait() {
                                   disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                   name="name"
                                   id="name"
-                                  inputProps={{ style: { fontSize: 14 } }}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                   variant="standard"
                                   onChange={(e) => handleServiceChange(e, index)}
                                   value={singleService.name}
@@ -2125,7 +2058,7 @@ export default function Nac_Main_wait() {
                                   disabled
                                   name="date_asset"
                                   id="date_asset"
-                                  inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   value={!serviceList[index].date_asset ? '' : serviceList[index].date_asset.split('T')[0]}
                                   variant="standard"
                                 />
@@ -2137,7 +2070,7 @@ export default function Nac_Main_wait() {
                                   disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                   name="dtl"
                                   id="dtl"
-                                  inputProps={{ style: { fontSize: 14 } }}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                   variant="standard"
                                   onChange={(e) => handleServiceChange(e, index)}
                                   value={singleService.dtl}
@@ -2151,8 +2084,7 @@ export default function Nac_Main_wait() {
                                   name="count"
                                   id="count"
                                   type='number'
-                                  inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
-                                  InputProps={{ inputProps: { min: 1 } }}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14, min: 1 } }}
                                   variant="standard"
                                   onChange={(e) => handleServiceChange(e, index)}
                                   value={singleService.count}
@@ -2168,7 +2100,7 @@ export default function Nac_Main_wait() {
                                   onChange={(e) => handleServiceChange(e, index)}
                                   type={valuesVisibility.showText ? "text" : "password"}
                                   value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
-                                  inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   variant="standard"
                                 />
                               </StyledTableCell>
@@ -2232,7 +2164,7 @@ export default function Nac_Main_wait() {
                               required
                               fullWidth
                               type={valuesVisibility.showText ? "text" : "password"}
-                              inputProps={{ style: { textAlign: 'center' } }}
+                              inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                               value={sum_price === 0 ? '' : sum_price.toLocaleString()}
                               InputProps={{
                                 endAdornment: (
@@ -2424,7 +2356,7 @@ export default function Nac_Main_wait() {
                                   ExamineApprove.length === 0 ? false : true}
                               onClick={handleSubmit}>
                               <React.Fragment>
-                                ยื่นคำร้อง
+                                ยืนยันรายการ
                               </React.Fragment>
                             </Button>
                           </Grid>

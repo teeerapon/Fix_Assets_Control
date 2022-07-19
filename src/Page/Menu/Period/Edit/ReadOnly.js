@@ -101,14 +101,28 @@ export default function ReadOnly({ periodData, handleEditClick }) {
       <StyledTableCell align="left" >{EndDate.split(':')[0] + ':' + EndDate.split(':')[1]}</StyledTableCell>
       <StyledTableCell align="left" >{periodData.Description}</StyledTableCell>
       <StyledTableCell align="center" >{(periodData.BranchID === 0 || periodData.BranchID === '0') ? 'ทุกสาขา' : periodData.BranchID}</StyledTableCell>
-      <StyledTableCell align="left" style={{'color': datenow >= BeginDate && datenow <=EndDate ? 'green' : 'red' }}>{datenow >= BeginDate && datenow <=EndDate ? 'อยู่ระหว่างเปิดใช้งาน' : 'ปิดการใช้งานแล้ว' }</StyledTableCell>
+      <StyledTableCell align="left" style={{ 'color': datenow >= BeginDate && datenow <= EndDate ? 'green' : 'red' }}>{datenow >= BeginDate && datenow <= EndDate ? 'อยู่ระหว่างเปิดใช้งาน' : 'ปิดการใช้งานแล้ว'}</StyledTableCell>
       <StyledTableCell align="center" >
         <Grid container rowSpacing={1}>
           <Grid item xs={6}>
-            <Button variant="contained" color="warning" onClick={(event) => handleEditClick(event, periodData)}>แก้ไข</Button>
+            <Button
+              disabled={datenow >= BeginDate && datenow <= EndDate ? false : true}
+              variant="contained"
+              color="warning"
+              onClick={(event) => handleEditClick(event, periodData)}
+            >
+              แก้ไข
+            </Button>
           </Grid>
           <Grid item xs={6}>
-            <Button variant="contained" color="error" onClick={handleClickOpen}>ลบ</Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={handleClickOpen}
+              disabled={datenow >= BeginDate && datenow <= EndDate ? false : true}
+            >
+              ลบ
+            </Button>
             <Dialog
               open={open}
               onClose={handleClose}

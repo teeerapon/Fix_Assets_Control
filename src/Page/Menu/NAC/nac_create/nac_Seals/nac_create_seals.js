@@ -36,7 +36,8 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import swal from 'sweetalert';
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
-import logoPure from '../../../../../image/Picture1.jpg'
+import logoPure from '../../../../../image/Picture1.png'
+import SummarizeIcon from '@mui/icons-material/Summarize';
 
 function Copyright() {
   return (
@@ -183,22 +184,22 @@ export default function Nac_Main() {
   const nac_type = 5;
 
   const result = serviceList.map(function (elt) {
-    return /^\d+$/.test(elt.price) ? parseInt(elt.price) : 0;
+    return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
   const book_V = serviceList.map(function (elt) {
-    return /^\d+$/.test(elt.bookValue) ? parseInt(elt.bookValue) : 0;
+    return (/^\d+\.\d+$/.test(elt.bookValue) || /^\d+$/.test(elt.bookValue)) ? parseFloat(elt.bookValue) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
   const price_seals = serviceList.map(function (elt) {
-    return /^\d+$/.test(elt.priceSeals) ? parseInt(elt.priceSeals) : 0;
+    return (/^\d+\.\d+$/.test(elt.priceSeals) || /^\d+$/.test(elt.priceSeals)) ? parseFloat(elt.priceSeals) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
   const profit_seals = serviceList.map(function (elt) {
-    return /^\d+$/.test(elt.priceSeals - elt.bookValue) ? parseInt(elt.priceSeals - elt.bookValue) : 0;
+    return (/^\d+\.\d+$/.test(elt.priceSeals - elt.bookValue) || /^\d+$/.test(elt.priceSeals - elt.bookValue)) ? parseFloat(elt.priceSeals - elt.bookValue) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
@@ -336,7 +337,7 @@ export default function Nac_Main() {
           list[index]['serialNo'] = response['data'][0].SerialNo
           list[index]['price'] = response['data'][0].Price
           list[index]['bookValue'] = ''
-          list[index]['priceSeals'] = '0'
+          list[index]['priceSeals'] = ''
           list[index]['profit'] = list[index]['priceSeals'] - list[index]['bookValue']
           list[index]['date_asset'] = response['data'][0].CreateDate
           setServiceList(list);
@@ -344,6 +345,10 @@ export default function Nac_Main() {
       }
     }
   };
+
+  function handleGoNAC() {
+    navigate('/NAC_ROW')
+  }
 
   //Source
 
@@ -573,7 +578,10 @@ export default function Nac_Main() {
             })
           }
         } else {
-          swal("แจ้งเตือน", 'กรุณากรอก ราคาขายทรัพย์สิน ให้ครบถ้วน', "warning")
+          swal("แจ้งเตือน", 'กรุณากรอก ราคาขายทรัพย์สิน ให้ครบถ้วน', "warning", {
+            buttons: false,
+            timer: 2000,
+          })
         }
       }
     }
@@ -601,11 +609,24 @@ export default function Nac_Main() {
           }}
         >
           <Toolbar>
-            <AnimatedPage>
-              <Typography variant="h5" color="inherit" noWrap>
-                การเปลี่ยนแปลงทรัพย์สินถาวร
-              </Typography>
-            </AnimatedPage>
+            <Box sx={{ width: 1 }}>
+              <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={17}>
+                <Box gridColumn="span 10">
+                  <AnimatedPage>
+                    <Typography variant="h5" color="inherit" noWrap sx={{pt:1}}>
+                      การเปลี่ยนแปลงทรัพย์สินถาวร
+                    </Typography>
+                  </AnimatedPage>
+                </Box>
+                <Box gridColumn="span 0">
+                  <AnimatedPage>
+                    <IconButton sx={{ color: 'rgb(0,0,0)' }} component="label" size="large" onClick={handleGoNAC}>
+                      <SummarizeIcon />
+                    </IconButton>
+                  </AnimatedPage>
+                </Box>
+              </Box>
+            </Box>
           </Toolbar>
         </AppBar>
         <AnimatedPage>
@@ -614,7 +635,7 @@ export default function Nac_Main() {
               <Grid container sx={{ pb: 1 }}>
                 <Grid xs={2}>
                   <Box sx={{ flexGrow: 1, justifyContent: 'start' }}>
-                    <img src={logoPure} loading="lazy" />
+                    <img style={{ maxWidth: '100%' }} src={logoPure} loading="lazy" />
                   </Box>
                 </Grid>
                 <Grid xs={8}>
@@ -695,7 +716,7 @@ export default function Nac_Main() {
                                   name='source_Department'
                                   onChange={handleChangeSource_Department}
                                   value={source_Department}
-                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                   variant="standard"
                                 />
                                 <TextField
@@ -704,7 +725,7 @@ export default function Nac_Main() {
                                   onChange={handleChangeSource_BU}
                                   name='source_Department'
                                   value={source_BU}
-                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                   variant="standard"
                                 />
                               </Stack>
@@ -881,7 +902,7 @@ export default function Nac_Main() {
                                 key={index}
                                 name="serialNo"
                                 id="serialNo"
-                                inputProps={{ style: { fontSize: 14 } }}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                 //onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].serialNo}
                                 // value={serviceList[index].serialNo}
@@ -895,7 +916,7 @@ export default function Nac_Main() {
                                 name="name"
                                 id="name"
                                 //onChange={(e) => handleServiceChange(e, index)}
-                                inputProps={{ style: { fontSize: 14 } }}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                 value={serviceList[index].name}
                                 variant="standard"
                               />
@@ -906,7 +927,7 @@ export default function Nac_Main() {
                                 key={index}
                                 name="date_asset"
                                 id="date_asset"
-                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 value={!serviceList[index].date_asset ? '' : serviceList[index].date_asset.split('T')[0]}
                                 variant="standard"
                               />
@@ -920,7 +941,7 @@ export default function Nac_Main() {
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 // onChange={(e) => handleServiceChange(e, index)}
                                 value={!serviceList[index].price ? '' : (serviceList[index].price).toLocaleString()}
-                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -929,11 +950,10 @@ export default function Nac_Main() {
                                 fullWidth
                                 disabled
                                 key={index}
-                                value='none'
                                 name="bookValue"
                                 id="bookValue"
                                 type={valuesVisibility.showText ? "text" : "password"}
-                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -941,11 +961,11 @@ export default function Nac_Main() {
                               <TextField
                                 fullWidth
                                 key={index}
-                                value={singleService.service}
-                                onChange={(e) => handleServiceChange(e, index)}
                                 name="priceSeals"
                                 id="priceSeals"
-                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
+                                value={singleService.service}
+                                onChange={(e) => handleServiceChange(e, index)}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -954,11 +974,11 @@ export default function Nac_Main() {
                                 fullWidth
                                 disabled
                                 key={index}
-                                value='none'
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 name="profit"
                                 id="profit"
-                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
+                                value={(!serviceList[index].priceSeals || serviceList[index].priceSeals === 0) ? '' : (serviceList[index].priceSeals - serviceList[index].bookValue).toLocaleString()}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -996,7 +1016,7 @@ export default function Nac_Main() {
                           fullWidth
                           type={valuesVisibility.showText ? "text" : "password"}
                           value={result === 0 ? '' : result.toLocaleString()}
-                          inputProps={{ style: { textAlign: 'center' } }}
+                          inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                           variant="standard"
                         />
                       </StyledTableCell>
@@ -1006,7 +1026,7 @@ export default function Nac_Main() {
                           fullWidth
                           type={valuesVisibility.showText ? "text" : "password"}
                           value={book_V === 0 ? '' : book_V.toLocaleString()}
-                          inputProps={{ style: { textAlign: 'center' } }}
+                          inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                           variant="standard"
                         />
                       </StyledTableCell>
@@ -1016,7 +1036,7 @@ export default function Nac_Main() {
                           fullWidth
                           type={valuesVisibility.showText ? "text" : "password"}
                           value={price_seals === 0 ? '' : price_seals.toLocaleString()}
-                          inputProps={{ style: { textAlign: 'center' } }}
+                          inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                           variant="standard"
                         />
                       </StyledTableCell>
@@ -1025,8 +1045,8 @@ export default function Nac_Main() {
                           required
                           fullWidth
                           type={valuesVisibility.showText ? "text" : "password"}
-                          value={profit_seals === 0 ? '' : profit_seals.toLocaleString()}
-                          inputProps={{ style: { textAlign: 'center' } }}
+                          value={profit_seals === 0 ? '' : (price_seals - book_V).toLocaleString()}
+                          inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                           variant="standard"
                         />
                       </StyledTableCell>

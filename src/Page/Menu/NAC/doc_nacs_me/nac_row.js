@@ -29,6 +29,7 @@ import { useTheme } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -141,13 +142,19 @@ export default function NAC_ROW() {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (tableSearch.length === 0 ? selectNAC.filter((val) => {
       if (search === '') {
         return val
-      } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase()) || val.create_by.toLowerCase().includes(search.toLowerCase())) {
+      } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) ||
+        val.name.toLowerCase().includes(search.toLowerCase()) ||
+        val.create_by.toLowerCase().includes(search.toLowerCase()) ||
+        val.status_name.toLowerCase().includes(search.toLowerCase())) {
         return val
       }
     }) : tableSearch.filter((val) => {
       if (search === '') {
         return val
-      } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase()) || val.create_by.toLowerCase().includes(search.toLowerCase())) {
+      } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) ||
+        val.name.toLowerCase().includes(search.toLowerCase()) ||
+        val.create_by.toLowerCase().includes(search.toLowerCase()) ||
+        val.status_name.toLowerCase().includes(search.toLowerCase())) {
         return val
       }
     })).length) : 0;
@@ -169,12 +176,21 @@ export default function NAC_ROW() {
     setSelectNAC(response.data);
   };
 
+
+  function handleGoNAC() {
+    navigate('/NAC_ROW')
+  }
+
+
   const handleSetSearch = (event) => {
     setSearchTerm(event.target.value)
     setTableSearch(selectNAC.filter((val) => {
       if (event.target.value === '') {
         return val
-      } else if (val.nac_code.toLowerCase().includes((event.target.value).toLowerCase()) || val.name.toLowerCase().includes((event.target.value).toLowerCase()) || val.create_by.toLowerCase().includes((event.target.value).toLowerCase())) {
+      } else if (val.nac_code.toLowerCase().includes((event.target.value).toLowerCase()) ||
+        val.name.toLowerCase().includes((event.target.value).toLowerCase()) ||
+        val.create_by.toLowerCase().includes((event.target.value).toLowerCase()) ||
+        val.status_name.toLowerCase().includes((event.target.value).toLowerCase())) {
         return val
       }
     }));
@@ -223,11 +239,24 @@ export default function NAC_ROW() {
             }}
           >
             <Toolbar>
-              <AnimatedPage>
-                <Typography variant="h5" color="inherit" noWrap>
-                  สถานะรายการเปลี่ยนแปลงทรัพย์สิน
-                </Typography>
-              </AnimatedPage>
+              <Box sx={{ width: 1 }}>
+                <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={17}>
+                  <Box gridColumn="span 10">
+                    <AnimatedPage>
+                      <Typography variant="h5" color="inherit" noWrap sx={{ pt: 1 }}>
+                        สถานะรายการเปลี่ยนแปลงทรัพย์สิน
+                      </Typography>
+                    </AnimatedPage>
+                  </Box>
+                  <Box gridColumn="span 0">
+                    <AnimatedPage>
+                      <IconButton sx={{ color: 'rgb(0,0,0)' }} component="label" size="large" onClick={handleGoNAC}>
+                        <SummarizeIcon />
+                      </IconButton>
+                    </AnimatedPage>
+                  </Box>
+                </Box>
+              </Box>
             </Toolbar>
           </AppBar>
           <AnimatedPage>
@@ -265,7 +294,7 @@ export default function NAC_ROW() {
                           <StyledTableCell align="center" sx={{ width: 100 }}>ผู้ส่ง</StyledTableCell>
                           <StyledTableCell align="center" sx={{ width: 100 }}>ผู้รับ</StyledTableCell>
                           <StyledTableCell align="left" >สถานะการทำรายการ</StyledTableCell>
-                          <StyledTableCell align="left" sx={{ width: 200 }}>ผู้ตรวจสอบ/อนุมัติ</StyledTableCell>
+                          <StyledTableCell align="left" sx={{ width: 150 }}>ผู้ตรวจสอบ/อนุมัติ</StyledTableCell>
                           <StyledTableCell align="center" sx={{ width: 200 }}>Action</StyledTableCell>
                         </TableRow>
                       </TableHead>
@@ -274,14 +303,20 @@ export default function NAC_ROW() {
                           ? selectNAC.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).filter((selectNAC) => {
                             if (search === '') {
                               return selectNAC
-                            } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) || selectNAC.name.toLowerCase().includes(search.toLowerCase()) || selectNAC.create_by.toLowerCase().includes(search.toLowerCase())) {
+                            } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) ||
+                              selectNAC.name.toLowerCase().includes(search.toLowerCase()) ||
+                              selectNAC.create_by.toLowerCase().includes(search.toLowerCase()) ||
+                              selectNAC.status_name.toLowerCase().includes(search.toLowerCase())) {
                               return selectNAC
                             }
                           })
                           : selectNAC.filter((selectNAC) => {
                             if (search === '') {
                               return selectNAC
-                            } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) || selectNAC.name.toLowerCase().includes(search.toLowerCase()) || selectNAC.create_by.toLowerCase().includes(search.toLowerCase())) {
+                            } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) ||
+                            selectNAC.name.toLowerCase().includes(search.toLowerCase()) ||
+                            selectNAC.create_by.toLowerCase().includes(search.toLowerCase()) ||
+                            selectNAC.status_name.toLowerCase().includes(search.toLowerCase())) {
                               return selectNAC
                             }
                           })
@@ -297,14 +332,20 @@ export default function NAC_ROW() {
                             ? tableSearch.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).filter((selectNAC) => {
                               if (search === '') {
                                 return selectNAC
-                              } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) || selectNAC.name.toLowerCase().includes(search.toLowerCase()) || selectNAC.create_by.toLowerCase().includes(search.toLowerCase())) {
+                              } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) ||
+                                selectNAC.name.toLowerCase().includes(search.toLowerCase()) ||
+                                selectNAC.create_by.toLowerCase().includes(search.toLowerCase()) ||
+                                selectNAC.status_name.toLowerCase().includes(search.toLowerCase())) {
                                 return selectNAC
                               }
                             })
                             : tableSearch.filter((selectNAC) => {
                               if (search === '') {
                                 return selectNAC
-                              } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) || selectNAC.name.toLowerCase().includes(search.toLowerCase()) || selectNAC.create_by.toLowerCase().includes(search.toLowerCase())) {
+                              } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) ||
+                                selectNAC.name.toLowerCase().includes(search.toLowerCase()) ||
+                                selectNAC.create_by.toLowerCase().includes(search.toLowerCase()) ||
+                                selectNAC.status_name.toLowerCase().includes(search.toLowerCase())) {
                                 return selectNAC
                               }
                             })
@@ -332,17 +373,23 @@ export default function NAC_ROW() {
                             count={tableSearch.length === 0 ? selectNAC.filter((val) => {
                               if (search === '') {
                                 return val
-                              } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase()) || val.create_by.toLowerCase().includes(search.toLowerCase())) {
+                              } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) ||
+                                val.name.toLowerCase().includes(search.toLowerCase()) ||
+                                val.create_by.toLowerCase().includes(search.toLowerCase()) ||
+                                val.status_name.toLowerCase().includes(search.toLowerCase())) {
                                 return val
                               }
-                            }).length 
-                            : tableSearch.filter((val) => {
-                              if (search === '') {
-                                return val
-                              } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) || val.name.toLowerCase().includes(search.toLowerCase()) || val.create_by.toLowerCase().includes(search.toLowerCase())) {
-                                return val
-                              }
-                            }).length}
+                            }).length
+                              : tableSearch.filter((val) => {
+                                if (search === '') {
+                                  return val
+                                } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) ||
+                                  val.name.toLowerCase().includes(search.toLowerCase()) ||
+                                  val.create_by.toLowerCase().includes(search.toLowerCase()) ||
+                                  val.status_name.toLowerCase().includes(search.toLowerCase())) {
+                                  return val
+                                }
+                              }).length}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             SelectProps={{

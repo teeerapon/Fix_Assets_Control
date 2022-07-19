@@ -147,101 +147,110 @@ export default function Report() {
     setPermission(event.target.value);
   };
 
-  return (
-    <div>
-      <AppBar
-        position="absolute"
-        color="default"
-        elevation={0}
-        sx={{
-          position: 'relative',
-          borderBottom: (t) => `1px solid ${t.palette.divider}`,
-        }}
-      >
-        <Toolbar>
-          <AnimatedPage>
-            <Typography variant="h5" color="inherit" noWrap>
-              รายงานการตรวจนับ
-            </Typography>
-          </AnimatedPage>
-        </Toolbar>
-      </AppBar>
-      <AnimatedPage>
-        <Container component="main" maxWidth="sm" sx={{ mb: 4 }} >
-          <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-            <form className={classes.form} noValidate onSubmit={handleSubmit}>
-              <center className="pt-2">
-                <Typography component="h1" variant="h4" align="center">
-                  <b>PURE THAI ENERGY CO.,LTD.</b>
-                </Typography>
-                <Typography variant="h6" gutterBottom className='pt-5'>
-                  กรุณาเลือกสาขา
-                </Typography>
-                <Box sx={{ minWidth: 120 }}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Branch ID</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={permissionData}
-                      label="Branch ID"
-                      onChange={handleChangeValue}
-                    >
-                      {
-                        permission.map((item) =>
-                          <MenuItem value={item.BranchID}>สาขาที่ : {!item.BranchID ? 'ไม่พบข้อมูลของสาขาที่สามารถเข้าถึงได้' : item.BranchID}</MenuItem>
-                        )
-                      }
-                    </Select>
-                  </FormControl>
-                </Box>
-              </center>
-              <center className="pt-5">
-                <Typography variant="h6" gutterBottom>
-                  กรุณาเลือกรอบบันทึก
-                </Typography>
-                <Box sx={{ minWidth: 120 }}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Period ID</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={periodData}
-                      label="Period ID"
-                      onChange={handleChangeValue2}
-                    >
-                      {
-                        periodData2.map((item) =>
-                          <MenuItem value={item.PeriodID}>
-                            รอบที่ {item.PeriodID} (วันที่ {item.BeginDate.split('T')[0]} - {item.EndDate.split('T')[0]}) : {item.Description}
-                          </MenuItem>
-                        )
-                      }
-                    </Select>
-                  </FormControl>
-                </Box>
-                <div className='pt-5'>
-                  <React.Fragment>
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                      <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
+  if (permission === 'ไม่พบสิทธิ์') {
+    swal("แจ้งเตือน", 'กรุณาติดต่อ Admin เพื่อขอสิทธิ์', "warning", {
+      buttons: false,
+      timer: 2000,
+    }).then((value) => {
+      window.location.href = "/HomePage";
+    });
+  } else {
+    return (
+      <div>
+        <AppBar
+          position="absolute"
+          color="default"
+          elevation={0}
+          sx={{
+            position: 'relative',
+            borderBottom: (t) => `1px solid ${t.palette.divider}`,
+          }}
+        >
+          <Toolbar>
+            <AnimatedPage>
+              <Typography variant="h5" color="inherit" noWrap>
+                รายงานการตรวจนับ
+              </Typography>
+            </AnimatedPage>
+          </Toolbar>
+        </AppBar>
+        <AnimatedPage>
+          <Container component="main" maxWidth="sm" sx={{ mb: 4 }} >
+            <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+              <form className={classes.form} noValidate onSubmit={handleSubmit}>
+                <center className="pt-2">
+                  <Typography component="h1" variant="h4" align="center">
+                    <b>PURE THAI ENERGY CO.,LTD.</b>
+                  </Typography>
+                  <Typography variant="h6" gutterBottom className='pt-5'>
+                    กรุณาเลือกสาขา
+                  </Typography>
+                  <Box sx={{ minWidth: 120 }}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Branch ID</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={permissionData}
+                        label="Branch ID"
+                        onChange={handleChangeValue}
                       >
-                        แสดงรายงาน
-                      </Button>
-                    </Box>
-                  </React.Fragment>
-                </div>
-              </center>
-            </form>
-          </Paper>
-          <Copyright />
-          <Outlet />
-        </Container>
-      </AnimatedPage>
-    </div>
-  );
+                        {
+                          permission.map((item) =>
+                            <MenuItem value={item.BranchID}>สาขาที่ : {!item.BranchID ? 'ไม่พบข้อมูลของสาขาที่สามารถเข้าถึงได้' : item.BranchID}</MenuItem>
+                          )
+                        }
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </center>
+                <center className="pt-5">
+                  <Typography variant="h6" gutterBottom>
+                    กรุณาเลือกรอบบันทึก
+                  </Typography>
+                  <Box sx={{ minWidth: 120 }}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Period ID</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={periodData}
+                        label="Period ID"
+                        onChange={handleChangeValue2}
+                      >
+                        {
+                          periodData2.map((item) =>
+                            <MenuItem value={item.PeriodID}>
+                              รอบที่ {item.PeriodID} (วันที่ {item.BeginDate.split('T')[0]} - {item.EndDate.split('T')[0]}) : {item.Description}
+                            </MenuItem>
+                          )
+                        }
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <div className='pt-5'>
+                    <React.Fragment>
+                      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          color="primary"
+                          className={classes.submit}
+                        >
+                          แสดงรายงาน
+                        </Button>
+                      </Box>
+                    </React.Fragment>
+                  </div>
+                </center>
+              </form>
+            </Paper>
+            <Copyright />
+            <Outlet />
+          </Container>
+        </AnimatedPage>
+      </div>
+    );
+  }
 }

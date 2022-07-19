@@ -124,9 +124,10 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
 
     for (let i = 0; i < (responseExecDocID.data.length); i++) {
       if (responseExecDocID.data[i].limitamount < price_approve && responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 5) {
-        CheckExamineApprove[i] = responseExecDocID.data[i].workflowlevel === 1 ? 'SM' :
-          responseExecDocID.data[i].workflowlevel === 2 ? 'DM' :
-            responseExecDocID.data[i].workflowlevel === 3 ? 'FM' : 'MD'
+        CheckExamineApprove[i] = responseExecDocID.data[i].workflowlevel === 0 ? 'AM' :
+          responseExecDocID.data[i].workflowlevel === 1 ? 'SM' :
+            responseExecDocID.data[i].workflowlevel === 2 ? 'DM' :
+              responseExecDocID.data[i].workflowlevel === 3 ? 'FM' : 'MD'
       }
     }
 
@@ -134,9 +135,10 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
 
     for (let i = 0; i < (responseExecDocID.data.length); i++) {
       if (responseExecDocID.data[i].limitamount >= price_approve && responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 5) {
-        CheckApprove[i] = responseExecDocID.data[i].workflowlevel === 1 ? 'SM' :
-          responseExecDocID.data[i].workflowlevel === 2 ? 'DM' :
-            responseExecDocID.data[i].workflowlevel === 3 ? 'FM' : 'MD'
+        CheckApprove[i] = responseExecDocID.data[i].workflowlevel === 0 ? 'AM' :
+          responseExecDocID.data[i].workflowlevel === 1 ? 'SM' :
+            responseExecDocID.data[i].workflowlevel === 2 ? 'DM' :
+              responseExecDocID.data[i].workflowlevel === 3 ? 'FM' : 'MD'
       }
     }
     setCheckApprove(CheckApprove)
@@ -189,34 +191,19 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
                       '#008000' : selectNAC.nac_status === 7 ?
                         '#FFA500' : selectNAC.nac_status === 8 ?
                           '#F0E68C' : selectNAC.nac_status === 11 ?
-                            '#87CEFA' : selectNAC.nac_status === 12 ?
+                            '#F4A460' : selectNAC.nac_status === 12 ?
                               '#DDA0DD' : selectNAC.nac_status === 13 ?
-                                '#B0C4DE' : selectNAC.nac_status === 14 ?
+                                '#6A5ACD' : selectNAC.nac_status === 14 ?
                                   '#708090' : '#DC143C'
         }}>
-          {
-            selectNAC.nac_status === 1 ? 'รอยืนยันรายการ' :
-              selectNAC.nac_status === 2 ? 'รอตรวจสอบ' :
-                selectNAC.nac_status === 3 ? 'รออนุมัติ' :
-                  selectNAC.nac_status === 4 ? 'รอผู้รับยืนยันรายการ' :
-                    selectNAC.nac_status === 5 ? 'รอปิดรายการ' :
-                      selectNAC.nac_status === 6 ? 'ดำเนินการเสร็จสิ้น' :
-                        selectNAC.nac_status === 7 ? 'โดนตีกลับรายการ' :
-                          selectNAC.nac_status === 8 ? 'ไม่พบทรัพย์สิน' :
-                            selectNAC.nac_status === 11 ? 'รอกรอกข้อมูล BV' :
-                              selectNAC.nac_status === 12 ? 'รอแนบเอกสารการขาย' :
-                                selectNAC.nac_status === 13 ? 'รอปิดรายการ' :
-                                  selectNAC.nac_status === 14 ? 'ได้รับทรัพย์สินไม่ครบ' :
-                                    selectNAC.nac_status === 0 ? 'ไม่ผ่านการอนุมัติ' : 'รอต้นสังกัดตรวจสอบ'
-
-          }
+          {selectNAC.status_name}
         </Item>
       </StyledTableCell>
       <StyledTableCell align="left" >{
         (selectNAC.nac_status === 2 && selectNAC.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && selectNAC.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + CheckExamineApprove.filter(x => x !== undefined) + '' :
           (selectNAC.nac_status === 3 && selectNAC.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && selectNAC.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + CheckApprove.filter(x => x !== undefined) + '' :
             ((selectNAC.nac_status === 2) && (selectNAC.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || selectNAC.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? 'ต้นสังกัดตรวจสอบ' :
-              (selectNAC.nac_status === 13) ? 'บัญชี/การเงิน' : 'none'
+              (selectNAC.nac_status === 13) ? 'การเงิน' : (selectNAC.nac_status === 5) ? 'บัญชี' : 'none'
       }</StyledTableCell>
       <StyledTableCell align="center" >
         <Grid container rowSpacing={1}>

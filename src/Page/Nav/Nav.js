@@ -15,7 +15,6 @@ import { Outlet, useNavigate } from "react-router";
 import swal from 'sweetalert';
 import Grid from '@mui/material/Grid';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import Image from '../../image/logo_purethai-450px-01.png'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -179,9 +178,9 @@ export default function MenuAppBar() {
     setAnchorEl3(event.currentTarget);
   };
 
-  // const handleMenu4 = (event) => {
-  //   setAnchorEl4(event.currentTarget);
-  // };
+  const handleMenu4 = (event) => {
+    setAnchorEl4(event.currentTarget);
+  };
 
   const handleClose4 = () => {
     setAnchorEl4(null);
@@ -293,6 +292,31 @@ export default function MenuAppBar() {
                     </Menu>
                   </React.Fragment>
                 )}
+                {auth4 && (
+                  <React.Fragment>
+                    {/* <Button onClick={handleMenu4} sx={{ my: 2, color: 'white', display: 'block' }}>REPORT</Button> */}
+                    <Button onClick={REPORT} sx={{ my: 2, color: 'white', display: 'block' }}>REPORT</Button>
+                    <Menu
+                      sx={{ mt: '45px' }}
+                      id="menu-appbar"
+                      anchorEl={anchorEl4}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      open={Boolean(anchorEl4)}
+                      onClose={handleClose4}
+                    >
+                      <MenuItem onClick={REPORT}>กำหนดสาขา</MenuItem>
+                      <MenuItem onClick={handleClose4}>รายงานสถานะ NAC</MenuItem> {/* REPORTAll */}
+                    </Menu>
+                  </React.Fragment>
+                )}
                 {auth2 && (
                   <React.Fragment>
                     <Button onClick={handleMenu2} sx={{ my: 2, color: 'white', display: 'block' }}>PERIOD</Button>
@@ -315,30 +339,6 @@ export default function MenuAppBar() {
                       <MenuItem onClick={PeriodOpen}>เพิ่มรอบตรวจนับ</MenuItem>
                       <MenuItem onClick={PeriodEdit}>แก้ไขรอบตรวจนับ</MenuItem>
                       {/* <MenuItem>กำหนดสิทธิ์</MenuItem> */}
-                    </Menu>
-                  </React.Fragment>
-                )}
-                {auth4 && (
-                  <React.Fragment>
-                    <Button onClick={REPORT} sx={{ my: 2, color: 'white', display: 'block' }}>REPORT</Button>
-                    <Menu
-                      sx={{ mt: '45px' }}
-                      id="menu-appbar"
-                      anchorEl={anchorEl4}
-                      anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                      }}
-                      keepMounted
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                      }}
-                      open={Boolean(anchorEl4)}
-                      onClose={handleClose4}
-                    >
-                      <MenuItem onClick={REPORT}>กำหนดสาขา</MenuItem>
-                      <MenuItem onClick={handleClose4}>แสดงทั้งหมด</MenuItem> {/* REPORTAll */}
                     </Menu>
                   </React.Fragment>
                 )}

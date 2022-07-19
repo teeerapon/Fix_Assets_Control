@@ -35,8 +35,9 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import swal from 'sweetalert';
-import logoPure from '../../../../../image/Picture1.jpg'
+import logoPure from '../../../../../image/Picture1.png'
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 
 function Copyright() {
   return (
@@ -160,7 +161,7 @@ export default function Nac_Main() {
 
   const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
   const result = serviceList.map(function (elt) {
-    return /^\d+$/.test(elt.price * elt.count) ? parseInt(elt.price * elt.count) : 0;
+    return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
@@ -306,6 +307,10 @@ export default function Nac_Main() {
       }
     }
   };
+
+  function handleGoNAC() {
+    navigate('/NAC_ROW')
+  }
 
   //Source
 
@@ -624,11 +629,24 @@ export default function Nac_Main() {
           }}
         >
           <Toolbar>
-            <AnimatedPage>
-              <Typography variant="h5" color="inherit" noWrap>
-                การเปลี่ยนแปลงทรัพย์สินถาวร
-              </Typography>
-            </AnimatedPage>
+            <Box sx={{ width: 1 }}>
+              <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={17}>
+                <Box gridColumn="span 10">
+                  <AnimatedPage>
+                    <Typography variant="h5" color="inherit" noWrap sx={{pt:1}}>
+                      การเปลี่ยนแปลงทรัพย์สินถาวร
+                    </Typography>
+                  </AnimatedPage>
+                </Box>
+                <Box gridColumn="span 0">
+                  <AnimatedPage>
+                    <IconButton sx={{color:'rgb(0,0,0)'}} component="label" size="large" onClick={handleGoNAC}>
+                      <SummarizeIcon />
+                    </IconButton>
+                  </AnimatedPage>
+                </Box>
+              </Box>
+            </Box>
           </Toolbar>
         </AppBar>
         <AnimatedPage>
@@ -637,7 +655,7 @@ export default function Nac_Main() {
               <Grid container sx={{ pb: 1 }}>
                 <Grid xs={2}>
                   <Box sx={{ flexGrow: 1, justifyContent: 'start' }}>
-                    <img src={logoPure} loading="lazy" />
+                    <img style={{ maxWidth: '100%' }} src={logoPure} loading="lazy" />
                   </Box>
                 </Grid>
                 <Grid xs={8}>
@@ -718,7 +736,7 @@ export default function Nac_Main() {
                                   name='source_Department'
                                   onChange={handleChangeSource_Department}
                                   value={source_Department}
-                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                   variant="standard"
                                 />
                                 <TextField
@@ -727,7 +745,7 @@ export default function Nac_Main() {
                                   onChange={handleChangeSource_BU}
                                   name='source_Department'
                                   value={source_BU}
-                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                   variant="standard"
                                 />
                               </Stack>
@@ -841,7 +859,7 @@ export default function Nac_Main() {
                                   name='des_Department'
                                   variant="standard"
                                   value={des_Department}
-                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                   onChange={handleChangeDes_Department}
                                 />
                                 <TextField
@@ -851,7 +869,7 @@ export default function Nac_Main() {
                                   fullWidth
                                   variant="standard"
                                   value={des_BU}
-                                  inputProps={{ style: { textAlign: 'center' } }}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                   onChange={handleDes_ChangeBU}
                                 />
                               </Stack>
@@ -995,7 +1013,7 @@ export default function Nac_Main() {
                                 key={index}
                                 name="serialNo"
                                 id="serialNo"
-                                inputProps={{ style: { fontSize: 14 } }}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                 onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].serialNo}
                                 variant="standard"
@@ -1007,7 +1025,7 @@ export default function Nac_Main() {
                                 key={index}
                                 name="name"
                                 id="name"
-                                inputProps={{ style: { fontSize: 14 } }}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                 onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].name}
                                 variant="standard"
@@ -1019,7 +1037,7 @@ export default function Nac_Main() {
                                 key={index}
                                 name="date_asset"
                                 id="date_asset"
-                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 value={!serviceList[index].date_asset ? '' : serviceList[index].date_asset.split('T')[0]}
                                 variant="standard"
                               />
@@ -1030,7 +1048,7 @@ export default function Nac_Main() {
                                 key={index}
                                 name="dtl"
                                 id="dtl"
-                                inputProps={{ style: { fontSize: 14 } }}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                 onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].dtl}
                                 variant="standard"
@@ -1045,8 +1063,7 @@ export default function Nac_Main() {
                                 type='number'
                                 onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].count}
-                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
-                                InputProps={{ inputProps: { min: 1 } }}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14, min: 1 } }}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -1059,7 +1076,7 @@ export default function Nac_Main() {
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 onChange={(e) => handleServiceChange(e, index)}
                                 value={!serviceList[index].price ? '' : (serviceList[index].price).toLocaleString()}
-                                inputProps={{ style: { textAlign: 'center', fontSize: 14 } }}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -1094,7 +1111,7 @@ export default function Nac_Main() {
                             fullWidth
                             type={valuesVisibility.showText ? "text" : "password"}
                             value={result === 0 ? '' : result.toLocaleString()}
-                            inputProps={{ style: { textAlign: 'center' } }}
+                            inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                             InputProps={{
                               endAdornment: (
                                 <InputAdornment position="start">
