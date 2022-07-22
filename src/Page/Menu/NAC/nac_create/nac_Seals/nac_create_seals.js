@@ -179,7 +179,7 @@ export default function Nac_Main() {
   const [UserForAssetsControl, setUserForAssetsControl] = React.useState([]);
   const [valuesVisibility, setValuesVisibility] = React.useState({
     text: serviceList[0].price,
-    showText: false,
+    showText: data.branchid === 901 ? true : false,
   });
   const nac_type = 5;
 

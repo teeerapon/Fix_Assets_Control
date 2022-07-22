@@ -51,6 +51,7 @@ import CloudDownloadRoundedIcon from '@mui/icons-material/CloudDownloadRounded';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import logoPure from '../../../../../image/Picture1.png'
 import SummarizeIcon from '@mui/icons-material/Summarize';
+import Card from '@mui/material/Card';
 
 function Copyright() {
   return (
@@ -311,8 +312,8 @@ export default function Nac_Seals_Approve() {
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
   const { nac_id } = useParams()
   const nac_code = nac_id.split('=')[0]
-  const nac_status = parseInt(nac_id.split('=')[1])
-  const [selectNAC] = React.useState(nac_status);
+  const [nac_status,setNac_status] = React.useState();
+  const [selectNAC, setSelectNAC] = React.useState();
   const [headers, setHeaders] = React.useState([]);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openDialogReply, setOpenDialogReply] = React.useState(false);
@@ -332,7 +333,7 @@ export default function Nac_Seals_Approve() {
   const [checkUserWeb, setCheckUserWeb] = React.useState();
   const [valuesVisibility, setValuesVisibility] = React.useState({
     text: serviceList[0].price,
-    showText: false,
+    showText: data.branchid === 901 ? true : false,
   });
 
   const result = serviceList.map(function (elt) {
@@ -422,6 +423,8 @@ export default function Nac_Seals_Approve() {
     const responseHeaders = await store_FA_control_select_headers({
       nac_code
     });
+    setSelectNAC(parseInt(responseHeaders.data[0].nac_status))
+    setNac_status(parseInt(responseHeaders.data[0].nac_status))
     setHeaders(responseHeaders.data[0])
     setSource_Department(responseHeaders.data[0].source_dep_owner)
     setSource_BU(responseHeaders.data[0].source_bu_owner)
@@ -846,7 +849,7 @@ export default function Nac_Seals_Approve() {
                 buttons: false,
                 timer: 2000,
               }).then((value) => {
-                navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + nac_status)
+                window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
               });
             } else {
               swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error", {
@@ -969,18 +972,18 @@ export default function Nac_Seals_Approve() {
                   nac_code
                 })
                 if ('data' in responseComment) {
-                  swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' กรอก Book Value ในรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+                  swal("ทำรายการสำเร็จ", 'คุณกรอก Book Value ในรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
                     buttons: false,
                     timer: 2000,
                   }).then((value) => {
-                    navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+                    window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
                   });
                 } else {
                   swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
                     buttons: false,
                     timer: 2000,
                   }).then((value) => {
-                    navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code + '=' + (selectNAC === 11) ? 10 : 11)
+                    window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
                   });
                 }
               } else {
@@ -1053,18 +1056,18 @@ export default function Nac_Seals_Approve() {
                     nac_code
                   })
                   if ('data' in responseComment) {
-                    swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ยืนยันรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+                    swal("ทำรายการสำเร็จ", 'คุณยืนยันรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
                       buttons: false,
                       timer: 2000,
                     }).then((value) => {
-                      navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+                      window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
                     });
                   } else {
                     swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
                       buttons: false,
                       timer: 2000,
                     }).then((value) => {
-                      navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code + '=' + (selectNAC === 11) ? 10 : 11)
+                      window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
                     });
                   }
                 }
@@ -1075,7 +1078,7 @@ export default function Nac_Seals_Approve() {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code + '=' + (selectNAC === 11) ? 10 : 11)
+              window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
             });
           }
         }
@@ -1125,18 +1128,18 @@ export default function Nac_Seals_Approve() {
             nac_code
           })
           if ('data' in responseComment) {
-            swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+            swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+              window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
             });
           } else {
             swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+              window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
             });
           }
         } else {
@@ -1144,7 +1147,7 @@ export default function Nac_Seals_Approve() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
           });
         }
       }
@@ -1185,18 +1188,18 @@ export default function Nac_Seals_Approve() {
           nac_code
         })
         if ('data' in responseComment) {
-          swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+          swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
           });
         } else {
           swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
           });
         }
       } else {
@@ -1204,7 +1207,7 @@ export default function Nac_Seals_Approve() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+          window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
         });
       }
     }
@@ -1248,18 +1251,18 @@ export default function Nac_Seals_Approve() {
         nac_code
       })
       if ('data' in responseComment) {
-        swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' อนุมัติรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+        swal("ทำรายการสำเร็จ", 'คุณอนุมัติรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+          window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
         });
       } else {
         swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+          window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
         });
       }
     }
@@ -1336,18 +1339,18 @@ export default function Nac_Seals_Approve() {
               })
             }
           }
-          swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+          swal("ทำรายการสำเร็จ", 'คุณได้ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
           });
         } else {
           swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
           });
         }
       }
@@ -1356,7 +1359,7 @@ export default function Nac_Seals_Approve() {
         buttons: false,
         timer: 2000,
       }).then((value) => {
-        navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + nac_status)
+        window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
       });
     }
   };
@@ -1398,18 +1401,18 @@ export default function Nac_Seals_Approve() {
         comment
       })
       if ('data' in responseComment) {
-        swal("ทำรายการสำเร็จ", 'คุณ ' + responseForUpdate.data[0].usercode + ' ได้ยกเลิกรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+        swal("ทำรายการสำเร็จ", 'คุณได้ยกเลิกรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+          window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
         });
       } else {
         swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+          window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
         });
       }
     } else {
@@ -1417,7 +1420,7 @@ export default function Nac_Seals_Approve() {
         buttons: false,
         timer: 2000,
       }).then((value) => {
-        navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + responseForUpdate.data[0].nac_status)
+        window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
       });
     }
   };
@@ -1462,7 +1465,7 @@ export default function Nac_Seals_Approve() {
       })
       if ('data' in responseComment) {
         setOpenDialogReply(false);
-        navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code + '=' + nac_status)
+        window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
       }
     }
   }
@@ -1507,7 +1510,7 @@ export default function Nac_Seals_Approve() {
                 <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={17}>
                   <Box gridColumn="span 10">
                     <AnimatedPage>
-                      <Typography variant="h5" color="inherit" noWrap sx={{pt:1}}>
+                      <Typography variant="h5" color="inherit" noWrap sx={{ pt: 1 }}>
                         การเปลี่ยนแปลงทรัพย์สินถาวร
                       </Typography>
                     </AnimatedPage>
@@ -1555,7 +1558,38 @@ export default function Nac_Seals_Approve() {
                   </Grid>
                 </Table>
               </Paper>
-              <Paper variant="outlined" sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 3 } }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'end',
+                  alignItems: 'baseline'
+                }}
+              >
+                <Card
+                  style={{
+                    borderTopLeftRadius:'100%',
+                    borderBottomLeftRadius:'0%',
+                    'maxWidth': 'fit-content',
+                    'backgroundColor': headers.nac_status === 1 ?
+                      '#1E90FF' : headers.nac_status === 2 ?
+                        '#6495ED' : headers.nac_status === 3 ?
+                          '#FF69B4' : headers.nac_status === 4 ?
+                            '#00CED1' : headers.nac_status === 5 ?
+                              '#6A5ACD' : headers.nac_status === 6 ?
+                                '#008000' : headers.nac_status === 7 ?
+                                  '#FFA500' : headers.nac_status === 8 ?
+                                    '#F0E68C' : headers.nac_status === 11 ?
+                                      '#F4A460' : headers.nac_status === 12 ?
+                                        '#DDA0DD' : headers.nac_status === 13 ?
+                                          '#6A5ACD' : headers.nac_status === 14 ?
+                                            '#708090' : '#DC143C'
+                  }}
+                  sx={{ p: 1, pt: 2, pl: 10, pr: 3, mb: 0, mt: 4, color: 'RGB(255,255,255)' }}
+                >
+                  {headers.status_name}
+                </Card>
+              </Box>
+              <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 } }}>
                 <Grid container sx={{ pb: 1 }}>
                   <Grid xs={2}>
                     <Box sx={{ flexGrow: 1, justifyContent: 'start' }}>
@@ -1608,37 +1642,13 @@ export default function Nac_Seals_Approve() {
                         <TableBody>
                           <StyledTableRow>
                             <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                              {selectNAC === 0 ? (
-                                <FormGroup>
-                                  <center>
-                                    <Typography variant='h4' color='black'>
-                                      ตัดบัญชีทรัพย์สินถาวร
-                                    </Typography>
-                                    <Typography variant='h6' color='error'>
-                                      (ไม่ผ่านการอนุมัติ)
-                                    </Typography>
-                                  </center>
-                                </FormGroup>
-                              ) : selectNAC === 6 ? (
-                                <FormGroup>
-                                  <center>
-                                    <Typography variant='h4' color='black'>
-                                      ตัดบัญชีทรัพย์สินถาวร
-                                    </Typography>
-                                    <Typography variant='h6' style={{ 'color': 'green' }}>
-                                      (ดำเนินการเสร็จสิ้น)
-                                    </Typography>
-                                  </center>
-                                </FormGroup>
-                              ) : (
-                                <FormGroup>
-                                  <center>
-                                    <Typography variant='h4' color='black'>
-                                      ตัดบัญชีทรัพย์สินถาวร
-                                    </Typography>
-                                  </center>
-                                </FormGroup>
-                              )}
+                              <FormGroup>
+                                <center>
+                                  <Typography variant='h4' color='black'>
+                                    ตัดบัญชีทรัพย์สินถาวร
+                                  </Typography>
+                                </center>
+                              </FormGroup>
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <React.Fragment>
@@ -1998,7 +2008,7 @@ export default function Nac_Seals_Approve() {
                           <TextField
                             required
                             fullWidth
-                            type={valuesVisibility.showText ? "text" : "password"}
+                            //type={valuesVisibility.showText ? "text" : "password"}
                             value={result === 0 ? '' : 0}
                             inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                             variant="standard"

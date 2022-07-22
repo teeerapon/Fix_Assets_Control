@@ -181,7 +181,8 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
       <StyledTableCell align="center" >{!selectNAC.des_userid ? 'ไม่มี' : selectNAC.des_userid}</StyledTableCell>
       <StyledTableCell align="left">
         <Item style={{
-          'max-width': 'fit-content',
+          'maxWidth': 'fit-content',
+          borderRadius: '100px',
           'backgroundColor': selectNAC.nac_status === 1 ?
             '#1E90FF' : selectNAC.nac_status === 2 ?
               '#6495ED' : selectNAC.nac_status === 3 ?
