@@ -780,7 +780,7 @@ export default function Nac_Seals_Approve() {
   // Update Document
   const handleSave = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning", {
+      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ส่งมอบให้ครบถ้วน', "warning", {
         buttons: false,
         timer: 2000,
       })
@@ -860,7 +860,7 @@ export default function Nac_Seals_Approve() {
               })
             }
           }
-          swal("ทำรายการสำเร็จ", 'สร้างรายการเปลี่ยนแปลงทรัพย์สิน ' + response.data[0].nac_code + ' แล้ว', "success", {
+          swal("ทำรายการสำเร็จ", 'สร้างรายการเปลี่ยนแปลงทรัพย์สินแล้ว', "success", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
@@ -879,7 +879,7 @@ export default function Nac_Seals_Approve() {
 
   const handleSubmit = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning", {
+      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยืนยันให้ครบถ้วน', "warning", {
         buttons: false,
         timer: 2000,
       })
@@ -891,7 +891,7 @@ export default function Nac_Seals_Approve() {
         })
       } else {
         if (sum_price !== headers.sum_price || headers.source_userid !== source || headers.des_userid !== des_delivery) {
-          swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยื่นคำร้อง', "warning", {
+          swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยืนยัน', "warning", {
             buttons: false,
             timer: 2000,
           })
@@ -970,7 +970,7 @@ export default function Nac_Seals_Approve() {
                     });
                   }
                 }
-                const comment = 'กรอก Book Value ในรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+                const comment = 'กรอก Book Value ในรายการแล้ว'
                 const responseComment = await store_FA_control_comment({
                   nac_code,
                   usercode,
@@ -980,7 +980,7 @@ export default function Nac_Seals_Approve() {
                   nac_code
                 })
                 if ('data' in responseComment) {
-                  swal("ทำรายการสำเร็จ", 'คุณกรอก Book Value ในรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+                  swal("ทำรายการสำเร็จ", 'คุณกรอก Book Value ในรายการแล้ว', "success", {
                     buttons: false,
                     timer: 2000,
                   }).then((value) => {
@@ -1056,7 +1056,7 @@ export default function Nac_Seals_Approve() {
                   });
                 }
               }
-              const comment = 'คุณยืนยันรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+              const comment = 'คุณยืนยันรายการแล้ว'
               const responseComment = await store_FA_control_comment({
                 nac_code,
                 usercode,
@@ -1066,7 +1066,7 @@ export default function Nac_Seals_Approve() {
                 nac_code
               })
               if ('data' in responseComment) {
-                swal("ทำรายการสำเร็จ", 'คุณยืนยันรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+                swal("ทำรายการสำเร็จ", 'คุณยืนยันรายการแล้ว', "success", {
                   buttons: false,
                   timer: 2000,
                 }).then((value) => {
@@ -1126,7 +1126,7 @@ export default function Nac_Seals_Approve() {
           verify_date,
         });
         if ('data' in responseForUpdate) {
-          const comment = 'ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+          const comment = 'ตรวจสอบรายการแล้ว'
           const responseComment = await store_FA_control_comment({
             nac_code,
             usercode,
@@ -1136,7 +1136,7 @@ export default function Nac_Seals_Approve() {
             nac_code
           })
           if ('data' in responseComment) {
-            swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+            swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการแล้ว', "success", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
@@ -1186,7 +1186,7 @@ export default function Nac_Seals_Approve() {
         verify_date,
       });
       if ('data' in responseForUpdate) {
-        const comment = 'ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+        const comment = 'ตรวจสอบรายการแล้ว'
         const responseComment = await store_FA_control_comment({
           nac_code,
           usercode,
@@ -1196,7 +1196,7 @@ export default function Nac_Seals_Approve() {
           nac_code
         })
         if ('data' in responseComment) {
-          swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+          swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการแล้ว', "success", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
@@ -1249,7 +1249,7 @@ export default function Nac_Seals_Approve() {
         verify_by,
         verify_date,
       });
-      const comment = 'อนุมัติรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+      const comment = 'อนุมัติรายการแล้ว'
       const responseComment = await store_FA_control_comment({
         nac_code,
         usercode,
@@ -1259,7 +1259,7 @@ export default function Nac_Seals_Approve() {
         nac_code
       })
       if ('data' in responseComment) {
-        swal("ทำรายการสำเร็จ", 'คุณอนุมัติรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+        swal("ทำรายการสำเร็จ", 'คุณอนุมัติรายการแล้ว', "success", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
@@ -1289,7 +1289,7 @@ export default function Nac_Seals_Approve() {
         const nac_status = selectNAC === 4 ? 5 : (selectNAC === 12 && Real_Price >= priceSeals) ? 13 : (selectNAC === 12 && Real_Price < priceSeals) ? 99 : undefined
         const source_approve = headers.source_approve_userid
         const source_approve_date = headers.source_approve_date
-        const des_delivery = selectNAC === 4 ? data.UserCode : headers.des_userid
+        const des_delivery = headers.des_userid
         const des_deliveryDate = selectNAC === 4 ? datenow : headers.des_date
         const verify_by = headers.verify_by_userid
         const verify_date = headers.verify_date
@@ -1315,9 +1315,9 @@ export default function Nac_Seals_Approve() {
           new_Price,
         });
         if ('data' in responseForUpdate) {
-          const comment = selectNAC === 4 ? 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว'
-            : (selectNAC === 99 || selectNAC === 13) ? 'ทำการแนบเอกสาร ในรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
-              : 'ตรวจสอบเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+          const comment = selectNAC === 4 ? 'ตรวจรับเอกสารแล้ว'
+            : (selectNAC === 99 || selectNAC === 13) ? 'แนบเอกสาร ในรายการแล้ว'
+              : 'ตรวจสอบเอกสารแล้ว'
           const responseComment = await store_FA_control_comment({
             nac_code,
             usercode,
@@ -1357,9 +1357,9 @@ export default function Nac_Seals_Approve() {
                 })
               }
             }
-            swal("ทำรายการสำเร็จ", selectNAC === 4 ? 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว'
-              : (selectNAC === 99 || selectNAC === 13) ? 'ทำการแนบเอกสาร ในรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
-                : 'ตรวจสอบเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+            swal("ทำรายการสำเร็จ", selectNAC === 4 ? 'ตรวจรับเอกสารแล้ว'
+              : (selectNAC === 99 || selectNAC === 13) ? 'แนบเอกสาร ในรายการแล้ว'
+                : 'ตรวจสอบเอกสารแล้ว', "success", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
@@ -1415,14 +1415,14 @@ export default function Nac_Seals_Approve() {
       verify_date,
     });
     if ('data' in responseForUpdate) {
-      const comment = 'ยกเลิกรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+      const comment = 'ยกเลิกรายการแล้ว'
       const responseComment = await store_FA_control_comment({
         nac_code,
         usercode,
         comment
       })
       if ('data' in responseComment) {
-        swal("ทำรายการสำเร็จ", 'คุณได้ยกเลิกรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+        swal("ทำรายการสำเร็จ", 'คุณได้ยกเลิกรายการแล้ว', "success", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
@@ -1655,8 +1655,8 @@ export default function Nac_Seals_Approve() {
                       <TableHead>
                         <TableRow>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ยื่นคำร้อง</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับคำร้อง</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ส่งมอบ</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับมอบ</StyledTableCell>
                         </TableRow>
                       </TableHead>
                       <React.Fragment>
@@ -1727,7 +1727,7 @@ export default function Nac_Seals_Approve() {
                                     <TextField
                                       {...params}
                                       variant="standard"
-                                      label='ผู้ยื่นคำร้อง'
+                                      label='ผู้ยืนยัน'
                                       fullWidth
                                       autoComplete="family-name"
                                       onChange={handleChangeSource_delivery2}
@@ -1746,7 +1746,7 @@ export default function Nac_Seals_Approve() {
                                       startAdornment: (
                                         <InputAdornment position="start">
                                           <Typography color="black">
-                                            วันที่ยื่นคำร้อง :
+                                            วันที่ยืนยันรายการ :
                                           </Typography>
                                         </InputAdornment>
                                       ),

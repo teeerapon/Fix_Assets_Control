@@ -483,7 +483,7 @@ export default function Nac_Main() {
 
   const handleNext = async () => {
     if (!source || !source_Department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning", {
+      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยืนยันให้ครบถ้วน', "warning", {
         buttons: false,
         timer: 2000,
       })
@@ -674,8 +674,8 @@ export default function Nac_Main() {
                     <TableHead>
                       <TableRow>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ยื่นคำร้อง</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับคำร้อง</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ส่งมอบ</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับมอบ</StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <React.Fragment>
@@ -760,7 +760,7 @@ export default function Nac_Main() {
                                     fullWidth
                                     name='source'
                                     id='source'
-                                    label='ผู้ยื่นคำร้อง'
+                                    label='ผู้ยืนยัน'
                                     value={source}
                                     sx={{ pt: 1 }}
                                     variant="standard"
@@ -777,7 +777,7 @@ export default function Nac_Main() {
                                     startAdornment: (
                                       <InputAdornment position="start">
                                         <Typography color="black">
-                                          วันที่ยื่นคำร้อง :
+                                          วันที่ยืนยัน :
                                         </Typography>
                                       </InputAdornment>
                                     ),

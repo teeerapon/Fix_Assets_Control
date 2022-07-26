@@ -38,6 +38,9 @@ import swal from 'sweetalert';
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 import logoPure from '../../../../../image/Picture1.png'
 import SummarizeIcon from '@mui/icons-material/Summarize';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 function Copyright() {
   return (
@@ -160,6 +163,7 @@ export default function Nac_Main() {
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
   const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
+  console.log(serviceList);
   const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }])
   const result = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : 0;
@@ -561,7 +565,7 @@ export default function Nac_Main() {
 
   const handleNext = async () => {
     if (!source || !source_Department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning", {
+      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยืนยันให้ครบถ้วน', "warning", {
         buttons: false,
         timer: 2000,
       })
@@ -663,7 +667,7 @@ export default function Nac_Main() {
               <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={17}>
                 <Box gridColumn="span 10">
                   <AnimatedPage>
-                    <Typography variant="h5" color="inherit" noWrap sx={{pt:1}}>
+                    <Typography variant="h5" color="inherit" noWrap sx={{ pt: 1 }}>
                       การเปลี่ยนแปลงทรัพย์สินถาวร
                     </Typography>
                   </AnimatedPage>
@@ -724,8 +728,8 @@ export default function Nac_Main() {
                     <TableHead>
                       <TableRow>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ยื่นคำร้อง</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับคำร้อง</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ส่งมอบ</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับมอบ</StyledTableCell>
                       </TableRow>
                     </TableHead>
                     <React.Fragment>
@@ -798,7 +802,7 @@ export default function Nac_Main() {
                                         value={source}
                                         sx={{ pt: 1 }}
                                         variant="standard"
-                                        label='ผู้ยื่นคำร้อง'
+                                        label='ผู้ยืนยัน'
                                         {...params}
                                       />}
                                   />
@@ -810,7 +814,7 @@ export default function Nac_Main() {
                                     fullWidth
                                     name='source'
                                     id='source'
-                                    label='ผู้ยื่นคำร้อง'
+                                    label='ผู้ยืนยัน'
                                     value={source}
                                     sx={{ pt: 1 }}
                                     variant="standard"
@@ -827,7 +831,7 @@ export default function Nac_Main() {
                                     startAdornment: (
                                       <InputAdornment position="start">
                                         <Typography color="black">
-                                          วันที่ยื่นคำร้อง :
+                                          วันที่ยืนยัน :
                                         </Typography>
                                       </InputAdornment>
                                     ),
@@ -884,7 +888,7 @@ export default function Nac_Main() {
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >Serial No.</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >รายละเอียด</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >สถานะทรัพย์สิน</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >
                           <Stack direction="row" alignItems="center" spacing={1}>
@@ -950,13 +954,6 @@ export default function Nac_Main() {
                             <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <TextField
                                 fullWidth
-                                disabled
-                                variant="standard"
-                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                value={serviceList_Main[index].serialNo}
-                              />
-                              <TextField
-                                fullWidth
                                 key={index}
                                 name="serialNo"
                                 id="serialNo"
@@ -967,13 +964,6 @@ export default function Nac_Main() {
                               />
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                              <TextField
-                                fullWidth
-                                disabled
-                                variant="standard"
-                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                value={serviceList_Main[index].name}
-                              />
                               <TextField
                                 fullWidth
                                 key={index}
@@ -988,13 +978,6 @@ export default function Nac_Main() {
                             <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <TextField
                                 fullWidth
-                                disabled
-                                variant="standard"
-                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                value={!serviceList_Main[index].date_asset ? '' : serviceList_Main[index].date_asset.split('T')[0]}
-                              />
-                              <TextField
-                                fullWidth
                                 key={index}
                                 name="date_asset"
                                 id="date_asset"
@@ -1003,34 +986,27 @@ export default function Nac_Main() {
                                 variant="standard"
                               />
                             </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                              <TextField
-                                fullWidth
-                                disabled
+                            <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              <FormControl
                                 variant="standard"
-                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                value={serviceList_Main[index].dtl}
-                              />
-                              <TextField
                                 fullWidth
-                                key={index}
-                                name="dtl"
-                                id="dtl"
-                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                onChange={(e) => handleServiceChange(e, index)}
-                                value={serviceList[index].dtl}
-                                variant="standard"
-                              />
+                                size="small"
+                              >
+                                <Select
+                                  key={index}
+                                  name="dtl"
+                                  id="dtl"
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
+                                  value={serviceList[index].dtl}
+                                  onChange={(e) => handleServiceChange(e, index)}
+                                >
+                                  <MenuItem value={'สภาพดี'}>สภาพดี</MenuItem>
+                                  <MenuItem value={'ชำรุดรอซ่อม'}>ชำรุดรอซ่อม</MenuItem>
+                                  <MenuItem value={'รอตัดชำรุด'}>รอตัดชำรุด</MenuItem>
+                                </Select>
+                              </FormControl>
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                              <TextField
-                                fullWidth
-                                disabled
-                                variant="standard"
-                                type='number'
-                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                value={serviceList_Main[index].count}
-                              />
                               <TextField
                                 fullWidth
                                 key={index}
@@ -1045,16 +1021,6 @@ export default function Nac_Main() {
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <TextField
-
-                                fullWidth
-                                disabled
-                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                type={valuesVisibility.showText ? "text" : "password"}
-                                variant="standard"
-                                value={(!serviceList_Main[index].price ? serviceList_Main[index].price : (serviceList_Main[index].price).toLocaleString())}
-                              />
-                              <TextField
-
                                 fullWidth
                                 key={index}
                                 name="price"

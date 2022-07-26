@@ -52,6 +52,9 @@ import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import logoPure from '../../../../../image/Picture1.png'
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import Card from '@mui/material/Card';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 function Copyright() {
   return (
@@ -291,7 +294,7 @@ export default function Nac_Main_wait() {
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
   const { nac_id } = useParams()
   const nac_code = nac_id.split('=')[0]
-  const [nac_status,setNac_status] = React.useState();
+  const [nac_status, setNac_status] = React.useState();
   const [selectNAC, setSelectNAC] = React.useState();
   const [headers, setHeaders] = React.useState([]);
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -740,13 +743,13 @@ export default function Nac_Main_wait() {
   // Update Document||
   const handleSave = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูล||ผู้ยื่นคำร้องให้ครบถ้วน', "warning", {
+      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ส่งมอบให้ครบถ้วน', "warning", {
         buttons: false,
         timer: 2000,
       })
     } else {
       if (!des_department || !des_BU || !des_delivery || !des_deliveryDate) {
-        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้รับคำร้องให้ครบถ้วน', "warning", {
+        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้รับมอบให้ครบถ้วน', "warning", {
           buttons: false,
           timer: 2000,
         })
@@ -803,7 +806,7 @@ export default function Nac_Main_wait() {
                 asset_id
               });
               if ('data' in responseDTL) {
-                swal("ทำรายการสำเร็จ", 'อัปเดตรายการ ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
+                swal("ทำรายการสำเร็จ", 'อัปเดตรายการแล้ว', "success", {
                   buttons: false,
                   timer: 2000,
                 }).then((value) => {
@@ -830,7 +833,7 @@ export default function Nac_Main_wait() {
 
   const handleSubmit = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยื่นคำร้องให้ครบถ้วน', "warning", {
+      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยืนยันให้ครบถ้วน', "warning", {
         buttons: false,
         timer: 2000,
       })
@@ -842,7 +845,7 @@ export default function Nac_Main_wait() {
         })
       } else {
         if (sum_price !== headers.sum_price || headers.source_userid !== source || headers.des_userid !== des_delivery) {
-          swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยื่นคำร้อง', "warning", {
+          swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยืนยัน', "warning", {
             buttons: false,
             timer: 2000,
           })
@@ -873,7 +876,7 @@ export default function Nac_Main_wait() {
               verify_by,
               verify_date,
             });
-            const comment = 'ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+            const comment = 'ยืนยันรายการแล้ว'
             const responseComment = await store_FA_control_comment({
               nac_code,
               usercode,
@@ -883,7 +886,7 @@ export default function Nac_Main_wait() {
               nac_code
             })
             if ('data' in responseComment) {
-              swal("ทำรายการสำเร็จ", 'คุณได้ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+              swal("ทำรายการสำเร็จ", 'คุณได้ยืนยันรายการแล้ว', "success", {
                 buttons: false,
                 timer: 2000,
               }).then((value) => {
@@ -917,7 +920,7 @@ export default function Nac_Main_wait() {
         swal("แจ้งเตือน", 'คุณได้ตรวจสอบรายการนี้ไปแล้ว', "warning")
       } else {
         const usercode = data.UserCode
-        const nac_status = (CheckExamineApprove.includes(data.UserCode) !== false && ExamineApprove[ExamineApprove.length - 2].status === 0) ? 2 : checkUserWeb === 'admin' ? 3 : 3
+        const nac_status = (CheckExamineApprove.includes(data.UserCode) !== false && ExamineApprove[ExamineApprove.length - 2].status === 0) ? 2 : checkUserWeb === 'admin' ? 5 : 5
         const source_approve = data.UserCode
         const source_approve_date = datenow
         const des_approve = des_deliveryApprove
@@ -942,7 +945,7 @@ export default function Nac_Main_wait() {
           verify_date,
         });
         if ('data' in responseForUpdate) {
-          const comment = 'ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+          const comment = 'ตรวจสอบรายการแล้ว'
           const responseComment = await store_FA_control_comment({
             nac_code,
             usercode,
@@ -952,7 +955,7 @@ export default function Nac_Main_wait() {
             nac_code
           })
           if ('data' in responseComment) {
-            swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+            swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการแล้ว', "success", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
@@ -977,7 +980,7 @@ export default function Nac_Main_wait() {
       }
     } else {
       const usercode = data.UserCode
-      const nac_status = 3
+      const nac_status = 5
       const source_approve = data.UserCode
       const source_approve_date = datenow
       const des_approve = des_deliveryApprove
@@ -1002,7 +1005,7 @@ export default function Nac_Main_wait() {
         verify_date,
       });
       if ('data' in responseForUpdate) {
-        const comment = 'ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+        const comment = 'ตรวจสอบรายการแล้ว'
         const responseComment = await store_FA_control_comment({
           nac_code,
           usercode,
@@ -1012,7 +1015,7 @@ export default function Nac_Main_wait() {
           nac_code
         })
         if ('data' in responseComment) {
-          swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+          swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการแล้ว', "success", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
@@ -1065,7 +1068,7 @@ export default function Nac_Main_wait() {
         verify_by,
         verify_date,
       });
-      const comment = 'อนุมัติรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+      const comment = 'อนุมัติรายการแล้ว'
       const responseComment = await store_FA_control_comment({
         nac_code,
         usercode,
@@ -1075,7 +1078,7 @@ export default function Nac_Main_wait() {
         nac_code
       })
       if ('data' in responseComment) {
-        swal("ทำรายการสำเร็จ", 'คุณอนุมัติรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+        swal("ทำรายการสำเร็จ", 'คุณอนุมัติรายการแล้ว', "success", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
@@ -1099,7 +1102,7 @@ export default function Nac_Main_wait() {
       const nac_status = selectNAC === 4 ? 5 : 6
       const source_approve = headers.source_approve_userid
       const source_approve_date = headers.source_approve_date
-      const des_delivery = selectNAC === 4 ? data.UserCode : headers.des_userid
+      const des_delivery = headers.des_userid
       const des_deliveryDate = selectNAC === 4 ? datenow : headers.des_date
       const verify_by = headers.verify_by_userid
       const verify_date = headers.verify_date
@@ -1123,7 +1126,7 @@ export default function Nac_Main_wait() {
         verify_date,
       });
       if ('data' in responseForUpdate) {
-        const comment = selectNAC === 4 ? 'ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว' : 'ปิดรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+        const comment = selectNAC === 4 ? 'ตรวจรับเอกสารแล้ว' : 'ปิดรายการแล้ว'
         const responseComment = await store_FA_control_comment({
           nac_code,
           usercode,
@@ -1153,6 +1156,7 @@ export default function Nac_Main_wait() {
               const usercode = data.UserCode
               const nacdtl_assetsCode = serviceList[i].assetsCode
               const asset_id = serviceList[i].asset_id
+              console.log(nacdtl_assetsCode, asset_id, nac_code);
               await store_FA_control_upadate_table({
                 nac_code,
                 usercode,
@@ -1163,7 +1167,7 @@ export default function Nac_Main_wait() {
               })
             }
           }
-          swal("ทำรายการสำเร็จ", 'คุณได้ตรวจรับเอกสาร ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+          swal("ทำรายการสำเร็จ", 'คุณได้ปิดรายการแล้ว', "success", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
@@ -1233,14 +1237,14 @@ export default function Nac_Main_wait() {
       verify_date,
     });
     if ('data' in responseForUpdate) {
-      const comment = 'ยกเลิกรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+      const comment = 'ยกเลิกรายการแล้ว'
       const responseComment = await store_FA_control_comment({
         nac_code,
         usercode,
         comment
       })
       if ('data' in responseComment) {
-        swal("ทำรายการสำเร็จ", 'คุณได้ยกเลิกรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+        swal("ทำรายการสำเร็จ", 'คุณได้ยกเลิกรายการแล้ว', "success", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
@@ -1378,7 +1382,7 @@ export default function Nac_Main_wait() {
                   </Grid>
                   <hr /> */}
                   <Grid container>
-                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ขาส่ง : บัญชีและการเงิน
+                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ขาส่ง : none
                   </Grid>
                   <hr />
                   <Grid container>
@@ -1467,8 +1471,8 @@ export default function Nac_Main_wait() {
                       <TableHead>
                         <TableRow>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ยื่นคำร้อง</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับคำร้อง</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ส่งมอบ</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับมอบ</StyledTableCell>
                         </TableRow>
                       </TableHead>
                       <React.Fragment>
@@ -1539,7 +1543,7 @@ export default function Nac_Main_wait() {
                                     <TextField
                                       {...params}
                                       variant="standard"
-                                      label='ผู้ยื่นคำร้อง'
+                                      label='ผู้ยืนยัน'
                                       fullWidth
                                       autoComplete="family-name"
                                       onChange={handleChangeSource_delivery2}
@@ -1558,7 +1562,7 @@ export default function Nac_Main_wait() {
                                       startAdornment: (
                                         <InputAdornment position="start">
                                           <Typography color="black">
-                                            วันที่ยื่นคำร้อง :
+                                            วันที่ยืนยันรายการ :
                                           </Typography>
                                         </InputAdornment>
                                       ),
@@ -1615,7 +1619,7 @@ export default function Nac_Main_wait() {
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >Serial No.</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >รายละเอียด</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >สถานะทรัพย์สิน</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >
                             <Stack direction="row" alignItems="center" spacing={1}>
@@ -1697,13 +1701,6 @@ export default function Nac_Main_wait() {
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
-                                  fullWidth
-                                  disabled
-                                  variant="standard"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  value={singleService.no_main}
-                                />
-                                <TextField
                                   key={index}
                                   fullWidth
                                   disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
@@ -1716,13 +1713,6 @@ export default function Nac_Main_wait() {
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  variant="standard"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                  value={singleService.name_main}
-                                />
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -1738,13 +1728,6 @@ export default function Nac_Main_wait() {
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  variant="standard"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  value={!singleService.date_asset_main ? '' : singleService.date_asset_main.split('T')[0]}
-                                />
-                                <TextField
-                                  fullWidth
                                   key={index}
                                   disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                   name="date_asset"
@@ -1754,25 +1737,26 @@ export default function Nac_Main_wait() {
                                   variant="standard"
                                 />
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                              <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                                <FormControl
                                   variant="standard"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                  value={singleService.dtl_main}
-                                />
-                                <TextField
-                                  key={index}
                                   fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  name="dtl"
-                                  id="dtl"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                  variant="standard"
-                                  onChange={(e) => handleServiceChange(e, index)}
-                                  value={singleService.dtl}
-                                />
+                                  size="small"
+                                >
+                                  <Select
+                                    key={index}
+                                    name="dtl"
+                                    id="dtl"
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
+                                    value={singleService.dtl}
+                                    onChange={(e) => handleServiceChange(e, index)}
+                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  >
+                                    <MenuItem value={'สภาพดี'}>สภาพดี</MenuItem>
+                                    <MenuItem value={'ชำรุดรอซ่อม'}>ชำรุดรอซ่อม</MenuItem>
+                                    <MenuItem value={'รอตัดชำรุด'}>รอตัดชำรุด</MenuItem>
+                                  </Select>
+                                </FormControl>
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
@@ -1797,14 +1781,6 @@ export default function Nac_Main_wait() {
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  type={valuesVisibility.showText ? "text" : "password"}
-                                  variant="standard"
-                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
-                                />
                                 <TextField
                                   disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                   key={index}

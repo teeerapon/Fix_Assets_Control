@@ -884,7 +884,7 @@ export default function Nac_Main_wait() {
                 asset_id
               });
               if ('data' in responseDTL) {
-                swal("ทำรายการสำเร็จ", 'อัปเดตรายการ ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
+                swal("ทำรายการสำเร็จ", 'อัปเดตรายการแล้ว', "success", {
                   buttons: false,
                   timer: 2000,
                 }).then((value) => {
@@ -929,7 +929,7 @@ export default function Nac_Main_wait() {
           })
         } else {
           if (sum_price !== headers.sum_price || headers.source_userid !== source || headers.des_userid !== des_delivery) {
-            swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยื่นคำร้อง', "warning", {
+            swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยืนยัน', "warning", {
               buttons: false,
               timer: 2000,
             })
@@ -960,7 +960,7 @@ export default function Nac_Main_wait() {
                 verify_by,
                 verify_date,
               });
-              const comment = 'ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+              const comment = 'ยืนยันรายการแล้ว'
               const responseComment = await store_FA_control_comment({
                 nac_code,
                 usercode,
@@ -970,7 +970,7 @@ export default function Nac_Main_wait() {
                 nac_code
               })
               if ('data' in responseComment) {
-                swal("ทำรายการสำเร็จ", 'คุณได้ยื่นคำร้อง ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+                swal("ทำรายการสำเร็จ", 'คุณได้ยืนยันรายการแล้ว', "success", {
                   buttons: false,
                   timer: 2000,
                 }).then((value) => {
@@ -1033,7 +1033,7 @@ export default function Nac_Main_wait() {
           verify_date,
         });
         if ('data' in responseForUpdate) {
-          const comment = 'ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+          const comment = 'ตรวจสอบรายการแล้ว'
           const responseComment = await store_FA_control_comment({
             nac_code,
             usercode,
@@ -1043,7 +1043,7 @@ export default function Nac_Main_wait() {
             nac_code
           })
           if ('data' in responseComment) {
-            swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+            swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการแล้ว', "success", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
@@ -1093,7 +1093,7 @@ export default function Nac_Main_wait() {
         verify_date,
       });
       if ('data' in responseForUpdate) {
-        const comment = 'ตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+        const comment = 'ตรวจสอบรายการแล้ว'
         const responseComment = await store_FA_control_comment({
           nac_code,
           usercode,
@@ -1103,7 +1103,7 @@ export default function Nac_Main_wait() {
           nac_code
         })
         if ('data' in responseComment) {
-          swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+          swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการแล้ว', "success", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
@@ -1156,7 +1156,7 @@ export default function Nac_Main_wait() {
         verify_by,
         verify_date,
       });
-      const comment = 'อนุมัติรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+      const comment = 'อนุมัติรายการแล้ว'
       const responseComment = await store_FA_control_comment({
         nac_code,
         usercode,
@@ -1166,7 +1166,7 @@ export default function Nac_Main_wait() {
         nac_code
       })
       if ('data' in responseComment) {
-        swal("ทำรายการสำเร็จ", 'คุณอนุมัติรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+        swal("ทำรายการสำเร็จ", 'คุณอนุมัติรายการแล้ว', "success", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
@@ -1193,7 +1193,7 @@ export default function Nac_Main_wait() {
       const nac_status = checkFullChecked.includes(0) === true ? 14 : 4
       const source_approve = headers.source_approve_userid
       const source_approve_date = headers.source_approve_date
-      const des_delivery = selectNAC === 4 ? data.UserCode : headers.des_userid
+      const des_delivery = headers.des_userid
       const des_deliveryDate = selectNAC === 4 ? datenow : headers.des_date
       const verify_by = headers.verify_by_userid
       const verify_date = headers.verify_date
@@ -1230,7 +1230,7 @@ export default function Nac_Main_wait() {
             statusCheck,
           })
         }
-        swal("ทำรายการสำเร็จ", 'คุณอัปเดตรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+        swal("ทำรายการสำเร็จ", 'คุณอัปเดตรายการแล้ว', "success", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
@@ -1257,7 +1257,7 @@ export default function Nac_Main_wait() {
         const nac_status = ((selectNAC === 4 || selectNAC === 14) && checkFullChecked.includes(0) === true) ? 14 : ((selectNAC === 4 || selectNAC === 14) && checkFullChecked.includes(0) === false) ? 5 : 6
         const source_approve = headers.source_approve_userid
         const source_approve_date = headers.source_approve_date
-        const des_delivery = selectNAC === 4 ? data.UserCode : headers.des_userid
+        const des_delivery = headers.des_userid
         const des_deliveryDate = selectNAC === 4 ? datenow : headers.des_date
         const verify_by = headers.verify_by_userid
         const verify_date = headers.verify_date
@@ -1281,7 +1281,7 @@ export default function Nac_Main_wait() {
           verify_date,
         });
         if ('data' in responseForUpdate) {
-          const comment = selectNAC === 4 ? 'ยืนยันรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว' : 'ปิดรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+          const comment = selectNAC === 5 ? 'ปิดรายการแล้ว' : 'ได้รับทรัพย์สินแล้ว'
           const responseComment = await store_FA_control_comment({
             nac_code,
             usercode,
@@ -1321,7 +1321,7 @@ export default function Nac_Main_wait() {
                 })
               }
             }
-            swal("ทำรายการสำเร็จ", 'คุณยืนยันรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+            swal("ทำรายการสำเร็จ", 'ได้รับทรัพย์สินแล้ว', "success", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
@@ -1377,14 +1377,14 @@ export default function Nac_Main_wait() {
       verify_date,
     });
     if ('data' in responseForUpdate) {
-      const comment = 'ยกเลิกรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว'
+      const comment = 'ยกเลิกรายการแล้ว'
       const responseComment = await store_FA_control_comment({
         nac_code,
         usercode,
         comment
       })
       if ('data' in responseComment) {
-        swal("ทำรายการสำเร็จ", 'คุณได้ยกเลิกรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+        swal("ทำรายการสำเร็จ", 'คุณได้ยกเลิกรายการแล้ว', "success", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
@@ -1458,7 +1458,7 @@ export default function Nac_Main_wait() {
     const nac_status = 8
     const source_approve = sourceApprove
     const source_approve_date = sourceDateApproveDate
-    const des_delivery = data.UserCode
+    const des_delivery = des_delivery
     const des_deliveryDate = datenow
     const verify_by = bossApprove
     const verify_date = bossApproveDate
@@ -1482,14 +1482,14 @@ export default function Nac_Main_wait() {
       verify_date,
     });
     if ('data' in responseForUpdate) {
-      const comment = 'ไม่เจอทรัพย์สินบางอย่างในรายการ ' + responseForUpdate.data[0].nac_code
+      const comment = 'ไม่เจอทรัพย์สินบางอย่างในรายการ'
       const responseComment = await store_FA_control_comment({
         nac_code,
         usercode,
         comment
       })
       if ('data' in responseComment) {
-        swal("ทำรายการสำเร็จ", 'คุณไม่พบทรัพย์สินในรายการ ' + responseForUpdate.data[0].nac_code + ' แล้ว', "success", {
+        swal("ทำรายการสำเร็จ", 'คุณไม่พบทรัพย์สินในรายการ', "success", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
@@ -1923,7 +1923,7 @@ export default function Nac_Main_wait() {
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >Serial No.</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >รายละเอียด</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >สถานะทรัพย์สิน</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >
                             <Stack direction="row" alignItems="center" spacing={1}>
