@@ -41,6 +41,8 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 function Copyright() {
   return (
@@ -150,6 +152,10 @@ async function store_FA_control_CheckAssetCode_Process(credentials) {
     .then(data => data.json())
 }
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function Nac_Main() {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
@@ -163,7 +169,6 @@ export default function Nac_Main() {
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
   const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
-  console.log(serviceList);
   const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }])
   const result = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : 0;
@@ -176,6 +181,8 @@ export default function Nac_Main() {
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
   const [AllAssetsControl, setAllAssetsControl] = React.useState([]);
   const [UserForAssetsControl, setUserForAssetsControl] = React.useState([]);
+  const [alert, setAlert] = React.useState(false);
+  const [valueAlert, setValueAlert] = React.useState(false);
   const [valuesVisibility, setValuesVisibility] = React.useState({
     text: serviceList[0].price,
     showText: data.branchid === 901 ? true : false,
@@ -279,10 +286,9 @@ export default function Nac_Main() {
       nacdtl_assetsCode
     });
     if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
-      swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      const alert_value = 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ'
+      setAlert(true);
+      setValueAlert(alert_value)
       const list = [...serviceList];
       list[index]['assetsCode'] = ''
       list[index]['name'] = ''
@@ -568,16 +574,14 @@ export default function Nac_Main() {
 
   const handleNext = async () => {
     if (!source || !source_Department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยืนยันให้ครบถ้วน', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' : 'กรุณากรอกวันที่ของผู้ส่ง'
+      setAlert(true);
+      setValueAlert(alert_value)
     } else {
       if (!serviceList[0].assetsCode) {
-        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        const alert_value = 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน'
+        setAlert(true);
+        setValueAlert(alert_value)
       } else {
         const usercode = data.UserCode
         const worktype = nac_type
@@ -647,8 +651,23 @@ export default function Nac_Main() {
   }
   resultIndex = [resultIndex]
 
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setAlert(false);
+  };
+
   return (
     <React.Fragment>
+      <Stack spacing={2} sx={{ width: '100%' }}>
+        <Snackbar open={alert} autoHideDuration={4500} onClose={handleCloseAlert}>
+          <Alert onClose={handleCloseAlert} severity="warning" sx={{ width: '100%' }}>
+            {valueAlert}
+          </Alert>
+        </Snackbar>
+      </Stack>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppBar

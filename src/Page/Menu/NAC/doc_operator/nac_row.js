@@ -229,9 +229,9 @@ export default function NAC_ROW() {
   };
 
   if (!selectNAC || selectNAC === undefined) {
-    swal("แจ้งเตือน", 'ไม่พบรายการเปลี่ยนเปลงทรัพย์สิน', "warning", {
+    swal("ยินดีด้วย", 'ไม่พบรายการเปลี่ยนเปลงทรัพย์สิน', "success", {
       buttons: false,
-      timer: 2000,
+      timer: 2500,
     }).then((value) => {
       window.location.href = "/HomePage";
     });

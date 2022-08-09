@@ -53,6 +53,8 @@ import CloudDownloadRoundedIcon from '@mui/icons-material/CloudDownloadRounded';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import Card from '@mui/material/Card';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 function Copyright() {
   return (
@@ -270,6 +272,10 @@ async function store_FA_SendMail(credentials) {
     .then(data => data.json())
 }
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function Nac_Main_wait() {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
@@ -310,6 +316,8 @@ export default function Nac_Main_wait() {
   const [commentReply, setCommentReply] = React.useState();
   const [description, setDescription] = React.useState();
   const [checkUserWeb, setCheckUserWeb] = React.useState();
+  const [alert, setAlert] = React.useState(false);
+  const [valueAlert, setValueAlert] = React.useState(false);
   const [valuesVisibility, setValuesVisibility] = React.useState({
     text: serviceList[0].price,
     showText: data.branchid === 901 ? true : false,
@@ -555,10 +563,9 @@ export default function Nac_Main_wait() {
       nacdtl_assetsCode
     });
     if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
-      swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      const alert_value = 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC'
+      setAlert(true);
+      setValueAlert(alert_value)
       const list = [...serviceList];
       list[index]['assetsCode'] = ''
       list[index]['name'] = ''
@@ -824,22 +831,19 @@ export default function Nac_Main_wait() {
   // Update Document
   const handleSave = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ส่งมอบให้ครบถ้วน', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' : 'กรุณากรอกวันที่ของผู้ส่ง'
+      setAlert(true);
+      setValueAlert(alert_value)
     } else {
       if (!des_department || !des_BU || !des_delivery) {
-        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้รับมอบให้ครบถ้วน', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        const alert_value = !des_delivery ? 'กรุณากรอกข้อมูลผู้รับ' : !des_department ? 'กรุณากรอกข้อมูลแผนกของผู้รับ' : 'กรุณากรอกวันที่ของผู้รับ'
+        setAlert(true);
+        setValueAlert(alert_value)
       } else {
         if (!serviceList[0].assetsCode) {
-          swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
-            buttons: false,
-            timer: 2000,
-          })
+          const alert_value = 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน'
+          setAlert(true);
+          setValueAlert(alert_value)
         } else {
           const usercode = data.UserCode
           const nac_status = 1
@@ -914,28 +918,24 @@ export default function Nac_Main_wait() {
 
   const handleSubmit = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ส่งมอบให้ครบถ้วน', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      const alert_value = 'กรุณากรอกข้อมูลผู้ส่งมอบให้ครบถ้วน'
+      setAlert(true);
+      setValueAlert(alert_value)
     } else {
       if (!des_department || !des_BU || !des_delivery) {
-        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้รับมอบให้ครบถ้วน', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        const alert_value = 'กรุณากรอกข้อมูลผู้รับมอบให้ครบถ้วน'
+        setAlert(true);
+        setValueAlert(alert_value)
       } else {
         if (!serviceList[0].assetsCode) {
-          swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
-            buttons: false,
-            timer: 2000,
-          })
+          const alert_value = 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน'
+          setAlert(true);
+          setValueAlert(alert_value)
         } else {
           if (sum_price !== headers.sum_price || headers.source_userid !== source || headers.des_userid !== des_delivery) {
-            swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยืนยัน', "warning", {
-              buttons: false,
-              timer: 2000,
-            })
+            const alert_value = 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยืนยัน'
+            setAlert(true);
+            setValueAlert(alert_value)
           } else {
             if (data.UserCode === headers.create_by || checkUserWeb === 'admin') {
               const usercode = data.UserCode
@@ -1005,10 +1005,9 @@ export default function Nac_Main_wait() {
   const handleExamineApprove = async () => {
     if ((CheckExamineApprove.length > 1 && ExamineApprove[ExamineApprove.length - 2] !== undefined)) {
       if (headers.source_approve_userid === data.UserCode) {
-        swal("แจ้งเตือน", 'คุณได้ตรวจสอบรายการนี้ไปแล้ว', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        const alert_value = 'คุณได้ตรวจสอบรายการนี้ไปแล้ว'
+        setAlert(true);
+        setValueAlert(alert_value)
       } else {
         const usercode = data.UserCode
         const nac_status = (CheckExamineApprove.includes(data.UserCode) !== false && ExamineApprove[ExamineApprove.length - 2].status === 0) ? 2 : checkUserWeb === 'admin' ? 3 : 3
@@ -1251,10 +1250,9 @@ export default function Nac_Main_wait() {
     }
     if (selectNAC === 4 || selectNAC === 5 || selectNAC === 14) {
       if (checkFullChecked.includes(0) === true) {
-        swal("แจ้งเตือน", 'มีทรัพย์สินบางรายการที่ยังไม่ได้รับ กรุณาลองใหม่อีกครั้ง', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        const alert_value = 'มีทรัพย์สินบางรายการที่ยังไม่ได้รับ กรุณาลองใหม่อีกครั้ง'
+        setAlert(true);
+        setValueAlert(alert_value)
       } else {
         const usercode = data.UserCode
         const nac_status = ((selectNAC === 4 || selectNAC === 14) && checkFullChecked.includes(0) === true) ? 14 : ((selectNAC === 4 || selectNAC === 14) && checkFullChecked.includes(0) === false) ? 5 : 6
@@ -1524,6 +1522,14 @@ export default function Nac_Main_wait() {
     }
   }
 
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setAlert(false);
+  };
+
 
   if (headers.length === 0) {
     return (
@@ -1548,6 +1554,13 @@ export default function Nac_Main_wait() {
   } else {
     return (
       <React.Fragment>
+        <Stack spacing={2} sx={{ width: '100%' }}>
+          <Snackbar open={alert} autoHideDuration={4500} onClose={handleCloseAlert}>
+            <Alert onClose={handleCloseAlert} severity="warning" sx={{ width: '100%' }}>
+              {valueAlert}
+            </Alert>
+          </Snackbar>
+        </Stack>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <AppBar

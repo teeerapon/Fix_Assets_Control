@@ -52,6 +52,8 @@ import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import logoPure from '../../../../../image/Picture1.png'
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import Card from '@mui/material/Card';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 function Copyright() {
   return (
@@ -293,6 +295,10 @@ async function store_FA_SendMail(credentials) {
     .then(data => data.json())
 }
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function Nac_Seals_Approve() {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
@@ -323,6 +329,8 @@ export default function Nac_Seals_Approve() {
   const [UserForAssetsControl, setUserForAssetsControl] = React.useState([]);
   const [AllAssetsControl, setAllAssetsControl] = React.useState([]);
   const [Real_Price, setReal_Price] = React.useState();
+  const [alert, setAlert] = React.useState(false);
+  const [valueAlert, setValueAlert] = React.useState(false);
 
   const [ExamineApprove, setExamineApprove] = React.useState([]);
   const [ExecApprove, setExecApprove] = React.useState([]);
@@ -604,10 +612,9 @@ export default function Nac_Seals_Approve() {
       nacdtl_assetsCode
     });
     if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
-      swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      const alert_value = 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC'
+      setAlert(true);
+      setValueAlert(alert_value)
       const list = [...serviceList];
       list[index]['assetsCode'] = ''
       list[index]['name'] = ''
@@ -783,16 +790,14 @@ export default function Nac_Seals_Approve() {
   // Update Document
   const handleSave = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ส่งมอบให้ครบถ้วน', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' : 'กรุณากรอกวันที่ของผู้ส่ง'
+      setAlert(true);
+      setValueAlert(alert_value)
     } else {
       if (!serviceList[0].assetsCode) {
-        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        const alert_value = 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน'
+        setAlert(true);
+        setValueAlert(alert_value)
       } else {
         const usercode = data.UserCode
         const nac_status = (selectNAC === 11) ? 11 : 1
@@ -857,10 +862,9 @@ export default function Nac_Seals_Approve() {
                 nacdtl_assetsCode
               });
             } else {
-              swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "warning", {
-                buttons: false,
-                timer: 2000,
-              })
+              const alert_value = 'คำขออัปเดตรายการผิดพลาด'
+              setAlert(true);
+              setValueAlert(alert_value)
             }
           }
           swal("ทำรายการสำเร็จ", 'สร้างรายการเปลี่ยนแปลงทรัพย์สินแล้ว', "success", {
@@ -870,10 +874,9 @@ export default function Nac_Seals_Approve() {
             window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
           });
         } else {
-          swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "warning", {
-            buttons: false,
-            timer: 2000,
-          })
+          const alert_value = 'กรุณาลองใหม่ภายหลัง'
+          setAlert(true);
+          setValueAlert(alert_value)
         }
       }
     }
@@ -882,22 +885,19 @@ export default function Nac_Seals_Approve() {
 
   const handleSubmit = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยืนยันให้ครบถ้วน', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' : 'กรุณากรอกวันที่ของผู้ส่ง'
+      setAlert(true);
+      setValueAlert(alert_value)
     } else {
       if (!serviceList[0].assetsCode) {
-        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        const alert_value = 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน'
+        setAlert(true);
+        setValueAlert(alert_value)
       } else {
         if (sum_price !== headers.sum_price || headers.source_userid !== source || headers.des_userid !== des_delivery) {
-          swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยืนยัน', "warning", {
-            buttons: false,
-            timer: 2000,
-          })
+          const alert_value = 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยืนยัน'
+          setAlert(true);
+          setValueAlert(alert_value)
         } else {
           if (data.UserCode === headers.create_by || CheckExamineApprove.includes(data.UserCode) === true || CheckApprove.includes(data.UserCode) === true || checkUserWeb === 'admin') {
             const usercode = data.UserCode
@@ -915,7 +915,7 @@ export default function Nac_Seals_Approve() {
                 checkBookValue_is_null[i] = serviceList[i].bookValue
               }
               if (checkBookValue_is_null.includes('') !== true) {
-                const responseForUpdate = await store_FA_control_updateStatus({
+                await store_FA_control_updateStatus({
                   usercode,
                   nac_code,
                   nac_status,
@@ -998,90 +998,102 @@ export default function Nac_Seals_Approve() {
                   });
                 }
               } else {
-                swal("แจ้งเตือน", 'กรุณากรอก Book Value ของทรัพย์สินให้ครบถ้วน', "warning")
+                const alert_value = 'กรุณากรอก Book Value ของทรัพย์สินให้ครบถ้วน'
+                setAlert(true);
+                setValueAlert(alert_value)
               }
             } else {
-              const responseForUpdate = await store_FA_control_updateStatus({
-                usercode,
-                nac_code,
-                nac_status,
-                nac_type,
-                source,
-                sourceDate,
-                des_delivery,
-                des_deliveryDate,
-                source_approve,
-                source_approve_date,
-                des_approve,
-                des_approve_date,
-                verify_by,
-                verify_date,
-              });
+              const checkPriceSeals_is_null = []
               for (let i = 0; i < serviceList.length; i++) {
-                const dtl_id = serviceList[i].dtl_id
-                const nacdtl_row = i
-                const nacdtl_assetsCode = serviceList[i].assetsCode
-                const nacdtl_assetsName = serviceList[i].name
-                const nacdtl_assetsSeria = serviceList[i].serialNo
-                const nacdtl_assetsDtl = serviceList[i].dtl
-                const nacdtl_assetsCount = serviceList[i].count
-                const nacdtl_assetsPrice = serviceList[i].price
-                const asset_id = serviceList[i].asset_id
-                const responseDTL = await store_FA_control_update_DTL({
-                  dtl_id,
+                checkPriceSeals_is_null[i] = serviceList[i].priceSeals
+              }
+              if (checkPriceSeals_is_null.includes('') !== true) {
+                await store_FA_control_updateStatus({
                   usercode,
-                  nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
-                  nacdtl_row,
-                  nacdtl_assetsCode,
-                  nacdtl_assetsName,
-                  nacdtl_assetsSeria,
-                  nacdtl_assetsDtl,
-                  nacdtl_assetsCount,
-                  nacdtl_assetsPrice,
-                  asset_id
+                  nac_code,
+                  nac_status,
+                  nac_type,
+                  source,
+                  sourceDate,
+                  des_delivery,
+                  des_deliveryDate,
+                  source_approve,
+                  source_approve_date,
+                  des_approve,
+                  des_approve_date,
+                  verify_by,
+                  verify_date,
                 });
-                if ('data' in responseDTL) {
-                  const nacdtl_bookV = serviceList[i].bookValue
-                  const nacdtl_PriceSeals = serviceList[i].priceSeals
-                  const nacdtl_profit = serviceList[i].priceSeals - serviceList[i].bookValue
-                  const asset_id = responseDTL.data[i].nacdtl_id
-                  const nac_status = (selectNAC === 11) ? 10 : 11
-                  await store_FA_control_updateDTL_seals({
+                for (let i = 0; i < serviceList.length; i++) {
+                  const dtl_id = serviceList[i].dtl_id
+                  const nacdtl_row = i
+                  const nacdtl_assetsCode = serviceList[i].assetsCode
+                  const nacdtl_assetsName = serviceList[i].name
+                  const nacdtl_assetsSeria = serviceList[i].serialNo
+                  const nacdtl_assetsDtl = serviceList[i].dtl
+                  const nacdtl_assetsCount = serviceList[i].count
+                  const nacdtl_assetsPrice = serviceList[i].price
+                  const asset_id = serviceList[i].asset_id
+                  const responseDTL = await store_FA_control_update_DTL({
+                    dtl_id,
                     usercode,
-                    nac_code,
-                    nac_status,
-                    nac_type,
-                    nacdtl_bookV,
-                    nacdtl_PriceSeals,
-                    nacdtl_profit,
-                    asset_id,
-                    nacdtl_assetsCode
+                    nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
+                    nacdtl_row,
+                    nacdtl_assetsCode,
+                    nacdtl_assetsName,
+                    nacdtl_assetsSeria,
+                    nacdtl_assetsDtl,
+                    nacdtl_assetsCount,
+                    nacdtl_assetsPrice,
+                    asset_id
+                  });
+                  if ('data' in responseDTL) {
+                    const nacdtl_bookV = serviceList[i].bookValue
+                    const nacdtl_PriceSeals = serviceList[i].priceSeals
+                    const nacdtl_profit = serviceList[i].priceSeals - serviceList[i].bookValue
+                    const asset_id = responseDTL.data[i].nacdtl_id
+                    const nac_status = (selectNAC === 11) ? 10 : 11
+                    await store_FA_control_updateDTL_seals({
+                      usercode,
+                      nac_code,
+                      nac_status,
+                      nac_type,
+                      nacdtl_bookV,
+                      nacdtl_PriceSeals,
+                      nacdtl_profit,
+                      asset_id,
+                      nacdtl_assetsCode
+                    });
+                  }
+                }
+                const comment = 'คุณยืนยันรายการแล้ว'
+                const responseComment = await store_FA_control_comment({
+                  nac_code,
+                  usercode,
+                  comment
+                })
+                await store_FA_SendMail({
+                  nac_code
+                })
+                if ('data' in responseComment) {
+                  swal("ทำรายการสำเร็จ", 'คุณยืนยันรายการแล้ว', "success", {
+                    buttons: false,
+                    timer: 2000,
+                  }).then((value) => {
+                    window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
+                  });
+                } else {
+                  swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+                    buttons: false,
+                    timer: 2000,
+                  }).then((value) => {
+                    window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
                   });
                 }
-              }
-              const comment = 'คุณยืนยันรายการแล้ว'
-              const responseComment = await store_FA_control_comment({
-                nac_code,
-                usercode,
-                comment
-              })
-              await store_FA_SendMail({
-                nac_code
-              })
-              if ('data' in responseComment) {
-                swal("ทำรายการสำเร็จ", 'คุณยืนยันรายการแล้ว', "success", {
-                  buttons: false,
-                  timer: 2000,
-                }).then((value) => {
-                  window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
-                });
               } else {
-                swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
-                  buttons: false,
-                  timer: 2000,
-                }).then((value) => {
-                  window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
-                });
+                const alert_value = 'กรุณากรอก ราคาขายทรัพย์สิน'
+                setAlert(true);
+                setValueAlert(alert_value)
               }
             }
           } else {
@@ -1101,7 +1113,9 @@ export default function Nac_Seals_Approve() {
   const handleExamineApprove = async () => {
     if ((CheckExamineApprove.length > 1 && ExamineApprove[ExamineApprove.length - 2] !== undefined)) {
       if (headers.source_approve_userid === data.UserCode) {
-        swal("แจ้งเตือน", 'คุณได้ตรวจสอบรายการนี้ไปแล้ว', "warning")
+        const alert_value = 'คุณได้ตรวจสอบรายการนี้ไปแล้ว'
+        setAlert(true);
+        setValueAlert(alert_value)
       } else {
         const usercode = data.UserCode
         const nac_status = (CheckExamineApprove.includes(data.UserCode) !== false && ExamineApprove[ExamineApprove.length - 2].status === 0) ? 2 : checkUserWeb === 'admin' ? 3 : 3
@@ -1282,10 +1296,9 @@ export default function Nac_Seals_Approve() {
   // Submit รายการ
   const handleSubmitComplete = async () => {
     if (!Real_Price) {
-      swal("แจ้งเตือน", 'กรุณาใส่ราคาขายจริง', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      const alert_value = 'กรุณาใส่ราคาขายจริง'
+      setAlert(true);
+      setValueAlert(alert_value)
     } else {
       if (selectNAC === 4 || selectNAC === 5 || selectNAC === 12 || selectNAC === 13) {
         const usercode = data.UserCode
@@ -1494,6 +1507,14 @@ export default function Nac_Seals_Approve() {
     }
   }
 
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setAlert(false);
+  };
+
 
   if (headers.length === 0) {
     return (
@@ -1518,6 +1539,13 @@ export default function Nac_Seals_Approve() {
   } else {
     return (
       <React.Fragment>
+        <Stack spacing={2} sx={{ width: '100%' }}>
+          <Snackbar open={alert} autoHideDuration={4500} onClose={handleCloseAlert}>
+            <Alert onClose={handleCloseAlert} severity="warning" sx={{ width: '100%' }}>
+              {valueAlert}
+            </Alert>
+          </Snackbar>
+        </Stack>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <AppBar

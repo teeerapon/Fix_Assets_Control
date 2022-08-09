@@ -52,6 +52,8 @@ import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 import logoPure from '../../../../../image/Picture1.png'
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import Card from '@mui/material/Card';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 function Copyright() {
   return (
@@ -293,6 +295,10 @@ async function store_FA_SendMail(credentials) {
     .then(data => data.json())
 }
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function Nac_Seals_Approve() {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
@@ -320,6 +326,8 @@ export default function Nac_Seals_Approve() {
   const [commentReply, setCommentReply] = React.useState();
   const [UserForAssetsControl, setUserForAssetsControl] = React.useState([]);
   const [AllAssetsControl, setAllAssetsControl] = React.useState([]);
+  const [alert, setAlert] = React.useState(false);
+  const [valueAlert, setValueAlert] = React.useState(false);
 
   const [ExamineApprove, setExamineApprove] = React.useState([]);
   const [ExecApprove, setExecApprove] = React.useState([]);
@@ -597,10 +605,9 @@ export default function Nac_Seals_Approve() {
       nacdtl_assetsCode
     });
     if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
-      swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      const alert_value = 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC'
+      setAlert(true);
+      setValueAlert(alert_value)
       const list = [...serviceList];
       list[index]['assetsCode'] = ''
       list[index]['name'] = ''
@@ -775,16 +782,14 @@ export default function Nac_Seals_Approve() {
   // Update Document
   const handleSave = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ส่งมอบให้ครบถ้วน', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' : 'กรุณากรอกวันที่ของผู้ส่ง'
+      setAlert(true);
+      setValueAlert(alert_value)
     } else {
       if (!serviceList[0].assetsCode) {
-        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        const alert_value = 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน'
+        setAlert(true);
+        setValueAlert(alert_value)
       } else {
         const usercode = data.UserCode
         const nac_status = (selectNAC === 11) ? 11 : 1
@@ -874,22 +879,19 @@ export default function Nac_Seals_Approve() {
 
   const handleSubmit = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
-      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลผู้ยืนยันให้ครบถ้วน', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      const alert_value = 'กรุณากรอกข้อมูลผู้ยืนยันให้ครบถ้วน'
+      setAlert(true);
+      setValueAlert(alert_value)
     } else {
       if (!serviceList[0].assetsCode) {
-        swal("แจ้งเตือน", 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน', "warning", {
-          buttons: false,
-          timer: 2000,
-        })
+        const alert_value = 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน'
+        setAlert(true);
+        setValueAlert(alert_value)
       } else {
         if (result !== headers.sum_price || headers.source_userid !== source || headers.des_userid !== des_delivery) {
-          swal("แจ้งเตือน", 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยืนยัน', "warning", {
-            buttons: false,
-            timer: 2000,
-          })
+          const alert_value = 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยืนยัน'
+          setAlert(true);
+          setValueAlert(alert_value)
         } else {
           if (data.UserCode === headers.create_by || CheckExamineApprove.includes(data.UserCode) === true || CheckApprove.includes(data.UserCode) === true || checkUserWeb === 'admin') {
             const usercode = data.UserCode
@@ -990,7 +992,9 @@ export default function Nac_Seals_Approve() {
                   });
                 }
               } else {
-                swal("แจ้งเตือน", 'กรุณากรอก Book Value ของทรัพย์สินให้ครบถ้วน', "warning")
+                const alert_value = 'กรุณากรอก Book Value ของทรัพย์สินให้ครบถ้วน'
+                setAlert(true);
+                setValueAlert(alert_value)
               }
             } else {
               const responseForUpdate = await store_FA_control_updateStatus({
@@ -1093,7 +1097,9 @@ export default function Nac_Seals_Approve() {
   const handleExamineApprove = async () => {
     if ((CheckExamineApprove.length > 1 && ExamineApprove[ExamineApprove.length - 2] !== undefined)) {
       if (headers.source_approve_userid === data.UserCode) {
-        swal("แจ้งเตือน", 'คุณได้ตรวจสอบรายการนี้ไปแล้ว', "warning")
+        const alert_value = 'คุณได้ตรวจสอบรายการนี้ไปแล้ว'
+        setAlert(true);
+        setValueAlert(alert_value)
       } else {
         const usercode = data.UserCode
         const nac_status = (CheckExamineApprove.includes(data.UserCode) !== false && ExamineApprove[ExamineApprove.length - 2].status === 0) ? 2 : checkUserWeb === 'admin' ? 3 : 3
@@ -1473,6 +1479,14 @@ export default function Nac_Seals_Approve() {
     }
   }
 
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setAlert(false);
+  };
+
 
   if (headers.length === 0) {
     return (
@@ -1497,6 +1511,13 @@ export default function Nac_Seals_Approve() {
   } else {
     return (
       <React.Fragment>
+        <Stack spacing={2} sx={{ width: '100%' }}>
+          <Snackbar open={alert} autoHideDuration={4500} onClose={handleCloseAlert}>
+            <Alert onClose={handleCloseAlert} severity="warning" sx={{ width: '100%' }}>
+              {valueAlert}
+            </Alert>
+          </Snackbar>
+        </Stack>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <AppBar
