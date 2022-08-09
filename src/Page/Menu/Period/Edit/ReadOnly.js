@@ -33,7 +33,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function DeletePeriodData(credentials) {
-  return fetch('http://similan:32001/api/delete_period', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/delete_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -94,9 +94,6 @@ export default function ReadOnly({ periodData, handleEditClick }) {
 
   return (
     <StyledTableRow key={periodData.PeriodID}>
-      <StyledTableCell component="th" scope="row" align="center">
-        {periodData.PeriodID}
-      </StyledTableCell>
       <StyledTableCell align="left" >{BeginDate.split(':')[0] + ':' + BeginDate.split(':')[1]}</StyledTableCell>
       <StyledTableCell align="left" >{EndDate.split(':')[0] + ':' + EndDate.split(':')[1]}</StyledTableCell>
       <StyledTableCell align="left" >{periodData.Description}</StyledTableCell>

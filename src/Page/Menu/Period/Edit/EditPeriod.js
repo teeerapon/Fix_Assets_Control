@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import AnimatedPage from '../../../../AnimatedPage.jsx'
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
-import Axios from "axios"
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -27,6 +26,8 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import PropTypes from 'prop-types';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -112,9 +113,21 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
+async function getPeriods(credentials) {
+  return fetch('http://vpnptec.dyndns.org:32001/api/period_round', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 export default function EditPeriod() {
 
   const [EditPeriodData, setEditPeriodData] = React.useState(null);
+  const data = JSON.parse(localStorage.getItem('data'));
   const [periodData, setPeriodData] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
@@ -125,6 +138,11 @@ export default function EditPeriod() {
     Description: '',
     BranchID: '',
   });
+  const [dense, setDense] = React.useState(false);
+
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked);
+  };
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - periodData.length) : 0;
@@ -139,15 +157,18 @@ export default function EditPeriod() {
   };
 
   const fetchPeriodData = async () => {
-    const { data } = await Axios.get(
-      "http://similan:32001/api/period_round"
-    );
-    const periodID = data;
-    setPeriodData(periodID)
+    const BranchID = data.BranchID;
+    const response_data = await getPeriods({
+      BranchID
+    })
+    setPeriodData(response_data);
   };
 
   React.useEffect(() => {
     fetchPeriodData();
+    // 👇️ disable the rule for a single line
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleEditClickCancel = () => {
@@ -201,17 +222,19 @@ export default function EditPeriod() {
       </AppBar>
       <AnimatedPage>
         <Container maxWidth="1000px">
-          <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+          <FormControlLabel
+            sx={{ pt: 2 }}
+            control={<Switch checked={dense} onChange={handleChangeDense} />}
+            label="Dense padding"
+          />
+          <Paper variant="outlined" sx={{ my: 2, p: { xs: 2, md: 3 } }}>
             <Typography variant="h5" color="inherit" noWrap sx={{ pl: 1 }}>
               สถานะรอบตรวจนับทั้งหมด
             </Typography>
             <TableContainer component={Paper} className='pt-1'>
-              <Table sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
+              <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell align="center" sx={{ minWidth: 100 }}>
-                      เลขที่
-                    </StyledTableCell>
                     <StyledTableCell align="left" sx={{ minWidth: 100 }}>วันที่และเวลาเริ่มต้น</StyledTableCell>
                     <StyledTableCell align="left" sx={{ minWidth: 100 }}>วันที่และเวลาสิ้นสุด</StyledTableCell>
                     <StyledTableCell align="left" sx={{ minWidth: 100 }}>คำธิบาย</StyledTableCell>
@@ -241,8 +264,12 @@ export default function EditPeriod() {
                     </React.Fragment>
                   ))}
                   {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
+                    <TableRow
+                      style={{
+                        height: (dense ? 33 : 53) * emptyRows,
+                      }}
+                    >
+                      <TableCell colSpan={9} />
                     </TableRow>
                   )}
                 </TableBody>

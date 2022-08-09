@@ -44,7 +44,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function store_FA_control_drop_NAC(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_drop_NAC', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_drop_NAC', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -56,7 +56,7 @@ async function store_FA_control_drop_NAC(credentials) {
 }
 
 async function store_FA_control_execDocID(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_execDocID', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_execDocID', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -119,6 +119,9 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
 
   React.useEffect(() => {
     handlefechtAprrove();
+    // 👇️ disable the rule for a single line
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDrop_NAC = async (event) => {

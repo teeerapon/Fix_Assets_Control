@@ -30,6 +30,9 @@ import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import SummarizeIcon from '@mui/icons-material/Summarize';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import 'reactjs-popup/dist/index.css';
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -116,7 +119,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function store_FA_control_select_NAC_approve(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_select_NAC_approve', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC_approve', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -136,7 +139,11 @@ export default function NAC_ROW() {
   const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
+  const [dense, setDense] = React.useState(false);
 
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked);
+  };
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (tableSearch.length === 0 ? selectNAC.filter((val) => {
@@ -198,6 +205,9 @@ export default function NAC_ROW() {
 
   React.useEffect(() => {
     fetchMyNAC();
+    // 👇️ disable the rule for a single line
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleEditClick = (event, selectNAC) => {
@@ -276,13 +286,17 @@ export default function NAC_ROW() {
                     onChange={handleSetSearch}
                     value={search}
                   />
+                  <FormControlLabel
+                    control={<Switch checked={dense} onChange={handleChangeDense} />}
+                    label="Dense padding"
+                  />
                 </Stack>
                 <Paper variant="outlined" sx={{ my: 2, p: { xs: 2, md: 3 } }}>
                   <Typography variant="h5" color="inherit" noWrap sx={{ pl: 1 }}>
                     รายการ NAC ทั้งหมด
                   </Typography>
                   <TableContainer component={Paper} className='pt-1'>
-                    <Table sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
+                    <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
                       <TableHead>
                         <TableRow>
                           <StyledTableCell align="center" sx={{ width: 200 }}>
@@ -358,8 +372,12 @@ export default function NAC_ROW() {
                             </React.Fragment>
                           ))}
                         {emptyRows > 0 && (
-                          <TableRow style={{ height: 53 * emptyRows }}>
-                            <TableCell colSpan={6} />
+                          <TableRow
+                            style={{
+                              height: (dense ? 33 : 53) * emptyRows,
+                            }}
+                          >
+                            <TableCell colSpan={9} />
                           </TableRow>
                         )}
                       </TableBody>

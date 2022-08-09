@@ -36,7 +36,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function EditPeriodData(credentials) {
-  return fetch('http://similan:32001/api/update_period', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/update_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -107,11 +107,6 @@ export default function EditPeriod({ editFormData, handleEditClickCancel }) {
 
   return (
     <StyledTableRow >
-      <StyledTableCell component="th" scope="row" align="center">
-        <Typography color="inherit" variant="body2" name="PeriodID" noWrap>
-          {PeriodID}
-        </Typography>
-      </StyledTableCell>
       <StyledTableCell align="left">
         <LocalizationProvider dateAdapter={DateAdapter}>
           <DatePicker

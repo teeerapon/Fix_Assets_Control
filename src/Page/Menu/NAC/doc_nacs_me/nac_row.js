@@ -30,6 +30,8 @@ import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import SummarizeIcon from '@mui/icons-material/Summarize';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -116,7 +118,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function store_FA_control_select_NAC(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_select_NAC', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -136,6 +138,11 @@ export default function NAC_ROW() {
   const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
+  const [dense, setDense] = React.useState(false);
+
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked);
+  };
 
 
   const emptyRows =
@@ -198,6 +205,9 @@ export default function NAC_ROW() {
 
   React.useEffect(() => {
     fetchMyNAC();
+    // 👇️ disable the rule for a single line
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleEditClick = (event, selectNAC) => {
@@ -276,13 +286,17 @@ export default function NAC_ROW() {
                     onChange={handleSetSearch}
                     value={search}
                   />
+                  <FormControlLabel
+                    control={<Switch checked={dense} onChange={handleChangeDense} />}
+                    label="Dense padding"
+                  />
                 </Stack>
                 <Paper variant="outlined" sx={{ my: 2, p: { xs: 2, md: 3 } }}>
                   <Typography variant="h5" color="inherit" noWrap sx={{ pl: 1 }}>
                     สถานะรายการ NAC
                   </Typography>
                   <TableContainer component={Paper} className='pt-1'>
-                    <Table sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
+                    <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
                       <TableHead>
                         <TableRow>
                           <StyledTableCell align="center" sx={{ width: 200 }}>
@@ -314,9 +328,9 @@ export default function NAC_ROW() {
                             if (search === '') {
                               return selectNAC
                             } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) ||
-                            selectNAC.name.toLowerCase().includes(search.toLowerCase()) ||
-                            selectNAC.create_by.toLowerCase().includes(search.toLowerCase()) ||
-                            selectNAC.status_name.toLowerCase().includes(search.toLowerCase())) {
+                              selectNAC.name.toLowerCase().includes(search.toLowerCase()) ||
+                              selectNAC.create_by.toLowerCase().includes(search.toLowerCase()) ||
+                              selectNAC.status_name.toLowerCase().includes(search.toLowerCase())) {
                               return selectNAC
                             }
                           })
@@ -358,8 +372,12 @@ export default function NAC_ROW() {
                             </React.Fragment>
                           ))}
                         {emptyRows > 0 && (
-                          <TableRow style={{ height: 53 * emptyRows }}>
-                            <TableCell colSpan={6} />
+                          <TableRow
+                            style={{
+                              height: (dense ? 33 : 53) * emptyRows,
+                            }}
+                          >
+                            <TableCell colSpan={9} />
                           </TableRow>
                         )}
                       </TableBody>

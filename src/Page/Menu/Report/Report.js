@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import Axios from "axios"
 import swal from 'sweetalert';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@mui/material/Toolbar';
@@ -34,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 async function Reported(credentials) {
-  return fetch('http://similan:32001/api/testGetBranch', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/testGetBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -45,7 +44,7 @@ async function Reported(credentials) {
 }
 
 async function Reported2(credentials) {
-  return fetch('http://similan:32001/api/getAssetbyUserBranch', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/getAssetbyUserBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -56,7 +55,18 @@ async function Reported2(credentials) {
 }
 
 async function Reported3(credentials) {
-  return fetch('http://similan:32001/api/wrongBranch', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/wrongBranch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
+async function getPeriods(credentials) {
+  return fetch('http://vpnptec.dyndns.org:32001/api/period_round', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -84,16 +94,17 @@ export default function Report() {
   const navigate = useNavigate();
   const classes = useStyles();
   const permission = JSON.parse(localStorage.getItem('permission'));
+  const data = JSON.parse(localStorage.getItem('data'));
   const [permissionData, setPermission] = React.useState([]);
   const [periodData2, setPeriodData2] = React.useState([]);
   const [periodData, setPeriodData] = React.useState([]);
 
   const fetchPeriodData = async () => {
-    const { data } = await Axios.get(
-      "http://similan:32001/api/period_round"
-    );
-    const periodID = data;
-    setPeriodData2(periodID);
+    const BranchID = data.BranchID;
+    const response_data = await getPeriods({
+      BranchID
+    })
+    setPeriodData2(response_data);
   };
 
   const handleSubmit = async e => {
@@ -137,6 +148,9 @@ export default function Report() {
 
   React.useEffect(() => {
     fetchPeriodData();
+    // 👇️ disable the rule for a single line
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChangeValue2 = (event) => {
@@ -221,7 +235,7 @@ export default function Report() {
                         {
                           periodData2.map((item) =>
                             <MenuItem value={item.PeriodID}>
-                              รอบที่ {item.PeriodID} (วันที่ {item.BeginDate.split('T')[0]} - {item.EndDate.split('T')[0]}) : {item.Description}
+                              วันที่ {item.BeginDate.split('T')[0]} - {item.EndDate.split('T')[0]} : {item.Description}
                             </MenuItem>
                           )
                         }

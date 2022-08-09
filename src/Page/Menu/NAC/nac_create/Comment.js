@@ -49,7 +49,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function store_FA_control_comment(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_comment', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_comment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -61,7 +61,7 @@ async function store_FA_control_comment(credentials) {
 }
 
 async function stroe_FA_control_Path(credentials) {
-  return fetch('http://similan:32001/api/stroe_FA_control_Path', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/stroe_FA_control_Path', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -73,7 +73,7 @@ async function stroe_FA_control_Path(credentials) {
 }
 
 async function qureyNAC_comment(credentials) {
-  return fetch('http://similan:32001/api/qureyNAC_comment', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/qureyNAC_comment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -85,7 +85,7 @@ async function qureyNAC_comment(credentials) {
 }
 
 async function qureyNAC_path(credentials) {
-  return fetch('http://similan:32001/api/qureyNAC_path', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/qureyNAC_path', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -210,6 +210,9 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
 
   React.useEffect(() => {
     fetchComment();
+    // 👇️ disable the rule for a single line
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -249,40 +252,40 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                     }}
                   >
                     <Grid sx={{ pb: 1 }}></Grid>
-                      {!pathFetch[0] ? (
-                        <React.Fragment></React.Fragment>
-                      ) : (
-                        <React.Fragment>
-                          <TableContainer sx={{p:2}}>
-                            <Table aria-label="customized table" style={{ width: '100%' }}>
-                              <TableHead>
-                                <TableRow>
-                                  <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>คำอธิบาย</StyledTableCell>
-                                  <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>ลิ้งแนบ</StyledTableCell>
-                                </TableRow>
-                              </TableHead>
-                              {pathFetch.map((res, index) => (
-                                <React.Fragment>
-                                  <TableBody>
-                                    <StyledTableRow>
-                                      <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                                        {res.userid} : {res.description}
-                                      </StyledTableCell>
-                                      <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                                        <TextField
-                                          variant='standard'
-                                          value={res.linkpath}
-                                          onClick={() => window.open(res.linkpath, "_blank")}
-                                        />
-                                      </StyledTableCell>
-                                    </StyledTableRow>
-                                  </TableBody>
-                                </React.Fragment>
-                              ))}
-                            </Table>
-                          </TableContainer>
-                        </React.Fragment>
-                      )}
+                    {!pathFetch[0] ? (
+                      <React.Fragment></React.Fragment>
+                    ) : (
+                      <React.Fragment>
+                        <TableContainer sx={{ p: 2 }}>
+                          <Table aria-label="customized table" style={{ width: '100%' }}>
+                            <TableHead>
+                              <TableRow>
+                                <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>คำอธิบาย</StyledTableCell>
+                                <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>ลิ้งแนบ</StyledTableCell>
+                              </TableRow>
+                            </TableHead>
+                            {pathFetch.map((res, index) => (
+                              <React.Fragment>
+                                <TableBody>
+                                  <StyledTableRow>
+                                    <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                      {res.userid} : {res.description}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
+                                      <TextField
+                                        variant='standard'
+                                        value={res.linkpath}
+                                        onClick={() => window.open(res.linkpath, "_blank")}
+                                      />
+                                    </StyledTableCell>
+                                  </StyledTableRow>
+                                </TableBody>
+                              </React.Fragment>
+                            ))}
+                          </Table>
+                        </TableContainer>
+                      </React.Fragment>
+                    )}
                   </Box>
                   <CardActions titleTypographyProps={{ align: 'center' }}
                     subheaderTypographyProps={{

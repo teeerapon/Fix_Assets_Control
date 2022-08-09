@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 async function Reported(credentials) {
-    return fetch('http://similan:32001/api/ReportassetsAll', {
+    return fetch('http://vpnptec.dyndns.org:32001/api/ReportassetsAll', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json; charset=utf-8'
@@ -66,7 +66,7 @@ export default function Report() {
 
     const fetchPeriodData = async () => {
         const { data } = await Axios.get(
-            "http://similan:32001/api/period_round"
+            "http://vpnptec.dyndns.org:32001/api/period_round"
         );
         const periodID = data;
         setPeriodData2(periodID);

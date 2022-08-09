@@ -14,7 +14,7 @@ const steps = ['กรอกข้อมูล', 'ตรวจสอบข้อ
 
 
 async function PeriodCreate(credentials) {
-  return fetch('http://similan:32001/api/craete_period', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/craete_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'

@@ -81,7 +81,7 @@ const filterOptions2 = createFilterOptions({
 });
 
 async function SelectDTL_Control(credentials) {
-  return fetch('http://similan:32001/api/SelectDTL_Control', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/SelectDTL_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -92,7 +92,7 @@ async function SelectDTL_Control(credentials) {
 }
 
 async function SelectAssetsControl(credentials) {
-  return fetch('http://similan:32001/api/AssetsAll_Control', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/AssetsAll_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -103,7 +103,7 @@ async function SelectAssetsControl(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://similan:32001/api/AutoDeapartMent', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -115,7 +115,7 @@ async function AutoDeapartMent(credentials) {
 }
 
 async function Store_FA_control_create_doc(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_create_doc', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_create_doc', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -127,7 +127,7 @@ async function Store_FA_control_create_doc(credentials) {
 }
 
 async function store_FA_control_creat_Detail(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_creat_Detail', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_creat_Detail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -139,7 +139,7 @@ async function store_FA_control_creat_Detail(credentials) {
 }
 
 async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://similan:32001/api/store_FA_control_CheckAssetCode_Process', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -220,7 +220,7 @@ export default function Nac_Main() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://similan:32001/api/getsUserForAssetsControl"
+      "http://vpnptec.dyndns.org:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []
@@ -244,6 +244,9 @@ export default function Nac_Main() {
   React.useEffect(() => {
     fetchAssetsControl();
     fetchUserForAssetsControl();
+    // 👇️ disable the rule for a single line
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleServiceAdd = () => {
@@ -618,13 +621,8 @@ export default function Nac_Main() {
               nacdtl_date_asset,
             });
             if ('data' in responseDTL) {
-              swal("ทำรายการสำเร็จ", 'สร้างรายการเปลี่ยนแปลงทรัพย์สิน ' + responseDTL.data[0].nac_code + ' แล้ว', "success", {
-                buttons: false,
-                timer: 2000,
-              }).then((value) => {
-                localStorage.setItem('NacCode', JSON.stringify({ nac_code: responseDTL.data[0].nac_code, nac_status: 1 }));
-                navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + responseDTL.data[0].nac_code + '=' + 1)
-              });
+              localStorage.setItem('NacCode', JSON.stringify({ nac_code: responseDTL.data[0].nac_code, nac_status: 1 }));
+              navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + responseDTL.data[0].nac_code)
             } else {
               swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error", {
                 buttons: false,
@@ -958,7 +956,7 @@ export default function Nac_Main() {
                                 name="serialNo"
                                 id="serialNo"
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                onChange={(e) => handleServiceChange(e, index)}
+                                //onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].serialNo}
                                 variant="standard"
                               />
@@ -970,7 +968,7 @@ export default function Nac_Main() {
                                 name="name"
                                 id="name"
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                onChange={(e) => handleServiceChange(e, index)}
+                                // onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].name}
                                 variant="standard"
                               />

@@ -139,7 +139,7 @@ export default function AddressForm() {
                   label="วันที่และเวลาสิ้นสุด"
                   value={valueDateTime2}
                   onChange={handleDateTime2}
-                  inputFormat="yyyy-MM-dd 23:59"
+                  inputFormat="yyyy-MM-dd 00:00"
                   renderInput={(params) =>
                     <TextField
                       fullWidth
