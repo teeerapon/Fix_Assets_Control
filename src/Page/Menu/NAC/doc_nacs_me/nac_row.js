@@ -229,7 +229,7 @@ export default function NAC_ROW() {
   };
 
   if (!selectNAC || selectNAC === undefined) {
-    swal("ยินดีด้วย", 'ไม่พบรายการเปลี่ยนเปลงทรัพย์สินของคุณ', "success", {
+    swal("แจ้งเตือน", 'ไม่พบรายการเปลี่ยนเปลงทรัพย์สินของคุณ', "error", {
       buttons: false,
       timer: 2500,
     }).then((value) => {
@@ -292,58 +292,41 @@ export default function NAC_ROW() {
                   />
                 </Stack>
                 <Paper variant="outlined" sx={{ my: 2, p: { xs: 2, md: 3 } }}>
-                  <Typography variant="h5" color="inherit" noWrap sx={{ pl: 1 }}>
-                    สถานะรายการ NAC
-                  </Typography>
-                  <TableContainer component={Paper} className='pt-1'>
-                    <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
-                      <TableHead>
-                        <TableRow>
-                          <StyledTableCell align="center" sx={{ width: 200 }}>
-                            เลขที่เอกสาร
-                          </StyledTableCell>
-                          <StyledTableCell align="left" sx={{ maxWidth: 300 }}>หัวข้อรายการ</StyledTableCell>
-                          <StyledTableCell align="center" >ผู้ทำรายการ</StyledTableCell>
-                          <StyledTableCell align="center">วันที่สร้างเอกสาร</StyledTableCell>
-                          <StyledTableCell align="center" sx={{ width: 100 }}>ผู้ส่ง</StyledTableCell>
-                          <StyledTableCell align="center" sx={{ width: 100 }}>ผู้รับ</StyledTableCell>
-                          <StyledTableCell align="left" >สถานะการทำรายการ</StyledTableCell>
-                          <StyledTableCell align="left" sx={{ width: 150 }}>ผู้ตรวจสอบ/อนุมัติ</StyledTableCell>
-                          <StyledTableCell align="center" sx={{ width: 200 }}>Action</StyledTableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {tableSearch.length === 0 ? (rowsPerPage > 0
-                          ? selectNAC.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).filter((selectNAC) => {
-                            if (search === '') {
-                              return selectNAC
-                            } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) ||
-                              selectNAC.name.toLowerCase().includes(search.toLowerCase()) ||
-                              selectNAC.create_by.toLowerCase().includes(search.toLowerCase()) ||
-                              selectNAC.status_name.toLowerCase().includes(search.toLowerCase())) {
-                              return selectNAC
-                            }
-                          })
-                          : selectNAC.filter((selectNAC) => {
-                            if (search === '') {
-                              return selectNAC
-                            } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) ||
-                              selectNAC.name.toLowerCase().includes(search.toLowerCase()) ||
-                              selectNAC.create_by.toLowerCase().includes(search.toLowerCase()) ||
-                              selectNAC.status_name.toLowerCase().includes(search.toLowerCase())) {
-                              return selectNAC
-                            }
-                          })
-                        ).map((selectNAC) => (
-                          <React.Fragment>
-                            <NAC_ReadOnly
-                              selectNAC={selectNAC}
-                              handleEditClick={handleEditClick}
-                            />
-                          </React.Fragment>
-                        ))
-                          : (rowsPerPage > 0
-                            ? tableSearch.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).filter((selectNAC) => {
+                  <Toolbar
+                    sx={{
+                      pl: { sm: 2 },
+                      pr: { xs: 1, sm: 1 },
+                    }}
+                  >
+                    <Typography
+                      sx={{ flex: '1 1 100%' }}
+                      variant="h5"
+                      component="div"
+                    >
+                      สถานะรายการ NAC
+                    </Typography>
+                  </Toolbar>
+                  <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                    <TableContainer component={Paper} className='pt-1'>
+                      <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
+                        <TableHead>
+                          <TableRow>
+                            <StyledTableCell align="center" sx={{ width: 200 }}>
+                              เลขที่เอกสาร
+                            </StyledTableCell>
+                            <StyledTableCell align="left" sx={{ maxWidth: 300 }}>หัวข้อรายการ</StyledTableCell>
+                            <StyledTableCell align="center" >ผู้ทำรายการ</StyledTableCell>
+                            <StyledTableCell align="center">วันที่สร้างเอกสาร</StyledTableCell>
+                            <StyledTableCell align="center" sx={{ width: 100 }}>ผู้ส่ง</StyledTableCell>
+                            <StyledTableCell align="center" sx={{ width: 100 }}>ผู้รับ</StyledTableCell>
+                            <StyledTableCell align="left" >สถานะการทำรายการ</StyledTableCell>
+                            <StyledTableCell align="left" sx={{ width: 150 }}>ผู้ตรวจสอบ/อนุมัติ</StyledTableCell>
+                            <StyledTableCell align="center" sx={{ width: 200 }}>Action</StyledTableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {tableSearch.length === 0 ? (rowsPerPage > 0
+                            ? selectNAC.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).filter((selectNAC) => {
                               if (search === '') {
                                 return selectNAC
                               } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) ||
@@ -353,7 +336,7 @@ export default function NAC_ROW() {
                                 return selectNAC
                               }
                             })
-                            : tableSearch.filter((selectNAC) => {
+                            : selectNAC.filter((selectNAC) => {
                               if (search === '') {
                                 return selectNAC
                               } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) ||
@@ -370,35 +353,54 @@ export default function NAC_ROW() {
                                 handleEditClick={handleEditClick}
                               />
                             </React.Fragment>
-                          ))}
-                        {emptyRows > 0 && (
-                          <TableRow
-                            style={{
-                              height: (dense ? 33 : 53) * emptyRows,
-                            }}
-                          >
-                            <TableCell colSpan={9} />
-                          </TableRow>
-                        )}
-                      </TableBody>
-                    </Table>
-                    <hr />
-                    <Table sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
-                      <TableFooter>
-                        <TableRow>
-                          <TablePagination
-                            rowsPerPageOptions={[]}
-                            count={tableSearch.length === 0 ? selectNAC.filter((val) => {
-                              if (search === '') {
-                                return val
-                              } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) ||
-                                val.name.toLowerCase().includes(search.toLowerCase()) ||
-                                val.create_by.toLowerCase().includes(search.toLowerCase()) ||
-                                val.status_name.toLowerCase().includes(search.toLowerCase())) {
-                                return val
-                              }
-                            }).length
-                              : tableSearch.filter((val) => {
+                          ))
+                            : (rowsPerPage > 0
+                              ? tableSearch.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).filter((selectNAC) => {
+                                if (search === '') {
+                                  return selectNAC
+                                } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) ||
+                                  selectNAC.name.toLowerCase().includes(search.toLowerCase()) ||
+                                  selectNAC.create_by.toLowerCase().includes(search.toLowerCase()) ||
+                                  selectNAC.status_name.toLowerCase().includes(search.toLowerCase())) {
+                                  return selectNAC
+                                }
+                              })
+                              : tableSearch.filter((selectNAC) => {
+                                if (search === '') {
+                                  return selectNAC
+                                } else if (selectNAC.nac_code.toLowerCase().includes(search.toLowerCase()) ||
+                                  selectNAC.name.toLowerCase().includes(search.toLowerCase()) ||
+                                  selectNAC.create_by.toLowerCase().includes(search.toLowerCase()) ||
+                                  selectNAC.status_name.toLowerCase().includes(search.toLowerCase())) {
+                                  return selectNAC
+                                }
+                              })
+                            ).map((selectNAC) => (
+                              <React.Fragment>
+                                <NAC_ReadOnly
+                                  selectNAC={selectNAC}
+                                  handleEditClick={handleEditClick}
+                                />
+                              </React.Fragment>
+                            ))}
+                          {emptyRows > 0 && (
+                            <TableRow
+                              style={{
+                                height: (dense ? 33 : 53) * emptyRows,
+                              }}
+                            >
+                              <TableCell colSpan={9} />
+                            </TableRow>
+                          )}
+                        </TableBody>
+                      </Table>
+                      <hr />
+                      <Table sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
+                        <TableFooter>
+                          <TableRow>
+                            <TablePagination
+                              rowsPerPageOptions={[]}
+                              count={tableSearch.length === 0 ? selectNAC.filter((val) => {
                                 if (search === '') {
                                   return val
                                 } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) ||
@@ -407,23 +409,34 @@ export default function NAC_ROW() {
                                   val.status_name.toLowerCase().includes(search.toLowerCase())) {
                                   return val
                                 }
-                              }).length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            SelectProps={{
-                              inputProps: {
-                                'aria-label': 'rows per page',
-                              },
-                              native: true,
-                            }}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            ActionsComponent={TablePaginationActions}
-                          />
-                        </TableRow>
-                      </TableFooter>
-                    </Table>
-                  </TableContainer>
+                              }).length
+                                : tableSearch.filter((val) => {
+                                  if (search === '') {
+                                    return val
+                                  } else if (val.nac_code.toLowerCase().includes(search.toLowerCase()) ||
+                                    val.name.toLowerCase().includes(search.toLowerCase()) ||
+                                    val.create_by.toLowerCase().includes(search.toLowerCase()) ||
+                                    val.status_name.toLowerCase().includes(search.toLowerCase())) {
+                                    return val
+                                  }
+                                }).length}
+                              rowsPerPage={rowsPerPage}
+                              page={page}
+                              SelectProps={{
+                                inputProps: {
+                                  'aria-label': 'rows per page',
+                                },
+                                native: true,
+                              }}
+                              onPageChange={handleChangePage}
+                              onRowsPerPageChange={handleChangeRowsPerPage}
+                              ActionsComponent={TablePaginationActions}
+                            />
+                          </TableRow>
+                        </TableFooter>
+                      </Table>
+                    </TableContainer>
+                  </Box>
                 </Paper>
               </React.Fragment>
               <Copyright />

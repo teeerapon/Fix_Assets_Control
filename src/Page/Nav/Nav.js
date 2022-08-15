@@ -232,10 +232,22 @@ export default function MenuAppBar() {
                 <HomeIcon />
               </Typography>
               <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>HOME</Button>
+                <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
+                  <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                    <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
+                      HOME
+                    </Typography>
+                  </div>
+                </Button>
                 {auth3 && (
                   <React.Fragment>
-                    <Button onClick={handleMenu3} sx={{ my: 2, color: 'white', display: 'block' }}>NAC</Button>
+                    <Button onClick={handleMenu3} sx={{ my: 2, color: 'white', display: 'block' }}>
+                      <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                        <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
+                          NAC
+                        </Typography>
+                      </div>
+                    </Button>
                     <Menu
                       sx={{ mt: '45px' }}
                       id="menu-appbar"
@@ -295,7 +307,13 @@ export default function MenuAppBar() {
                 {auth4 && (
                   <React.Fragment>
                     {/* <Button onClick={handleMenu4} sx={{ my: 2, color: 'white', display: 'block' }}>REPORT</Button> */}
-                    <Button onClick={REPORT} sx={{ my: 2, color: 'white', display: 'block' }}>REPORT</Button>
+                    <Button onClick={REPORT} sx={{ my: 2, color: 'white', display: 'block' }}>
+                      <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                        <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
+                          REPORT
+                        </Typography>
+                      </div>
+                    </Button>
                     <Menu
                       sx={{ mt: '45px' }}
                       id="menu-appbar"
@@ -319,7 +337,13 @@ export default function MenuAppBar() {
                 )}
                 {auth2 && (
                   <React.Fragment>
-                    <Button onClick={handleMenu2} sx={{ my: 2, color: 'white', display: 'block' }}>PERIOD</Button>
+                    <Button onClick={handleMenu2} sx={{ my: 2, color: 'white', display: 'block' }}>
+                      <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                        <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
+                          PERIOD
+                        </Typography>
+                      </div>
+                    </Button>
                     <Menu
                       sx={{ mt: '45px' }}
                       id="menu-appbar"
@@ -411,10 +435,22 @@ export default function MenuAppBar() {
                 <HomeIcon />
               </Typography>
               <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>HOME</Button>
+                <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
+                  <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                    <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
+                      HOME
+                    </Typography>
+                  </div>
+                </Button>
                 {auth3 && (
                   <React.Fragment>
-                    <Button onClick={handleMenu3} sx={{ my: 2, color: 'white', display: 'block' }}>NAC</Button>
+                    <Button onClick={handleMenu3} sx={{ my: 2, color: 'white', display: 'block' }}>
+                      <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                        <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
+                          NAC
+                        </Typography>
+                      </div>
+                    </Button>
                     <Menu
                       sx={{ mt: '45px' }}
                       id="menu-appbar"
@@ -471,7 +507,13 @@ export default function MenuAppBar() {
                 )}
                 {auth4 && (
                   <React.Fragment>
-                    <Button onClick={REPORT} sx={{ my: 2, color: 'white', display: 'block' }}>REPORT</Button>
+                    <Button onClick={REPORT} sx={{ my: 2, color: 'white', display: 'block' }}>
+                      <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                        <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
+                          REPORT
+                        </Typography>
+                      </div>
+                    </Button>
                     <Menu
                       sx={{ mt: '45px' }}
                       id="menu-appbar"

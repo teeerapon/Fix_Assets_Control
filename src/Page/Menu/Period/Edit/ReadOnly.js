@@ -11,6 +11,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import swal from 'sweetalert';
+import ArticleIcon from '@mui/icons-material/Article';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
@@ -43,6 +45,18 @@ async function DeletePeriodData(credentials) {
     .then(data => data.json())
 }
 
+async function ChackUserWeb(credentials) {
+  return fetch('http://vpnptec.dyndns.org:32001/api/ChackUserWeb', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 export default function ReadOnly({ periodData, handleEditClick }) {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
@@ -60,6 +74,8 @@ export default function ReadOnly({ periodData, handleEditClick }) {
   const EndDate = (periodData.EndDate).split('T')[0] + ' ' + (periodData.EndDate).split('T')[1].split('Z')[0].split('.')[0]
   const PeriodID = periodData.PeriodID;
   const BranchID = periodData.BranchID;
+  const data = JSON.parse(localStorage.getItem('data'));
+  const [checkUserWeb, setCheckUserWeb] = React.useState();
 
   const handleClickOpen = (event, open) => {
     setOpen(true);
@@ -68,6 +84,20 @@ export default function ReadOnly({ periodData, handleEditClick }) {
   const handleClose = (event, open) => {
     setOpen(false);
   };
+
+  const fetchCheckUser = async () => {
+    const usercode = data.UserCode;
+    const response = await ChackUserWeb({
+      usercode
+    });
+    if ('data' in response) {
+      setCheckUserWeb(response.data[0].approverid)
+    }
+  }
+
+  React.useEffect(() => {
+    fetchCheckUser();
+  });
 
   const handleSubmit = async e => {
     handleClose()
@@ -103,12 +133,12 @@ export default function ReadOnly({ periodData, handleEditClick }) {
         <Grid container rowSpacing={1}>
           <Grid item xs={6}>
             <Button
-              disabled={datenow >= BeginDate && datenow <= EndDate ? false : true}
+              disabled={(datenow >= BeginDate && datenow <= EndDate) || (checkUserWeb === 'admin') ? false : true }
               variant="contained"
               color="warning"
               onClick={(event) => handleEditClick(event, periodData)}
             >
-              แก้ไข
+              <ArticleIcon/>
             </Button>
           </Grid>
           <Grid item xs={6}>
@@ -116,9 +146,9 @@ export default function ReadOnly({ periodData, handleEditClick }) {
               variant="contained"
               color="error"
               onClick={handleClickOpen}
-              disabled={datenow >= BeginDate && datenow <= EndDate ? false : true}
+              disabled={(datenow >= BeginDate && datenow <= EndDate) || (checkUserWeb === 'admin') ? false : true }
             >
-              ลบ
+              <DeleteIcon/>
             </Button>
             <Dialog
               open={open}

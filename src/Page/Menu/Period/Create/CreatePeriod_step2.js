@@ -29,7 +29,7 @@ export default function AddressForm() {
   const data = JSON.parse(localStorage.getItem('data'));
   const DataCreatePeriod = JSON.parse(localStorage.getItem('DataCreatePeriod'));
   const valueBeginDate = (DataCreatePeriod.valueDateTime1).split('T')[0]+ ' 00:00'
-  const valueEndDate = (DataCreatePeriod.valueDateTime2).split('T')[0]+' 23:59'
+  const valueEndDate = (DataCreatePeriod.valueDateTime2).split('T')[0]+' 00:00'
   const navigate = useNavigate();
   const [activeStep] = React.useState(1);
 
@@ -38,8 +38,8 @@ export default function AddressForm() {
   };
 
   const handleSubmit = async e => {
-    const BeginDate = (DataCreatePeriod.valueDateTime1).split('T')[0]+ ' 07:00:00'
-    const EndDate = (DataCreatePeriod.valueDateTime2).split('T')[0]+ ' 06:59:00'
+    const BeginDate = (DataCreatePeriod.valueDateTime1).split('T')[0]+ ' 7:00:00'
+    const EndDate = (DataCreatePeriod.valueDateTime2).split('T')[0]+ ' 7:00:00'
     const BranchID = DataCreatePeriod.valueBrachID1
     const Description = DataCreatePeriod.valueDescription
     const usercode = data.UserCode

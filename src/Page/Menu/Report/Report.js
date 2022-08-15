@@ -15,6 +15,9 @@ import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import { Outlet, useNavigate } from "react-router";
 import AnimatedPage from '../../../AnimatedPage.jsx'
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,6 +92,10 @@ function Copyright() {
   );
 }
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function Report() {
 
   const navigate = useNavigate();
@@ -98,13 +105,53 @@ export default function Report() {
   const [permissionData, setPermission] = React.useState([]);
   const [periodData2, setPeriodData2] = React.useState([]);
   const [periodData, setPeriodData] = React.useState([]);
+  const [showResult, setShowResult] = React.useState(false);
+  const [alert, setAlert] = React.useState(false);
+  const [valueAlert, setValueAlert] = React.useState(false);
 
-  const fetchPeriodData = async () => {
-    const BranchID = data.BranchID;
-    const response_data = await getPeriods({
-      BranchID
-    })
-    setPeriodData2(response_data);
+  const handleChangeValue = async (event) => {
+    setPermission(event.target.value);
+    const BranchID = event.target.value
+    if (event.target.value !== undefined) {
+      const response_data = await getPeriods({
+        BranchID
+      })
+      if (response_data.length !== 0) {
+        setPeriodData2(response_data);
+        setShowResult(true)
+      } else {
+        setAlert(true)
+        setValueAlert('ไม่พบข้อมูลรอบบันทึกสำหรับแสดงรายงานได้ กรุณาลองใหม่ภายหลัง')
+        setShowResult(false)
+      }
+    }
+  };
+
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setAlert(false);
+  };
+
+  // const fetchPeriodData = async () => {
+  //   const BranchID = !permissionData? '' : permissionData;
+  //   const response_data = await getPeriods({
+  //     BranchID
+  //   })
+  //   setPeriodData2(response_data);
+  // };
+
+  // React.useEffect(() => {
+  //   fetchPeriodData();
+  //   // 👇️ disable the rule for a single line
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  const handleChangeValue2 = (event) => {
+    setPeriodData(event.target.value);
   };
 
   const handleSubmit = async e => {
@@ -146,21 +193,6 @@ export default function Report() {
     }
   }
 
-  React.useEffect(() => {
-    fetchPeriodData();
-    // 👇️ disable the rule for a single line
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleChangeValue2 = (event) => {
-    setPeriodData(event.target.value);
-  };
-
-  const handleChangeValue = (event) => {
-    setPermission(event.target.value);
-  };
-
   if (permission === 'ไม่พบสิทธิ์') {
     swal("แจ้งเตือน", 'กรุณาติดต่อ Admin เพื่อขอสิทธิ์', "warning", {
       buttons: false,
@@ -171,6 +203,13 @@ export default function Report() {
   } else {
     return (
       <div>
+        <Stack spacing={2} sx={{ width: '100%' }}>
+          <Snackbar open={alert} autoHideDuration={4500} onClose={handleCloseAlert}>
+            <Alert onClose={handleCloseAlert} severity="warning" sx={{ width: '100%' }}>
+              {valueAlert}
+            </Alert>
+          </Snackbar>
+        </Stack>
         <AppBar
           position="absolute"
           color="default"
@@ -218,35 +257,40 @@ export default function Report() {
                     </FormControl>
                   </Box>
                 </center>
-                <center className="pt-5">
-                  <Typography variant="h6" gutterBottom>
-                    กรุณาเลือกรอบบันทึก
-                  </Typography>
-                  <Box sx={{ minWidth: 120 }}>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Period ID</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={periodData}
-                        label="Period ID"
-                        onChange={handleChangeValue2}
-                      >
-                        {
-                          periodData2.map((item) =>
-                            <MenuItem value={item.PeriodID}>
-                              วันที่ {item.BeginDate.split('T')[0]} - {item.EndDate.split('T')[0]} : {item.Description}
-                            </MenuItem>
-                          )
-                        }
-                      </Select>
-                    </FormControl>
-                  </Box>
+                {showResult ?
+                  <center className="pt-5">
+                    <Typography variant="h6" gutterBottom>
+                      กรุณาเลือกรอบบันทึก
+                    </Typography>
+                    <Box sx={{ minWidth: 120 }}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Period ID</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={periodData}
+                          label="Period ID"
+                          onChange={handleChangeValue2}
+                        >
+                          {
+                            periodData2.map((item) =>
+                              <MenuItem value={item.PeriodID}>
+                                วันที่ {item.BeginDate.split('T')[0]} - {item.EndDate.split('T')[0]} : {item.Description}
+                              </MenuItem>
+                            )
+                          }
+                        </Select>
+                      </FormControl>
+                    </Box>
+                  </center>
+                  : null}
+                <center>
                   <div className='pt-5'>
                     <React.Fragment>
                       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <Button
                           type="submit"
+                          disabled={showResult ? false : true}
                           fullWidth
                           variant="contained"
                           color="primary"

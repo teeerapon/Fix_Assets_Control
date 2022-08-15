@@ -113,46 +113,46 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
     setOpen(false);
   };
 
-  const handlefechtAprrove = async () => {
-    const user_source = selectNAC.source_userid
-    const nac_code = selectNAC.nac_code
-    const responseExecDocID = await store_FA_control_execDocID({
-      user_source,
-      nac_code,
-    });
+  // const handlefechtAprrove = async () => {
+  //   const user_source = selectNAC.source_userid
+  //   const nac_code = selectNAC.nac_code
+  //   const responseExecDocID = await store_FA_control_execDocID({
+  //     user_source,
+  //     nac_code,
+  //   });
 
-    const CheckApprove = []
-    const CheckExamineApprove = []
-    const price_approve = selectNAC.sum_price;
+  //   const CheckApprove = []
+  //   const CheckExamineApprove = []
+  //   const price_approve = selectNAC.sum_price;
 
-    for (let i = 0; i < (responseExecDocID.data.length); i++) {
-      if (responseExecDocID.data[i].limitamount < price_approve && responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 5) {
-        CheckExamineApprove[i] = responseExecDocID.data[i].workflowlevel === 0 ? 'AM' :
-          responseExecDocID.data[i].workflowlevel === 1 ? 'SM' :
-            responseExecDocID.data[i].workflowlevel === 2 ? 'DM' :
-              responseExecDocID.data[i].workflowlevel === 3 ? 'FM' : 'MD'
-      }
-    }
+  //   for (let i = 0; i < (responseExecDocID.data.length); i++) {
+  //     if (responseExecDocID.data[i].limitamount < price_approve && responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 5) {
+  //       CheckExamineApprove[i] = responseExecDocID.data[i].workflowlevel === 0 ? 'AM' :
+  //         responseExecDocID.data[i].workflowlevel === 1 ? 'SM' :
+  //           responseExecDocID.data[i].workflowlevel === 2 ? 'DM' :
+  //             responseExecDocID.data[i].workflowlevel === 3 ? 'FM' : 'MD'
+  //     }
+  //   }
 
-    setCheckExamineApprove(CheckExamineApprove)
+  //   setCheckExamineApprove(CheckExamineApprove)
 
-    for (let i = 0; i < (responseExecDocID.data.length); i++) {
-      if (responseExecDocID.data[i].limitamount >= price_approve && responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 5) {
-        CheckApprove[i] = responseExecDocID.data[i].workflowlevel === 0 ? 'AM' :
-          responseExecDocID.data[i].workflowlevel === 1 ? 'SM' :
-            responseExecDocID.data[i].workflowlevel === 2 ? 'DM' :
-              responseExecDocID.data[i].workflowlevel === 3 ? 'FM' : 'MD'
-      }
-    }
-    setCheckApprove(CheckApprove)
-  }
+  //   for (let i = 0; i < (responseExecDocID.data.length); i++) {
+  //     if (responseExecDocID.data[i].limitamount >= price_approve && responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 5) {
+  //       CheckApprove[i] = responseExecDocID.data[i].workflowlevel === 0 ? 'AM' :
+  //         responseExecDocID.data[i].workflowlevel === 1 ? 'SM' :
+  //           responseExecDocID.data[i].workflowlevel === 2 ? 'DM' :
+  //             responseExecDocID.data[i].workflowlevel === 3 ? 'FM' : 'MD'
+  //     }
+  //   }
+  //   setCheckApprove(CheckApprove)
+  // }
 
-  React.useEffect(() => {
-    handlefechtAprrove();
-    // 👇️ disable the rule for a single line
+  // React.useEffect(() => {
+  //   handlefechtAprrove();
+  //   // 👇️ disable the rule for a single line
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   const handleDrop_NAC = async (event) => {
     event.preventDefault();
@@ -207,8 +207,8 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
         </Item>
       </StyledTableCell>
       <StyledTableCell align="left" style={{ 'maxWidth': 'fit-content' }}>{
-        (selectNAC.nac_status === 2 && selectNAC.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && selectNAC.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + CheckExamineApprove.filter(x => x !== undefined) + '' :
-          (selectNAC.nac_status === 3 && selectNAC.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && selectNAC.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + CheckApprove.filter(x => x !== undefined) + '' :
+        (selectNAC.nac_status === 2 && selectNAC.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && selectNAC.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + selectNAC.vertify + '' :
+          (selectNAC.nac_status === 3 && selectNAC.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && selectNAC.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + selectNAC.approved + '' :
             ((selectNAC.nac_status === 2) && (selectNAC.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || selectNAC.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? 'ต้นสังกัดตรวจสอบ' :
               (selectNAC.nac_status === 13) ? 'การเงิน' : (selectNAC.nac_status === 5) ? 'บัญชี' : 'none'
       }</StyledTableCell>

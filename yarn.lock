@@ -1370,6 +1370,76 @@
     "minimatch" "^3.0.4"
     "strip-json-comments" "^3.1.1"
 
+"@formatjs/ecma402-abstract@1.11.8":
+  "integrity" "sha512-fgLqyWlwmTEuqV/TSLEL/t9JOmHNLFvCdgzXB0jc2w+WOItPCOJ1T0eyN6fQBQKRPfSqqNlu+kWj7ijcOVTVVQ=="
+  "resolved" "https://registry.npmjs.org/@formatjs/ecma402-abstract/-/ecma402-abstract-1.11.8.tgz"
+  "version" "1.11.8"
+  dependencies:
+    "@formatjs/intl-localematcher" "0.2.28"
+    "tslib" "2.4.0"
+
+"@formatjs/fast-memoize@1.2.4":
+  "integrity" "sha512-9ARYoLR8AEzXvj2nYrOVHY/h1dDMDWGTnKDLXSISF1uoPakSmfcZuSqjiqZX2wRkEUimPxdwTu/agyozBtZRHA=="
+  "resolved" "https://registry.npmjs.org/@formatjs/fast-memoize/-/fast-memoize-1.2.4.tgz"
+  "version" "1.2.4"
+  dependencies:
+    "tslib" "2.4.0"
+
+"@formatjs/icu-messageformat-parser@2.1.4":
+  "integrity" "sha512-3PqMvKWV1oyok0BuiXUAHIaotdhdTJw6OICqCZbfUgKT+ZRwRWO4IlCgvXJeCITaKS5p+PY0XXKjf/vUyIpWjQ=="
+  "resolved" "https://registry.npmjs.org/@formatjs/icu-messageformat-parser/-/icu-messageformat-parser-2.1.4.tgz"
+  "version" "2.1.4"
+  dependencies:
+    "@formatjs/ecma402-abstract" "1.11.8"
+    "@formatjs/icu-skeleton-parser" "1.3.10"
+    "tslib" "2.4.0"
+
+"@formatjs/icu-skeleton-parser@1.3.10":
+  "integrity" "sha512-kXJmtLDqFF5aLTf8IxdJXnhrIX1Qb4Qp3a9jqRecGDYfzOa9hMhi9U0nKyhrJJ4cXxBzptcgb+LWkyeHL6nlBQ=="
+  "resolved" "https://registry.npmjs.org/@formatjs/icu-skeleton-parser/-/icu-skeleton-parser-1.3.10.tgz"
+  "version" "1.3.10"
+  dependencies:
+    "@formatjs/ecma402-abstract" "1.11.8"
+    "tslib" "2.4.0"
+
+"@formatjs/intl-displaynames@6.0.3":
+  "integrity" "sha512-Mxh6W1VOlmiEvO/QPBrBQHlXrIn5VxjJWyyEI0V7ZHNGl0ee8AjSlq7vIJG8GodRJqGUuutF6N3OB/6qFv0YWg=="
+  "resolved" "https://registry.npmjs.org/@formatjs/intl-displaynames/-/intl-displaynames-6.0.3.tgz"
+  "version" "6.0.3"
+  dependencies:
+    "@formatjs/ecma402-abstract" "1.11.8"
+    "@formatjs/intl-localematcher" "0.2.28"
+    "tslib" "2.4.0"
+
+"@formatjs/intl-listformat@7.0.3":
+  "integrity" "sha512-ampNLRGZl/08epHa3i5sRmcHGLneC6JrknexbbgnexYFNSmJ6AbL/dCzgrQzw2Efl+5AZK7UbNFxcDYY3RePvw=="
+  "resolved" "https://registry.npmjs.org/@formatjs/intl-listformat/-/intl-listformat-7.0.3.tgz"
+  "version" "7.0.3"
+  dependencies:
+    "@formatjs/ecma402-abstract" "1.11.8"
+    "@formatjs/intl-localematcher" "0.2.28"
+    "tslib" "2.4.0"
+
+"@formatjs/intl-localematcher@0.2.28":
+  "integrity" "sha512-FLsc6Gifs1np/8HnCn/7Q+lHMmenrD5fuDhRT82yj0gi9O19kfaFwjQUw1gZsyILuRyT93GuzdifHj7TKRhBcw=="
+  "resolved" "https://registry.npmjs.org/@formatjs/intl-localematcher/-/intl-localematcher-0.2.28.tgz"
+  "version" "0.2.28"
+  dependencies:
+    "tslib" "2.4.0"
+
+"@formatjs/intl@2.3.1":
+  "integrity" "sha512-f06qZ/ukpeN24gc01qFjh3P+r3FU/ikY4yG+fDJu6dPNvpUQzDy98lYogA1dr6ig2UtrnoEk3xncyFPL1e9cZw=="
+  "resolved" "https://registry.npmjs.org/@formatjs/intl/-/intl-2.3.1.tgz"
+  "version" "2.3.1"
+  dependencies:
+    "@formatjs/ecma402-abstract" "1.11.8"
+    "@formatjs/fast-memoize" "1.2.4"
+    "@formatjs/icu-messageformat-parser" "2.1.4"
+    "@formatjs/intl-displaynames" "6.0.3"
+    "@formatjs/intl-listformat" "7.0.3"
+    "intl-messageformat" "10.1.1"
+    "tslib" "2.4.0"
+
 "@hapi/hoek@^9.0.0":
   "integrity" "sha512-gfta+H8aziZsm8pZa0vj04KO6biEiisppNgA1kbJvFrrWu9Vm7eaUEy76DIxsuTaWvti5fkJVhllWc6ZTE+Mdw=="
   "resolved" "https://registry.npmjs.org/@hapi/hoek/-/hoek-9.2.1.tgz"
@@ -1899,7 +1969,7 @@
     "schema-utils" "^3.0.0"
     "source-map" "^0.7.3"
 
-"@popperjs/core@^2.10.1", "@popperjs/core@^2.11.3", "@popperjs/core@^2.11.4":
+"@popperjs/core@^2.10.1", "@popperjs/core@^2.11.3", "@popperjs/core@^2.11.4", "@popperjs/core@^2.4.0":
   "integrity" "sha512-q/ytXxO5NKvyT37pmisQAItCFqA7FD/vNb8dgaJy3/630Fsc+Mz9/9f2SziBoIZ30TJooXyTwZmhi1zjXmObYg=="
   "resolved" "https://registry.npmjs.org/@popperjs/core/-/core-2.11.4.tgz"
   "version" "2.11.4"
@@ -2553,6 +2623,14 @@
   dependencies:
     "@types/node" "*"
 
+"@types/hoist-non-react-statics@^3.3.1":
+  "integrity" "sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA=="
+  "resolved" "https://registry.npmjs.org/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz"
+  "version" "3.3.1"
+  dependencies:
+    "@types/react" "*"
+    "hoist-non-react-statics" "^3.3.0"
+
 "@types/html-minifier-terser@^6.0.0":
   "integrity" "sha512-oh/6byDPnL1zeNXFrDXFLyZjkr1MsBG667IM792caf1L2UPOOMf65NFzjUH/ltyfwjAGfs1rsX1eftK0jC/KIg=="
   "resolved" "https://registry.npmjs.org/@types/html-minifier-terser/-/html-minifier-terser-6.1.0.tgz"
@@ -2661,7 +2739,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.8.6 || ^17.0.0", "@types/react@>=16.14.8", "@types/react@>=16.9.11":
+"@types/react@*", "@types/react@^16.8.6 || ^17.0.0", "@types/react@>=16.14.8", "@types/react@>=16.9.11", "@types/react@16 || 17 || 18":
   "integrity" "sha512-UrXhD/JyLH+W70nNSufXqMZNuUD2cXHu6UjCllC6pmOQgBX4SGXOH8fjRka0O0Ee0HrFxapDD8Bwn81Kmiz6jQ=="
   "resolved" "https://registry.npmjs.org/@types/react/-/react-17.0.40.tgz"
   "version" "17.0.40"
@@ -4040,7 +4118,7 @@
     "isobject" "^3.0.0"
     "static-extend" "^0.1.1"
 
-"classnames@^2.3.1":
+"classnames@^2.2.6", "classnames@^2.3.1":
   "integrity" "sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA=="
   "resolved" "https://registry.npmjs.org/classnames/-/classnames-2.3.1.tgz"
   "version" "2.3.1"
@@ -6253,7 +6331,7 @@
   dependencies:
     "@babel/runtime" "^7.7.6"
 
-"hoist-non-react-statics@^3.0.0", "hoist-non-react-statics@^3.3.1", "hoist-non-react-statics@^3.3.2":
+"hoist-non-react-statics@^3.0.0", "hoist-non-react-statics@^3.3.0", "hoist-non-react-statics@^3.3.1", "hoist-non-react-statics@^3.3.2":
   "integrity" "sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw=="
   "resolved" "https://registry.npmjs.org/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz"
   "version" "3.3.2"
@@ -6520,6 +6598,16 @@
     "get-intrinsic" "^1.1.0"
     "has" "^1.0.3"
     "side-channel" "^1.0.4"
+
+"intl-messageformat@10.1.1":
+  "integrity" "sha512-FeJne2oooYW6shLPbrqyjRX6hTELVrQ90Dn88z7NomLk/xZBCLxLPAkgaYaTQJBRBV78nZ933d8APHHkTQrD9Q=="
+  "resolved" "https://registry.npmjs.org/intl-messageformat/-/intl-messageformat-10.1.1.tgz"
+  "version" "10.1.1"
+  dependencies:
+    "@formatjs/ecma402-abstract" "1.11.8"
+    "@formatjs/fast-memoize" "1.2.4"
+    "@formatjs/icu-messageformat-parser" "2.1.4"
+    "tslib" "2.4.0"
 
 "invariant@^2.2.4":
   "integrity" "sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA=="
@@ -9860,7 +9948,7 @@
     "shell-quote" "^1.6.1"
     "ws" "^7"
 
-"react-dom@*", "react-dom@^15.3.0 || ^16.0.0 || ^17.0.0", "react-dom@^16.8.0  || ^17.0.0", "react-dom@^16.8.0 || ^17.0.0", "react-dom@^17.0.0", "react-dom@^17.0.2", "react-dom@^17.0.2 || ^18.0.0", "react-dom@>= 16.8.0", "react-dom@>=16", "react-dom@>=16.14.0", "react-dom@>=16.6.0", "react-dom@>=16.8", "react-dom@>=16.8 || ^17.0.0 || ^18.0.0":
+"react-dom@*", "react-dom@^15.3.0 || ^16.0.0 || ^17.0.0", "react-dom@^16.3.0 || 17", "react-dom@^16.8.0  || ^17.0.0", "react-dom@^16.8.0 || ^17.0.0", "react-dom@^17.0.0", "react-dom@^17.0.2", "react-dom@^17.0.2 || ^18.0.0", "react-dom@>= 16.8.0", "react-dom@>=16", "react-dom@>=16.14.0", "react-dom@>=16.6.0", "react-dom@>=16.8", "react-dom@>=16.8 || ^17.0.0 || ^18.0.0", "react-dom@>=16.8.0":
   "integrity" "sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-17.0.2.tgz"
   "version" "17.0.2"
@@ -9900,6 +9988,27 @@
   "version" "2.0.0"
   dependencies:
     "prop-types" "^15.5.10"
+
+"react-icons@^4.4.0":
+  "integrity" "sha512-fSbvHeVYo/B5/L4VhB7sBA1i2tS8MkT0Hb9t2H1AVPkwGfVHLJCqyr2Py9dKMxsyM63Eng1GkdZfbWj+Fmv8Rg=="
+  "resolved" "https://registry.npmjs.org/react-icons/-/react-icons-4.4.0.tgz"
+  "version" "4.4.0"
+
+"react-intl@^6.0.5":
+  "integrity" "sha512-nDZ3BosuE8WdovcGxsrjj1aIgJZklSL5aORs5oah+5tLQTzUdOEstzJEYQPM+sxl1dkDOu7RCuw0z9oI9ENf9g=="
+  "resolved" "https://registry.npmjs.org/react-intl/-/react-intl-6.0.5.tgz"
+  "version" "6.0.5"
+  dependencies:
+    "@formatjs/ecma402-abstract" "1.11.8"
+    "@formatjs/icu-messageformat-parser" "2.1.4"
+    "@formatjs/intl" "2.3.1"
+    "@formatjs/intl-displaynames" "6.0.3"
+    "@formatjs/intl-listformat" "7.0.3"
+    "@types/hoist-non-react-statics" "^3.3.1"
+    "@types/react" "16 || 17 || 18"
+    "hoist-non-react-statics" "^3.3.2"
+    "intl-messageformat" "10.1.1"
+    "tslib" "2.4.0"
 
 "react-is@^16.13.1":
   "integrity" "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
@@ -9988,6 +10097,16 @@
     "use-subscription" "^1.0.0"
     "whatwg-fetch" "^3.0.0"
     "ws" "^6.1.4"
+
+"react-pro-sidebar@^0.7.1":
+  "integrity" "sha512-Iy1X8ce4t5Vqz4CsyzjwokGUE3/IObgmYzS0ins7/2eWKle0SMUPaWdgMKFIVjtVrMr5vmjPbRicq8FxnVaf8A=="
+  "resolved" "https://registry.npmjs.org/react-pro-sidebar/-/react-pro-sidebar-0.7.1.tgz"
+  "version" "0.7.1"
+  dependencies:
+    "@popperjs/core" "^2.4.0"
+    "classnames" "^2.2.6"
+    "react-slidedown" "^2.4.5"
+    "resize-observer-polyfill" "^1.5.1"
 
 "react-reconciler@^0.20.4":
   "integrity" "sha512-kxERc4H32zV2lXMg/iMiwQHOtyqf15qojvkcZ5Ja2CPkjVohHw9k70pdDBwrnQhLVetUJBSYyqU3yqrlVTOajA=="
@@ -10088,6 +10207,13 @@
   optionalDependencies:
     "fsevents" "^2.3.2"
 
+"react-slidedown@^2.4.5":
+  "integrity" "sha512-HGDfrqo70r1WVE0DwrySPdCT27/2wcZaJYh5kOnmuPSCtjDDJrNkDdn4Ep/cma2VVfwupeAGhbc2pbrGThU6VQ=="
+  "resolved" "https://registry.npmjs.org/react-slidedown/-/react-slidedown-2.4.7.tgz"
+  "version" "2.4.7"
+  dependencies:
+    "tslib" "^2.0.0"
+
 "react-spring@^9.4.4":
   "integrity" "sha512-VOqilh9DJBsS6Pf550YLhdReS3j9a2AQVh7NcsNtWoxTYIeuErWi6ym0++6bBhQp4yT5xvVvUDaJ8ez8vrFgaw=="
   "resolved" "https://registry.npmjs.org/react-spring/-/react-spring-9.4.4.tgz"
@@ -10141,7 +10267,7 @@
     "resize-observer-polyfill" "^1.5.1"
     "scheduler" "0.13.3"
 
-"react@*", "react@^15.3.0 || ^16.0.0 || ^17.0.0", "react@^15.x.x", "react@^16.0 || ^17.0.0", "react@^16.0.0", "react@^16.8.0  || ^17.0.0", "react@^16.8.0 || ^17.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0-rc.1", "react@^17.0.0", "react@^17.0.0 || ^18.0.0", "react@^17.0.2", "react@^17.0.2 || ^18.0.0", "react@>= 16", "react@>= 16.8.0", "react@>= 16.8.3", "react@>=0.14.0", "react@>=15.0.0", "react@>=16", "react@>=16.14.0", "react@>=16.6.0", "react@>=16.8", "react@>=16.8 || ^17.0.0 || ^18.0.0", "react@>=16.8.0", "react@17.0.2":
+"react@*", "react@^15.3.0 || ^16.0.0 || ^17.0.0", "react@^15.x.x", "react@^16.0 || ^17.0.0", "react@^16.0.0", "react@^16.3.0 || 17", "react@^16.6.0 || 17 || 18", "react@^16.8.0  || ^17.0.0", "react@^16.8.0 || ^17.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0-rc.1", "react@^17.0.0", "react@^17.0.0 || ^18.0.0", "react@^17.0.2", "react@^17.0.2 || ^18.0.0", "react@>= 16", "react@>= 16.8.0", "react@>= 16.8.3", "react@>=0.14.0", "react@>=15.0.0", "react@>=16", "react@>=16.14.0", "react@>=16.6.0", "react@>=16.8", "react@>=16.8 || ^17.0.0 || ^18.0.0", "react@>=16.8.0", "react@17.0.2":
   "integrity" "sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA=="
   "resolved" "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
   "version" "17.0.2"
@@ -11636,10 +11762,10 @@
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   "version" "1.14.1"
 
-"tslib@^2.0.1", "tslib@^2.0.3", "tslib@^2.1.0":
-  "integrity" "sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw=="
-  "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz"
-  "version" "2.3.1"
+"tslib@^2.0.0", "tslib@^2.0.1", "tslib@^2.0.3", "tslib@^2.1.0", "tslib@2.4.0":
+  "integrity" "sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ=="
+  "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.4.0.tgz"
+  "version" "2.4.0"
 
 "tsutils@^3.21.0":
   "integrity" "sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA=="

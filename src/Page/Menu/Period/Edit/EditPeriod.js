@@ -130,7 +130,7 @@ export default function EditPeriod() {
   const data = JSON.parse(localStorage.getItem('data'));
   const [periodData, setPeriodData] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(20);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [editFormData, setEditFormData] = React.useState({
     PeriodID: '',
     BeginDate: '',
@@ -152,7 +152,7 @@ export default function EditPeriod() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 20));
+    setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
@@ -228,75 +228,93 @@ export default function EditPeriod() {
             label="Dense padding"
           />
           <Paper variant="outlined" sx={{ my: 2, p: { xs: 2, md: 3 } }}>
-            <Typography variant="h5" color="inherit" noWrap sx={{ pl: 1 }}>
-              สถานะรอบตรวจนับทั้งหมด
-            </Typography>
-            <TableContainer component={Paper} className='pt-1'>
-              <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell align="left" sx={{ minWidth: 100 }}>วันที่และเวลาเริ่มต้น</StyledTableCell>
-                    <StyledTableCell align="left" sx={{ minWidth: 100 }}>วันที่และเวลาสิ้นสุด</StyledTableCell>
-                    <StyledTableCell align="left" sx={{ minWidth: 100 }}>คำธิบาย</StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 100 }}>สาขา</StyledTableCell>
-                    <StyledTableCell align="left" sx={{ minWidth: 100 }}>สถานะ</StyledTableCell>
-                    <StyledTableCell align="center" sx={{ width: 200 }}>Action</StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {(rowsPerPage > 0
-                    ? periodData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    : periodData
-                  ).map((periodData) => (
-                    <React.Fragment>
-                      {EditPeriodData === periodData.PeriodID ? (
-                        <EditRow
-                          editFormData={editFormData}
-                          handleEditFromChange={handleEditFromChange}
-                          handleEditClickCancel={handleEditClickCancel}
-                        />
-                      ) : (
-                        <ReadOnly
-                          periodData={periodData}
-                          handleEditClick={handleEditClick}
-                        />
-                      )}
-                    </React.Fragment>
-                  ))}
-                  {emptyRows > 0 && (
-                    <TableRow
-                      style={{
-                        height: (dense ? 33 : 53) * emptyRows,
-                      }}
-                    >
-                      <TableCell colSpan={9} />
+            <Toolbar
+              sx={{
+                pl: { sm: 2 },
+                pr: { xs: 1, sm: 1 },
+              }}
+            >
+              <Typography
+                sx={{ flex: '1 1 100%' }}
+                variant="h5"
+                component="div"
+              >
+                สถานะรอบตรวจนับทั้งหมด
+              </Typography>
+            </Toolbar>
+            <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              <TableContainer component={Paper} className='pt-1'>
+                <Table
+                  size={dense ? 'small' : 'medium'}
+                  sx={{ minWidth: 750 }}
+                  aria-label="customized table"
+                  id="table-to-xls1"
+                >
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="left" sx={{ minWidth: 100 }}>วันที่และเวลาเริ่มต้น</StyledTableCell>
+                      <StyledTableCell align="left" sx={{ minWidth: 100 }}>วันที่และเวลาสิ้นสุด</StyledTableCell>
+                      <StyledTableCell align="left" sx={{ minWidth: 100 }}>คำธิบาย</StyledTableCell>
+                      <StyledTableCell align="center" sx={{ minWidth: 100 }}>สาขา</StyledTableCell>
+                      <StyledTableCell align="left" sx={{ minWidth: 100 }}>สถานะ</StyledTableCell>
+                      <StyledTableCell align="center" sx={{ width: 200 }}>Action</StyledTableCell>
                     </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-              <hr />
-              <Table sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
-                <TableFooter>
-                  <TableRow>
-                    <TablePagination
-                      rowsPerPageOptions={[]}
-                      count={periodData.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      SelectProps={{
-                        inputProps: {
-                          'aria-label': 'rows per page',
-                        },
-                        native: true,
-                      }}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                      ActionsComponent={TablePaginationActions}
-                    />
-                  </TableRow>
-                </TableFooter>
-              </Table>
-            </TableContainer>
+                  </TableHead>
+                  <TableBody>
+                    {(rowsPerPage > 0
+                      ? periodData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      : periodData
+                    ).map((periodData) => (
+                      <React.Fragment>
+                        {EditPeriodData === periodData.PeriodID ? (
+                          <EditRow
+                            editFormData={editFormData}
+                            handleEditFromChange={handleEditFromChange}
+                            handleEditClickCancel={handleEditClickCancel}
+                          />
+                        ) : (
+                          <ReadOnly
+                            periodData={periodData}
+                            handleEditClick={handleEditClick}
+                          />
+                        )}
+                      </React.Fragment>
+                    ))}
+                    {emptyRows > 0 && (
+                      <TableRow
+                        style={{
+                          height: (dense ? 33 : 53) * emptyRows,
+                        }}
+                      >
+                        <TableCell colSpan={9} />
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+                <hr />
+                <Table sx={{ minWidth: 750 }} aria-label="customized table" id="table-to-xls1">
+                  <TableFooter>
+                    <TableRow>
+                      <TablePagination
+                        rowsPerPageOptions={[]}
+                        count={periodData.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        SelectProps={{
+                          inputProps: {
+                            'aria-label': 'rows per page',
+                          },
+                          native: true,
+                        }}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        ActionsComponent={TablePaginationActions}
+                      />
+                    </TableRow>
+                  </TableFooter>
+                </Table>
+              </TableContainer>
+            </Box>
           </Paper>
           <Copyright />
         </Container>
