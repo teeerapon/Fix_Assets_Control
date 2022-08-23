@@ -1364,7 +1364,7 @@ export default function Nac_Main_wait() {
           >
             <Toolbar>
               <Box sx={{ width: 1 }}>
-                <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={17}>
+                <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                   <Box gridColumn="span 10">
                     <AnimatedPage>
                       <Typography variant="h5" color="inherit" noWrap sx={{ pt: 1 }}>
@@ -1767,21 +1767,14 @@ export default function Nac_Main_wait() {
                                     onChange={(e) => handleServiceChange(e, index)}
                                     disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                   >
-                                    <MenuItem value={'สภาพดี'}>สภาพดี</MenuItem>
+                                    {/* <MenuItem value={'สภาพดี'}>สภาพดี</MenuItem>
                                     <MenuItem value={'ชำรุดรอซ่อม'}>ชำรุดรอซ่อม</MenuItem>
-                                    <MenuItem value={'รอตัดชำรุด'}>รอตัดชำรุด</MenuItem>
+                                    <MenuItem value={'รอตัดชำรุด'}>รอตัดชำรุด</MenuItem> */}
+                                    <MenuItem value={'ชำรุด'}>ชำรุด</MenuItem>
                                   </Select>
                                 </FormControl>
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  type='number'
-                                  variant="standard"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  value={singleService.count}
-                                />
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -2170,7 +2163,7 @@ export default function Nac_Main_wait() {
                 setDescription={setDescription}
                 setOpenDialog={setOpenDialog}
               />
-              <Copyright />
+              
               <Dialog open={openDialogReply} onClose={handleCloseDialogReply} >
                 <DialogTitle>กรุณาระบุข้อความ/เหตุผล ที่ตีกลับเอกสาร</DialogTitle>
                 <DialogContent sx={{ width: 500 }}>

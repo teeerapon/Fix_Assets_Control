@@ -118,6 +118,16 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
+
 async function store_FA_control_select_NAC_approve(credentials) {
   return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC_approve', {
     method: 'POST',
@@ -138,7 +148,7 @@ export default function NAC_ROW() {
   const data = JSON.parse(localStorage.getItem('data'));
   const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(20);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [dense, setDense] = React.useState(false);
 
   const handleChangeDense = (event) => {
@@ -171,7 +181,7 @@ export default function NAC_ROW() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 20));
+    setRowsPerPage(parseInt(event.target.value, 5));
     setPage(0);
   };
 
@@ -229,13 +239,6 @@ export default function NAC_ROW() {
   };
 
   if (!selectNAC || selectNAC === undefined) {
-    swal("แจ้งเตือน", 'ไม่พบรายการเปลี่ยนเปลงทรัพย์สินของคุณ', "error", {
-      buttons: false,
-      timer: 2500,
-    }).then((value) => {
-      window.location.href = "/HomePage";
-    });
-  } else {
     return (
       <React.Fragment>
         <div>
@@ -250,7 +253,7 @@ export default function NAC_ROW() {
           >
             <Toolbar>
               <Box sx={{ width: 1 }}>
-                <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={17}>
+                <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                   <Box gridColumn="span 10">
                     <AnimatedPage>
                       <Typography variant="h5" color="inherit" noWrap sx={{ pt: 1 }}>
@@ -260,7 +263,7 @@ export default function NAC_ROW() {
                   </Box>
                   <Box gridColumn="span 0">
                     <AnimatedPage>
-                      <IconButton sx={{ color: 'rgb(0,0,0)' }} component="label" size="large" onClick={handleGoNAC}>
+                      <IconButton sx={{ color: 'rgb(0,0,0)' }} component="label" size="large">
                         <SummarizeIcon />
                       </IconButton>
                     </AnimatedPage>
@@ -303,6 +306,155 @@ export default function NAC_ROW() {
                       variant="h5"
                       component="div"
                     >
+                      สถานะรายการ NAC
+                    </Typography>
+                  </Toolbar>
+                  <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                    <TableContainer component={Paper} className='pt-1'>
+                      <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
+                        <TableHead>
+                        <TableRow>
+                            <StyledTableCell align="center" sx={{ width: 150 }}>
+                              เลขที่เอกสาร
+                            </StyledTableCell>
+                            <StyledTableCell align="left" sx={{ maxWidth: 150 }}>หัวข้อรายการ</StyledTableCell>
+                            <StyledTableCell align="center" >ผู้ทำรายการ</StyledTableCell>
+                            <StyledTableCell align="center">วันที่สร้างเอกสาร</StyledTableCell>
+                            <StyledTableCell align="center" sx={{ width: 100 }}>ผู้ส่ง</StyledTableCell>
+                            <StyledTableCell align="center" sx={{ width: 100 }}>ผู้รับ</StyledTableCell>
+                            <StyledTableCell align="left" sx={{ width: 150 }}>สถานะรายการ</StyledTableCell>
+                            <StyledTableCell align="left" sx={{ width: 150 }}>ผู้ตรวจสอบ/อนุมัติ</StyledTableCell>
+                            <StyledTableCell align="center" sx={{ width: 180 }}>Action</StyledTableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          <StyledTableRow>
+                            <TableCell colSpan={9}>
+                              <Box sx={{ minWidth: 700, minHeight: 50 }}>
+                                <Stack
+                                  direction="row"
+                                  justifyContent="center"
+                                  alignItems="center"
+                                  spacing={2}
+                                >
+                                  <Typography variant="subtitle1" color="inherit" noWrap>
+                                    ไม่พบรายการ
+                                  </Typography>
+                                </Stack>
+                              </Box>
+                            </TableCell>
+                          </StyledTableRow>
+                          {emptyRows > 0 && (
+                            <TableRow
+                              style={{
+                                height: (dense ? 33 : 53) * emptyRows,
+                              }}
+                            >
+                              <TableCell colSpan={9} />
+                            </TableRow>
+                          )}
+                        </TableBody>
+                      </Table>
+                      <hr />
+                      <Table sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
+                        <TableFooter>
+                          <TableRow>
+                            <TablePagination
+                              rowsPerPageOptions={[]}
+                              count={0}
+                              rowsPerPage={rowsPerPage}
+                              page={page}
+                              SelectProps={{
+                                inputProps: {
+                                  'aria-label': 'rows per page',
+                                },
+                                native: true,
+                              }}
+                              onPageChange={handleChangePage}
+                              onRowsPerPageChange={handleChangeRowsPerPage}
+                              ActionsComponent={TablePaginationActions}
+                            />
+                          </TableRow>
+                        </TableFooter>
+                      </Table>
+                    </TableContainer>
+                  </Box>
+                </Paper>
+              </React.Fragment>
+            </Container>
+          </AnimatedPage>
+        </div >
+        <Outlet />
+      </React.Fragment>
+    );
+  } else {
+    return (
+      <React.Fragment>
+        <div>
+          <AppBar
+            position="absolute"
+            color="default"
+            elevation={0}
+            sx={{
+              position: 'relative',
+              borderBottom: (t) => `1px solid ${t.palette.divider}`,
+            }}
+          >
+            <Toolbar>
+              <Box sx={{ width: 1 }}>
+                <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
+                  <Box gridColumn="span 10">
+                    <AnimatedPage>
+                      <Typography variant="h5" color="inherit" noWrap sx={{ pt: 1 }}>
+                        สถานะรายการเปลี่ยนแปลงทรัพย์สิน
+                      </Typography>
+                    </AnimatedPage>
+                  </Box>
+                  <Box gridColumn="span 0">
+                    <AnimatedPage>
+                      <IconButton sx={{ color: 'rgb(0,0,0)' }} component="label" size="large" onClick={handleGoNAC}>
+                        <SummarizeIcon />
+                      </IconButton>
+                    </AnimatedPage>
+                  </Box>
+                </Box>
+              </Box>
+            </Toolbar>
+          </AppBar>
+          <Container maxWidth="1000px">
+            <AnimatedPage>
+              <React.Fragment>
+                <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', pl: 1 }}>
+                    <Typography variant="h6" color="inherit" noWrap>
+                      ค้นหา
+                    </Typography>
+                  </Box>
+                  <TextField
+                    id="outlined-basic"
+                    label="Search..."
+                    variant="outlined"
+                    size="small"
+                    onChange={handleSetSearch}
+                    value={search}
+                  />
+                  <FormControlLabel
+                    control={<Switch checked={dense} onChange={handleChangeDense} />}
+                    label="Dense padding"
+                  />
+                </Stack>
+                <Paper variant="outlined" sx={{ my: 2, p: { xs: 2, md: 3 } }}>
+                  <Toolbar
+                    sx={{
+                      pl: { sm: 2 },
+                      pr: { xs: 1, sm: 1 },
+                    }}
+                  >
+                    <Typography
+                      sx={{ flex: '1 1 100%' }}
+                      variant="h5"
+                      component="div"
+                    >
                       รายการ NAC ทั้งหมด
                     </Typography>
                   </Toolbar>
@@ -311,17 +463,17 @@ export default function NAC_ROW() {
                       <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
                         <TableHead>
                           <TableRow>
-                            <StyledTableCell align="center" sx={{ width: 200 }}>
+                            <StyledTableCell align="center" sx={{ width: 150 }}>
                               เลขที่เอกสาร
                             </StyledTableCell>
-                            <StyledTableCell align="left" sx={{ maxWidth: 300 }}>หัวข้อรายการ</StyledTableCell>
+                            <StyledTableCell align="left" sx={{ maxWidth: 150 }}>หัวข้อรายการ</StyledTableCell>
                             <StyledTableCell align="center" >ผู้ทำรายการ</StyledTableCell>
                             <StyledTableCell align="center">วันที่สร้างเอกสาร</StyledTableCell>
                             <StyledTableCell align="center" sx={{ width: 100 }}>ผู้ส่ง</StyledTableCell>
                             <StyledTableCell align="center" sx={{ width: 100 }}>ผู้รับ</StyledTableCell>
-                            <StyledTableCell align="left" >สถานะการทำรายการ</StyledTableCell>
+                            <StyledTableCell align="left" sx={{ width: 150 }}>สถานะรายการ</StyledTableCell>
                             <StyledTableCell align="left" sx={{ width: 150 }}>ผู้ตรวจสอบ/อนุมัติ</StyledTableCell>
-                            <StyledTableCell align="center" sx={{ width: 200 }}>Action</StyledTableCell>
+                            <StyledTableCell align="center" sx={{ width: 180 }}>Action</StyledTableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
@@ -439,12 +591,11 @@ export default function NAC_ROW() {
                   </Box>
                 </Paper>
               </React.Fragment>
-              <Copyright />
-            </Container>
-          </AnimatedPage>
+            </AnimatedPage>
+          </Container>
         </div >
         <Outlet />
-      </React.Fragment>
+      </React.Fragment >
     );
   }
 }

@@ -681,7 +681,7 @@ export default function Nac_Main() {
         >
           <Toolbar>
             <Box sx={{ width: 1 }}>
-              <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={17}>
+              <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                 <Box gridColumn="span 10">
                   <AnimatedPage>
                     <Typography variant="h5" color="inherit" noWrap sx={{ pt: 1 }}>
@@ -1017,9 +1017,10 @@ export default function Nac_Main() {
                                   value={serviceList[index].dtl}
                                   onChange={(e) => handleServiceChange(e, index)}
                                 >
-                                  <MenuItem value={'สภาพดี'}>สภาพดี</MenuItem>
+                                  {/* <MenuItem value={'สภาพดี'}>สภาพดี</MenuItem>
                                   <MenuItem value={'ชำรุดรอซ่อม'}>ชำรุดรอซ่อม</MenuItem>
-                                  <MenuItem value={'รอตัดชำรุด'}>รอตัดชำรุด</MenuItem>
+                                  <MenuItem value={'รอตัดชำรุด'}>รอตัดชำรุด</MenuItem> */}
+                                  <MenuItem value={'ชำรุด'}>ชำรุด</MenuItem>
                                 </Select>
                               </FormControl>
                             </StyledTableCell>
@@ -1255,7 +1256,7 @@ export default function Nac_Main() {
                 </center>
               </React.Fragment>
             </Paper>
-            <Copyright />
+            
           </Container>
         </AnimatedPage>
       </ThemeProvider>

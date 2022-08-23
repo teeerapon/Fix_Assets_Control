@@ -133,22 +133,24 @@ export default function ReadOnly({ periodData, handleEditClick }) {
         <Grid container rowSpacing={1}>
           <Grid item xs={6}>
             <Button
-              disabled={(datenow >= BeginDate && datenow <= EndDate) || (checkUserWeb === 'admin') ? false : true }
+              disabled={(datenow >= BeginDate && datenow <= EndDate) || (checkUserWeb === 'admin') ? false : true}
               variant="contained"
               color="warning"
+              sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
               onClick={(event) => handleEditClick(event, periodData)}
             >
-              <ArticleIcon/>
+              <ArticleIcon />
             </Button>
           </Grid>
           <Grid item xs={6}>
             <Button
               variant="contained"
               color="error"
+              sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
               onClick={handleClickOpen}
-              disabled={(datenow >= BeginDate && datenow <= EndDate) || (checkUserWeb === 'admin') ? false : true }
+              disabled={(datenow >= BeginDate && datenow <= EndDate) || (checkUserWeb === 'admin') ? false : true}
             >
-              <DeleteIcon/>
+              <DeleteIcon />
             </Button>
             <Dialog
               open={open}
@@ -165,8 +167,18 @@ export default function ReadOnly({ periodData, handleEditClick }) {
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button variant="contained" onClick={handleSubmit}>ใช่</Button>
-                <Button variant="contained" color='error' onClick={handleClose} autoFocus>
+                <Button
+                  variant="contained"
+                  onClick={handleSubmit}
+                  sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                >ใช่
+                </Button>
+                <Button
+                  variant="contained"
+                  color='error'
+                  sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                  onClick={handleClose} autoFocus
+                >
                   ไม่
                 </Button>
               </DialogActions>

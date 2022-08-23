@@ -48,6 +48,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import FormGroup from '@mui/material/FormGroup';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -1253,7 +1255,87 @@ export default function EnhancedTable() {
         </Toolbar>
       </AppBar>
       <AnimatedPage>
-        <Container maxWidth="1000px">
+        <Container maxWidth="1000px" sx={{ pt: 3 }}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="flex-start"
+            spacing={2}
+          >
+            <Card
+              sx={{ minWidth: 275 }}
+              style={{
+                'cursor': 'pointer',
+                'flex': 1,
+                'margin': '0px 20px',
+                'padding': '15px',
+                'border-radius': '10px',
+              }}
+            >
+              <CardContent>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                  รวมทรัพย์สินที่ตรวจนับแล้ว
+                </Typography>
+                <Typography variant="h5" component="div" style={{ color: 'green' }}>
+                  <b>{!aseetsCounted ? 0 : aseetsCounted.length} รายการ</b>
+                </Typography>
+              </CardContent>
+            </Card>
+            <Card
+              style={{
+                'cursor': 'pointer',
+                'flex': 1,
+                'margin': '0px 20px',
+                'padding': '15px',
+                'border-radius': '10px',
+              }}
+            >
+              <CardContent>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                  รวมทรัพย์สินที่คงเหลือ
+                </Typography>
+                <Typography variant="h5" component="div" style={{ color: 'red' }}>
+                  <b>{!AssetsAll ? 0 : AssetsAll.length} รายการ</b>
+                </Typography>
+              </CardContent>
+            </Card>
+            <Card
+              style={{
+                'cursor': 'pointer',
+                'flex': 1,
+                'margin': '0px 20px',
+                'padding': '15px',
+                'border-radius': '10px',
+              }}
+            >
+              <CardContent>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                  ทรัพย์สินสาขาอื่น ๆ
+                </Typography>
+                <Typography variant="h5" component="div" style={{ color: 'orange' }}>
+                  <b>{!assetsWrong ? 0 : assetsWrong.length} รายการ</b>
+                </Typography>
+              </CardContent>
+            </Card>
+            <Card
+              style={{
+                'cursor': 'pointer',
+                'flex': 1,
+                'margin': '0px 20px',
+                'padding': '15px',
+                'border-radius': '10px',
+              }}
+            >
+              <CardContent>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                  ทรัพย์สินทั้งหมด
+                </Typography>
+                <Typography variant="h5" component="div" style={{ color: 'blue' }}>
+                  <b>{!sumArray_assets ? 0 : sumArray_assets.length} รายการ</b>
+                </Typography>
+              </CardContent>
+            </Card>
+          </Stack>
           <Stack direction="row" justifyContent="space-between" sx={{ pt: 5 }}>
             <FormControlLabel
               control={<Switch checked={dense} onChange={handleChangeDense} />}
@@ -1341,13 +1423,64 @@ export default function EnhancedTable() {
                         </TableRow>
                       );
                     })}
+                  {
+                    (stableSort(rows, getComparator(order, orderBy))
+                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .length) === rows.length ?
+                      <React.Fragment>
+                        <TableRow>
+                          <TableCell colSpan={6}>
+                            รวม รายการตรวจนับแล้ว
+                          </TableCell>
+                          <TableCell>
+                            {!aseetsCounted ? 0 : aseetsCounted.length}
+                          </TableCell>
+                          <TableCell>
+                            รายการ
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell colSpan={6}>
+                            รวม รายการคงเหลือ
+                          </TableCell>
+                          <TableCell>
+                            {!AssetsAll ? 0 : AssetsAll.length}
+                          </TableCell>
+                          <TableCell>
+                            รายการ
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell colSpan={6}>
+                            รวม รายการที่ตรวจนับแล้ว (สาขาอื่น ๆ)
+                          </TableCell>
+                          <TableCell>
+                            {!assetsWrong ? 0 : assetsWrong.length}
+                          </TableCell>
+                          <TableCell>
+                            รายการ
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell colSpan={6}>
+                            รวม รายการทั้งหมด
+                          </TableCell>
+                          <TableCell>
+                            {!sumArray_assets ? 0 : sumArray_assets.length}
+                          </TableCell>
+                          <TableCell>
+                            รายการ
+                          </TableCell>
+                        </TableRow>
+                      </React.Fragment>
+                      : null}
                   {emptyRows > 0 && (
                     <TableRow
                       style={{
                         height: (dense ? 33 : 53) * emptyRows,
                       }}
                     >
-                      <TableCell colSpan={9} />
+                      <TableCell colSpan={8} />
                     </TableRow>
                   )}
                 </TableBody>
@@ -1356,7 +1489,7 @@ export default function EnhancedTable() {
                 <TablePagination
                   component="div"
                   labelRowsPerPage={''}
-                  rowsPerPageOptions={[10, 25, 50, { label: "ทั้งหมด", value: -1 }]}
+                  rowsPerPageOptions={[10, 25, 50, { label: "ทั้งหมด", value: rows.length }]}
                   colSpan={3}
                   count={rows.length}
                   rowsPerPage={rowsPerPage}

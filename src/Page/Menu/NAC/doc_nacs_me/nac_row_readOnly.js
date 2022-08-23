@@ -28,7 +28,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const Item = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(1),
+  padding: theme.spacing(0.8),
+  paddingTop: theme.spacing(0.5),
+  paddingBottom: theme.spacing(0.5),
   textAlign: 'start',
   color: '#ffffff',
 }));
@@ -190,7 +192,8 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
                 variant="contained"
                 color="warning"
                 onClick={(event) => handleEditClick(event, selectNAC)}
-                sx={{ width: 50 }}>
+                sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+              >
                 <ArticleIcon />
               </Button>
             </Grid>
@@ -201,7 +204,8 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
               color="error"
               disabled={(selectNAC.create_by === data.UserCode) && (selectNAC.nac_status < 4) && (!selectNAC.verify_by_userid) ? false : true}
               onClick={handleClickOpen}
-              sx={{ width: 50 }}>
+              sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+            >
               <DeleteIcon />
             </Button>
             <Dialog
@@ -219,8 +223,21 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button variant="contained" name={selectNAC.nac_code} onClick={(event) => handleDrop_NAC(event)}>ใช่</Button>
-                <Button variant="contained" color='error' onClick={handleClose} autoFocus>
+                <Button
+                  variant="contained"
+                  sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                  name={selectNAC.nac_code}
+                  onClick={(event) => handleDrop_NAC(event)}
+                >
+                  ใช่
+                </Button>
+                <Button
+                  variant="contained"
+                  sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                  color='error'
+                  onClick={handleClose}
+                  autoFocus
+                >
                   ไม่
                 </Button>
               </DialogActions>

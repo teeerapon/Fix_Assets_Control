@@ -304,7 +304,7 @@ export default function Report() {
                 </center>
               </form>
             </Paper>
-            <Copyright />
+            
             <Outlet />
           </Container>
         </AnimatedPage>

@@ -51,7 +51,7 @@ export default function Checkout() {
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
               <Step1 />
             </Paper>
-            <Copyright />
+            
           </Container>
         </AnimatedPage>
       </ThemeProvider>

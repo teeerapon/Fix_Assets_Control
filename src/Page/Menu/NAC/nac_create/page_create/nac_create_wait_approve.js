@@ -1554,7 +1554,7 @@ export default function Nac_Main_wait() {
           >
             <Toolbar>
               <Box sx={{ width: 1 }}>
-                <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={17}>
+                <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                   <Box gridColumn="span 10">
                     <AnimatedPage>
                       <Typography variant="h5" color="inherit" noWrap sx={{ pt: 1 }}>
@@ -2500,7 +2500,7 @@ export default function Nac_Main_wait() {
                 setDescription={setDescription}
                 setOpenDialog={setOpenDialog}
               />
-              <Copyright />
+              
               <Dialog open={openDialogReply} onClose={handleCloseDialogReply} >
                 <DialogTitle>กรุณาระบุข้อความ/เหตุผล ที่ตีกลับเอกสาร</DialogTitle>
                 <DialogContent sx={{ width: 500 }}>

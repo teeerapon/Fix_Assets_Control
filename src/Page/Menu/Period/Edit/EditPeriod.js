@@ -90,19 +90,6 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'ptec@pure © '}
-      <Link color="inherit">
-        Edit Period
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -316,7 +303,7 @@ export default function EditPeriod() {
               </TableContainer>
             </Box>
           </Paper>
-          <Copyright />
+          
         </Container>
       </AnimatedPage>
     </div >

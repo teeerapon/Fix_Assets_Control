@@ -627,7 +627,7 @@ export default function Nac_Main() {
         >
           <Toolbar>
             <Box sx={{ width: 1 }}>
-              <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={17}>
+              <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                 <Box gridColumn="span 10">
                   <AnimatedPage>
                     <Typography variant="h5" color="inherit" noWrap sx={{ pt: 1 }}>
@@ -1230,7 +1230,7 @@ export default function Nac_Main() {
                 </center>
               </React.Fragment>
             </Paper>
-            <Copyright />
+            
           </Container>
         </AnimatedPage>
       </ThemeProvider>
