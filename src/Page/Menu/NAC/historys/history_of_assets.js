@@ -91,6 +91,8 @@ export default function History_of_assets() {
   const dataChange = !dataHistory ? [] : dataHistory.map(function (elt) {
     if (elt.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
       return 1
+    } else {
+      return 0
     }
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
@@ -99,6 +101,8 @@ export default function History_of_assets() {
   const dataAdd = !dataHistory ? [] : dataHistory.map(function (elt) {
     if (elt.name === 'เพิ่มบัญชีทรัพย์สินถาวร' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
       return 1
+    } else {
+      return 0
     }
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
@@ -107,6 +111,8 @@ export default function History_of_assets() {
   const dataTranfers = !dataHistory ? [] : dataHistory.map(function (elt) {
     if (elt.name === 'โยกย้ายทรัพย์สิน' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
       return 1
+    } else {
+      return 0
     }
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
@@ -115,6 +121,8 @@ export default function History_of_assets() {
   const dataDelete = !dataHistory ? [] : dataHistory.map(function (elt) {
     if (elt.name === 'ตัดจากบัญชีทรัพย์สินถาวร' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
       return 1
+    } else {
+      return 0
     }
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
@@ -123,6 +131,8 @@ export default function History_of_assets() {
   const dataSeals = !dataHistory ? [] : dataHistory.map(function (elt) {
     if (elt.name === 'ขายทรัพย์สิน' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
       return 1
+    } else {
+      return 0
     }
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
@@ -171,7 +181,7 @@ export default function History_of_assets() {
         <Toolbar>
           <AnimatedPage>
             <Typography variant="h5" color="inherit" noWrap>
-              ประวัติทรัพย์สิน
+              ประวัติทรัพย์สินที่ดำเนินการเสร็จสิ้น
             </Typography>
           </AnimatedPage>
         </Toolbar>
@@ -200,7 +210,7 @@ export default function History_of_assets() {
                     เพิ่มบัญชีทรัพย์สินถาวร
                   </Typography>
                   <Typography variant="h5" component="div">
-                    <b>{!dataAdd ? 0 : dataAdd} รายการ</b>
+                    <b>{!dataHistory ? 0 : dataAdd} รายการ</b>
                   </Typography>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     เดือน {monthString[d.getMonth()]}
@@ -222,7 +232,7 @@ export default function History_of_assets() {
                     โยกย้ายทรัพย์สิน
                   </Typography>
                   <Typography variant="h5" component="div">
-                    <b>{!dataTranfers ? 0 : dataTranfers} รายการ</b>
+                    <b>{!dataHistory ? 0 : dataTranfers} รายการ</b>
                   </Typography>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     เดือน {monthString[d.getMonth()]}
@@ -244,7 +254,7 @@ export default function History_of_assets() {
                     เปลี่ยนแปลงรายละเอียด
                   </Typography>
                   <Typography variant="h5" component="div">
-                    <b>{!dataChange ? 0 : dataChange} รายการ</b>
+                    <b>{!dataHistory ? 0 : dataChange} รายการ</b>
                   </Typography>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     เดือน {monthString[d.getMonth()]}
@@ -266,7 +276,7 @@ export default function History_of_assets() {
                     ตัดทรัพย์สินถาวร
                   </Typography>
                   <Typography variant="h5" component="div">
-                    <b>{!dataDelete ? 0 : dataDelete} รายการ</b>
+                    <b>{!dataHistory ? 0 : dataDelete} รายการ</b>
                   </Typography>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     เดือน {monthString[d.getMonth()]}
@@ -288,7 +298,7 @@ export default function History_of_assets() {
                     ขายทรัพย์สิน
                   </Typography>
                   <Typography variant="h5" component="div">
-                    <b>{!dataSeals ? 0 : dataSeals} รายการ</b>
+                    <b>{!dataHistory ? 0 : dataSeals} รายการ</b>
                   </Typography>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     เดือน {monthString[d.getMonth()]}
