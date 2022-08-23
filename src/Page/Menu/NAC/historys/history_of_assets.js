@@ -7,33 +7,144 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import Paper from '@mui/material/Paper';
-import { DataGrid } from '@mui/x-data-grid';
+import { alpha, styled } from '@mui/material/styles';
+import { DataGrid, gridClasses } from '@mui/x-data-grid';
 import Axios from "axios"
+
+const ODD_OPACITY = 0.2;
+
+const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
+  [`& .${gridClasses.row}.even`]: {
+    backgroundColor: theme.palette.grey[100],
+    '&:hover, &.Mui-hovered': {
+      backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+    },
+    '&.Mui-selected': {
+      backgroundColor: alpha(
+        theme.palette.primary.main,
+        ODD_OPACITY + theme.palette.action.selectedOpacity,
+      ),
+      '&:hover, &.Mui-hovered': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          ODD_OPACITY +
+          theme.palette.action.selectedOpacity +
+          theme.palette.action.hoverOpacity,
+        ),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: alpha(
+            theme.palette.primary.main,
+            ODD_OPACITY + theme.palette.action.selectedOpacity,
+          ),
+        },
+      },
+    },
+  },
+  [`& .${gridClasses.row}.odd`]: {
+    '&:hover, &.Mui-hovered': {
+      backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+    },
+    '&.Mui-selected': {
+      backgroundColor: alpha(
+        theme.palette.primary.main,
+        ODD_OPACITY + theme.palette.action.selectedOpacity,
+      ),
+      '&:hover, &.Mui-hovered': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          ODD_OPACITY +
+          theme.palette.action.selectedOpacity +
+          theme.palette.action.hoverOpacity,
+        ),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: alpha(
+            theme.palette.primary.main,
+            ODD_OPACITY + theme.palette.action.selectedOpacity,
+          ),
+        },
+      },
+    },
+  },
+}));
 
 export default function History_of_assets() {
 
-  const [dense, setDense] = React.useState(false);
+  const d = new Date();
+  const year = (d.getFullYear()).toString();
+  const month = ((d.getMonth()) + 101).toString().slice(-2);
+  const date = ((d.getDate()) + 100).toString().slice(-2);
+  const datenow = `${year}-${month}-${date}`;
+  const monthString = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+
   const [dataHistory, setDataHistory] = React.useState();
-  const [dataChange, setDataChange] = React.useState();
   const data = JSON.parse(localStorage.getItem('data'));
 
-  const columns = [
-    { field: 'nac_code', headerName: 'รหัสทรัพย์สิน', width: 130 },
-    { field: 'nacdtl_assetsName', headerName: 'ชื่อ', width: 250 },
-    { field: 'nacdtl_assetsPrice', headerName: 'ราคา (บาท)', width: 200 },
-    { field: 'name', headerName: 'หัวข้อรายการ', width: 250 },
-    { field: 'create_by', headerName: 'ผู้ทำรายการ', width: 130 },
-    { field: 'source_approve_userid', headerName: 'ผู้อนุมัติ', width: 130 },
-    { field: 'account_aprrove_id', headerName: 'ผู้ปิดรายการ', width: 130 },
-    { field: 'update_date', headerName: 'วันที่ปิดรายการ', type: 'date', width: 200 },
-  ];
+  const dataChange = !dataHistory ? [] : dataHistory.map(function (elt) {
+    if (elt.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
+      return 1
+    }
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
+  const dataAdd = !dataHistory ? [] : dataHistory.map(function (elt) {
+    if (elt.name === 'เพิ่มบัญชีทรัพย์สินถาวร' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
+      return 1
+    }
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+
+  const dataTranfers = !dataHistory ? [] : dataHistory.map(function (elt) {
+    if (elt.name === 'โยกย้ายทรัพย์สิน' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
+      return 1
+    }
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+
+  const dataDelete = !dataHistory ? [] : dataHistory.map(function (elt) {
+    if (elt.name === 'ตัดจากบัญชีทรัพย์สินถาวร' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
+      return 1
+    }
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+
+  const dataSeals = !dataHistory ? [] : dataHistory.map(function (elt) {
+    if (elt.name === 'ขายทรัพย์สิน' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
+      return 1
+    }
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+
+  const columns = [
+    { field: 'nac_code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 150, },
+    { field: 'nacdtl_assetsName', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 284 },
+    {
+      field: 'nacdtl_assetsPrice',
+      headerName: 'ราคาทุน',
+      headerClassName: 'super-app-theme--header',
+      width: 200,
+      valueGetter: (params) =>
+        `${params.row.nacdtl_assetsPrice.toLocaleString() || ''} บาท`,
+    },
+    { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', width: 230 },
+    { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', width: 130 },
+    { field: 'source_approve_userid', headerName: 'ผู้อนุมัติ', headerClassName: 'super-app-theme--header', width: 130 },
+    { field: 'account_aprrove_id', headerName: 'ผู้ปิดรายการ', headerClassName: 'super-app-theme--header', width: 130 },
+    { field: 'update_date', headerName: 'วันที่ปิดรายการ', type: 'date', headerClassName: 'super-app-theme--header', width: 200 },
+  ];
 
   React.useEffect(() => {
     // POST request using axios with set headers
@@ -80,6 +191,7 @@ export default function History_of_assets() {
                   'flex': 1,
                   'margin': '0px 20px',
                   'padding': '15px',
+                  'paddingBottom': '5px',
                   'border-radius': '10px',
                 }}
               >
@@ -88,7 +200,10 @@ export default function History_of_assets() {
                     เพิ่มบัญชีทรัพย์สินถาวร
                   </Typography>
                   <Typography variant="h5" component="div">
-                    <b>100 รายการ</b>
+                    <b>{!dataAdd ? 0 : dataAdd} รายการ</b>
+                  </Typography>
+                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    เดือน {monthString[d.getMonth()]}
                   </Typography>
                 </CardContent>
               </Card>
@@ -98,6 +213,7 @@ export default function History_of_assets() {
                   'flex': 1,
                   'margin': '0px 20px',
                   'padding': '15px',
+                  'paddingBottom': '5px',
                   'border-radius': '10px',
                 }}
               >
@@ -106,7 +222,10 @@ export default function History_of_assets() {
                     โยกย้ายทรัพย์สิน
                   </Typography>
                   <Typography variant="h5" component="div">
-                    <b>86 รายการ</b>
+                    <b>{!dataTranfers ? 0 : dataTranfers} รายการ</b>
+                  </Typography>
+                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    เดือน {monthString[d.getMonth()]}
                   </Typography>
                 </CardContent>
               </Card>
@@ -116,6 +235,7 @@ export default function History_of_assets() {
                   'flex': 1,
                   'margin': '0px 20px',
                   'padding': '15px',
+                  'paddingBottom': '5px',
                   'border-radius': '10px',
                 }}
               >
@@ -124,7 +244,10 @@ export default function History_of_assets() {
                     เปลี่ยนแปลงรายละเอียด
                   </Typography>
                   <Typography variant="h5" component="div">
-                    <b>13 รายการ</b>
+                    <b>{!dataChange ? 0 : dataChange} รายการ</b>
+                  </Typography>
+                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    เดือน {monthString[d.getMonth()]}
                   </Typography>
                 </CardContent>
               </Card>
@@ -134,6 +257,7 @@ export default function History_of_assets() {
                   'flex': 1,
                   'margin': '0px 20px',
                   'padding': '15px',
+                  'paddingBottom': '5px',
                   'border-radius': '10px',
                 }}
               >
@@ -142,7 +266,10 @@ export default function History_of_assets() {
                     ตัดทรัพย์สินถาวร
                   </Typography>
                   <Typography variant="h5" component="div">
-                    <b>41 รายการ</b>
+                    <b>{!dataDelete ? 0 : dataDelete} รายการ</b>
+                  </Typography>
+                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    เดือน {monthString[d.getMonth()]}
                   </Typography>
                 </CardContent>
               </Card>
@@ -152,6 +279,7 @@ export default function History_of_assets() {
                   'flex': 1,
                   'margin': '0px 20px',
                   'padding': '15px',
+                  'paddingBottom': '5px',
                   'border-radius': '10px',
                 }}
               >
@@ -160,22 +288,47 @@ export default function History_of_assets() {
                     ขายทรัพย์สิน
                   </Typography>
                   <Typography variant="h5" component="div">
-                    <b>5 รายการ</b>
+                    <b>{!dataSeals ? 0 : dataSeals} รายการ</b>
+                  </Typography>
+                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    เดือน {monthString[d.getMonth()]}
                   </Typography>
                 </CardContent>
               </Card>
             </Stack>
-            <div style={{ height: 387, width: '100%' }}>
-              <DataGrid
-                sx={{ mt: 3, pl: 2, pt: 2 }}
+            <Box
+              sx={{
+                height: 400,
+                width: '100%',
+                '& .super-app-theme--header': {
+                  backgroundColor: 'rgba(0, 0, 0, 1)',
+                  color: 'rgba(255, 255, 255, 1)'
+                },
+                '.css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root': {
+                  color: 'rgba(255, 255, 255, 1)'
+                }
+              }}
+            >
+              <StripedDataGrid
+                sx={{
+                  mt: 3,
+                  pl: 2,
+                  pr: 2,
+                  pt: 2,
+                  boxShadow: 1,
+                }}
                 rows={!dataHistory ? [] : dataHistory}
                 columns={columns}
                 getRowId={(dataHistory) => dataHistory.nacdtl_id}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
+                getRowClassName={(params) =>
+                  params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                }
+                disableSelectionOnClick
               //checkboxSelection
               />
-            </div>
+            </Box>
           </Container>
         </Box>
       </AnimatedPage>
