@@ -139,8 +139,8 @@ export default function History_of_assets() {
   })
 
   const columns = [
-    { field: 'nac_code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 150, },
-    { field: 'nacdtl_assetsName', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 284 },
+    { field: 'nacdtl_assetsCode', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 150, },
+    { field: 'nacdtl_assetsName', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 250 },
     {
       field: 'nacdtl_assetsPrice',
       headerName: 'ราคาทุน',
@@ -149,11 +149,12 @@ export default function History_of_assets() {
       valueGetter: (params) =>
         `${params.row.nacdtl_assetsPrice.toLocaleString() || ''} บาท`,
     },
+    { field: 'nac_code', headerName: 'เลขที่ NAC', headerClassName: 'super-app-theme--header', width: 150, },
     { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', width: 230 },
-    { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', width: 130 },
-    { field: 'source_approve_userid', headerName: 'ผู้อนุมัติ', headerClassName: 'super-app-theme--header', width: 130 },
-    { field: 'account_aprrove_id', headerName: 'ผู้ปิดรายการ', headerClassName: 'super-app-theme--header', width: 130 },
-    { field: 'update_date', headerName: 'วันที่ปิดรายการ', type: 'date', headerClassName: 'super-app-theme--header', width: 200 },
+    { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', width: 110 },
+    { field: 'source_approve_userid', headerName: 'ผู้อนุมัติ', headerClassName: 'super-app-theme--header', width: 110 },
+    { field: 'account_aprrove_id', headerName: 'ผู้ปิดรายการ', headerClassName: 'super-app-theme--header', width: 110 },
+    { field: 'update_date', headerName: 'วันที่ปิดรายการ', type: 'date', headerClassName: 'super-app-theme--header', width: 144 },
   ];
 
   React.useEffect(() => {
