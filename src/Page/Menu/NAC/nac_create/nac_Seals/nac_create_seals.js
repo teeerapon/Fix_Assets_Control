@@ -573,7 +573,7 @@ export default function Nac_Main() {
               }
             }
             localStorage.setItem('NacCode', JSON.stringify({ nac_code: responseDTL.data[0].nac_code, nac_status: 1 }));
-            navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + responseDTL.data[0].nac_code)
+            navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + responseDTL.data[0].nac_code)
           } else {
             swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error", {
               buttons: false,

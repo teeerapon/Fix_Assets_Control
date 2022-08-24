@@ -211,7 +211,7 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
       <StyledTableCell align="left" style={{ 'maxWidth': 'fit-content' }}>{
         (selectNAC.nac_status === 2 && selectNAC.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && selectNAC.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + selectNAC.vertify + '' :
           (selectNAC.nac_status === 3 && selectNAC.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && selectNAC.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + selectNAC.approved + '' :
-            ((selectNAC.nac_status === 2) && (selectNAC.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || selectNAC.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? 'ต้นสังกัดตรวจสอบ' :
+            ((selectNAC.nac_status === 2) && (selectNAC.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || selectNAC.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? '' + selectNAC.vertify + '' :
               (selectNAC.nac_status === 13) ? 'การเงิน' : (selectNAC.nac_status === 5) ? 'บัญชี' : 'none'
       }</StyledTableCell>
       <StyledTableCell align="center" style={{ 'maxWidth': 'fit-content' }}>
