@@ -26,7 +26,7 @@ const mainFeaturedPost = [
     title: 'PURE THAI ENERGY CO.,LTD',
     description:
       "สถานีบริการน้ำมันเอสโซ่เพียวไทย ภายใต้การบริหารของ บริษัท เพียวพลังงานไทย จำกัด (เดิมชื่อ โยธินปิโตรเลียม จำกัด) เป็น บริษัทในเครือของ บริษัท อาร์พีซีจี จำกัด (มหาชน) (RPCG) โดยผู้ถือหุ้นเป็นคนไทยทั้งสิ้น เริ่มเปิดดำเนินการสาขาแรก เดือนกุมภาพันธ์ พ.ศ 2542 ที่จังหวัดนครสวรรค์ ในแบรนด์สถานีบริการน้ำมันเพียว และเมื่อวันที่ 6 พฤศจิกายน ปี 2562 ได้จับมือเป็นพันธมิตรทางธุรกิจกับ บริษัท เอสโซ่ (ประเทศไทย) จำกัด (มหาชน) เปลี่ยนสถานีบริการน้ำมัน“เพียว” ให้เป็นเครื่องหมายการค้า“เอสโซ่” โดยบริษัท เพียวฯ ยังคงเป็นผู้บริหารสถานีบริการน้ำมันดังกล่าวเช่นเดิม",
-    imgPath: 'https://www.purethai.co.th/wp-content/uploads/2022/06/PT-Purethai-202205-Choose-3184-1200x800.jpg',
+    imgPath: 'https://scontent.fbkk14-1.fna.fbcdn.net/v/t39.30808-6/292265093_5364529780260631_8318749687930611200_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=730e14&_nc_eui2=AeHb5AJOcQJP4N1rGe5JlfkSu7aTeaI7MYa7tpN5ojsxhpbpuFMKUiItjfoD3EBIm9C2ViibV7jP-PxEtiOaatRz&_nc_ohc=Zdc6gC3Gw0EAX-p1_Jd&_nc_ht=scontent.fbkk14-1.fna&oh=00_AT-Jy2JjK5w5nyp8mdB5gAi2xCeW8LACxpLQrkqLLxksIw&oe=6312A6FC',
     imageText: 'main image description',
   },
   {
@@ -47,7 +47,7 @@ const mainFeaturedPost = [
     title: 'PURE THAI ENERGY CO.,LTD',
     description:
       "สถานีบริการน้ำมันเอสโซ่เพียวไทย ภายใต้การบริหารของ บริษัท เพียวพลังงานไทย จำกัด (เดิมชื่อ โยธินปิโตรเลียม จำกัด) เป็น บริษัทในเครือของ บริษัท อาร์พีซีจี จำกัด (มหาชน) (RPCG) โดยผู้ถือหุ้นเป็นคนไทยทั้งสิ้น เริ่มเปิดดำเนินการสาขาแรก เดือนกุมภาพันธ์ พ.ศ 2542 ที่จังหวัดนครสวรรค์ ในแบรนด์สถานีบริการน้ำมันเพียว และเมื่อวันที่ 6 พฤศจิกายน ปี 2562 ได้จับมือเป็นพันธมิตรทางธุรกิจกับ บริษัท เอสโซ่ (ประเทศไทย) จำกัด (มหาชน) เปลี่ยนสถานีบริการน้ำมัน“เพียว” ให้เป็นเครื่องหมายการค้า“เอสโซ่” โดยบริษัท เพียวฯ ยังคงเป็นผู้บริหารสถานีบริการน้ำมันดังกล่าวเช่นเดิม",
-    imgPath: 'https://www.purethai.co.th/wp-content/uploads/2022/05/09.jpg',
+    imgPath: 'https://scontent.fbkk10-1.fna.fbcdn.net/v/t39.30808-6/291901402_5356611007719175_3843897491518363884_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=730e14&_nc_eui2=AeHYUZGMv_ALWYRpV1GvJYXsyF-ZDzFCAarIX5kPMUIBqrZnPTxOoL1TCJ_NRs1P1N0ojjDrgkVcR-3TH9Poq-4u&_nc_ohc=qPcwauoem2UAX80PELG&_nc_ht=scontent.fbkk10-1.fna&oh=00_AT9A9X40TpkxLEffkNtIlF1_QNrNcGtrFqrUfZr1mYcUDw&oe=631297FF',
     imageText: 'main image description',
   },
 ];

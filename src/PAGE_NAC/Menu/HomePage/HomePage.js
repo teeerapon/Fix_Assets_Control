@@ -47,7 +47,7 @@ export default function MenuAppBar() {
                 </main>
               </div>
               <footer className="mt-auto text-dark-50 bg-white">
-                <p>Creater Page By <a href='https://www.facebook.com/TeeraponMARK/' className="text-dark">@Tps</a></p>
+                <p>Facebook Fanpage By <a href='https://www.facebook.com/essopurethai/' className="text-dark">@Purethai</a></p>
                 <div className='pt-2'></div>
               </footer>
             </body>
