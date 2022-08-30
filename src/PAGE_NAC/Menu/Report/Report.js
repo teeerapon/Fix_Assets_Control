@@ -198,7 +198,7 @@ export default function Report() {
       buttons: false,
       timer: 2000,
     }).then((value) => {
-      window.location.href = "/HomePage";
+      window.location.href = "/NAC_MAIN";
     });
   } else {
     return (

@@ -1,39 +1,43 @@
 import React from 'react';
 import './App.css';
 import { AnimatePresence } from "framer-motion";
-import Signin from './Page/Signin';
-import Report from './Page/Menu/Report/Report';
-import ReportAll from './Page/Menu/Report/report_all';
-import AssetPage from './Page/Menu/Report/Assets';
-import AssetPage2 from './Page/Menu/Report/AssetsAll';
-import Page404 from './Page/Page404';
-import HomePage from './Page/Menu/HomePage/HomePage';
-import History_of_Assets from './Page/Menu/NAC/historys/history_of_assets';
-import CreatePeriod from './Page/Menu/Period/Create/main';
-import CreatePeriod2 from './Page/Menu/Period/Create/main2';
-import CreatePeriod3 from './Page/Menu/Period/Create/main3';
-import EditPeriod from './Page/Menu/Period/Edit/EditPeriod';
+import Signin from './Signin';
+import Report from './PAGE_NAC/Menu/Report/Report';
+import ReportAll from './PAGE_NAC/Menu/Report/report_all';
+import AssetPage from './PAGE_NAC/Menu/Report/Assets';
+import AssetPage2 from './PAGE_NAC/Menu/Report/AssetsAll';
+import Page404 from './Page404';
+import HomePage from './PAGE_NAC/Menu/HomePage/HomePage';
+import History_of_Assets from './PAGE_NAC/Menu/NAC/historys/history_of_assets';
+import CreatePeriod from './PAGE_NAC/Menu/Period/Create/main';
+import CreatePeriod2 from './PAGE_NAC/Menu/Period/Create/main2';
+import CreatePeriod3 from './PAGE_NAC/Menu/Period/Create/main3';
+import EditPeriod from './PAGE_NAC/Menu/Period/Edit/EditPeriod';
 // รายการ อนุมัติ และ ของฉัน
-import NAC_ROW from './Page/Menu/NAC/doc_nacs_me/nac_row';
-import NAC_OPERATOR from './Page/Menu/NAC/doc_operator/nac_row';
+import NAC_ROW from './PAGE_NAC/Menu/NAC/doc_nacs_me/nac_row';
+import NAC_OPERATOR from './PAGE_NAC/Menu/NAC/doc_operator/nac_row';
 // ทำการราย
-import NAC_CREATE_STEP1 from './Page/Menu/NAC/nac_create/page_create/nac_create_step1';
-import NAC_CREATE_MAIN1 from './Page/Menu/NAC/nac_create/page_nac/nac_main_stepCreate';
-import NAC_CHANGE_STEP1 from './Page/Menu/NAC/nac_create/nac_change/nac_change_step1';
-import NAC_DELETE_STEP1 from './Page/Menu/NAC/nac_create/nac_delete/nac_delete_step1';
-import NAC_SEALS_STEP1 from './Page/Menu/NAC/nac_create/nac_Seals/nac_create_seals';
+import NAC_CREATE_STEP1 from './PAGE_NAC/Menu/NAC/nac_create/page_create/nac_create_step1';
+import NAC_CREATE_MAIN1 from './PAGE_NAC/Menu/NAC/nac_create/page_nac/nac_main_stepCreate';
+import NAC_CHANGE_STEP1 from './PAGE_NAC/Menu/NAC/nac_create/nac_change/nac_change_step1';
+import NAC_DELETE_STEP1 from './PAGE_NAC/Menu/NAC/nac_create/nac_delete/nac_delete_step1';
+import NAC_SEALS_STEP1 from './PAGE_NAC/Menu/NAC/nac_create/nac_Seals/nac_create_seals';
 // รออนุมัติ
-import NAC_CREATE_WAIT_APPROVE from './Page/Menu/NAC/nac_create/page_nac/nac_main_wait_approve';
-import NAC_CHANGE_WAIT_APPROVE from './Page/Menu/NAC/nac_create/nac_change/nac_change_wait_approve';
-import NAC_CREATE_NEW_WAIT_APPROVE from './Page/Menu/NAC/nac_create/page_create/nac_create_wait_approve';
-import NAC_DELETE_WAIT_APPROVE from './Page/Menu/NAC/nac_create/nac_delete/nac_delete_wait_approve';
-import NAC_SEALS_APPROVE from './Page/Menu/NAC/nac_create/nac_Seals/nac_seals_approve';
+import NAC_CREATE_WAIT_APPROVE from './PAGE_NAC/Menu/NAC/nac_create/page_nac/nac_main_wait_approve';
+import NAC_CHANGE_WAIT_APPROVE from './PAGE_NAC/Menu/NAC/nac_create/nac_change/nac_change_wait_approve';
+import NAC_CREATE_NEW_WAIT_APPROVE from './PAGE_NAC/Menu/NAC/nac_create/page_create/nac_create_wait_approve';
+import NAC_DELETE_WAIT_APPROVE from './PAGE_NAC/Menu/NAC/nac_create/nac_delete/nac_delete_wait_approve';
+import NAC_SEALS_APPROVE from './PAGE_NAC/Menu/NAC/nac_create/nac_Seals/nac_seals_approve';
 // Routes
-import NavBar from './Page/Nav/Nav';
+import NavBar from './PAGE_NAC/Nav/Nav';
 import { IntlProvider } from 'react-intl';
 import { styled, useTheme } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
-import { Route, Routes, useLocation } from "react-router";
+import { Route, Routes, useLocation, useParams } from "react-router";
+
+//DATA_CENTER
+import DATA_CENTER from './DATA_CENTER/data_center'
+import DATA_CENTER_NAV from './DATA_CENTER/Nav/Nav'
 
 const drawerWidth = 240;
 
@@ -48,7 +52,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     ...(open && {
       flexGrow: 1,
       whiteSpace: 'pre-wrap',
-      //opacity: 0.05,
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
@@ -93,6 +96,32 @@ function App() {
   const token = localStorage.getItem('token');
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const nAC_MENU =
+    [
+      '/NAC_MAIN',
+      '/Report',
+      '/ReportAll',
+      '/AssetPage',
+      '/AssetPage2',
+      '/CreatePeriod',
+      '/CreatePeriod2',
+      '/CreatePeriod3',
+      '/EditPeriod',
+      '/History_of_Assets',
+      '/NAC_ROW',
+      '/NAC_OPERATOR',
+      '/NAC_CREATE_MAIN1',
+      '/NAC_CREATE_STEP1',
+      '/NAC_CHANGE_STEP1',
+      '/NAC_DELETE_STEP1',
+      '/NAC_SEALS_STEP1',
+      '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/',
+      '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/',
+      '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/',
+      '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/',
+      '/NAC_ROW/NAC_SEALS_APPROVE/',
+      '*',
+    ]
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -104,24 +133,48 @@ function App() {
 
   if (!token) {
     return <Signin />
-  }
-
-  return (
-    <IntlProvider>
-      <NavBar
-        AppBar={AppBar}
-        theme={theme}
-        open={open}
-        drawerWidth={drawerWidth}
-        handleDrawerOpen={handleDrawerOpen}
-        handleDrawerClose={handleDrawerClose}
-        DrawerHeader={DrawerHeader}
-      />
+  } else if (location.pathname === ('/' || '/DATA_CENTER')) {
+    return (
+      <IntlProvider>
+        <DATA_CENTER_NAV
+          AppBar={AppBar}
+          theme={theme}
+          open={open}
+          drawerWidth={drawerWidth}
+          handleDrawerOpen={handleDrawerOpen}
+          handleDrawerClose={handleDrawerClose}
+          setOpen={setOpen}
+          DrawerHeader={DrawerHeader}
+        />
         <Main open={open}>
           <AnimatePresence exitBeforeEnter>
             <Routes key={location.pathname} location={location}>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/HomePage" element={<HomePage />} />
+              <Route path="/" element={<DATA_CENTER />} />
+              <Route path="/DATA_CENTER" element={<DATA_CENTER />} />
+              <Route path="*" element={<Page404 />} />
+            </Routes>
+          </AnimatePresence>
+        </Main>
+      </IntlProvider>
+    );
+  } else if (location.pathname === '/ROPA') {
+    return <Signin />
+  } else if (nAC_MENU.includes(location.pathname) === true || (location.pathname.split('/')[3]??''.includes('NAC') === true)) {
+    return (
+      <IntlProvider>
+        <NavBar
+          AppBar={AppBar}
+          theme={theme}
+          open={open}
+          drawerWidth={drawerWidth}
+          handleDrawerOpen={handleDrawerOpen}
+          handleDrawerClose={handleDrawerClose}
+          DrawerHeader={DrawerHeader}
+        />
+        <Main open={open}>
+          <AnimatePresence exitBeforeEnter>
+            <Routes key={location.pathname} location={location}>
+              <Route path="/NAC_MAIN" element={<HomePage />} />
               <Route path="/Report" element={<Report />} />
               <Route path="/ReportAll" element={<ReportAll />} />
               <Route path="/AssetPage" element={<AssetPage />} />
@@ -150,8 +203,9 @@ function App() {
             </Routes>
           </AnimatePresence>
         </Main>
-    </IntlProvider>
-  );
+      </IntlProvider>
+    );
+  }
 }
 
 export default App;

@@ -234,7 +234,7 @@ export default function NAC_ROW() {
     } else if (selectNAC.workflowtypeid === 5) {
       navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + selectNAC.nac_code)
     } else {
-      navigate('/HomePage')
+      navigate('/NAC_MAIN')
     }
   };
 

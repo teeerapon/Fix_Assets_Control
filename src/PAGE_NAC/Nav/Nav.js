@@ -65,10 +65,6 @@ async function ChackUserWeb(credentials) {
 export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, open, handleDrawerOpen, handleDrawerClose }) {
   const classes = useStyles();
   const [auth] = React.useState(true);
-  const [auth2] = React.useState(true);
-  const [auth3] = React.useState(true);
-  const [auth4] = React.useState(true);
-  const [auth5] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorEl2, setAnchorEl2] = React.useState(null);
   const [anchorEl3, setAnchorEl3] = React.useState(null);
@@ -115,70 +111,52 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
 
   function PeriodOpen() {
     navigate('/CreatePeriod')
-    setAnchorEl3(null);
+
   };
 
   function HomePage() {
-
-    navigate('/HomePage')
-    setAnchorEl3(null);
+    navigate('/')
+    handleDrawerClose()
   };
 
   function PeriodEdit() {
     navigate('/EditPeriod')
-    setAnchorEl3(null);
   };
 
   function REPORT() {
     navigate('/Report')
-    setAnchorEl3(null);
   };
 
   function History_of_Assets() {
     navigate('/History_of_Assets')
-    setAnchorEl3(null);
   };
 
   function NAC_NAC() {
     navigate('/NAC_CREATE_MAIN1')
-    setAnchorEl3(null);
-    setAnchorEl5(null);
   };
 
   function NAC_NEW() {
     navigate('/NAC_CREATE_STEP1')
-    setAnchorEl3(null);
-    setAnchorEl5(null);
   };
 
   function NAC_CHANGE() {
     navigate('/NAC_CHANGE_STEP1')
-    setAnchorEl3(null);
-    setAnchorEl5(null);
   }
 
   function NAC_DELETE() {
     navigate('/NAC_DELETE_STEP1')
-    setAnchorEl3(null);
-    setAnchorEl5(null);
   }
 
   function NAC_SEALS() {
     navigate('/NAC_SEALS_STEP1')
-    setAnchorEl3(null);
-    setAnchorEl5(null);
   }
 
   function DOC_NAC_ME() {
     navigate('/NAC_ROW')
-    setAnchorEl3(null);
-    setAnchorEl5(null);
   }
 
   function NAC_OPERATOR() {
     navigate('/NAC_OPERATOR')
-    setAnchorEl3(null);
-    setAnchorEl5(null);
   }
 
   const handleLogout = () => {
@@ -203,39 +181,6 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenu2 = (event) => {
-    setAnchorEl2(event.currentTarget);
-  };
-
-  const handleMenu3 = (event) => {
-    setAnchorEl3(event.currentTarget);
-  };
-
-  const handleMenu4 = (event) => {
-    setAnchorEl4(event.currentTarget);
-  };
-
-  const handleClose4 = () => {
-    setAnchorEl4(null);
-  };
-
-  const handleMenu5 = (event) => {
-    setAnchorEl5(event.currentTarget);
-  };
-
-  const handleClose5 = () => {
-    setAnchorEl3(null);
-    setAnchorEl5(null);
-  };
-
-  const handleClose3 = () => {
-    setAnchorEl3(null);
-  };
-
-  const handleClose2 = () => {
-    setAnchorEl2(null);
-  };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -255,7 +200,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
           <ThemeProvider theme={darkTheme}>
-            <AppBar position="static" open={open} style={{ backgroundColor: 'rgb(0,0,0)' }}>
+            <AppBar position="static" open={open} >
               <Toolbar>
                 <IconButton
                   color="inherit"
@@ -266,139 +211,45 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                 >
                   <MenuIcon />
                 </IconButton>
-                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                  <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
+                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} style={{ height: 80 }}>
+                  <Button disabled={checkUserWeb === 'admin' ? false : true} onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
                     <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                      <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                        HOME
+                      <Typography
+                        style={{ color: '#ea0c80' }}
+                        variant="h5"
+                        component="React.Fragment"
+                        noWrap
+                        sx={{
+                          flexGrow: 1,
+                          fontFamily: 'monospace',
+                          fontWeight: 700,
+                          letterSpacing: '.5rem',
+                          color: 'inherit',
+                          textDecoration: 'none',
+                        }}
+                        className={classes.root}
+                      >
+                        <b>DATA</b>
+                      </Typography>
+                      <Typography
+                        style={{ color: '#07519e' }}
+                        variant="h5"
+                        component="React.Fragment"
+                        noWrap
+                        sx={{
+                          flexGrow: 1,
+                          fontFamily: 'monospace',
+                          fontWeight: 700,
+                          letterSpacing: '.5rem',
+                          color: 'inherit',
+                          textDecoration: 'none',
+                        }}
+                        className={classes.root}
+                      >
+                        CENTER
                       </Typography>
                     </div>
                   </Button>
-                  {/* {auth3 && (
-                    <React.Fragment>
-                      <Button onClick={handleMenu3} sx={{ my: 2, color: 'white', display: 'block' }}>
-                        <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                          <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                            NAC
-                          </Typography>
-                        </div>
-                      </Button>
-                      <Menu
-                        sx={{ mt: '45px' }}
-                        id="menu-appbar"
-                        anchorEl={anchorEl3}
-                        anchorOrigin={{
-                          vertical: 'top',
-                          horizontal: 'left',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'left',
-                        }}
-                        open={Boolean(anchorEl3)}
-                        onClose={handleClose3}
-                      >
-                        {auth5 && (
-                          <React.Fragment>
-                            <MenuItem onClick={handleMenu5}>
-                              <Grid container spacing={1}>
-                                <Grid item xs={10}>
-                                  จัดการทรัพย์สินถาวร
-                                </Grid>
-                                <Grid item xs={2}>
-                                  <ArrowRightIcon />
-                                </Grid>
-                              </Grid>
-                            </MenuItem>
-                            <Menu
-                              id="menu-appbar"
-                              anchorEl={anchorEl5}
-                              anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                              }}
-                              keepMounted
-                              transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                              }}
-                              open={Boolean(anchorEl5)}
-                              onClose={handleClose5}
-                            >
-                              <MenuItem onClick={NAC_NEW}>เพิ่มบัญชีทรัพย์สินถาวร</MenuItem>
-                              <MenuItem onClick={NAC_NAC}>โยกย้ายทรัพย์สิน</MenuItem>
-                              <MenuItem onClick={NAC_CHANGE}>เปลี่ยนแปลงรายละเอียดทรัพย์สิน</MenuItem>
-                              <MenuItem onClick={NAC_DELETE}>ตัดจากบัญชีทรัพย์สินถาวร</MenuItem>
-                              <MenuItem onClick={NAC_SEALS}>ขายทรัพย์สิน</MenuItem>
-                            </Menu>
-                          </React.Fragment>
-                        )}
-                        <MenuItem onClick={DOC_NAC_ME}>สถานะรายการ NAC</MenuItem>
-                        <MenuItem onClick={NAC_OPERATOR}>สถานะรายการ NAC ทั้งหมด</MenuItem>
-                      </Menu>
-                    </React.Fragment>
-                  )}
-                  {auth4 && (
-                    <React.Fragment>
-                      <Button onClick={REPORT} sx={{ my: 2, color: 'white', display: 'block' }}>
-                        <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                          <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                            REPORT
-                          </Typography>
-                        </div>
-                      </Button>
-                      <Menu
-                        sx={{ mt: '45px' }}
-                        id="menu-appbar"
-                        anchorEl={anchorEl4}
-                        anchorOrigin={{
-                          vertical: 'top',
-                          horizontal: 'left',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'left',
-                        }}
-                        open={Boolean(anchorEl4)}
-                        onClose={handleClose4}
-                      >
-                        <MenuItem onClick={REPORT}>กำหนดสาขา</MenuItem>
-                        <MenuItem onClick={handleClose4}>รายงานสถานะรายการ NAC</MenuItem>
-                      </Menu>
-                    </React.Fragment>
-                  )}
-                  {auth2 && (
-                    <React.Fragment>
-                      <Button onClick={handleMenu2} sx={{ my: 2, color: 'white', display: 'block' }}>
-                        <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                          <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                            PERIOD
-                          </Typography>
-                        </div>
-                      </Button>
-                      <Menu
-                        sx={{ mt: '45px' }}
-                        id="menu-appbar"
-                        anchorEl={anchorEl2}
-                        anchorOrigin={{
-                          vertical: 'top',
-                          horizontal: 'left',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'left',
-                        }}
-                        open={Boolean(anchorEl2)}
-                        onClose={handleClose2}
-                      >
-                        <MenuItem onClick={PeriodOpen}>เพิ่มรอบตรวจนับ</MenuItem>
-                        <MenuItem onClick={PeriodEdit}>แก้ไขรอบตรวจนับ</MenuItem>
-                      </Menu>
-                    </React.Fragment>
-                  )} */}
                 </Box>
                 <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
                   <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
@@ -441,11 +292,11 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                     </Box>
                   </React.Fragment>
                 )}
-                <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                {/* <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
                   <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
                     {checkUserWeb === 'admin' ? 'ADMIN' : checkUserWeb === 'OPERATOR II' ? 'operatorII' : 'OPERATOR I'}
                   </Typography>
-                </div>
+                </div> */}
               </Toolbar>
             </AppBar>
             <Drawer
@@ -688,7 +539,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
       <>
         <Box sx={{ display: 'flex' }}>
           <ThemeProvider theme={darkTheme}>
-            <AppBar position="static" open={open} style={{ backgroundColor: 'rgb(0,0,0)' }}>
+            <AppBar position="static" open={open} >
               <Toolbar>
                 <IconButton
                   color="inherit"
@@ -699,107 +550,45 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                 >
                   <MenuIcon />
                 </IconButton>
-                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                  <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
+                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} style={{ height: 80 }}>
+                  <Button disabled={checkUserWeb === 'admin' ? false : true} onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
                     <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                      <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                        HOME
+                      <Typography
+                        style={{ color: '#ea0c80' }}
+                        variant="h5"
+                        component="React.Fragment"
+                        noWrap
+                        sx={{
+                          flexGrow: 1,
+                          fontFamily: 'monospace',
+                          fontWeight: 700,
+                          letterSpacing: '.5rem',
+                          color: 'inherit',
+                          textDecoration: 'none',
+                        }}
+                        className={classes.root}
+                      >
+                        <b>DATA</b>
+                      </Typography>
+                      <Typography
+                        style={{ color: '#07519e' }}
+                        variant="h5"
+                        component="React.Fragment"
+                        noWrap
+                        sx={{
+                          flexGrow: 1,
+                          fontFamily: 'monospace',
+                          fontWeight: 700,
+                          letterSpacing: '.5rem',
+                          color: 'inherit',
+                          textDecoration: 'none',
+                        }}
+                        className={classes.root}
+                      >
+                        CENTER
                       </Typography>
                     </div>
                   </Button>
-                  {/* {auth3 && (
-                    <React.Fragment>
-                      <Button onClick={handleMenu3} sx={{ my: 2, color: 'white', display: 'block' }}>
-                        <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                          <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                            NAC
-                          </Typography>
-                        </div>
-                      </Button>
-                      <Menu
-                        sx={{ mt: '45px' }}
-                        id="menu-appbar"
-                        anchorEl={anchorEl3}
-                        anchorOrigin={{
-                          vertical: 'top',
-                          horizontal: 'left',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'left',
-                        }}
-                        open={Boolean(anchorEl3)}
-                        onClose={handleClose3}
-                      >
-                        {auth5 && (
-                          <React.Fragment>
-                            <MenuItem onClick={handleMenu5}>
-                              <Grid container spacing={1}>
-                                <Grid item xs={10}>
-                                  จัดการทรัพย์สินถาวร
-                                </Grid>
-                                <Grid item xs={2}>
-                                  <ArrowRightIcon />
-                                </Grid>
-                              </Grid>
-                            </MenuItem>
-                            <Menu
-                              id="menu-appbar"
-                              anchorEl={anchorEl5}
-                              anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                              }}
-                              keepMounted
-                              transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                              }}
-                              open={Boolean(anchorEl5)}
-                              onClose={handleClose5}
-                            >
-                              <MenuItem onClick={NAC_NAC}>โยกย้ายทรัพย์สิน</MenuItem>
-                              <MenuItem onClick={NAC_CHANGE}>เปลี่ยนแปลงรายละเอียดทรัพย์สิน</MenuItem>
-                              <MenuItem onClick={NAC_DELETE}>ตัดจากบัญชีทรัพย์สินถาวร</MenuItem>
-                              <MenuItem onClick={NAC_SEALS}>ขายทรัพย์สิน</MenuItem>
-                            </Menu>
-                          </React.Fragment>
-                        )}
-                        <MenuItem onClick={DOC_NAC_ME}>สถานะรายการ NAC</MenuItem>
-                      </Menu>
-                    </React.Fragment>
-                  )}
-                  {auth4 && (
-                    <React.Fragment>
-                      <Button onClick={REPORT} sx={{ my: 2, color: 'white', display: 'block' }}>
-                        <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                          <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                            REPORT
-                          </Typography>
-                        </div>
-                      </Button>
-                      <Menu
-                        sx={{ mt: '45px' }}
-                        id="menu-appbar"
-                        anchorEl={anchorEl4}
-                        anchorOrigin={{
-                          vertical: 'top',
-                          horizontal: 'left',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'left',
-                        }}
-                        open={Boolean(anchorEl4)}
-                        onClose={handleClose4}
-                      >
-                        <MenuItem onClick={REPORT}>กำหนดสาขา</MenuItem>
-                        <MenuItem onClick={handleClose4}>แสดงทั้งหมด</MenuItem>
-                      </Menu>
-                    </React.Fragment>
-                  )} */}
                 </Box>
                 <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
                   <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
@@ -842,11 +631,11 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                     </Box>
                   </React.Fragment>
                 )}
-                <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                {/* <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
                   <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
                     USER
                   </Typography>
-                </div>
+                </div> */}
               </Toolbar>
             </AppBar>
             <Drawer

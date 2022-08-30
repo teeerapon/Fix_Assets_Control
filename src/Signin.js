@@ -10,6 +10,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import swal from 'sweetalert';
 import { useLocation } from 'react-router';
+//DATA_CENTER
+import DATA_CENTER from './DATA_CENTER/data_center'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -95,7 +97,7 @@ export default function Signin() {
           localStorage.setItem('token', response['token']);
           localStorage.setItem('data', JSON.stringify(response['data'][0]));
           localStorage.setItem('permission', JSON.stringify(responseForPermission['data']));
-          window.location.href = "/HomePage";
+          window.location.href = '/NAC_MAIN';
           }
         });
       } else {

@@ -19,15 +19,11 @@ import swal from 'sweetalert';
 import { useNavigate } from "react-router";
 import Stack from '@mui/material/Stack';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import TableContainer from '@mui/material/TableContainer';
-import TableBody from '@mui/material/TableBody';
-import Link from '@mui/material/Link';
-//import List from '@mui/material/List';
+import Tooltip from '@mui/material/Tooltip';
+import Chip from '@mui/material/Chip';
 
 const theme = createTheme();
 
@@ -223,7 +219,8 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
             container
             direction="row"
             spacing={5}
-            alignItems="flex-start" sx={{ pb: 2 }}
+            alignItems="flex-start"
+            sx={{ pb: 2, pt: 2 }}
           >
             <Grid
               item
@@ -256,34 +253,25 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                       <React.Fragment></React.Fragment>
                     ) : (
                       <React.Fragment>
-                        <TableContainer sx={{ p: 2 }}>
-                          <Table aria-label="customized table" style={{ width: '100%' }}>
-                            <TableHead>
-                              <TableRow>
-                                <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>คำอธิบาย</StyledTableCell>
-                                <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>ลิ้งแนบ</StyledTableCell>
-                              </TableRow>
-                            </TableHead>
+                        <Box sx={{ flexGrow: 1 }}>
+                          <Grid container sx={{ p: 1, pb: 0 }}>
                             {pathFetch.map((res, index) => (
                               <React.Fragment>
-                                <TableBody>
-                                  <StyledTableRow>
-                                    <StyledTableCell align="left" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                                      {res.userid} : {res.description}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="center" style={{ "borderWidth": "1px", 'borderColor': "#aaaaaa" }}>
-                                      <TextField
-                                        variant='standard'
-                                        value={res.linkpath}
-                                        onClick={() => window.open(res.linkpath, "_blank")}
-                                      />
-                                    </StyledTableCell>
-                                  </StyledTableRow>
-                                </TableBody>
+                                <Grid item>
+                                  <Tooltip title={res.linkpath}>
+                                    <Chip
+                                      variant="contained"
+                                      onClick={() => window.open(res.linkpath, "_blank")}
+                                      sx={{ m: 0.5 }}
+                                      label={res.userid + ' : ' + res.description}
+                                      style={{ maxWidth: 'fit-content' }}
+                                    />
+                                  </Tooltip>
+                                </Grid>
                               </React.Fragment>
                             ))}
-                          </Table>
-                        </TableContainer>
+                          </Grid>
+                        </Box>
                       </React.Fragment>
                     )}
                   </Box>
@@ -357,9 +345,6 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                                 'color': (res.userid === data.UserCode) ? 'white' : 'black'
                                 , 'padding-bottom': '12px'
                               }}>
-                                {/* <Typography sx={{ fontSize: 12 }}>
-                                  {(res.create_date).split('T')[0]}  {(res.create_date).split('T')[1].split('.')[0]}
-                                </Typography> */}
                                 <Typography sx={{ fontSize: 14 }}>
                                   {res.comment}
                                 </Typography>
@@ -370,18 +355,6 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                       </CardContent>
                     </React.Fragment>
                   ))}
-                  {/* <List
-                    id='scroll-input'
-                    sx={{
-                      width: '100%',
-                      bgcolor: 'background.paper',
-                      position: 'relative',
-                      overflow: 'auto',
-                      maxHeight: 'auto',
-                      '& ul': { padding: 0 },
-                    }}
-                    subheader={<li />}> */}
-                  {/* </List> */}
                   <CardActions titleTypographyProps={{ align: 'center' }}
                     subheaderTypographyProps={{
                       align: 'center',
