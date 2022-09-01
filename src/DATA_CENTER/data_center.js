@@ -55,21 +55,24 @@ const mainFeaturedPost = [
 const featuredPosts = [
   {
     title: 'Notice of Asset Change',
+    thai_sub: 'การเปลี่ยนแปลงทรัพย์สิน',
     initial: 'NAC',
     description: '',
     url_link: '/NAC_MAIN',
   },
   {
     title: 'Online Billing System',
+    thai_sub: 'ระบบการเรียกเก็บเงินออนไลน์',
     initial: 'OBS',
     description: '',
     url_link: '/',
   },
   {
     title: 'Record of Processing Activity',
+    thai_sub: 'บันทึกกิจกรรมการประมวลข้อมูลส่วนบุคคล',
     initial: 'RoPA',
     description: '',
-    url_link: '/',
+    url_link: '/ROPA_MAIN',
   },
 ];
 
@@ -97,7 +100,7 @@ export default function Blog() {
               backgroundColor: 'grey.800',
               color: '#fff',
               mb: 4,
-              height: '350px',
+              height: '330px',
               backgroundSize: 'cover',
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',
@@ -213,8 +216,19 @@ export default function Blog() {
                             alignItems: 'baseline',
                           }}
                         >
-                          <Typography component="body1" variant="body2" color="text.primary">
+                          <Typography component="body1" variant="body2" color="text.primary" sx={{ fontWeight: 'bold' }}>
                             {post.title}
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'baseline',
+                          }}
+                        >
+                          <Typography variant="caption" color="text.primary" sx={{ pt: 0.5 }}>
+                            {post.thai_sub}
                           </Typography>
                         </Box>
                       </CardContent>
@@ -230,17 +244,6 @@ export default function Blog() {
                       </CardActions>
                     </Card>
                   </Grid>
-                  // <Grid item xs={12} md={4}>
-                  //   <CardActionArea component="a" onClick={() => navigate(post.url_link)}>
-                  //     <Card sx={{ display: 'flex' }}>
-                  //       <CardContent sx={{ flex: 1 }} style={{ textAlign: 'center' }}>
-                  //         <Typography component="h2" variant="body2">
-                  //           {post.title}
-                  //         </Typography>
-                  //       </CardContent>
-                  //     </Card>
-                  //   </CardActionArea>
-                  // </Grid>
                 ))}
               </Grid>
             </main>

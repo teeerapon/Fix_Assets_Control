@@ -21,9 +21,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import CategoryIcon from '@mui/icons-material/Category';
-import ReceiptIcon from '@mui/icons-material/Receipt';
-import SecurityIcon from '@mui/icons-material/Security';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,6 +77,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
 
   function HomePage() {
     navigate('/')
+    handleDrawerClose();
   };
 
   const handleLogout = () => {
@@ -116,285 +115,144 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
     },
   });
 
-  if (checkUserWeb === 'admin' || checkUserWeb === 'operatorII' || checkUserWeb === 'operatorI') {
-    return (
-      <>
-        <Box sx={{ display: 'flex' }}>
-          <CssBaseline />
-          <ThemeProvider theme={darkTheme}>
-            <AppBar position="static" open={open} >
-              <Toolbar>
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  onClick={handleDrawerOpen}
-                  edge="start"
-                  sx={{ mr: 2, ...(open && { display: 'none' }) }}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} style={{ height: 80 }}>
-                  <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
-                    <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                      <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                        HOME
-                      </Typography>
-                    </div>
-                  </Button>
-                </Box>
-                <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                  <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                    {data.name}
-                  </Typography>
-                </div>
-                {auth && (
-                  <React.Fragment>
-                    <Box sx={{ flexGrow: 0 }}>
-                      <IconButton
-                        size="large"
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
-                        onClick={handleMenu}
-                        color="inherit"
-                      >
+  return (
+    <>
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <ThemeProvider theme={darkTheme}>
+          <AppBar position="static" open={open} >
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{ mr: 2, ...(open && { display: 'none' }) }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} style={{ height: 80 }}>
+                <Button disabled={checkUserWeb === 'admin' ? false : true} onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
+                  <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                    <Typography
+                      style={{ color: '#ea0c80' }}
+                      variant="h5"
+                      component="React.Fragment"
+                      noWrap
+                      sx={{
+                        flexGrow: 1,
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        letterSpacing: '.5rem',
+                        color: 'inherit',
+                        textDecoration: 'none',
+                      }}
+                      className={classes.root}
+                    >
+                      <b>DATA</b>
+                    </Typography>
+                    <Typography
+                      style={{ color: '#07519e' }}
+                      variant="h5"
+                      component="React.Fragment"
+                      noWrap
+                      sx={{
+                        flexGrow: 1,
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        letterSpacing: '.5rem',
+                        color: 'inherit',
+                        textDecoration: 'none',
+                      }}
+                      className={classes.root}
+                    >
+                      CENTER
+                    </Typography>
+                  </div>
+                </Button>
+              </Box>
+              <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+                <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
+                  {data.name}
+                </Typography>
+              </div>
+              {auth && (
+                <React.Fragment>
+                  <Box sx={{ flexGrow: 0 }}>
+                    <IconButton
+                      size="large"
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      color="inherit"
+                    >
 
-                        <AccountCircle />
-                      </IconButton>
-                      <Menu
-                        sx={{ mt: '45px' }}
-                        id="menu-appbar"
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right',
-                        }}
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                      >
-                        <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleLogout}>Log Out</MenuItem>
-                      </Menu>
-                    </Box>
-                  </React.Fragment>
-                )}
-                <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                  <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                    {checkUserWeb === 'admin' ? 'ADMIN' : checkUserWeb === 'OPERATOR II' ? 'operatorII' : 'OPERATOR I'}
-                  </Typography>
-                </div>
-              </Toolbar>
-            </AppBar>
-            <Drawer
-              sx={{
-                flexShrink: 0,
-                '& .MuiDrawer-paper': {
-                  width: drawerWidth,
-                  boxSizing: 'border-box',
-                },
-              }}
-              variant="persistent"
-              anchor="left"
-              open={open}
-            >
-              <DrawerHeader>
-                <IconButton onClick={handleDrawerClose}>
-                  {theme.direction === 'ltr' ? <CloseIcon fontSize="small" /> : <CloseIcon />}
-                </IconButton>
-              </DrawerHeader>
-              <Divider />
-              <List>
-                <ListItem disablePadding>
-                  <ListItemButton onClick={() => navigate('/HomePage')}>
-                    <ListItemIcon><CategoryIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        NAC
-                      </Typography>
-                    </ListItemText>
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon><ReceiptIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        OB
-                      </Typography>
-                    </ListItemText>
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon><SecurityIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        ROPA
-                      </Typography>
-                    </ListItemText>
-                  </ListItemButton>
-                </ListItem>
-              </List>
-              <Divider />
-            </Drawer>
-            <Outlet />
-          </ThemeProvider>
-        </Box >
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Box sx={{ display: 'flex' }}>
-          <ThemeProvider theme={darkTheme}>
-            <AppBar position="static" open={open} >
-              <Toolbar>
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  onClick={handleDrawerOpen}
-                  edge="start"
-                  sx={{ mr: 2, ...(open && { display: 'none' }) }}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} style={{ height: 80 }}>
-                  <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
-                    <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                      <Typography variant="subtitle1" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                        HOME
-                      </Typography>
-                    </div>
-                  </Button>
-                </Box>
-                <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                  <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                    {data.name}
-                  </Typography>
-                </div>
-                {auth && (
-                  <React.Fragment>
-                    <Box sx={{ flexGrow: 0 }}>
-                      <IconButton
-                        size="large"
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
-                        onClick={handleMenu}
-                        color="inherit"
-                      >
+                      <AccountCircle />
+                    </IconButton>
+                    <Menu
+                      sx={{ mt: '45px' }}
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+                    </Menu>
+                  </Box>
+                </React.Fragment>
+              )}
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            sx={{
+              flexShrink: 0,
+              '& .MuiDrawer-paper': {
+                width: drawerWidth,
+                boxSizing: 'border-box',
+              },
+            }}
+            variant="persistent"
+            anchor="left"
+            open={open}
+          >
+            <DrawerHeader>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === 'ltr' ? <CloseIcon fontSize="small" /> : <CloseIcon />}
+              </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => navigate('/PERMISSION_TO_ROPA')}>
+                  <ListItemIcon><AccountBoxIcon fontSize="small" /></ListItemIcon>
+                  <ListItemText>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                    >
+                      ผู้มีสิทธิ์เข้าถึงข้อมูล
+                    </Typography>
+                  </ListItemText>
+                </ListItemButton>
+              </ListItem>
+            </List>
+            <Divider />
+          </Drawer>
+          <Outlet />
+        </ThemeProvider>
+      </Box >
+    </>
+  );
 
-                        <AccountCircle />
-                      </IconButton>
-                      <Menu
-                        sx={{ mt: '45px' }}
-                        id="menu-appbar"
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right',
-                        }}
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                      >
-                        <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleLogout}>Log Out</MenuItem>
-                      </Menu>
-                    </Box>
-                  </React.Fragment>
-                )}
-                <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                  <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                    USER
-                  </Typography>
-                </div>
-              </Toolbar>
-            </AppBar>
-            <Drawer
-              sx={{
-                // width: drawerWidth,
-                flexShrink: 0,
-                '& .MuiDrawer-paper': {
-                  width: drawerWidth,
-                  boxSizing: 'border-box',
-                },
-              }}
-              variant="persistent"
-              anchor="left"
-              open={open}
-            >
-              <DrawerHeader>
-                <IconButton onClick={handleDrawerClose}>
-                  {theme.direction === 'ltr' ? <CloseIcon /> : <CloseIcon />}
-                </IconButton>
-              </DrawerHeader>
-              <Divider />
-              <List>
-                <ListItem disablePadding>
-                  <ListItemButton onClick={() => navigate('/HomePage')}>
-                    <ListItemIcon><CategoryIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        NAC
-                      </Typography>
-                    </ListItemText>
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon><ReceiptIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        OB
-                      </Typography>
-                    </ListItemText>
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon><SecurityIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        ROPA
-                      </Typography>
-                    </ListItemText>
-                  </ListItemButton>
-                </ListItem>
-              </List>
-              <Divider />
-            </Drawer>
-            <Outlet />
-          </ThemeProvider>
-        </Box>
-      </>
-    );
-  }
 }

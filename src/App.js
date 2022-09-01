@@ -1,12 +1,20 @@
 import React from 'react';
 import './App.css';
+import { IntlProvider } from 'react-intl';
+import { styled, useTheme } from '@mui/material/styles';
 import { AnimatePresence } from "framer-motion";
+// Routes //
 import Signin from './Signin';
+import Page404 from './Page404';
+import NavBar from './PAGE_NAC/Nav/Nav';
+import MuiAppBar from '@mui/material/AppBar';
+import { Route, Routes, useLocation, useParams } from "react-router";
+
+// NAC* //
 import Report from './PAGE_NAC/Menu/Report/Report';
 import ReportAll from './PAGE_NAC/Menu/Report/report_all';
 import AssetPage from './PAGE_NAC/Menu/Report/Assets';
 import AssetPage2 from './PAGE_NAC/Menu/Report/AssetsAll';
-import Page404 from './Page404';
 import HomePage from './PAGE_NAC/Menu/HomePage/HomePage';
 import History_of_Assets from './PAGE_NAC/Menu/NAC/historys/history_of_assets';
 import CreatePeriod from './PAGE_NAC/Menu/Period/Create/main';
@@ -28,16 +36,15 @@ import NAC_CHANGE_WAIT_APPROVE from './PAGE_NAC/Menu/NAC/nac_create/nac_change/n
 import NAC_CREATE_NEW_WAIT_APPROVE from './PAGE_NAC/Menu/NAC/nac_create/page_create/nac_create_wait_approve';
 import NAC_DELETE_WAIT_APPROVE from './PAGE_NAC/Menu/NAC/nac_create/nac_delete/nac_delete_wait_approve';
 import NAC_SEALS_APPROVE from './PAGE_NAC/Menu/NAC/nac_create/nac_Seals/nac_seals_approve';
-// Routes
-import NavBar from './PAGE_NAC/Nav/Nav';
-import { IntlProvider } from 'react-intl';
-import { styled, useTheme } from '@mui/material/styles';
-import MuiAppBar from '@mui/material/AppBar';
-import { Route, Routes, useLocation, useParams } from "react-router";
 
-//DATA_CENTER
+// DATA_CENTER* //
 import DATA_CENTER from './DATA_CENTER/data_center'
 import DATA_CENTER_NAV from './DATA_CENTER/Nav/Nav'
+
+// ROPA* //
+import ROPA_MAIN from './PAGE_ROPA/main';
+import ROPA_NAV from './PAGE_ROPA/Nav/Nav';
+import PERMISSION_TO_ROPA from './PAGE_ROPA/Menu/permission_to_ROPA';
 
 const drawerWidth = 240;
 
@@ -96,6 +103,11 @@ function App() {
   const token = localStorage.getItem('token');
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const roPA = [
+    '/ROPA_MAIN',
+    '/PERMISSION_TO_ROPA',
+    '*',
+  ]
   const nAC_MENU =
     [
       '/NAC_MAIN',
@@ -150,16 +162,36 @@ function App() {
           <AnimatePresence exitBeforeEnter>
             <Routes key={location.pathname} location={location}>
               <Route path="/" element={<DATA_CENTER />} />
-              <Route path="/DATA_CENTER" element={<DATA_CENTER />} />
               <Route path="*" element={<Page404 />} />
             </Routes>
           </AnimatePresence>
         </Main>
       </IntlProvider>
     );
-  } else if (location.pathname === '/ROPA') {
-    return <Signin />
-  } else if (nAC_MENU.includes(location.pathname) === true || (location.pathname.split('/')[3]??''.includes('NAC') === true)) {
+  } else if (roPA.includes(location.pathname) === true || (location.pathname.split('/')[3] ?? ''.includes('ROPA') === true)) {
+    return (
+      <IntlProvider>
+        <ROPA_NAV
+          AppBar={AppBar}
+          theme={theme}
+          open={open}
+          drawerWidth={drawerWidth}
+          handleDrawerOpen={handleDrawerOpen}
+          handleDrawerClose={handleDrawerClose}
+          DrawerHeader={DrawerHeader}
+        />
+        <Main open={open}>
+          <AnimatePresence exitBeforeEnter>
+            <Routes key={location.pathname} location={location}>
+              <Route path="/ROPA_MAIN" element={<ROPA_MAIN />} />
+              <Route path="/PERMISSION_TO_ROPA" element={<PERMISSION_TO_ROPA />} />
+              <Route path="*" element={<Page404 />} />
+            </Routes>
+          </AnimatePresence>
+        </Main>
+      </IntlProvider>
+    );
+  } else if (nAC_MENU.includes(location.pathname) === true || (location.pathname.split('/')[3] ?? ''.includes('NAC') === true)) {
     return (
       <IntlProvider>
         <NavBar

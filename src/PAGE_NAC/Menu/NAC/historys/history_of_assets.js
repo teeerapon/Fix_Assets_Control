@@ -9,12 +9,29 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import { alpha, styled } from '@mui/material/styles';
-import { DataGrid, gridClasses } from '@mui/x-data-grid';
+import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
 import Axios from "axios"
 
 const ODD_OPACITY = 0.2;
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
+  '.css-1knaqv7-MuiButtonBase-root-MuiButton-root': {
+    color: 'rgba(0, 0, 0, 1)',
+  },
+  '.css-f3jnds-MuiDataGrid-columnHeaders': {
+    backgroundColor: 'rgba(0, 0, 0, 1)',
+  },
+  '.css-1s0hp0k-MuiDataGrid-columnHeadersInner': {
+    backgroundColor: 'rgba(0, 0, 0, 1)',
+    color: 'rgba(255, 255, 255, 1)',
+    '.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root': {
+      color: 'rgba(255, 255, 255, 1)',
+      display: 'none'
+    },
+    '.css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root': {
+      color : 'rgba(255, 255, 255,1)'
+    },
+  },
   [`& .${gridClasses.row}.even`]: {
     backgroundColor: theme.palette.grey[100],
     '&:hover, &.Mui-hovered': {
@@ -145,7 +162,7 @@ export default function History_of_assets() {
       field: 'nacdtl_assetsPrice',
       headerName: 'ราคาทุน',
       headerClassName: 'super-app-theme--header',
-      width: 200,
+      width: 180,
       valueGetter: (params) =>
         `${params.row.nacdtl_assetsPrice.toLocaleString() || ''} บาท`,
     },
@@ -309,15 +326,8 @@ export default function History_of_assets() {
             </Stack>
             <Box
               sx={{
-                height: 400,
+                height: 450,
                 width: '100%',
-                '& .super-app-theme--header': {
-                  backgroundColor: 'rgba(0, 0, 0, 1)',
-                  color: 'rgba(255, 255, 255, 1)'
-                },
-                '.css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root': {
-                  color: 'rgba(255, 255, 255, 1)'
-                }
               }}
             >
               <StripedDataGrid
@@ -328,6 +338,7 @@ export default function History_of_assets() {
                   pt: 2,
                   boxShadow: 1,
                 }}
+                components={{ Toolbar: GridToolbar }}
                 rows={!dataHistory ? [] : dataHistory}
                 columns={columns}
                 getRowId={(dataHistory) => dataHistory.nacdtl_id}

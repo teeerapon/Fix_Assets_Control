@@ -2,10 +2,11 @@ import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
-import AnimatedPage from '../../../AnimatedPage.jsx'
+import AnimatedPage from '../AnimatedPage.jsx'
 import React from 'react';
 import Box from '@mui/material/Box';
-import logoPure from '../../../image/Picture1.png'
+import logoPure from '../image/Picture1.png'
+import CssBaseline from '@mui/material/CssBaseline';
 
 export default function MenuAppBar() {
   return (
@@ -22,7 +23,7 @@ export default function MenuAppBar() {
         <Toolbar>
           <AnimatedPage>
             <Typography variant="h5" color="inherit" noWrap>
-              หน้าแรกเว็บไซต์
+              หน้าแรกระบบบันทึกกิจกรรมการประมวลข้อมูลส่วนบุคคล
             </Typography>
           </AnimatedPage>
         </Toolbar>
@@ -30,27 +31,27 @@ export default function MenuAppBar() {
       <AnimatedPage>
         <Box
           sx={{
-            marginTop: 10,
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
+            minHeight: '45vh',
           }}
         >
-          <img style={{ maxWidth: '30%' }} src={logoPure} loading="lazy" />
-          <Container sx={{pt:1}}>
-            <body className="text-center text-dark bg-white" style={{ height: "50vh" }}>
-              <div className='container bg-white' style={{ height: "40vh", width: "100vh" }}>
-                <main className="px-3">
-                  <h1>PURE THAI ENERGY CO.,LTD</h1>
-                  <hr></hr>
-                  <p className="lead">ยินดีต้อนรับสู่เว็บไซต์เดโม เพียวพลังงานไทย จำกัด <b>(PURE THAI ENERGY CO.,LTD)</b> ที่ใช้สำหรับการจัดการเปลี่ยนแปลงและควบคุมระบบงานทรัพย์สินทั้งหมด</p>
-                </main>
-              </div>
-              <footer className="mt-auto text-dark-50 bg-white">
-                <p>Creater Page By <a href='https://www.facebook.com/TeeraponMARK/' className="text-dark">@Tps</a></p>
-                <div className='pt-2'></div>
-              </footer>
-            </body>
+          <CssBaseline />
+          <Container component="main" sx={{ mt: 8, mb: 0 }} maxWidth="md">
+            <center>
+              <img style={{ maxWidth: '50%' }} src={logoPure} loading="lazy" />
+              <Typography sx={{ mt: 2 }} variant="h3" component="h2" gutterBottom>
+                <b> {'(PURE THAI ENERGY CO.,LTD)'} </b>
+              </Typography>
+            </center>
+          </Container>
+          <Container component="main" sx={{ mt: 0, mb: 2 }} maxWidth="sm">
+            <center>
+              <Typography variant="h5" component="h2" gutterBottom>
+                {'ยินดีต้อนรับสู่เว็บไซต์เดโม เพียวพลังงานไทย จำกัด'}
+                {'ที่ใช้สำหรับการจัดการและประมวลข้อมูลส่วนบุคคล'}
+              </Typography>
+            </center>
           </Container>
         </Box>
       </AnimatedPage>
