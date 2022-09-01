@@ -168,7 +168,7 @@ function App() {
         </Main>
       </IntlProvider>
     );
-  } else if (roPA.includes(location.pathname) === true || (location.pathname.split('/')[3] ?? ''.includes('ROPA') === true)) {
+  } else if (roPA.includes(location.pathname) === true || ((location.pathname.split('/')[3] ?? '').includes('ROPA') === true)) {
     return (
       <IntlProvider>
         <ROPA_NAV
@@ -191,7 +191,7 @@ function App() {
         </Main>
       </IntlProvider>
     );
-  } else if (nAC_MENU.includes(location.pathname) === true || (location.pathname.split('/')[3] ?? ''.includes('NAC') === true)) {
+  } else if (nAC_MENU.includes(location.pathname) === true || ((location.pathname.split('/')[3] ?? '').includes('NAC') === true)) {
     return (
       <IntlProvider>
         <NavBar
