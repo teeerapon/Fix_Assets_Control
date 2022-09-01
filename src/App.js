@@ -182,7 +182,7 @@ function App() {
         />
         <Main open={open}>
           <AnimatePresence exitBeforeEnter>
-            <Routes key={location.pathname} location={location}></Routes>
+            <Routes key={location.pathname} location={location}>
               <Route path="/ROPA_MAIN" element={<ROPA_MAIN />} />
               <Route path="/PERMISSION_TO_ROPA" element={<PERMISSION_TO_ROPA />} />
               <Route path="*" element={<Page404 />} />
