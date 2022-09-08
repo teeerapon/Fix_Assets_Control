@@ -44,7 +44,8 @@ import DATA_CENTER_NAV from './DATA_CENTER/Nav/Nav'
 // ROPA* //
 import ROPA_MAIN from './PAGE_ROPA/main';
 import ROPA_NAV from './PAGE_ROPA/Nav/Nav';
-import PERMISSION_TO_ROPA from './PAGE_ROPA/Menu/permission_to_ROPA';
+import PERSON_ROPA from './PAGE_ROPA/Menu/Person_RoPA';
+
 
 const drawerWidth = 240;
 
@@ -105,7 +106,7 @@ function App() {
   const [open, setOpen] = React.useState(false);
   const roPA = [
     '/ROPA_MAIN',
-    '/PERMISSION_TO_ROPA',
+    '/PERSON_ROPA',
     '*',
   ]
   const nAC_MENU =
@@ -184,7 +185,7 @@ function App() {
           <AnimatePresence exitBeforeEnter>
             <Routes key={location.pathname} location={location}>
               <Route path="/ROPA_MAIN" element={<ROPA_MAIN />} />
-              <Route path="/PERMISSION_TO_ROPA" element={<PERMISSION_TO_ROPA />} />
+              <Route path="/PERSON_ROPA" element={<PERSON_ROPA />} />
               <Route path="*" element={<Page404 />} />
             </Routes>
           </AnimatePresence>

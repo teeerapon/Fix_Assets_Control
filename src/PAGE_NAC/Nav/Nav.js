@@ -21,7 +21,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import NoiseControlOffIcon from '@mui/icons-material/NoiseControlOff';
+import CircleIcon from '@mui/icons-material/Circle';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ViewTimelineIcon from '@mui/icons-material/AlignVerticalBottom';
 import SubjectIcon from '@mui/icons-material/ViewTimeline';
@@ -354,7 +354,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; เพิ่มบัญชีทรัพย์สินถาวร
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เพิ่มบัญชีทรัพย์สินถาวร
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -365,7 +365,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; โยกย้ายทรัพย์สิน
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; โยกย้ายทรัพย์สิน
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -376,7 +376,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; เปลี่ยนแปลงรายละเอียดทรัพย์สิน
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เปลี่ยนแปลงรายละเอียดทรัพย์สิน
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -387,7 +387,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; ตัดจากบัญชีทรัพย์สินถาวร
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตัดจากบัญชีทรัพย์สินถาวร
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -398,7 +398,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; ขายทรัพย์สิน
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ขายทรัพย์สิน
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -427,7 +427,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; สถานะรายการ NAC
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการ NAC
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -438,7 +438,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; สถานะรายการ NAC ทั้งหมด
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการ NAC ทั้งหมด
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -467,7 +467,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; เพิ่มรอบตรวจนับ
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เพิ่มรอบตรวจนับ
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -478,7 +478,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; แก้ไขรอบตรวจนับ
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; แก้ไขรอบตรวจนับ
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -507,7 +507,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; ประวัติทรัพย์สิน
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติทรัพย์สิน
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -694,7 +694,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; โยกย้ายทรัพย์สิน
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; โยกย้ายทรัพย์สิน
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -705,7 +705,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; เปลี่ยนแปลงรายละเอียดทรัพย์สิน
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เปลี่ยนแปลงรายละเอียดทรัพย์สิน
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -716,7 +716,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; ตัดจากบัญชีทรัพย์สินถาวร
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตัดจากบัญชีทรัพย์สินถาวร
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -727,7 +727,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; ขายทรัพย์สิน
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ขายทรัพย์สิน
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -756,7 +756,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <NoiseControlOffIcon sx={{ fontSize: 12 }} />&nbsp; สถานะรายการ NAC
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการ NAC
                         </Typography>
                       </ListItemText>
                     </ListItemButton>

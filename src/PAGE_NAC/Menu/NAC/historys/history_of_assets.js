@@ -20,6 +20,7 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
   },
   '.css-f3jnds-MuiDataGrid-columnHeaders': {
     backgroundColor: 'rgba(0, 0, 0, 1)',
+    color: 'rgba(255, 255, 255,1)',
   },
   '.css-1s0hp0k-MuiDataGrid-columnHeadersInner': {
     backgroundColor: 'rgba(0, 0, 0, 1)',
@@ -29,7 +30,7 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
       display: 'none'
     },
     '.css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root': {
-      color : 'rgba(255, 255, 255,1)'
+      color: 'rgba(255, 255, 255,1)'
     },
   },
   [`& .${gridClasses.row}.even`]: {
@@ -326,7 +327,7 @@ export default function History_of_assets() {
             </Stack>
             <Box
               sx={{
-                height: 450,
+                height: 480,
                 width: '100%',
               }}
             >
@@ -337,6 +338,9 @@ export default function History_of_assets() {
                   pr: 2,
                   pt: 2,
                   boxShadow: 1,
+                  [`& .${gridClasses.cell}`]: {
+                    py: 1,
+                  },
                 }}
                 components={{ Toolbar: GridToolbar }}
                 rows={!dataHistory ? [] : dataHistory}
@@ -344,6 +348,9 @@ export default function History_of_assets() {
                 getRowId={(dataHistory) => dataHistory.nacdtl_id}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
+                getRowHeight={() => 'auto'}
+                disableColumnMenu
+                autoHeight={!dataHistory ? true : false}
                 getRowClassName={(params) =>
                   params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                 }

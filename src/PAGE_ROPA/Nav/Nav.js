@@ -22,6 +22,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import TypeSpecimenIcon from '@mui/icons-material/TypeSpecimen';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -234,14 +236,27 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
             <Divider />
             <List>
               <ListItem disablePadding>
-                <ListItemButton onClick={() => navigate('/PERMISSION_TO_ROPA')}>
-                  <ListItemIcon><AccountBoxIcon fontSize="small" /></ListItemIcon>
+                <ListItemButton onClick={() => navigate('/PERSON_ROPA')}>
+                  <ListItemIcon><AdminPanelSettingsIcon fontSize="small" /></ListItemIcon>
                   <ListItemText>
                     <Typography
                       component="span"
                       variant="caption"
                     >
-                      ผู้มีสิทธิ์เข้าถึงข้อมูล
+                      สิทธิ์เข้าถึงข้อมูล
+                    </Typography>
+                  </ListItemText>
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon><TypeSpecimenIcon fontSize="small" /></ListItemIcon>
+                  <ListItemText>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                    >
+                      ประเภทของข้อมูล
                     </Typography>
                   </ListItemText>
                 </ListItemButton>
