@@ -348,7 +348,7 @@ export default function History_of_assets() {
                 getRowId={(dataHistory) => dataHistory.nacdtl_id}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
-                getRowHeight={() => 'auto'}
+                //getRowHeight={() => 'auto'}
                 disableColumnMenu
                 autoHeight={!dataHistory ? true : false}
                 getRowClassName={(params) =>

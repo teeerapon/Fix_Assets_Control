@@ -276,6 +276,18 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
+async function store_FA_control_drop_NAC(credentials) {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_drop_NAC', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 export default function Nac_Main_wait() {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
@@ -1454,71 +1466,21 @@ export default function Nac_Main_wait() {
     }
   }
 
-  const noneAssetsComplete = async () => {
+  const drop_NAC = async () => {
     const usercode = data.UserCode
-    const nac_status = 8
-    const source_approve = sourceApprove
-    const source_approve_date = sourceDateApproveDate
-    const des_delivery = des_delivery
-    const des_deliveryDate = datenow
-    const verify_by = bossApprove
-    const verify_date = bossApproveDate
-    const nac_type = headers.nac_type
-    const des_approve = null
-    const des_approve_date = null
-    const responseForUpdate = await store_FA_control_updateStatus({
+    const response = await store_FA_control_drop_NAC({
       usercode,
       nac_code,
-      nac_status,
-      nac_type,
-      source,
-      sourceDate,
-      des_delivery,
-      des_deliveryDate,
-      source_approve,
-      source_approve_date,
-      des_approve,
-      des_approve_date,
-      verify_by,
-      verify_date,
     });
-    if ('data' in responseForUpdate) {
-      const comment = 'ไม่เจอทรัพย์สินบางอย่างในรายการ'
-      const responseComment = await store_FA_control_comment({
-        nac_code,
-        usercode,
-        comment
-      })
-      if ('data' in responseComment) {
-        swal("ทำรายการสำเร็จ", 'คุณไม่พบทรัพย์สินในรายการ', "success", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-        });
-      } else {
-        swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-        });
-      }
-    }
-    if (nac_status === 8) {
-      for (let i = 0; i < checked.length; i++) {
-        const usercode = data.UserCode
-        const nacdtl_assetsCode = checked[i].assets_code
-        const asset_id = checked[i].asset_id
-        const statusCheck = checked[i].statusCheck
-        await stroe_FA_control_DTL_ConfirmSuccess({
-          nac_code,
-          usercode,
-          nacdtl_assetsCode,
-          asset_id,
-          statusCheck,
-        })
-      }
+    if ('data' in response) {
+      swal("ทำรายการสำเร็จ", 'ทำการลบรายการ ' + response.data[0].nac_code + ' แล้ว', "success", {
+        buttons: false,
+        timer: 2000,
+      }).then((value) => {
+        window.location.href = "/NAC_OPERATOR";
+      });
+    } else {
+      swal("ทำรายการไม่สำเร็จ", 'ไม่สามารถลบ ' + response.data[0].nac_code + ' ได้', "error")
     }
   }
 
@@ -2451,17 +2413,6 @@ export default function Nac_Main_wait() {
                         <Grid container>
                           <Grid item xs>
                           </Grid>
-                          {/* <Grid item xs={2}>
-                            <Button
-                              variant="contained"
-                              color='error'
-                              startIcon={<ClearRoundedIcon />}
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
-                              onClick={noneAssetsComplete}>
-                              ไม่รับทรัพย์สิน
-                            </Button>
-                          </Grid> */}
                           <Grid item xs={2}>
                             <Button
                               variant="contained"
@@ -2481,6 +2432,17 @@ export default function Nac_Main_wait() {
                               disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
                               onClick={handleSubmitComplete}>
                               รับทรัพย์สิน
+                            </Button>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Button
+                              variant="contained"
+                              color='error'
+                              startIcon={<ClearRoundedIcon />}
+                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                              disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
+                              onClick={drop_NAC}>
+                              ยกเลิกรายการ
                             </Button>
                           </Grid>
                           <Grid item xs>
@@ -2524,7 +2486,7 @@ export default function Nac_Main_wait() {
                 setDescription={setDescription}
                 setOpenDialog={setOpenDialog}
               />
-              
+
               <Dialog open={openDialogReply} onClose={handleCloseDialogReply} >
                 <DialogTitle>กรุณาระบุข้อความ/เหตุผล ที่ตีกลับเอกสาร</DialogTitle>
                 <DialogContent sx={{ width: 500 }}>

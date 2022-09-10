@@ -1018,7 +1018,7 @@ export default function Nac_Main() {
                     <StyledTableRow>
                       <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'border-right': 0 }}>
                         <Typography>
-                          รวมทั้งหมด
+                         ต้นทุนรวมทั้งหมด
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="start" style={{ border: `none` }}>

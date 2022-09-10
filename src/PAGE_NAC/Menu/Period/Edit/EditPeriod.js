@@ -101,7 +101,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function getPeriods(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/period_round', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/round_website', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -115,6 +115,7 @@ export default function EditPeriod() {
 
   const [EditPeriodData, setEditPeriodData] = React.useState(null);
   const data = JSON.parse(localStorage.getItem('data'));
+  console.log(data);
   const [periodData, setPeriodData] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -144,7 +145,7 @@ export default function EditPeriod() {
   };
 
   const fetchPeriodData = async () => {
-    const BranchID = data.BranchID;
+    const BranchID = data.branchid;
     const response_data = await getPeriods({
       BranchID
     })

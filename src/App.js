@@ -21,6 +21,7 @@ import CreatePeriod from './PAGE_NAC/Menu/Period/Create/main';
 import CreatePeriod2 from './PAGE_NAC/Menu/Period/Create/main2';
 import CreatePeriod3 from './PAGE_NAC/Menu/Period/Create/main3';
 import EditPeriod from './PAGE_NAC/Menu/Period/Edit/EditPeriod';
+import FETCH_ASSETS from './PAGE_NAC/Menu/Assets/main';
 // รายการ อนุมัติ และ ของฉัน
 import NAC_ROW from './PAGE_NAC/Menu/NAC/doc_nacs_me/nac_row';
 import NAC_OPERATOR from './PAGE_NAC/Menu/NAC/doc_operator/nac_row';
@@ -47,7 +48,7 @@ import ROPA_NAV from './PAGE_ROPA/Nav/Nav';
 import PERSON_ROPA from './PAGE_ROPA/Menu/Person_RoPA';
 
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -133,6 +134,7 @@ function App() {
       '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/',
       '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/',
       '/NAC_ROW/NAC_SEALS_APPROVE/',
+      '/FETCH_ASSETS',
       '*',
     ]
 
@@ -217,6 +219,7 @@ function App() {
               <Route path="/CreatePeriod3" element={<CreatePeriod3 />} />
               <Route path="/EditPeriod" element={<EditPeriod />} />
               <Route path="/History_of_Assets" element={<History_of_Assets />} />
+              <Route path="/FETCH_ASSETS" element={<FETCH_ASSETS />} />
               {/* รายการ อนุมัติ และ ของฉัน */}
               <Route path="/NAC_ROW" element={<NAC_ROW />} />
               <Route path="/NAC_OPERATOR" element={<NAC_OPERATOR />} />

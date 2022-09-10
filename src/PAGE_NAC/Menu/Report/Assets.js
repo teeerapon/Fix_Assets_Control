@@ -143,12 +143,6 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  // {
-  //   id: 'AssetID',
-  //   numeric: false,
-  //   disablePadding: true,
-  //   label: 'ทั้งหมด',
-  // },
   {
     id: 'Code',
     numeric: false,
@@ -197,6 +191,7 @@ function EnhancedTableHead(props) {
 
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, style } =
     props;
+
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -1138,6 +1133,22 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.string.isRequired,
 };
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+async function store_FA_control_CheckAssetCode_Process(credentials) {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_CheckAssetCode_Process', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 export default function EnhancedTable() {
 
   const AssetsAll = JSON.parse(localStorage.getItem('Allaseets'));
@@ -1152,6 +1163,8 @@ export default function EnhancedTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [forcheckAssetCount, setForcheckAssetCount] = React.useState()
   const [forcheckAssetWrong, setForcheckAssetWrong] = React.useState()
+  const [alert, setAlert] = React.useState(false);
+  const [valueAlert, setValueAlert] = React.useState(false);
 
 
   const rows = !sumArray_assets ? [] : sumArray_assets
@@ -1193,24 +1206,33 @@ export default function EnhancedTable() {
     setSelected([]);
   };
 
-  const handleClick = (event, Code) => {
-    const selectedIndex = selected.indexOf(Code);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, Code);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
+  const handleClick = async (event, Code) => {
+    const nacdtl_assetsCode = Code
+    const responseCheckAssetCode_Process = await store_FA_control_CheckAssetCode_Process({
+      nacdtl_assetsCode
+    })
+    console.log(responseCheckAssetCode_Process);
+    if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
+      const alert_value = 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ'
+      setAlert(true);
+      setValueAlert(alert_value)
+    } else {
+      const selectedIndex = selected.indexOf(Code);
+      let newSelected = [];
+      if (selectedIndex === -1) {
+        newSelected = newSelected.concat(selected, Code);
+      } else if (selectedIndex === 0) {
+        newSelected = newSelected.concat(selected.slice(1));
+      } else if (selectedIndex === selected.length - 1) {
+        newSelected = newSelected.concat(selected.slice(0, -1));
+      } else if (selectedIndex > 0) {
+        newSelected = newSelected.concat(
+          selected.slice(0, selectedIndex),
+          selected.slice(selectedIndex + 1),
+        );
+      }
+      setSelected(newSelected);
     }
-
-    setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -1232,8 +1254,23 @@ export default function EnhancedTable() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setAlert(false);
+  };
+
   return (
     <div>
+      <Stack spacing={2} sx={{ width: '100%' }}>
+        <Snackbar open={alert} autoHideDuration={4500} onClose={handleCloseAlert}>
+          <Alert onClose={handleCloseAlert} severity="warning" sx={{ width: '100%' }}>
+            {valueAlert}
+          </Alert>
+        </Snackbar>
+      </Stack>
       <AppBar
         position="absolute"
         color="default"

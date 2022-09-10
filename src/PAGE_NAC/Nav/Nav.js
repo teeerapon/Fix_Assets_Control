@@ -81,18 +81,30 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
 
   const handleClickList = (e, index) => {
     setOpenList(!openList);
+    setOpenList2(false)
+    setOpenList3(false)
+    setOpenList4(false)
   };
 
   const handleClickList2 = (e, index) => {
     setOpenList2(!openList2);
+    setOpenList(false);
+    setOpenList3(false)
+    setOpenList4(false)
   };
 
   const handleClickList3 = (e, index) => {
     setOpenList3(!openList3);
+    setOpenList(false);
+    setOpenList2(false);
+    setOpenList4(false);
   };
 
   const handleClickList4 = (e, index) => {
     setOpenList4(!openList4);
+    setOpenList(false);
+    setOpenList2(false);
+    setOpenList3(false);
   };
 
   const fetchCheckUser = async () => {
@@ -111,7 +123,6 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
 
   function PeriodOpen() {
     navigate('/CreatePeriod')
-
   };
 
   function HomePage() {
@@ -129,6 +140,10 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
 
   function History_of_Assets() {
     navigate('/History_of_Assets')
+  };
+
+  function FETCH_ASSETS() {
+    navigate('/FETCH_ASSETS')
   };
 
   function NAC_NAC() {
@@ -492,13 +507,39 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                         component="span"
                         variant="caption"
                       >
-                        History
+                        REPORT
                       </Typography>
                     </ListItemText>
                     {openList4 ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
                 </ListItem>
                 <Collapse in={openList4} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItemButton onClick={FETCH_ASSETS}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทรัพย์สินทั้งหมด
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                  </List>
+                  <List component="div" disablePadding>
+                    <ListItemButton onClick={REPORT}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; รายานตรวจนับทรัพย์สิน
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                  </List>
                   <List component="div" disablePadding>
                     <ListItemButton onClick={History_of_Assets}>
                       <ListItemText>
@@ -513,7 +554,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                     </ListItemButton>
                   </List>
                 </Collapse>
-                <ListItem disablePadding>
+                {/* <ListItem disablePadding>
                   <ListItemButton onClick={REPORT}>
                     <ListItemIcon><ViewTimelineIcon fontSize="small" /></ListItemIcon>
                     <ListItemText>
@@ -525,7 +566,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                       </Typography>
                     </ListItemText>
                   </ListItemButton>
-                </ListItem>
+                </ListItem> */}
               </List>
               <Divider />
             </Drawer>

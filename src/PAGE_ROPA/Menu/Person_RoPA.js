@@ -584,7 +584,7 @@ export default function Permission_to_RoPA() {
                   <div role="presentation">
                     <Breadcrumbs aria-label="breadcrumb">
                       <Chip variant="outlined" label="สิทธิ์เข้าถึงข้อมูล" onClick={backToPageI} />
-                      <Chip variant="outlined" label="ราชชื่อผู้ยินยอม" />
+                      <Chip variant="outlined" label="ราชชื่อผู้ยินยอม" color="primary" />
                     </Breadcrumbs>
                   </div>
                 </Stack> : rows_pageIII ?
@@ -597,7 +597,7 @@ export default function Permission_to_RoPA() {
                       <Breadcrumbs aria-label="breadcrumb">
                         <Chip variant="outlined" label="สิทธิ์เข้าถึงข้อมูล" onClick={backToPageI} />
                         <Chip variant="outlined" label="ราชชื่อผู้ยินยอม" onClick={backToPageII} />
-                        <Chip variant="outlined" label="ข้อมูลที่ยินยอม" />
+                        <Chip variant="outlined" label="ข้อมูลที่ยินยอม" color="primary" />
                       </Breadcrumbs>
                     </div>
                   </Stack> : rows_pageII_I ?
@@ -609,7 +609,7 @@ export default function Permission_to_RoPA() {
                       <div role="presentation">
                         <Breadcrumbs aria-label="breadcrumb">
                           <Chip variant="outlined" label="สิทธิ์เข้าถึงข้อมูล" onClick={backToPageI} />
-                          <Chip variant="outlined" label="รายชื่อผู้มีสิทธิ์" />
+                          <Chip variant="outlined" label="รายชื่อผู้มีสิทธิ์" color="primary" />
                         </Breadcrumbs>
                       </div>
                       <Button
@@ -628,7 +628,7 @@ export default function Permission_to_RoPA() {
                     >
                       <div role="presentation">
                         <Breadcrumbs aria-label="breadcrumb">
-                          <Chip variant="outlined" label="สิทธิ์เข้าถึงข้อมูล" />
+                          <Chip variant="outlined" label="สิทธิ์เข้าถึงข้อมูล" color="primary" />
                         </Breadcrumbs>
                       </div>
                     </Stack>
