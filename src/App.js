@@ -148,7 +148,10 @@ function App() {
 
   if (!token) {
     return <Signin />
-  } else if (location.pathname === ('/' || '/DATA_CENTER')) {
+    // } else if (location.pathname === ('/' || '/DATA_CENTER')) {
+    //  เอาตรงนี้ออกเมื่อ DataCenter เสร็จ
+  } else if (location.pathname === ('/DATA_CENTER')) {
+    // 
     return (
       <IntlProvider>
         <DATA_CENTER_NAV
@@ -194,7 +197,10 @@ function App() {
         </Main>
       </IntlProvider>
     );
-  } else if (nAC_MENU.includes(location.pathname) === true || ((location.pathname.split('/')[3] ?? '').includes('NAC') === true)) {
+    // } else if (nAC_MENU.includes(location.pathname) === true || ((location.pathname.split('/')[3] ?? '').includes('NAC') === true)) {
+    //  เอาตรงนี้ออกเมื่อ DataCenter เสร็จ
+  } else if (location.pathname === ('/') || nAC_MENU.includes(location.pathname) === true || ((location.pathname.split('/')[3] ?? '').includes('NAC') === true)) {
+    // 
     return (
       <IntlProvider>
         <NavBar
@@ -209,6 +215,9 @@ function App() {
         <Main open={open}>
           <AnimatePresence exitBeforeEnter>
             <Routes key={location.pathname} location={location}>
+              {/* เอาตรงนี้ออกเมื่อ DataCenter เสร็จ */}
+              <Route path="/" element={<HomePage />} />
+              {/*  */}
               <Route path="/NAC_MAIN" element={<HomePage />} />
               <Route path="/Report" element={<Report />} />
               <Route path="/ReportAll" element={<ReportAll />} />
