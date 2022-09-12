@@ -162,6 +162,12 @@ const headCells = [
     label: 'วันที่ตรวจนับ',
   },
   {
+    id: 'EndDate_Success',
+    numeric: false,
+    disablePadding: false,
+    label: 'วันที่ทำ NAC ล่าสุด',
+  },
+  {
     id: 'UserID',
     numeric: false,
     disablePadding: false,
@@ -1444,6 +1450,7 @@ export default function EnhancedTable() {
                           {/* <TableCell align="left" style={{ 'maxWidth': 'fit-content' }}>{row.Code}</TableCell> */}
                           <TableCell align="left" style={{ 'maxWidth': 'fit-content' }}>{row.Name}</TableCell>
                           <TableCell align="left" style={{ 'maxWidth': 'fit-content' }}>{!row.Date ? '' : row.Date.split('T')[0]}</TableCell>
+                          <TableCell align="left" style={{ 'maxWidth': 'fit-content' }}>{!row.EndDate_Success ? '' : row.EndDate_Success.split('T')[0]}</TableCell>
                           <TableCell align="left" style={{ 'maxWidth': 'fit-content' }}>{row.UserID}</TableCell>
                           <TableCell align="left" style={{ 'maxWidth': 'fit-content' }}>{row.detail}</TableCell>
                           <TableCell align="left" style={{ 'maxWidth': 'fit-content' }}>{row.Reference}</TableCell>
