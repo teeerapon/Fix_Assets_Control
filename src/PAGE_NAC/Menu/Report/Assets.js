@@ -775,9 +775,9 @@ const EnhancedTableToolbar = (props) => {
                   >
                     <option value={0}>None</option>
                     <option value={2}>โยกย้ายทรัพย์สิน</option>
-                    <option value={3}>เปลี่ยนแปลงรายละเอียดทรัพย์สิน</option>
-                    <option value={4}>ตัดจากบัญชีทรัพย์สินถาวร</option>
+                    {/* <option value={3}>เปลี่ยนแปลงรายละเอียดทรัพย์สิน</option> */}
                     <option value={5}>ขายทรัพย์สิน</option>
+                    <option value={4}>ตัดบัญชีทรัพย์สินถาวร</option>
                   </NativeSelect>
                 </FormControl>
               </Stack>

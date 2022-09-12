@@ -104,7 +104,7 @@ export default function History_of_assets() {
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 250 },
     { field: 'BranchID', headerName: 'สาขา', headerClassName: 'super-app-theme--header', width: 100 },
     { field: 'SerialNo', headerName: 'SerialNo', headerClassName: 'super-app-theme--header', flex: 1, },
-    { field: 'Details', headerName: 'รายละเอียด', headerClassName: 'super-app-theme--header', flex: 1, },
+    { field: 'Details', headerName: 'หมายเหตุ', headerClassName: 'super-app-theme--header', flex: 1, },
     {
       field: 'Price',
       headerName: 'ราคาทุน',

@@ -395,17 +395,6 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
-                    <ListItemButton onClick={NAC_DELETE}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตัดจากบัญชีทรัพย์สินถาวร
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
                     <ListItemButton onClick={NAC_SEALS}>
                       <ListItemText>
                         <Typography
@@ -414,6 +403,17 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           variant="caption"
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ขายทรัพย์สิน
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                    <ListItemButton onClick={NAC_DELETE}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตัดบัญชีทรัพย์สินถาวร
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -739,7 +739,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
-                    <ListItemButton onClick={NAC_CHANGE}>
+                    {/* <ListItemButton onClick={NAC_CHANGE}>
                       <ListItemText>
                         <Typography
                           sx={{ display: 'inline' }}
@@ -747,6 +747,17 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           variant="caption"
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เปลี่ยนแปลงรายละเอียดทรัพย์สิน
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton> */}
+                    <ListItemButton onClick={NAC_SEALS}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ขายทรัพย์สิน
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -757,18 +768,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตัดจากบัญชีทรัพย์สินถาวร
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    <ListItemButton onClick={NAC_SEALS}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ขายทรัพย์สิน
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตัดบัญชีทรัพย์สินถาวร
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
