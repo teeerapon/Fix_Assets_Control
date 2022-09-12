@@ -114,14 +114,14 @@ export default function History_of_assets() {
         `${params.row.Price.toLocaleString() || ''} บาท`,
     },
     { field: 'Position', headerName: 'Position', headerClassName: 'super-app-theme--header', width: 130 },
-    { 
+    {
       field: 'CreateDate',
-       headerName: 'วันที่ขึ้นทะเบียน', 
-       headerClassName: 'super-app-theme--header', 
-       width: 150,
-       valueGetter: (params) =>
-       `${params.row.CreateDate.split('T')[0]|| ''}`,
-  },
+      headerName: 'วันที่ขึ้นทะเบียน',
+      headerClassName: 'super-app-theme--header',
+      width: 150,
+      valueGetter: (params) =>
+        `${params.row.CreateDate.split('T')[0] || ''}`,
+    },
   ];
 
   React.useEffect(() => {
@@ -175,6 +175,7 @@ export default function History_of_assets() {
                   },
                 }}
                 components={{ Toolbar: GridToolbar }}
+                componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
                 rows={!dataHistory ? [] : dataHistory}
                 columns={columns}
                 getRowId={(dataHistory) => dataHistory.AssetID}
