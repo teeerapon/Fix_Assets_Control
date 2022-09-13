@@ -111,7 +111,7 @@ export default function History_of_assets() {
       headerClassName: 'super-app-theme--header',
       flex: 1,
       valueGetter: (params) =>
-        `${params.row.Price.toLocaleString() || ''} บาท`,
+        `${params.row.Price.toLocaleString() || ''}`,
     },
     { field: 'Position', headerName: 'Position', headerClassName: 'super-app-theme--header', width: 130 },
     {

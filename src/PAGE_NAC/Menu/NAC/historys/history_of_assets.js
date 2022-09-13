@@ -165,7 +165,7 @@ export default function History_of_assets() {
       headerClassName: 'super-app-theme--header',
       width: 180,
       valueGetter: (params) =>
-        `${params.row.nacdtl_assetsPrice.toLocaleString() || ''} บาท`,
+        `${params.row.nacdtl_assetsPrice.toLocaleString() || ''}`,
     },
     { field: 'nac_code', headerName: 'เลขที่ NAC', headerClassName: 'super-app-theme--header', width: 150, },
     { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', width: 230 },

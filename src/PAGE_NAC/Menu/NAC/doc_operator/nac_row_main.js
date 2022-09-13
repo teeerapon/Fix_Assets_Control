@@ -200,24 +200,24 @@ export default function History_of_assets() {
   }
 
   const columns = [
-    { field: 'nac_code', headerName: 'เลขที่เอกสาร', headerClassName: 'super-app-theme--header', width: 150 },
-    { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', width: 250 },
+    { field: 'nac_code', headerName: 'เลขที่เอกสาร', headerClassName: 'super-app-theme--header', width: 130, },
+    { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', flex: 1, },
     { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', width: 100 },
     {
       field: 'create_date',
       headerName: 'วันที่สร้างเอกสาร',
       headerClassName: 'super-app-theme--header',
-      flex: 1,
+      width: 130,
       valueGetter: (params) =>
         `${params.row.create_date.split('T')[0] || ''}`,
     },
-    { field: 'source_userid', headerName: 'ผู้ส่ง', headerClassName: 'super-app-theme--header', flex: 1, },
-    { field: 'des_userid', headerName: 'ผู้รับ', headerClassName: 'super-app-theme--header', flex: 1, },
+    { field: 'source_userid', headerName: 'ผู้ส่ง', headerClassName: 'super-app-theme--header', width: 100, },
+    { field: 'des_userid', headerName: 'ผู้รับ', headerClassName: 'super-app-theme--header', width: 100, },
     {
       field: 'status_name',
       headerName: 'สถานะรายการ',
       headerClassName: 'super-app-theme--header',
-      width: 130,
+      width: 160,
       renderCell: (params) => {
         return (
           <React.Fragment>
@@ -250,7 +250,7 @@ export default function History_of_assets() {
       field: 'nac_status',
       headerName: 'ผู้ตรวจสอบ/อนุมัติ',
       headerClassName: 'super-app-theme--header',
-      width: 150,
+      width: 130,
       valueGetter: (params) =>
         `${(params.row.nac_status === 2 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.vertify + '' :
           (params.row.nac_status === 3 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.approved + '' :
@@ -262,7 +262,10 @@ export default function History_of_assets() {
       field: 'action',
       headerName: 'Action',
       headerClassName: 'super-app-theme--header',
-      width: 180,
+      width: 160,
+      disableExport: true,
+      headerAlign: 'center',
+      align: 'center',
       renderCell: (params) => {
         return (
           <React.Fragment>
