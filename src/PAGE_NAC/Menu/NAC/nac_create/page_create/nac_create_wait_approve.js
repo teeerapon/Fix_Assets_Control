@@ -276,6 +276,18 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
+async function store_FA_control_drop_NAC(credentials) {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_drop_NAC', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 export default function Nac_Main_wait() {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
@@ -900,7 +912,7 @@ export default function Nac_Main_wait() {
           } else {
             if (data.UserCode === headers.create_by) {
               const usercode = data.UserCode
-              const nac_status = 3
+              const nac_status = 2
               const source_approve = sourceApprove
               const source_approve_date = sourceDateApproveDate
               const des_approve = des_deliveryApprove
@@ -962,82 +974,36 @@ export default function Nac_Main_wait() {
     }
   };
 
+  //ยกเลิกรายการหลังจากไม่ได้รับทรัพย์สิน
+  const drop_NAC = async () => {
+    const usercode = data.UserCode
+    const response = await store_FA_control_drop_NAC({
+      usercode,
+      nac_code,
+    });
+    if ('data' in response) {
+      swal("ทำรายการสำเร็จ", 'ทำการลบรายการ ' + response.data[0].nac_code + ' แล้ว', "success", {
+        buttons: false,
+        timer: 2000,
+      }).then((value) => {
+        window.location.href = "/NAC_OPERATOR";
+      });
+    } else {
+      swal("ทำรายการไม่สำเร็จ", 'ไม่สามารถลบ ' + response.data[0].nac_code + ' ได้', "error")
+    }
+  }
+
   // ExamineApprove
   const handleExamineApprove = async () => {
-    if ((CheckExamineApprove.length > 1 && ExamineApprove[ExamineApprove.length - 2] !== undefined)) {
-      if (headers.source_approve_userid === data.UserCode) {
-        const alert_value = 'คุณได้ตรวจสอบรายการนี้ไปแล้ว'
-        setAlert(true);
-        setValueAlert(alert_value)
-      } else {
-        const usercode = data.UserCode
-        const nac_status = (CheckExamineApprove.includes(data.UserCode) !== false && ExamineApprove[ExamineApprove.length - 2].status === 0) ? 2 : checkUserWeb === 'admin' ? 3 : 3
-        const source_approve = data.UserCode
-        const source_approve_date = datenow
-        const des_approve = des_deliveryApprove
-        const des_approve_date = des_deliveryApproveDate
-        const verify_by = bossApprove
-        const verify_date = bossApproveDate
-        const nac_type = headers.nac_type
-        const responseForUpdate = await store_FA_control_updateStatus({
-          usercode,
-          nac_code,
-          nac_status,
-          nac_type,
-          source,
-          sourceDate,
-          des_delivery,
-          des_deliveryDate,
-          source_approve,
-          source_approve_date,
-          des_approve,
-          des_approve_date,
-          verify_by,
-          verify_date,
-        });
-        if ('data' in responseForUpdate) {
-          const comment = 'ตรวจสอบรายการแล้ว'
-          const responseComment = await store_FA_control_comment({
-            nac_code,
-            usercode,
-            comment
-          })
-          await store_FA_SendMail({
-            nac_code
-          })
-          if ('data' in responseComment) {
-            swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการแล้ว', "success", {
-              buttons: false,
-              timer: 2000,
-            }).then((value) => {
-              window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/' + nac_code
-            });
-          } else {
-            swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
-              buttons: false,
-              timer: 2000,
-            }).then((value) => {
-              window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/' + nac_code
-            });
-          }
-        } else {
-          swal("ทำรายการไม่สำเร็จ", 'คุณไม่ได้รับอนุญาติให้ทำรายการนี้', "error", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/' + nac_code
-          });
-        }
-      }
-    } else {
+    if (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin') {
       const usercode = data.UserCode
-      const nac_status = 3
-      const source_approve = data.UserCode
-      const source_approve_date = datenow
+      const nac_status = 4
+      const source_approve = sourceApprove
+      const source_approve_date = sourceDateApproveDate
       const des_approve = des_deliveryApprove
       const des_approve_date = des_deliveryApproveDate
-      const verify_by = bossApprove
-      const verify_date = bossApproveDate
+      const verify_by = data.UserCode
+      const verify_date = datenow
       const nac_type = headers.nac_type
       const responseForUpdate = await store_FA_control_updateStatus({
         usercode,
@@ -1055,31 +1021,22 @@ export default function Nac_Main_wait() {
         verify_by,
         verify_date,
       });
-      if ('data' in responseForUpdate) {
-        const comment = 'ตรวจสอบรายการแล้ว'
-        const responseComment = await store_FA_control_comment({
-          nac_code,
-          usercode,
-          comment
-        })
-        await store_FA_SendMail({
-          nac_code
-        })
-        if ('data' in responseComment) {
-          swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการแล้ว', "success", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/' + nac_code
-          });
-        } else {
-          swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/' + nac_code
-          });
-        }
+      const comment = 'ตรวจสอบรายการแล้ว'
+      const responseComment = await store_FA_control_comment({
+        nac_code,
+        usercode,
+        comment
+      })
+      await store_FA_SendMail({
+        nac_code
+      })
+      if ('data' in responseComment) {
+        swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการแล้ว', "success", {
+          buttons: false,
+          timer: 2000,
+        }).then((value) => {
+          window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/' + nac_code
+        });
       } else {
         swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
           buttons: false,
@@ -1578,16 +1535,16 @@ export default function Nac_Main_wait() {
               <Paper variant="outlined" sx={{ p: { xs: 1, md: 2 }, mt: 4 }}>
                 <Table aria-label="customized table">
                   <Grid container>
-                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ : none
-                  </Grid>
-                  <hr />
-                  <Grid container>
-                    ผู้มีสิทธิตรวจสอบเอกสารฉบับนี้ : {
+                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ : {
                       ExecApprove.map((Approve) => (
                         <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'black' }}>
                           &nbsp;({Approve.approverid})
                         </Typography>
                       ))}
+                  </Grid>
+                  <hr />
+                  <Grid container>
+                    ผู้มีสิทธิตรวจสอบเอกสารฉบับนี้ : none
                   </Grid>
                 </Table>
               </Paper>
@@ -2422,22 +2379,11 @@ export default function Nac_Main_wait() {
                   </React.Fragment>
                 ) : ((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? (
                   <React.Fragment>
-                    <center>
+                   <center>
                       <Box sx={{ flexGrow: 1 }}>
                         <Grid container>
                           <Grid item xs>
                           </Grid>
-                          {/* <Grid item xs={2}>
-                            <Button
-                              variant="contained"
-                              color='error'
-                              startIcon={<ClearRoundedIcon />}
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
-                              onClick={noneAssetsComplete}>
-                              ไม่รับทรัพย์สิน
-                            </Button>
-                          </Grid> */}
                           <Grid item xs={2}>
                             <Button
                               variant="contained"
@@ -2457,6 +2403,17 @@ export default function Nac_Main_wait() {
                               disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
                               onClick={handleSubmitComplete}>
                               รับทรัพย์สิน
+                            </Button>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Button
+                              variant="contained"
+                              color='error'
+                              startIcon={<ClearRoundedIcon />}
+                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                              disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
+                              onClick={drop_NAC}>
+                              ยกเลิกรายการ
                             </Button>
                           </Grid>
                           <Grid item xs>
