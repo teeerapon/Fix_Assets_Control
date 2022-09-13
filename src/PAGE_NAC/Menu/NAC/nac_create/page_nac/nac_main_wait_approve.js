@@ -843,7 +843,7 @@ export default function Nac_Main_wait() {
   // Update Document
   const handleSave = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
-      const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' : 'กรุณากรอกวันที่ของผู้ส่ง'
+      const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' : 'กรุณากรอกวันที่ของผู้ส่ง'
       setAlert(true);
       setValueAlert(alert_value)
     } else {

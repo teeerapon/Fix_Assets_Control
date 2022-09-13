@@ -464,17 +464,17 @@ export default function NAC_ROW() {
                       <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
                         <TableHead>
                           <TableRow>
-                            <StyledTableCell align="center" sx={{ width: 200 }}>
+                            <StyledTableCell align="center" sx={{ width: 150 }}>
                               เลขที่เอกสาร
                             </StyledTableCell>
-                            <StyledTableCell align="left" sx={{ maxWidth: 300 }}>หัวข้อรายการ</StyledTableCell>
+                            <StyledTableCell align="left" sx={{ maxWidth: 150 }}>หัวข้อรายการ</StyledTableCell>
                             <StyledTableCell align="center" >ผู้ทำรายการ</StyledTableCell>
-                            <StyledTableCell align="center">วันที่สร้างเอกสาร</StyledTableCell>
-                            <StyledTableCell align="center" sx={{ width: 100 }}>ผู้ส่ง</StyledTableCell>
-                            <StyledTableCell align="center" sx={{ width: 100 }}>ผู้รับ</StyledTableCell>
-                            <StyledTableCell align="left" >สถานะการทำรายการ</StyledTableCell>
+                            <StyledTableCell align="center" sx={{ width: 150 }}>วันที่สร้างเอกสาร</StyledTableCell>
+                            <StyledTableCell align="center" >ผู้ส่ง</StyledTableCell>
+                            <StyledTableCell align="center" >ผู้รับ</StyledTableCell>
+                            <StyledTableCell align="left" sx={{ width: 150 }}>สถานะรายการ</StyledTableCell>
                             <StyledTableCell align="left" sx={{ width: 150 }}>ผู้ตรวจสอบ/อนุมัติ</StyledTableCell>
-                            <StyledTableCell align="center" sx={{ width: 200 }}>Action</StyledTableCell>
+                            <StyledTableCell align="center" sx={{ width: 180 }}>Action</StyledTableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>

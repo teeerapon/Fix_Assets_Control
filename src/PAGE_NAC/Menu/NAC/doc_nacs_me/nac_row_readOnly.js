@@ -149,12 +149,12 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
 
   return (
     <StyledTableRow key={selectNAC.nac_code}>
-      <StyledTableCell component="th" scope="row" align="center">
+      <StyledTableCell component="th" scope="row" >
         {selectNAC.nac_code}
       </StyledTableCell>
       <StyledTableCell align="left" >{selectNAC.name}</StyledTableCell>
       <StyledTableCell align="center" >{selectNAC.create_by}</StyledTableCell>
-      <StyledTableCell align="center">{!selectNAC.create_date ? '' : selectNAC.create_date.split('T')[0]}</StyledTableCell>
+      <StyledTableCell align="center" >{!selectNAC.create_date ? '' : selectNAC.create_date.split('T')[0]}</StyledTableCell>
       <StyledTableCell align="center" >{selectNAC.source_userid}</StyledTableCell>
       <StyledTableCell align="center" >{!selectNAC.des_userid ? 'ไม่มี' : selectNAC.des_userid}</StyledTableCell>
       <StyledTableCell align="left">
@@ -178,13 +178,13 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
           {selectNAC.status_name}
         </Item>
       </StyledTableCell>
-      <StyledTableCell align="left" >{
+      <StyledTableCell align="left">{
         (selectNAC.nac_status === 2 && selectNAC.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && selectNAC.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + selectNAC.vertify + '' :
           (selectNAC.nac_status === 3 && selectNAC.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && selectNAC.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + selectNAC.approved + '' :
             ((selectNAC.nac_status === 2) && (selectNAC.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || selectNAC.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? '' + selectNAC.vertify + '' :
               (selectNAC.nac_status === 13) ? 'การเงิน' : (selectNAC.nac_status === 5) ? 'บัญชี' : 'none'
       }</StyledTableCell>
-      <StyledTableCell align="center" >
+      <StyledTableCell align="center">
         <Grid container rowSpacing={1}>
           <React.Fragment>
             <Grid item xs={6}>

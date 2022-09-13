@@ -782,7 +782,7 @@ export default function Nac_Seals_Approve() {
   // Update Document
   const handleSave = async () => {
     if (!source || !source_department || !source_BU || !sourceDate) {
-      const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' : 'กรุณากรอกวันที่ของผู้ส่ง'
+      const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' : 'กรุณากรอกวันที่ของผู้ส่ง'
       setAlert(true);
       setValueAlert(alert_value)
     } else {
@@ -2276,7 +2276,7 @@ export default function Nac_Seals_Approve() {
                             </Button>
                           </Grid>
                           <Grid item xs={2}>
-                            <Button
+                          <Button
                               variant="contained"
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                               color={selectNAC === 2 ? 'success' :

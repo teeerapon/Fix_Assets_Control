@@ -23,8 +23,8 @@ import CreatePeriod3 from './PAGE_NAC/Menu/Period/Create/main3';
 import EditPeriod from './PAGE_NAC/Menu/Period/Edit/EditPeriod';
 import FETCH_ASSETS from './PAGE_NAC/Menu/Assets/main';
 // รายการ อนุมัติ และ ของฉัน
-import NAC_ROW from './PAGE_NAC/Menu/NAC/doc_nacs_me/nac_row';
-import NAC_OPERATOR from './PAGE_NAC/Menu/NAC/doc_operator/nac_row';
+import NAC_ROW from './PAGE_NAC/Menu/NAC/doc_nacs_me/nac_row_main';
+import NAC_OPERATOR from './PAGE_NAC/Menu/NAC/doc_operator/nac_row_main';
 // ทำการราย
 import NAC_CREATE_STEP1 from './PAGE_NAC/Menu/NAC/nac_create/page_create/nac_create_step1';
 import NAC_CREATE_MAIN1 from './PAGE_NAC/Menu/NAC/nac_create/page_nac/nac_main_stepCreate';
