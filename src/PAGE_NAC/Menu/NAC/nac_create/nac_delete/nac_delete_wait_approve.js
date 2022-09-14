@@ -336,7 +336,7 @@ export default function Nac_Seals_Approve() {
   //const [CheckExamineApproveDes, setCheckExamineApproveDes] = React.useState([]);
   //const [ExamineApproveDes, setExamineApproveDes] = React.useState([]);
   const [checked, setChecked] = React.useState([{ assets_code: "", statusCheck: "", asset_id: "" }]);
-  const [userBookValue] = React.useState(['SSP', 'JRK', 'TCM', 'TPD', 'TPS']);
+  const [userBookValue] = React.useState(['SSP', 'JRK', 'TCM', 'TPD', 'TPS', 'RYS', 'SPP', 'NDL']);
   const [description, setDescription] = React.useState();
   const [checkUserWeb, setCheckUserWeb] = React.useState();
   const [valuesVisibility, setValuesVisibility] = React.useState({
@@ -893,7 +893,7 @@ export default function Nac_Seals_Approve() {
           setAlert(true);
           setValueAlert(alert_value)
         } else {
-          if (data.UserCode === headers.create_by || CheckExamineApprove.includes(data.UserCode) === true || CheckApprove.includes(data.UserCode) === true || checkUserWeb === 'admin') {
+          if (data.UserCode === headers.create_by || CheckExamineApprove.includes(data.UserCode) === true || CheckApprove.includes(data.UserCode) === true || checkUserWeb === 'admin' || userBookValue.includes(data.UserCode)) {
             const usercode = data.UserCode
             const nac_status = (selectNAC === 11) ? 10 : 11
             const source_approve = sourceApprove

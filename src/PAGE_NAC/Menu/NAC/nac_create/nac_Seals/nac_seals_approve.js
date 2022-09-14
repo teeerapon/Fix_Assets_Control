@@ -339,7 +339,7 @@ export default function Nac_Seals_Approve() {
   //const [CheckExamineApproveDes, setCheckExamineApproveDes] = React.useState([]);
   //const [ExamineApproveDes, setExamineApproveDes] = React.useState([]);
   const [checked, setChecked] = React.useState([{ assets_code: "", statusCheck: "", asset_id: "" }]);
-  const [userBookValue] = React.useState(['SSP', 'JRK', 'TCM', 'TPD', 'TPS']);
+  const [userBookValue] = React.useState(['SSP', 'JRK', 'TCM', 'TPD', 'TPS','RYS','SPP','NDL']);
   const [description, setDescription] = React.useState();
   const [checkUserWeb, setCheckUserWeb] = React.useState();
   const [valuesVisibility, setValuesVisibility] = React.useState({
@@ -803,6 +803,7 @@ export default function Nac_Seals_Approve() {
         const nac_status = (selectNAC === 11) ? 11 : 1
         const sumPrice = sum_price
         const nac_type = headers.nac_type
+        const new_Price = headers.real_price
         const response = await store_FA_control_update_DTLandHeaders({
           usercode,
           nac_code,
@@ -899,7 +900,7 @@ export default function Nac_Seals_Approve() {
           setAlert(true);
           setValueAlert(alert_value)
         } else {
-          if (data.UserCode === headers.create_by || CheckExamineApprove.includes(data.UserCode) === true || CheckApprove.includes(data.UserCode) === true || checkUserWeb === 'admin') {
+          if (data.UserCode === headers.create_by || CheckExamineApprove.includes(data.UserCode) === true || CheckApprove.includes(data.UserCode) === true || checkUserWeb === 'admin' || userBookValue.includes(data.UserCode)) {
             const usercode = data.UserCode
             const nac_status = (selectNAC === 11) ? 10 : 11
             const source_approve = sourceApprove
@@ -909,6 +910,7 @@ export default function Nac_Seals_Approve() {
             const verify_by = bossApprove
             const verify_date = bossApproveDate
             const nac_type = headers.nac_type
+            const new_Price = headers.real_price
             if (selectNAC === 11) {
               const checkBookValue_is_null = []
               for (let i = 0; i < serviceList.length; i++) {
@@ -930,6 +932,7 @@ export default function Nac_Seals_Approve() {
                   des_approve_date,
                   verify_by,
                   verify_date,
+                  new_Price,
                 });
                 for (let i = 0; i < serviceList.length; i++) {
                   const dtl_id = serviceList[i].dtl_id
@@ -955,8 +958,8 @@ export default function Nac_Seals_Approve() {
                     asset_id
                   });
                   if ('data' in responseDTL) {
-                    const nacdtl_bookV = serviceList[i].bookValue
-                    const nacdtl_PriceSeals = serviceList[i].priceSeals
+                    const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
+                    const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
                     const nacdtl_profit = serviceList[i].priceSeals - serviceList[i].bookValue
                     const asset_id = responseDTL.data[i].nacdtl_id
                     const nac_status = (selectNAC === 11) ? 10 : 11
@@ -1023,6 +1026,7 @@ export default function Nac_Seals_Approve() {
                   des_approve_date,
                   verify_by,
                   verify_date,
+                  new_Price,
                 });
                 for (let i = 0; i < serviceList.length; i++) {
                   const dtl_id = serviceList[i].dtl_id
@@ -1048,8 +1052,8 @@ export default function Nac_Seals_Approve() {
                     asset_id
                   });
                   if ('data' in responseDTL) {
-                    const nacdtl_bookV = serviceList[i].bookValue
-                    const nacdtl_PriceSeals = serviceList[i].priceSeals
+                    const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
+                    const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
                     const nacdtl_profit = serviceList[i].priceSeals - serviceList[i].bookValue
                     const asset_id = responseDTL.data[i].nacdtl_id
                     const nac_status = (selectNAC === 11) ? 10 : 11
@@ -1126,6 +1130,7 @@ export default function Nac_Seals_Approve() {
         const verify_by = bossApprove
         const verify_date = bossApproveDate
         const nac_type = headers.nac_type
+        const new_Price = headers.real_price
         const responseForUpdate = await store_FA_control_updateStatus({
           usercode,
           nac_code,
@@ -1141,6 +1146,7 @@ export default function Nac_Seals_Approve() {
           des_approve_date,
           verify_by,
           verify_date,
+          new_Price,
         });
         if ('data' in responseForUpdate) {
           const comment = 'ตรวจสอบรายการแล้ว'
@@ -1186,6 +1192,7 @@ export default function Nac_Seals_Approve() {
       const verify_by = bossApprove
       const verify_date = bossApproveDate
       const nac_type = headers.nac_type
+      const new_Price = headers.real_price
       const responseForUpdate = await store_FA_control_updateStatus({
         usercode,
         nac_code,
@@ -1201,6 +1208,7 @@ export default function Nac_Seals_Approve() {
         des_approve_date,
         verify_by,
         verify_date,
+        new_Price,
       });
       if ('data' in responseForUpdate) {
         const comment = 'ตรวจสอบรายการแล้ว'
@@ -1250,6 +1258,7 @@ export default function Nac_Seals_Approve() {
       const verify_by = data.UserCode
       const verify_date = datenow
       const nac_type = headers.nac_type
+      const new_Price = headers.real_price
       const responseForUpdate = await store_FA_control_updateStatus({
         usercode,
         nac_code,
@@ -1265,6 +1274,7 @@ export default function Nac_Seals_Approve() {
         des_approve_date,
         verify_by,
         verify_date,
+        new_Price,
       });
       const comment = 'อนุมัติรายการแล้ว'
       const responseComment = await store_FA_control_comment({
@@ -1333,7 +1343,7 @@ export default function Nac_Seals_Approve() {
         if ('data' in responseForUpdate) {
           const comment = selectNAC === 4 ? 'ตรวจรับเอกสารแล้ว'
             : (selectNAC === 99 || selectNAC === 13) ? 'แนบเอกสาร ในรายการแล้ว'
-              : 'ตรวจสอบเอกสารแล้ว'
+              : 'ยืนยันเอกสารแล้ว'
           const responseComment = await store_FA_control_comment({
             nac_code,
             usercode,
@@ -1379,14 +1389,14 @@ export default function Nac_Seals_Approve() {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
+              window.location.href = (selectNAC === 12 && Real_Price < priceSeals) ? '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code + '-1' : '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
             });
           } else {
             swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
+              window.location.href = (selectNAC === 12 && Real_Price < priceSeals) ? '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code + '-1' : '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
             });
           }
         }
@@ -1395,7 +1405,7 @@ export default function Nac_Seals_Approve() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
+          window.location.href = (selectNAC === 12 && Real_Price < priceSeals) ? '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code + '-1' : '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
         });
       }
     }
@@ -1477,6 +1487,7 @@ export default function Nac_Seals_Approve() {
     const verify_by = bossApprove
     const verify_date = bossApproveDate
     const nac_type = headers.nac_type
+    const new_Price = headers.real_price
     const responseForUpdate = await store_FA_control_updateStatus({
       usercode,
       nac_code,
@@ -1491,7 +1502,8 @@ export default function Nac_Seals_Approve() {
       des_approve,
       des_approve_date,
       verify_by,
-      verify_date
+      verify_date,
+      new_Price,
     });
     if ('data' in responseForUpdate) {
       const comment = 'ตีกลับรายการเนื่องจาก "' + commentReply + '"'
@@ -2027,7 +2039,7 @@ export default function Nac_Seals_Approve() {
                       <StyledTableRow>
                         <StyledTableCell align="start" style={{ "borderWidth": "1px", 'border-right': 0 }}>
                           <Typography>
-                           ต้นทุนรวมทั้งหมด
+                            ต้นทุนรวมทั้งหมด
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell align="start" style={{ border: `none` }}>
@@ -2082,10 +2094,8 @@ export default function Nac_Seals_Approve() {
                     </Table>
                     <Table aria-label="customized table" style={{ width: '100%' }}>
                       <TableBody>
-                        {(selectNAC !== 12 && !headers.real_price) || ((selectNAC > 7 && selectNAC < 2) && headers.real_price !== undefined) ? (
-                          <React.Fragment>
-                            {/* ค่าว่าง */}
-                          </React.Fragment>
+                        {(selectNAC !== 12 && !headers.real_price) || ((selectNAC > 7 && selectNAC < 2) && !headers.real_price) ? (
+                          null
                         ) : (
                           <React.Fragment>
                             <StyledTableRow>
@@ -2293,8 +2303,8 @@ export default function Nac_Seals_Approve() {
                                   (selectNAC === 11 && (checkUserWeb === 'admin')) ||
                                   (selectNAC === 11 && userBookValue.includes(data.UserCode)) ? false :
                                   ExamineApprove.length === 0 ? false : true}
-                              onClick={handleSubmit
-                              }>
+                              onClick={handleSubmit}
+                              >
                               <React.Fragment>
                                 ยืนยันรายการ
                               </React.Fragment>
@@ -2313,35 +2323,38 @@ export default function Nac_Seals_Approve() {
                         <Grid container>
                           <Grid item xs>
                           </Grid>
-                          <Grid item xs={2}>
-                            <Button
-                              variant="contained"
-                              onClick={handleClickOpenDialogReply}
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              style={{ 'backgroundColor': 'orange' }}
-                              startIcon={<ReplyAllRoundedIcon />}
-                              disabled={
-                                (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
-                                  (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
-                                    true
-                              }>
-                              ตีกลับเอกสาร
-                            </Button>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Button
-                              variant="contained"
-                              color='error'
-                              disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false
-                                : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
-                                  true
-                              }
-                              onClick={CancelApprove}
-                              startIcon={<ClearRoundedIcon />}
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}>
-                              ไม่อนุมัติ
-                            </Button>
-                          </Grid>
+                          {(headers.real_price > 0) ? null : (
+                            <React.Fragment>
+                              <Grid item xs={2}>
+                                <Button
+                                  variant="contained"
+                                  onClick={handleClickOpenDialogReply}
+                                  sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                  style={{ 'backgroundColor': 'orange' }}
+                                  startIcon={<ReplyAllRoundedIcon />}
+                                  disabled={
+                                    (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                        true
+                                  }>
+                                </Button>
+                              </Grid>
+                              <Grid item xs={2}>
+                                <Button
+                                  variant="contained"
+                                  color='error'
+                                  disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false
+                                    : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                      true
+                                  }
+                                  onClick={CancelApprove}
+                                  startIcon={<ClearRoundedIcon />}
+                                  sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}>
+                                  ไม่อนุมัติ
+                                </Button>
+                              </Grid>
+                            </React.Fragment>
+                          )}
                           <Grid item xs={2}>
                             <Button
                               variant="contained"
@@ -2449,7 +2462,7 @@ export default function Nac_Seals_Approve() {
                 setDescription={setDescription}
                 setOpenDialog={setOpenDialog}
               />
-              
+
             </Container>
             <Dialog open={openDialogReply} onClose={handleCloseDialogReply} >
               <DialogTitle>กรุณาระบุข้อความ/เหตุผล ที่ตีกลับเอกสาร</DialogTitle>
