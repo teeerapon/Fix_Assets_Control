@@ -749,7 +749,7 @@ export default function Nac_Main() {
               </Grid>
               <React.Fragment>
                 <Typography sx={{ pb: 1, pt: 1 }} color='error'>
-                  * กรุณากรอกข้อมูลสำหรับตัดจากบัญชีทรัพย์สินถาวร
+                  * กรุณากรอกข้อมูลสำหรับตัดจากบัญชีทรัพย์สิน
                 </Typography>
                 <TableContainer component={Paper}>
                   <Table aria-label="customized table" style={{ width: '100%' }}>
@@ -767,7 +767,7 @@ export default function Nac_Main() {
                             <FormGroup>
                               <center>
                                 <Typography variant='h4' color='black'>
-                                  ตัดจากบัญชีทรัพย์สินถาวร
+                                  ตัดจากบัญชีทรัพย์สิน
                                 </Typography>
                               </center>
                             </FormGroup>

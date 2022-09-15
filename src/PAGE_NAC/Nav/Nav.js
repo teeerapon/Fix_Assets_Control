@@ -369,7 +369,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เพิ่มบัญชีทรัพย์สินถาวร
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เพิ่มบัญชีทรัพย์สิน
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -413,7 +413,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตัดบัญชีทรัพย์สินถาวร
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตัดบัญชีทรัพย์สิน
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -535,7 +535,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; รายานตรวจนับทรัพย์สิน
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; รายงานตรวจนับทรัพย์สิน
                         </Typography>
                       </ListItemText>
                     </ListItemButton>

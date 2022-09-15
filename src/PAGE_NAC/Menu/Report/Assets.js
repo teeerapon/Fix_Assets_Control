@@ -1473,7 +1473,7 @@ export default function EnhancedTable() {
                       .length) === rows.length ?
                       <React.Fragment>
                         <TableRow>
-                          <TableCell colSpan={6}>
+                          <TableCell colSpan={7}>
                             รวม รายการตรวจนับแล้ว
                           </TableCell>
                           <TableCell>
@@ -1484,7 +1484,7 @@ export default function EnhancedTable() {
                           </TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableCell colSpan={6}>
+                          <TableCell colSpan={7}>
                             รวม รายการคงเหลือ
                           </TableCell>
                           <TableCell>
@@ -1495,7 +1495,7 @@ export default function EnhancedTable() {
                           </TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableCell colSpan={6}>
+                          <TableCell colSpan={7}>
                             รวม รายการที่ตรวจนับแล้ว (สาขาอื่น ๆ)
                           </TableCell>
                           <TableCell>
@@ -1506,7 +1506,7 @@ export default function EnhancedTable() {
                           </TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableCell colSpan={6}>
+                          <TableCell colSpan={7}>
                             รวม รายการทั้งหมด
                           </TableCell>
                           <TableCell>

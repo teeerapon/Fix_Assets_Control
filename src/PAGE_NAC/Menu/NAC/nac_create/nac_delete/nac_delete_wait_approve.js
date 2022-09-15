@@ -1651,7 +1651,7 @@ export default function Nac_Seals_Approve() {
                 </Grid>
                 <React.Fragment>
                   <Typography sx={{ pb: 1, pt: 1 }} color='error'>
-                    * กรุณากรอกข้อมูลสำหรับตัดบัญชีทรัพย์สินถาวร
+                    * กรุณากรอกข้อมูลสำหรับตัดจากบัญชีทรัพย์สิน
                   </Typography>
                   <TableContainer component={Paper}>
                     <Table aria-label="customized table" style={{ width: '100%' }}>
@@ -1669,7 +1669,7 @@ export default function Nac_Seals_Approve() {
                               <FormGroup>
                                 <center>
                                   <Typography variant='h4' color='black'>
-                                    ตัดบัญชีทรัพย์สินถาวร
+                                    ตัดจากบัญชีทรัพย์สิน
                                   </Typography>
                                 </center>
                               </FormGroup>
