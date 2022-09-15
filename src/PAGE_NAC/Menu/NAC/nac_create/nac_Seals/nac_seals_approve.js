@@ -2320,7 +2320,7 @@ export default function Nac_Seals_Approve() {
                   <React.Fragment>
                     <center>
                       <Box sx={{ flexGrow: 1 }}>
-                        <Grid container>
+                        <Grid container></Grid>
                           <Grid item xs>
                           </Grid>
                           {(headers.real_price > 0) ? null : (
@@ -2337,6 +2337,7 @@ export default function Nac_Seals_Approve() {
                                       (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
                                         true
                                   }>
+                                    ตีกลับเอกสาร
                                 </Button>
                               </Grid>
                               <Grid item xs={2}>

@@ -107,7 +107,7 @@ export default function History_of_assets() {
   const data = JSON.parse(localStorage.getItem('data'));
 
   const dataChange = !dataHistory ? [] : dataHistory.map(function (elt) {
-    if (elt.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
+    if (elt.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && (datenow.split('-')[1] === (!elt.update_date ? '' : elt.update_date.split('-')[1]))) {
       return 1
     } else {
       return 0
@@ -117,7 +117,7 @@ export default function History_of_assets() {
   })
 
   const dataAdd = !dataHistory ? [] : dataHistory.map(function (elt) {
-    if (elt.name === 'เพิ่มบัญชีทรัพย์สินถาวร' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
+    if (elt.name === 'เพิ่มบัญชีทรัพย์สินถาวร' && (datenow.split('-')[1] === (!elt.update_date ? '' : elt.update_date.split('-')[1]))) {
       return 1
     } else {
       return 0
@@ -127,7 +127,7 @@ export default function History_of_assets() {
   })
 
   const dataTranfers = !dataHistory ? [] : dataHistory.map(function (elt) {
-    if (elt.name === 'โยกย้ายทรัพย์สิน' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
+    if (elt.name === 'โยกย้ายทรัพย์สิน' && (datenow.split('-')[1] === (!elt.update_date ? '' : elt.update_date.split('-')[1]))) {
       return 1
     } else {
       return 0
@@ -137,7 +137,7 @@ export default function History_of_assets() {
   })
 
   const dataDelete = !dataHistory ? [] : dataHistory.map(function (elt) {
-    if (elt.name === 'ตัดจากบัญชีทรัพย์สินถาวร' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
+    if (elt.name === 'ตัดจากบัญชีทรัพย์สินถาวร' && (datenow.split('-')[1] === (!elt.update_date ? '' : elt.update_date.split('-')[1]))) {
       return 1
     } else {
       return 0
@@ -147,7 +147,7 @@ export default function History_of_assets() {
   })
 
   const dataSeals = !dataHistory ? [] : dataHistory.map(function (elt) {
-    if (elt.name === 'ขายทรัพย์สิน' && (datenow.split('-')[1] === elt.update_date.split('-')[1])) {
+    if (elt.name === 'ขายทรัพย์สิน' && (datenow.split('-')[1] === (!elt.update_date ? '' : elt.update_date.split('-')[1]))) {
       return 1
     } else {
       return 0
@@ -172,7 +172,13 @@ export default function History_of_assets() {
     { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', width: 110 },
     { field: 'source_approve_userid', headerName: 'ผู้อนุมัติ', headerClassName: 'super-app-theme--header', width: 110 },
     { field: 'account_aprrove_id', headerName: 'ผู้ปิดรายการ', headerClassName: 'super-app-theme--header', width: 110 },
-    { field: 'update_date', headerName: 'วันที่ปิดรายการ', type: 'date', headerClassName: 'super-app-theme--header', width: 144 },
+    { 
+      field: 'update_date', 
+      headerName: 'วันที่ปิดรายการ', 
+      type: 'date', 
+      headerClassName: 'super-app-theme--header',
+      width: 144,
+   },
   ];
 
   React.useEffect(() => {
