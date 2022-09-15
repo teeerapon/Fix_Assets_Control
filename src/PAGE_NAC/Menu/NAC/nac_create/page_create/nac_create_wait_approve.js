@@ -372,6 +372,8 @@ export default function Nac_Main_wait() {
   // ส่วนของผู้อนุมัตื
   const [bossApprove, setBossApprove] = React.useState('');
   const [bossApproveDate, setBossApproveDate] = React.useState();
+  const [verify, setVerifyApprove] = React.useState('');
+  const [verifyApproveDate, setVerifyApproveDate] = React.useState();
 
 
   const fetchUserForAssetsControl = async () => {
@@ -421,8 +423,10 @@ export default function Nac_Main_wait() {
     setDes_deliveryApprove(responseHeaders.data[0].des_approve_userid)
     setDes_deliveryApproveDate(responseHeaders.data[0].des_approve_date)
 
-    setBossApprove(responseHeaders.data[0].verify_by_userid)
-    setBossApproveDate(responseHeaders.data[0].verify_date)
+    setBossApprove(responseHeaders.data[0].source_approve_userid)
+    setBossApproveDate(responseHeaders.data[0].source_approve_date)
+        setVerifyApprove(responseHeaders.data[0].verify_by_userid)
+    setVerifyApproveDate(responseHeaders.data[0].verify_date)
 
     // เรียก Detail มาแสดง
     const responseDTL = await store_FA_control_select_dtl({
@@ -1053,12 +1057,12 @@ export default function Nac_Main_wait() {
     if (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin') {
       const usercode = data.UserCode
       const nac_status = 4
-      const source_approve = sourceApprove
-      const source_approve_date = sourceDateApproveDate
+      const source_approve = data.UserCode
+      const source_approve_date = datenow
       const des_approve = des_deliveryApprove
       const des_approve_date = des_deliveryApproveDate
-      const verify_by = data.UserCode
-      const verify_date = datenow
+      const verify_by = headers.verify_by_userid
+      const verify_date = headers.verify_date
       const nac_type = headers.nac_type
       const responseForUpdate = await store_FA_control_updateStatus({
         usercode,
@@ -2188,16 +2192,11 @@ export default function Nac_Main_wait() {
                                         </Typography>
                                       </InputAdornment>
                                       <InputAdornment position="start">
-                                        {
-                                          ExamineApprove.map((Approve, index) => (
-                                            <Typography style={{ 'color': 'black' }}>
-                                              {Approve.status === 1 ? '[' + [CheckExamineApprove[index]] + ']' : ''}
-                                            </Typography>
-                                          ))}
+                                        {!verify ? '' : '[' + verify + ']'}
                                       </InputAdornment>
                                       <InputAdornment position="start">
                                         <Typography color="black">
-                                          {!sourceDateApproveDate ? '' : (sourceDateApproveDate).split('T')[0]}
+                                          {!verifyApproveDate ? '' : (verifyApproveDate).split('T')[0]}
                                         </Typography>
                                       </InputAdornment>
                                     </Stack>
@@ -2379,7 +2378,7 @@ export default function Nac_Main_wait() {
                   </React.Fragment>
                 ) : ((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? (
                   <React.Fragment>
-                   <center>
+                    <center>
                       <Box sx={{ flexGrow: 1 }}>
                         <Grid container>
                           <Grid item xs>
@@ -2457,7 +2456,7 @@ export default function Nac_Main_wait() {
                 setDescription={setDescription}
                 setOpenDialog={setOpenDialog}
               />
-              
+
               <Dialog open={openDialogReply} onClose={handleCloseDialogReply} >
                 <DialogTitle>กรุณาระบุข้อความ/เหตุผล ที่ตีกลับเอกสาร</DialogTitle>
                 <DialogContent sx={{ width: 500 }}>

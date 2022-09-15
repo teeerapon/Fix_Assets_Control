@@ -1349,7 +1349,7 @@ export default function Nac_Seals_Approve() {
         });
         if ('data' in responseForUpdate) {
           const comment = selectNAC === 4 ? 'ตรวจรับเอกสารแล้ว'
-            : (selectNAC === 99 || selectNAC === 13) ? 'แนบเอกสาร ในรายการแล้ว'
+            : selectNAC === 99 ? 'แนบเอกสาร ในรายการแล้ว'
               : selectNAC === 13 ? 'ปิดรายการแล้ว' : 'ยืนยันเอกสารแล้ว'
           const responseComment = await store_FA_control_comment({
             nac_code,
@@ -1391,8 +1391,8 @@ export default function Nac_Seals_Approve() {
               }
             }
             swal("ทำรายการสำเร็จ", selectNAC === 4 ? 'ตรวจรับเอกสารแล้ว'
-              : (selectNAC === 99 || selectNAC === 13) ? 'แนบเอกสาร ในรายการแล้ว'
-                : 'ตรวจสอบเอกสารแล้ว', "success", {
+              : selectNAC === 99 ? 'แนบเอกสาร ในรายการแล้ว'
+                : selectNAC === 13 ? 'ปิดรายการแล้ว' : 'ยืนยันเอกสารแล้ว', "success", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
@@ -1423,9 +1423,9 @@ export default function Nac_Seals_Approve() {
     const usercode = data.UserCode
     const nac_status = 0
     const source_approve =
-      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? sourceApprove : data.UserCode
+      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? verify : data.UserCode
     const source_approve_date =
-      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? sourceDateApproveDate : datenow
+      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? verifyApproveDate : datenow
     const des_approve = des_deliveryApprove
     const des_approve_date = des_deliveryApproveDate
     const verify_by = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? data.UserCode : bossApprove

@@ -401,6 +401,8 @@ export default function Nac_Seals_Approve() {
   // ส่วนของผู้อนุมัตื
   const [bossApprove, setBossApprove] = React.useState('');
   const [bossApproveDate, setBossApproveDate] = React.useState();
+  const [verify, setVerifyApprove] = React.useState('');
+  const [verifyApproveDate, setVerifyApproveDate] = React.useState();
 
 
   const fetchUserForAssetsControl = async () => {
@@ -450,8 +452,11 @@ export default function Nac_Seals_Approve() {
     setDes_deliveryApprove(responseHeaders.data[0].des_approve_userid)
     setDes_deliveryApproveDate(responseHeaders.data[0].des_approve_date)
 
-    setBossApprove(responseHeaders.data[0].verify_by_userid)
-    setBossApproveDate(responseHeaders.data[0].verify_date)
+    setBossApprove(responseHeaders.data[0].source_approve_userid)
+    setBossApproveDate(responseHeaders.data[0].source_approve_date)
+    setVerifyApprove(responseHeaders.data[0].verify_by_userid)
+    setVerifyApproveDate(responseHeaders.data[0].verify_date)
+
 
     // เรียก Detail มาแสดง
     const responseDTL = await store_FA_control_select_dtl({
@@ -1103,12 +1108,12 @@ export default function Nac_Seals_Approve() {
       } else {
         const usercode = data.UserCode
         const nac_status = (CheckExamineApprove.includes(data.UserCode) !== false && ExamineApprove[ExamineApprove.length - 2].status === 0) ? 2 : checkUserWeb === 'admin' ? 3 : 3
-        const source_approve = data.UserCode
-        const source_approve_date = datenow
+        const source_approve = sourceApprove
+        const source_approve_date = sourceDateApproveDate
         const des_approve = des_deliveryApprove
         const des_approve_date = des_deliveryApproveDate
-        const verify_by = bossApprove
-        const verify_date = bossApproveDate
+        const verify_by = data.UserCode
+        const verify_date = datenow
         const nac_type = headers.nac_type
         const responseForUpdate = await store_FA_control_updateStatus({
           usercode,
@@ -1163,12 +1168,12 @@ export default function Nac_Seals_Approve() {
     } else {
       const usercode = data.UserCode
       const nac_status = 3
-      const source_approve = data.UserCode
-      const source_approve_date = datenow
+      const source_approve = sourceApprove
+      const source_approve_date = sourceDateApproveDate
       const des_approve = des_deliveryApprove
       const des_approve_date = des_deliveryApproveDate
-      const verify_by = bossApprove
-      const verify_date = bossApproveDate
+      const verify_by = data.UserCode
+      const verify_date = datenow
       const nac_type = headers.nac_type
       const responseForUpdate = await store_FA_control_updateStatus({
         usercode,
@@ -1227,12 +1232,12 @@ export default function Nac_Seals_Approve() {
     if (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin') {
       const usercode = data.UserCode
       const nac_status = 5
-      const source_approve = sourceApprove
-      const source_approve_date = sourceDateApproveDate
+      const source_approve = data.UserCode
+      const source_approve_date = datenow
       const des_approve = des_deliveryApprove
       const des_approve_date = des_deliveryApproveDate
-      const verify_by = data.UserCode
-      const verify_date = datenow
+      const verify_by = headers.verify_by_userid
+      const verify_date = headers.verify_date
       const nac_type = headers.nac_type
       const responseForUpdate = await store_FA_control_updateStatus({
         usercode,
@@ -1378,9 +1383,9 @@ export default function Nac_Seals_Approve() {
     const usercode = data.UserCode
     const nac_status = 0
     const source_approve =
-      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? sourceApprove : data.UserCode
+      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? verify : data.UserCode
     const source_approve_date =
-      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? sourceDateApproveDate : datenow
+      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? verifyApproveDate : datenow
     const des_approve = des_deliveryApprove
     const des_approve_date = des_deliveryApproveDate
     const verify_by = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? data.UserCode : bossApprove
@@ -2110,16 +2115,11 @@ export default function Nac_Seals_Approve() {
                                         </Typography>
                                       </InputAdornment>
                                       <InputAdornment position="start">
-                                        {
-                                          ExamineApprove.map((Approve, index) => (
-                                            <Typography style={{ 'color': 'black' }}>
-                                              {Approve.status === 1 ? '[' + [CheckExamineApprove[index]] + ']' : ''}
-                                            </Typography>
-                                          ))}
+                                        {!verify ? '' : '[' + verify + ']'}
                                       </InputAdornment>
                                       <InputAdornment position="start">
                                         <Typography color="black">
-                                          {!sourceDateApproveDate ? '' : (sourceDateApproveDate).split('T')[0]}
+                                          {!verifyApproveDate ? '' : (verifyApproveDate).split('T')[0]}
                                         </Typography>
                                       </InputAdornment>
                                     </Stack>
@@ -2276,7 +2276,7 @@ export default function Nac_Seals_Approve() {
                             </Button>
                           </Grid>
                           <Grid item xs={2}>
-                          <Button
+                            <Button
                               variant="contained"
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                               color={selectNAC === 2 ? 'success' :
@@ -2381,7 +2381,7 @@ export default function Nac_Seals_Approve() {
                 setDescription={setDescription}
                 setOpenDialog={setOpenDialog}
               />
-              
+
             </Container>
             <Dialog open={openDialogReply} onClose={handleCloseDialogReply} >
               <DialogTitle>กรุณาระบุข้อความ/เหตุผล ที่ตีกลับเอกสาร</DialogTitle>

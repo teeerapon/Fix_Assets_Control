@@ -975,7 +975,7 @@ export default function Nac_Main() {
                                 name="serialNo"
                                 id="serialNo"
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                //onChange={(e) => handleServiceChange(e, index)}
+                                onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].serialNo}
                                 variant="standard"
                               />
@@ -987,7 +987,7 @@ export default function Nac_Main() {
                                 name="name"
                                 id="name"
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                // onChange={(e) => handleServiceChange(e, index)}
+                                onChange={(e) => handleServiceChange(e, index)}
                                 value={serviceList[index].name}
                                 variant="standard"
                               />
