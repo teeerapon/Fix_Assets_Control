@@ -339,7 +339,7 @@ export default function Nac_Seals_Approve() {
   //const [CheckExamineApproveDes, setCheckExamineApproveDes] = React.useState([]);
   //const [ExamineApproveDes, setExamineApproveDes] = React.useState([]);
   const [checked, setChecked] = React.useState([{ assets_code: "", statusCheck: "", asset_id: "" }]);
-  const [userBookValue] = React.useState(['SSP', 'JRK', 'TCM', 'TPD', 'TPS','RYS','SPP','NDL']);
+  const [userBookValue] = React.useState(['SSP', 'JRK', 'TCM', 'TPD', 'TPS', 'RYS', 'SPP', 'NDL']);
   const [description, setDescription] = React.useState();
   const [checkUserWeb, setCheckUserWeb] = React.useState();
   const [valuesVisibility, setValuesVisibility] = React.useState({
@@ -403,6 +403,8 @@ export default function Nac_Seals_Approve() {
   // ส่วนของผู้อนุมัตื
   const [bossApprove, setBossApprove] = React.useState('');
   const [bossApproveDate, setBossApproveDate] = React.useState();
+  const [verify, setVerifyApprove] = React.useState('');
+  const [verifyApproveDate, setVerifyApproveDate] = React.useState();
 
 
   const fetchUserForAssetsControl = async () => {
@@ -452,8 +454,11 @@ export default function Nac_Seals_Approve() {
     setDes_deliveryApprove(responseHeaders.data[0].des_approve_userid)
     setDes_deliveryApproveDate(responseHeaders.data[0].des_approve_date)
 
-    setBossApprove(responseHeaders.data[0].verify_by_userid)
-    setBossApproveDate(responseHeaders.data[0].verify_date)
+    setBossApprove(responseHeaders.data[0].source_approve_userid)
+    setBossApproveDate(responseHeaders.data[0].source_approve_date)
+    setReal_Price(responseHeaders.data[0].real_price)
+    setVerifyApprove(responseHeaders.data[0].verify_by_userid)
+    setVerifyApproveDate(responseHeaders.data[0].verify_date)
 
     // เรียก Detail มาแสดง
     const responseDTL = await store_FA_control_select_dtl({
@@ -1121,14 +1126,14 @@ export default function Nac_Seals_Approve() {
         setAlert(true);
         setValueAlert(alert_value)
       } else {
-        const usercode = data.UserCode
         const nac_status = (CheckExamineApprove.includes(data.UserCode) !== false && ExamineApprove[ExamineApprove.length - 2].status === 0) ? 2 : checkUserWeb === 'admin' ? 3 : 3
-        const source_approve = data.UserCode
-        const source_approve_date = datenow
+        const usercode = data.UserCode
+        const source_approve = sourceApprove
+        const source_approve_date = sourceDateApproveDate
         const des_approve = des_deliveryApprove
         const des_approve_date = des_deliveryApproveDate
-        const verify_by = bossApprove
-        const verify_date = bossApproveDate
+        const verify_by = data.UserCode
+        const verify_date = datenow
         const nac_type = headers.nac_type
         const new_Price = headers.real_price
         const responseForUpdate = await store_FA_control_updateStatus({
@@ -1185,12 +1190,12 @@ export default function Nac_Seals_Approve() {
     } else {
       const usercode = data.UserCode
       const nac_status = 3
-      const source_approve = data.UserCode
-      const source_approve_date = datenow
+      const source_approve = sourceApprove
+      const source_approve_date = sourceDateApproveDate
       const des_approve = des_deliveryApprove
       const des_approve_date = des_deliveryApproveDate
-      const verify_by = bossApprove
-      const verify_date = bossApproveDate
+      const verify_by = data.UserCode
+      const verify_date = datenow
       const nac_type = headers.nac_type
       const new_Price = headers.real_price
       const responseForUpdate = await store_FA_control_updateStatus({
@@ -1251,12 +1256,12 @@ export default function Nac_Seals_Approve() {
     if (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin') {
       const usercode = data.UserCode
       const nac_status = !headers.real_price ? 12 : 13
-      const source_approve = sourceApprove
-      const source_approve_date = sourceDateApproveDate
+      const source_approve = data.UserCode
+      const source_approve_date = datenow
       const des_approve = des_deliveryApprove
       const des_approve_date = des_deliveryApproveDate
-      const verify_by = data.UserCode
-      const verify_date = datenow
+      const verify_by = headers.verify_by_userid
+      const verify_date = headers.verify_date
       const nac_type = headers.nac_type
       const new_Price = headers.real_price
       const responseForUpdate = await store_FA_control_updateStatus({
@@ -1312,7 +1317,9 @@ export default function Nac_Seals_Approve() {
     } else {
       if (selectNAC === 4 || selectNAC === 5 || selectNAC === 12 || selectNAC === 13) {
         const usercode = data.UserCode
-        const nac_status = selectNAC === 4 ? 5 : (selectNAC === 12 && Real_Price >= priceSeals) ? 13 : (selectNAC === 12 && Real_Price < priceSeals) ? 99 : undefined
+        const nac_status =
+          selectNAC === 4 ? 5 : (selectNAC === 12 && Real_Price >= priceSeals) ? 13 :
+            (selectNAC === 12 && Real_Price < priceSeals) ? 99 : selectNAC === 13 ? 6 : undefined
         const source_approve = headers.source_approve_userid
         const source_approve_date = headers.source_approve_date
         const des_delivery = headers.des_userid
@@ -1343,7 +1350,7 @@ export default function Nac_Seals_Approve() {
         if ('data' in responseForUpdate) {
           const comment = selectNAC === 4 ? 'ตรวจรับเอกสารแล้ว'
             : (selectNAC === 99 || selectNAC === 13) ? 'แนบเอกสาร ในรายการแล้ว'
-              : 'ยืนยันเอกสารแล้ว'
+              : selectNAC === 13 ? 'ปิดรายการแล้ว' : 'ยืนยันเอกสารแล้ว'
           const responseComment = await store_FA_control_comment({
             nac_code,
             usercode,
@@ -2187,16 +2194,11 @@ export default function Nac_Seals_Approve() {
                                         </Typography>
                                       </InputAdornment>
                                       <InputAdornment position="start">
-                                        {
-                                          ExamineApprove.map((Approve, index) => (
-                                            <Typography style={{ 'color': 'black' }}>
-                                              {Approve.status === 1 ? '[' + [CheckExamineApprove[index]] + ']' : ''}
-                                            </Typography>
-                                          ))}
+                                        {!verify ? '' : '[' + verify + ']'}
                                       </InputAdornment>
                                       <InputAdornment position="start">
                                         <Typography color="black">
-                                          {!sourceDateApproveDate ? '' : (sourceDateApproveDate).split('T')[0]}
+                                          {!verifyApproveDate ? '' : (verifyApproveDate).split('T')[0]}
                                         </Typography>
                                       </InputAdornment>
                                     </Stack>
@@ -2298,13 +2300,9 @@ export default function Nac_Seals_Approve() {
                               variant="contained"
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                               endIcon={<DoubleArrowRoundedIcon />}
-                              disabled={
-                                ((selectNAC === 1 || selectNAC === 7) && data.UserCode === headers.create_by) ||
-                                  (selectNAC === 11 && (checkUserWeb === 'admin')) ||
-                                  (selectNAC === 11 && userBookValue.includes(data.UserCode)) ? false :
-                                  ExamineApprove.length === 0 ? false : true}
+                              disabled={((selectNAC === 1 || selectNAC === 7) && data.UserCode === headers.create_by) || (selectNAC === 11 && (checkUserWeb === 'admin')) || (selectNAC === 11 && userBookValue.includes(data.UserCode)) ? false : ExamineApprove.length === 0 ? false : true}
                               onClick={handleSubmit}
-                              >
+                            >
                               <React.Fragment>
                                 ยืนยันรายการ
                               </React.Fragment>
@@ -2337,7 +2335,7 @@ export default function Nac_Seals_Approve() {
                                       (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
                                         true
                                   }>
-                                    ตีกลับเอกสาร
+                                  ตีกลับเอกสาร
                                 </Button>
                               </Grid>
                               <Grid item xs={2}>
@@ -2363,7 +2361,7 @@ export default function Nac_Seals_Approve() {
                               color={selectNAC === 2 ? 'success' :
                                 selectNAC === 3 ? 'success' :
                                   'primary'}
-                              onClick={selectNAC === 2 ? handleExamineApprove : handleExecApprove}
+                              onClick={(selectNAC === 2 || selectNAC === 11) ? handleExamineApprove : handleExecApprove}
                               startIcon={selectNAC === 3 ? <CheckRoundedIcon /> : <VisibilityRoundedIcon />}
                               disabled={
                                 (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
@@ -2413,7 +2411,7 @@ export default function Nac_Seals_Approve() {
                       </Box>
                     </center>
                   </React.Fragment>
-                ) : (selectNAC === 5) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? (
+                ) : (selectNAC === 13) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? (
                   <React.Fragment>
                     <center>
                       <Box sx={{ flexGrow: 1 }}>
@@ -2421,14 +2419,14 @@ export default function Nac_Seals_Approve() {
                           variant="contained"
                           sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                           startIcon={<CloudDownloadRoundedIcon />}
-                          disabled={(selectNAC === 5) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
+                          disabled={(selectNAC === 13) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
                           onClick={handleSubmitComplete}>
                           ปิดรายการ
                         </Button>
                       </Box>
                     </center>
                   </React.Fragment>
-                ) : (selectNAC === 12 || selectNAC === 13) && ((headers.create_by === data.UserCode) || (checkUserWeb === 'admin') || (checkUserWeb === 'operatorI')) ? (
+                ) : (selectNAC === 12) && ((headers.create_by === data.UserCode) || (checkUserWeb === 'admin') || (checkUserWeb === 'operatorI')) ? (
                   <React.Fragment>
                     <center>
                       <Box sx={{ flexGrow: 1 }}>
@@ -2436,7 +2434,7 @@ export default function Nac_Seals_Approve() {
                           variant="contained"
                           endIcon={<DoubleArrowRoundedIcon />}
                           sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                          disabled={(selectNAC === 12 || selectNAC === 13) && ((headers.create_by === data.UserCode) || (checkUserWeb === 'admin') || (checkUserWeb === 'operatorI')) ? false : true}
+                          disabled={(selectNAC === 12) && ((headers.create_by === data.UserCode) || (checkUserWeb === 'admin') || (checkUserWeb === 'operatorI')) ? false : true}
                           onClick={handleSubmitComplete}>
                           ยืนยันรายการ
                         </Button>
