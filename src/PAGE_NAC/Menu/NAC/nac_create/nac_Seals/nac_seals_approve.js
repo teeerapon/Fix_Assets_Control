@@ -2320,7 +2320,7 @@ export default function Nac_Seals_Approve() {
                   <React.Fragment>
                     <center>
                       <Box sx={{ flexGrow: 1 }}>
-                        <Grid container></Grid>
+                        <Grid container>
                           <Grid item xs>
                           </Grid>
                           {(headers.real_price > 0) ? null : (
