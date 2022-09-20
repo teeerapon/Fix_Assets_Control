@@ -115,7 +115,6 @@ export default function EditPeriod() {
 
   const [EditPeriodData, setEditPeriodData] = React.useState(null);
   const data = JSON.parse(localStorage.getItem('data'));
-  console.log(data);
   const [periodData, setPeriodData] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);

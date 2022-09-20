@@ -172,12 +172,10 @@ export default function AddressForm() {
                 <TextField
                   required
                   inputProps={{ min: 1 }}
-                  min={1}
                   id="branchID"
                   name="branchID"
                   onChange={handleBranchID}
                   label="สาขา"
-                  type="number"
                   fullWidth
                 />
               </Grid>

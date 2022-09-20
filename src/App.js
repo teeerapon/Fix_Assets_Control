@@ -20,7 +20,7 @@ import History_of_Assets from './PAGE_NAC/Menu/NAC/historys/history_of_assets';
 import CreatePeriod from './PAGE_NAC/Menu/Period/Create/main';
 import CreatePeriod2 from './PAGE_NAC/Menu/Period/Create/main2';
 import CreatePeriod3 from './PAGE_NAC/Menu/Period/Create/main3';
-import EditPeriod from './PAGE_NAC/Menu/Period/Edit/EditPeriod';
+import EditPeriod from './PAGE_NAC/Menu/Period/Edit/period_round';
 import FETCH_ASSETS from './PAGE_NAC/Menu/Assets/main';
 // รายการ อนุมัติ และ ของฉัน
 import NAC_ROW from './PAGE_NAC/Menu/NAC/doc_nacs_me/nac_row_main';
