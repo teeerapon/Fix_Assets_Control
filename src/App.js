@@ -12,9 +12,8 @@ import { Route, Routes, useLocation, useParams } from "react-router";
 
 // NAC* //
 import Report from './PAGE_NAC/Menu/Report/Report';
-import ReportAll from './PAGE_NAC/Menu/Report/report_all';
 import AssetPage from './PAGE_NAC/Menu/Report/Assets';
-import AssetPage2 from './PAGE_NAC/Menu/Report/AssetsAll';
+import Reported_Assets_Counted from './PAGE_NAC/Menu/Report/AssetsAll';
 import HomePage from './PAGE_NAC/Menu/HomePage/HomePage';
 import History_of_Assets from './PAGE_NAC/Menu/NAC/historys/history_of_assets';
 import CreatePeriod from './PAGE_NAC/Menu/Period/Create/main';
@@ -114,9 +113,8 @@ function App() {
     [
       '/NAC_MAIN',
       '/Report',
-      '/ReportAll',
       '/AssetPage',
-      '/AssetPage2',
+      '/Reported_Assets_Counted',
       '/CreatePeriod',
       '/CreatePeriod2',
       '/CreatePeriod3',
@@ -220,9 +218,8 @@ function App() {
               {/*  */}
               <Route path="/NAC_MAIN" element={<HomePage />} />
               <Route path="/Report" element={<Report />} />
-              <Route path="/ReportAll" element={<ReportAll />} />
               <Route path="/AssetPage" element={<AssetPage />} />
-              <Route path="/AssetPage2" element={<AssetPage2 />} />
+              <Route path="/Reported_Assets_Counted" element={<Reported_Assets_Counted />} />
               <Route path="/CreatePeriod" element={<CreatePeriod />} />
               <Route path="/CreatePeriod2" element={<CreatePeriod2 />} />
               <Route path="/CreatePeriod3" element={<CreatePeriod3 />} />

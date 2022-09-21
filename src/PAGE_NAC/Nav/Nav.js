@@ -138,6 +138,10 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
     navigate('/Report')
   };
 
+  function REPORT_ALL() {
+    navigate('/Reported_Assets_Counted')
+  };
+
   function History_of_Assets() {
     navigate('/History_of_Assets')
   };
@@ -528,6 +532,19 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                     </ListItemButton>
                   </List>
                   <List component="div" disablePadding>
+                    <ListItemButton onClick={REPORT_ALL}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตรวจนับทรัพย์สินทั้งหมด
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                  </List>
+                  <List component="div" disablePadding>
                     <ListItemButton onClick={REPORT}>
                       <ListItemText>
                         <Typography
@@ -535,7 +552,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                           component="span"
                           variant="caption"
                         >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; รายงานตรวจนับทรัพย์สิน
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตรวจนับทรัพย์สิน 1 สาขา
                         </Typography>
                       </ListItemText>
                     </ListItemButton>

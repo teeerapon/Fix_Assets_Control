@@ -202,17 +202,19 @@ export default function History_of_assets() {
   const columns = [
     { field: 'nac_code', headerName: 'เลขที่เอกสาร', headerClassName: 'super-app-theme--header', width: 130 },
     { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', flex: 1, },
-    { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', width: 100 },
+    { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', width: 100, headerAlign: 'center', align: 'center', },
     {
       field: 'create_date',
       headerName: 'วันที่สร้างเอกสาร',
       headerClassName: 'super-app-theme--header',
-      width: 130,
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
       valueGetter: (params) =>
         `${params.row.create_date.split('T')[0] || ''}`,
     },
-    { field: 'source_userid', headerName: 'ผู้ส่ง', headerClassName: 'super-app-theme--header', width: 100, },
-    { field: 'des_userid', headerName: 'ผู้รับ', headerClassName: 'super-app-theme--header', width: 100, },
+    { field: 'source_userid', headerName: 'ผู้ส่ง', headerClassName: 'super-app-theme--header', width: 100, headerAlign: 'center', align: 'center', },
+    { field: 'des_userid', headerName: 'ผู้รับ', headerClassName: 'super-app-theme--header', width: 100, headerAlign: 'center', align: 'center', },
     {
       field: 'status_name',
       headerName: 'สถานะรายการ',
@@ -381,7 +383,7 @@ export default function History_of_assets() {
                 rowsPerPageOptions={[5]}
                 // getRowHeight={() => 'auto'}
                 disableColumnMenu
-                autoHeight={!selectNAC ? true : false}
+                autoHeight={true}
                 getRowClassName={(params) =>
                   params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                 }

@@ -157,28 +157,30 @@ export default function History_of_assets() {
   })
 
   const columns = [
-    { field: 'nacdtl_assetsCode', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 150, },
-    { field: 'nacdtl_assetsName', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 250 },
+    { field: 'nacdtl_assetsCode', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130, },
+    { field: 'nacdtl_assetsName', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', flex: 1, },
     {
       field: 'nacdtl_assetsPrice',
       headerName: 'ราคาทุน',
       headerClassName: 'super-app-theme--header',
-      width: 180,
+      width: 150,
       valueGetter: (params) =>
         `${params.row.nacdtl_assetsPrice.toLocaleString() || ''}`,
     },
-    { field: 'nac_code', headerName: 'เลขที่ NAC', headerClassName: 'super-app-theme--header', width: 150, },
-    { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', width: 230 },
-    { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', width: 110 },
-    { field: 'source_approve_userid', headerName: 'ผู้อนุมัติ', headerClassName: 'super-app-theme--header', width: 110 },
-    { field: 'account_aprrove_id', headerName: 'ผู้ปิดรายการ', headerClassName: 'super-app-theme--header', width: 110 },
-    { 
-      field: 'update_date', 
-      headerName: 'วันที่ปิดรายการ', 
-      type: 'date', 
+    { field: 'nac_code', headerName: 'เลขที่ NAC', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', width: 130 },
+    { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', flex: 1 },
+    { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', width: 100, },
+    { field: 'source_approve_userid', headerName: 'ผู้อนุมัติ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', width: 100, },
+    { field: 'account_aprrove_id', headerName: 'ผู้ปิดรายการ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', width: 100, },
+    {
+      field: 'update_date',
+      headerName: 'วันที่ปิดรายการ',
+      type: 'date',
       headerClassName: 'super-app-theme--header',
-      width: 144,
-   },
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
+    },
   ];
 
   React.useEffect(() => {
@@ -234,7 +236,7 @@ export default function History_of_assets() {
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     เพิ่มบัญชีทรัพย์สินถาวร
                   </Typography>
-                  <Typography variant="h5" component="div">
+                  <Typography sx={{ fontSize: 16 }} component="div">
                     <b>{!dataHistory ? 0 : dataAdd} รายการ</b>
                   </Typography>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -256,7 +258,7 @@ export default function History_of_assets() {
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     โยกย้ายทรัพย์สิน
                   </Typography>
-                  <Typography variant="h5" component="div">
+                  <Typography sx={{ fontSize: 16 }} component="div">
                     <b>{!dataHistory ? 0 : dataTranfers} รายการ</b>
                   </Typography>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -278,7 +280,7 @@ export default function History_of_assets() {
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     เปลี่ยนแปลงรายละเอียด
                   </Typography>
-                  <Typography variant="h5" component="div">
+                  <Typography sx={{ fontSize: 16 }} component="div">
                     <b>{!dataHistory ? 0 : dataChange} รายการ</b>
                   </Typography>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -300,7 +302,7 @@ export default function History_of_assets() {
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     ตัดทรัพย์สินถาวร
                   </Typography>
-                  <Typography variant="h5" component="div">
+                  <Typography sx={{ fontSize: 16 }} component="div">
                     <b>{!dataHistory ? 0 : dataDelete} รายการ</b>
                   </Typography>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -322,7 +324,7 @@ export default function History_of_assets() {
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     ขายทรัพย์สิน
                   </Typography>
-                  <Typography variant="h5" component="div">
+                  <Typography sx={{ fontSize: 16 }} component="div">
                     <b>{!dataHistory ? 0 : dataSeals} รายการ</b>
                   </Typography>
                   <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -357,7 +359,7 @@ export default function History_of_assets() {
                 rowsPerPageOptions={[5]}
                 //getRowHeight={() => 'auto'}
                 disableColumnMenu
-                autoHeight={!dataHistory ? true : false}
+                autoHeight={true}
                 getRowClassName={(params) =>
                   params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                 }
