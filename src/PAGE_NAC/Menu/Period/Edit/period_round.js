@@ -209,6 +209,8 @@ export default function History_of_assets() {
       field: 'BeginDate',
       headerName: 'วันที่เริ่มต้น',
       headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', 
+      align: 'center',
       flex: 1,
       valueGetter: (params) =>
         `${!params.row.BeginDate ? '' : params.row.BeginDate.split('T')[0] || ''} ${!params.row.BeginDate ? '' : params.row.BeginDate.split('T')[1].split('.')[0] || ''}`,
@@ -217,6 +219,8 @@ export default function History_of_assets() {
       field: 'EndDate',
       headerName: 'วันที่สิ้นสุด',
       headerClassName: 'super-app-theme--header',
+      headerAlign: 'center', 
+      align: 'center',
       flex: 1,
       valueGetter: (params) =>
         `${!params.row.EndDate ? '' : params.row.EndDate.split('T')[0] || ''} ${!params.row.EndDate ? '' : params.row.EndDate.split('T')[1].split('.')[0] || ''}`,
@@ -225,7 +229,9 @@ export default function History_of_assets() {
       field: 'Code',
       headerName: 'สาขา',
       headerClassName: 'super-app-theme--header',
-      flex: 1,
+      headerAlign: 'center', 
+      align: 'center',
+      width: 100,
       valueGetter: (params) =>
         `${params.row.Code || ''}`,
     },
@@ -423,6 +429,7 @@ export default function History_of_assets() {
                 pageSize={5}
                 rowsPerPageOptions={[5]}
                 getRowId={(dataBranchID_Main) => dataBranchID_Main.PeriodID}
+                autoHeight={true}
                 disableColumnMenu
                 getRowClassName={(params) =>
                   params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'

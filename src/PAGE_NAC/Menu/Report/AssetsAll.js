@@ -1,62 +1,198 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import ReactHTMLTableToExcel from 'react-html-table-to-excel';
-import Button from '@mui/material/Button';
-import AnimatedPage from "../../../AnimatedPage.jsx";
+import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
-import { Outlet, useNavigate } from "react-router";
+import AnimatedPage from '../../../AnimatedPage';
+import React from 'react';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Stack from '@mui/material/Stack';
+import { alpha, styled } from '@mui/material/styles';
+import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
+import Axios from "axios"
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
+const ODD_OPACITY = 0.2;
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
+const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
+  '.css-1knaqv7-MuiButtonBase-root-MuiButton-root': {
+    color: 'rgba(0, 0, 0, 1)',
   },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+  '.css-f3jnds-MuiDataGrid-columnHeaders': {
+    backgroundColor: 'rgba(0, 0, 0, 1)',
+    color: 'rgba(255, 255, 255,1)',
+  },
+  '.css-1s0hp0k-MuiDataGrid-columnHeadersInner': {
+    backgroundColor: 'rgba(0, 0, 0, 1)',
+    color: 'rgba(255, 255, 255, 1)',
+    '.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root': {
+      color: 'rgba(255, 255, 255, 1)',
+      display: 'none'
+    },
+    '.css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root': {
+      color: 'rgba(255, 255, 255,1)'
+    },
+  },
+  [`& .${gridClasses.row}.even`]: {
+    backgroundColor: theme.palette.grey[100],
+    '&:hover, &.Mui-hovered': {
+      backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+    },
+    '&.Mui-selected': {
+      backgroundColor: alpha(
+        theme.palette.primary.main,
+        ODD_OPACITY + theme.palette.action.selectedOpacity,
+      ),
+      '&:hover, &.Mui-hovered': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          ODD_OPACITY +
+          theme.palette.action.selectedOpacity +
+          theme.palette.action.hoverOpacity,
+        ),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: alpha(
+            theme.palette.primary.main,
+            ODD_OPACITY + theme.palette.action.selectedOpacity,
+          ),
+        },
+      },
+    },
+  },
+  [`& .${gridClasses.row}.odd`]: {
+    '&:hover, &.Mui-hovered': {
+      backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+    },
+    '&.Mui-selected': {
+      backgroundColor: alpha(
+        theme.palette.primary.main,
+        ODD_OPACITY + theme.palette.action.selectedOpacity,
+      ),
+      '&:hover, &.Mui-hovered': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          ODD_OPACITY +
+          theme.palette.action.selectedOpacity +
+          theme.palette.action.hoverOpacity,
+        ),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: alpha(
+            theme.palette.primary.main,
+            ODD_OPACITY + theme.palette.action.selectedOpacity,
+          ),
+        },
+      },
+    },
   },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
+export default function Reported_of_assets() {
 
-export default function MenuAppBar() {
-  const AssetsAll = JSON.parse(localStorage.getItem('Allassets'));
-  console.log(AssetsAll.length)
-  const AssetsAllCount = AssetsAll.length
-  const [showResultsAll, setShowResultsAll] = React.useState(false)
-  const navigate = useNavigate();
+  const [selectMenu, setSelectMenu] = React.useState();
+  const [reported_of_assets, setReported_of_assets] = React.useState();
+  const data = JSON.parse(localStorage.getItem('data'));
+  const [description_value, setDescription_value] = React.useState('');
 
-  if (!AssetsAll) {
-    navigate("/ReportAll")
-  }
+  const columns = [
+    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130 },
+    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 200 },
+    { field: 'BranchID', headerName: 'สาขา', headerClassName: 'super-app-theme--header', width: 100, headerAlign: 'center', align: 'center', },
+    {
+      field: 'Date',
+      headerName: 'วันที่ตรวจนับ',
+      headerClassName: 'super-app-theme--header',
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
+      valueGetter: (params) =>
+        `${params.row.Date || ''}`,
+    },
+    { field: 'EndDate_Success', headerName: 'วันที่ทำ NAC ล่าสุด', headerClassName: 'super-app-theme--header', width: 150, headerAlign: 'center', align: 'center', },
+    {
+      field: 'UserID',
+      headerName: 'ผู้ตรวจนับ',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'super-app-theme--header',
+      width: 100,
+      valueGetter: (params) =>
+        `${params.row.UserID || ''}`,
+    },
+    {
+      field: 'detail',
+      headerName: 'สถานะล่าสุด',
+      headerClassName: 'super-app-theme--header',
+      flex: 1,
+      valueGetter: (params) =>
+        `${params.row.detail || ''}`,
+    },
+    {
+      field: 'Reference',
+      headerName: 'สถานะครั้งนี้',
+      headerClassName: 'super-app-theme--header',
+      flex: 1,
+      valueGetter: (params) =>
+        `${params.row.Reference || ''}`,
+    },
+    {
+      field: 'Status',
+      headerName: 'หมายเหตุ',
+      headerClassName: 'super-app-theme--header',
+      width: 120,
+      renderCell: (params) => {
+        return (
+          <Typography
+            variant='body2'
+            style={{
+              color: (params.row.Status === true && (params.row.BranchID === params.row.UserBranch)) ? '#008000' :
+                (params.row.Status === true && (params.row.BranchID !== params.row.UserBranch)) ? ' #FFA500' : '#DC143C'
+            }}
+          >
+            {(params.row.Status === true && (params.row.BranchID === params.row.UserBranch)) ? 'สแกนแล้ว' :
+              (params.row.Status === true && (params.row.BranchID !== params.row.UserBranch)) ? 'ต่างสาขา' : 'ยังไม่ได้สแกน'}
+          </Typography>
+        )
+      }
+    },
+  ];
 
-  function ShowDataAll() {
-    setShowResultsAll(showResultsAll => !showResultsAll);
+  React.useEffect(() => {
+    // POST request using axios with set headers
+    const Description = { Description: '' }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers })
+      .then(response => setSelectMenu(response.data.data));
+  }, []);
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setDescription_value(event.target.value);
+    const Description = { Description: event.target.value }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers })
+      .then(response => setReported_of_assets(response.data.data));
   };
 
   return (
-    <div>
+    <React.Fragment>
       <AppBar
         position="absolute"
         color="default"
@@ -69,78 +205,64 @@ export default function MenuAppBar() {
         <Toolbar>
           <AnimatedPage>
             <Typography variant="h5" color="inherit" noWrap>
-              รายงานการตรวจนับทั้งหมด
+            รายงานการตรวจนับทั้งหมด
             </Typography>
           </AnimatedPage>
         </Toolbar>
       </AppBar>
       <AnimatedPage>
-        <div className='container pt-3' component="main">
-          <center>
-            <div className='col-md-10' align="left">
-              <Card style={{ height: '4rem', background: 'linear-gradient(45deg, #0226d8 30%, #a602d8 90%)' }} className="block-example text-white">
-                <CardContent>
-                  <Row>
-                    <Col className='col-md-8'><h3 align="left">ทั้งหมด ({AssetsAllCount})</h3></Col>
-                    <Col align="right" >
-                      <Button variant="contained" onClick={ShowDataAll} className="bg-white text-dark">Show/Hide</Button>
-                    </Col>
-                    <Col align="right" ><ReactHTMLTableToExcel
-                      id="test-table-xls-button"
-                      variant="contained"
-                      className="download-table-xls-button btn mb-3 text-dark bg-white"
-                      table="table-to-xls1"
-                      filename="AssetsAllReported"
-                      sheet="AssetsAllReported"
-                      buttonText="Export to Excel" />
-                    </Col>
-                  </Row>
-                </CardContent>
-              </Card>
-              {
-                showResultsAll ?
-                <TableContainer component={Paper} className='pt-1'>
-                  <Table sx={{ minWidth: 700 }} aria-label="customized table" id="table-to-xls1">
-                    <TableHead>
-                      <TableRow>
-                        <StyledTableCell align="left" sx={{ minWidth: 110 }}>
-                          Asset ID
-                        </StyledTableCell>
-                        <StyledTableCell align="left" sx={{ minWidth: 150 }}>Assets Code</StyledTableCell>
-                        <StyledTableCell align="left" >ชื่อทรัพย์สิน</StyledTableCell>
-                        <StyledTableCell align="center" sx={{ minWidth: 110 }}>รอบที่บันทึก</StyledTableCell>
-                        <StyledTableCell align="center" >สาขา</StyledTableCell>
-                        <StyledTableCell align="center" sx={{ minWidth: 90 }}>ผู้ตรวจนับ</StyledTableCell>
-                        <StyledTableCell align="center" sx={{ minWidth: 90 }}>อ้างอิง</StyledTableCell>
-                        <StyledTableCell align="center" sx={{ minWidth: 90 }}>หมายเหตุ</StyledTableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {AssetsAll.map((AssetsAll) => (
-                        <StyledTableRow key={AssetsAll.Code}>
-                          <StyledTableCell component="th" scope="row" align="left" >
-                            {AssetsAll.AssetID}
-                          </StyledTableCell>
-                          <StyledTableCell align="left" >{AssetsAll.Code}</StyledTableCell>
-                          <StyledTableCell align="left" >{AssetsAll.Name}</StyledTableCell>
-                          <StyledTableCell align="center" >{AssetsAll.RoundID}</StyledTableCell>
-                          <StyledTableCell align="center" >{AssetsAll.BranchID}</StyledTableCell>
-                          <StyledTableCell align="center" >{AssetsAll.UserID}</StyledTableCell>
-                          <StyledTableCell align="center" >{AssetsAll.Reference}</StyledTableCell>
-                          <StyledTableCell align="center" >{AssetsAll.Reference}</StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                : null
-              }
-            </div>
-          </center>
-        </div>
+        <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+          <Container maxWidth="1000px" sx={{ pt: 3 }}>
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 300 }}>
+              <InputLabel id="demo-simple-select-standard-label">None</InputLabel>
+              <Select
+                labelId="demo-simple-select-standard-label"
+                id="demo-simple-select-standard"
+                value={description_value}
+                onChange={handleChange}
+                label="None"
+              >
+                {!selectMenu ? null : selectMenu.map((res) => (
+                  <MenuItem value={res.Description}>{res.Description}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Box
+              sx={{
+                height: 480,
+                width: '100%',
+              }}
+            >
+              <StripedDataGrid
+                sx={{
+                  mt: 3,
+                  pl: 2,
+                  pr: 2,
+                  pt: 2,
+                  boxShadow: 1,
+                  [`& .${gridClasses.cell}`]: {
+                    py: 1,
+                  },
+                }}
+                components={{ Toolbar: GridToolbar }}
+                componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
+                rows={!reported_of_assets ? [] : reported_of_assets}
+                columns={columns}
+                getRowId={(reported_of_assets) => reported_of_assets.AssetID}
+                pageSize={5}
+                rowsPerPageOptions={[5]}
+                disableColumnMenu
+                autoHeight={true}
+                getRowClassName={(params) =>
+                  params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                }
+                disableSelectionOnClick
+              //checkboxSelection
+              />
+            </Box>
+          </Container>
+        </Box>
       </AnimatedPage>
-      <div className='pt-3'></div>
-      <Outlet />
-    </div>
+    </React.Fragment>
   );
 }

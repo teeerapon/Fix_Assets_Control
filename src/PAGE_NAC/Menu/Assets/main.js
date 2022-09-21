@@ -100,7 +100,7 @@ export default function History_of_assets() {
   const data = JSON.parse(localStorage.getItem('data'));
 
   const columns = [
-    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 150 },
+    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130 },
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 250 },
     { field: 'BranchID', headerName: 'สาขา', headerClassName: 'super-app-theme--header', width: 100 },
     { field: 'SerialNo', headerName: 'SerialNo', headerClassName: 'super-app-theme--header', flex: 1, },
@@ -113,12 +113,14 @@ export default function History_of_assets() {
       valueGetter: (params) =>
         `${params.row.Price.toLocaleString() || ''}`,
     },
-    { field: 'Position', headerName: 'Position', headerClassName: 'super-app-theme--header', width: 130 },
+    { field: 'Position', headerName: 'Position', headerClassName: 'super-app-theme--header', width: 100 },
     {
       field: 'CreateDate',
       headerName: 'วันที่ขึ้นทะเบียน',
       headerClassName: 'super-app-theme--header',
       width: 150,
+      headerAlign: 'center', 
+      align: 'center',
       valueGetter: (params) =>
         `${params.row.CreateDate.split('T')[0] || ''}`,
     },
@@ -149,7 +151,7 @@ export default function History_of_assets() {
         <Toolbar>
           <AnimatedPage>
             <Typography variant="h5" color="inherit" noWrap>
-              ประวัติทรัพย์สินที่ดำเนินการเสร็จสิ้น
+              ทรัพย์สินทั้งหมด
             </Typography>
           </AnimatedPage>
         </Toolbar>
@@ -183,7 +185,7 @@ export default function History_of_assets() {
                 rowsPerPageOptions={[5]}
                 //getRowHeight={() => 'auto'}
                 disableColumnMenu
-                autoHeight={!dataHistory ? true : false}
+                autoHeight={true}
                 getRowClassName={(params) =>
                   params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                 }
