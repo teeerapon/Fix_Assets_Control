@@ -148,7 +148,7 @@ export default function Reported_of_assets() {
         `${params.row.Reference || ''}`,
     },
     {
-      field: 'Status',
+      field: 'remarker',
       headerName: 'หมายเหตุ',
       headerClassName: 'super-app-theme--header',
       width: 120,
@@ -157,12 +157,11 @@ export default function Reported_of_assets() {
           <Typography
             variant='body2'
             style={{
-              color: (params.row.Status === true && (params.row.BranchID === params.row.UserBranch)) ? '#008000' :
-                (params.row.Status === true && (params.row.BranchID !== params.row.UserBranch)) ? ' #FFA500' : '#DC143C'
+              color: params.row.remarker === 'ตรวจนับแล้ว' ? '#008000' :
+              params.row.remarker === 'ยังไม่ได้ตรวจนับ' ? '#DC143C' : ' #FFA500'
             }}
           >
-            {(params.row.Status === true && (params.row.BranchID === params.row.UserBranch)) ? 'สแกนแล้ว' :
-              (params.row.Status === true && (params.row.BranchID !== params.row.UserBranch)) ? 'ต่างสาขา' : 'ยังไม่ได้สแกน'}
+            {params.row.remarker}
           </Typography>
         )
       }

@@ -1455,13 +1455,12 @@ export default function EnhancedTable() {
                           <TableCell align="left" style={{ 'maxWidth': 'fit-content' }}>{row.detail}</TableCell>
                           <TableCell align="left" style={{ 'maxWidth': 'fit-content' }}>{row.Reference}</TableCell>
                           <TableCell align="left" style={{
-                            'backgroundColor': forcheckAssetCount.includes(row.Code) === true ? 'green' :
-                              forcheckAssetWrong.includes(row.Code) === true ? 'orange' : 'red'
-                            , 'color': 'white'
+                            'color': forcheckAssetCount.includes(row.Code) === true ? '#008000' :
+                              forcheckAssetWrong.includes(row.Code) === true ? '#FFA500' : '#DC143C'
                           }}>
                             {
-                              forcheckAssetCount.includes(row.Code) === true ? 'รายการนับแล้ว' :
-                                forcheckAssetWrong.includes(row.Code) === true ? 'สาขาอื่น' : 'ยังไม่ได้นับ'
+                              forcheckAssetCount.includes(row.Code) === true ? 'ตรวจนับแล้ว' :
+                                forcheckAssetWrong.includes(row.Code) === true ? 'นับแล้ว ต่างสาขา' : 'ยังไม่ได้ตรวจนับ'
                             }
                           </TableCell>
                         </TableRow>
