@@ -247,7 +247,7 @@ export default function Reported_of_assets() {
                 componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
                 rows={!reported_of_assets ? [] : reported_of_assets}
                 columns={columns}
-                getRowId={(reported_of_assets) => reported_of_assets.AssetID}
+                getRowId={(reported_of_assets) => reported_of_assets.RowID}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
                 disableColumnMenu
