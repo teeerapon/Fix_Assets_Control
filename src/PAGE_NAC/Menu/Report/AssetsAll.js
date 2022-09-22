@@ -103,6 +103,7 @@ export default function Reported_of_assets() {
 
   const [selectMenu, setSelectMenu] = React.useState();
   const [reported_of_assets, setReported_of_assets] = React.useState();
+  console.log(!reported_of_assets ? 0 : reported_of_assets.length);
   const data = JSON.parse(localStorage.getItem('data'));
   const [description_value, setDescription_value] = React.useState('');
 
@@ -158,7 +159,7 @@ export default function Reported_of_assets() {
             variant='body2'
             style={{
               color: params.row.remarker === 'ตรวจนับแล้ว' ? '#008000' :
-              params.row.remarker === 'ยังไม่ได้ตรวจนับ' ? '#DC143C' : ' #FFA500'
+                params.row.remarker === 'ยังไม่ได้ตรวจนับ' ? '#DC143C' : ' #FFA500'
             }}
           >
             {params.row.remarker}
@@ -204,7 +205,7 @@ export default function Reported_of_assets() {
         <Toolbar>
           <AnimatedPage>
             <Typography variant="h5" color="inherit" noWrap>
-            รายงานการตรวจนับทั้งหมด
+              รายงานการตรวจนับทั้งหมด
             </Typography>
           </AnimatedPage>
         </Toolbar>
@@ -247,7 +248,7 @@ export default function Reported_of_assets() {
                 componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
                 rows={!reported_of_assets ? [] : reported_of_assets}
                 columns={columns}
-                getRowId={(reported_of_assets) => reported_of_assets.AssetID}
+                getRowId={(reported_of_assets) => reported_of_assets.RowID}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
                 disableColumnMenu
