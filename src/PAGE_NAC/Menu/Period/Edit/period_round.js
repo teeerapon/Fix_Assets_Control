@@ -214,7 +214,7 @@ export default function History_of_assets() {
       align: 'center',
       flex: 1,
       valueGetter: (params) =>
-        `${!params.row.BeginDate ? '' : params.row.BeginDate.split('T')[0] || ''} ${!params.row.BeginDate ? '' : params.row.BeginDate.split('T')[1].split('.')[0] || ''}`,
+        `${!params.row.BeginDate ? '' : params.row.BeginDate.split('T')[0] || ''} ${!params.row.BeginDate ? '' : '00:00' || ''}`,
     },
     {
       field: 'EndDate',
@@ -224,7 +224,7 @@ export default function History_of_assets() {
       align: 'center',
       flex: 1,
       valueGetter: (params) =>
-        `${!params.row.EndDate ? '' : params.row.EndDate.split('T')[0] || ''} ${!params.row.EndDate ? '' : params.row.EndDate.split('T')[1].split('.')[0] || ''}`,
+        `${!params.row.EndDate ? '' : params.row.EndDate.split('T')[0] || ''} ${!params.row.EndDate ? '' : '00:00' || ''}`,
     },
     {
       field: 'Code',
@@ -463,7 +463,7 @@ export default function History_of_assets() {
                       <LocalizationProvider dateAdapter={DateAdapter}>
                         <DatePicker
                           value={editFormData.BeginDate}
-                          inputFormat="yyyy-MM-dd 00:00:00"
+                          inputFormat="yyyy-MM-dd 00:00"
                           onChange={handleChangeBeginDate}
                           renderInput={(params) =>
                             <TextField
@@ -480,7 +480,7 @@ export default function History_of_assets() {
                       <LocalizationProvider dateAdapter={DateAdapter}>
                         <DatePicker
                           value={editFormData.EndDate}
-                          inputFormat="yyyy-MM-dd 00:00:00"
+                          inputFormat="yyyy-MM-dd 00:00"
                           onChange={handleChangeEndDate}
                           renderInput={(params) =>
                             <TextField

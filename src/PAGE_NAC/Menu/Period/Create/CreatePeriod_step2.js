@@ -40,7 +40,7 @@ export default function AddressForm() {
 
   const handleSubmit = async e => {
     const BeginDate = (DataCreatePeriod.valueDateTime1).split('T')[0] + ' 7:00:00'
-    const EndDate = (DataCreatePeriod.valueDateTime2).split('T')[0] + ' 7:00:00'
+    const EndDate = (DataCreatePeriod.valueDateTime2).split('T')[0] + ' 14:00:00'
     const BranchID = DataCreatePeriod.valueBrachID1
     const Description = DataCreatePeriod.valueDescription
     const usercode = data.UserCode

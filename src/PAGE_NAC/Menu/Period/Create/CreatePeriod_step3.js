@@ -72,12 +72,12 @@ export default function AddressForm() {
             <TableBody>
               <StyledTableCell align="left" sx={{ width: 200 }}>วันที่และเวลาเริ่มต้น</StyledTableCell>
               <StyledTableCell align="left" sx={{ width: 50 }}>:</StyledTableCell>
-              <StyledTableCell align="left" sx={{ width: 250 }}>{period_round.BeginDate.split('T')[0]} ( 00:00 )</StyledTableCell>
+              <StyledTableCell align="left" sx={{ width: 250 }}>{period_round.BeginDate.split('T')[0]}  00:00 </StyledTableCell>
             </TableBody>
             <TableBody>
               <StyledTableCell align="left" sx={{ width: 200 }}>วันที่และเวลาสิ้นสุด</StyledTableCell>
               <StyledTableCell align="left" sx={{ width: 50 }}>:</StyledTableCell>
-              <StyledTableCell align="left" sx={{ width: 250 }}>{period_round.EndDate.split('T')[0]} ( 23:59 )</StyledTableCell>
+              <StyledTableCell align="left" sx={{ width: 250 }}>{period_round.EndDate.split('T')[0]}  00:00 </StyledTableCell>
             </TableBody>
           </Table>
         </TableContainer>

@@ -78,8 +78,13 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
   });
 
   function HomePage() {
-    navigate('/')
-    handleDrawerClose();
+    if (checkUserWeb === 'admin') {
+      navigate('/DATA_CENTER')
+      handleDrawerClose()
+    } else {
+      navigate('/')
+      handleDrawerClose()
+    }
   };
 
   const handleLogout = () => {
