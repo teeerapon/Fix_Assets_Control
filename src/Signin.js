@@ -64,12 +64,26 @@ async function permission(credentials) {
     .then(data => data.json())
 }
 
+async function ChackUserWeb(credentials) {
+  return fetch('http://vpnptec.dyndns.org:32001/api/ChackUserWeb', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 export default function Signin() {
   const classes = useStyles();
   const URL_LINK = useLocation()
   const [UserCode, setUserCode] = useState();
   const [Password, setPassword] = useState();
+  const [checkUserWeb, setCheckUserWeb] = React.useState();
   const userCode = UserCode;
+  const usercode = UserCode;
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -80,24 +94,29 @@ export default function Signin() {
     const responseForPermission = await permission({
       userCode
     });
+    const resChackUserWeb = await ChackUserWeb({
+      usercode
+    });
     if (UserCode == null || Password == null) {
       swal("ทำรายการไม่สำเร็จ", 'กรุณากรอกข้อมูลเพื่อล็อคอินเข้าสู่ระบบ', "error");
     } else {
       if ('token' in response) {
-        swal("ทำรายการสำเร็จ", 'คุณได้เข้าสู่กระบบแล้ว', "success",{
+        swal("ทำรายการสำเร็จ", 'คุณได้เข้าสู่กระบบแล้ว', "success", {
           buttons: false,
           timer: 1500,
         }).then((value) => {
-          if(URL_LINK.pathname !== '/'){
+          if (URL_LINK.pathname !== '/') {
+            localStorage.setItem('sucurity', resChackUserWeb['data'][0]['approverid']);
             localStorage.setItem('token', response['token']);
             localStorage.setItem('data', JSON.stringify(response['data'][0]));
             localStorage.setItem('permission', JSON.stringify(responseForPermission['data']));
             window.location.href = URL_LINK.pathname;
-          }else{
-          localStorage.setItem('token', response['token']);
-          localStorage.setItem('data', JSON.stringify(response['data'][0]));
-          localStorage.setItem('permission', JSON.stringify(responseForPermission['data']));
-          window.location.href = '/NAC_MAIN';
+          } else {
+            localStorage.setItem('sucurity', resChackUserWeb['data'][0]['approverid']);
+            localStorage.setItem('token', response['token']);
+            localStorage.setItem('data', JSON.stringify(response['data'][0]));
+            localStorage.setItem('permission', JSON.stringify(responseForPermission['data']));
+            window.location.href = '/NAC_MAIN';
           }
         });
       } else {

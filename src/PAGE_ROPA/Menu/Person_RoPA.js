@@ -19,7 +19,7 @@ import logoPure from '../../image/Picture1.png'
 import { alpha, styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
-import ArticleIcon from '@mui/icons-material/Visibility';
+import ArticleIcon from '@mui/icons-material/Article';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -35,6 +35,14 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import PersonAddAlt1 from '@mui/icons-material/PersonAddAlt1';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Chip from '@mui/material/Chip';
+import Grid from '@mui/material/Grid';
+import Axios from "axios"
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const ODD_OPACITY = 0.2;
 
@@ -120,28 +128,37 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 
 export default function Permission_to_RoPA() {
 
-  const [selectedUser, setSelectedUser] = React.useState();
-  const [openDialogDelete, setOpenDialogDelete] = React.useState(false);
-  const [openDialogDeleteII, setOpenDialogDeleteII] = React.useState(false);
+  const [ropa_List, setRopa_List] = React.useState();
+  const [openII, setOpenII] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [dataList, setDataList] = React.useState(false);
 
-  const [rows_pageMAIN, setRows_pageMAIN] = React.useState();
-  const [columns_pageMAIN, setColumns_pageMAIN] = React.useState();
+  const handleClickOpenII = (event, params) => {
+    setOpenII(true);
+    setDataList(params.row)
+  }
 
-  const [rows_pageII, setRows_pageII] = React.useState();
-  const [rows_pageII_I, setRows_pageII_I] = React.useState();
-  const [rows_pageIII, setRows_pageIII] = React.useState();
-
-  const [columns_pageII, setColumns_pageII] = React.useState();
-  const [columns_pageII_I, setColumns_pageII_I] = React.useState();
-  const [columns_pageIII, setColumns_pageIII] = React.useState();
-
-  const handleCloseDeleteII = () => {
-    setOpenDialogDeleteII(false);
+  const handleCloseII = () => {
+    setOpenII(false);
   };
 
-  const handleCloseDelete = () => {
-    setOpenDialogDelete(false);
+  const handleClickOpen = (event, params) => {
+    setOpen(true);
+    setDataList(params.row)
+  }
+
+  const handleClose = () => {
+    setOpen(false);
   };
+
+  React.useEffect(() => {
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.get('http://192.168.220.1:32001/api/Ropa_List', { headers })
+      .then(response => setRopa_List(response.data));
+  }, []);
 
   const row_PageIII = [
     { id: 1, type_name: 'หมายเลขบัตรประจำตัวประชาชน', },
@@ -184,14 +201,6 @@ export default function Permission_to_RoPA() {
         );
       }
     },
-  ];
-
-  const row_PageII = [
-    { id: 1, inital: 'PAB', lastName: 'Anekboonyapirom', depID: 'ITO', beginDate_permission: '2022/08/01', date_permission: '2022/08/01', firstName: 'Pison' },
-    { id: 2, inital: 'TPS', lastName: 'สุขแสงเปล่ง', depID: 'ITO', beginDate_permission: '2022/09/04', date_permission: '2022/08/01', firstName: 'ธีรภณ' },
-    { id: 3, inital: 'TPD', lastName: 'ดูเรืองรัมย์', depID: 'ITO', beginDate_permission: '2022/08/25', date_permission: '2022/08/01', firstName: 'ธนพล' },
-    { id: 4, inital: 'SRD', lastName: 'แดงน้อย', depID: 'ITO', beginDate_permission: '2022/09/01', date_permission: '2022/08/01', firstName: 'สมฤดี' },
-    { id: 5, inital: 'SCN', lastName: 'Numplaeg', depID: 'ITO', beginDate_permission: '2022/09/01', date_permission: '2022/08/01', firstName: 'Stc' },
   ];
 
   const column_PageII: GridColDef[] = [
@@ -242,32 +251,9 @@ export default function Permission_to_RoPA() {
       flex: 1,
       disableClickEventBubbling: true,
       renderCell: (params) => {
-        const onClickPermission = (e) => {
-          e.stopPropagation(); // don't select this row after clicking
-
-          const value = params.colDef.field;
-          const api: GridApi = params.api;
-          const thisRow: Record<string, GridCellValue> = {};
-
-          api
-            .getAllColumns()
-            .filter((c) => c.field !== "__check__" && !!c)
-            .forEach(
-              (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-            );
-          setRows_pageIII(row_PageIII);
-          setColumns_pageIII(column_PageIII)
-          setRows_pageMAIN(row_PageIII)
-          setColumns_pageMAIN(column_PageIII)
-          setRows_pageII(null);
-          setColumns_pageII(null)
-          setRows_pageII_I(null);
-          setColumns_pageII_I(null);
-        };
         return (
           <Button
             variant="contained"
-            onClick={onClickPermission}
             style={{ backgroundColor: '#008000' }}
             startIcon={<ArticleIcon />}
           >
@@ -282,26 +268,9 @@ export default function Permission_to_RoPA() {
       flex: 1,
       disableClickEventBubbling: true,
       renderCell: (params) => {
-        const onClickDelete = (e) => {
-          e.stopPropagation(); // don't select this row after clicking
-
-          const value = params.colDef.field;
-          const api: GridApi = params.api;
-          const thisRow: Record<string, GridCellValue> = {};
-
-          api
-            .getAllColumns()
-            .filter((c) => c.field !== "__check__" && !!c)
-            .forEach(
-              (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-            );
-          setSelectedUser(thisRow);
-          setOpenDialogDelete(true);
-        };
         return (
           <Button
             variant="contained"
-            onClick={onClickDelete}
             style={{ backgroundColor: '#DC143C' }}
             startIcon={<DeleteIcon />}
           >
@@ -310,14 +279,6 @@ export default function Permission_to_RoPA() {
         );
       }
     },
-  ];
-
-  const row_PageII_I = [
-    { id: 1, inital: 'PAB', lastName: 'Anekboonyapirom', depID: 'ITO', beginDate_permission: '2022/09/01', firstName: 'Pison' },
-    { id: 2, inital: 'TPS', lastName: 'สุขแสงเปล่ง', depID: 'ITO', beginDate_permission: '2022/09/01', firstName: 'ธีรภณ' },
-    { id: 3, inital: 'TPD', lastName: 'ดูเรืองรัมย์', depID: 'ITO', beginDate_permission: '2022/09/01', firstName: 'ธนพล' },
-    { id: 4, inital: 'SRD', lastName: 'แดงน้อย', depID: 'ITO', beginDate_permission: '2022/09/01', firstName: 'สมฤดี' },
-    { id: 5, inital: 'SCN', lastName: 'Numplaeg', depID: 'ITO', beginDate_permission: '2022/09/01', firstName: 'Stc' },
   ];
 
   const column_PageII_I: GridColDef[] = [
@@ -363,26 +324,9 @@ export default function Permission_to_RoPA() {
       flex: 1,
       disableClickEventBubbling: true,
       renderCell: (params) => {
-        const onClickDelete = (e) => {
-          e.stopPropagation(); // don't select this row after clicking
-
-          const value = params.colDef.field;
-          const api: GridApi = params.api;
-          const thisRow: Record<string, GridCellValue> = {};
-
-          api
-            .getAllColumns()
-            .filter((c) => c.field !== "__check__" && !!c)
-            .forEach(
-              (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-            );
-          setSelectedUser(thisRow);
-          setOpenDialogDeleteII(true);
-        };
         return (
           <Button
             variant="contained"
-            onClick={onClickDelete}
             color='error'
             startIcon={<DeleteIcon />}
           >
@@ -395,150 +339,85 @@ export default function Permission_to_RoPA() {
 
   const columns: GridColDef[] = [
     {
-      field: 'id',
+      field: 'Ropa_ID',
       headerName: 'ID',
       headerClassName: 'super-app-theme--header',
       width: 80,
       hide: true,
     },
     {
-      field: 'code',
-      headerName: 'Code',
+      field: 'Depcode',
+      headerName: 'DepCode',
       headerClassName: 'super-app-theme--header',
       width: 80,
     },
     {
-      field: 'name_ROPA',
+      field: 'DataItem_Name',
       headerName: 'ชือหัวข้อ',
       headerClassName: 'super-app-theme--header',
       flex: 1,
     },
     {
-      field: 'scope_group',
+      field: 'Ropa_Type',
+      headerName: 'ประเภทข้อมูล',
+      headerClassName: 'super-app-theme--header',
+      flex: 1,
+    },
+    {
+      field: 'Data_Subject',
       headerName: 'กลุ่มเป้าหมาย',
       headerClassName: 'super-app-theme--header',
       flex: 1,
     },
     {
-      field: 'layer_security',
-      headerName: 'ขั้นตอนในการรักษาความปลอดภัยของข้อมูล',
+      field: 'Step',
+      headerName: 'ขั้นตอนในการรักษา',
       headerClassName: 'super-app-theme--header',
       flex: 1,
     },
     {
-      field: 'begin_date_security',
+      field: 'Last_Review',
       headerName: 'วันที่ล่าสุดที่ประมวลผล',
       type: 'dateTime',
       headerClassName: 'super-app-theme--header',
       flex: 1,
     },
     {
-      field: 'permission',
-      headerName: 'Permission',
-      flex: 1,
+      field: 'action',
+      headerName: 'Action',
+      width: 200,
+      align: 'center',
+      headerAlign: 'center',
       disableClickEventBubbling: true,
       renderCell: (params) => {
-        const onClickPermission = (e) => {
-          e.stopPropagation(); // don't select this row after clicking
-
-          const value = params.colDef.field;
-          const api: GridApi = params.api;
-          const thisRow: Record<string, GridCellValue> = {};
-
-          api
-            .getAllColumns()
-            .filter((c) => c.field !== "__check__" && !!c)
-            .forEach(
-              (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-            );
-          setRows_pageII(row_PageII);
-          setColumns_pageII(column_PageII)
-          setRows_pageMAIN(row_PageII)
-          setColumns_pageMAIN(column_PageII)
-          setRows_pageII_I(null);
-          setColumns_pageII_I(null);
-          setRows_pageIII(null);
-          setColumns_pageIII(null);
-        };
         return (
-          <Button
-            variant="contained"
-            onClick={onClickPermission}
-            style={{ backgroundColor: '#008000' }}
-            startIcon={<ArticleIcon />}
-          >
-            PERSON
-          </Button>
-        );
-      }
-    },
-    {
-      field: 'permission_person',
-      headerName: 'Person',
-      flex: 1,
-      disableClickEventBubbling: true,
-      renderCell: (params) => {
-        const onClickPermission = (e) => {
-          e.stopPropagation(); // don't select this row after clicking
-
-          const value = params.colDef.field;
-          const api: GridApi = params.api;
-          const thisRow: Record<string, GridCellValue> = {};
-
-          api
-            .getAllColumns()
-            .filter((c) => c.field !== "__check__" && !!c)
-            .forEach(
-              (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-            );
-          setRows_pageII_I(row_PageII_I);
-          setColumns_pageII_I(column_PageII_I);
-          setRows_pageMAIN(row_PageII_I)
-          setColumns_pageMAIN(column_PageII_I)
-          setRows_pageII(null);
-          setColumns_pageII(null);
-          setRows_pageIII(null);
-          setColumns_pageIII(null);
-        };
-        return (
-          <Button
-            variant="contained"
-            onClick={onClickPermission}
-            color="secondary"
-            startIcon={<AccountBoxIcon />}
-          >
-            USERS
-          </Button>
+          <React.Fragment>
+            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="warning"
+                  onClick={(event) => handleClickOpen(event, params)}
+                >
+                  <ArticleIcon />
+                </Button>
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  disabled
+                  onClick={(event) => handleClickOpenII(event, params)}
+                >
+                  <DeleteIcon />
+                </Button>
+              </Grid>
+            </Grid>
+          </React.Fragment>
         );
       }
     },
   ];
-
-  const rows = [
-    { id: 1, code: 'HRM', name_ROPA: 'ข้อมูลการสมัครงาน', scope_group: 'ผู้สมัครงาน, กลุ่มเป้าหมาย', layer_security: 'ตู้เก็บเอกสารมีกุญแจล็อค, ระบบ Tigersoft มีการกำหนดสิทธิ์', begin_date_security: '2022/09/05' },
-  ];
-
-  function backToPageI() {
-    setRows_pageMAIN(null)
-    setColumns_pageMAIN(null)
-    setRows_pageII(null)
-    setRows_pageII_I(null)
-    setRows_pageIII(null)
-    setColumns_pageII(null)
-    setColumns_pageII_I(null)
-    setColumns_pageIII(null)
-  };
-
-  function backToPageII() {
-    setRows_pageMAIN(row_PageII)
-    setColumns_pageMAIN(column_PageII)
-    setRows_pageII(row_PageII)
-    setColumns_pageII(column_PageII)
-    setRows_pageII_I(null)
-    setColumns_pageII_I(null)
-    setRows_pageIII(null)
-    setColumns_pageIII(null)
-  };
 
   return (
     <React.Fragment>
@@ -568,71 +447,33 @@ export default function Permission_to_RoPA() {
           }}
         >
           <CssBaseline />
-          <Container component="main" sx={{ mt: 2, mb: 0 }} maxWidth="lg">
+          <Container component="main" sx={{ mt: 3, mb: 0 }} maxWidth="1000px">
             <Box
               sx={{
                 height: 480,
                 width: '100%',
               }}
             >
-              {rows_pageII ?
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <div role="presentation">
+                  <Breadcrumbs aria-label="breadcrumb">
+                    <Chip variant="outlined" label="สิทธิ์เข้าถึงข้อมูล" />
+                    <Chip variant="outlined" label="รายชื่อผู้มีสิทธิ์" color="primary" />
+                  </Breadcrumbs>
+                </div>
+                <Button
+                  size="small"
+                  variant="contained"
+                  color='secondary'
+                  startIcon={<PersonAddAlt1 size="small" />}
                 >
-                  <div role="presentation">
-                    <Breadcrumbs aria-label="breadcrumb">
-                      <Chip variant="outlined" label="สิทธิ์เข้าถึงข้อมูล" onClick={backToPageI} />
-                      <Chip variant="outlined" label="ราชชื่อผู้ยินยอม" color="primary" />
-                    </Breadcrumbs>
-                  </div>
-                </Stack> : rows_pageIII ?
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <div role="presentation">
-                      <Breadcrumbs aria-label="breadcrumb">
-                        <Chip variant="outlined" label="สิทธิ์เข้าถึงข้อมูล" onClick={backToPageI} />
-                        <Chip variant="outlined" label="ราชชื่อผู้ยินยอม" onClick={backToPageII} />
-                        <Chip variant="outlined" label="ข้อมูลที่ยินยอม" color="primary" />
-                      </Breadcrumbs>
-                    </div>
-                  </Stack> : rows_pageII_I ?
-                    <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                    >
-                      <div role="presentation">
-                        <Breadcrumbs aria-label="breadcrumb">
-                          <Chip variant="outlined" label="สิทธิ์เข้าถึงข้อมูล" onClick={backToPageI} />
-                          <Chip variant="outlined" label="รายชื่อผู้มีสิทธิ์" color="primary" />
-                        </Breadcrumbs>
-                      </div>
-                      <Button
-                        size="small"
-                        variant="contained"
-                        color='secondary'
-                        startIcon={<PersonAddAlt1 size="small" />}
-                      >
-                        Add User
-                      </Button>
-                    </Stack>
-                    : <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                    >
-                      <div role="presentation">
-                        <Breadcrumbs aria-label="breadcrumb">
-                          <Chip variant="outlined" label="สิทธิ์เข้าถึงข้อมูล" color="primary" />
-                        </Breadcrumbs>
-                      </div>
-                    </Stack>
-              }
+                  Add Main
+                </Button>
+              </Stack>
               <StripedDataGrid
                 sx={{
                   mt: 1,
@@ -645,38 +486,113 @@ export default function Permission_to_RoPA() {
                   },
                 }}
                 components={{ Toolbar: GridToolbar }}
-                rows={!rows_pageMAIN ? rows : rows_pageMAIN}
-                columns={!columns_pageMAIN ? columns : columns_pageMAIN}
+                rows={!ropa_List ? [] : ropa_List}
+                columns={columns}
                 getRowHeight={() => 'auto'}
+                getRowId={(ropa_List) => ropa_List.Ropa_ID}
                 pageSize={5}
+                autoHeight={true}
                 rowsPerPageOptions={[5]}
                 disableColumnMenu
                 disableSelectionOnClick
               />
               <Dialog
-                open={openDialogDelete}
-                onClose={handleCloseDelete}
+                open={open}
+                onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  {"แจ้งเตือน"}
+                  {"แก้ไขข้อมูลหลัก"}
                 </DialogTitle>
                 <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    คุณต้องการที่จะลบข้อมูลของ {!selectedUser ? null : selectedUser.full_name} ?
-                  </DialogContentText>
+                  <FormControl variant="standard" fullWidth>
+                    <InputLabel id="demo-simple-select-standard-label">Dep Code</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      label="Dep Code"
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value={10}>HRM</MenuItem>
+                      <MenuItem value={20}>ITO</MenuItem>
+                      <MenuItem value={30}>ROD</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    required
+                    fullWidth
+                    value={dataList.DataItem_Name}
+                    name='DataItem_Name'
+                    sx={{ pt: 1 }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Typography color="black">
+                            ชือหัวข้อ :
+                          </Typography>
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="standard"
+                  />
+                  <TextField
+                    required
+                    fullWidth
+                    value={dataList.Data_Subject}
+                    name='Data_Subject'
+                    sx={{ pt: 1 }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Typography color="black">
+                            กลุ่มเป้าหมาย :
+                          </Typography>
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="standard"
+                  />
+                  <TextField
+                    required
+                    fullWidth
+                    value={dataList.Step}
+                    name='Step'
+                    sx={{ pt: 1 }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Typography color="black">
+                            ขั้นตอนในการรักษา :
+                          </Typography>
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="standard"
+                  />
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleCloseDelete}>ไม่ใช่</Button>
-                  <Button onClick={handleCloseDelete} autoFocus>
-                    ใช่
+                  <Button
+                    variant="contained"
+                    onClick={handleClose}
+                    sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                  >ใช่
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color='error'
+                    sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                    onClick={handleClose} autoFocus
+                  >
+                    ไม่
                   </Button>
                 </DialogActions>
               </Dialog>
               <Dialog
-                open={openDialogDeleteII}
-                onClose={handleCloseDeleteII}
+                open={openII}
+                onClose={handleCloseII}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
               >
@@ -685,20 +601,30 @@ export default function Permission_to_RoPA() {
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    คุณต้องการที่จะลบข้อมูลของ {!selectedUser ? null : selectedUser.full_name} ?
+                    คุณต้องการที่จะลบหัวข้อ <b>{dataList.DataItem_Name}</b> นี้ใช่หรือไม่?
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleCloseDeleteII}>ไม่ใช่</Button>
-                  <Button onClick={handleCloseDeleteII} autoFocus>
-                    ใช่
+                  <Button
+                    variant="contained"
+                    onClick={handleCloseII}
+                    sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                  >ใช่
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color='error'
+                    sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                    onClick={handleCloseII} autoFocus
+                  >
+                    ไม่
                   </Button>
                 </DialogActions>
               </Dialog>
             </Box>
           </Container>
         </Box>
-      </AnimatedPage>
-    </React.Fragment>
+      </AnimatedPage >
+    </React.Fragment >
   );
 }

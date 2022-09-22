@@ -135,7 +135,7 @@ export default function History_of_assets() {
   const [open, setOpen] = React.useState(false);
   const [CheckApprove, setCheckApprove] = React.useState([]);
   const [CheckExamineApprove, setCheckExamineApprove] = React.useState([]);
-  const [checkUserWeb, setCheckUserWeb] = React.useState();
+  const checkUserWeb = localStorage.getItem('sucurity');
   const [getNac_Code, setGetNac_Code] = React.useState();
 
   React.useEffect(() => {
@@ -147,8 +147,6 @@ export default function History_of_assets() {
     };
     Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC_approve', usercode, { headers })
       .then(response => setSelectNAC(response.data.data));
-    Axios.post('http://vpnptec.dyndns.org:32001/api/ChackUserWeb', usercode, { headers })
-      .then(response => setCheckUserWeb(response.data.data[0].approverid));
   }, []);
 
   const handleClickOpen = (event, params) => {

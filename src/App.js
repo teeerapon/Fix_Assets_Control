@@ -102,6 +102,7 @@ function App() {
 
   const location = useLocation();
   const token = localStorage.getItem('token');
+  const checkUserWeb = localStorage.getItem('sucurity');
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const roPA = [
@@ -165,7 +166,7 @@ function App() {
         <Main open={open}>
           <AnimatePresence exitBeforeEnter>
             <Routes key={location.pathname} location={location}>
-              <Route path="/" element={<DATA_CENTER />} />
+              <Route path="/DATA_CENTER" element={<DATA_CENTER />} />
               <Route path="*" element={<Page404 />} />
             </Routes>
           </AnimatePresence>
@@ -195,7 +196,7 @@ function App() {
         </Main>
       </IntlProvider>
     );
-    // } else if (nAC_MENU.includes(location.pathname) === true || ((location.pathname.split('/')[3] ?? '').includes('NAC') === true)) {
+    //} else if (nAC_MENU.includes(location.pathname) === true || ((location.pathname.split('/')[3] ?? '').includes('NAC') === true)) {
     //  เอาตรงนี้ออกเมื่อ DataCenter เสร็จ
   } else if (location.pathname === ('/') || nAC_MENU.includes(location.pathname) === true || ((location.pathname.split('/')[3] ?? '').includes('NAC') === true)) {
     // 

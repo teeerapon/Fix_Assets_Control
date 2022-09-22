@@ -39,6 +39,7 @@ export default function AddressForm() {
   const [valueBrachID1, setValueBrachID1] = React.useState()
   const [brachID1, setBrachID1] = React.useState()
   const [activeStep] = React.useState(0);
+  const checkUserWeb = localStorage.getItem('sucurity');
 
 
   const handleDescription = (newValue) => {
@@ -80,148 +81,152 @@ export default function AddressForm() {
     //console.warn(new Date(valueDateTime2).toISOString().split('T')[0])
   };
 
-  return (
-    <React.Fragment>
-      <Typography component="h1" variant="h4" align="center">
-        <b>PURE THAI ENERGY CO.,LTD.</b>
-      </Typography>
-      <Typography component="h1" variant="h6" align="center" className='pt-2'>
-        ขั้นตอนการกรอกข้อมูล
-      </Typography>
-      <center>
-        <Stepper activeStep={activeStep} sx={{ pt: 5, pb: 5 }} className="col-md-10">
-          {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-      </center>
+  if (checkUserWeb === 'null') {
+    window.location.href = '/NAC_MAIN';
+  } else {
+    return (
       <React.Fragment>
-        <Typography variant="h6" gutterBottom>
-          *กรุณากรอกข้อมูลให้ครบถ้วน
+        <Typography component="h1" variant="h4" align="center">
+          <b>PURE THAI ENERGY CO.,LTD.</b>
         </Typography>
-        <Grid container spacing={3} className='pt-2'>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="fulltName"
-              name="fulltName"
-              label="ชื่อผู้เปิดรอบบันทึก"
-              value={data.name}
-              fullWidth
-              autoComplete="given-name"
-              variant="standard"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Stack spacing={3}>
-              <LocalizationProvider dateAdapter={DateAdapter}>
-                <DatePicker
-                  label="วันที่และเวลาเริ่มต้น"
-                  value={valueDateTime1}
-                  onChange={handleDateTime1}
-                  inputFormat="yyyy-MM-dd 00:00"
-                  renderInput={(params) =>
-                    <TextField
-                      fullWidth
-                      autoComplete="family-name"
-                      variant="standard"
-                      {...params} />}
-                />
-              </LocalizationProvider>
-            </Stack>
-          </Grid>
-          <Grid item xs={12}>
-            <Stack spacing={3}>
-              <LocalizationProvider dateAdapter={DateAdapter}>
-                <DatePicker
-                  label="วันที่และเวลาสิ้นสุด"
-                  value={valueDateTime2}
-                  onChange={handleDateTime2}
-                  inputFormat="yyyy-MM-dd 00:00"
-                  renderInput={(params) =>
-                    <TextField
-                      fullWidth
-                      autoComplete="family-name"
-                      variant="standard"
-                      {...params} />}
-                />
-              </LocalizationProvider>
-            </Stack>
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="discription"
-              name="discription"
-              onChange={handleDescription}
-              value={valueDescription == undefined ? '' : valueDescription}
-              helperText="กรุณาเลือกตัวเลือกอย่างน้อย 1 อย่าง"
-              fullWidth
-              autoComplete="family-name"
-              variant="standard"
-            />
-          </Grid>
-          {showResults ?
-            <>
-              <Grid item xs={12} sm={6} mt={2}>
-                <p className='text-danger'>*หมายเหตุ กรุณาระบุสาขาให้ถูกต้อง</p>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  inputProps={{ min: 1 }}
-                  id="branchID"
-                  name="branchID"
-                  onChange={handleBranchID}
-                  label="สาขา"
-                  fullWidth
-                />
-              </Grid>
-            </>
-            : null
-          }
-          <Grid item xs={12} sm={6}>
-            <FormControlLabel
-              control={<Radio
-                color="secondary"
-                id="1"
-                value={0}
-                defaultChecked
-                onChange={toggleCheckbox}
-                checked={brachID1 == 0 ? true : false} />}
-              label="เปิดทุกสาขา"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormControlLabel
-              control={<Radio
-                color="secondary"
-                id="0"
-                value={1}
-                onChange={toggleCheckbox}
-                checked={brachID1 == 1 ? true : false} />}
-              label="เปิดเฉพาะบางสาขา"
-            />
-          </Grid>
-        </Grid>
-      </React.Fragment>
-      <React.Fragment>
+        <Typography component="h1" variant="h6" align="center" className='pt-2'>
+          ขั้นตอนการกรอกข้อมูล
+        </Typography>
+        <center>
+          <Stepper activeStep={activeStep} sx={{ pt: 5, pb: 5 }} className="col-md-10">
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </center>
         <React.Fragment>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              variant="contained"
-              onClick={handleNext}
-              sx={{ mt: 3, ml: 1 }}
-            >
-              ต่อไป
-            </Button>
-          </Box>
+          <Typography variant="h6" gutterBottom>
+            *กรุณากรอกข้อมูลให้ครบถ้วน
+          </Typography>
+          <Grid container spacing={3} className='pt-2'>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="fulltName"
+                name="fulltName"
+                label="ชื่อผู้เปิดรอบบันทึก"
+                value={data.name}
+                fullWidth
+                autoComplete="given-name"
+                variant="standard"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Stack spacing={3}>
+                <LocalizationProvider dateAdapter={DateAdapter}>
+                  <DatePicker
+                    label="วันที่และเวลาเริ่มต้น"
+                    value={valueDateTime1}
+                    onChange={handleDateTime1}
+                    inputFormat="yyyy-MM-dd 00:00"
+                    renderInput={(params) =>
+                      <TextField
+                        fullWidth
+                        autoComplete="family-name"
+                        variant="standard"
+                        {...params} />}
+                  />
+                </LocalizationProvider>
+              </Stack>
+            </Grid>
+            <Grid item xs={12}>
+              <Stack spacing={3}>
+                <LocalizationProvider dateAdapter={DateAdapter}>
+                  <DatePicker
+                    label="วันที่และเวลาสิ้นสุด"
+                    value={valueDateTime2}
+                    onChange={handleDateTime2}
+                    inputFormat="yyyy-MM-dd 00:00"
+                    renderInput={(params) =>
+                      <TextField
+                        fullWidth
+                        autoComplete="family-name"
+                        variant="standard"
+                        {...params} />}
+                  />
+                </LocalizationProvider>
+              </Stack>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="discription"
+                name="discription"
+                onChange={handleDescription}
+                value={valueDescription == undefined ? '' : valueDescription}
+                helperText="กรุณาเลือกตัวเลือกอย่างน้อย 1 อย่าง"
+                fullWidth
+                autoComplete="family-name"
+                variant="standard"
+              />
+            </Grid>
+            {showResults ?
+              <>
+                <Grid item xs={12} sm={6} mt={2}>
+                  <p className='text-danger'>*หมายเหตุ กรุณาระบุสาขาให้ถูกต้อง</p>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    required
+                    inputProps={{ min: 1 }}
+                    id="branchID"
+                    name="branchID"
+                    onChange={handleBranchID}
+                    label="สาขา"
+                    fullWidth
+                  />
+                </Grid>
+              </>
+              : null
+            }
+            <Grid item xs={12} sm={6}>
+              <FormControlLabel
+                control={<Radio
+                  color="secondary"
+                  id="1"
+                  value={0}
+                  defaultChecked
+                  onChange={toggleCheckbox}
+                  checked={brachID1 == 0 ? true : false} />}
+                label="เปิดทุกสาขา"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControlLabel
+                control={<Radio
+                  color="secondary"
+                  id="0"
+                  value={1}
+                  onChange={toggleCheckbox}
+                  checked={brachID1 == 1 ? true : false} />}
+                label="เปิดเฉพาะบางสาขา"
+              />
+            </Grid>
+          </Grid>
         </React.Fragment>
+        <React.Fragment>
+          <React.Fragment>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Button
+                variant="contained"
+                onClick={handleNext}
+                sx={{ mt: 3, ml: 1 }}
+              >
+                ต่อไป
+              </Button>
+            </Box>
+          </React.Fragment>
+        </React.Fragment>
+        <Outlet />
       </React.Fragment>
-      <Outlet />
-    </React.Fragment>
 
-  );
+    );
+  }
 }

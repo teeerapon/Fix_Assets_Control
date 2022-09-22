@@ -235,18 +235,6 @@ async function store_FA_control_comment(credentials) {
     .then(data => data.json())
 }
 
-async function ChackUserWeb(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/ChackUserWeb', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
 async function store_FA_control_CheckAssetCode_Process(credentials) {
   return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
@@ -341,7 +329,7 @@ export default function Nac_Seals_Approve() {
   const [checked, setChecked] = React.useState([{ assets_code: "", statusCheck: "", asset_id: "" }]);
   const [userBookValue] = React.useState(['SSP', 'JRK', 'TCM', 'TPD', 'TPS', 'RYS', 'SPP', 'NDL']);
   const [description, setDescription] = React.useState();
-  const [checkUserWeb, setCheckUserWeb] = React.useState();
+  const checkUserWeb = localStorage.getItem('sucurity');
   const [valuesVisibility, setValuesVisibility] = React.useState({
     text: serviceList[0].price,
     showText: data.branchid === 901 ? true : false,
@@ -538,15 +526,6 @@ export default function Nac_Seals_Approve() {
     //setCheckExamineApproveDes(CheckExamineApproveDes)
     setExecApprove(ExecApprove)
     setCheckApprove(CheckApprove)
-
-    // Operator Check
-    const usercode = data.UserCode;
-    const responseOperator = await ChackUserWeb({
-      usercode
-    });
-    if ('data' in responseOperator) {
-      setCheckUserWeb(responseOperator.data[0].approverid)
-    }
   }
 
 

@@ -106,6 +106,7 @@ export default function Reported_of_assets() {
   console.log(!reported_of_assets ? 0 : reported_of_assets.length);
   const data = JSON.parse(localStorage.getItem('data'));
   const [description_value, setDescription_value] = React.useState('');
+  const checkUserWeb = localStorage.getItem('sucurity');
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130 },
@@ -191,78 +192,82 @@ export default function Reported_of_assets() {
       .then(response => setReported_of_assets(response.data.data));
   };
 
-  return (
-    <React.Fragment>
-      <AppBar
-        position="absolute"
-        color="default"
-        elevation={0}
-        sx={{
-          position: 'relative',
-          borderBottom: (t) => `1px solid ${t.palette.divider}`,
-        }}
-      >
-        <Toolbar>
-          <AnimatedPage>
-            <Typography variant="h5" color="inherit" noWrap>
-              รายงานการตรวจนับทั้งหมด
-            </Typography>
-          </AnimatedPage>
-        </Toolbar>
-      </AppBar>
-      <AnimatedPage>
-        <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-          <Container maxWidth="1000px" sx={{ pt: 3 }}>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 300 }}>
-              <InputLabel id="demo-simple-select-standard-label">None</InputLabel>
-              <Select
-                labelId="demo-simple-select-standard-label"
-                id="demo-simple-select-standard"
-                value={description_value}
-                onChange={handleChange}
-                label="None"
-              >
-                {!selectMenu ? null : selectMenu.map((res) => (
-                  <MenuItem value={res.Description}>{res.Description}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <Box
-              sx={{
-                height: 480,
-                width: '100%',
-              }}
-            >
-              <StripedDataGrid
+  if (checkUserWeb === 'null') {
+    window.location.href = '/NAC_MAIN';
+  } else {
+    return (
+      <React.Fragment>
+        <AppBar
+          position="absolute"
+          color="default"
+          elevation={0}
+          sx={{
+            position: 'relative',
+            borderBottom: (t) => `1px solid ${t.palette.divider}`,
+          }}
+        >
+          <Toolbar>
+            <AnimatedPage>
+              <Typography variant="h5" color="inherit" noWrap>
+                รายงานการตรวจนับทั้งหมด
+              </Typography>
+            </AnimatedPage>
+          </Toolbar>
+        </AppBar>
+        <AnimatedPage>
+          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+            <Container maxWidth="1000px" sx={{ pt: 3 }}>
+              <FormControl variant="standard" sx={{ m: 1, minWidth: 300 }}>
+                <InputLabel id="demo-simple-select-standard-label">None</InputLabel>
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-simple-select-standard"
+                  value={description_value}
+                  onChange={handleChange}
+                  label="None"
+                >
+                  {!selectMenu ? null : selectMenu.map((res) => (
+                    <MenuItem value={res.Description}>{res.Description}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Box
                 sx={{
-                  mt: 3,
-                  pl: 2,
-                  pr: 2,
-                  pt: 2,
-                  boxShadow: 1,
-                  [`& .${gridClasses.cell}`]: {
-                    py: 1,
-                  },
+                  height: 480,
+                  width: '100%',
                 }}
-                components={{ Toolbar: GridToolbar }}
-                componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
-                rows={!reported_of_assets ? [] : reported_of_assets}
-                columns={columns}
-                getRowId={(reported_of_assets) => reported_of_assets.RowID}
-                pageSize={5}
-                rowsPerPageOptions={[5]}
-                disableColumnMenu
-                autoHeight={true}
-                getRowClassName={(params) =>
-                  params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                }
-                disableSelectionOnClick
-              //checkboxSelection
-              />
-            </Box>
-          </Container>
-        </Box>
-      </AnimatedPage>
-    </React.Fragment>
-  );
+              >
+                <StripedDataGrid
+                  sx={{
+                    mt: 3,
+                    pl: 2,
+                    pr: 2,
+                    pt: 2,
+                    boxShadow: 1,
+                    [`& .${gridClasses.cell}`]: {
+                      py: 1,
+                    },
+                  }}
+                  components={{ Toolbar: GridToolbar }}
+                  componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
+                  rows={!reported_of_assets ? [] : reported_of_assets}
+                  columns={columns}
+                  getRowId={(reported_of_assets) => reported_of_assets.RowID}
+                  pageSize={5}
+                  rowsPerPageOptions={[5]}
+                  disableColumnMenu
+                  autoHeight={true}
+                  getRowClassName={(params) =>
+                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                  }
+                  disableSelectionOnClick
+                //checkboxSelection
+                />
+              </Box>
+            </Container>
+          </Box>
+        </AnimatedPage>
+      </React.Fragment>
+    );
+  }
 }

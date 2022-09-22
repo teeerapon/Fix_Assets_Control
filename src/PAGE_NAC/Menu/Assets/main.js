@@ -98,6 +98,7 @@ export default function History_of_assets() {
 
   const [dataHistory, setDataHistory] = React.useState();
   const data = JSON.parse(localStorage.getItem('data'));
+  const checkUserWeb = localStorage.getItem('sucurity');
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130 },
@@ -119,7 +120,7 @@ export default function History_of_assets() {
       headerName: 'วันที่ขึ้นทะเบียน',
       headerClassName: 'super-app-theme--header',
       width: 150,
-      headerAlign: 'center', 
+      headerAlign: 'center',
       align: 'center',
       valueGetter: (params) =>
         `${params.row.CreateDate.split('T')[0] || ''}`,
@@ -137,65 +138,69 @@ export default function History_of_assets() {
       .then(response => setDataHistory(response.data.data));
   }, []);
 
-  return (
-    <React.Fragment>
-      <AppBar
-        position="absolute"
-        color="default"
-        elevation={0}
-        sx={{
-          position: 'relative',
-          borderBottom: (t) => `1px solid ${t.palette.divider}`,
-        }}
-      >
-        <Toolbar>
-          <AnimatedPage>
-            <Typography variant="h5" color="inherit" noWrap>
-              ทรัพย์สินทั้งหมด
-            </Typography>
-          </AnimatedPage>
-        </Toolbar>
-      </AppBar>
-      <AnimatedPage>
-        <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-          <Container maxWidth="1000px" sx={{ pt: 3 }}>
-            <Box
-              sx={{
-                height: 480,
-                width: '100%',
-              }}
-            >
-              <StripedDataGrid
+  if (checkUserWeb === 'null') {
+    window.location.href = '/NAC_MAIN';
+  } else {
+    return (
+      <React.Fragment>
+        <AppBar
+          position="absolute"
+          color="default"
+          elevation={0}
+          sx={{
+            position: 'relative',
+            borderBottom: (t) => `1px solid ${t.palette.divider}`,
+          }}
+        >
+          <Toolbar>
+            <AnimatedPage>
+              <Typography variant="h5" color="inherit" noWrap>
+                ทรัพย์สินทั้งหมด
+              </Typography>
+            </AnimatedPage>
+          </Toolbar>
+        </AppBar>
+        <AnimatedPage>
+          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+            <Container maxWidth="1000px" sx={{ pt: 3 }}>
+              <Box
                 sx={{
-                  mt: 3,
-                  pl: 2,
-                  pr: 2,
-                  pt: 2,
-                  boxShadow: 1,
-                  [`& .${gridClasses.cell}`]: {
-                    py: 1,
-                  },
+                  height: 480,
+                  width: '100%',
                 }}
-                components={{ Toolbar: GridToolbar }}
-                componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
-                rows={!dataHistory ? [] : dataHistory}
-                columns={columns}
-                getRowId={(dataHistory) => dataHistory.AssetID}
-                pageSize={5}
-                rowsPerPageOptions={[5]}
-                //getRowHeight={() => 'auto'}
-                disableColumnMenu
-                autoHeight={true}
-                getRowClassName={(params) =>
-                  params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                }
-                disableSelectionOnClick
-              //checkboxSelection
-              />
-            </Box>
-          </Container>
-        </Box>
-      </AnimatedPage>
-    </React.Fragment>
-  );
+              >
+                <StripedDataGrid
+                  sx={{
+                    mt: 3,
+                    pl: 2,
+                    pr: 2,
+                    pt: 2,
+                    boxShadow: 1,
+                    [`& .${gridClasses.cell}`]: {
+                      py: 1,
+                    },
+                  }}
+                  components={{ Toolbar: GridToolbar }}
+                  componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
+                  rows={!dataHistory ? [] : dataHistory}
+                  columns={columns}
+                  getRowId={(dataHistory) => dataHistory.AssetID}
+                  pageSize={5}
+                  rowsPerPageOptions={[5]}
+                  //getRowHeight={() => 'auto'}
+                  disableColumnMenu
+                  autoHeight={true}
+                  getRowClassName={(params) =>
+                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                  }
+                  disableSelectionOnClick
+                //checkboxSelection
+                />
+              </Box>
+            </Container>
+          </Box>
+        </AnimatedPage>
+      </React.Fragment>
+    );
+  }
 }

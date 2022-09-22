@@ -105,6 +105,7 @@ export default function History_of_assets() {
 
   const [dataHistory, setDataHistory] = React.useState();
   const data = JSON.parse(localStorage.getItem('data'));
+  const checkUserWeb = localStorage.getItem('sucurity');
 
   const dataChange = !dataHistory ? [] : dataHistory.map(function (elt) {
     if (elt.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && (datenow.split('-')[1] === (!elt.update_date ? '' : elt.update_date.split('-')[1]))) {
@@ -194,182 +195,187 @@ export default function History_of_assets() {
       .then(response => setDataHistory(response.data.data));
   }, []);
 
-  return (
-    <React.Fragment>
-      <AppBar
-        position="absolute"
-        color="default"
-        elevation={0}
-        sx={{
-          position: 'relative',
-          borderBottom: (t) => `1px solid ${t.palette.divider}`,
-        }}
-      >
-        <Toolbar>
-          <AnimatedPage>
-            <Typography variant="h5" color="inherit" noWrap>
-              ประวัติทรัพย์สินที่ดำเนินการเสร็จสิ้น
-            </Typography>
-          </AnimatedPage>
-        </Toolbar>
-      </AppBar>
-      <AnimatedPage>
-        <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-          <Container maxWidth="1000px" sx={{ pt: 3 }}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="flex-start"
-              spacing={2}
-            >
-              <Card
-                style={{
-                  'cursor': 'pointer',
-                  'flex': 1,
-                  'margin': '0px 20px',
-                  'padding': '15px',
-                  'paddingBottom': '5px',
-                  'border-radius': '10px',
-                }}
+
+  if (checkUserWeb === 'null') {
+    window.location.href = '/NAC_MAIN';
+  } else {
+    return (
+      <React.Fragment>
+        <AppBar
+          position="absolute"
+          color="default"
+          elevation={0}
+          sx={{
+            position: 'relative',
+            borderBottom: (t) => `1px solid ${t.palette.divider}`,
+          }}
+        >
+          <Toolbar>
+            <AnimatedPage>
+              <Typography variant="h5" color="inherit" noWrap>
+                ประวัติทรัพย์สินที่ดำเนินการเสร็จสิ้น
+              </Typography>
+            </AnimatedPage>
+          </Toolbar>
+        </AppBar>
+        <AnimatedPage>
+          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+            <Container maxWidth="1000px" sx={{ pt: 3 }}>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="flex-start"
+                spacing={2}
               >
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    เพิ่มบัญชีทรัพย์สินถาวร
-                  </Typography>
-                  <Typography sx={{ fontSize: 16 }} component="div">
-                    <b>{!dataHistory ? 0 : dataAdd} รายการ</b>
-                  </Typography>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    เดือน {monthString[d.getMonth()]}
-                  </Typography>
-                </CardContent>
-              </Card>
-              <Card
-                style={{
-                  'cursor': 'pointer',
-                  'flex': 1,
-                  'margin': '0px 20px',
-                  'padding': '15px',
-                  'paddingBottom': '5px',
-                  'border-radius': '10px',
-                }}
-              >
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    โยกย้ายทรัพย์สิน
-                  </Typography>
-                  <Typography sx={{ fontSize: 16 }} component="div">
-                    <b>{!dataHistory ? 0 : dataTranfers} รายการ</b>
-                  </Typography>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    เดือน {monthString[d.getMonth()]}
-                  </Typography>
-                </CardContent>
-              </Card>
-              <Card
-                style={{
-                  'cursor': 'pointer',
-                  'flex': 1,
-                  'margin': '0px 20px',
-                  'padding': '15px',
-                  'paddingBottom': '5px',
-                  'border-radius': '10px',
-                }}
-              >
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    เปลี่ยนแปลงรายละเอียด
-                  </Typography>
-                  <Typography sx={{ fontSize: 16 }} component="div">
-                    <b>{!dataHistory ? 0 : dataChange} รายการ</b>
-                  </Typography>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    เดือน {monthString[d.getMonth()]}
-                  </Typography>
-                </CardContent>
-              </Card>
-              <Card
-                style={{
-                  'cursor': 'pointer',
-                  'flex': 1,
-                  'margin': '0px 20px',
-                  'padding': '15px',
-                  'paddingBottom': '5px',
-                  'border-radius': '10px',
-                }}
-              >
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    ตัดทรัพย์สินถาวร
-                  </Typography>
-                  <Typography sx={{ fontSize: 16 }} component="div">
-                    <b>{!dataHistory ? 0 : dataDelete} รายการ</b>
-                  </Typography>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    เดือน {monthString[d.getMonth()]}
-                  </Typography>
-                </CardContent>
-              </Card>
-              <Card
-                style={{
-                  'cursor': 'pointer',
-                  'flex': 1,
-                  'margin': '0px 20px',
-                  'padding': '15px',
-                  'paddingBottom': '5px',
-                  'border-radius': '10px',
-                }}
-              >
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    ขายทรัพย์สิน
-                  </Typography>
-                  <Typography sx={{ fontSize: 16 }} component="div">
-                    <b>{!dataHistory ? 0 : dataSeals} รายการ</b>
-                  </Typography>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    เดือน {monthString[d.getMonth()]}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Stack>
-            <Box
-              sx={{
-                height: 480,
-                width: '100%',
-              }}
-            >
-              <StripedDataGrid
+                <Card
+                  style={{
+                    'cursor': 'pointer',
+                    'flex': 1,
+                    'margin': '0px 20px',
+                    'padding': '15px',
+                    'paddingBottom': '5px',
+                    'border-radius': '10px',
+                  }}
+                >
+                  <CardContent>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      เพิ่มบัญชีทรัพย์สินถาวร
+                    </Typography>
+                    <Typography sx={{ fontSize: 16 }} component="div">
+                      <b>{!dataHistory ? 0 : dataAdd} รายการ</b>
+                    </Typography>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      เดือน {monthString[d.getMonth()]}
+                    </Typography>
+                  </CardContent>
+                </Card>
+                <Card
+                  style={{
+                    'cursor': 'pointer',
+                    'flex': 1,
+                    'margin': '0px 20px',
+                    'padding': '15px',
+                    'paddingBottom': '5px',
+                    'border-radius': '10px',
+                  }}
+                >
+                  <CardContent>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      โยกย้ายทรัพย์สิน
+                    </Typography>
+                    <Typography sx={{ fontSize: 16 }} component="div">
+                      <b>{!dataHistory ? 0 : dataTranfers} รายการ</b>
+                    </Typography>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      เดือน {monthString[d.getMonth()]}
+                    </Typography>
+                  </CardContent>
+                </Card>
+                <Card
+                  style={{
+                    'cursor': 'pointer',
+                    'flex': 1,
+                    'margin': '0px 20px',
+                    'padding': '15px',
+                    'paddingBottom': '5px',
+                    'border-radius': '10px',
+                  }}
+                >
+                  <CardContent>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      เปลี่ยนแปลงรายละเอียด
+                    </Typography>
+                    <Typography sx={{ fontSize: 16 }} component="div">
+                      <b>{!dataHistory ? 0 : dataChange} รายการ</b>
+                    </Typography>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      เดือน {monthString[d.getMonth()]}
+                    </Typography>
+                  </CardContent>
+                </Card>
+                <Card
+                  style={{
+                    'cursor': 'pointer',
+                    'flex': 1,
+                    'margin': '0px 20px',
+                    'padding': '15px',
+                    'paddingBottom': '5px',
+                    'border-radius': '10px',
+                  }}
+                >
+                  <CardContent>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      ตัดทรัพย์สินถาวร
+                    </Typography>
+                    <Typography sx={{ fontSize: 16 }} component="div">
+                      <b>{!dataHistory ? 0 : dataDelete} รายการ</b>
+                    </Typography>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      เดือน {monthString[d.getMonth()]}
+                    </Typography>
+                  </CardContent>
+                </Card>
+                <Card
+                  style={{
+                    'cursor': 'pointer',
+                    'flex': 1,
+                    'margin': '0px 20px',
+                    'padding': '15px',
+                    'paddingBottom': '5px',
+                    'border-radius': '10px',
+                  }}
+                >
+                  <CardContent>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      ขายทรัพย์สิน
+                    </Typography>
+                    <Typography sx={{ fontSize: 16 }} component="div">
+                      <b>{!dataHistory ? 0 : dataSeals} รายการ</b>
+                    </Typography>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      เดือน {monthString[d.getMonth()]}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Stack>
+              <Box
                 sx={{
-                  mt: 3,
-                  pl: 2,
-                  pr: 2,
-                  pt: 2,
-                  boxShadow: 1,
-                  [`& .${gridClasses.cell}`]: {
-                    py: 1,
-                  },
+                  height: 480,
+                  width: '100%',
                 }}
-                components={{ Toolbar: GridToolbar }}
-                componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
-                rows={!dataHistory ? [] : dataHistory}
-                columns={columns}
-                getRowId={(dataHistory) => dataHistory.nacdtl_id}
-                pageSize={5}
-                rowsPerPageOptions={[5]}
-                //getRowHeight={() => 'auto'}
-                disableColumnMenu
-                autoHeight={true}
-                getRowClassName={(params) =>
-                  params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                }
-                disableSelectionOnClick
-              //checkboxSelection
-              />
-            </Box>
-          </Container>
-        </Box>
-      </AnimatedPage>
-    </React.Fragment>
-  );
+              >
+                <StripedDataGrid
+                  sx={{
+                    mt: 3,
+                    pl: 2,
+                    pr: 2,
+                    pt: 2,
+                    boxShadow: 1,
+                    [`& .${gridClasses.cell}`]: {
+                      py: 1,
+                    },
+                  }}
+                  components={{ Toolbar: GridToolbar }}
+                  componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
+                  rows={!dataHistory ? [] : dataHistory}
+                  columns={columns}
+                  getRowId={(dataHistory) => dataHistory.nacdtl_id}
+                  pageSize={5}
+                  rowsPerPageOptions={[5]}
+                  //getRowHeight={() => 'auto'}
+                  disableColumnMenu
+                  autoHeight={true}
+                  getRowClassName={(params) =>
+                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                  }
+                  disableSelectionOnClick
+                //checkboxSelection
+                />
+              </Box>
+            </Container>
+          </Box>
+        </AnimatedPage>
+      </React.Fragment>
+    );
+  }
 }

@@ -48,18 +48,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-async function ChackUserWeb(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/ChackUserWeb', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
 
 
 export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, open, handleDrawerOpen, handleDrawerClose }) {
@@ -71,7 +59,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
   const [anchorEl4, setAnchorEl4] = React.useState(null);
   const [anchorEl5, setAnchorEl5] = React.useState(null);
   const data = JSON.parse(localStorage.getItem('data'));
-  const [checkUserWeb, setCheckUserWeb] = React.useState();
+  const checkUserWeb = localStorage.getItem('sucurity');
   const [openList, setOpenList] = React.useState(false);
   const [openList2, setOpenList2] = React.useState(false);
   const [openList3, setOpenList3] = React.useState(false);
@@ -107,27 +95,18 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
     setOpenList3(false);
   };
 
-  const fetchCheckUser = async () => {
-    const usercode = data.UserCode;
-    const response = await ChackUserWeb({
-      usercode
-    });
-    if ('data' in response) {
-      setCheckUserWeb(response.data[0].approverid)
-    }
-  }
-
-  React.useEffect(() => {
-    fetchCheckUser();
-  });
-
   function PeriodOpen() {
     navigate('/CreatePeriod')
   };
 
   function HomePage() {
-    navigate('/')
-    handleDrawerClose()
+    if (checkUserWeb === 'admin') {
+      navigate('/DATA_CENTER')
+      handleDrawerClose()
+    } else {
+      navigate('/')
+      handleDrawerClose()
+    }
   };
 
   function PeriodEdit() {
@@ -213,7 +192,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
     },
   });
 
-  if (checkUserWeb === 'admin' || checkUserWeb === 'operatorII' || checkUserWeb === 'operatorI') {
+  if (checkUserWeb !== 'null') {
     return (
       <>
         <Box sx={{ display: 'flex' }}>

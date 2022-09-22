@@ -148,6 +148,7 @@ export default function History_of_assets() {
 
   const [dataBranchID_Main, setDataBranchID_Main] = React.useState([]);
   const data = JSON.parse(localStorage.getItem('data'));
+  const checkUserWeb = localStorage.getItem('sucurity');
   const [open, setOpen] = React.useState(false);
   const [openII, setOpenII] = React.useState(false);
   const [EditPeriodData, setEditPeriodData] = React.useState(null);
@@ -209,7 +210,7 @@ export default function History_of_assets() {
       field: 'BeginDate',
       headerName: 'วันที่เริ่มต้น',
       headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', 
+      headerAlign: 'center',
       align: 'center',
       flex: 1,
       valueGetter: (params) =>
@@ -219,7 +220,7 @@ export default function History_of_assets() {
       field: 'EndDate',
       headerName: 'วันที่สิ้นสุด',
       headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', 
+      headerAlign: 'center',
       align: 'center',
       flex: 1,
       valueGetter: (params) =>
@@ -229,7 +230,7 @@ export default function History_of_assets() {
       field: 'Code',
       headerName: 'สาขา',
       headerClassName: 'super-app-theme--header',
-      headerAlign: 'center', 
+      headerAlign: 'center',
       align: 'center',
       width: 100,
       valueGetter: (params) =>
@@ -383,155 +384,159 @@ export default function History_of_assets() {
     setEditFormData(FromValues);
   };
 
-  return (
-    <React.Fragment>
-      <AppBar
-        position="absolute"
-        color="default"
-        elevation={0}
-        sx={{
-          position: 'relative',
-          borderBottom: (t) => `1px solid ${t.palette.divider}`,
-        }}
-      >
-        <Toolbar>
-          <AnimatedPage>
-            <Typography variant="h5" color="inherit" noWrap>
-              สถานะรอบตรวจนับทั้งหมด
-            </Typography>
-          </AnimatedPage>
-        </Toolbar>
-      </AppBar>
-      <AnimatedPage>
-        <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-          <Container maxWidth="1000px" sx={{ pt: 3 }}>
-            <Box
-              sx={{
-                height: 480,
-                width: '100%',
-              }}
-            >
-              <StripedDataGrid
+  if (checkUserWeb === 'null') {
+    window.location.href = '/NAC_MAIN';
+  } else {
+    return (
+      <React.Fragment>
+        <AppBar
+          position="absolute"
+          color="default"
+          elevation={0}
+          sx={{
+            position: 'relative',
+            borderBottom: (t) => `1px solid ${t.palette.divider}`,
+          }}
+        >
+          <Toolbar>
+            <AnimatedPage>
+              <Typography variant="h5" color="inherit" noWrap>
+                สถานะรอบตรวจนับทั้งหมด
+              </Typography>
+            </AnimatedPage>
+          </Toolbar>
+        </AppBar>
+        <AnimatedPage>
+          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+            <Container maxWidth="1000px" sx={{ pt: 3 }}>
+              <Box
                 sx={{
-                  mt: 3,
-                  pl: 2,
-                  pr: 2,
-                  pt: 2,
-                  boxShadow: 1,
-                  [`& .${gridClasses.cell}`]: {
-                    py: 1,
-                  },
+                  height: 480,
+                  width: '100%',
                 }}
-                components={{ Toolbar: GridToolbar }}
-                componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
-                rows={!dataBranchID_Main ? [] : dataBranchID_Main}
-                columns={columns}
-                pageSize={5}
-                rowsPerPageOptions={[5]}
-                getRowId={(dataBranchID_Main) => dataBranchID_Main.PeriodID}
-                autoHeight={true}
-                disableColumnMenu
-                getRowClassName={(params) =>
-                  params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                }
-                disableSelectionOnClick
-              />
-            </Box>
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                {editFormData.Code}
-              </DialogTitle>
-              <DialogContent>
-                <TextField
-                  id="standard-basic"
-                  value={editFormData.Description}
-                  variant="standard"
-                  sx={{ pb: 3 }}
-                  fullWidth
+              >
+                <StripedDataGrid
+                  sx={{
+                    mt: 3,
+                    pl: 2,
+                    pr: 2,
+                    pt: 2,
+                    boxShadow: 1,
+                    [`& .${gridClasses.cell}`]: {
+                      py: 1,
+                    },
+                  }}
+                  components={{ Toolbar: GridToolbar }}
+                  componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
+                  rows={!dataBranchID_Main ? [] : dataBranchID_Main}
+                  columns={columns}
+                  pageSize={5}
+                  rowsPerPageOptions={[5]}
+                  getRowId={(dataBranchID_Main) => dataBranchID_Main.PeriodID}
+                  autoHeight={true}
+                  disableColumnMenu
+                  getRowClassName={(params) =>
+                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                  }
+                  disableSelectionOnClick
                 />
-                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                  <Grid item xs={6}>
-                    <LocalizationProvider dateAdapter={DateAdapter}>
-                      <DatePicker
-                        value={editFormData.BeginDate}
-                        inputFormat="yyyy-MM-dd 00:00:00"
-                        onChange={handleChangeBeginDate}
-                        renderInput={(params) =>
-                          <TextField
-                            fullWidth
-                            focused
-                            name="BeginDate"
-                            autoComplete="family-name"
-                            variant="standard"
-                            {...params} />}
-                      />
-                    </LocalizationProvider>
+              </Box>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {editFormData.Code}
+                </DialogTitle>
+                <DialogContent>
+                  <TextField
+                    id="standard-basic"
+                    value={editFormData.Description}
+                    variant="standard"
+                    sx={{ pb: 3 }}
+                    fullWidth
+                  />
+                  <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                    <Grid item xs={6}>
+                      <LocalizationProvider dateAdapter={DateAdapter}>
+                        <DatePicker
+                          value={editFormData.BeginDate}
+                          inputFormat="yyyy-MM-dd 00:00:00"
+                          onChange={handleChangeBeginDate}
+                          renderInput={(params) =>
+                            <TextField
+                              fullWidth
+                              focused
+                              name="BeginDate"
+                              autoComplete="family-name"
+                              variant="standard"
+                              {...params} />}
+                        />
+                      </LocalizationProvider>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <LocalizationProvider dateAdapter={DateAdapter}>
+                        <DatePicker
+                          value={editFormData.EndDate}
+                          inputFormat="yyyy-MM-dd 00:00:00"
+                          onChange={handleChangeEndDate}
+                          renderInput={(params) =>
+                            <TextField
+                              fullWidth
+                              focused
+                              name="EndDate"
+                              autoComplete="family-name"
+                              variant="standard"
+                              {...params} />}
+                        />
+                      </LocalizationProvider>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={6}>
-                    <LocalizationProvider dateAdapter={DateAdapter}>
-                      <DatePicker
-                        value={editFormData.EndDate}
-                        inputFormat="yyyy-MM-dd 00:00:00"
-                        onChange={handleChangeEndDate}
-                        renderInput={(params) =>
-                          <TextField
-                            fullWidth
-                            focused
-                            name="EndDate"
-                            autoComplete="family-name"
-                            variant="standard"
-                            {...params} />}
-                      />
-                    </LocalizationProvider>
-                  </Grid>
-                </Grid>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleSubmit_Update} variant='contained'>Submit</Button>
-                <Button onClick={handleClose} variant='contained' color='error' autoFocus>
-                  Cancel
-                </Button>
-              </DialogActions>
-            </Dialog>
-            <Dialog
-              open={openII}
-              onClose={handleCloseII}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"แจ้งเตือน"}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  ท่านแน่ใจที่จะลบรอบตรวจนับทรัพย์สินของ {editFormData.Code} ใช่หรือไม่ ?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  variant="contained"
-                  onClick={handleSubmit_Delete}
-                  sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
-                >ใช่
-                </Button>
-                <Button
-                  variant="contained"
-                  color='error'
-                  sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
-                  onClick={handleCloseII} autoFocus
-                >
-                  ไม่
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </Container>
-        </Box>
-      </AnimatedPage>
-    </React.Fragment>
-  );
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleSubmit_Update} variant='contained'>Submit</Button>
+                  <Button onClick={handleClose} variant='contained' color='error' autoFocus>
+                    Cancel
+                  </Button>
+                </DialogActions>
+              </Dialog>
+              <Dialog
+                open={openII}
+                onClose={handleCloseII}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"แจ้งเตือน"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    ท่านแน่ใจที่จะลบรอบตรวจนับทรัพย์สินของ {editFormData.Code} ใช่หรือไม่ ?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    variant="contained"
+                    onClick={handleSubmit_Delete}
+                    sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                  >ใช่
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color='error'
+                    sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                    onClick={handleCloseII} autoFocus
+                  >
+                    ไม่
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </Container>
+          </Box>
+        </AnimatedPage>
+      </React.Fragment>
+    );
+  }
 }
