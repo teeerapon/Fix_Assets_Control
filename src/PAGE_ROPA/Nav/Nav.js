@@ -139,7 +139,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                 <MenuIcon />
               </IconButton>
               <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} style={{ height: 80 }}>
-                <Button disabled={checkUserWeb === 'admin' ? false : true} onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
+                <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
                   <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
                     <Typography
                       style={{ color: '#ea0c80' }}
