@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography';
 import AnimatedPage from '../../AnimatedPage.jsx'
 import Box from '@mui/material/Box';
 import logoPure from '../../image/Picture1.png'
-import { alpha, styled } from '@mui/material/styles';
+import { alpha, styled, Theme, useTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
 import ArticleIcon from '@mui/icons-material/Article';
@@ -43,6 +43,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import AddIcon from '@mui/icons-material/Add';
 
 const ODD_OPACITY = 0.2;
 
@@ -129,13 +130,33 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 export default function Permission_to_RoPA() {
 
   const [ropa_List, setRopa_List] = React.useState();
+  const [ropa_type, setRopa_type] = React.useState();
   const [openII, setOpenII] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const [dataList, setDataList] = React.useState(false);
+  const [serviceList, setServiceList] = React.useState([{ Ropa_ID: "", Depcode: "", DataItem_Name: "", Ropa_Type: "", Data_Subject: "", Step: "", Last_Review: "", allowner: "", allaccess: "" }]);
+  const allowner = !serviceList.allowner ? [] : serviceList.allowner.split(",");
+  const allaccess = !serviceList.allaccess ? [] : serviceList.allaccess.split(",");
+
+  const handleDelete = () => {
+    alert('You clicked the delete icon.');
+  };
 
   const handleClickOpenII = (event, params) => {
     setOpenII(true);
-    setDataList(params.row)
+
+    const FromValues = {
+      Ropa_ID: params.row.Ropa_ID,
+      Depcode: params.row.Depcode,
+      DataItem_Name: params.row.DataItem_Name,
+      Ropa_Type: params.row.Ropa_Type,
+      Data_Subject: params.row.Data_Subject,
+      Step: params.row.Step,
+      Last_Review: params.row.Last_Review,
+      allowner: params.row.allowner,
+      allaccess: params.row.allaccess
+    }
+
+    setServiceList(FromValues);
   }
 
   const handleCloseII = () => {
@@ -144,11 +165,89 @@ export default function Permission_to_RoPA() {
 
   const handleClickOpen = (event, params) => {
     setOpen(true);
-    setDataList(params.row)
+
+    const FromValues = {
+      Ropa_ID: params.row.Ropa_ID,
+      Depcode: params.row.Depcode,
+      DataItem_Name: params.row.DataItem_Name,
+      Ropa_Type: params.row.Ropa_Type,
+      Data_Subject: params.row.Data_Subject,
+      Step: params.row.Step,
+      Last_Review: params.row.Last_Review,
+      allowner: params.row.allowner,
+      allaccess: params.row.allaccess
+    }
+
+    setServiceList(FromValues);
+
+    const ropaType_ID = { RopaType_ID: params.row.Ropa_ID }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    Axios.post('http://192.168.220.1:32001/api/Ropa_List_By_ID', ropaType_ID, { headers })
+      .then(response => setRopa_type(response.data.data));
   }
+
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleRopa_Save_Update = () => {
+    setOpen(false);
+  };
+
+  const handleChangeValue_DataItem_Name = (event) => {
+    event.preventDefault();
+    const FromValues = {
+      Ropa_ID: serviceList.Ropa_ID,
+      Depcode: serviceList.Depcode,
+      DataItem_Name: event.target.value,
+      Ropa_Type: serviceList.Ropa_Type,
+      Data_Subject: serviceList.Data_Subject,
+      Step: serviceList.Step,
+      Last_Review: serviceList.Last_Review,
+      allowner: serviceList.allowner,
+      allaccess: serviceList.allaccess
+    }
+
+    setServiceList(FromValues);
+  };
+
+  const handleChangeValue_Data_Subject = (event) => {
+    event.preventDefault();
+    const FromValues = {
+      Ropa_ID: serviceList.Ropa_ID,
+      Depcode: serviceList.Depcode,
+      DataItem_Name: serviceList.DataItem_Name,
+      Ropa_Type: serviceList.Ropa_Type,
+      Data_Subject: event.target.value,
+      Step: serviceList.Step,
+      Last_Review: serviceList.Last_Review,
+      allowner: serviceList.allowner,
+      allaccess: serviceList.allaccess
+    }
+
+    setServiceList(FromValues);
+  };
+
+  const handleChangeValue_Step = (event) => {
+    event.preventDefault();
+    const FromValues = {
+      Ropa_ID: serviceList.Ropa_ID,
+      Depcode: serviceList.Depcode,
+      DataItem_Name: serviceList.DataItem_Name,
+      Ropa_Type: serviceList.Ropa_Type,
+      Data_Subject: serviceList.Data_Subject,
+      Step: event.target.value,
+      Last_Review: serviceList.Last_Review,
+      allowner: serviceList.allowner,
+      allaccess: serviceList.allaccess
+    }
+
+    setServiceList(FromValues);
   };
 
   React.useEffect(() => {
@@ -159,183 +258,6 @@ export default function Permission_to_RoPA() {
     Axios.get('http://192.168.220.1:32001/api/Ropa_List', { headers })
       .then(response => setRopa_List(response.data));
   }, []);
-
-  const row_PageIII = [
-    { id: 1, type_name: 'หมายเลขบัตรประจำตัวประชาชน', },
-    { id: 2, type_name: 'ที่อยู่', },
-    { id: 3, type_name: 'ข้อมูลการศึกษา', },
-    { id: 4, type_name: 'ข้อมูลทางการเงิน', },
-    { id: 5, type_name: 'ประวัติการทำงาน', },
-    { id: 6, type_name: 'ข้อมูลอ่อนไหว', },
-  ];
-
-  const column_PageIII: GridColDef[] = [
-    {
-      field: 'id',
-      headerName: 'ลำดับ',
-      headerClassName: 'super-app-theme--header',
-      flex: 1,
-      hide: true,
-    },
-    {
-      field: 'type_name',
-      headerName: 'หัวข้อ',
-      headerClassName: 'super-app-theme--header',
-      flex: 1,
-    },
-    {
-      field: 'checked',
-      headerName: '',
-      flex: 1,
-      type: 'number',
-      disableClickEventBubbling: true,
-      renderCell: (params) => {
-        return (
-          <Button
-            variant="contained"
-            style={{ backgroundColor: '#DC143C' }}
-            startIcon={<DeleteIcon />}
-          >
-            Delete
-          </Button>
-        );
-      }
-    },
-  ];
-
-  const column_PageII: GridColDef[] = [
-    {
-      field: 'id',
-      headerName: 'ลำดับ',
-      headerClassName: 'super-app-theme--header',
-      flex: 1,
-      hide: true,
-    },
-    {
-      field: 'inital',
-      headerName: 'อักษรย่อ',
-      headerClassName: 'super-app-theme--header',
-      width: 100,
-    },
-    {
-      field: 'full_name',
-      headerName: 'ชื่อ - นามสกุล',
-      headerClassName: 'super-app-theme--header',
-      flex: 1,
-      valueGetter: (params: GridValueGetterParams) =>
-        `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-    },
-    {
-      field: 'depID',
-      headerName: 'แผนก',
-      headerClassName: 'super-app-theme--header',
-      width: 100,
-    },
-    {
-      field: 'beginDate_permission',
-      headerName: 'วันที่ได้รับความยินยอม',
-      type: 'dateTime',
-      headerClassName: 'super-app-theme--header',
-      width: 130,
-    },
-    {
-      field: 'date_permission',
-      headerName: 'วันที่เก็บข้อมูล',
-      type: 'dateTime',
-      headerClassName: 'super-app-theme--header',
-      width: 130,
-    },
-    {
-      field: 'permission',
-      headerName: 'Permission',
-      flex: 1,
-      disableClickEventBubbling: true,
-      renderCell: (params) => {
-        return (
-          <Button
-            variant="contained"
-            style={{ backgroundColor: '#008000' }}
-            startIcon={<ArticleIcon />}
-          >
-            Permission
-          </Button>
-        );
-      }
-    },
-    {
-      field: 'delete',
-      headerName: 'Delete',
-      flex: 1,
-      disableClickEventBubbling: true,
-      renderCell: (params) => {
-        return (
-          <Button
-            variant="contained"
-            style={{ backgroundColor: '#DC143C' }}
-            startIcon={<DeleteIcon />}
-          >
-            Delete
-          </Button>
-        );
-      }
-    },
-  ];
-
-  const column_PageII_I: GridColDef[] = [
-    {
-      field: 'id',
-      headerName: 'ลำดับ',
-      headerClassName: 'super-app-theme--header',
-      flex: 1,
-      hide: true,
-    },
-    {
-      field: 'inital',
-      headerName: 'อักษรย่อ',
-      headerClassName: 'super-app-theme--header',
-      flex: 1,
-    },
-    {
-      field: 'full_name',
-      headerName: 'ชื่อ - นามสกุล',
-      headerClassName: 'super-app-theme--header',
-      description: 'This column has a value getter and is not sortable.',
-      flex: 1,
-      valueGetter: (params: GridValueGetterParams) =>
-        `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-    },
-    {
-      field: 'depID',
-      headerName: 'แผนก',
-      headerClassName: 'super-app-theme--header',
-      flex: 1,
-    },
-    {
-      field: 'beginDate_permission',
-      headerName: 'วันที่ได้รับสิทธิ์',
-      type: 'dateTime',
-      headerClassName: 'super-app-theme--header',
-      flex: 1,
-    },
-    {
-      field: 'action',
-      headerName: 'Action',
-
-      flex: 1,
-      disableClickEventBubbling: true,
-      renderCell: (params) => {
-        return (
-          <Button
-            variant="contained"
-            color='error'
-            startIcon={<DeleteIcon />}
-          >
-            Delete
-          </Button>
-        );
-      }
-    },
-  ];
 
   const columns: GridColDef[] = [
     {
@@ -372,6 +294,22 @@ export default function Permission_to_RoPA() {
     {
       field: 'Step',
       headerName: 'ขั้นตอนในการรักษา',
+      headerClassName: 'super-app-theme--header',
+      flex: 1,
+    },
+    {
+      field: 'allowner',
+      headerName: 'ผู้รับผิดชอบ',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'super-app-theme--header',
+      flex: 1,
+    },
+    {
+      field: 'allaccess',
+      headerName: 'ผู้ที่มีสิทธิ์',
+      headerAlign: 'center',
+      align: 'center',
       headerClassName: 'super-app-theme--header',
       flex: 1,
     },
@@ -469,7 +407,7 @@ export default function Permission_to_RoPA() {
                   size="small"
                   variant="contained"
                   color='secondary'
-                  startIcon={<PersonAddAlt1 size="small" />}
+                  startIcon={<AddIcon size="small" />}
                 >
                   Add Main
                 </Button>
@@ -524,7 +462,8 @@ export default function Permission_to_RoPA() {
                   <TextField
                     required
                     fullWidth
-                    value={dataList.DataItem_Name}
+                    value={serviceList.DataItem_Name}
+                    onChange={handleChangeValue_DataItem_Name}
                     name='DataItem_Name'
                     sx={{ pt: 1 }}
                     InputProps={{
@@ -541,7 +480,33 @@ export default function Permission_to_RoPA() {
                   <TextField
                     required
                     fullWidth
-                    value={dataList.Data_Subject}
+                    sx={{ pt: 1 }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Typography color="black" sx={{ mb: 1 }}>
+                            ประเภทข้อมูล :
+                          </Typography>
+                          <Box sx={{ display: 'flex', gap: 0.5, m: 1, mt: 0 }}>
+                            {(!ropa_type ? [] : ropa_type).map((ropa_type) => (
+                              <Chip key={ropa_type.RopaType_Name} label={ropa_type.RopaType_Name} onDelete={handleDelete} />
+                            ))}
+                          </Box>
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <IconButton aria-label="upload picture" component="label">
+                          <AddIcon />
+                        </IconButton>
+                      ),
+                    }}
+                    variant="standard"
+                  />
+                  <TextField
+                    required
+                    fullWidth
+                    value={serviceList.Data_Subject}
+                    onChange={handleChangeValue_Data_Subject}
                     name='Data_Subject'
                     sx={{ pt: 1 }}
                     InputProps={{
@@ -558,7 +523,8 @@ export default function Permission_to_RoPA() {
                   <TextField
                     required
                     fullWidth
-                    value={dataList.Step}
+                    value={serviceList.Step}
+                    onChange={handleChangeValue_Step}
                     name='Step'
                     sx={{ pt: 1 }}
                     InputProps={{
@@ -572,11 +538,63 @@ export default function Permission_to_RoPA() {
                     }}
                     variant="standard"
                   />
+                  <TextField
+                    required
+                    fullWidth
+                    name='allowner'
+                    sx={{ pt: 1 }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Typography color="black" sx={{ mb: 1 }}>
+                            ผู้รับผิดชอบ :
+                          </Typography>
+                          <Box sx={{ display: 'flex', gap: 0.5, m: 1, mt: 0 }}>
+                            {allowner.map((allowner) => (
+                              <Chip key={allowner} label={allowner} onDelete={handleDelete} />
+                            ))}
+                          </Box>
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <IconButton aria-label="upload picture" component="label">
+                          <AddIcon />
+                        </IconButton>
+                      ),
+                    }}
+                    variant="standard"
+                  />
+                  <TextField
+                    required
+                    fullWidth
+                    name='allaccess'
+                    sx={{ pt: 1 }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Typography color="black" sx={{ mb: 1 }}>
+                            ผู้ที่มีสิทธิ์ :
+                          </Typography>
+                          <Box sx={{ display: 'flex', gap: 0.5, m: 1, mt: 0 }}>
+                            {allaccess.map((allaccess) => (
+                              <Chip key={allaccess} label={allaccess} onDelete={handleDelete} />
+                            ))}
+                          </Box>
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <IconButton aria-label="upload picture" component="label">
+                          <AddIcon />
+                        </IconButton>
+                      ),
+                    }}
+                    variant="standard"
+                  />
                 </DialogContent>
                 <DialogActions>
                   <Button
                     variant="contained"
-                    onClick={handleClose}
+                    onClick={handleRopa_Save_Update}
                     sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
                   >ใช่
                   </Button>
@@ -601,7 +619,7 @@ export default function Permission_to_RoPA() {
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    คุณต้องการที่จะลบหัวข้อ <b>{dataList.DataItem_Name}</b> นี้ใช่หรือไม่?
+                    คุณต้องการที่จะลบหัวข้อ <b>{!serviceList ? '' : serviceList.DataItem_Name}</b> นี้ใช่หรือไม่?
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>

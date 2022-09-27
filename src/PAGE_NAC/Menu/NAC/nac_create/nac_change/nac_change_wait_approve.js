@@ -349,7 +349,7 @@ export default function Nac_Main_wait() {
   // ส่วนของผู้อนุมัตื
   const [bossApprove, setBossApprove] = React.useState('');
   const [bossApproveDate, setBossApproveDate] = React.useState();
-    const [verify, setVerifyApprove] = React.useState('');
+  const [verify, setVerifyApprove] = React.useState('');
   const [verifyApproveDate, setVerifyApproveDate] = React.useState();
 
 
@@ -1508,7 +1508,7 @@ export default function Nac_Main_wait() {
                                   <TextField
                                     required
                                     fullWidth
-                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    disabled
                                     name='source_department'
                                     onChange={handleChangeSource_Department}
                                     value={source_department}
@@ -1518,7 +1518,7 @@ export default function Nac_Main_wait() {
                                   <TextField
                                     required
                                     fullWidth
-                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    disabled
                                     onChange={handleChangeSource_BU}
                                     name='source_BU'
                                     value={source_BU}
@@ -1670,13 +1670,15 @@ export default function Nac_Main_wait() {
                                       getOptionLabel={(option) => option.Code || ''}
                                       filterOptions={filterOptions}
                                       onChange={(e) => handleServiceChangeHeader(e, index)}
-                                      value={!singleService.assetsCode ? '' : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
+                                      value={!singleService.assetsCode ? singleService.assetsCode : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
                                       renderInput={(params) => (
                                         <TextField
                                           {...params}
                                           variant="standard"
                                           name='assetsCode'
                                           id='assetsCode'
+                                          key={index}
+                                          value={singleService.assetsCode}
                                         //onChange={(e) => handleServiceChange(e, index)}
                                         />
                                       )}
@@ -1692,7 +1694,7 @@ export default function Nac_Main_wait() {
                                       name='assetsCode'
                                       id='assetsCode'
                                       onChange={(e) => handleServiceChange(e, index)}
-                                      value={!singleService.assetsCode ? '' : singleService.assetsCode}
+                                      value={singleService.assetsCode}
                                     />
                                   </React.Fragment>
                                 )}
@@ -1707,7 +1709,7 @@ export default function Nac_Main_wait() {
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   variant="standard"
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={!singleService.serialNo ? '' : singleService.serialNo}
+                                  value={singleService.serialNo}
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
@@ -1767,7 +1769,7 @@ export default function Nac_Main_wait() {
                                   type='number'
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14, min: 1 } }}
                                   variant="standard"
-                                  onChange={(e) => handleServiceChange(e, index)}
+                                  //onChange={(e) => handleServiceChange(e, index)}
                                   value={singleService.count}
                                 />
                               </StyledTableCell>
@@ -1815,6 +1817,7 @@ export default function Nac_Main_wait() {
                             <TextField
                               required
                               fullWidth
+                              disabled
                               type={valuesVisibility.showText ? "text" : "password"}
                               inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                               value={sum_price === 0 ? '' : sum_price.toLocaleString()}
@@ -2141,7 +2144,7 @@ export default function Nac_Main_wait() {
                 setDescription={setDescription}
                 setOpenDialog={setOpenDialog}
               />
-              
+
               <Dialog open={openDialogReply} onClose={handleCloseDialogReply} >
                 <DialogTitle>กรุณาระบุข้อความ/เหตุผล ที่ตีกลับเอกสาร</DialogTitle>
                 <DialogContent sx={{ width: 500 }}>

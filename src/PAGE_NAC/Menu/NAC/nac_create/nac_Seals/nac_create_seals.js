@@ -731,6 +731,7 @@ export default function Nac_Main() {
                                   required
                                   fullWidth
                                   name='source_Department'
+                                  disabled
                                   onChange={handleChangeSource_Department}
                                   value={source_Department}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
@@ -739,6 +740,7 @@ export default function Nac_Main() {
                                 <TextField
                                   required
                                   fullWidth
+                                  disabled
                                   onChange={handleChangeSource_BU}
                                   name='source_Department'
                                   value={source_BU}
@@ -907,8 +909,7 @@ export default function Nac_Main() {
                                     key={index}
                                     name='assetsCode'
                                     id='assetsCode'
-                                    //onChange={(e) => handleServiceChange(e, index)}
-                                    value={singleService.service}
+                                    value={singleService.assetsCode}
                                   />
                                 )}
                               />
@@ -919,10 +920,9 @@ export default function Nac_Main() {
                                 key={index}
                                 name="serialNo"
                                 id="serialNo"
+                                disabled
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                //onChange={(e) => handleServiceChange(e, index)}
-                                value={serviceList[index].serialNo}
-                                // value={serviceList[index].serialNo}
+                                value={singleService.serialNo}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -932,9 +932,9 @@ export default function Nac_Main() {
                                 key={index}
                                 name="name"
                                 id="name"
-                                //onChange={(e) => handleServiceChange(e, index)}
+                                disabled
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                value={serviceList[index].name}
+                                value={singleService.name}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -944,8 +944,9 @@ export default function Nac_Main() {
                                 key={index}
                                 name="date_asset"
                                 id="date_asset"
+                                disabled
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                value={!serviceList[index].date_asset ? '' : serviceList[index].date_asset.split('T')[0]}
+                                value={!singleService.date_asset ? singleService.date_asset : singleService.date_asset.split('T')[0]}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -956,8 +957,8 @@ export default function Nac_Main() {
                                 name="price"
                                 id="price"
                                 type={valuesVisibility.showText ? "text" : "password"}
-                                // onChange={(e) => handleServiceChange(e, index)}
-                                value={!serviceList[index].price ? '' : (serviceList[index].price).toLocaleString()}
+                                disabled
+                                value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
@@ -980,7 +981,7 @@ export default function Nac_Main() {
                                 key={index}
                                 name="priceSeals"
                                 id="priceSeals"
-                                value={singleService.service}
+                                value={singleService.priceSeals}
                                 onChange={(e) => handleServiceChange(e, index)}
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
@@ -994,7 +995,7 @@ export default function Nac_Main() {
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 name="profit"
                                 id="profit"
-                                value={(!serviceList[index].priceSeals || serviceList[index].priceSeals === 0) ? '' : (serviceList[index].priceSeals - serviceList[index].bookValue).toLocaleString()}
+                                value={(!singleService.priceSeals || singleService.priceSeals === 0) ? '' : (singleService.priceSeals - singleService.bookValue).toLocaleString()}
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
@@ -1031,6 +1032,7 @@ export default function Nac_Main() {
                         <TextField
                           required
                           fullWidth
+                          disabled
                           type={valuesVisibility.showText ? "text" : "password"}
                           value={result === 0 ? '' : result.toLocaleString()}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
@@ -1041,6 +1043,7 @@ export default function Nac_Main() {
                         <TextField
                           required
                           fullWidth
+                          disabled
                           type={valuesVisibility.showText ? "text" : "password"}
                           value={book_V === 0 ? '' : book_V.toLocaleString()}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
@@ -1051,6 +1054,7 @@ export default function Nac_Main() {
                         <TextField
                           required
                           fullWidth
+                          disabled
                           type={valuesVisibility.showText ? "text" : "password"}
                           value={price_seals === 0 ? '' : price_seals.toLocaleString()}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
@@ -1061,6 +1065,7 @@ export default function Nac_Main() {
                         <TextField
                           required
                           fullWidth
+                          disabled
                           type={valuesVisibility.showText ? "text" : "password"}
                           value={profit_seals === 0 ? '' : (price_seals - book_V).toLocaleString()}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}

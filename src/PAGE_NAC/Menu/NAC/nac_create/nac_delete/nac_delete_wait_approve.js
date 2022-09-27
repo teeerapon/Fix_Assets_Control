@@ -1681,7 +1681,7 @@ export default function Nac_Seals_Approve() {
                                   <TextField
                                     required
                                     fullWidth
-                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    disabled
                                     name='source_department'
                                     onChange={handleChangeSource_Department}
                                     value={source_department}
@@ -1691,7 +1691,7 @@ export default function Nac_Seals_Approve() {
                                   <TextField
                                     required
                                     fullWidth
-                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    disabled
                                     onChange={handleChangeSource_BU}
                                     name='source_BU'
                                     value={source_BU}
@@ -1842,13 +1842,15 @@ export default function Nac_Seals_Approve() {
                                       getOptionLabel={(option) => option.Code || ''}
                                       filterOptions={filterOptions}
                                       onChange={(e) => handleServiceChangeHeader(e, index)}
-                                      value={!singleService.assetsCode ? '' : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
+                                      value={!singleService.assetsCode ? singleService.assetsCode : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
                                       renderInput={(params) => (
                                         <TextField
                                           {...params}
                                           variant="standard"
                                           name='assetsCode'
                                           id='assetsCode'
+                                          key={index}
+                                          value={singleService.assetsCode}
                                         //onChange={(e) => handleServiceChange(e, index)}
                                         />
                                       )}
@@ -1865,7 +1867,7 @@ export default function Nac_Seals_Approve() {
                                       id='assetsCode'
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                       onChange={(e) => handleServiceChange(e, index)}
-                                      value={!singleService.assetsCode ? '' : singleService.assetsCode}
+                                      value={singleService.assetsCode}
                                     />
                                   </React.Fragment>
                                 )}
@@ -1874,20 +1876,20 @@ export default function Nac_Seals_Approve() {
                                 <TextField
                                   key={index}
                                   fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  disabled
                                   name="serialNo"
                                   id="serialNo"
                                   variant="standard"
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={!singleService.serialNo ? '' : singleService.serialNo}
+                                  value={singleService.serialNo}
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  disabled
                                   name="name"
                                   id="name"
                                   variant="standard"
@@ -1904,7 +1906,7 @@ export default function Nac_Seals_Approve() {
                                   name="date_asset"
                                   id="date_asset"
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  value={!serviceList[index].date_asset ? '' : serviceList[index].date_asset.split('T')[0]}
+                                  value={!singleService.date_asset ? singleService.date_asset : singleService.date_asset.split('T')[0]}
                                   variant="standard"
                                 />
                               </StyledTableCell>
@@ -1912,12 +1914,12 @@ export default function Nac_Seals_Approve() {
                                 <TextField
                                   key={index}
                                   fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  disabled
                                   name="price"
                                   id="price"
                                   onChange={(e) => handleServiceChange(e, index)}
                                   type={valuesVisibility.showText ? "text" : "password"}
-                                  value={!serviceList[index].price ? '' : (serviceList[index].price).toLocaleString()}
+                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   variant="standard"
                                 />
@@ -1933,7 +1935,7 @@ export default function Nac_Seals_Approve() {
                                   type={valuesVisibility.showText ? "text" : "password"}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={!serviceList[index].bookValue ? '' : serviceList[index].bookValue.toLocaleString()}
+                                  value={!singleService.bookValue ? singleService.bookValue : (singleService.bookValue).toLocaleString()}
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
@@ -1946,7 +1948,7 @@ export default function Nac_Seals_Approve() {
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   variant="standard"
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={!serviceList[index].price ? '' : 0}
+                                  value={!singleService.priceSeals ? 0 : (singleService.priceSeals).toLocaleString()}
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
@@ -1960,7 +1962,7 @@ export default function Nac_Seals_Approve() {
                                   type={valuesVisibility.showText ? "text" : "password"}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={!serviceList[index].bookValue ? '' : (0 - serviceList[index].bookValue).toLocaleString()}
+                                  value={!singleService.bookValue ? '' : (0 - singleService.bookValue).toLocaleString()}
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
@@ -1996,6 +1998,7 @@ export default function Nac_Seals_Approve() {
                           <TextField
                             required
                             fullWidth
+                            disabled
                             type={valuesVisibility.showText ? "text" : "password"}
                             value={result === 0 ? '' : result.toLocaleString()}
                             inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
@@ -2006,6 +2009,7 @@ export default function Nac_Seals_Approve() {
                           <TextField
                             required
                             fullWidth
+                            disabled
                             type={valuesVisibility.showText ? "text" : "password"}
                             value={book_V === 0 ? '' : book_V.toLocaleString()}
                             inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
@@ -2016,6 +2020,7 @@ export default function Nac_Seals_Approve() {
                           <TextField
                             required
                             fullWidth
+                            disabled
                             //type={valuesVisibility.showText ? "text" : "password"}
                             value={result === 0 ? '' : 0}
                             inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
@@ -2026,6 +2031,7 @@ export default function Nac_Seals_Approve() {
                           <TextField
                             required
                             fullWidth
+                            disabled
                             type={valuesVisibility.showText ? "text" : "password"}
                             value={book_V === 0 ? '' : (0 - book_V).toLocaleString()}
                             inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}

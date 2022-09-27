@@ -413,7 +413,7 @@ export default function Nac_Main_wait() {
 
     setBossApprove(responseHeaders.data[0].source_approve_userid)
     setBossApproveDate(responseHeaders.data[0].source_approve_date)
-        setVerifyApprove(responseHeaders.data[0].verify_by_userid)
+    setVerifyApprove(responseHeaders.data[0].verify_by_userid)
     setVerifyApproveDate(responseHeaders.data[0].verify_date)
 
     // เรียก Detail มาแสดง
@@ -1646,7 +1646,7 @@ export default function Nac_Main_wait() {
                                   <TextField
                                     required
                                     fullWidth
-                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    disabled
                                     name='source_department'
                                     onChange={handleChangeSource_Department}
                                     value={source_department}
@@ -1656,7 +1656,7 @@ export default function Nac_Main_wait() {
                                   <TextField
                                     required
                                     fullWidth
-                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    disabled
                                     onChange={handleChangeSource_BU}
                                     name='source_BU'
                                     value={source_BU}
@@ -1756,7 +1756,7 @@ export default function Nac_Main_wait() {
                                   <TextField
                                     required
                                     fullWidth
-                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    disabled
                                     align="center"
                                     name='des_department'
                                     variant="standard"
@@ -1767,7 +1767,7 @@ export default function Nac_Main_wait() {
                                   <TextField
                                     required
                                     fullWidth
-                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    disabled
                                     align='center'
                                     name='des_BU'
                                     variant="standard"
@@ -1929,13 +1929,15 @@ export default function Nac_Main_wait() {
                                       getOptionLabel={(option) => option.Code || ''}
                                       filterOptions={filterOptions}
                                       onChange={(e) => handleServiceChangeHeader(e, index)}
-                                      value={!singleService.assetsCode ? '' : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
+                                      value={!singleService.assetsCode ? singleService.assetsCode : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
                                       renderInput={(params) => (
                                         <TextField
                                           {...params}
                                           variant="standard"
                                           name='assetsCode'
                                           id='assetsCode'
+                                          key={index}
+                                          value={singleService.assetsCode}
                                         //onChange={(e) => handleServiceChange(e, index)}
                                         />
                                       )}
@@ -1952,7 +1954,7 @@ export default function Nac_Main_wait() {
                                       id='assetsCode'
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                       onChange={(e) => handleServiceChange(e, index)}
-                                      value={!singleService.assetsCode ? '' : singleService.assetsCode}
+                                      value={singleService.assetsCode}
                                     />
                                   </React.Fragment>
                                 )}
@@ -1961,25 +1963,25 @@ export default function Nac_Main_wait() {
                                 <TextField
                                   key={index}
                                   fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  disabled
                                   name="serialNo"
                                   id="serialNo"
                                   variant="standard"
-                                  onChange={(e) => handleServiceChange(e, index)}
+                                  disabled
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  value={!singleService.serialNo ? '' : singleService.serialNo}
+                                  value={singleService.serialNo}
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  disabled
                                   name="name"
                                   id="name"
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                   variant="standard"
-                                  onChange={(e) => handleServiceChange(e, index)}
+                                  disabled
                                   value={singleService.name}
                                 />
                               </StyledTableCell>
@@ -1991,7 +1993,7 @@ export default function Nac_Main_wait() {
                                   name="date_asset"
                                   id="date_asset"
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  value={!serviceList[index].date_asset ? '' : serviceList[index].date_asset.split('T')[0]}
+                                  value={!singleService.date_asset ? singleService.date_asset : singleService.date_asset.split('T')[0]}
                                   variant="standard"
                                 />
                               </StyledTableCell>
@@ -1999,7 +2001,7 @@ export default function Nac_Main_wait() {
                                 <TextField
                                   key={index}
                                   fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  disabled
                                   name="dtl"
                                   id="dtl"
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
@@ -2012,7 +2014,7 @@ export default function Nac_Main_wait() {
                                 <TextField
                                   key={index}
                                   fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  disabled
                                   name="count"
                                   id="count"
                                   type='number'
@@ -2026,12 +2028,12 @@ export default function Nac_Main_wait() {
                                 <TextField
                                   key={index}
                                   fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  disabled
                                   name="price"
                                   id="price"
                                   onChange={(e) => handleServiceChange(e, index)}
                                   type={valuesVisibility.showText ? "text" : "password"}
-                                  value={!singleService.price ? '' : (singleService.price).toLocaleString()}
+                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   variant="standard"
                                 />
@@ -2095,6 +2097,7 @@ export default function Nac_Main_wait() {
                             <TextField
                               required
                               fullWidth
+                              disabled
                               type={valuesVisibility.showText ? "text" : "password"}
                               inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                               value={sum_price === 0 ? '' : sum_price.toLocaleString()}
@@ -2376,22 +2379,22 @@ export default function Nac_Main_wait() {
                           <Grid item xs={2}>
                             <Button
                               variant="contained"
-                              endIcon={<DoubleArrowRoundedIcon />}
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
-                              onClick={handleSubmitComplete}>
-                              รับทรัพย์สิน
-                            </Button>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Button
-                              variant="contained"
                               color='error'
                               startIcon={<ClearRoundedIcon />}
                               sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                               disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
                               onClick={drop_NAC}>
                               ยกเลิกรายการ
+                            </Button>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Button
+                              variant="contained"
+                              endIcon={<DoubleArrowRoundedIcon />}
+                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                              disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
+                              onClick={handleSubmitComplete}>
+                              รับทรัพย์สิน
                             </Button>
                           </Grid>
                           <Grid item xs>

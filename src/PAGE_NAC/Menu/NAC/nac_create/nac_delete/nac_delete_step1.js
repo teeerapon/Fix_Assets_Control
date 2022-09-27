@@ -795,6 +795,7 @@ export default function Nac_Main() {
                                 <TextField
                                   required
                                   fullWidth
+                                  disabled
                                   name='source_Department'
                                   onChange={handleChangeSource_Department}
                                   value={source_Department}
@@ -804,6 +805,7 @@ export default function Nac_Main() {
                                 <TextField
                                   required
                                   fullWidth
+                                  disabled
                                   onChange={handleChangeSource_BU}
                                   name='source_Department'
                                   value={source_BU}
@@ -975,7 +977,7 @@ export default function Nac_Main() {
                                     name='assetsCode'
                                     id='assetsCode'
                                     //onChange={(e) => handleServiceChange(e, index)}
-                                    value={singleService.service}
+                                    value={singleService.assetsCode}
                                   />
                                 )}
                               />
@@ -986,9 +988,10 @@ export default function Nac_Main() {
                                 key={index}
                                 name="serialNo"
                                 id="serialNo"
+                                disabled
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                 //onChange={(e) => handleServiceChange(e, index)}
-                                value={serviceList[index].serialNo}
+                                value={singleService.serialNo}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -998,8 +1001,9 @@ export default function Nac_Main() {
                                 key={index}
                                 name="name"
                                 id="name"
+                                disabled
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                value={serviceList[index].name}
+                                value={singleService.name}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -1009,8 +1013,9 @@ export default function Nac_Main() {
                                 key={index}
                                 name="date_asset"
                                 id="date_asset"
+                                disabled
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                value={!serviceList[index].date_asset ? '' : serviceList[index].date_asset.split('T')[0]}
+                                value={!singleService.date_asset ? singleService.date_asset : singleService.date_asset.split('T')[0]}
                                 variant="standard"
                               />
                             </StyledTableCell>
@@ -1020,9 +1025,10 @@ export default function Nac_Main() {
                                 key={index}
                                 name="price"
                                 id="price"
+                                disabled
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 // onChange={(e) => handleServiceChange(e, index)}
-                                value={!serviceList[index].price ? '' : (serviceList[index].price).toLocaleString()}
+                                value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
@@ -1097,6 +1103,7 @@ export default function Nac_Main() {
                         <TextField
                           required
                           fullWidth
+                          disabled
                           type={valuesVisibility.showText ? "text" : "password"}
                           value={result === 0 ? '' : result.toLocaleString()}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
@@ -1107,6 +1114,7 @@ export default function Nac_Main() {
                         <TextField
                           required
                           fullWidth
+                          disabled
                           type={valuesVisibility.showText ? "text" : "password"}
                           value={book_V === 0 ? '' : book_V.toLocaleString()}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
@@ -1117,6 +1125,7 @@ export default function Nac_Main() {
                         <TextField
                           required
                           fullWidth
+                          disabled
                           value={result === 0 ? '' : 0}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                           variant="standard"
@@ -1126,6 +1135,7 @@ export default function Nac_Main() {
                         <TextField
                           required
                           fullWidth
+                          disabled
                           type={valuesVisibility.showText ? "text" : "password"}
                           value={price_seals === 0 ? '' : (price_seals - book_V).toLocaleString()}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}

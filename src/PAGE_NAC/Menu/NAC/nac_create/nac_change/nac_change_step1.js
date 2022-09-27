@@ -791,12 +791,14 @@ export default function Nac_Main() {
                                     name='source_Department'
                                     onChange={handleChangeSource_Department}
                                     value={source_Department}
+                                    disabled
                                     inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                     variant="standard"
                                   />
                                   <TextField
                                     required
                                     fullWidth
+                                    disabled
                                     onChange={handleChangeSource_BU}
                                     name='source_Department'
                                     value={source_BU}
@@ -967,7 +969,7 @@ export default function Nac_Main() {
                                       name='assetsCode'
                                       id='assetsCode'
                                       //onChange={(e) => handleServiceChange(e, index)}
-                                      value={singleService.service}
+                                      value={singleService.assetsCode}
                                     />
                                   )}
                                 />
@@ -980,7 +982,7 @@ export default function Nac_Main() {
                                   id="serialNo"
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={serviceList[index].serialNo}
+                                  value={singleService.serialNo}
                                   variant="standard"
                                 />
                               </StyledTableCell>
@@ -992,7 +994,7 @@ export default function Nac_Main() {
                                   id="name"
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={serviceList[index].name}
+                                  value={singleService.name}
                                   variant="standard"
                                 />
                               </StyledTableCell>
@@ -1003,7 +1005,7 @@ export default function Nac_Main() {
                                   name="date_asset"
                                   id="date_asset"
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  value={!serviceList[index].date_asset ? '' : serviceList[index].date_asset.split('T')[0]}
+                                  value={!singleService.date_asset ? singleService.date_asset : singleService.date_asset.split('T')[0]}
                                   variant="standard"
                                 />
                               </StyledTableCell>
@@ -1036,8 +1038,8 @@ export default function Nac_Main() {
                                   id="count"
                                   type='number'
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14, min: 1 } }}
-                                  onChange={(e) => handleServiceChange(e, index)}
-                                  value={serviceList[index].count}
+                                  //onChange={(e) => handleServiceChange(e, index)}
+                                  value={singleService.count}
                                   variant="standard"
                                 />
                               </StyledTableCell>
@@ -1050,7 +1052,7 @@ export default function Nac_Main() {
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   type={valuesVisibility.showText ? "text" : "password"}
                                   // onChange={(e) => handleServiceChange(e, index)}
-                                  value={!serviceList[index].price ? '' : (serviceList[index].price).toLocaleString()}
+                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
                                   variant="standard"
                                 />
                               </StyledTableCell>
@@ -1083,6 +1085,7 @@ export default function Nac_Main() {
                             <TextField
                               required
                               fullWidth
+                              disabled
                               type={valuesVisibility.showText ? "text" : "password"}
                               value={result === 0 ? '' : result.toLocaleString()}
                               inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}

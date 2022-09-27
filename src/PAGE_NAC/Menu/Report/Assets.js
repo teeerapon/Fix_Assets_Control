@@ -783,7 +783,7 @@ const EnhancedTableToolbar = (props) => {
                     <option value={2}>โยกย้ายทรัพย์สิน</option>
                     {/* <option value={3}>เปลี่ยนแปลงรายละเอียดทรัพย์สิน</option> */}
                     <option value={5}>ขายทรัพย์สิน</option>
-                    <option value={4}>ตัดบัญชีทรัพย์สินถาวร</option>
+                    <option value={4}>ตัดจากบัญชีทรัพย์สิน</option>
                   </NativeSelect>
                 </FormControl>
               </Stack>
@@ -826,6 +826,7 @@ const EnhancedTableToolbar = (props) => {
                                         <TextField
                                           required
                                           fullWidth
+                                          disabled
                                           name='source_Department'
                                           onChange={handleChangeSource_Department}
                                           value={source_Department}
@@ -835,6 +836,7 @@ const EnhancedTableToolbar = (props) => {
                                         <TextField
                                           required
                                           fullWidth
+                                          disabled
                                           onChange={handleChangeSource_BU}
                                           name='source_Department'
                                           value={source_BU}
@@ -923,6 +925,7 @@ const EnhancedTableToolbar = (props) => {
                                         <TextField
                                           required
                                           fullWidth
+                                          disabled
                                           align="center"
                                           name='des_Department'
                                           variant="standard"
@@ -935,6 +938,7 @@ const EnhancedTableToolbar = (props) => {
                                           align='center'
                                           name='des_BU'
                                           fullWidth
+                                          disabled
                                           variant="standard"
                                           value={des_BU}
                                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
@@ -1026,6 +1030,7 @@ const EnhancedTableToolbar = (props) => {
                                         <TextField
                                           required
                                           fullWidth
+                                          disabled
                                           name='source_Department'
                                           onChange={handleChangeSource_Department}
                                           value={source_Department}
@@ -1035,6 +1040,7 @@ const EnhancedTableToolbar = (props) => {
                                         <TextField
                                           required
                                           fullWidth
+                                          disabled
                                           onChange={handleChangeSource_BU}
                                           name='source_Department'
                                           value={source_BU}
