@@ -21,9 +21,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import CategoryIcon from '@mui/icons-material/Category';
-import ReceiptIcon from '@mui/icons-material/Receipt';
-import SecurityIcon from '@mui/icons-material/Security';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import TypeSpecimenIcon from '@mui/icons-material/TypeSpecimen';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,7 +78,19 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
   });
 
   function HomePage() {
-    navigate('/')
+    if (checkUserWeb === 'admin') {
+      navigate('/DATA_CENTER')
+    } else {
+      navigate('/')
+    }
+  };
+
+  function NAC() {
+    navigate('/NAC_MAIN')
+  };
+
+  function RoPA() {
+    navigate('/ROPA_MAIN')
   };
 
   const handleLogout = () => {
@@ -121,20 +133,19 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <ThemeProvider theme={darkTheme}>
-          <AppBar position="static">
+          <AppBar position="static" open={open} >
             <Toolbar>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
                 onClick={handleDrawerOpen}
-                disabled
                 edge="start"
                 sx={{ mr: 2, ...(open && { display: 'none' }) }}
               >
-                <MenuIcon sx={{ color: 'rgba(0,0,0,0)' }} />
+                <MenuIcon />
               </IconButton>
               <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} style={{ height: 80 }}>
-                <Button sx={{ color: 'white', display: 'block' }} disabled>
+                <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
                   <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
                     <Typography
                       style={{ color: '#ea0c80' }}
@@ -214,16 +225,60 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                   </Box>
                 </React.Fragment>
               )}
-              {/* <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                  {checkUserWeb === 'admin' ? 'ADMIN' : checkUserWeb === 'OPERATOR II' ? 'operatorII' : checkUserWeb === 'OPERATOR I' ? 'OPERATOR I' : 'USER'}
-                </Typography>
-              </div> */}
             </Toolbar>
           </AppBar>
+          <Drawer
+            sx={{
+              flexShrink: 0,
+              '& .MuiDrawer-paper': {
+                width: drawerWidth,
+                boxSizing: 'border-box',
+              },
+            }}
+            variant="persistent"
+            anchor="left"
+            open={open}
+          >
+            <DrawerHeader>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === 'ltr' ? <CloseIcon fontSize="small" /> : <CloseIcon />}
+              </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton onClick={NAC}>
+                  <ListItemIcon><AdminPanelSettingsIcon fontSize="small" /></ListItemIcon>
+                  <ListItemText>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                    >
+                      NAC
+                    </Typography>
+                  </ListItemText>
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton onClick={RoPA}>
+                  <ListItemIcon><TypeSpecimenIcon fontSize="small" /></ListItemIcon>
+                  <ListItemText>
+                    <Typography
+                      component="span"
+                      variant="caption"
+                    >
+                      RoPA
+                    </Typography>
+                  </ListItemText>
+                </ListItemButton>
+              </ListItem>
+            </List>
+            <Divider />
+          </Drawer>
           <Outlet />
         </ThemeProvider>
       </Box >
     </>
   );
+
 }

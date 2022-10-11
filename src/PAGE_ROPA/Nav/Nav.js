@@ -80,10 +80,8 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
   function HomePage() {
     if (checkUserWeb === 'admin') {
       navigate('/DATA_CENTER')
-      handleDrawerClose()
     } else {
       navigate('/')
-      handleDrawerClose()
     }
   };
 
@@ -248,7 +246,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                       component="span"
                       variant="caption"
                     >
-                      สิทธิ์เข้าถึงข้อมูล
+                      ประเภทข้อมูลส่วนบุคคล
                     </Typography>
                   </ListItemText>
                 </ListItemButton>

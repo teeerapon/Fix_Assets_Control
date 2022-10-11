@@ -415,12 +415,14 @@ export default function History_of_assets() {
                   width: '100%',
                 }}
               >
+                <Typography variant="body" color="error" noWrap sx={{ mt: 5 }}>
+                  * หมายเหตุ การตั้งเวลาจะต้องตั้งเผื่อไว้ เช่น ต้องการวันที่สิ้นสุดภายในวันที่ 1 จะต้องตั้งวันที่สิ้นสุดเป็นวันที่ 2
+                </Typography>
                 <StripedDataGrid
                   sx={{
-                    mt: 3,
                     pl: 2,
                     pr: 2,
-                    pt: 2,
+                    mt: 2,
                     boxShadow: 1,
                     [`& .${gridClasses.cell}`]: {
                       py: 1,

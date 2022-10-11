@@ -371,7 +371,7 @@ export default function Permission_to_RoPA() {
         <Toolbar>
           <AnimatedPage>
             <Typography variant="h5" color="inherit" noWrap>
-              สิทธิ์เข้าถึงข้อมูล
+              ประเภทข้อมูลส่วนบุคคล
             </Typography>
           </AnimatedPage>
         </Toolbar>
@@ -399,8 +399,7 @@ export default function Permission_to_RoPA() {
               >
                 <div role="presentation">
                   <Breadcrumbs aria-label="breadcrumb">
-                    <Chip variant="outlined" label="สิทธิ์เข้าถึงข้อมูล" />
-                    <Chip variant="outlined" label="รายชื่อผู้มีสิทธิ์" color="primary" />
+                    <Chip variant="outlined" label="ประเภทข้อมูลส่วนบุคคล" color="primary" />
                   </Breadcrumbs>
                 </div>
                 <Button

@@ -154,19 +154,6 @@ export default function AddressForm() {
                 </LocalizationProvider>
               </Stack>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                id="discription"
-                name="discription"
-                onChange={handleDescription}
-                value={valueDescription == undefined ? '' : valueDescription}
-                helperText="กรุณาเลือกตัวเลือกอย่างน้อย 1 อย่าง"
-                fullWidth
-                autoComplete="family-name"
-                variant="standard"
-              />
-            </Grid>
             {showResults ?
               <>
                 <Grid item xs={12} sm={6} mt={2}>

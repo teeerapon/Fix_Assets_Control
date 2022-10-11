@@ -23,7 +23,7 @@ export default function MenuAppBar() {
         <Toolbar>
           <AnimatedPage>
             <Typography variant="h5" color="inherit" noWrap>
-              หน้าแรกระบบบันทึกกิจกรรมการประมวลข้อมูลส่วนบุคคล
+              ระบบบันทึกกิจกรรมการประมวลข้อมูลส่วนบุคคล
             </Typography>
           </AnimatedPage>
         </Toolbar>

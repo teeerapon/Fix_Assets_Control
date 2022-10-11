@@ -102,10 +102,8 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
   function HomePage() {
     if (checkUserWeb === 'admin') {
       navigate('/DATA_CENTER')
-      handleDrawerClose()
     } else {
       navigate('/')
-      handleDrawerClose()
     }
   };
 
