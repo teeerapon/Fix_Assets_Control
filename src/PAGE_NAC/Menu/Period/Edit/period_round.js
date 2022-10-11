@@ -416,7 +416,7 @@ export default function History_of_assets() {
                 }}
               >
                 <Typography variant="body" color="error" noWrap sx={{ mt: 5 }}>
-                  * หมายเหตุ การตั้งเวลาจะต้องตั้งเผื่อไว้ เช่น ต้องการวันที่สิ้นสุดภายในวันที่ 1 จะต้องตั้งวันที่สิ้นสุดเป็นวันที่ 2
+                  * หมายเหตุ ตัวอย่างวันที่สิ้นสุด 2022-10-11 0.00 น. = 2022-10-10 24.00 น.
                 </Typography>
                 <StripedDataGrid
                   sx={{
