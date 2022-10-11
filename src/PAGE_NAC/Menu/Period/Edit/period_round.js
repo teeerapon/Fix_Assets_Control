@@ -416,7 +416,7 @@ export default function History_of_assets() {
                 }}
               >
                 <Typography variant="body" color="error" noWrap sx={{ mt: 5 }}>
-                  * หมายเหตุ ตัวอย่างวันที่สิ้นสุด 2022-10-11 0.00 น. = 2022-10-10 24.00 น.
+                  * หมายเหตุ วันที่สิ้นสุด (2022-10-11 0.00 น.) ผลลัพธ์คือ (2022-10-10 24.00 น.)
                 </Typography>
                 <StripedDataGrid
                   sx={{
