@@ -106,11 +106,6 @@ export default function AddressForm() {
           <Typography variant="h6" gutterBottom>
             *กรุณากรอกข้อมูลให้ครบถ้วน
           </Typography>
-          <Alert variant="outlined" severity="error">
-            <Typography variant="body" color='error' noWrap>
-              วันที่สิ้นสุด (2022-10-11 0.00 น.) ผลลัพธ์คือ (2022-10-10 24.00 น.)
-            </Typography>
-          </Alert>
           <Grid container spacing={3} className='pt-2'>
             <Grid item xs={12}>
               <TextField
@@ -126,6 +121,11 @@ export default function AddressForm() {
             </Grid>
             <Grid item xs={12}>
               <Stack spacing={3}>
+                <Alert variant="outlined" severity="error">
+                  <Typography variant="body" color='error' noWrap>
+                    วันที่สิ้นสุด (2022-10-11 0.00 น.) ผลลัพธ์คือ (2022-10-10 24.00 น.)
+                  </Typography>
+                </Alert>
                 <LocalizationProvider dateAdapter={DateAdapter}>
                   <DatePicker
                     label="วันที่และเวลาเริ่มต้น"
@@ -161,17 +161,19 @@ export default function AddressForm() {
               </Stack>
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                required
-                id="discription"
-                name="discription"
-                label='คำอธิบาย'
-                onChange={handleDescription}
-                value={valueDescription}
-                fullWidth
-                autoComplete="family-name"
-                variant="standard"
-              />
+              <Stack spacing={3}>
+                <TextField
+                  required
+                  id="discription"
+                  name="discription"
+                  label='คำอธิบาย'
+                  onChange={handleDescription}
+                  value={valueDescription}
+                  fullWidth
+                  autoComplete="family-name"
+                  variant="standard"
+                />
+              </Stack>
             </Grid>
             {showResults ?
               <>
