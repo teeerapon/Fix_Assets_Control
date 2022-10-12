@@ -29,6 +29,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import swal from 'sweetalert';
+import Alert from '@mui/material/Alert';
 
 const ODD_OPACITY = 0.2;
 
@@ -415,9 +416,11 @@ export default function History_of_assets() {
                   width: '100%',
                 }}
               >
-                <Typography variant="body" color="error" noWrap sx={{ mt: 5 }}>
-                  * หมายเหตุ วันที่สิ้นสุด (2022-10-11 0.00 น.) ผลลัพธ์คือ (2022-10-10 24.00 น.)
-                </Typography>
+                <Alert variant="outlined" severity="error">
+                  <Typography variant="body" color='error' noWrap sx={{ mt: 5 }}>
+                    วันที่สิ้นสุด (2022-10-11 0.00 น.) ผลลัพธ์คือ (2022-10-10 24.00 น.)
+                  </Typography>
+                </Alert>
                 <StripedDataGrid
                   sx={{
                     pl: 2,

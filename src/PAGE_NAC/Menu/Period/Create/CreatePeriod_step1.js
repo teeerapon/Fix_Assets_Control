@@ -9,6 +9,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import swal from 'sweetalert';
@@ -69,7 +70,7 @@ export default function AddressForm() {
   };
 
   const handleNext = () => {
-    if (brachID1 != null && valueDateTime1 != null && valueDateTime2 != null && valueDescription != null && valueBrachID1 != null) {
+    if (brachID1 !== undefined && valueDateTime1 !== undefined && valueDateTime2 !== undefined && valueDescription !== undefined && valueBrachID1 !== undefined) {
       localStorage.setItem('DataCreatePeriod', JSON.stringify({ brachID1, valueDateTime1, valueDateTime2, valueDescription, valueBrachID1 }));
       navigate("/CreatePeriod2")
     } else if (valueBrachID1 == null) {
@@ -105,6 +106,11 @@ export default function AddressForm() {
           <Typography variant="h6" gutterBottom>
             *กรุณากรอกข้อมูลให้ครบถ้วน
           </Typography>
+          <Alert variant="outlined" severity="error">
+            <Typography variant="body" color='error' noWrap>
+              วันที่สิ้นสุด (2022-10-11 0.00 น.) ผลลัพธ์คือ (2022-10-10 24.00 น.)
+            </Typography>
+          </Alert>
           <Grid container spacing={3} className='pt-2'>
             <Grid item xs={12}>
               <TextField
@@ -153,6 +159,19 @@ export default function AddressForm() {
                   />
                 </LocalizationProvider>
               </Stack>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="discription"
+                name="discription"
+                label='คำอธิบาย'
+                onChange={handleDescription}
+                value={valueDescription}
+                fullWidth
+                autoComplete="family-name"
+                variant="standard"
+              />
             </Grid>
             {showResults ?
               <>

@@ -44,6 +44,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import AddIcon from '@mui/icons-material/Add';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const ODD_OPACITY = 0.2;
 
@@ -330,27 +332,27 @@ export default function Permission_to_RoPA() {
       renderCell: (params) => {
         return (
           <React.Fragment>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  color="warning"
-                  onClick={(event) => handleClickOpen(event, params)}
-                >
-                  <ArticleIcon />
-                </Button>
-              </Grid>
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  color="error"
-                  disabled
-                  onClick={(event) => handleClickOpenII(event, params)}
-                >
-                  <DeleteIcon />
-                </Button>
-              </Grid>
-            </Grid>
+            <ButtonGroup variant="contained" color='inherit'>
+              <Button
+                color="secondary"
+                disabled
+              >
+                <AccountCircleIcon />
+              </Button>
+              <Button
+                color="warning"
+                onClick={(event) => handleClickOpen(event, params)}
+              >
+                <ArticleIcon />
+              </Button>
+              <Button
+                color="error"
+                disabled
+                onClick={(event) => handleClickOpenII(event, params)}
+              >
+                <DeleteIcon />
+              </Button>
+            </ButtonGroup>
           </React.Fragment>
         );
       }
@@ -405,7 +407,7 @@ export default function Permission_to_RoPA() {
                 <Button
                   size="small"
                   variant="contained"
-                  color='secondary'
+                  color='primary'
                   startIcon={<AddIcon size="small" />}
                 >
                   Add Main

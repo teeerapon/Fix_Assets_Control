@@ -7,6 +7,7 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 import { Outlet, useNavigate } from "react-router";
 import swal from 'sweetalert';
 
@@ -94,6 +95,11 @@ export default function AddressForm() {
           <Typography variant="h6" gutterBottom>
             *กรุณากรอกข้อมูลให้ครบถ้วน
           </Typography>
+          <Alert variant="outlined" severity="error">
+            <Typography variant="body" color='error' noWrap>
+              วันที่สิ้นสุด (2022-10-11 0.00 น.) ผลลัพธ์คือ (2022-10-10 24.00 น.)
+            </Typography>
+          </Alert>
           <Grid container spacing={3} className='pt-2'>
             <Grid item xs={12}>
               <TextField
