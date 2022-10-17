@@ -30,7 +30,7 @@ import Stack from '@mui/material/Stack';
 import PropTypes from 'prop-types';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconButton from '@mui/material/IconButton';
-import { Switch } from '@mui/material';
+import { formLabelClasses, Switch } from '@mui/material';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import PersonAddAlt1 from '@mui/icons-material/PersonAddAlt1';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -46,6 +46,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import AddIcon from '@mui/icons-material/Add';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 
 const ODD_OPACITY = 0.2;
 
@@ -132,16 +133,15 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 export default function Permission_to_RoPA() {
 
   const [ropa_List, setRopa_List] = React.useState();
-  const [ropa_type, setRopa_type] = React.useState();
+  const [list_dep, setList_dep] = React.useState();
+  const [valueRopa_type, setValueRopa_type] = React.useState();
   const [openII, setOpenII] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [serviceList, setServiceList] = React.useState([{ Ropa_ID: "", Depcode: "", DataItem_Name: "", Ropa_Type: "", Data_Subject: "", Step: "", Last_Review: "", allowner: "", allaccess: "" }]);
   const allowner = !serviceList.allowner ? [] : serviceList.allowner.split(",");
   const allaccess = !serviceList.allaccess ? [] : serviceList.allaccess.split(",");
-
-  const handleDelete = () => {
-    alert('You clicked the delete icon.');
-  };
+  const [ropa_type, setRopa_type] = React.useState();
+  const data = JSON.parse(localStorage.getItem('data'));
 
   const handleClickOpenII = (event, params) => {
     setOpenII(true);
@@ -159,6 +159,7 @@ export default function Permission_to_RoPA() {
     }
 
     setServiceList(FromValues);
+
   }
 
   const handleCloseII = () => {
@@ -182,14 +183,15 @@ export default function Permission_to_RoPA() {
 
     setServiceList(FromValues);
 
-    const ropaType_ID = { RopaType_ID: params.row.Ropa_ID }
+    const body = { RopaType_ID: params.row.Ropa_ID }
+
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
 
-    Axios.post('http://192.168.220.1:32001/api/Ropa_List_By_ID', ropaType_ID, { headers })
-      .then(response => setRopa_type(response.data.data));
+    Axios.post('http://192.168.220.1:32001/api/Ropa_List_By_ID', body, { headers })
+      .then(response => setRopa_type(response.data.data))
   }
 
 
@@ -198,6 +200,14 @@ export default function Permission_to_RoPA() {
   };
 
   const handleRopa_Save_Update = () => {
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.get('http://192.168.220.1:32001/api/Ropa_List', { headers })
+      .then(response => setRopa_List(response.data));
+
     setOpen(false);
   };
 
@@ -252,6 +262,10 @@ export default function Permission_to_RoPA() {
     setServiceList(FromValues);
   };
 
+  const filterOptions2 = createFilterOptions({
+    stringify: (option) => option.DepCode,
+  });
+
   React.useEffect(() => {
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
@@ -259,7 +273,44 @@ export default function Permission_to_RoPA() {
     };
     Axios.get('http://192.168.220.1:32001/api/Ropa_List', { headers })
       .then(response => setRopa_List(response.data));
+
+    Axios.get('http://192.168.220.1:32001/api/Ropa_List_Dep', { headers })
+      .then(response => setList_dep(response.data));
   }, []);
+
+  const handleChange_RopaType = (event) => {
+    event.preventDefault();
+    setValueRopa_type(event.target.value);
+  };
+
+  const handleAdd_RopaType = () => {
+
+    const body = { ropaid: serviceList.Ropa_ID, typeid: 0, typename: valueRopa_type, user: data.UserCode }
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    Axios.post('http://192.168.220.1:32001/api/addType', body, { headers })
+      .then(response => setRopa_type(response.data));
+
+    setValueRopa_type(null)
+  }
+
+  const handleDelete = (ropa_type) => {
+
+    const body = { ropaid: serviceList.Ropa_ID, ropa_type: ropa_type, user: data.UserCode }
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    Axios.post('http://192.168.220.1:32001/api/removeType', body, { headers })
+      .then(response => setRopa_type(response.data))
+
+  };
 
   const columns: GridColDef[] = [
     {
@@ -317,42 +368,45 @@ export default function Permission_to_RoPA() {
     },
     {
       field: 'Last_Review',
-      headerName: 'วันที่ล่าสุดที่ประมวลผล',
+      headerName: 'ประมวลผลล่าสุด',
       type: 'dateTime',
       headerClassName: 'super-app-theme--header',
-      flex: 1,
+      width: 150,
     },
     {
       field: 'action',
       headerName: 'Action',
-      width: 200,
+      width: 220,
       align: 'center',
       headerAlign: 'center',
       disableClickEventBubbling: true,
       renderCell: (params) => {
         return (
           <React.Fragment>
-            <ButtonGroup variant="contained" color='inherit'>
+            <Stack spacing={1} direction="row">
               <Button
+                variant="contained"
                 color="secondary"
                 disabled
               >
                 <AccountCircleIcon />
               </Button>
               <Button
+                variant="contained"
                 color="warning"
                 onClick={(event) => handleClickOpen(event, params)}
               >
                 <ArticleIcon />
               </Button>
               <Button
+                variant="contained"
                 color="error"
                 disabled
                 onClick={(event) => handleClickOpenII(event, params)}
               >
                 <DeleteIcon />
               </Button>
-            </ButtonGroup>
+            </Stack>
           </React.Fragment>
         );
       }
@@ -446,19 +500,23 @@ export default function Permission_to_RoPA() {
                 </DialogTitle>
                 <DialogContent>
                   <FormControl variant="standard" fullWidth>
-                    <InputLabel id="demo-simple-select-standard-label">Dep Code</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-standard-label"
-                      id="demo-simple-select-standard"
-                      label="Dep Code"
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value={10}>HRM</MenuItem>
-                      <MenuItem value={20}>ITO</MenuItem>
-                      <MenuItem value={30}>ROD</MenuItem>
-                    </Select>
+                    <Autocomplete
+                      freeSolo
+                      size="small"
+                      options={list_dep}
+                      getOptionLabel={(option) => option.DepCode}
+                      filterOptions={filterOptions2}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="standard"
+                          label='ผู้ยืนยัน'
+                          fullWidth
+                          autoComplete="family-name"
+                          sx={{ pt: 1 }}
+                        />
+                      )}
+                    />
                   </FormControl>
                   <TextField
                     required
@@ -482,6 +540,8 @@ export default function Permission_to_RoPA() {
                     required
                     fullWidth
                     sx={{ pt: 1 }}
+                    onChange={handleChange_RopaType}
+                    value={valueRopa_type}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -489,14 +549,14 @@ export default function Permission_to_RoPA() {
                             ประเภทข้อมูล :
                           </Typography>
                           <Box sx={{ display: 'flex', gap: 0.5, m: 1, mt: 0 }}>
-                            {(!ropa_type ? [] : ropa_type).map((ropa_type) => (
-                              <Chip key={ropa_type.RopaType_Name} label={ropa_type.RopaType_Name} onDelete={handleDelete} />
+                            {(!ropa_type ? [] : ropa_type[0].Ropa_Type.split(",")).map((ropa_type) => (
+                              <Chip key={ropa_type} label={ropa_type} onDelete={(event) => handleDelete(ropa_type)} />
                             ))}
                           </Box>
                         </InputAdornment>
                       ),
                       endAdornment: (
-                        <IconButton aria-label="upload picture" component="label">
+                        <IconButton aria-label="upload picture" component="label" disabled={!valueRopa_type ? true : false} onClick={handleAdd_RopaType}>
                           <AddIcon />
                         </IconButton>
                       ),
@@ -597,7 +657,7 @@ export default function Permission_to_RoPA() {
                     variant="contained"
                     onClick={handleRopa_Save_Update}
                     sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
-                  >ใช่
+                  >บันทึก
                   </Button>
                   <Button
                     variant="contained"
@@ -605,7 +665,7 @@ export default function Permission_to_RoPA() {
                     sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
                     onClick={handleClose} autoFocus
                   >
-                    ไม่
+                    ยกเลิก
                   </Button>
                 </DialogActions>
               </Dialog>
