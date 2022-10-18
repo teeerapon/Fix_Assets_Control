@@ -216,7 +216,7 @@ export default function Reported_of_assets() {
         </AppBar>
         <AnimatedPage>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            <Container maxWidth="1000px" sx={{ pt: 3 }}>
+            <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
               <FormControl variant="standard" sx={{ m: 1, minWidth: 300 }}>
                 <InputLabel id="demo-simple-select-standard-label">None</InputLabel>
                 <Select
@@ -233,7 +233,7 @@ export default function Reported_of_assets() {
               </FormControl>
               <Box
                 sx={{
-                  height: 480,
+                  height: 423,
                   width: '100%',
                 }}
               >
@@ -256,7 +256,7 @@ export default function Reported_of_assets() {
                   pageSize={5}
                   rowsPerPageOptions={[5]}
                   disableColumnMenu
-                  autoHeight={true}
+                  //autoHeight={true}
                   getRowClassName={(params) =>
                     params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                   }

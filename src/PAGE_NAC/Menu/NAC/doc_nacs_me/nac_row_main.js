@@ -354,10 +354,10 @@ export default function History_of_assets() {
       </AppBar>
       <AnimatedPage>
         <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-          <Container maxWidth="1000px" sx={{ pt: 3 }}>
+          <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
             <Box
               sx={{
-                height: 480,
+                height: 423,
                 width: '100%',
               }}
             >
@@ -381,7 +381,7 @@ export default function History_of_assets() {
                 rowsPerPageOptions={[5]}
                 // getRowHeight={() => 'auto'}
                 disableColumnMenu
-                autoHeight={true}
+                //autoHeight={true}
                 getRowClassName={(params) =>
                   params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                 }

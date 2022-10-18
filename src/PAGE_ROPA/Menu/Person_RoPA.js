@@ -137,7 +137,7 @@ export default function Permission_to_RoPA() {
   const [valueRopa_type, setValueRopa_type] = React.useState();
   const [openII, setOpenII] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const [serviceList, setServiceList] = React.useState([{ Ropa_ID: "", Depcode: "", DataItem_Name: "", Ropa_Type: "", Data_Subject: "", Step: "", Last_Review: "", allowner: "", allaccess: "" }]);
+  const [serviceList, setServiceList] = React.useState([{ Ropa_ID: "", Depcode: "", DataItem_Name: "", Ropa_Type: "", Data_Subject: "", Data_Collection: "", Step: "", Last_Review: "", allowner: "", allaccess: "" }]);
   const allowner = !serviceList.allowner ? [] : serviceList.allowner.split(",");
   const allaccess = !serviceList.allaccess ? [] : serviceList.allaccess.split(",");
   const [ropa_type, setRopa_type] = React.useState();
@@ -152,6 +152,7 @@ export default function Permission_to_RoPA() {
       DataItem_Name: params.row.DataItem_Name,
       Ropa_Type: params.row.Ropa_Type,
       Data_Subject: params.row.Data_Subject,
+      Data_Collection: params.row.Data_Collection,
       Step: params.row.Step,
       Last_Review: params.row.Last_Review,
       allowner: params.row.allowner,
@@ -175,6 +176,7 @@ export default function Permission_to_RoPA() {
       DataItem_Name: params.row.DataItem_Name,
       Ropa_Type: params.row.Ropa_Type,
       Data_Subject: params.row.Data_Subject,
+      Data_Collection: params.row.Data_Collection,
       Step: params.row.Step,
       Last_Review: params.row.Last_Review,
       allowner: params.row.allowner,
@@ -200,11 +202,32 @@ export default function Permission_to_RoPA() {
   };
 
   const handleRopa_Save_Update = () => {
+    console.log(serviceList.Ropa_ID,
+      serviceList.Depcode,
+      serviceList.DataItem_Name,
+      serviceList.Data_Subject,
+      serviceList.Data_Collection,
+      serviceList.Step,
+      serviceList.Last_Review,
+      data.UserCode);
+
+    const body = {
+      ropaid: serviceList.Ropa_ID,
+      depcode: serviceList.Depcode,
+      name: serviceList.DataItem_Name,
+      target: serviceList.Data_Subject,
+      collectiontype: serviceList.Data_Collection,
+      step: serviceList.Step,
+      lastreview: serviceList.Last_Review,
+      user: data.UserCode,
+    }
 
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
+    Axios.post('http://192.168.220.1:32001/api/RopaSave', body, { headers })
+
     Axios.get('http://192.168.220.1:32001/api/Ropa_List', { headers })
       .then(response => setRopa_List(response.data));
 
@@ -219,6 +242,7 @@ export default function Permission_to_RoPA() {
       DataItem_Name: event.target.value,
       Ropa_Type: serviceList.Ropa_Type,
       Data_Subject: serviceList.Data_Subject,
+      Data_Collection: serviceList.Data_Collection,
       Step: serviceList.Step,
       Last_Review: serviceList.Last_Review,
       allowner: serviceList.allowner,
@@ -236,6 +260,7 @@ export default function Permission_to_RoPA() {
       DataItem_Name: serviceList.DataItem_Name,
       Ropa_Type: serviceList.Ropa_Type,
       Data_Subject: event.target.value,
+      Data_Collection: serviceList.Data_Collection,
       Step: serviceList.Step,
       Last_Review: serviceList.Last_Review,
       allowner: serviceList.allowner,
@@ -253,6 +278,7 @@ export default function Permission_to_RoPA() {
       DataItem_Name: serviceList.DataItem_Name,
       Ropa_Type: serviceList.Ropa_Type,
       Data_Subject: serviceList.Data_Subject,
+      Data_Collection: serviceList.Data_Collection,
       Step: event.target.value,
       Last_Review: serviceList.Last_Review,
       allowner: serviceList.allowner,
@@ -343,6 +369,13 @@ export default function Permission_to_RoPA() {
       headerName: 'กลุ่มเป้าหมาย',
       headerClassName: 'super-app-theme--header',
       flex: 1,
+    },
+    {
+      field: 'Data_Collection',
+      headerName: 'รูปแบบการเก็บข้อมูล',
+      headerClassName: 'super-app-theme--header',
+      flex: 1,
+      hide: true,
     },
     {
       field: 'Step',
@@ -444,7 +477,7 @@ export default function Permission_to_RoPA() {
           <Container component="main" sx={{ mt: 3, mb: 0 }} maxWidth="1000px">
             <Box
               sx={{
-                height: 480,
+                height: 423,
                 width: '100%',
               }}
             >
@@ -484,7 +517,7 @@ export default function Permission_to_RoPA() {
                 getRowHeight={() => 'auto'}
                 getRowId={(ropa_List) => ropa_List.Ropa_ID}
                 pageSize={5}
-                autoHeight={true}
+                //autoHeight={true}
                 rowsPerPageOptions={[5]}
                 disableColumnMenu
                 disableSelectionOnClick
