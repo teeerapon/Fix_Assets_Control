@@ -47,6 +47,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import ImageList from '@mui/material/ImageList';
 
 const ODD_OPACITY = 0.2;
 
@@ -135,11 +136,13 @@ export default function Permission_to_RoPA() {
   const [ropa_List, setRopa_List] = React.useState();
   const [list_dep, setList_dep] = React.useState();
   const [valueRopa_type, setValueRopa_type] = React.useState();
+  const [valueAllowner, setValueAllowner] = React.useState();
+  const [valueAllaccess, setValueAllaccess] = React.useState();
   const [openII, setOpenII] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [serviceList, setServiceList] = React.useState([{ Ropa_ID: "", Depcode: "", DataItem_Name: "", Ropa_Type: "", Data_Subject: "", Data_Collection: "", Step: "", Last_Review: "", allowner: "", allaccess: "" }]);
-  const allowner = !serviceList.allowner ? [] : serviceList.allowner.split(",");
-  const allaccess = !serviceList.allaccess ? [] : serviceList.allaccess.split(",");
+  const [allowner, setAllowner] = React.useState();
+  const [allaccess, setAllaccess] = React.useState();
   const [ropa_type, setRopa_type] = React.useState();
   const data = JSON.parse(localStorage.getItem('data'));
 
@@ -193,7 +196,11 @@ export default function Permission_to_RoPA() {
     };
 
     Axios.post('http://192.168.220.1:32001/api/Ropa_List_By_ID', body, { headers })
-      .then(response => setRopa_type(response.data.data))
+      .then(response => {
+        setRopa_type(response.data.data)
+        setAllowner(response.data.data)
+        setAllaccess(response.data.data)
+      })
   }
 
 
@@ -202,15 +209,6 @@ export default function Permission_to_RoPA() {
   };
 
   const handleRopa_Save_Update = () => {
-    console.log(serviceList.Ropa_ID,
-      serviceList.Depcode,
-      serviceList.DataItem_Name,
-      serviceList.Data_Subject,
-      serviceList.Data_Collection,
-      serviceList.Step,
-      serviceList.Last_Review,
-      data.UserCode);
-
     const body = {
       ropaid: serviceList.Ropa_ID,
       depcode: serviceList.Depcode,
@@ -228,8 +226,20 @@ export default function Permission_to_RoPA() {
     };
     Axios.post('http://192.168.220.1:32001/api/RopaSave', body, { headers })
 
-    Axios.get('http://192.168.220.1:32001/api/Ropa_List', { headers })
-      .then(response => setRopa_List(response.data));
+    window.location.href = '/PERSON_ROPA';
+    setOpen(false);
+  };
+
+  const handleClose_Dialog_Svae = () => {
+    const body = {
+      ropaid: serviceList.Ropa_ID,
+    }
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.post('http://192.168.220.1:32001/api/Ropa_Close_Save', body, { headers })
 
     setOpen(false);
   };
@@ -309,6 +319,16 @@ export default function Permission_to_RoPA() {
     setValueRopa_type(event.target.value);
   };
 
+  const handleChange_allowner = (event) => {
+    event.preventDefault();
+    setValueAllowner(event.target.value);
+  };
+
+  const handleChange_allaccess = (event) => {
+    event.preventDefault();
+    setValueAllaccess(event.target.value);
+  };
+
   const handleAdd_RopaType = () => {
 
     const body = { ropaid: serviceList.Ropa_ID, typeid: 0, typename: valueRopa_type, user: data.UserCode }
@@ -319,9 +339,51 @@ export default function Permission_to_RoPA() {
     };
 
     Axios.post('http://192.168.220.1:32001/api/addType', body, { headers })
-      .then(response => setRopa_type(response.data));
+      .then(response => setRopa_type(response.data.data));
 
-    setValueRopa_type(null)
+    setValueRopa_type('')
+  }
+
+  const handleAdd_Owner = () => {
+
+    const body = { ropaid: serviceList.Ropa_ID, ownercode: valueAllowner, user: data.UserCode }
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    Axios.post('http://192.168.220.1:32001/api/addOwner', body, { headers })
+      .then(response => {
+        if (!response.data) {
+          alert('ไม่พบ user นี้ในระบบ')
+        } else {
+          setAllowner(response.data)
+        }
+      });
+
+    setValueAllowner('')
+  }
+
+  const handleAdd_Access = () => {
+
+    const body = { ropaid: serviceList.Ropa_ID, acecode: valueAllaccess, user: data.UserCode }
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    Axios.post('http://192.168.220.1:32001/api/addPermissionAccess', body, { headers })
+      .then(response => {
+        if (!response.data) {
+          alert('ไม่พบ user นี้ในระบบ')
+        } else {
+          setAllaccess(response.data)
+        }
+      });
+
+      setValueAllaccess('')
   }
 
   const handleDelete = (ropa_type) => {
@@ -335,6 +397,34 @@ export default function Permission_to_RoPA() {
 
     Axios.post('http://192.168.220.1:32001/api/removeType', body, { headers })
       .then(response => setRopa_type(response.data))
+
+  };
+
+  const handleRemoveOwner = (allowner) => {
+
+    const body = { ropaid: serviceList.Ropa_ID, ropaownerCode: allowner, user: data.UserCode }
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    Axios.post('http://192.168.220.1:32001/api/removeOwner', body, { headers })
+      .then(response => setAllowner(response.data))
+
+  };
+
+  const handleRemoveAccess = (allaccess) => {
+
+    const body = { ropaid: serviceList.Ropa_ID, permissionaccessCode: allaccess, user: data.UserCode }
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    Axios.post('http://192.168.220.1:32001/api/removePermissionAccess', body, { headers })
+      .then(response => setAllaccess(response.data))
 
   };
 
@@ -575,6 +665,8 @@ export default function Permission_to_RoPA() {
                     sx={{ pt: 1 }}
                     onChange={handleChange_RopaType}
                     value={valueRopa_type}
+                    placeholder="กรุณาเพิ่มข้อความ"
+                    multiline
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -636,6 +728,9 @@ export default function Permission_to_RoPA() {
                     required
                     fullWidth
                     name='allowner'
+                    value={valueAllowner}
+                    onChange={handleChange_allowner}
+                    placeholder='ระบุ Initial'
                     sx={{ pt: 1 }}
                     InputProps={{
                       startAdornment: (
@@ -644,14 +739,14 @@ export default function Permission_to_RoPA() {
                             ผู้รับผิดชอบ :
                           </Typography>
                           <Box sx={{ display: 'flex', gap: 0.5, m: 1, mt: 0 }}>
-                            {allowner.map((allowner) => (
-                              <Chip key={allowner} label={allowner} onDelete={handleDelete} />
+                            {(!allowner ? [] : allowner[0].Owner.split(",")).map((allowner) => (
+                              <Chip key={allowner} label={allowner} onDelete={(event) => handleRemoveOwner(allowner)} />
                             ))}
                           </Box>
                         </InputAdornment>
                       ),
                       endAdornment: (
-                        <IconButton aria-label="upload picture" component="label">
+                        <IconButton aria-label="upload picture" component="label" disabled={!valueAllowner ? true : false} onClick={handleAdd_Owner}>
                           <AddIcon />
                         </IconButton>
                       ),
@@ -662,22 +757,25 @@ export default function Permission_to_RoPA() {
                     required
                     fullWidth
                     name='allaccess'
+                    onChange={handleChange_allaccess}
+                    value={valueAllaccess}
+                    placeholder='ระบุ Initial'
                     sx={{ pt: 1 }}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
                           <Typography color="black" sx={{ mb: 1 }}>
-                            ผู้ที่มีสิทธิ์ :
+                            ผู้มีสิทธิ์ :
                           </Typography>
                           <Box sx={{ display: 'flex', gap: 0.5, m: 1, mt: 0 }}>
-                            {allaccess.map((allaccess) => (
-                              <Chip key={allaccess} label={allaccess} onDelete={handleDelete} />
+                            {(!allaccess ? [] : allaccess[0].Access.split(",")).map((allaccess) => (
+                              <Chip key={allaccess} label={allaccess} onDelete={(event) => handleRemoveAccess(allaccess)} />
                             ))}
                           </Box>
                         </InputAdornment>
                       ),
                       endAdornment: (
-                        <IconButton aria-label="upload picture" component="label">
+                        <IconButton aria-label="upload picture" component="label" disabled={!valueAllaccess ? true : false} onClick={handleAdd_Access}>
                           <AddIcon />
                         </IconButton>
                       ),
@@ -696,7 +794,7 @@ export default function Permission_to_RoPA() {
                     variant="contained"
                     color='error'
                     sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
-                    onClick={handleClose} autoFocus
+                    onClick={handleClose_Dialog_Svae} autoFocus
                   >
                     ยกเลิก
                   </Button>
