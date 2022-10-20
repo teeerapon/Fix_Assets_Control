@@ -144,6 +144,7 @@ export default function Permission_to_RoPA() {
   const [allowner, setAllowner] = React.useState();
   const [allaccess, setAllaccess] = React.useState();
   const [ropa_type, setRopa_type] = React.useState();
+  const [index, setIndex] = React.useState();
   const data = JSON.parse(localStorage.getItem('data'));
 
   const handleClickOpenII = (event, params) => {
@@ -201,6 +202,11 @@ export default function Permission_to_RoPA() {
         setAllowner(response.data.data)
         setAllaccess(response.data.data)
       })
+
+      setIndex(list_dep.findIndex(object => {
+        return object.DepCode === params.row.Depcode;
+      }))
+
   }
 
 
@@ -383,7 +389,7 @@ export default function Permission_to_RoPA() {
         }
       });
 
-      setValueAllaccess('')
+    setValueAllaccess('')
   }
 
   const handleDelete = (ropa_type) => {
@@ -427,6 +433,12 @@ export default function Permission_to_RoPA() {
       .then(response => setAllaccess(response.data))
 
   };
+
+  const handleChange_DepCode = async (e, index) => {
+    setIndex(list_dep.findIndex(object => {
+      return object.DepCode === e.target.innerText;
+    }))
+  }
 
   const columns: GridColDef[] = [
     {
@@ -629,11 +641,12 @@ export default function Permission_to_RoPA() {
                       options={list_dep}
                       getOptionLabel={(option) => option.DepCode}
                       filterOptions={filterOptions2}
+                      onChange={handleChange_DepCode}
+                      value={!list_dep ? '' : list_dep[index]}
                       renderInput={(params) => (
                         <TextField
                           {...params}
                           variant="standard"
-                          label='ผู้ยืนยัน'
                           fullWidth
                           autoComplete="family-name"
                           sx={{ pt: 1 }}
