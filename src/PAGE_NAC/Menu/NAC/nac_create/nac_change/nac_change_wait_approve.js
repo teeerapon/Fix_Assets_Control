@@ -1290,6 +1290,9 @@ export default function Nac_Main_wait() {
         comment
       })
       if ('data' in responseComment) {
+        await store_FA_SendMail({
+          nac_code
+        })
         setOpenDialogReply(false);
         window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + nac_code
       }

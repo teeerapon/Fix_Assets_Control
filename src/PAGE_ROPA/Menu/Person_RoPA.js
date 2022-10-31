@@ -48,6 +48,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import ImageList from '@mui/material/ImageList';
+import LayersIcon from '@mui/icons-material/Layers';
 
 const ODD_OPACITY = 0.2;
 
@@ -134,6 +135,7 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 export default function Permission_to_RoPA() {
 
   const [ropa_List, setRopa_List] = React.useState();
+  const [columns, setColumns] = React.useState();
   const [list_dep, setList_dep] = React.useState();
   const [valueRopa_type, setValueRopa_type] = React.useState();
   const [valueAllowner, setValueAllowner] = React.useState();
@@ -146,6 +148,18 @@ export default function Permission_to_RoPA() {
   const [ropa_type, setRopa_type] = React.useState();
   const [index, setIndex] = React.useState();
   const data = JSON.parse(localStorage.getItem('data'));
+
+  const ropa_main_click = () => {
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.get('http://192.168.220.1:32001/api/Ropa_List', { headers })
+      .then(response => {
+        setRopa_List(response.data)
+        setColumns(null)
+      });
+  }
 
   const handleClickOpenII = (event, params) => {
     setOpenII(true);
@@ -170,6 +184,62 @@ export default function Permission_to_RoPA() {
   const handleCloseII = () => {
     setOpenII(false);
   };
+
+  const handleClickOpen_User = (event, params) => {
+    const body = { ropaid: params.row.Ropa_ID }
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    const columns_User: GridColDef_User[] = [
+      {
+        field: 'UserName',
+        headerName: 'ชื่อ-นามสกุล',
+        headerClassName: 'super-app-theme--header',
+        flex: 1,
+      },
+      {
+        field: 'ConsentDate',
+        headerName: 'ConsentDate',
+        headerClassName: 'super-app-theme--header',
+        flex: 1,
+      },
+      {
+        field: 'CollectionDate',
+        headerName: 'ConsentDate',
+        headerClassName: 'super-app-theme--header',
+        flex: 1,
+      },
+      {
+        field: 'action',
+        headerName: 'Action',
+        width: 220,
+        align: 'center',
+        headerAlign: 'center',
+        disableClickEventBubbling: true,
+        renderCell: (params) => {
+          return (
+            <React.Fragment>
+              <Button
+                variant="contained"
+                color='secondary'
+              >
+                <LayersIcon />
+              </Button>
+            </React.Fragment>
+          );
+        }
+      },
+    ];
+
+    Axios.post('http://192.168.220.1:32001/api/Ropa_List_User', body, { headers })
+      .then(response => {
+        setRopa_List(response.data.data)
+        setColumns(columns_User)
+      });
+  }
 
   const handleClickOpen = (event, params) => {
     setOpen(true);
@@ -203,9 +273,9 @@ export default function Permission_to_RoPA() {
         setAllaccess(response.data.data)
       })
 
-      setIndex(list_dep.findIndex(object => {
-        return object.DepCode === params.row.Depcode;
-      }))
+    setIndex(list_dep.findIndex(object => {
+      return object.DepCode === params.row.Depcode;
+    }))
 
   }
 
@@ -440,14 +510,14 @@ export default function Permission_to_RoPA() {
     }))
   }
 
-  const columns: GridColDef[] = [
-    {
-      field: 'Ropa_ID',
-      headerName: 'ID',
-      headerClassName: 'super-app-theme--header',
-      width: 80,
-      hide: true,
-    },
+  const columns_main: GridColDef[] = [
+    // {
+    //   field: 'Ropa_ID',
+    //   headerName: 'ID',
+    //   headerClassName: 'super-app-theme--header',
+    //   width: 80,
+    //   hide: true,
+    // },
     {
       field: 'Depcode',
       headerName: 'DepCode',
@@ -472,13 +542,13 @@ export default function Permission_to_RoPA() {
       headerClassName: 'super-app-theme--header',
       flex: 1,
     },
-    {
-      field: 'Data_Collection',
-      headerName: 'รูปแบบการเก็บข้อมูล',
-      headerClassName: 'super-app-theme--header',
-      flex: 1,
-      hide: true,
-    },
+    // {
+    //   field: 'Data_Collection',
+    //   headerName: 'รูปแบบการเก็บข้อมูล',
+    //   headerClassName: 'super-app-theme--header',
+    //   flex: 1,
+    //   hide: true,
+    // },
     {
       field: 'Step',
       headerName: 'ขั้นตอนในการรักษา',
@@ -522,7 +592,7 @@ export default function Permission_to_RoPA() {
               <Button
                 variant="contained"
                 color="secondary"
-                disabled
+                onClick={(event) => handleClickOpen_User(event, params)}
               >
                 <AccountCircleIcon />
               </Button>
@@ -588,19 +658,34 @@ export default function Permission_to_RoPA() {
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <div role="presentation">
-                  <Breadcrumbs aria-label="breadcrumb">
-                    <Chip variant="outlined" label="ประเภทข้อมูลส่วนบุคคล" color="primary" />
-                  </Breadcrumbs>
-                </div>
-                <Button
-                  size="small"
-                  variant="contained"
-                  color='primary'
-                  startIcon={<AddIcon size="small" />}
-                >
-                  Add Main
-                </Button>
+                {!columns ?
+                  <div role="presentation">
+                    <Breadcrumbs aria-label="breadcrumb">
+                      <Chip variant="outlined" label="ประเภทข้อมูลส่วนบุคคล" color="primary" />
+                    </Breadcrumbs>
+                  </div> :
+                  <React.Fragment>
+                    <div role="presentation">
+                      <Breadcrumbs aria-label="breadcrumb">
+                        <Chip variant="outlined" label="ประเภทข้อมูลส่วนบุคคล" onClick={ropa_main_click} />
+                        <Chip variant="outlined" label="รายชื่อข้อมูลส่วนบุคคล" color="primary" />
+                      </Breadcrumbs>
+                    </div>
+                  </React.Fragment>
+                }
+                {columns ?
+                  null :
+                  <React.Fragment>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      color='primary'
+                      startIcon={<AddIcon size="small" />}
+                    >
+                      Add Main
+                    </Button>
+                  </React.Fragment>
+                }
               </Stack>
               <StripedDataGrid
                 sx={{
@@ -615,7 +700,7 @@ export default function Permission_to_RoPA() {
                 }}
                 components={{ Toolbar: GridToolbar }}
                 rows={!ropa_List ? [] : ropa_List}
-                columns={columns}
+                columns={!columns ? columns_main : columns}
                 getRowHeight={() => 'auto'}
                 getRowId={(ropa_List) => ropa_List.Ropa_ID}
                 pageSize={5}

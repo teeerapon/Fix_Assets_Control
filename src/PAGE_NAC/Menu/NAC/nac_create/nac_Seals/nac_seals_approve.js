@@ -1499,6 +1499,9 @@ export default function Nac_Seals_Approve() {
         comment
       })
       if ('data' in responseComment) {
+        await store_FA_SendMail({
+          nac_code
+        })
         setOpenDialogReply(false);
         window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
       }
