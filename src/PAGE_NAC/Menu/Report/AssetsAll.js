@@ -250,7 +250,7 @@ export default function Reported_of_assets() {
                   }}
                   components={{ Toolbar: GridToolbar }}
                   componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
-                  rows={!reported_of_assets ? [] : reported_of_assets}
+                  rows={reported_of_assets ?? []}
                   columns={columns}
                   getRowId={(reported_of_assets) => reported_of_assets.RowID}
                   pageSize={5}

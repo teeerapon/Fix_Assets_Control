@@ -374,7 +374,7 @@ export default function History_of_assets() {
                 }}
                 components={{ Toolbar: GridToolbar }}
                 componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
-                rows={!selectNAC ? [] : selectNAC}
+                rows={selectNAC ?? []}
                 columns={columns}
                 getRowId={(selectNAC) => selectNAC.nac_code}
                 pageSize={5}

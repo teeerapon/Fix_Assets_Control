@@ -357,7 +357,7 @@ export default function History_of_assets() {
                   }}
                   components={{ Toolbar: GridToolbar }}
                   componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
-                  rows={!dataHistory ? [] : dataHistory}
+                  rows={dataHistory ?? []}
                   columns={columns}
                   getRowId={(dataHistory) => dataHistory.nacdtl_id}
                   pageSize={5}

@@ -433,7 +433,7 @@ export default function History_of_assets() {
                   }}
                   components={{ Toolbar: GridToolbar }}
                   componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
-                  rows={!dataBranchID_Main ? [] : dataBranchID_Main}
+                  rows={dataBranchID_Main ?? []}
                   columns={columns}
                   pageSize={5}
                   rowsPerPageOptions={[5]}
