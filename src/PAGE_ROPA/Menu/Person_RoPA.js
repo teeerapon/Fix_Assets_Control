@@ -49,8 +49,60 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import ImageList from '@mui/material/ImageList';
 import LayersIcon from '@mui/icons-material/Layers';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const ODD_OPACITY = 0.2;
+
+const IOSSwitch = styled((props: SwitchProps) => (
+  <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+))(({ theme }) => ({
+  width: 42,
+  height: 26,
+  padding: 0,
+  '& .MuiSwitch-switchBase': {
+    padding: 0,
+    margin: 2,
+    transitionDuration: '300ms',
+    '&.Mui-checked': {
+      transform: 'translateX(16px)',
+      color: '#fff',
+      '& + .MuiSwitch-track': {
+        backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#65C466',
+        opacity: 1,
+        border: 0,
+      },
+      '&.Mui-disabled + .MuiSwitch-track': {
+        opacity: 0.5,
+      },
+    },
+    '&.Mui-focusVisible .MuiSwitch-thumb': {
+      color: '#33cf4d',
+      border: '6px solid #fff',
+    },
+    '&.Mui-disabled .MuiSwitch-thumb': {
+      color:
+        theme.palette.mode === 'light'
+          ? theme.palette.grey[100]
+          : theme.palette.grey[600],
+    },
+    '&.Mui-disabled + .MuiSwitch-track': {
+      opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    boxSizing: 'border-box',
+    width: 22,
+    height: 22,
+  },
+  '& .MuiSwitch-track': {
+    borderRadius: 26 / 2,
+    backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+    opacity: 1,
+    transition: theme.transitions.create(['background-color'], {
+      duration: 500,
+    }),
+  },
+}));
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
   '.css-1knaqv7-MuiButtonBase-root-MuiButton-root': {
@@ -142,12 +194,110 @@ export default function Permission_to_RoPA() {
   const [valueAllaccess, setValueAllaccess] = React.useState();
   const [openII, setOpenII] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [openAdd_main, setOpenAdd_main] = React.useState(false);
+  const [openAdd_user, setOpenAdd_user] = React.useState(false);
+  const [openAdd_data, setOpenAdd_data] = React.useState(false);
   const [serviceList, setServiceList] = React.useState([{ Ropa_ID: "", Depcode: "", DataItem_Name: "", Ropa_Type: "", Data_Subject: "", Data_Collection: "", Step: "", Last_Review: "", allowner: "", allaccess: "" }]);
   const [allowner, setAllowner] = React.useState();
   const [allaccess, setAllaccess] = React.useState();
   const [ropa_type, setRopa_type] = React.useState();
   const [index, setIndex] = React.useState();
   const data = JSON.parse(localStorage.getItem('data'));
+
+  const handleCloseAdd_main = () => {
+    setOpenAdd_main(false)
+  }
+
+  const handleCloseAdd_user = () => {
+    setOpenAdd_user(false)
+  }
+
+  const handleCloseAdd_data = () => {
+    setOpenAdd_data(false)
+  }
+
+  const handleOpenAdd_main = () => {
+    setOpenAdd_main(true)
+  }
+
+  const handleOpenAdd_user = () => {
+    setOpenAdd_user(true)
+  }
+
+  const handleOpenAdd_data = () => {
+    setOpenAdd_data(true)
+  }
+
+
+  const setActive_User = (event, params) => {
+    const body = { ropaid: params.row.Ropa_ID, ropauserid: params.row.RopaUser_ID }
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    const columns_User: GridColDef_User[] = [
+      {
+        field: 'UserName',
+        headerName: 'ชื่อ-นามสกุล',
+        headerClassName: 'super-app-theme--header',
+        flex: 1,
+      },
+      {
+        field: 'Active',
+        headerName: 'สถานะการเปิดใช้งาน',
+        width: 220,
+        align: 'center',
+        headerAlign: 'center',
+        disableClickEventBubbling: true,
+        renderCell: (params) => {
+          return (
+            <React.Fragment>
+              <FormControlLabel
+                control={
+                  <IOSSwitch
+                    sx={{ m: 1 }}
+                    defaultChecked={(params.row.Active === true) ? true : false}
+                    onChange={(event) => setActive_User(event, params)}
+                  />
+                }
+                label={(params.row.Active === true) ? 'กำลังใช้งาน' : 'ไม่ได้ใช้งาน'}
+              />
+            </React.Fragment>
+          );
+        }
+      },
+      {
+        field: 'action',
+        headerName: 'Action',
+        width: 220,
+        align: 'center',
+        headerAlign: 'center',
+        disableClickEventBubbling: true,
+        renderCell: (params) => {
+          return (
+            <React.Fragment>
+              <Button
+                variant="contained"
+                color='secondary'
+                disabled={(params.row.Active === true) ? false : true}
+                onClick={(event) => handleClickRopa_UserID(event, params)}
+              >
+                <LayersIcon />
+              </Button>
+            </React.Fragment>
+          );
+        }
+      },
+    ];
+
+    Axios.post('http://192.168.220.1:32001/api/Ropa_SetActive_User', body, { headers })
+      .then(response => {
+        setColumns(columns_User)
+        setRopa_List(response.data.data)
+      });
+  }
 
   const ropa_main_click = () => {
     const headers = {
@@ -177,16 +327,28 @@ export default function Permission_to_RoPA() {
         flex: 1,
       },
       {
-        field: 'ConsentDate',
-        headerName: 'ConsentDate',
-        headerClassName: 'super-app-theme--header',
-        flex: 1,
-      },
-      {
-        field: 'CollectionDate',
-        headerName: 'ConsentDate',
-        headerClassName: 'super-app-theme--header',
-        flex: 1,
+        field: 'Active',
+        headerName: 'สถานะการเปิดใช้งาน',
+        width: 220,
+        align: 'center',
+        headerAlign: 'center',
+        disableClickEventBubbling: true,
+        renderCell: (params) => {
+          return (
+            <React.Fragment>
+              <FormControlLabel
+                control={
+                  <IOSSwitch
+                    sx={{ m: 1 }}
+                    defaultChecked={(params.row.Active === true) ? true : false}
+                    onChange={(event) => setActive_User(event, params)}
+                  />
+                }
+                label={(params.row.Active === true) ? 'กำลังใช้งาน' : 'ไม่ได้ใช้งาน'}
+              />
+            </React.Fragment>
+          );
+        }
       },
       {
         field: 'action',
@@ -201,6 +363,7 @@ export default function Permission_to_RoPA() {
               <Button
                 variant="contained"
                 color='secondary'
+                disabled={(params.row.Active === true) ? false : true}
                 onClick={(event) => handleClickRopa_UserID(event, params)}
               >
                 <LayersIcon />
@@ -258,8 +421,8 @@ export default function Permission_to_RoPA() {
         flex: 1,
       },
       {
-        field: 'action',
-        headerName: 'สถานะการเปิดใช้งาน',
+        field: 'Action',
+        headerName: 'Action',
         width: 220,
         align: 'center',
         headerAlign: 'center',
@@ -267,7 +430,9 @@ export default function Permission_to_RoPA() {
         renderCell: (params) => {
           return (
             <React.Fragment>
-              <Switch defaultChecked={(params.row.Active === true) ? true : false} />
+              <Button variant='contained' color='error'>
+                <DeleteIcon />
+              </Button>
             </React.Fragment>
           );
         }
@@ -298,16 +463,28 @@ export default function Permission_to_RoPA() {
         flex: 1,
       },
       {
-        field: 'ConsentDate',
-        headerName: 'ConsentDate',
-        headerClassName: 'super-app-theme--header',
-        flex: 1,
-      },
-      {
-        field: 'CollectionDate',
-        headerName: 'ConsentDate',
-        headerClassName: 'super-app-theme--header',
-        flex: 1,
+        field: 'Active',
+        headerName: 'สถานะการเปิดใช้งาน',
+        width: 220,
+        align: 'center',
+        headerAlign: 'center',
+        disableClickEventBubbling: true,
+        renderCell: (params) => {
+          return (
+            <React.Fragment>
+              <FormControlLabel
+                control={
+                  <IOSSwitch
+                    sx={{ m: 1 }}
+                    defaultChecked={(params.row.Active === true) ? true : false}
+                    onChange={(event) => setActive_User(event, params)}
+                  />
+                }
+                label={(params.row.Active === true) ? 'กำลังใช้งาน' : 'ไม่ได้ใช้งาน'}
+              />
+            </React.Fragment>
+          );
+        }
       },
       {
         field: 'action',
@@ -322,6 +499,7 @@ export default function Permission_to_RoPA() {
               <Button
                 variant="contained"
                 color='secondary'
+                disabled={(params.row.Active === true) ? false : true}
                 onClick={(event) => handleClickRopa_UserID(event, params)}
               >
                 <LayersIcon />
@@ -737,54 +915,241 @@ export default function Permission_to_RoPA() {
                 width: '100%',
               }}
             >
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                {
-                  (!ropa_List ? null : ropa_List[0].RopaCollection_ID) !== undefined ?
-                    <React.Fragment>
+              {
+                (!ropa_List ? null : ropa_List[0].RopaCollection_ID) !== undefined ?
+                  <React.Fragment>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
                       <div role="presentation">
                         <Breadcrumbs aria-label="breadcrumb">
                           <Chip variant="outlined" label="ประเภทข้อมูลส่วนบุคคล" onClick={ropa_main_click} />
-                          <Chip variant="outlined" label="รายชื่อข้อมูลส่วนบุคคล" onClick={ropa_userBack_click} />
-                          <Chip variant="outlined" label="Collection" color="primary" />
+                          <Chip variant="outlined" label={!ropa_List ? null : ropa_List[0].DataItem_Name} onClick={ropa_userBack_click} />
+                          <Chip variant="outlined" label={!ropa_List ? null : ropa_List[0].UserName} color="primary" />
                         </Breadcrumbs>
                       </div>
-                    </React.Fragment>
-                    : (!(!ropa_List ? null : ropa_List[0].RopaCollection_ID) && (!ropa_List ? null : ropa_List[0].RopaUser_ID) !== undefined) ?
-                      <React.Fragment>
+                      <Button
+                        variant="contained"
+                        color='primary'
+                        onClick={handleOpenAdd_data}
+                        startIcon={<AddIcon size="small" />}
+                      >
+                        Add Data
+                      </Button>
+                    </Stack>
+                    <Dialog
+                      open={openAdd_data}
+                      onClose={handleCloseAdd_data}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
+                    >
+                      <DialogTitle id="alert-dialog-title">
+                        {"แจ้งเตือน"}
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                          เนื้อหา
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          variant="contained"
+                          onClick={handleCloseAdd_data}
+                          sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                        >ใช่
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color='error'
+                          sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                          onClick={handleCloseAdd_data} autoFocus
+                        >
+                          ไม่
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                  </React.Fragment>
+                  : (!(!ropa_List ? null : ropa_List[0].RopaCollection_ID) && (!ropa_List ? null : ropa_List[0].RopaUser_ID) !== undefined) ?
+                    <React.Fragment>
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
                         <div role="presentation">
                           <Breadcrumbs aria-label="breadcrumb">
                             <Chip variant="outlined" label="ประเภทข้อมูลส่วนบุคคล" onClick={ropa_main_click} />
-                            <Chip variant="outlined" label="รายชื่อข้อมูลส่วนบุคคล" color="primary" />
+                            <Chip variant="outlined" label={!ropa_List ? null : ropa_List[0].DataItem_Name} color="primary" />
                           </Breadcrumbs>
                         </div>
-                      </React.Fragment>
-                      :
-                      <React.Fragment>
+                        <Button
+                          variant="contained"
+                          color='primary'
+                          onClick={handleOpenAdd_user}
+                          startIcon={<AddIcon size="small" />}
+                        >
+                          Add User
+                        </Button>
+                      </Stack>
+                      <Dialog
+                        open={openAdd_user}
+                        onClose={handleCloseAdd_user}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                      >
+                        <DialogTitle id="alert-dialog-title">
+                          {"แจ้งเตือน"}
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText id="alert-dialog-description">
+                            เนื้อหา
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button
+                            variant="contained"
+                            onClick={handleCloseAdd_user}
+                            sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                          >ใช่
+                          </Button>
+                          <Button
+                            variant="contained"
+                            color='error'
+                            sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                            onClick={handleCloseAdd_user} autoFocus
+                          >
+                            ไม่
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                    </React.Fragment>
+                    :
+                    <React.Fragment>
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
                         <div role="presentation">
                           <Breadcrumbs aria-label="breadcrumb">
                             <Chip variant="outlined" label="ประเภทข้อมูลส่วนบุคคล" color="primary" />
                           </Breadcrumbs>
                         </div>
-                      </React.Fragment>
-                }
-                {columns ?
-                  null :
-                  <React.Fragment>
-                    <Button
-                      size="small"
-                      variant="contained"
-                      color='primary'
-                      startIcon={<AddIcon size="small" />}
-                    >
-                      Add Main
-                    </Button>
-                  </React.Fragment>
-                }
-              </Stack>
+                        <Button
+                          variant="contained"
+                          color='primary'
+                          onClick={handleOpenAdd_main}
+                          startIcon={<AddIcon size="small" />}
+                        >
+                          Add Main
+                        </Button>
+                      </Stack>
+                      <Dialog
+                        open={openAdd_main}
+                        onClose={handleCloseAdd_main}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                      >
+                        <DialogTitle id="alert-dialog-title">
+                          {"แจ้งเตือน"}
+                        </DialogTitle>
+                        <DialogContent>
+                          <FormControl variant="standard" fullWidth>
+                            <Autocomplete
+                              freeSolo
+                              size="small"
+                              options={list_dep}
+                              getOptionLabel={(option) => option.DepCode}
+                              filterOptions={filterOptions2}
+                              onChange={handleChange_DepCode}
+                              value={!list_dep ? '' : list_dep[index]}
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  variant="standard"
+                                  fullWidth
+                                  autoComplete="family-name"
+                                  sx={{ pt: 1 }}
+                                />
+                              )}
+                            />
+                          </FormControl>
+                          <TextField
+                            required
+                            fullWidth
+                            value={serviceList.DataItem_Name}
+                            onChange={handleChangeValue_DataItem_Name}
+                            name='DataItem_Name'
+                            sx={{ pt: 1 }}
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <Typography color="black">
+                                    ชือหัวข้อ :
+                                  </Typography>
+                                </InputAdornment>
+                              ),
+                            }}
+                            variant="standard"
+                          />
+                          <TextField
+                            required
+                            fullWidth
+                            value={serviceList.Data_Subject}
+                            onChange={handleChangeValue_Data_Subject}
+                            name='Data_Subject'
+                            sx={{ pt: 1 }}
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <Typography color="black">
+                                    กลุ่มเป้าหมาย :
+                                  </Typography>
+                                </InputAdornment>
+                              ),
+                            }}
+                            variant="standard"
+                          />
+                          <TextField
+                            required
+                            fullWidth
+                            value={serviceList.Step}
+                            onChange={handleChangeValue_Step}
+                            name='Step'
+                            sx={{ pt: 1 }}
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <Typography color="black">
+                                    ขั้นตอนในการรักษา :
+                                  </Typography>
+                                </InputAdornment>
+                              ),
+                            }}
+                            variant="standard"
+                          />
+                        </DialogContent>
+                        <DialogActions>
+                          <Button
+                            variant="contained"
+                            onClick={handleCloseAdd_main}
+                            sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                          >บันทึก
+                          </Button>
+                          <Button
+                            variant="contained"
+                            color='error'
+                            sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                            onClick={handleCloseAdd_main} autoFocus
+                          >
+                            ยกเลิก
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                    </React.Fragment>
+              }
               <StripedDataGrid
                 sx={{
                   mt: 1,

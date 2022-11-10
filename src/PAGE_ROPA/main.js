@@ -48,7 +48,7 @@ export default function MenuAppBar() {
           <Container component="main" sx={{ mt: 0, mb: 2 }} maxWidth="sm">
             <center>
               <Typography variant="h5" component="h2" gutterBottom>
-                {'ยินดีต้อนรับสู่เว็บไซต์เดโม เพียวพลังงานไทย จำกัด'}
+                {'ยินดีต้อนรับสู่เว็บไซต์ เพียวพลังงานไทย จำกัด'}
                 {'ที่ใช้สำหรับการจัดการและประมวลข้อมูลส่วนบุคคล'}
               </Typography>
             </center>

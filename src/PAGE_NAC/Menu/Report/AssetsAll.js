@@ -217,14 +217,14 @@ export default function Reported_of_assets() {
         <AnimatedPage>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
-              <FormControl variant="standard" sx={{ m: 1, minWidth: 300 }}>
-                <InputLabel id="demo-simple-select-standard-label">None</InputLabel>
+              <FormControl sx={{ m: 1 }} fullWidth>
+                <InputLabel id="demo-simple-select-standard-label">เลือกคำอธิบาย</InputLabel>
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
                   value={description_value}
                   onChange={handleChange}
-                  label="None"
+                  label='เลือกคำอธิบาย'
                 >
                   {!selectMenu ? null : selectMenu.map((res) => (
                     <MenuItem value={res.Description}>{res.Description}</MenuItem>
