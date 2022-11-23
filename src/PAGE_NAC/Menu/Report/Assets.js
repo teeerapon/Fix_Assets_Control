@@ -277,7 +277,7 @@ const filterOptions2 = createFilterOptions({
 });
 
 async function Store_FA_control_create_doc(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_create_doc', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_create_doc', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -289,7 +289,7 @@ async function Store_FA_control_create_doc(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/AutoDeapartMent', {
+  return fetch('http://192.168.220.1:32001/api/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -301,7 +301,7 @@ async function AutoDeapartMent(credentials) {
 }
 
 async function Store_FA_control_Create_from_reported(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/Store_FA_control_Create_from_reported', {
+  return fetch('http://192.168.220.1:32001/api/Store_FA_control_Create_from_reported', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -344,7 +344,7 @@ const EnhancedTableToolbar = (props) => {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://vpnptec.dyndns.org:32001/api/getsUserForAssetsControl"
+      "http://192.168.220.1:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []
@@ -1150,7 +1150,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_CheckAssetCode_Process', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
