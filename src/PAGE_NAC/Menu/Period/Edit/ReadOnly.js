@@ -35,7 +35,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function DeletePeriodData(credentials) {
-  return fetch('http://192.168.220.1:32001/api/delete_period', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/delete_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -46,7 +46,7 @@ async function DeletePeriodData(credentials) {
 }
 
 async function ChackUserWeb(credentials) {
-  return fetch('http://192.168.220.1:32001/api/ChackUserWeb', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/ChackUserWeb', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
