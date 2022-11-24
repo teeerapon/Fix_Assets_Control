@@ -129,7 +129,7 @@ export default function History_of_assets() {
     setDetails(null)
   };
 
-  const handleSubmit_Add = () => {
+  const handleSubmit_Add = async () => {
     const body = { UserCode: data.UserCode, Code: code, Name: name, BranchID: data.branchid, Details: details, SerialNo: serialNo, Price: price }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
@@ -142,7 +142,7 @@ export default function History_of_assets() {
     } else if (!price) {
       alert('กรุณากรอกราคา')
     } else {
-      Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_New_Assets', body, { headers })
+      await Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_New_Assets', body, { headers })
         .then(response => {
           if (response.data !== undefined) {
             const userCode = { userCode: data.UserCode }

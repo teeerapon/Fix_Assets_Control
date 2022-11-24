@@ -229,7 +229,7 @@ export default function Permission_to_RoPA() {
   }
 
 
-  const setActive_User = (event, params) => {
+  const setActive_User = async (event, params) => {
     const body = { ropaid: params.row.Ropa_ID, ropauserid: params.row.RopaUser_ID }
 
     const headers = {
@@ -292,26 +292,26 @@ export default function Permission_to_RoPA() {
       },
     ];
 
-    Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_SetActive_User', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_SetActive_User', body, { headers })
       .then(response => {
         setColumns(columns_User)
         setRopa_List(response.data.data)
       });
   }
 
-  const ropa_main_click = () => {
+  const ropa_main_click = async () => {
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.get('http://vpnptec.dyndns.org:32001/api/Ropa_List', { headers })
+    await Axios.get('http://vpnptec.dyndns.org:32001/api/Ropa_List', { headers })
       .then(response => {
         setColumns(null)
         setRopa_List(response.data)
       });
   }
 
-  const ropa_userBack_click = () => {
+  const ropa_userBack_click = async () => {
     const body = { ropaid: ropa_List[0].Ropa_ID }
 
     const headers = {
@@ -374,7 +374,7 @@ export default function Permission_to_RoPA() {
       },
     ];
 
-    Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_List_User', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_List_User', body, { headers })
       .then(response => {
         setColumns(columns_User)
         setRopa_List(response.data.data)
@@ -405,7 +405,7 @@ export default function Permission_to_RoPA() {
     setOpenII(false);
   };
 
-  const handleClickRopa_UserID = (event, params) => {
+  const handleClickRopa_UserID = async (event, params) => {
     const body = { ropauserid: params.row.RopaUser_ID }
 
     const headers = {
@@ -439,7 +439,7 @@ export default function Permission_to_RoPA() {
       },
     ];
 
-    Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_List_Collection', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_List_Collection', body, { headers })
       .then(response => {
         setColumns(columns_User_Collection)
         setRopa_List(response.data.data);
@@ -447,7 +447,7 @@ export default function Permission_to_RoPA() {
 
   }
 
-  const handleClickOpen_User = (event, params) => {
+  const handleClickOpen_User = async (event, params) => {
     const body = { ropaid: params.row.Ropa_ID }
 
     const headers = {
@@ -510,14 +510,14 @@ export default function Permission_to_RoPA() {
       },
     ];
 
-    Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_List_User', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_List_User', body, { headers })
       .then(response => {
         setColumns(columns_User)
         setRopa_List(response.data.data)
       });
   }
 
-  const handleClickOpen = (event, params) => {
+  const handleClickOpen = async (event, params) => {
     setOpen(true);
 
     const FromValues = {
@@ -542,7 +542,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_List_By_ID', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_List_By_ID', body, { headers })
       .then(response => {
         setRopa_type(response.data.data)
         setAllowner(response.data.data)
@@ -560,7 +560,7 @@ export default function Permission_to_RoPA() {
     setOpen(false);
   };
 
-  const handleRopa_Save_Update = () => {
+  const handleRopa_Save_Update = async () => {
     const body = {
       ropaid: serviceList.Ropa_ID,
       depcode: serviceList.Depcode,
@@ -576,7 +576,7 @@ export default function Permission_to_RoPA() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/RopaSave', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/RopaSave', body, { headers })
 
     window.location.href = '/PERSON_ROPA';
     setOpen(false);
@@ -681,7 +681,7 @@ export default function Permission_to_RoPA() {
     setValueAllaccess(event.target.value);
   };
 
-  const handleAdd_RopaType = () => {
+  const handleAdd_RopaType = async () => {
 
     const body = { ropaid: serviceList.Ropa_ID, typeid: 0, typename: valueRopa_type, user: data.UserCode }
 
@@ -690,13 +690,13 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    Axios.post('http://vpnptec.dyndns.org:32001/api/addType', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/addType', body, { headers })
       .then(response => setRopa_type(response.data.data));
 
     setValueRopa_type('')
   }
 
-  const handleAdd_Owner = () => {
+  const handleAdd_Owner = async () => {
 
     const body = { ropaid: serviceList.Ropa_ID, ownercode: valueAllowner, user: data.UserCode }
 
@@ -705,7 +705,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    Axios.post('http://vpnptec.dyndns.org:32001/api/addOwner', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/addOwner', body, { headers })
       .then(response => {
         if (!response.data) {
           alert('ไม่พบ user นี้ในระบบ')
@@ -717,7 +717,7 @@ export default function Permission_to_RoPA() {
     setValueAllowner('')
   }
 
-  const handleAdd_Access = () => {
+  const handleAdd_Access = async () => {
 
     const body = { ropaid: serviceList.Ropa_ID, acecode: valueAllaccess, user: data.UserCode }
 
@@ -726,7 +726,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    Axios.post('http://vpnptec.dyndns.org:32001/api/addPermissionAccess', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/addPermissionAccess', body, { headers })
       .then(response => {
         if (!response.data) {
           alert('ไม่พบ user นี้ในระบบ')
@@ -738,7 +738,7 @@ export default function Permission_to_RoPA() {
     setValueAllaccess('')
   }
 
-  const handleDelete = (ropa_type) => {
+  const handleDelete = async (ropa_type) => {
 
     const body = { ropaid: serviceList.Ropa_ID, ropa_type: ropa_type, user: data.UserCode }
 
@@ -747,12 +747,12 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    Axios.post('http://vpnptec.dyndns.org:32001/api/removeType', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/removeType', body, { headers })
       .then(response => setRopa_type(response.data))
 
   };
 
-  const handleRemoveOwner = (allowner) => {
+  const handleRemoveOwner = async (allowner) => {
 
     const body = { ropaid: serviceList.Ropa_ID, ropaownerCode: allowner, user: data.UserCode }
 
@@ -761,12 +761,12 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    Axios.post('http://vpnptec.dyndns.org:32001/api/removeOwner', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/removeOwner', body, { headers })
       .then(response => setAllowner(response.data))
 
   };
 
-  const handleRemoveAccess = (allaccess) => {
+  const handleRemoveAccess = async (allaccess) => {
 
     const body = { ropaid: serviceList.Ropa_ID, permissionaccessCode: allaccess, user: data.UserCode }
 
@@ -775,7 +775,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    Axios.post('http://vpnptec.dyndns.org:32001/api/removePermissionAccess', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/removePermissionAccess', body, { headers })
       .then(response => setAllaccess(response.data))
 
   };

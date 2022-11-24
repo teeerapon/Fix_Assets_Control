@@ -183,14 +183,14 @@ export default function Reported_of_assets() {
       .then(response => setSelectMenu(response.data.data));
   }, []);
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = async (event: SelectChangeEvent) => {
     setDescription_value(event.target.innerText);
     const Description = { Description: event.target.innerText }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers })
       .then(response => setReported_of_assets(response.data.data));
   };
 
