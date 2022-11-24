@@ -191,7 +191,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://192.168.220.1:32001/api/store_FA_control_HistorysAssets', userCode, { headers })
+    Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_HistorysAssets', userCode, { headers })
       .then(response => setDataHistory(response.data.data));
   }, []);
 
