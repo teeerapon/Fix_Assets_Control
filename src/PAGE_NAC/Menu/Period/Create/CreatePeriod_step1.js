@@ -26,10 +26,11 @@ export default function AddressForm() {
   const year = (d.getFullYear()).toString();
   const month = ((d.getMonth()) + 101).toString().slice(-2);
   const date = ((d.getDate()) + 100).toString().slice(-2);
-  const hours = ((d.getHours()) + 100).toString().slice(-2);
-  const mins = ((d.getMinutes()) + 100).toString().slice(-2);
-  const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
-  const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
+  // const hours = ((d.getHours()) + 100).toString().slice(-2);
+  // const mins = ((d.getMinutes()) + 100).toString().slice(-2);
+  // const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
+  const datenow = `${year}-${month}-${date}T00:00:00.000Z`;
+  console.log(datenow);
 
   const data = JSON.parse(localStorage.getItem('data'));
   const navigate = useNavigate();

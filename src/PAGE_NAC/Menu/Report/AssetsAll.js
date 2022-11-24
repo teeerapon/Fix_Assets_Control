@@ -16,6 +16,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
 const ODD_OPACITY = 0.2;
 
@@ -177,18 +179,18 @@ export default function Reported_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers })
+    Axios.post('http://192.168.220.1:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers })
       .then(response => setSelectMenu(response.data.data));
   }, []);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setDescription_value(event.target.value);
-    const Description = { Description: event.target.value }
+    setDescription_value(event.target.innerText);
+    const Description = { Description: event.target.innerText }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers })
+    Axios.post('http://192.168.220.1:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers })
       .then(response => setReported_of_assets(response.data.data));
   };
 
@@ -217,20 +219,24 @@ export default function Reported_of_assets() {
         <AnimatedPage>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
-              <FormControl sx={{ m: 1 }} fullWidth>
-                <InputLabel id="demo-simple-select-standard-label">เลือกคำอธิบาย</InputLabel>
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  value={description_value}
-                  onChange={handleChange}
-                  label='เลือกคำอธิบาย'
-                >
-                  {!selectMenu ? null : selectMenu.map((res) => (
-                    <MenuItem value={res.Description}>{res.Description}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <Autocomplete
+                freeSolo
+                id="free-solo-2-demo"
+                disableClearable
+                sx={{ pb: 2 }}
+                options={!selectMenu ? null : selectMenu.map((option) => option.Description)}
+                onChange={handleChange}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="ค้นหาคำอธิบาย"
+                    InputProps={{
+                      ...params.InputProps,
+                      type: 'search',
+                    }}
+                  />
+                )}
+              />
               <Box
                 sx={{
                   height: 423,
