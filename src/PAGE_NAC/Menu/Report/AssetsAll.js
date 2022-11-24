@@ -223,7 +223,6 @@ export default function Reported_of_assets() {
                 freeSolo
                 id="free-solo-2-demo"
                 disableClearable
-                sx={{ pb: 2 }}
                 options={!selectMenu ? null : selectMenu.map((option) => option.Description)}
                 onChange={handleChange}
                 renderInput={(params) => (
