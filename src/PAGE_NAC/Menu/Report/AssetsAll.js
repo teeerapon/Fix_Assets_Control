@@ -179,7 +179,7 @@ export default function Reported_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers })
+    Axios.post('http://192.168.220.1:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers })
       .then(response => setSelectMenu(response.data.data));
   }, []);
 
@@ -190,7 +190,7 @@ export default function Reported_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers })
+    Axios.post('http://192.168.220.1:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers })
       .then(response => setReported_of_assets(response.data.data));
   };
 

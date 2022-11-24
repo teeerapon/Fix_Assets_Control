@@ -11,6 +11,16 @@ import Stack from '@mui/material/Stack';
 import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
 import Axios from "axios"
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+
+
 
 const ODD_OPACITY = 0.2;
 
@@ -99,11 +109,75 @@ export default function History_of_assets() {
   const [dataHistory, setDataHistory] = React.useState();
   const data = JSON.parse(localStorage.getItem('data'));
   const checkUserWeb = localStorage.getItem('sucurity');
+  const [open, setOpen] = React.useState(false);
+  const [code, setCode] = React.useState();
+  const [name, setName] = React.useState();
+  const [serialNo, setSerialNo] = React.useState();
+  const [price, setPrice] = React.useState();
+  const [details, setDetails] = React.useState();
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setCode(null)
+    setName(null)
+    setSerialNo(null)
+    setPrice(null)
+    setDetails(null)
+  };
+
+  const handleSubmit_Add = () => {
+    const body = { UserCode: data.UserCode, Code: code, Name: name, BranchID: data.branchid, Details: details, SerialNo: serialNo, Price: price }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    if (!code) {
+      alert('กรุณากรอกรหัสทรัพย์สิน')
+    } else if (!name) {
+      alert('กรุณากรอกชื่อทรัพย์สิน')
+    } else if (!price) {
+      alert('กรุณากรอกราคา')
+    } else {
+      Axios.post('http://192.168.220.1:32001/api/FA_Control_New_Assets', body, { headers })
+        .then(response => {
+          if (response.data !== undefined) {
+            const userCode = { userCode: data.UserCode }
+            const headers = {
+              'Authorization': 'application/json; charset=utf-8',
+              'Accept': 'application/json'
+            };
+            Axios.post('http://192.168.220.1:32001/api/store_FA_control_fetch_assets', userCode, { headers })
+              .then(response => setDataHistory(response.data.data));
+            setOpen(false);
+          }
+        });
+    }
+
+  };
+
+  const handleChange_Code = (event) => {
+    setCode(event.target.value)
+  }
+  const handleChange_Name = (event) => {
+    setName(event.target.value)
+  }
+  const handleChange_SerialNo = (event) => {
+    setSerialNo(event.target.value)
+  }
+  const handleChange_Price = (event) => {
+    setPrice(event.target.value)
+  }
+  const handleChange_Details = (event) => {
+    setDetails(event.target.value)
+  }
 
   const columns = [
-    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130 },
+    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 150 },
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 250 },
-    { field: 'BranchID', headerName: 'สาขา', headerClassName: 'super-app-theme--header', width: 100 },
     { field: 'SerialNo', headerName: 'SerialNo', headerClassName: 'super-app-theme--header', flex: 1, },
     { field: 'Details', headerName: 'หมายเหตุ', headerClassName: 'super-app-theme--header', flex: 1, },
     {
@@ -114,7 +188,14 @@ export default function History_of_assets() {
       valueGetter: (params) =>
         `${params.row.Price.toLocaleString() || ''}`,
     },
-    { field: 'Position', headerName: 'Position', headerClassName: 'super-app-theme--header', width: 100 },
+    {
+      field: 'BranchID',
+      headerName: 'สาขา',
+      headerClassName: 'super-app-theme--header',
+      width: 150,
+      valueGetter: (params) =>
+        params.row.BranchID === 901 ? 'HO' : params.row.BranchID,
+    },
     {
       field: 'CreateDate',
       headerName: 'วันที่ขึ้นทะเบียน',
@@ -134,7 +215,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_fetch_assets', userCode, { headers })
+    Axios.post('http://192.168.220.1:32001/api/store_FA_control_fetch_assets', userCode, { headers })
       .then(response => setDataHistory(response.data.data));
   }, []);
 
@@ -163,6 +244,16 @@ export default function History_of_assets() {
         <AnimatedPage>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
+              <Grid
+                container
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="center"
+              >
+                <Button variant="contained" onClick={handleClickOpen}>
+                  เพิ่มทรัพย์สิน
+                </Button>
+              </Grid>
               <Box
                 sx={{
                   height: 423,
@@ -171,7 +262,7 @@ export default function History_of_assets() {
               >
                 <StripedDataGrid
                   sx={{
-                    mt: 3,
+                    mt: 1,
                     pl: 2,
                     pr: 2,
                     pt: 2,
@@ -197,6 +288,96 @@ export default function History_of_assets() {
                 //checkboxSelection
                 />
               </Box>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle>
+                  <b>{"กรุณาหรอกข้อมูลให้ครบถ้วน"}</b>
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    <Box component="form" noValidate sx={{ mt: 4, width: 300, }}>
+                      <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                          <TextField
+                            size="small"
+                            autoComplete="given-name"
+                            name="Code"
+                            value={code}
+                            onChange={(event) => handleChange_Code(event)}
+                            required
+                            fullWidth
+                            label="รหัสทรัพย์สิน"
+                            autoFocus
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            size="small"
+                            autoComplete="given-name"
+                            name="Name"
+                            value={name}
+                            onChange={(event) => handleChange_Name(event)}
+                            required
+                            fullWidth
+                            label="ชื่อ"
+                            autoFocus
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            size="small"
+                            autoComplete="given-name"
+                            name="SerialNo"
+                            value={serialNo}
+                            onChange={(event) => handleChange_SerialNo(event)}
+                            required
+                            fullWidth
+                            label="SerialNo"
+                            autoFocus
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            size="small"
+                            autoComplete="given-name"
+                            name="Details"
+                            value={details}
+                            onChange={(event) => handleChange_Details(event)}
+                            required
+                            fullWidth
+                            label="รายะลเอียดทรัพย์สิน"
+                            autoFocus
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            size="small"
+                            autoComplete="given-name"
+                            name="Price"
+                            value={price}
+                            onChange={(event) => handleChange_Price(event)}
+                            required
+                            fullWidth
+                            type='number'
+                            label="ราคาทุน"
+                            autoFocus
+                          />
+                        </Grid>
+                      </Grid>
+                    </Box>
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleSubmit_Add} variant="contained">บันทึก</Button>
+                  <Button onClick={handleClose} autoFocus variant="contained" color="error">
+                    ยกเลิก
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </Container>
           </Box>
         </AnimatedPage>

@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 async function Reported(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/testGetBranch', {
+  return fetch('http://192.168.220.1:32001/api/testGetBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -47,7 +47,7 @@ async function Reported(credentials) {
 }
 
 async function Reported2(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/getAssetbyUserBranch', {
+  return fetch('http://192.168.220.1:32001/api/getAssetbyUserBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -58,7 +58,7 @@ async function Reported2(credentials) {
 }
 
 async function Reported3(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/wrongBranch', {
+  return fetch('http://192.168.220.1:32001/api/wrongBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -69,7 +69,7 @@ async function Reported3(credentials) {
 }
 
 async function getPeriods(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/period_round', {
+  return fetch('http://192.168.220.1:32001/api/period_round', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'

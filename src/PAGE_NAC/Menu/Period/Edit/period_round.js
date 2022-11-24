@@ -114,7 +114,7 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 }));
 
 async function EditPeriodData_Update(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/update_period', {
+  return fetch('http://192.168.220.1:32001/api/update_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -125,7 +125,7 @@ async function EditPeriodData_Update(credentials) {
 }
 
 async function DeletePeriodData(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/delete_period', {
+  return fetch('http://192.168.220.1:32001/api/delete_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -231,11 +231,9 @@ export default function History_of_assets() {
       field: 'Code',
       headerName: 'สาขา',
       headerClassName: 'super-app-theme--header',
-      headerAlign: 'center',
-      align: 'center',
       width: 100,
       valueGetter: (params) =>
-        `${params.row.Code || ''}`,
+        params.row.Code === 'CO' ? 'HO' : params.row.Code === 0 ? 'CO' : params.row.Code,
     },
     {
       field: 'status',
@@ -295,7 +293,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/get_branch_period', userCode, { headers })
+    Axios.post('http://192.168.220.1:32001/api/get_branch_period', userCode, { headers })
       .then(response => setDataBranchID_Main(response.data.data));
   }, []);
 
@@ -518,7 +516,7 @@ export default function History_of_assets() {
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    ท่านแน่ใจที่จะลบรอบตรวจนับทรัพย์สินของ {editFormData.Code} ใช่หรือไม่ ?
+                    ท่านแน่ใจที่จะลบรอบตรวจนับทรัพย์สินของ {editFormData.Code === 'CO' ? 'HO' : editFormData.Code} ใช่หรือไม่ ?
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
