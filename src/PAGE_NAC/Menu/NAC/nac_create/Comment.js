@@ -45,7 +45,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function store_FA_control_comment(credentials) {
-  return fetch('http://192.168.220.1:32001/api/store_FA_control_comment', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_comment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -57,7 +57,7 @@ async function store_FA_control_comment(credentials) {
 }
 
 async function stroe_FA_control_Path(credentials) {
-  return fetch('http://192.168.220.1:32001/api/stroe_FA_control_Path', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/stroe_FA_control_Path', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -69,7 +69,7 @@ async function stroe_FA_control_Path(credentials) {
 }
 
 async function qureyNAC_comment(credentials) {
-  return fetch('http://192.168.220.1:32001/api/qureyNAC_comment', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/qureyNAC_comment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -81,7 +81,7 @@ async function qureyNAC_comment(credentials) {
 }
 
 async function qureyNAC_path(credentials) {
-  return fetch('http://192.168.220.1:32001/api/qureyNAC_path', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/qureyNAC_path', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',

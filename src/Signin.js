@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(http://192.168.220.1:10280/OPS_Fileupload/ATT_220300007.jpg)',
+    backgroundImage: 'url(http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_220300007.jpg)',
     backgroundSize: 'cover',
   },
   paper: {
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 // เพื่อใช้ทดสอบ
 async function loginUser(credentials) {
-  return fetch('http://192.168.220.1:32001/api/login', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -54,7 +54,7 @@ async function loginUser(credentials) {
 }
 
 async function permission(credentials) {
-  return fetch('http://192.168.220.1:32001/api/permission_branch', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/permission_branch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -65,7 +65,7 @@ async function permission(credentials) {
 }
 
 async function ChackUserWeb(credentials) {
-  return fetch('http://192.168.220.1:32001/api/ChackUserWeb', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/ChackUserWeb', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',

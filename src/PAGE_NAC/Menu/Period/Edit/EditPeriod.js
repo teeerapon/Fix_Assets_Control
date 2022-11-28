@@ -101,7 +101,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function getPeriods(credentials) {
-  return fetch('http://192.168.220.1:32001/api/round_website', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/round_website', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
