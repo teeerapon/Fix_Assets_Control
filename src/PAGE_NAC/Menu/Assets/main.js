@@ -142,7 +142,7 @@ export default function History_of_assets() {
     } else if (!price) {
       alert('กรุณากรอกราคา')
     } else {
-      await Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_New_Assets', body, { headers })
+      await Axios.post('http://192.168.220.1:32001/api/FA_Control_New_Assets', body, { headers })
         .then(response => {
           if (response.data !== undefined) {
             const userCode = { userCode: data.UserCode }
@@ -150,7 +150,7 @@ export default function History_of_assets() {
               'Authorization': 'application/json; charset=utf-8',
               'Accept': 'application/json'
             };
-            Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_fetch_assets', userCode, { headers })
+            Axios.post('http://192.168.220.1:32001/api/store_FA_control_fetch_assets', userCode, { headers })
               .then(response => setDataHistory(response.data.data));
             setOpen(false);
           }
@@ -215,7 +215,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_fetch_assets', userCode, { headers })
+    Axios.post('http://192.168.220.1:32001/api/store_FA_control_fetch_assets', userCode, { headers })
       .then(response => setDataHistory(response.data.data));
   }, []);
 

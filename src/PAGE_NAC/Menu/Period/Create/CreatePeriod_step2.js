@@ -16,7 +16,7 @@ const steps = ['กรอกข้อมูล', 'ตรวจสอบข้อ
 
 
 async function PeriodCreate(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/craete_period', {
+  return fetch('http://192.168.220.1:32001/api/craete_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -41,12 +41,12 @@ export default function AddressForm() {
   };
 
   const handleSubmit = async e => {
+    e.preventDefault();
     const BeginDate = (DataCreatePeriod.valueDateTime1).split('T')[0] + ' 7:00:00'
     const EndDate = (DataCreatePeriod.valueDateTime2).split('T')[0] + ' 7:00:00'
     const BranchID = DataCreatePeriod.valueBrachID1
     const Description = DataCreatePeriod.valueDescription
     const usercode = data.UserCode
-    e.preventDefault();
     if (DataCreatePeriod.valueDateTime1 !== undefined && DataCreatePeriod.valueDateTime2 !== undefined && DataCreatePeriod.valueDescription !== undefined && DataCreatePeriod.valueBrachID1 !== undefined) {
       const response = await PeriodCreate({
         BeginDate,
@@ -55,23 +55,19 @@ export default function AddressForm() {
         Description,
         usercode
       });
-      if (response['data'] !== 'มีการเปิดช่วงเวลาทับกัน') {
-        if (response['data'] !== 'ข้อมูลสาขาที่บันทึกไม่ถูกต้อง') {
-          localStorage.removeItem("period_round");
-          localStorage.setItem('period_round', JSON.stringify(response['data'][0]));
-          navigate("/CreatePeriod3")
-        } else {
-          swal("ทำรายการไม่สำเร็จ", response.data, "error");
-        }
+      if (response.data[0] === 'ทำรายการสำเร็จ') {
+        swal("ทำรายการไม่สำเร็จ", `เปิดรอบตรวจนับสาขา ${BranchID} แล้ว`, "success", {
+          buttons: false,
+          timer: 1500,
+        }).then((value) => {
+          navigate('/EditPeriod')
+        });
       } else {
-        if (response['data'] === 'มีการเปิดช่วงเวลาทับกัน') {
-          swal("ทำรายการไม่สำเร็จ", response.data + 'กับรอบตรวจนับที่ ' + response.wrongPeriod, "error");
-        } else {
-          swal("ทำรายการไม่สำเร็จ", response.data, "error");
-        }
+        swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่อีกครั้ง', "error");
       }
     }
   }
+
   if (checkUserWeb === 'null') {
     window.location.href = '/NAC_MAIN';
   } else {
