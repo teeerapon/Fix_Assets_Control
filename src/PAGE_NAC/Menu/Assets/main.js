@@ -19,7 +19,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DateAdapter from '@mui/lab/AdapterDateFns';
+import DatePicker from '@mui/lab/DatePicker';
 
 
 const ODD_OPACITY = 0.2;
@@ -113,6 +115,7 @@ export default function History_of_assets() {
   const [code, setCode] = React.useState();
   const [name, setName] = React.useState();
   const [serialNo, setSerialNo] = React.useState();
+  const [create_Date, setCeate_Date] = React.useState(null);
   const [price, setPrice] = React.useState();
   const [details, setDetails] = React.useState();
 
@@ -127,10 +130,11 @@ export default function History_of_assets() {
     setSerialNo(null)
     setPrice(null)
     setDetails(null)
+    setCeate_Date(null)
   };
 
   const handleSubmit_Add = async () => {
-    const body = { UserCode: data.UserCode, Code: code, Name: name, BranchID: data.branchid, Details: details, SerialNo: serialNo, Price: price }
+    const body = { UserCode: data.UserCode, Code: code, Name: name, BranchID: data.branchid, Details: details, SerialNo: serialNo, Price: price, Create_Date: create_Date }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
@@ -173,6 +177,9 @@ export default function History_of_assets() {
   }
   const handleChange_Details = (event) => {
     setDetails(event.target.value)
+  }
+  const handleChange_Ceate_Date = (newValue) => {
+    setCeate_Date(!newValue.toISOString().split('T')[0] ? null : newValue.toISOString().split('T')[0])
   }
 
   const columns = [
@@ -328,13 +335,29 @@ export default function History_of_assets() {
                           />
                         </Grid>
                         <Grid item xs={12}>
+                          <LocalizationProvider dateAdapter={DateAdapter}>
+                            <DatePicker
+                              label="วันที่ขึ้นทะเบียน"
+                              value={create_Date}
+                              onChange={handleChange_Ceate_Date}
+                              inputFormat="yyyy-MM-dd"
+                              renderInput={(params) =>
+                                <TextField
+                                  fullWidth
+                                  size="small"
+                                  autoComplete="family-name"
+                                  required
+                                  {...params} />}
+                            />
+                          </LocalizationProvider>
+                        </Grid>
+                        <Grid item xs={12}>
                           <TextField
                             size="small"
                             autoComplete="given-name"
                             name="SerialNo"
                             value={serialNo}
                             onChange={(event) => handleChange_SerialNo(event)}
-                            required
                             fullWidth
                             label="SerialNo"
                             autoFocus
@@ -347,7 +370,6 @@ export default function History_of_assets() {
                             name="Details"
                             value={details}
                             onChange={(event) => handleChange_Details(event)}
-                            required
                             fullWidth
                             label="รายะลเอียดทรัพย์สิน"
                             autoFocus

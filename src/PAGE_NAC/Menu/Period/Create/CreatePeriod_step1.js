@@ -30,7 +30,6 @@ export default function AddressForm() {
   // const mins = ((d.getMinutes()) + 100).toString().slice(-2);
   // const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T00:00:00.000Z`;
-  console.log(datenow);
 
   const data = JSON.parse(localStorage.getItem('data'));
   const navigate = useNavigate();
