@@ -15,7 +15,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
@@ -183,7 +182,7 @@ export default function Reported_of_assets() {
       .then(response => setSelectMenu(response.data.data));
   }, []);
 
-  const handleChange = async (event: SelectChangeEvent) => {
+  const handleChange = async (event) => {
     setDescription_value(event.target.innerText);
     const Description = { Description: event.target.innerText }
     const headers = {
