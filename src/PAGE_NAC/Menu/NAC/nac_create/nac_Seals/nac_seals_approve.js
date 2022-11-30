@@ -423,30 +423,40 @@ export default function Nac_Seals_Approve() {
     const responseHeaders = await store_FA_control_select_headers({
       nac_code
     });
-    setSelectNAC(parseInt(responseHeaders.data[0].nac_status))
-    setNac_status(parseInt(responseHeaders.data[0].nac_status))
-    setHeaders(responseHeaders.data[0])
-    setSource_Department(responseHeaders.data[0].source_dep_owner)
-    setSource_BU(responseHeaders.data[0].source_bu_owner)
-    setSource(responseHeaders.data[0].source_userid)
-    setSourceDate(responseHeaders.data[0].source_date)
-    setSource_Description(responseHeaders.data[0].source_remark)
-    setSource_Approve(responseHeaders.data[0].source_approve_userid)
-    setSource_DateApproveDate(responseHeaders.data[0].source_approve_date)
+    if (responseHeaders.message === "ไม่พบข้อมูล") {
+      swal("ทำรายการไม่สำเร็จ", 'ไม่พบรายการนี้แล้ว', "error", {
+        buttons: false,
+        timer: 2000,
+      }).then((value) => {
+        window.location.href = '/'
+      });
+    }
+    else {
+      setSelectNAC(parseInt(responseHeaders.data[0].nac_status))
+      setNac_status(parseInt(responseHeaders.data[0].nac_status))
+      setHeaders(responseHeaders.data[0])
+      setSource_Department(responseHeaders.data[0].source_dep_owner)
+      setSource_BU(responseHeaders.data[0].source_bu_owner)
+      setSource(responseHeaders.data[0].source_userid)
+      setSourceDate(responseHeaders.data[0].source_date)
+      setSource_Description(responseHeaders.data[0].source_remark)
+      setSource_Approve(responseHeaders.data[0].source_approve_userid)
+      setSource_DateApproveDate(responseHeaders.data[0].source_approve_date)
 
-    setDes_Department(responseHeaders.data[0].des_dep_owner)
-    setDes_BU(responseHeaders.data[0].des_bu_owner)
-    setDes_delivery(responseHeaders.data[0].des_userid)
-    setDes_deliveryDate(responseHeaders.data[0].des_date)
-    setDes_Description(responseHeaders.data[0].des_remark)
-    setDes_deliveryApprove(responseHeaders.data[0].des_approve_userid)
-    setDes_deliveryApproveDate(responseHeaders.data[0].des_approve_date)
+      setDes_Department(responseHeaders.data[0].des_dep_owner)
+      setDes_BU(responseHeaders.data[0].des_bu_owner)
+      setDes_delivery(responseHeaders.data[0].des_userid)
+      setDes_deliveryDate(responseHeaders.data[0].des_date)
+      setDes_Description(responseHeaders.data[0].des_remark)
+      setDes_deliveryApprove(responseHeaders.data[0].des_approve_userid)
+      setDes_deliveryApproveDate(responseHeaders.data[0].des_approve_date)
 
-    setBossApprove(responseHeaders.data[0].source_approve_userid)
-    setBossApproveDate(responseHeaders.data[0].source_approve_date)
-    setReal_Price(responseHeaders.data[0].real_price)
-    setVerifyApprove(responseHeaders.data[0].verify_by_userid)
-    setVerifyApproveDate(responseHeaders.data[0].verify_date)
+      setBossApprove(responseHeaders.data[0].source_approve_userid)
+      setBossApproveDate(responseHeaders.data[0].source_approve_date)
+      setReal_Price(responseHeaders.data[0].real_price)
+      setVerifyApprove(responseHeaders.data[0].verify_by_userid)
+      setVerifyApproveDate(responseHeaders.data[0].verify_date)
+    }
 
     // เรียก Detail มาแสดง
     const responseDTL = await store_FA_control_select_dtl({
