@@ -140,6 +140,7 @@ export default function History_of_assets() {
 
   const change_page_NacOperation = (newPage) => {
     localStorage.setItem('pagination_user', newPage);
+    localStorage.removeItem("pagination");
   }
 
   React.useEffect(() => {

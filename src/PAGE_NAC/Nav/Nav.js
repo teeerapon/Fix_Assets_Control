@@ -148,10 +148,12 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
   }
 
   function DOC_NAC_ME() {
+    localStorage.removeItem("pagination");
     navigate('/NAC_ROW')
   }
 
   function NAC_OPERATOR() {
+    localStorage.removeItem("pagination_user");
     navigate('/NAC_OPERATOR')
   }
 
@@ -169,6 +171,8 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
         localStorage.removeItem("assetsWrong");
         localStorage.removeItem("DataCreatePeriod");
         localStorage.removeItem("NacCode");
+        localStorage.removeItem("pagination");
+        localStorage.removeItem("pagination_user");
         navigate('/')
       });
   };

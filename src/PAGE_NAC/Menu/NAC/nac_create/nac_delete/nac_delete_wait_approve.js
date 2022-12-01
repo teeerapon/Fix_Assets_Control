@@ -652,7 +652,11 @@ export default function Nac_Seals_Approve() {
   };
 
   function handleGoNAC() {
-    navigate('/NAC_ROW')
+    if(localStorage.getItem('pagination')){
+      navigate('/NAC_OPERATOR')
+    }else {
+      navigate('/NAC_ROW')
+    }
   }
 
   //Source
