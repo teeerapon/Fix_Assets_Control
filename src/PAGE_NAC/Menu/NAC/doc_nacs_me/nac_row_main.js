@@ -138,6 +138,10 @@ export default function History_of_assets() {
   const checkUserWeb = localStorage.getItem('sucurity');
   const [getNac_Code, setGetNac_Code] = React.useState();
 
+  const change_page_NacOperation = (newPage) => {
+    localStorage.setItem('pagination_user', newPage);
+  }
+
   React.useEffect(() => {
     // POST request using axios with set headers
     const usercode = { usercode: data.UserCode }
@@ -218,13 +222,16 @@ export default function History_of_assets() {
       headerName: 'สถานะรายการ',
       headerClassName: 'super-app-theme--header',
       width: 160,
+      headerAlign: 'center',
       renderCell: (params) => {
         return (
           <React.Fragment>
             <Item
               style={{
-                'maxWidth': 'fit-content',
+                //'maxWidth': 'fit-content',
                 borderRadius: '100px',
+                width: '100%',
+                textAlign: 'center',
                 'backgroundColor': params.row.nac_status === 1 ?
                   '#1E90FF' : params.row.nac_status === 2 ?
                     '#6495ED' : params.row.nac_status === 3 ?
@@ -250,6 +257,8 @@ export default function History_of_assets() {
       field: 'nac_status',
       headerName: 'ผู้ตรวจสอบ/อนุมัติ',
       headerClassName: 'super-app-theme--header',
+      align: 'center',
+      headerAlign: 'center',
       width: 130,
       valueGetter: (params) =>
         `${(params.row.nac_status === 2 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.vertify + '' :
@@ -357,7 +366,7 @@ export default function History_of_assets() {
           <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
             <Box
               sx={{
-                height: 423,
+                height: 683,
                 width: '100%',
               }}
             >
@@ -379,14 +388,18 @@ export default function History_of_assets() {
                 getRowId={(selectNAC) => selectNAC.nac_code}
                 pageSize={5}
                 rowsPerPageOptions={[5]}
-                // getRowHeight={() => 'auto'}
                 disableColumnMenu
-                //autoHeight={true}
                 getRowClassName={(params) =>
                   params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                 }
                 disableSelectionOnClick
-              //checkboxSelection
+                onPageChange={(newPage) => change_page_NacOperation(newPage)}
+                initialState={{
+                  ...data.initialState,
+                  pagination: {
+                    page: localStorage.getItem('pagination_user'),
+                  },
+                }}
               />
             </Box>
           </Container>

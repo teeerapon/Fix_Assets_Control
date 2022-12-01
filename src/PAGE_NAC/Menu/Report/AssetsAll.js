@@ -237,7 +237,7 @@ export default function Reported_of_assets() {
               />
               <Box
                 sx={{
-                  height: 423,
+                  height: 683,
                   width: '100%',
                 }}
               >
@@ -257,8 +257,8 @@ export default function Reported_of_assets() {
                   rows={reported_of_assets ?? []}
                   columns={columns}
                   getRowId={(reported_of_assets) => reported_of_assets.RowID}
-                  pageSize={5}
-                  rowsPerPageOptions={[5]}
+                  pageSize={10}
+                  //rowsPerPageOptions={[5]}
                   disableColumnMenu
                   //autoHeight={true}
                   getRowClassName={(params) =>

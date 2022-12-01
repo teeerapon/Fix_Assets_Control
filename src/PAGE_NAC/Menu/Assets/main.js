@@ -263,7 +263,7 @@ export default function History_of_assets() {
               </Grid>
               <Box
                 sx={{
-                  height: 423,
+                  height: 683,
                   width: '100%',
                 }}
               >
@@ -283,9 +283,7 @@ export default function History_of_assets() {
                   rows={dataHistory ?? []}
                   columns={columns}
                   getRowId={(dataHistory) => dataHistory.AssetID}
-                  pageSize={5}
-                  rowsPerPageOptions={[5]}
-                  //getRowHeight={() => 'auto'}
+                  pageSize={10}
                   disableColumnMenu
                   //autoHeight={true}
                   getRowClassName={(params) =>

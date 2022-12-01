@@ -340,7 +340,7 @@ export default function History_of_assets() {
               </Stack>
               <Box
                 sx={{
-                  height: 423,
+                  height: 683,
                   width: '100%',
                 }}
               >
@@ -360,8 +360,7 @@ export default function History_of_assets() {
                   rows={dataHistory ?? []}
                   columns={columns}
                   getRowId={(dataHistory) => dataHistory.nacdtl_id}
-                  pageSize={5}
-                  rowsPerPageOptions={[5]}
+                  pageSize={10}
                   //getRowHeight={() => 'auto'}
                   disableColumnMenu
                   //autoHeight={true}

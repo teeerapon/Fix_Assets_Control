@@ -410,7 +410,7 @@ export default function History_of_assets() {
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
               <Box
                 sx={{
-                  height: 407,
+                  height: 667,
                   width: '100%',
                 }}
               >
@@ -433,8 +433,8 @@ export default function History_of_assets() {
                   componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
                   rows={dataBranchID_Main ?? []}
                   columns={columns}
-                  pageSize={5}
-                  rowsPerPageOptions={[5]}
+                  pageSize={10}
+                  //rowsPerPageOptions={[5]}
                   getRowId={(dataBranchID_Main) => dataBranchID_Main.PeriodID}
                   //autoHeight={true}
                   disableColumnMenu
