@@ -386,8 +386,7 @@ export default function History_of_assets() {
                 rows={selectNAC ?? []}
                 columns={columns}
                 getRowId={(selectNAC) => selectNAC.nac_code}
-                pageSize={5}
-                rowsPerPageOptions={[5]}
+                pageSize={10}
                 disableColumnMenu
                 getRowClassName={(params) =>
                   params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
