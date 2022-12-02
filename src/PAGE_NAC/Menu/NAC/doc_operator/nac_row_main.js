@@ -145,7 +145,6 @@ export default function History_of_assets() {
 
   const filterModelChange = (newFilterModel) => {
     localStorage.setItem('filter_model', JSON.stringify(newFilterModel));
-    localStorage.removeItem("filter_model_user");
   }
 
   React.useEffect(() => {
