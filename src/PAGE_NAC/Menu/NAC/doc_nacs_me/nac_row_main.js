@@ -143,6 +143,11 @@ export default function History_of_assets() {
     localStorage.removeItem("pagination");
   }
 
+  const filterModelChange = (newFilterModel) => {
+    localStorage.setItem('filter_model_user', JSON.stringify(newFilterModel));
+    localStorage.removeItem("filter_model");
+  }
+
   React.useEffect(() => {
     // POST request using axios with set headers
     const usercode = { usercode: data.UserCode }
@@ -399,7 +404,11 @@ export default function History_of_assets() {
                   pagination: {
                     page: localStorage.getItem('pagination_user'),
                   },
+                  filter: {
+                    filterModel: JSON.parse(localStorage.getItem('filter_model_user'))
+                  },
                 }}
+                onFilterModelChange={(newFilterModel) => filterModelChange(newFilterModel)}
               />
             </Box>
           </Container>

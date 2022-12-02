@@ -173,6 +173,8 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
         localStorage.removeItem("NacCode");
         localStorage.removeItem("pagination");
         localStorage.removeItem("pagination_user");
+        localStorage.removeItem("filterModel");
+        localStorage.removeItem("filterModel_user");
         navigate('/')
       });
   };

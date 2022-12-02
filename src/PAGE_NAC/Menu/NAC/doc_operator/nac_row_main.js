@@ -143,7 +143,10 @@ export default function History_of_assets() {
     localStorage.removeItem("pagination_user");
   }
 
-
+  const filterModelChange = (newFilterModel) => {
+    localStorage.setItem('filter_model', JSON.stringify(newFilterModel));
+    localStorage.removeItem("filter_model_user");
+  }
 
   React.useEffect(() => {
     // POST request using axios with set headers
@@ -154,6 +157,7 @@ export default function History_of_assets() {
     };
     Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC_approve', usercode, { headers })
       .then(response => setSelectNAC(response.data.data));
+    
   }, []);
 
   const handleClickOpen = (event, params) => {
@@ -400,7 +404,11 @@ export default function History_of_assets() {
                   pagination: {
                     page: localStorage.getItem('pagination'),
                   },
+                  filter: {
+                    filterModel: JSON.parse(localStorage.getItem('filter_model'))
+                  },
                 }}
+                onFilterModelChange={(newFilterModel) => filterModelChange(newFilterModel)}
               />
             </Box>
           </Container>
