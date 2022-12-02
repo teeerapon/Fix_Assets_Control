@@ -137,10 +137,10 @@ export default function History_of_assets() {
   const [CheckExamineApprove, setCheckExamineApprove] = React.useState([]);
   const checkUserWeb = localStorage.getItem('sucurity');
   const [getNac_Code, setGetNac_Code] = React.useState();
+  const [newPage_value, setNewPage_value] = React.useState(0);
 
   const change_page_NacOperation = (newPage) => {
-    localStorage.setItem('pagination', newPage);
-    localStorage.removeItem("pagination_user");
+    setNewPage_value(newPage)
   }
 
   const filterModelChange = (newFilterModel) => {
@@ -171,6 +171,8 @@ export default function History_of_assets() {
 
   const handleEditClick = (event, params) => {
     event.preventDefault();
+    localStorage.setItem('pagination', newPage_value);
+    localStorage.removeItem("pagination_user");
     localStorage.setItem('NacCode', JSON.stringify({ nac_code: params.row.nac_code, nac_status: params.row.nac_status }));
     if (params.row.workflowtypeid === 1) {
       navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/' + params.row.nac_code)
