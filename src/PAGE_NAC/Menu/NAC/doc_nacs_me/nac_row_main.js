@@ -271,7 +271,8 @@ export default function History_of_assets() {
         `${(params.row.nac_status === 2 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.vertify + '' :
           (params.row.nac_status === 3 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.approved + '' :
             ((params.row.nac_status === 2) && (params.row.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || params.row.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? '' + !params.row.vertify ? params.row.approved : params.row.vertify + '' :
-              (params.row.nac_status === 13) ? 'การเงิน' : (params.row.nac_status === 5) ? 'บัญชี' : (params.row.nac_status === 6) ? 'none' : 'none'
+              (params.row.nac_status === 13) ? 'การเงิน' : (params.row.nac_status === 5) ? 'บัญชี' : (params.row.nac_status === 11) ? 'RSS' :
+              (params.row.nac_status === 6) ? '-' : 'PM'
         }`,
     },
     {
