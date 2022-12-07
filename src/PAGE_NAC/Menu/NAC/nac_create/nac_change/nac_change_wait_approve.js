@@ -100,6 +100,18 @@ async function store_FA_control_select_dtl(credentials) {
     .then(data => data.json())
 }
 
+async function store_FA_control_select_dtl_Draff(credentials) {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_dtl_draff', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 async function store_FA_control_select_headers(credentials) {
   return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_headers', {
     method: 'POST',
@@ -277,12 +289,14 @@ export default function Nac_Main_wait() {
   const mins = ((d.getMinutes()) + 100).toString().slice(-2);
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
-  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: "", code_main: "", no_main: "", name_main: "", date_asset_main: "", dtl_main: "", price_main: "" }]);
+  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: "" }]);
+  const [serviceList_Main, setServiceList_Main] = React.useState([{ AssetID: "", assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", price: "" }])
   const sum_price = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
+
   const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
@@ -416,9 +430,42 @@ export default function Nac_Main_wait() {
     }
 
     // เรียก Detail มาแสดง
+    const responseDTL_draff = await store_FA_control_select_dtl_Draff({
+      nac_code
+    })
+
+    console.log(responseDTL_draff);
+
+    const responseDTLs_draff = responseDTL_draff.data
+    let listPoST_draff = []
+    for (let i = 0; i < responseDTLs_draff.length; i++) {
+      listPoST_draff[i] = {
+        dtl_id: responseDTLs_draff[i].AssetID,
+        assetsCode: responseDTLs_draff[i].Code,
+        serialNo: responseDTLs_draff[i].SerialNo,
+        name: responseDTLs_draff[i].Name,
+        dtl: responseDTLs_draff[i].Details,
+        price: responseDTLs_draff[i].Price,
+        date_asset: responseDTLs_draff[i].CreateDate,
+      }
+    }
+    setServiceList_Main(listPoST_draff.map((res) => {
+      return {
+        dtl_id: res.dtl_id,
+        assetsCode: res.assetsCode,
+        serialNo: res.serialNo,
+        name: res.name,
+        dtl: res.dtl,
+        count: res.count,
+        price: res.price,
+        asset_id: res.asset_id,
+      };
+    }));
+
     const responseDTL = await store_FA_control_select_dtl({
       nac_code
     });
+
     const responseDTLs = responseDTL.data
     const DataCodeDTL = []
     const responesCode = []
@@ -443,12 +490,6 @@ export default function Nac_Main_wait() {
         price: responseDTLs[i].nacdtl_assetsPrice,
         date_asset: responseDTLs[i].nacdtl_date_asset,
         asset_id: responseDTLs[i].nacdtl_id,
-        code_main: responesCode[i].Code,
-        no_main: responesCode[i].SerialNo,
-        name_main: responesCode[i].Name,
-        dtl_main: responesCode[i].Details,
-        price_main: responesCode[i].Price,
-        date_asset_main: responesCode[i].CreateDate
       }
     }
 
@@ -470,13 +511,6 @@ export default function Nac_Main_wait() {
         count: res.count,
         price: res.price,
         asset_id: res.asset_id,
-        code_main: res.code_main,
-        no_main: res.no_main,
-        name_main: res.name_main,
-        dtl_main: res.dtl_main,
-        price_main: res.price_main,
-        date_asset: res.date_asset,
-        date_asset_main: res.date_asset
       };
     }));
 
@@ -497,10 +531,10 @@ export default function Nac_Main_wait() {
       if (responseExecDocID.data[i].limitamount === null && responseExecDocID.data[i].workflowlevel < 5) {
         ExecApprove[i] = {
           approverid: responseExecDocID.data[i].workflowlevel === 0 ? 'AM: ' + responseExecDocID.data[i].approverid :
-          responseExecDocID.data[i].approverid === 'PRT' ? 'RM: ' + responseExecDocID.data[i].approverid :
-            responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
-              responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
-                responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
+            responseExecDocID.data[i].approverid === 'PRT' ? 'RM: ' + responseExecDocID.data[i].approverid :
+              responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
+                responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
+                  responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
         }
         CheckApprove[i] = responseExecDocID.data[i].approverid
       }
@@ -508,10 +542,10 @@ export default function Nac_Main_wait() {
       if (responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 3) {
         ExamineApprove[i] = {
           approverid: responseExecDocID.data[i].workflowlevel === 0 ? 'AM: ' + responseExecDocID.data[i].approverid :
-          responseExecDocID.data[i].approverid === 'PRT' ? 'RM: ' + responseExecDocID.data[i].approverid :
-            responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
-              responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
-                responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
+            responseExecDocID.data[i].approverid === 'PRT' ? 'RM: ' + responseExecDocID.data[i].approverid :
+              responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
+                responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
+                  responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
         }
         CheckExamineApprove[i] = responseExecDocID.data[i].approverid
       }
@@ -562,12 +596,17 @@ export default function Nac_Main_wait() {
 
   const handleServiceAdd = () => {
     setServiceList([...serviceList, { dtl_id: 0, assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: "" }]);
+    setServiceList_Main([...serviceList_Main, { AssetID: "", assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", price: "" }]);
   };
 
   const handleServiceRemove = (index) => {
     const list = [...serviceList];
     list.splice(index, 1);
     setServiceList(list);
+
+    const list_main = [...serviceList_Main];
+    list_main.splice(index, 1);
+    setServiceList_Main(list_main);
   };
 
   const handleServiceChange = (e, index) => {
@@ -598,8 +637,18 @@ export default function Nac_Main_wait() {
       list[index]['price'] = ''
       list[index]['date_asset'] = ''
       setServiceList(list);
+
+      const list_main = [...serviceList_Main];
+      list_main[index]['assetsCode'] = ''
+      list_main[index]['name'] = ''
+      list_main[index]['dtl'] = ''
+      list_main[index]['serialNo'] = ''
+      list_main[index]['price'] = ''
+      list_main[index]['date_asset'] = ''
+      setServiceList_Main(list_main)
     } else {
       const list = [...serviceList];
+      const list_main = [...serviceList_Main];
       list[index][name] = value;
       list[index]['assetsCode'] = assetsCodeSelect;
       if ((list[index]['assetsCode'] === null) || (list[index]['assetsCode'] === undefined)) {
@@ -610,6 +659,14 @@ export default function Nac_Main_wait() {
         list[index]['price'] = ''
         list[index]['date_asset'] = ''
         setServiceList(list);
+
+        list_main[index]['assetsCode'] = ''
+        list_main[index]['name'] = ''
+        list_main[index]['dtl'] = ''
+        list_main[index]['serialNo'] = ''
+        list_main[index]['price'] = ''
+        list_main[index]['date_asset'] = ''
+        setServiceList_Main(list_main)
       } else {
         const Code = list[index]['assetsCode'];
         const response = await SelectDTL_Control({
@@ -623,15 +680,22 @@ export default function Nac_Main_wait() {
           list[index]['price'] = response['data'][0].Price
           list[index]['date_asset'] = response['data'][0].CreateDate
           setServiceList(list);
+
+          list_main[index]['name'] = response['data'][0].Name
+          list_main[index]['dtl'] = response['data'][0].Details
+          list_main[index]['serialNo'] = response['data'][0].SerialNo
+          list_main[index]['price'] = response['data'][0].Price
+          list_main[index]['date_asset'] = response['data'][0].CreateDate
+          setServiceList_Main(list_main)
         }
       }
     }
   };
 
   function handleGoNAC() {
-    if(localStorage.getItem('pagination')){
+    if (localStorage.getItem('pagination')) {
       navigate('/NAC_OPERATOR')
-    }else {
+    } else {
       navigate('/NAC_ROW')
     }
   }
@@ -1637,7 +1701,7 @@ export default function Nac_Main_wait() {
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >สถานะทรัพย์สิน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
+                          {/* <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell> */}
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >
                             <Stack direction="row" alignItems="center" spacing={1}>
                               <Typography>
@@ -1712,6 +1776,7 @@ export default function Nac_Main_wait() {
                                       variant="standard"
                                       name='assetsCode'
                                       id='assetsCode'
+                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                       onChange={(e) => handleServiceChange(e, index)}
                                       value={singleService.assetsCode}
                                     />
@@ -1719,6 +1784,14 @@ export default function Nac_Main_wait() {
                                 )}
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                                <TextField
+                                  fullWidth
+                                  key={index}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
+                                  disabled
+                                  value={serviceList_Main[index].serialNo}
+                                  variant="standard"
+                                />
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -1733,6 +1806,14 @@ export default function Nac_Main_wait() {
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
+                                  fullWidth
+                                  key={index}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', fontSize: 14 } }}
+                                  disabled
+                                  value={serviceList_Main[index].name}
+                                  variant="standard"
+                                />
+                                <TextField
                                   key={index}
                                   fullWidth
                                   disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
@@ -1745,6 +1826,14 @@ export default function Nac_Main_wait() {
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                                <TextField
+                                  fullWidth
+                                  key={index}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
+                                  disabled
+                                  value={!serviceList_Main[index].date_asset ? '' : serviceList_Main[index].date_asset.split('T')[0]}
+                                  variant="standard"
+                                />
                                 <TextField
                                   fullWidth
                                   key={index}
@@ -1762,6 +1851,14 @@ export default function Nac_Main_wait() {
                                   fullWidth
                                   size="small"
                                 >
+                                  <TextField
+                                    key={index}
+                                    fullWidth
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', fontSize: 14 } }}
+                                    disabled
+                                    value={serviceList_Main[index].dtl}
+                                    variant="standard"
+                                  />
                                   <Select
                                     key={index}
                                     name="dtl"
@@ -1778,7 +1875,7 @@ export default function Nac_Main_wait() {
                                   </Select>
                                 </FormControl>
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              {/* <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -1791,8 +1888,16 @@ export default function Nac_Main_wait() {
                                   //onChange={(e) => handleServiceChange(e, index)}
                                   value={singleService.count}
                                 />
-                              </StyledTableCell>
+                              </StyledTableCell> */}
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                                <TextField
+                                  fullWidth
+                                  key={index}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
+                                  disabled
+                                  value={!serviceList_Main[index].price ? serviceList_Main[index].price : (serviceList_Main[index].price).toLocaleString()}
+                                  variant="standard"
+                                />
                                 <TextField
                                   disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                   key={index}

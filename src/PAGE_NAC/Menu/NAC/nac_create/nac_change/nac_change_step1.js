@@ -169,7 +169,7 @@ export default function Nac_Main() {
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
   const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
-  const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }])
+  const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", price: "" }])
   const result = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
@@ -259,7 +259,7 @@ export default function Nac_Main() {
 
   const handleServiceAdd = () => {
     setServiceList([...serviceList, { assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
-    setServiceList_Main([...serviceList_Main, { assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
+    setServiceList_Main([...serviceList_Main, { assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", price: "" }]);
   };
 
   const handleServiceRemove = (index) => {
@@ -299,17 +299,18 @@ export default function Nac_Main() {
       list[index]['price'] = ''
       list[index]['date_asset'] = ''
       setServiceList(list);
+
       const list_main = [...serviceList_Main];
       list_main[index]['assetsCode'] = ''
       list_main[index]['name'] = ''
       list_main[index]['dtl'] = ''
-      list_main[index]['count'] = ''
       list_main[index]['serialNo'] = ''
       list_main[index]['price'] = ''
       list_main[index]['date_asset'] = ''
       setServiceList_Main(list_main);
     } else {
       const list = [...serviceList];
+      const list_main = [...serviceList_Main];
       list[index][name] = value;
       list[index]['assetsCode'] = assetsCodeSelect;
       if (list[index]['assetsCode'] === null || list[index]['assetsCode'] === undefined) {
@@ -321,6 +322,14 @@ export default function Nac_Main() {
         list[index]['price'] = ''
         list[index]['date_asset'] = ''
         setServiceList(list);
+
+        list_main[index]['assetsCode'] = ''
+        list_main[index]['name'] = ''
+        list_main[index]['dtl'] = ''
+        list_main[index]['serialNo'] = ''
+        list_main[index]['price'] = ''
+        list_main[index]['date_asset'] = ''
+        setServiceList_Main(list_main)
       } else {
         const Code = list[index]['assetsCode'];
         const response = await SelectDTL_Control({
@@ -334,34 +343,13 @@ export default function Nac_Main() {
           list[index]['price'] = response['data'][0].Price
           list[index]['date_asset'] = response['data'][0].CreateDate
           setServiceList(list);
-        }
-      }
 
-      const list_main = [...serviceList_Main];
-      list_main[index][name] = value;
-      list_main[index]['assetsCode'] = assetsCodeSelect;
-      if (list[index]['assetsCode'] === null || list[index]['assetsCode'] === undefined) {
-        list_main[index]['assetsCode'] = ''
-        list_main[index]['name'] = ''
-        list_main[index]['dtl'] = ''
-        list_main[index]['count'] = ''
-        list_main[index]['serialNo'] = ''
-        list_main[index]['price'] = ''
-        list_main[index]['date_asset'] = ''
-        setServiceList_Main(list_main);
-      } else {
-        const Code = list[index]['assetsCode'];
-        const response = await SelectDTL_Control({
-          Code
-        });
-        if (response['data'].length !== 0) {
           list_main[index]['name'] = response['data'][0].Name
           list_main[index]['dtl'] = response['data'][0].Details
-          list_main[index]['count'] = 1
           list_main[index]['serialNo'] = response['data'][0].SerialNo
           list_main[index]['price'] = response['data'][0].Price
           list_main[index]['date_asset'] = response['data'][0].CreateDate
-          setServiceList_Main(list_main);
+          setServiceList_Main(list_main)
         }
       }
     }
@@ -912,7 +900,7 @@ export default function Nac_Main() {
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >สถานะทรัพย์สิน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
+                          {/* <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell> */}
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >
                             <Stack direction="row" alignItems="center" spacing={1}>
                               <Typography>
@@ -978,6 +966,14 @@ export default function Nac_Main() {
                                 <TextField
                                   fullWidth
                                   key={index}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
+                                  disabled
+                                  value={serviceList_Main[index].serialNo}
+                                  variant="standard"
+                                />
+                                <TextField
+                                  fullWidth
+                                  key={index}
                                   name="serialNo"
                                   id="serialNo"
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
@@ -990,6 +986,14 @@ export default function Nac_Main() {
                                 <TextField
                                   fullWidth
                                   key={index}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', fontSize: 14 } }}
+                                  disabled
+                                  value={serviceList_Main[index].name}
+                                  variant="standard"
+                                />
+                                <TextField
+                                  fullWidth
+                                  key={index}
                                   name="name"
                                   id="name"
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
@@ -999,6 +1003,14 @@ export default function Nac_Main() {
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                                <TextField
+                                  fullWidth
+                                  key={index}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
+                                  disabled
+                                  value={!serviceList_Main[index].date_asset ? serviceList_Main[index].date_asset : serviceList_Main[index].date_asset.split('T')[0]}
+                                  variant="standard"
+                                />
                                 <TextField
                                   fullWidth
                                   key={index}
@@ -1015,6 +1027,14 @@ export default function Nac_Main() {
                                   fullWidth
                                   size="small"
                                 >
+                                  <TextField
+                                    key={index}
+                                    fullWidth
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', fontSize: 14 } }}
+                                    disabled
+                                    value={serviceList_Main[index].dtl}
+                                    variant="standard"
+                                  />
                                   <Select
                                     key={index}
                                     name="dtl"
@@ -1030,7 +1050,7 @@ export default function Nac_Main() {
                                   </Select>
                                 </FormControl>
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              {/* <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   fullWidth
                                   key={index}
@@ -1042,8 +1062,16 @@ export default function Nac_Main() {
                                   value={singleService.count}
                                   variant="standard"
                                 />
-                              </StyledTableCell>
+                              </StyledTableCell> */}
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                                <TextField
+                                  fullWidth
+                                  key={index}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
+                                  disabled
+                                  value={!serviceList_Main[index].price ? serviceList_Main[index].price : (serviceList_Main[index].price).toLocaleString()}
+                                  variant="standard"
+                                />
                                 <TextField
                                   fullWidth
                                   key={index}
