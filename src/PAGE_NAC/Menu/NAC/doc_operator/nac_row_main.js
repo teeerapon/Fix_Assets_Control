@@ -156,7 +156,7 @@ export default function History_of_assets() {
     };
     Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC_approve', usercode, { headers })
       .then(response => setSelectNAC(response.data.data));
-    
+
   }, []);
 
   const handleClickOpen = (event, params) => {
@@ -271,7 +271,7 @@ export default function History_of_assets() {
       valueGetter: (params) =>
         `${(params.row.nac_status === 2 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.vertify + '' :
           (params.row.nac_status === 3 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.approved + '' :
-            ((params.row.nac_status === 2) && (params.row.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || params.row.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? '' + params.row.vertify + '' :
+            ((params.row.nac_status === 2) && (params.row.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || params.row.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? '' + !params.row.vertify ? params.row.approved : params.row.vertify + '' :
               (params.row.nac_status === 13) ? 'การเงิน' : (params.row.nac_status === 5) ? 'บัญชี' : (params.row.nac_status === 6) ? '' : 'none'
         }`,
     },
