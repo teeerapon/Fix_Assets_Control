@@ -1905,7 +1905,7 @@ export default function Nac_Main_wait() {
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >สถานะทรัพย์สิน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell>
+                          {/* <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell> */}
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >
                             <Stack direction="row" alignItems="center" spacing={1}>
                               <Typography>
@@ -2057,7 +2057,7 @@ export default function Nac_Main_wait() {
                                   value={singleService.dtl}
                                 />
                               </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              {/* <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}
                                   fullWidth
@@ -2069,7 +2069,7 @@ export default function Nac_Main_wait() {
                                   variant="standard"
                                   value={singleService.count}
                                 />
-                              </StyledTableCell>
+                              </StyledTableCell> */}
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   key={index}

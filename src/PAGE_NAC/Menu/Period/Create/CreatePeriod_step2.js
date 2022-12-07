@@ -55,8 +55,8 @@ export default function AddressForm() {
         Description,
         usercode
       });
-      if (response.data[0] === 'ทำรายการสำเร็จ') {
-        swal("ทำรายการไม่สำเร็จ", `เปิดรอบตรวจนับสาขา ${BranchID} แล้ว`, "success", {
+      if (response.data[0]) {
+        swal("ทำรายการไม่สำเร็จ", `เปิดรอบตรวจนับสาขา ${BranchID === ('901' || 901) ? 'HO' : BranchID} แล้ว`, "success", {
           buttons: false,
           timer: 1500,
         }).then((value) => {
