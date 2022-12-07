@@ -993,7 +993,7 @@ export default function Nac_Main_wait() {
 
   // ExamineApprove
   const handleExamineApprove = async () => {
-    if (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin') {
+    if (CheckExamineApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false || checkUserWeb === 'admin') {
       const usercode = data.UserCode
       const nac_status = 4
       const source_approve = sourceApprove
@@ -1048,7 +1048,7 @@ export default function Nac_Main_wait() {
 
   // ExecApprove
   const handleExecApprove = async () => {
-    if (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin') {
+    if (CheckApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false || checkUserWeb === 'admin') {
       const usercode = data.UserCode
       const nac_status = 4
       const source_approve = data.UserCode
@@ -1981,7 +1981,6 @@ export default function Nac_Main_wait() {
                                 <TextField
                                   key={index}
                                   fullWidth
-                                  disabled
                                   name="serialNo"
                                   id="serialNo"
                                   variant="standard"
@@ -1999,7 +1998,6 @@ export default function Nac_Main_wait() {
                                   id="name"
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
                                   variant="standard"
-                                  disabled
                                   value={singleService.name}
                                 />
                               </StyledTableCell>

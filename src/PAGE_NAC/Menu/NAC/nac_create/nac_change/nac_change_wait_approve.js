@@ -976,72 +976,72 @@ export default function Nac_Main_wait() {
 
   // ExamineApprove
   const handleExamineApprove = async () => {
-    if ((CheckExamineApprove.length > 1 && ExamineApprove[ExamineApprove.length - 2] !== undefined)) {
-      if (headers.source_approve_userid === data.UserCode) {
-        const alert_value = 'คุณได้ตรวจสอบรายการนี้ไปแล้ว'
-        setAlert(true);
-        setValueAlert(alert_value)
-      } else {
-        const usercode = data.UserCode
-        const nac_status = (CheckExamineApprove.includes(data.UserCode) !== false && ExamineApprove[ExamineApprove.length - 2].status === 0) ? 2 : checkUserWeb === 'admin' ? 5 : 5
-        const source_approve = sourceApprove
-        const source_approve_date = sourceDateApproveDate
-        const des_approve = des_deliveryApprove
-        const des_approve_date = des_deliveryApproveDate
-        const verify_by = data.UserCode
-        const verify_date = datenow
-        const nac_type = headers.nac_type
-        const responseForUpdate = await store_FA_control_updateStatus({
-          usercode,
+    if (verify === data.UserCode) {
+      const alert_value = 'คุณได้ตรวจสอบรายการนี้ไปแล้ว'
+      setAlert(true);
+      setValueAlert(alert_value)
+    }
+    else if (CheckExamineApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false && ExamineApprove.filter(function (el) { return (el != null && el.status === 0) }).length > 1) {
+      const usercode = data.UserCode
+      const nac_status = 2
+      const source_approve = sourceApprove
+      const source_approve_date = sourceDateApproveDate
+      const des_approve = des_deliveryApprove
+      const des_approve_date = des_deliveryApproveDate
+      const verify_by = data.UserCode
+      const verify_date = datenow
+      const nac_type = headers.nac_type
+      const responseForUpdate = await store_FA_control_updateStatus({
+        usercode,
+        nac_code,
+        nac_status,
+        nac_type,
+        source,
+        sourceDate,
+        des_delivery,
+        des_deliveryDate,
+        source_approve,
+        source_approve_date,
+        des_approve,
+        des_approve_date,
+        verify_by,
+        verify_date,
+      });
+      if ('data' in responseForUpdate) {
+        const comment = 'ตรวจสอบรายการแล้ว'
+        const responseComment = await store_FA_control_comment({
           nac_code,
-          nac_status,
-          nac_type,
-          source,
-          sourceDate,
-          des_delivery,
-          des_deliveryDate,
-          source_approve,
-          source_approve_date,
-          des_approve,
-          des_approve_date,
-          verify_by,
-          verify_date,
-        });
-        if ('data' in responseForUpdate) {
-          const comment = 'ตรวจสอบรายการแล้ว'
-          const responseComment = await store_FA_control_comment({
-            nac_code,
-            usercode,
-            comment
-          })
-          await store_FA_SendMail({
-            nac_code
-          })
-          if ('data' in responseComment) {
-            swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการแล้ว', "success", {
-              buttons: false,
-              timer: 2000,
-            }).then((value) => {
-              window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + nac_code
-            });
-          } else {
-            swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
-              buttons: false,
-              timer: 2000,
-            }).then((value) => {
-              window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + nac_code
-            });
-          }
-        } else {
-          swal("ทำรายการไม่สำเร็จ", 'คุณไม่ได้รับอนุญาติให้ทำรายการนี้', "error", {
+          usercode,
+          comment
+        })
+        await store_FA_SendMail({
+          nac_code
+        })
+        if ('data' in responseComment) {
+          swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการแล้ว', "success", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + nac_code
+            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
+          });
+        } else {
+          swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+            buttons: false,
+            timer: 2000,
+          }).then((value) => {
+            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
           });
         }
+      } else {
+        swal("ทำรายการไม่สำเร็จ", 'คุณไม่ได้รับอนุญาติให้ทำรายการนี้', "error", {
+          buttons: false,
+          timer: 2000,
+        }).then((value) => {
+          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
+        });
       }
-    } else {
+    }
+    else if ((CheckExamineApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false && ExamineApprove.filter(function (el) { return (el != null && el.status === 0) }).length === 1) || checkUserWeb === 'admin') {
       const usercode = data.UserCode
       const nac_status = 5
       const source_approve = sourceApprove
@@ -1082,14 +1082,14 @@ export default function Nac_Main_wait() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + nac_code
+            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
           });
         } else {
           swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + nac_code
+            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
           });
         }
       } else {
@@ -1097,7 +1097,7 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + nac_code
+          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
         });
       }
     }
@@ -1105,7 +1105,7 @@ export default function Nac_Main_wait() {
 
   // ExecApprove
   const handleExecApprove = async () => {
-    if (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin') {
+    if (CheckApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false || checkUserWeb === 'admin') {
       const usercode = data.UserCode
       const nac_status = 5
       const source_approve = data.UserCode
@@ -1145,14 +1145,14 @@ export default function Nac_Main_wait() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + nac_code
+          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
         });
       } else {
         swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + nac_code
+          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
         });
       }
     }
