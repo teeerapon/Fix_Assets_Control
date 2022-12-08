@@ -5,14 +5,21 @@ import Typography from '@mui/material/Typography';
 import AnimatedPage from '../../../../AnimatedPage.jsx'
 import React from 'react';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
 import Axios from "axios"
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 const ODD_OPACITY = 0.2;
+
+const other = {
+  showCellRightBorder: true,
+  showColumnRightBorder: true,
+};
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
   '.css-1knaqv7-MuiButtonBase-root-MuiButton-root': {
@@ -181,6 +188,25 @@ export default function History_of_assets() {
       width: 150,
       headerAlign: 'center',
       align: 'center',
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            {params.row.update_date ?
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={1}
+              >
+                <CalendarMonthIcon />
+                <Typography variant='body2'>
+                  {params.row.update_date.split('T')[0] || ''}
+                </Typography>
+              </Stack>
+              : null}
+          </React.Fragment>
+        )
+      }
     },
   ];
 
@@ -368,6 +394,7 @@ export default function History_of_assets() {
                     params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                   }
                   disableSelectionOnClick
+                  {...other}
                 //checkboxSelection
                 />
               </Box>

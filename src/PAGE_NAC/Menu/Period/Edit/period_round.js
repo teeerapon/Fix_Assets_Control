@@ -30,8 +30,23 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import swal from 'sweetalert';
 import Alert from '@mui/material/Alert';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Paper from '@mui/material/Paper';
 
 const ODD_OPACITY = 0.2;
+
+const other = {
+  showCellRightBorder: true,
+  showColumnRightBorder: true,
+};
+
+const Item = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(0.8),
+  paddingTop: theme.spacing(0.5),
+  paddingBottom: theme.spacing(0.5),
+  textAlign: 'start',
+  color: '#ffffff',
+}));
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
   '.css-1knaqv7-MuiButtonBase-root-MuiButton-root': {
@@ -214,8 +229,25 @@ export default function History_of_assets() {
       headerAlign: 'center',
       align: 'center',
       flex: 1,
-      valueGetter: (params) =>
-        `${!params.row.BeginDate ? '' : params.row.BeginDate.split('T')[0] || ''} ${!params.row.BeginDate ? '' : '00:00' || ''}`,
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            {params.row.BeginDate ?
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={1}
+              >
+                <CalendarMonthIcon />
+                <Typography variant='body2'>
+                  {!params.row.BeginDate ? '' : params.row.BeginDate.split('T')[0] || ''} {!params.row.BeginDate ? '' : '00:00' || ''}
+                </Typography>
+              </Stack>
+              : null}
+          </React.Fragment>
+        )
+      }
     },
     {
       field: 'EndDate',
@@ -224,8 +256,25 @@ export default function History_of_assets() {
       headerAlign: 'center',
       align: 'center',
       flex: 1,
-      valueGetter: (params) =>
-        `${!params.row.EndDate ? '' : params.row.EndDate.split('T')[0] || ''} ${!params.row.EndDate ? '' : '00:00' || ''}`,
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            {params.row.EndDate ?
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={1}
+              >
+                <CalendarMonthIcon />
+                <Typography variant='body2'>
+                  {!params.row.EndDate ? '' : params.row.EndDate.split('T')[0] || ''} {!params.row.EndDate ? '' : '00:00' || ''}
+                </Typography>
+              </Stack>
+              : null}
+          </React.Fragment >
+        )
+      }
     },
     {
       field: 'Code',
@@ -442,6 +491,7 @@ export default function History_of_assets() {
                     params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                   }
                   disableSelectionOnClick
+                  {...other}
                 />
               </Box>
               <Dialog

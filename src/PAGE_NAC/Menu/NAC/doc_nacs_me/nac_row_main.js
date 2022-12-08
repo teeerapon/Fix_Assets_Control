@@ -23,7 +23,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import swal from 'sweetalert';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ArticleIcon from '@mui/icons-material/Article';
+import ArticleIcon from '@mui/icons-material/Article'
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(0.8),
@@ -32,6 +34,11 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: 'start',
   color: '#ffffff',
 }));
+
+const other = {
+  showCellRightBorder: true,
+  showColumnRightBorder: true,
+};
 
 const ODD_OPACITY = 0.2;
 
@@ -209,9 +216,30 @@ export default function History_of_assets() {
   }
 
   const columns = [
-    { field: 'nac_code', headerName: 'เลขที่เอกสาร', headerClassName: 'super-app-theme--header', width: 130 },
-    { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', flex: 1, },
-    { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', width: 100, headerAlign: 'center', align: 'center', },
+    { field: 'nac_code', headerName: 'เลขที่เอกสาร', headerClassName: 'super-app-theme--header', width: 130, },
+    { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', flex: 1 },
+    // {
+    //   field: 'create_by',
+    //   headerName: 'ผู้ทำรายการ',
+    //   headerClassName: 'super-app-theme--header',
+    //   width: 120,
+    //   headerAlign: 'center',
+    //   align: 'center',
+    //   renderCell: (params) => {
+    //     return (
+    //       <React.Fragment>
+    //         <Grid container spacing={1}>
+    //           <Grid item xs={4}>
+    //             <AccountBoxIcon />
+    //           </Grid>
+    //           <Grid item xs={8}>
+    //             {params.row.create_by}
+    //           </Grid>
+    //         </Grid>
+    //       </React.Fragment>
+    //     )
+    //   }
+    // },
     {
       field: 'create_date',
       headerName: 'วันที่สร้างเอกสาร',
@@ -219,11 +247,68 @@ export default function History_of_assets() {
       width: 150,
       headerAlign: 'center',
       align: 'center',
-      valueGetter: (params) =>
-        `${params.row.create_date.split('T')[0] || ''}`,
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            {params.row.create_date ?
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={1}
+              >
+                <CalendarMonthIcon />
+                <Typography variant='body2'>
+                  {params.row.create_date.split('T')[0] || ''}
+                </Typography>
+              </Stack>
+              : null}
+          </React.Fragment>
+        )
+      }
     },
-    { field: 'source_userid', headerName: 'ผู้ส่ง', headerClassName: 'super-app-theme--header', width: 100, headerAlign: 'center', align: 'center', },
-    { field: 'des_userid', headerName: 'ผู้รับ', headerClassName: 'super-app-theme--header', width: 100, headerAlign: 'center', align: 'center', },
+    {
+      field: 'source_userid',
+      headerName: 'ผู้ส่ง',
+      headerClassName: 'super-app-theme--header',
+      width: 120,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            {!params.row.source_userid ?
+              '-'
+              :
+              <React.Fragment>
+                {params.row.source_userid}
+              </React.Fragment>
+            }
+          </React.Fragment>
+        )
+      }
+    },
+    {
+      field: 'des_userid',
+      headerName: 'ผู้รับ',
+      headerClassName: 'super-app-theme--header',
+      width: 120,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            {!params.row.des_userid ?
+              '-'
+              :
+              <React.Fragment>
+                {params.row.des_userid}
+              </React.Fragment>
+            }
+          </React.Fragment>
+        )
+      }
+    },
     {
       field: 'status_name',
       headerName: 'สถานะรายการ',
@@ -271,8 +356,7 @@ export default function History_of_assets() {
         `${(params.row.nac_status === 2 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.vertify + '' :
           (params.row.nac_status === 3 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.approved + '' :
             ((params.row.nac_status === 2) && (params.row.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || params.row.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? '' + !params.row.vertify ? params.row.approved : params.row.vertify + '' :
-              (params.row.nac_status === 13) ? 'การเงิน' : (params.row.nac_status === 5) ? 'บัญชี' : (params.row.nac_status === 11) ? 'RSS' :
-              (params.row.nac_status === 6) ? '-' : 'PM'
+              (params.row.nac_status === 13) ? 'การเงิน' : (params.row.nac_status === 5) ? 'บัญชี' : (params.row.nac_status === 11) ? 'RSS' : ''
         }`,
     },
     {
@@ -284,7 +368,6 @@ export default function History_of_assets() {
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
-        const details_nac = params
         return (
           <React.Fragment>
             <Grid container rowSpacing={1}>
@@ -304,7 +387,7 @@ export default function History_of_assets() {
                 <Button
                   variant="contained"
                   color="error"
-                  disabled={(details_nac.row.create_by === data.UserCode) && (details_nac.row.nac_status < 4) && (!details_nac.row.verify_by_userid) ? false : true}
+                  disabled={checkUserWeb === 'admin' ? false : true}
                   onClick={(event) => handleClickOpen(event, params)}
                   sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
                 >
@@ -321,7 +404,7 @@ export default function History_of_assets() {
                   </DialogTitle>
                   <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                      ท่านแน่ใจที่จะลบรายการ {details_nac.row.nac_code} ใช่หรือไม่
+                      ท่านแน่ใจที่จะลบรายการ {!getNac_Code ? '' : getNac_Code} ใช่หรือไม่
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
@@ -411,6 +494,7 @@ export default function History_of_assets() {
                   },
                 }}
                 onFilterModelChange={(newFilterModel) => filterModelChange(newFilterModel)}
+                {...other}
               />
             </Box>
           </Container>

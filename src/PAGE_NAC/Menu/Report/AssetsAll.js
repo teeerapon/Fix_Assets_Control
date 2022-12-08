@@ -17,8 +17,24 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Paper from '@mui/material/Paper';
 
 const ODD_OPACITY = 0.2;
+
+const other = {
+  showCellRightBorder: true,
+  showColumnRightBorder: true,
+};
+
+const Item = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(0.8),
+  paddingTop: theme.spacing(0.5),
+  paddingBottom: theme.spacing(0.5),
+  textAlign: 'start',
+  color: '#ffffff',
+}));
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
   '.css-1knaqv7-MuiButtonBase-root-MuiButton-root': {
@@ -120,10 +136,53 @@ export default function Reported_of_assets() {
       width: 150,
       headerAlign: 'center',
       align: 'center',
-      valueGetter: (params) =>
-        `${params.row.Date || ''}`,
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            {params.row.Date ?
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={1}
+              >
+                <CalendarMonthIcon />
+                <Typography variant='body2'>
+                  {params.row.Date || ''}
+                </Typography>
+              </Stack>
+              : null}
+          </React.Fragment>
+        )
+      }
     },
-    { field: 'EndDate_Success', headerName: 'วันที่ทำ NAC ล่าสุด', headerClassName: 'super-app-theme--header', width: 150, headerAlign: 'center', align: 'center', },
+    {
+      field: 'EndDate_Success',
+      headerName: 'วันที่ทำ NAC ล่าสุด',
+      headerClassName: 'super-app-theme--header',
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            {params.row.EndDate_Success ?
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={1}
+              >
+                <CalendarMonthIcon />
+                <Typography variant='body2'>
+                  {params.row.EndDate_Success || ''}
+                </Typography>
+              </Stack>
+              : null}
+          </React.Fragment>
+        )
+      }
+    },
     {
       field: 'UserID',
       headerName: 'ผู้ตรวจนับ',
@@ -153,19 +212,24 @@ export default function Reported_of_assets() {
     {
       field: 'remarker',
       headerName: 'หมายเหตุ',
+      headerAlign: 'center',
+      align: 'center',
       headerClassName: 'super-app-theme--header',
-      width: 120,
+      width: 150,
       renderCell: (params) => {
         return (
-          <Typography
-            variant='body2'
+          <Item
             style={{
-              color: params.row.remarker === 'ตรวจนับแล้ว' ? '#008000' :
+              //'maxWidth': 'fit-content',
+              borderRadius: '100px',
+              width: '100%',
+              textAlign: 'center',
+              'backgroundColor': params.row.remarker === 'ตรวจนับแล้ว' ? '#008000' :
                 params.row.remarker === 'ยังไม่ได้ตรวจนับ' ? '#DC143C' : ' #FFA500'
             }}
           >
             {params.row.remarker}
-          </Typography>
+          </Item>
         )
       }
     },
@@ -265,6 +329,7 @@ export default function Reported_of_assets() {
                     params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                   }
                   disableSelectionOnClick
+                  {...other}
                 //checkboxSelection
                 />
               </Box>

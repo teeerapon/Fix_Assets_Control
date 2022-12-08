@@ -22,9 +22,15 @@ import TextField from '@mui/material/TextField';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import DatePicker from '@mui/lab/DatePicker';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 
 const ODD_OPACITY = 0.2;
+
+const other = {
+  showCellRightBorder: true,
+  showColumnRightBorder: true,
+};
 
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
   '.css-1knaqv7-MuiButtonBase-root-MuiButton-root': {
@@ -210,8 +216,25 @@ export default function History_of_assets() {
       width: 150,
       headerAlign: 'center',
       align: 'center',
-      valueGetter: (params) =>
-        `${params.row.CreateDate.split('T')[0] || ''}`,
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            {params.row.CreateDate ?
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={1}
+              >
+                <CalendarMonthIcon />
+                <Typography variant='body2'>
+                  {params.row.CreateDate.split('T')[0] || ''}
+                </Typography>
+              </Stack>
+              : null}
+          </React.Fragment>
+        )
+      }
     },
   ];
 
@@ -290,6 +313,7 @@ export default function History_of_assets() {
                     params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                   }
                   disableSelectionOnClick
+                  {...other}
                 //checkboxSelection
                 />
               </Box>

@@ -472,10 +472,10 @@ export default function Nac_Main_wait() {
       if (responseExecDocID.data[i].limitamount >= price_approve && responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 5) {
         ExecApprove[i] = {
           approverid: responseExecDocID.data[i].workflowlevel === 0 ? 'AM: ' + responseExecDocID.data[i].approverid :
-            
-              responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
-                responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
-                  responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
+
+            responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
+              responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
+                responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
         }
         CheckApprove[i] = responseExecDocID.data[i].approverid
       }
@@ -483,19 +483,19 @@ export default function Nac_Main_wait() {
       if (responseExecDocID.data[i].limitamount < price_approve && responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 5) {
         ExamineApprove[i] = {
           approverid: responseExecDocID.data[i].workflowlevel === 0 ? 'AM: ' + responseExecDocID.data[i].approverid :
-            
-              responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
-                responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
-                  responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
+
+            responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
+              responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
+                responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
         }
         CheckExamineApprove[i] = responseExecDocID.data[i].approverid
       } else if (responseExecDocID.data[i].workflowlevel > 4) {
         ExamineApproveDes[i] = {
           approverid: responseExecDocID.data[i].workflowlevel === 0 ? 'AM: ' + responseExecDocID.data[i].approverid :
-            
-              responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
-                responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
-                  responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
+
+            responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
+              responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
+                responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
         }
         CheckExamineApproveDes[i] = responseExecDocID.data[i].approverid
       }
@@ -1561,7 +1561,7 @@ export default function Nac_Main_wait() {
           <AnimatedPage>
             <Container component="main" maxWidth="lg" sx={{ mb: 12 }}>
               <Paper variant="outlined" sx={{ p: { xs: 1, md: 2 }, mt: 4 }}>
-                <Table aria-label="customized table">
+                <Table aria-label="customized table" style={{ width: 1100 }}>
                   <Grid container>
                     ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ขาส่ง : {
                       ExecApprove.map((Approve) => (
@@ -1653,7 +1653,7 @@ export default function Nac_Main_wait() {
                     * กรุณากรอกข้อมูลสำหรับโยกย้ายทรัพย์สิน
                   </Typography>
                   <TableContainer component={Paper}>
-                    <Table aria-label="customized table" style={{ width: '100%' }}>
+                    <Table aria-label="customized table" sx={{ width: 1100 }}>
                       <TableHead>
                         <TableRow>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
@@ -1897,7 +1897,7 @@ export default function Nac_Main_wait() {
                         </TableBody>
                       </React.Fragment>
                     </Table>
-                    <Table aria-label="customized table">
+                    <Table aria-label="customized table" sx={{ width: 1100 }}>
                       <TableHead>
                         <TableRow style={{ width: '100%' }}>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
@@ -2130,7 +2130,7 @@ export default function Nac_Main_wait() {
                         </React.Fragment>
                       ))}
                     </Table>
-                    <Table aria-label="customized table" style={{ width: '100%' }}>
+                    <Table aria-label="customized table" sx={{ width: 1100 }}>
                       <TableBody>
                         <StyledTableRow>
                           <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '55%' }}>
@@ -2161,7 +2161,7 @@ export default function Nac_Main_wait() {
                         </StyledTableRow>
                       </TableBody>
                     </Table>
-                    <Table aria-label="customized table" style={{ width: '100%' }}>
+                    <Table aria-label="customized table" sx={{ width: 1100 }}>
                       <TableHead>
                         <StyledTableRow>
                           <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
@@ -2301,175 +2301,129 @@ export default function Nac_Main_wait() {
                         </StyledTableRow>
                       </TableHead>
                     </Table>
+                    <Table sx={{ width: 1100 }}>
+                      <TableBody>
+                        <Stack
+                          direction="row"
+                          justifyContent="center"
+                          alignItems="center"
+                          spacing={3}
+                        >
+                          {((selectNAC === 1 || selectNAC === 7) && (data.UserCode === headers.create_by || (checkUserWeb === 'admin'))) ? (
+                            <React.Fragment>
+                              <Button
+                                variant="contained"
+                                onClick={handleSave}
+                                startIcon={<SystemUpdateAltRoundedIcon />}
+                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                style={{ 'backgroundColor': 'orange' }}
+                                disabled={(data.UserCode === headers.create_by || (checkUserWeb === 'admin')) ? false : true}>
+                                อัปเดต
+                              </Button>
+                              <Button
+                                variant="contained"
+                                endIcon={<DoubleArrowRoundedIcon />}
+                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                disabled={
+                                  (data.UserCode === headers.create_by || (checkUserWeb === 'admin')) ? false :
+                                    ExamineApprove.length === 0 ? false : true}
+                                onClick={handleSubmit}>
+                                <React.Fragment>
+                                  ยืนยันรายการ
+                                </React.Fragment>
+                              </Button>
+                            </React.Fragment>
+                          ) : ((selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) || (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin')))) ? (
+                            <React.Fragment>
+                              <Button
+                                variant="contained"
+                                onClick={handleClickOpenDialogReply}
+                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                style={{ 'backgroundColor': 'orange' }}
+                                disabled={
+                                  (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                    (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                      true
+                                }
+                                startIcon={<ReplyAllRoundedIcon />}>
+                                ตีกลับเอกสาร
+                              </Button>
+                              <Button
+                                variant="contained"
+                                color='error'
+                                disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false
+                                  : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                    true
+                                }
+                                onClick={CancelApprove}
+                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                startIcon={<ClearRoundedIcon />}>
+                                ไม่อนุมัติ
+                              </Button>
+                              <Button
+                                variant="contained"
+                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                color={selectNAC === 2 ? 'success' :
+                                  selectNAC === 3 ? 'success' :
+                                    'primary'}
+                                onClick={selectNAC === 2 ? handleExamineApprove : handleExecApprove}
+                                disabled={
+                                  (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                    (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                      true
+                                }
+                                startIcon={selectNAC === 3 ? <CheckRoundedIcon /> : <VisibilityRoundedIcon />}>
+                                <React.Fragment>
+                                  {selectNAC === 2 ? 'ตรวจสอบ' : 'อนุมัติ'}
+                                </React.Fragment>
+                              </Button>
+                            </React.Fragment>
+                          ) : ((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? (
+                            <React.Fragment>
+                              <Button
+                                variant="contained"
+                                style={{ 'backgroundColor': 'orange' }}
+                                startIcon={<SystemUpdateAltRoundedIcon />}
+                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
+                                onClick={handleupdate_checked}>
+                                อัปเดต
+                              </Button>
+                              <Button
+                                variant="contained"
+                                color='error'
+                                startIcon={<ClearRoundedIcon />}
+                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
+                                onClick={drop_NAC}>
+                                ยกเลิกรายการ
+                              </Button>
+                              <Button
+                                variant="contained"
+                                endIcon={<DoubleArrowRoundedIcon />}
+                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
+                                onClick={handleSubmitComplete}>
+                                รับทรัพย์สิน
+                              </Button>
+                            </React.Fragment>
+                          ) : selectNAC === 5 && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? (
+                            <React.Fragment>
+                              <Button
+                                variant="contained"
+                                startIcon={<CloudDownloadRoundedIcon />}
+                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                disabled={selectNAC === 5 && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
+                                onClick={handleSubmitComplete}>
+                                ปิดรายการ
+                              </Button>
+                            </React.Fragment>
+                          ) : null}
+                        </Stack>
+                      </TableBody>
+                    </Table>
                   </TableContainer>
                 </React.Fragment>
-                {((selectNAC === 1 || selectNAC === 7) && (data.UserCode === headers.create_by || (checkUserWeb === 'admin'))) ? (
-                  <React.Fragment>
-                    <center>
-                      <Box sx={{ flexGrow: 1 }}>
-                        <Grid container>
-                          <Grid item xs>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Button
-                              variant="contained"
-                              onClick={handleSave}
-                              startIcon={<SystemUpdateAltRoundedIcon />}
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              style={{ 'backgroundColor': 'orange' }}
-                              disabled={(data.UserCode === headers.create_by || (checkUserWeb === 'admin')) ? false : true}>
-                              อัปเดต
-                            </Button>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Button
-                              variant="contained"
-                              endIcon={<DoubleArrowRoundedIcon />}
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              disabled={
-                                (data.UserCode === headers.create_by || (checkUserWeb === 'admin')) ? false :
-                                  ExamineApprove.length === 0 ? false : true}
-                              onClick={handleSubmit}>
-                              <React.Fragment>
-                                ยืนยันรายการ
-                              </React.Fragment>
-                            </Button>
-                          </Grid>
-                          <Grid item xs>
-                          </Grid>
-                        </Grid>
-                      </Box>
-                    </center>
-                  </React.Fragment>
-                ) : ((selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) || (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin')))) ? (
-                  <React.Fragment>
-                    <center>
-                      <Box sx={{ flexGrow: 1 }}>
-                        <Grid container>
-                          <Grid item xs>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Button
-                              variant="contained"
-                              onClick={handleClickOpenDialogReply}
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              style={{ 'backgroundColor': 'orange' }}
-                              disabled={
-                                (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
-                                  (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
-                                    true
-                              }
-                              startIcon={<ReplyAllRoundedIcon />}>
-                              ตีกลับเอกสาร
-                            </Button>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Button
-                              variant="contained"
-                              color='error'
-                              disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false
-                                : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
-                                  true
-                              }
-                              onClick={CancelApprove}
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              startIcon={<ClearRoundedIcon />}>
-                              ไม่อนุมัติ
-                            </Button>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Button
-                              variant="contained"
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              color={selectNAC === 2 ? 'success' :
-                                selectNAC === 3 ? 'success' :
-                                  'primary'}
-                              onClick={selectNAC === 2 ? handleExamineApprove : handleExecApprove}
-                              disabled={
-                                (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
-                                  (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
-                                    true
-                              }
-                              startIcon={selectNAC === 3 ? <CheckRoundedIcon /> : <VisibilityRoundedIcon />}>
-                              <React.Fragment>
-                                {selectNAC === 2 ? 'ตรวจสอบ' : 'อนุมัติ'}
-                              </React.Fragment>
-                            </Button>
-                          </Grid>
-                          <Grid item xs>
-                          </Grid>
-                        </Grid>
-                      </Box>
-                    </center>
-                  </React.Fragment>
-                ) : ((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? (
-                  <React.Fragment>
-                    <center>
-                      <Box sx={{ flexGrow: 1 }}>
-                        <Grid container>
-                          <Grid item xs>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Button
-                              variant="contained"
-                              style={{ 'backgroundColor': 'orange' }}
-                              startIcon={<SystemUpdateAltRoundedIcon />}
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
-                              onClick={handleupdate_checked}>
-                              อัปเดต
-                            </Button>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Button
-                              variant="contained"
-                              color='error'
-                              startIcon={<ClearRoundedIcon />}
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
-                              onClick={drop_NAC}>
-                              ยกเลิกรายการ
-                            </Button>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Button
-                              variant="contained"
-                              endIcon={<DoubleArrowRoundedIcon />}
-                              sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                              disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
-                              onClick={handleSubmitComplete}>
-                              รับทรัพย์สิน
-                            </Button>
-                          </Grid>
-                          <Grid item xs>
-                          </Grid>
-                        </Grid>
-                      </Box>
-                    </center>
-                  </React.Fragment>
-                ) : selectNAC === 5 && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? (
-                  <React.Fragment>
-                    <center>
-                      <Box sx={{ flexGrow: 1 }}>
-                        <Button
-                          variant="contained"
-                          startIcon={<CloudDownloadRoundedIcon />}
-                          sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                          disabled={selectNAC === 5 && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
-                          onClick={handleSubmitComplete}>
-                          ปิดรายการ
-                        </Button>
-                      </Box>
-                    </center>
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment>
-                    <center>
-                      <Box sx={{ flexGrow: 1 }}>
-                      </Box>
-                    </center>
-                  </React.Fragment>
-                )}
               </Paper>
               <CommentNAC
                 handleClickOpenDialog={handleClickOpenDialog}
