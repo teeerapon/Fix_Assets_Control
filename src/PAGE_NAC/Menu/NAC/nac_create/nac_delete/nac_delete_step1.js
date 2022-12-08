@@ -752,7 +752,7 @@ export default function Nac_Main() {
                   * กรุณากรอกข้อมูลสำหรับตัดจากบัญชีทรัพย์สิน
                 </Typography>
                 <TableContainer component={Paper}>
-                  <Table aria-label="customized table" style={{ width: '100%' }}>
+                  <Table aria-label="customized table" style={{ width: 1100 }}>
                     <TableHead>
                       <TableRow>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
@@ -911,7 +911,7 @@ export default function Nac_Main() {
                       </TableBody>
                     </React.Fragment>
                   </Table>
-                  <Table aria-label="customized table">
+                  <Table aria-label="customized table" style={{ width: 1100 }}>
                     <TableHead>
                       <TableRow style={{ width: '100%' }}>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '18%' }} >รหัสทรัพย์สิน</StyledTableCell>
@@ -1146,7 +1146,7 @@ export default function Nac_Main() {
                       </StyledTableCell>
                     </StyledTableRow>
                   </Table>
-                  <Table aria-label="customized table" style={{ width: '100%' }}>
+                  <Table aria-label="customized table" style={{ width: 1100 }}>
                     <TableHead>
                       <StyledTableRow>
                         <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
@@ -1288,24 +1288,28 @@ export default function Nac_Main() {
                       </StyledTableRow>
                     </TableHead>
                   </Table>
+                  <Table aria-label="customized table" style={{ width: 1100 }}>
+                    <TableBody>
+                      <Stack
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={3}
+                      >
+                        <Button
+                          variant="contained"
+                          onClick={handleNext}
+                          endIcon={<BorderColorRoundedIcon />}
+                          sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 2 } }}
+                        >
+                          สร้างเอกสาร
+                        </Button>
+                      </Stack>
+                    </TableBody>
+                  </Table>
                 </TableContainer>
               </React.Fragment>
-              <React.Fragment>
-                <center>
-                  <Box>
-                    <Button
-                      variant="contained"
-                      onClick={handleNext}
-                      endIcon={<BorderColorRoundedIcon />}
-                      sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 2 } }}
-                    >
-                      สร้างเอกสาร
-                    </Button>
-                  </Box>
-                </center>
-              </React.Fragment>
             </Paper>
-            
           </Container>
         </AnimatedPage>
       </ThemeProvider>
