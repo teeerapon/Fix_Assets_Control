@@ -20,6 +20,7 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Paper from '@mui/material/Paper';
+import Select from '@mui/material/Select';
 
 const ODD_OPACITY = 0.2;
 
@@ -120,10 +121,12 @@ export default function Reported_of_assets() {
 
   const [selectMenu, setSelectMenu] = React.useState();
   const [reported_of_assets, setReported_of_assets] = React.useState();
-  console.log(!reported_of_assets ? 0 : reported_of_assets.length);
   const data = JSON.parse(localStorage.getItem('data'));
   const [description_value, setDescription_value] = React.useState('');
   const checkUserWeb = localStorage.getItem('sucurity');
+  const [value_status, setValue_status] = React.useState('');
+  const [status_all] = React.useState(['none', 'สภาพดี', 'ชำรุดรอซ่อม', 'รอตัดขาย', 'รอตัดชำรุด', 'QR Code ไม่สมบูรณ์ (สภาพดี)', 'QR Code ไม่สมบูรณ์ (ชำรุดรอซ่อม)', 'QR Code ไม่สมบูรณ์ (รอตัดขาย)', 'QR Code ไม่สมบูรณ์ (รอตัดชำรุด)']);
+  const [valueOfIndex, setValueOfIndex] = React.useState([]);
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130 },
@@ -205,9 +208,49 @@ export default function Reported_of_assets() {
       field: 'Reference',
       headerName: 'สถานะครั้งนี้',
       headerClassName: 'super-app-theme--header',
-      flex: 1,
-      valueGetter: (params) =>
-        `${params.row.Reference || ''}`,
+      width: 200,
+      renderCell: (params) => {
+
+        const handleChange_select = async (event, params) => {
+          const body = {
+            Reference: event.target.value,
+            UserID: data.userid,
+            Code: params.row.Code,
+            RoundID: params.row.RoundID,
+            choice: 1
+          }
+
+          const headers = {
+            'Authorization': 'application/json; charset=utf-8',
+            'Accept': 'application/json'
+          };
+          await Axios.put('http://vpnptec.dyndns.org:32001/api/updateReference', body, { headers })
+
+          reported_of_assets.forEach(function (x, index) {
+            if (x.RowID === params.row.RowID) {
+              const list = [...reported_of_assets]
+              list[index]['Reference'] = event.target.value
+              list[index]['remarker'] = event.target.value === 'none' ? 'ยังไม่ได้ตรวจนับ' : 'ตรวจนับแล้ว'
+              setReported_of_assets(list)
+            }
+          })
+
+        };
+
+        return (
+          <React.Fragment>
+            <FormControl fullWidth size="small">
+              <Select
+                label={false}
+                value={!params.row.Reference ? 'none' : params.row.Reference}
+                onChange={(event) => handleChange_select(event, params)}
+              >
+                {status_all.map((status) => (<MenuItem value={status}>{status}</MenuItem>))}
+              </Select>
+            </FormControl>
+          </React.Fragment >
+        )
+      }
     },
     {
       field: 'remarker',

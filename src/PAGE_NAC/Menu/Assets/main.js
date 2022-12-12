@@ -124,6 +124,7 @@ export default function History_of_assets() {
   const [create_Date, setCeate_Date] = React.useState(null);
   const [price, setPrice] = React.useState();
   const [details, setDetails] = React.useState();
+  const [branchID, setBranchID] = React.useState();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -140,17 +141,19 @@ export default function History_of_assets() {
   };
 
   const handleSubmit_Add = async () => {
-    const body = { UserCode: data.UserCode, Code: code, Name: name, BranchID: data.branchid, Details: details, SerialNo: serialNo, Price: price, Create_Date: create_Date }
+    const body = { UserCode: data.UserCode, Code: code, Name: name, BranchID: branchID, Details: details, SerialNo: serialNo, Price: price, Create_Date: create_Date }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
     if (!code) {
-      alert('กรุณากรอกรหัสทรัพย์สิน')
+      alert('กรุณากรอกรหัสทรัพย์สินให้ถูกต้อง')
     } else if (!name) {
-      alert('กรุณากรอกชื่อทรัพย์สิน')
-    } else if (!price) {
-      alert('กรุณากรอกราคา')
+      alert('กรุณากรอกชื่อทรัพย์สินให้ถูกต้อง')
+    } else if (!branchID || branchID < 1) {
+      alert('กรุณากรอกสาขาให้ถูกต้อง')
+    } else if (!price || price < 1) {
+      alert('กรุณากรอกราคาให้ถูกต้อง')
     } else {
       await Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_New_Assets', body, { headers })
         .then(response => {
@@ -186,6 +189,9 @@ export default function History_of_assets() {
   }
   const handleChange_Ceate_Date = (newValue) => {
     setCeate_Date(!newValue.toISOString().split('T')[0] ? null : newValue.toISOString().split('T')[0])
+  }
+  const handleChange_BranchID = (event) => {
+    setBranchID(event.target.value)
   }
 
   const columns = [
@@ -324,7 +330,7 @@ export default function History_of_assets() {
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle>
-                  <b>{"กรุณาหรอกข้อมูลให้ครบถ้วน"}</b>
+                  <b>{"กรุณากรอกข้อมูลให้ครบถ้วน"}</b>
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
@@ -353,6 +359,20 @@ export default function History_of_assets() {
                             required
                             fullWidth
                             label="ชื่อ"
+                            autoFocus
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            size="small"
+                            autoComplete="given-name"
+                            name="branchID"
+                            value={branchID}
+                            onChange={(event) => handleChange_BranchID(event)}
+                            required
+                            fullWidth
+                            type='number'
+                            label="สาขา"
                             autoFocus
                           />
                         </Grid>

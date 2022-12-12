@@ -46,28 +46,6 @@ async function Reported(credentials) {
     .then(data => data.json())
 }
 
-async function Reported2(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/getAssetbyUserBranch', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-async function Reported3(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/wrongBranch', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
 async function getPeriods(credentials) {
   return fetch('http://vpnptec.dyndns.org:32001/api/period_round', {
     method: 'POST',
@@ -164,25 +142,13 @@ export default function Report() {
         RoundID,
         BranchID
       });
-      const response2 = await Reported2({
-        RoundID,
-        BranchID,
-        UserBranch
-      });
-      const response3 = await Reported3({
-        RoundID,
-        BranchID,
-        UserBranch
-      });
-      if ('data' in response || 'data' in response2 || 'data' in response3) {
+      if ('data' in response) {
         swal("ทำรายการสำเร็จ", "ค้นหาข้อมูลเสร็จสิ้น", "success", {
           buttons: false,
           timer: 2000,
         })
           .then((value) => {
             localStorage.setItem('Allaseets', JSON.stringify(response['data']));
-            localStorage.setItem('aseetsCounted', JSON.stringify(response2));
-            localStorage.setItem('assetsWrong', JSON.stringify(response3));
             navigate("/AssetPage")
           });
       } else {
