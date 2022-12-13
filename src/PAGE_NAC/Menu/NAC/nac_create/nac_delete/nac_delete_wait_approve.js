@@ -2118,7 +2118,9 @@ export default function Nac_Seals_Approve() {
                                         </Typography>
                                       </InputAdornment>
                                       <InputAdornment position="start">
-                                        {!verify ? '' : '[' + verify + ']'}
+                                        <Typography color="black">
+                                          {!verify ? '' : '[' + verify + ']'}
+                                        </Typography>
                                       </InputAdornment>
                                       <InputAdornment position="start">
                                         <Typography color="black">
