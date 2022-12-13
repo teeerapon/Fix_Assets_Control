@@ -622,7 +622,7 @@ export default function Reported_of_assets() {
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130 },
-    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', flex: 1 },
+    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 285 },
     {
       field: 'Date',
       headerName: 'วันที่ตรวจนับ',
@@ -691,7 +691,7 @@ export default function Reported_of_assets() {
       field: 'detail',
       headerName: 'สถานะล่าสุด',
       headerClassName: 'super-app-theme--header',
-      width: 220,
+      width: 210,
       valueGetter: (params) =>
         `${params.row.detail || ''}`,
     },
@@ -699,7 +699,7 @@ export default function Reported_of_assets() {
       field: 'Reference',
       headerName: 'สถานะครั้งนี้',
       headerClassName: 'super-app-theme--header',
-      width: 220,
+      width: 210,
       renderCell: (params) => {
 
         const handleChange_select = async (event, params) => {

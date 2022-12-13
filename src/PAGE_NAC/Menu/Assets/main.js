@@ -196,14 +196,14 @@ export default function History_of_assets() {
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 150 },
-    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 250 },
-    { field: 'SerialNo', headerName: 'SerialNo', headerClassName: 'super-app-theme--header', flex: 1, },
-    { field: 'Details', headerName: 'หมายเหตุ', headerClassName: 'super-app-theme--header', flex: 1, },
+    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 285 },
+    { field: 'SerialNo', headerName: 'SerialNo', headerClassName: 'super-app-theme--header', width: 285 },
+    { field: 'Details', headerName: 'หมายเหตุ', headerClassName: 'super-app-theme--header', width: 285 },
     {
       field: 'Price',
       headerName: 'ราคาทุน',
       headerClassName: 'super-app-theme--header',
-      flex: 1,
+      width: 150,
       valueGetter: (params) =>
         `${params.row.Price.toLocaleString() || ''}`,
     },
@@ -211,7 +211,7 @@ export default function History_of_assets() {
       field: 'BranchID',
       headerName: 'สาขา',
       headerClassName: 'super-app-theme--header',
-      width: 150,
+      width: 110,
       valueGetter: (params) =>
         params.row.BranchID === 901 ? 'HO' : params.row.BranchID,
     },
