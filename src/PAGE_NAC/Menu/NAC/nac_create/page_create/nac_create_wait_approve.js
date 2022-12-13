@@ -910,7 +910,7 @@ export default function Nac_Main_wait() {
           } else {
             if (data.UserCode === headers.create_by) {
               const usercode = data.UserCode
-              const nac_status = 2
+              const nac_status = 4
               const source_approve = sourceApprove
               const source_approve_date = sourceDateApproveDate
               const des_approve = des_deliveryApprove
@@ -1536,12 +1536,7 @@ export default function Nac_Main_wait() {
               <Paper variant="outlined" sx={{ p: { xs: 1, md: 2 }, mt: 4 }}>
                 <Table aria-label="customized table" style={{ width: '100%' }}>
                   <Grid container>
-                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ : {
-                      ExecApprove.map((Approve) => (
-                        <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'black' }}>
-                          &nbsp;({Approve.approverid})
-                        </Typography>
-                      ))}
+                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ : none
                   </Grid>
                   <hr />
                   <Grid container>
@@ -1597,7 +1592,7 @@ export default function Nac_Main_wait() {
                   </Grid>
                   <Grid xs={2}>
                     <TableContainer component={Paper}>
-                      <Table aria-label="customized table" style={{ width: 1100 }}>
+                      <Table aria-label="customized table">
                         <TableBody>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                             <Typography align='center' color="inherit" noWrap>

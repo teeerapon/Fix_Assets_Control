@@ -711,7 +711,7 @@ export default function Nac_Main() {
                   </Grid>
                   <Grid xs={2}>
                     <TableContainer component={Paper}>
-                      <Table aria-label="customized table" style={{ width: 1100 }}>
+                      <Table aria-label="customized table">
                         <TableBody>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
                             <TextField
