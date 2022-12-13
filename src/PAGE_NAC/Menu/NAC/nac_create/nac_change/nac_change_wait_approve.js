@@ -2018,7 +2018,9 @@ export default function Nac_Main_wait() {
                                         </Typography>
                                       </InputAdornment>
                                       <InputAdornment position="start">
-                                        {!verify ? '' : '[' + verify + ']'}
+                                        <Typography color="black">
+                                          {!verify ? '' : '[' + verify + ']'}
+                                        </Typography>
                                       </InputAdornment>
                                       <InputAdornment position="start">
                                         <Typography color="black">
