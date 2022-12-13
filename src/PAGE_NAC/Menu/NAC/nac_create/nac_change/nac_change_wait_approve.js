@@ -434,8 +434,6 @@ export default function Nac_Main_wait() {
       nac_code
     })
 
-    console.log(responseDTL_draff);
-
     const responseDTLs_draff = responseDTL_draff.data
     let listPoST_draff = []
     for (let i = 0; i < responseDTLs_draff.length; i++) {
@@ -1219,7 +1217,6 @@ export default function Nac_Main_wait() {
               const usercode = data.UserCode
               const nacdtl_assetsCode = serviceList[i].assetsCode
               const asset_id = serviceList[i].asset_id
-              console.log(nacdtl_assetsCode, asset_id, nac_code);
               await store_FA_control_upadate_table({
                 nac_code,
                 usercode,

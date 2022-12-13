@@ -222,7 +222,6 @@ export default function Nac_Main() {
   };
 
   const handleClickShowPassword = () => {
-    console.log(data.branchid)
     if (data.branchid !== 901) {
       setValuesVisibility(false);
     } else {

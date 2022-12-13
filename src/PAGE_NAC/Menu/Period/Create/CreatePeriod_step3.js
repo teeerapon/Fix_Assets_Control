@@ -26,7 +26,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 export default function AddressForm() {
   const [activeStep] = React.useState(3);
   const period_round = JSON.parse(localStorage.getItem('period_round'));
-  console.log(period_round);
 
   return (
     <>

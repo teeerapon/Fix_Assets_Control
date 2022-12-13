@@ -176,7 +176,6 @@ export default function History_of_assets() {
     BranchID: '',
     Code: ''
   });
-  console.log(editFormData)
 
   const handleClickOpen = (event, params) => {
     setOpen(true);

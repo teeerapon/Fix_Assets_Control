@@ -386,7 +386,6 @@ export default function Nac_Main() {
 
   const handleChangeSource_deliveryDate = (newValue) => {
     setSourceDate(newValue);
-    console.log(newValue)
   };
 
   const handleChangeSource_Description = (event) => {
