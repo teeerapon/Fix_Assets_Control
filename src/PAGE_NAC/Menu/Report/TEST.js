@@ -1197,7 +1197,6 @@ export default function EnhancedTable() {
     const responseCheckAssetCode_Process = await store_FA_control_CheckAssetCode_Process({
       nacdtl_assetsCode
     })
-    console.log(responseCheckAssetCode_Process);
     if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
       const alert_value = 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ'
       setAlert(true);
