@@ -107,6 +107,10 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
     }
   };
 
+  function handle_Home(){
+    navigate('/')
+  }
+
   function PeriodEdit() {
     navigate('/EditPeriod')
   };
@@ -321,14 +325,14 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
               <Divider />
               <List>
                 <ListItem disablePadding>
-                  <ListItemButton>
+                  <ListItemButton onClick={handle_Home}>
                     <ListItemIcon><DashboardIcon fontSize="small" /></ListItemIcon>
                     <ListItemText>
                       <Typography
                         component="span"
                         variant="caption"
                       >
-                        DASHBOARD
+                        HOMEPAGE
                       </Typography>
                     </ListItemText>
                   </ListItemButton>
@@ -700,14 +704,14 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
               <Divider />
               <List>
                 <ListItem disablePadding>
-                  <ListItemButton>
+                  <ListItemButton onClick={handle_Home}>
                     <ListItemIcon><DashboardIcon fontSize="small" /></ListItemIcon>
                     <ListItemText>
                       <Typography
                         component="span"
                         variant="caption"
                       >
-                        DASHBOARD
+                        HOMEPAGE
                       </Typography>
                     </ListItemText>
                   </ListItemButton>
