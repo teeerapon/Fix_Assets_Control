@@ -208,7 +208,6 @@ async function store_FA_control_CheckAssetCode_Process(credentials) {
 }
 
 export default function Reported_of_assets() {
-
   const [reported_of_assets, setReported_of_assets] = React.useState(JSON.parse(localStorage.getItem('Allaseets')));
   const data = JSON.parse(localStorage.getItem('data'));
   const checkUserWeb = localStorage.getItem('sucurity');
@@ -240,6 +239,7 @@ export default function Reported_of_assets() {
   const [source_Description, setSource_Description] = React.useState();
   const [alert, setAlert] = React.useState(false);
   const [valueAlert, setValueAlert] = React.useState(false);
+  const [pageSize, setPageSize] = React.useState(10);
 
   const handleClick_Value = async (newSelectionModel) => {
     const nacdtl_assetsCode = newSelectionModel[newSelectionModel.length - 1]
@@ -915,7 +915,9 @@ export default function Reported_of_assets() {
                 rows={reported_of_assets}
                 columns={columns}
                 getRowId={(reported_of_assets) => reported_of_assets.Code}
-                pageSize={10}
+                pageSize={pageSize}
+                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                pagination
                 disableColumnMenu
                 getRowClassName={(params) =>
                   params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'

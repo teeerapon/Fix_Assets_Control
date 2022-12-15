@@ -47,7 +47,7 @@ async function Reported(credentials) {
 }
 
 async function Reported2(credentials) {
-  return fetch('http://similan:32001/api/getAssetbyUserBranch', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/getAssetbyUserBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -58,7 +58,7 @@ async function Reported2(credentials) {
 }
 
 async function Reported3(credentials) {
-  return fetch('http://similan:32001/api/wrongBranch', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/wrongBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -157,20 +157,31 @@ export default function Report() {
   const handleSubmit = async e => {
     const RoundID = periodData;
     const BranchID = permissionData;
-    const UserBranch = permissionData;
+    const UserBranch = data.branchid;
     e.preventDefault();
     if (periodData !== "" && permissionData !== "" && permissionData !== undefined && periodData !== undefined) {
       const response = await Reported({
         RoundID,
-        BranchID
+        BranchID,
+        UserBranch
       });
-      if ('data' in response) {
+      const response2 = await Reported2({
+        RoundID,
+        BranchID,
+        UserBranch
+      })
+      const response3 = await Reported3({
+        RoundID,
+        BranchID,
+        UserBranch
+      })
+      if ('data' in response || 'data' in response2 || 'data' in response3) {
         swal("ทำรายการสำเร็จ", "ค้นหาข้อมูลเสร็จสิ้น", "success", {
           buttons: false,
           timer: 2000,
         })
           .then((value) => {
-            localStorage.setItem('Allaseets', JSON.stringify(response['data']));
+            localStorage.setItem('Allaseets', JSON.stringify((response2).concat(response3, response.data)));
             navigate("/AssetPage")
           });
       } else {
@@ -292,7 +303,7 @@ export default function Report() {
                 </center>
               </form>
             </Paper>
-            
+
             <Outlet />
           </Container>
         </AnimatedPage>

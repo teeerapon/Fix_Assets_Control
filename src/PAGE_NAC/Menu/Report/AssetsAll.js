@@ -127,6 +127,7 @@ export default function Reported_of_assets() {
   const [value_status, setValue_status] = React.useState('');
   const [status_all] = React.useState(['none', 'สภาพดี', 'ชำรุดรอซ่อม', 'รอตัดขาย', 'รอตัดชำรุด', 'QR Code ไม่สมบูรณ์ (สภาพดี)', 'QR Code ไม่สมบูรณ์ (ชำรุดรอซ่อม)', 'QR Code ไม่สมบูรณ์ (รอตัดขาย)', 'QR Code ไม่สมบูรณ์ (รอตัดชำรุด)']);
   const [valueOfIndex, setValueOfIndex] = React.useState([]);
+  const [pageSize, setPageSize] = React.useState(10);
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130 },
@@ -364,13 +365,15 @@ export default function Reported_of_assets() {
                   rows={reported_of_assets ?? []}
                   columns={columns}
                   getRowId={(reported_of_assets) => reported_of_assets.RowID}
-                  pageSize={10}
-                  //rowsPerPageOptions={[5]}
+                  //pageSize={10}
                   disableColumnMenu
                   //autoHeight={true}
                   getRowClassName={(params) =>
                     params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                   }
+                  pageSize={pageSize}
+                  onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                  pagination
                   disableSelectionOnClick
                   {...other}
                 //checkboxSelection

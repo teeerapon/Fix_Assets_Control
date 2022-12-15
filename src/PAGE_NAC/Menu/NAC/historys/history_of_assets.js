@@ -113,6 +113,7 @@ export default function History_of_assets() {
   const [dataHistory, setDataHistory] = React.useState();
   const data = JSON.parse(localStorage.getItem('data'));
   const checkUserWeb = localStorage.getItem('sucurity');
+  const [pageSize, setPageSize] = React.useState(10);
 
   const dataChange = !dataHistory ? [] : dataHistory.map(function (elt) {
     if (elt.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && (datenow.split('-')[1] === (!elt.update_date ? '' : elt.update_date.split('-')[1]))) {
@@ -386,8 +387,9 @@ export default function History_of_assets() {
                   rows={dataHistory ?? []}
                   columns={columns}
                   getRowId={(dataHistory) => dataHistory.nacdtl_id}
-                  pageSize={10}
-                  //getRowHeight={() => 'auto'}
+                  pageSize={pageSize}
+                  onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                  pagination
                   disableColumnMenu
                   //autoHeight={true}
                   getRowClassName={(params) =>

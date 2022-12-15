@@ -125,6 +125,7 @@ export default function History_of_assets() {
   const [price, setPrice] = React.useState();
   const [details, setDetails] = React.useState();
   const [branchID, setBranchID] = React.useState();
+  const [pageSize, setPageSize] = React.useState(10);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -312,9 +313,10 @@ export default function History_of_assets() {
                   rows={dataHistory ?? []}
                   columns={columns}
                   getRowId={(dataHistory) => dataHistory.AssetID}
-                  pageSize={10}
+                  pageSize={pageSize}
+                  onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                  pagination
                   disableColumnMenu
-                  //autoHeight={true}
                   getRowClassName={(params) =>
                     params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                   }
