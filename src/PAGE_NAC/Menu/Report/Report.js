@@ -46,6 +46,28 @@ async function Reported(credentials) {
     .then(data => data.json())
 }
 
+async function Reported2(credentials) {
+  return fetch('http://similan:32001/api/getAssetbyUserBranch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
+async function Reported3(credentials) {
+  return fetch('http://similan:32001/api/wrongBranch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 async function getPeriods(credentials) {
   return fetch('http://vpnptec.dyndns.org:32001/api/period_round', {
     method: 'POST',
