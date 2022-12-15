@@ -145,6 +145,7 @@ export default function History_of_assets() {
   const checkUserWeb = localStorage.getItem('sucurity');
   const [getNac_Code, setGetNac_Code] = React.useState();
   const [newPage_value, setNewPage_value] = React.useState(0);
+  const [pageSize, setPageSize] = React.useState(10);
 
   const change_page_NacOperation = (newPage) => {
     setNewPage_value(newPage)
@@ -478,13 +479,17 @@ export default function History_of_assets() {
                 rows={selectNAC ?? []}
                 columns={columns}
                 getRowId={(selectNAC) => selectNAC.nac_code}
-                pageSize={10}
+                pageSize={pageSize}
+                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                pagination
                 disableColumnMenu
                 getRowClassName={(params) =>
                   params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                 }
                 disableSelectionOnClick
                 onPageChange={(newPage) => change_page_NacOperation(newPage)}
+                rowsPerPageOptions={[10, 20, 50, 100]}
+                autoHeight
                 initialState={{
                   ...data.initialState,
                   pagination: {

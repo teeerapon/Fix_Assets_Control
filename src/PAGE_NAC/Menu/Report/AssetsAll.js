@@ -365,15 +365,16 @@ export default function Reported_of_assets() {
                   rows={reported_of_assets ?? []}
                   columns={columns}
                   getRowId={(reported_of_assets) => reported_of_assets.RowID}
-                  //pageSize={10}
+                  pageSize={pageSize}
+                  onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                  pagination
+                  rowsPerPageOptions={[10, 20, 50, 100]}
+                  autoHeight
                   disableColumnMenu
                   //autoHeight={true}
                   getRowClassName={(params) =>
                     params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                   }
-                  pageSize={pageSize}
-                  onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                  pagination
                   disableSelectionOnClick
                   {...other}
                 //checkboxSelection

@@ -390,6 +390,8 @@ export default function History_of_assets() {
                   pageSize={pageSize}
                   onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                   pagination
+                  rowsPerPageOptions={[10, 20, 50, 100]}
+                  autoHeight
                   disableColumnMenu
                   //autoHeight={true}
                   getRowClassName={(params) =>
