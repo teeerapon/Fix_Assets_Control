@@ -197,14 +197,15 @@ export default function History_of_assets() {
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 150 },
-    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 285 },
-    { field: 'SerialNo', headerName: 'SerialNo', headerClassName: 'super-app-theme--header', width: 285 },
-    { field: 'Details', headerName: 'หมายเหตุ', headerClassName: 'super-app-theme--header', width: 285 },
+    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', flex: 1 },
+    { field: 'SerialNo', headerName: 'SerialNo', headerClassName: 'super-app-theme--header', flex: 1 },
+    { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', flex: 1 },
+    { field: 'Details', headerName: 'หมายเหตุ', headerClassName: 'super-app-theme--header', flex: 1 },
     {
       field: 'Price',
       headerName: 'ราคาทุน',
       headerClassName: 'super-app-theme--header',
-      width: 150,
+      flex: 1,
       valueGetter: (params) =>
         `${params.row.Price.toLocaleString() || ''}`,
     },
@@ -212,7 +213,7 @@ export default function History_of_assets() {
       field: 'BranchID',
       headerName: 'สาขา',
       headerClassName: 'super-app-theme--header',
-      width: 110,
+      flex: 1,
       valueGetter: (params) =>
         params.row.BranchID === 901 ? 'HO' : params.row.BranchID,
     },
@@ -220,7 +221,7 @@ export default function History_of_assets() {
       field: 'CreateDate',
       headerName: 'วันที่ขึ้นทะเบียน',
       headerClassName: 'super-app-theme--header',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {

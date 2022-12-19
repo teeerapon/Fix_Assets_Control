@@ -21,6 +21,7 @@ import Grid from '@mui/material/Grid';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
+import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
@@ -622,12 +623,12 @@ export default function Reported_of_assets() {
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130 },
-    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 285 },
+    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', flex: 1 },
     {
       field: 'Date',
       headerName: 'วันที่ตรวจนับ',
       headerClassName: 'super-app-theme--header',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
@@ -654,7 +655,7 @@ export default function Reported_of_assets() {
       field: 'EndDate_Success',
       headerName: 'วันที่ทำ NAC ล่าสุด',
       headerClassName: 'super-app-theme--header',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
@@ -683,7 +684,7 @@ export default function Reported_of_assets() {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',
-      width: 100,
+      flex: 1,
       valueGetter: (params) =>
         `${params.row.UserID || ''}`,
     },
@@ -691,7 +692,7 @@ export default function Reported_of_assets() {
       field: 'detail',
       headerName: 'สถานะล่าสุด',
       headerClassName: 'super-app-theme--header',
-      width: 210,
+      flex: 1,
       valueGetter: (params) =>
         `${params.row.detail || ''}`,
     },
@@ -699,9 +700,8 @@ export default function Reported_of_assets() {
       field: 'Reference',
       headerName: 'สถานะครั้งนี้',
       headerClassName: 'super-app-theme--header',
-      width: 210,
+      flex: 1,
       renderCell: (params) => {
-
         const handleChange_select = async (event, params) => {
           const body = {
             Reference: event.target.value,
@@ -756,7 +756,7 @@ export default function Reported_of_assets() {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',
-      width: 150,
+      flex: 1,
       renderCell: (params) => {
         return (
           <Item
@@ -805,86 +805,94 @@ export default function Reported_of_assets() {
       <AnimatedPage>
         <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
           <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="flex-start"
-              spacing={2}
-            >
-              <Card
-                sx={{ minWidth: 275 }}
-                style={{
-                  'cursor': 'pointer',
-                  'flex': 1,
-                  'margin': '0px 20px',
-                  'padding': '15px',
-                  'border-radius': '10px',
-                }}
-              >
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    รวมทรัพย์สินที่ตรวจนับแล้ว
-                  </Typography>
-                  <Typography variant="h5" component="div" style={{ color: 'green' }}>
-                    <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'ตรวจนับแล้ว') }).length} รายการ</b>
-                  </Typography>
-                </CardContent>
-              </Card>
-              <Card
-                style={{
-                  'cursor': 'pointer',
-                  'flex': 1,
-                  'margin': '0px 20px',
-                  'padding': '15px',
-                  'border-radius': '10px',
-                }}
-              >
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    รวมทรัพย์สินที่คงเหลือ
-                  </Typography>
-                  <Typography variant="h5" component="div" style={{ color: 'red' }}>
-                    <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'ยังไม่ได้ตรวจนับ') }).length} รายการ</b>
-                  </Typography>
-                </CardContent>
-              </Card>
-              <Card
-                style={{
-                  'cursor': 'pointer',
-                  'flex': 1,
-                  'margin': '0px 20px',
-                  'padding': '15px',
-                  'border-radius': '10px',
-                }}
-              >
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    ทรัพย์สินสาขาอื่น ๆ
-                  </Typography>
-                  <Typography variant="h5" component="div" style={{ color: 'orange' }}>
-                    <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'นับแล้ว ต่างสาขา') }).length} รายการ</b>
-                  </Typography>
-                </CardContent>
-              </Card>
-              <Card
-                style={{
-                  'cursor': 'pointer',
-                  'flex': 1,
-                  'margin': '0px 20px',
-                  'padding': '15px',
-                  'border-radius': '10px',
-                }}
-              >
-                <CardContent>
-                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    ทรัพย์สินทั้งหมด
-                  </Typography>
-                  <Typography variant="h5" component="div" style={{ color: 'blue' }}>
-                    <b>{reported_of_assets.length} รายการ</b>
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Stack>
+            <TableContainer >
+              <Table aria-label="customized table" style={{ width: '100%' }}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="flex-start"
+                  spacing={2}
+                  sx={{ mb: 2, mt: 2 }}
+                >
+                  <Card
+                    
+                    style={{
+                      'cursor': 'pointer',
+                      'flex': 1,
+                      'margin': '0px 20px',
+                      'padding': '15px',
+                      'border-radius': '10px',
+                    }}
+                  >
+                    <CardContent>
+                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        รวมทรัพย์สินที่ตรวจนับแล้ว
+                      </Typography>
+                      <Typography variant="h5" component="div" style={{ color: 'green' }}>
+                        <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'ตรวจนับแล้ว') }).length} รายการ</b>
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                  <Card
+                    
+                    style={{
+                      'cursor': 'pointer',
+                      'flex': 1,
+                      'margin': '0px 20px',
+                      'padding': '15px',
+                      'border-radius': '10px',
+                    }}
+                  >
+                    <CardContent>
+                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        รวมทรัพย์สินที่คงเหลือ
+                      </Typography>
+                      <Typography variant="h5" component="div" style={{ color: 'red' }}>
+                        <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'ยังไม่ได้ตรวจนับ') }).length} รายการ</b>
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                  <Card
+                    
+                    style={{
+                      'cursor': 'pointer',
+                      'flex': 1,
+                      'margin': '0px 20px',
+                      'padding': '15px',
+                      'border-radius': '10px',
+                    }}
+                  >
+                    <CardContent>
+                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        ทรัพย์สินสาขาอื่น ๆ
+                      </Typography>
+                      <Typography variant="h5" component="div" style={{ color: 'orange' }}>
+                        <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'นับแล้ว ต่างสาขา') }).length} รายการ</b>
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                  <Card
+                    
+                    style={{
+                      'cursor': 'pointer',
+                      'flex': 1,
+                      'margin': '0px 20px',
+                      'padding': '15px',
+                      'border-radius': '10px',
+                    }}
+                  >
+                    <CardContent>
+                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        ทรัพย์สินทั้งหมด
+                      </Typography>
+                      <Typography variant="h5" component="div" style={{ color: 'blue' }}>
+                        <b>{reported_of_assets.length} รายการ</b>
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Stack>
+              </Table>
+            </TableContainer>
             <Stack
               direction="row"
               justifyContent="flex-end"

@@ -131,13 +131,13 @@ export default function Reported_of_assets() {
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130 },
-    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 235 },
-    { field: 'BranchID', headerName: 'สาขา', headerClassName: 'super-app-theme--header', width: 100, headerAlign: 'center', align: 'center', },
+    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', flex: 1 },
+    { field: 'BranchID', headerName: 'สาขา', headerClassName: 'super-app-theme--header', flex: 1, headerAlign: 'center', align: 'center', },
     {
       field: 'Date',
       headerName: 'วันที่ตรวจนับ',
       headerClassName: 'super-app-theme--header',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
@@ -164,7 +164,7 @@ export default function Reported_of_assets() {
       field: 'EndDate_Success',
       headerName: 'วันที่ทำ NAC ล่าสุด',
       headerClassName: 'super-app-theme--header',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
@@ -193,7 +193,7 @@ export default function Reported_of_assets() {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',
-      width: 100,
+      flex: 1,
       valueGetter: (params) =>
         `${params.row.UserID || ''}`,
     },
@@ -201,7 +201,7 @@ export default function Reported_of_assets() {
       field: 'detail',
       headerName: 'สถานะล่าสุด',
       headerClassName: 'super-app-theme--header',
-      width: 210,
+      flex: 1,
       valueGetter: (params) =>
         `${params.row.detail || ''}`,
     },
@@ -209,7 +209,7 @@ export default function Reported_of_assets() {
       field: 'Reference',
       headerName: 'สถานะครั้งนี้',
       headerClassName: 'super-app-theme--header',
-      width: 210,
+      flex: 1,
       renderCell: (params) => {
 
         const handleChange_select = async (event, params) => {
@@ -259,7 +259,7 @@ export default function Reported_of_assets() {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',
-      width: 150,
+      flex: 1,
       renderCell: (params) => {
         return (
           <Item

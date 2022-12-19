@@ -13,6 +13,8 @@ import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
 import Axios from "axios"
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import TableContainer from '@mui/material/TableContainer';
+import Table from '@mui/material/Table';
 
 const ODD_OPACITY = 0.2;
 
@@ -167,26 +169,26 @@ export default function History_of_assets() {
 
   const columns = [
     { field: 'nacdtl_assetsCode', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130, },
-    { field: 'nacdtl_assetsName', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 335 },
+    { field: 'nacdtl_assetsName', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', flex: 1 },
     {
       field: 'nacdtl_assetsPrice',
       headerName: 'ราคาทุน',
       headerClassName: 'super-app-theme--header',
-      width: 150,
+      flex: 1,
       valueGetter: (params) =>
         `${params.row.nacdtl_assetsPrice.toLocaleString() || ''}`,
     },
-    { field: 'nac_code', headerName: 'เลขที่ NAC', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', width: 130 },
+    { field: 'nac_code', headerName: 'เลขที่ NAC', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',flex: 1 },
     { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', width: 235 },
-    { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', width: 100, },
-    { field: 'source_approve_userid', headerName: 'ผู้อนุมัติ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', width: 100, },
-    { field: 'account_aprrove_id', headerName: 'ผู้ปิดรายการ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', width: 100, },
+    { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', flex: 1, },
+    { field: 'source_approve_userid', headerName: 'ผู้อนุมัติ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', flex: 1, },
+    { field: 'account_aprrove_id', headerName: 'ผู้ปิดรายการ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', flex: 1, },
     {
       field: 'update_date',
       headerName: 'วันที่ปิดรายการ',
       type: 'date',
       headerClassName: 'super-app-theme--header',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
@@ -248,123 +250,128 @@ export default function History_of_assets() {
         <AnimatedPage>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="flex-start"
-                spacing={2}
-              >
-                <Card
-                  style={{
-                    'cursor': 'pointer',
-                    'flex': 1,
-                    'margin': '0px 20px',
-                    'padding': '15px',
-                    'paddingBottom': '5px',
-                    'border-radius': '10px',
-                  }}
-                >
-                  <CardContent>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                      เพิ่มบัญชีทรัพย์สินถาวร
-                    </Typography>
-                    <Typography sx={{ fontSize: 16 }} component="div">
-                      <b>{!dataHistory ? 0 : dataAdd} รายการ</b>
-                    </Typography>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                      เดือน {monthString[d.getMonth()]}
-                    </Typography>
-                  </CardContent>
-                </Card>
-                <Card
-                  style={{
-                    'cursor': 'pointer',
-                    'flex': 1,
-                    'margin': '0px 20px',
-                    'padding': '15px',
-                    'paddingBottom': '5px',
-                    'border-radius': '10px',
-                  }}
-                >
-                  <CardContent>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                      โยกย้ายทรัพย์สิน
-                    </Typography>
-                    <Typography sx={{ fontSize: 16 }} component="div">
-                      <b>{!dataHistory ? 0 : dataTranfers} รายการ</b>
-                    </Typography>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                      เดือน {monthString[d.getMonth()]}
-                    </Typography>
-                  </CardContent>
-                </Card>
-                <Card
-                  style={{
-                    'cursor': 'pointer',
-                    'flex': 1,
-                    'margin': '0px 20px',
-                    'padding': '15px',
-                    'paddingBottom': '5px',
-                    'border-radius': '10px',
-                  }}
-                >
-                  <CardContent>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                      เปลี่ยนแปลงรายละเอียด
-                    </Typography>
-                    <Typography sx={{ fontSize: 16 }} component="div">
-                      <b>{!dataHistory ? 0 : dataChange} รายการ</b>
-                    </Typography>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                      เดือน {monthString[d.getMonth()]}
-                    </Typography>
-                  </CardContent>
-                </Card>
-                <Card
-                  style={{
-                    'cursor': 'pointer',
-                    'flex': 1,
-                    'margin': '0px 20px',
-                    'padding': '15px',
-                    'paddingBottom': '5px',
-                    'border-radius': '10px',
-                  }}
-                >
-                  <CardContent>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                      ตัดทรัพย์สินถาวร
-                    </Typography>
-                    <Typography sx={{ fontSize: 16 }} component="div">
-                      <b>{!dataHistory ? 0 : dataDelete} รายการ</b>
-                    </Typography>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                      เดือน {monthString[d.getMonth()]}
-                    </Typography>
-                  </CardContent>
-                </Card>
-                <Card
-                  style={{
-                    'cursor': 'pointer',
-                    'flex': 1,
-                    'margin': '0px 20px',
-                    'padding': '15px',
-                    'paddingBottom': '5px',
-                    'border-radius': '10px',
-                  }}
-                >
-                  <CardContent>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                      ขายทรัพย์สิน
-                    </Typography>
-                    <Typography sx={{ fontSize: 16 }} component="div">
-                      <b>{!dataHistory ? 0 : dataSeals} รายการ</b>
-                    </Typography>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                      เดือน {monthString[d.getMonth()]}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Stack>
+              <TableContainer >
+                <Table aria-label="customized table" style={{ width: '100%' }}>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="flex-start"
+                    spacing={2}
+                    sx={{ mb: 2, mt: 2 }}
+                  >
+                    <Card
+                      style={{
+                        'cursor': 'pointer',
+                        'flex': 1,
+                        'margin': '0px 20px',
+                        'padding': '15px',
+                        'paddingBottom': '5px',
+                        'border-radius': '10px',
+                      }}
+                    >
+                      <CardContent>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                          เพิ่มบัญชีทรัพย์สินถาวร
+                        </Typography>
+                        <Typography sx={{ fontSize: 16 }} component="div">
+                          <b>{!dataHistory ? 0 : dataAdd} รายการ</b>
+                        </Typography>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                          เดือน {monthString[d.getMonth()]}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                    <Card
+                      style={{
+                        'cursor': 'pointer',
+                        'flex': 1,
+                        'margin': '0px 20px',
+                        'padding': '15px',
+                        'paddingBottom': '5px',
+                        'border-radius': '10px',
+                      }}
+                    >
+                      <CardContent>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                          โยกย้ายทรัพย์สิน
+                        </Typography>
+                        <Typography sx={{ fontSize: 16 }} component="div">
+                          <b>{!dataHistory ? 0 : dataTranfers} รายการ</b>
+                        </Typography>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                          เดือน {monthString[d.getMonth()]}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                    <Card
+                      style={{
+                        'cursor': 'pointer',
+                        'flex': 1,
+                        'margin': '0px 20px',
+                        'padding': '15px',
+                        'paddingBottom': '5px',
+                        'border-radius': '10px',
+                      }}
+                    >
+                      <CardContent>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                          เปลี่ยนแปลงรายละเอียด
+                        </Typography>
+                        <Typography sx={{ fontSize: 16 }} component="div">
+                          <b>{!dataHistory ? 0 : dataChange} รายการ</b>
+                        </Typography>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                          เดือน {monthString[d.getMonth()]}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                    <Card
+                      style={{
+                        'cursor': 'pointer',
+                        'flex': 1,
+                        'margin': '0px 20px',
+                        'padding': '15px',
+                        'paddingBottom': '5px',
+                        'border-radius': '10px',
+                      }}
+                    >
+                      <CardContent>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                          ตัดทรัพย์สินถาวร
+                        </Typography>
+                        <Typography sx={{ fontSize: 16 }} component="div">
+                          <b>{!dataHistory ? 0 : dataDelete} รายการ</b>
+                        </Typography>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                          เดือน {monthString[d.getMonth()]}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                    <Card
+                      style={{
+                        'cursor': 'pointer',
+                        'flex': 1,
+                        'margin': '0px 20px',
+                        'padding': '15px',
+                        'paddingBottom': '5px',
+                        'border-radius': '10px',
+                      }}
+                    >
+                      <CardContent>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                          ขายทรัพย์สิน
+                        </Typography>
+                        <Typography sx={{ fontSize: 16 }} component="div">
+                          <b>{!dataHistory ? 0 : dataSeals} รายการ</b>
+                        </Typography>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                          เดือน {monthString[d.getMonth()]}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Stack>
+                </Table>
+              </TableContainer>
               <Box
                 sx={{
                   height: 683,
