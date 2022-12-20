@@ -202,7 +202,7 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
             <Button
               variant="contained"
               color="error"
-              disabled={(selectNAC.create_by === data.UserCode) && (selectNAC.nac_status < 4) && (!selectNAC.verify_by_userid) ? false : true}
+              disabled={((checkUserWeb === 'admin' || data.UserCode === params.row.create_by || data.UserCode === params.row.source_userid) && (selectNAC.nac_status < 4)) ? false : true}
               onClick={handleClickOpen}
               sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
             >
