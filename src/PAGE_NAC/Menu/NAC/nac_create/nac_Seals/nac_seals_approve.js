@@ -868,7 +868,7 @@ export default function Nac_Seals_Approve() {
               setValueAlert(alert_value)
             }
           }
-          swal("ทำรายการสำเร็จ", 'สร้างรายการเปลี่ยนแปลงทรัพย์สินแล้ว', "success", {
+          swal("ทำรายการสำเร็จ", 'อัปเดตรายการแล้ว', "success", {
             buttons: false,
             timer: 2000,
           }).then((value) => {

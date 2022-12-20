@@ -62,10 +62,11 @@
     "react-switch": "^6.0.0",
     "react-touch-carousel": "^0.10.2",
     "reactjs-popup": "^2.0.5",
+    "read-excel-file": "^5.5.3",
     "styled-components": "^5.3.3",
     "sweetalert": "^2.1.2",
     "web-vitals": "^2.1.4",
-    "xlsx": "^0.18.4"
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

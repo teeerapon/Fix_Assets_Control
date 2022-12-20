@@ -23,6 +23,8 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import DatePicker from '@mui/lab/DatePicker';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import * as XLSX from 'xlsx';
+import readXlsxFile from 'read-excel-file'
 
 
 const ODD_OPACITY = 0.2;
@@ -126,6 +128,91 @@ export default function History_of_assets() {
   const [details, setDetails] = React.useState();
   const [branchID, setBranchID] = React.useState();
   const [pageSize, setPageSize] = React.useState(10);
+  const [dataFile, setDataFile] = React.useState();
+  const [field, setField] = React.useState()
+  const [openXlsx, setOpenXlsx] = React.useState(false);
+  const [nameExcel, setNameExcel] = React.useState()
+
+  const fileSelected = (event) => {
+    event.preventDefault();
+    var files = event.target.files, f = files[0];
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var data = e.target.result;
+      let readedData = XLSX.read(data, { type: 'binary', cellText: false, cellDates: true });
+      const wsname = readedData.SheetNames[0];
+      const ws = readedData.Sheets[wsname];
+
+      /* Convert array to json*/
+      const columnsHeader = XLSX.utils.sheet_to_json(ws, { header: 1, raw: false, dateNF: 'dd/mm/yyyy', rawNumbers: false });
+      const dataParse = XLSX.utils.sheet_to_json(ws, { range: 1, header: columnsHeader[0], raw: false, dateNF: 'dd/mm/yyyy' });
+      const col = columnsHeader[0]
+      let arrayField = []
+
+      for (let i = 0; i < col.length; i++) {
+        if (col[i] === 'BranchID' || col[i] === 'Price' || col[i] === 'Position') {
+          arrayField[i] = {
+            field: col[i],
+            width: 80,
+          }
+        } else if (col[i] === 'Code' || col[i] === 'Name') {
+          arrayField[i] = {
+            field: col[i],
+            width: 180,
+          }
+        } else if (col[i] === 'CreateDate') {
+          arrayField[i] = {
+            field: col[i],
+            width: 120,
+          }
+        } else {
+          arrayField[i] = {
+            field: col[i],
+            flex: 1,
+          }
+        }
+      }
+      if (columnsHeader[0].indexOf('Code') >= 0) {
+        setField(arrayField)
+        setDataFile(dataParse)
+        setOpenXlsx(true)
+        setNameExcel(f.name)
+      } else {
+        alert('ไม่พบหัวข้อรหัสทรัพย์สิน (Code !)')
+      }
+    };
+    reader.readAsBinaryString(f)
+  }
+
+  const handleCloseXlsx = () => {
+    setOpenXlsx(false);
+  };
+
+  const handleSubmitXlsx = async () => {
+    const data = { string: JSON.stringify(dataFile) }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    if (
+      field[0].field === 'Code' &&
+      field[1].field === 'Name' &&
+      field[2].field === 'BranchID' &&
+      field[3].field === 'SerialNo' &&
+      field[4].field === 'Price' &&
+      field[5].field === 'CreateDate' &&
+      field[6].field === 'CreateBy' &&
+      field[7].field === 'Position' &&
+      field[8].field === 'Details'
+    ) {
+      await Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_New_Assets_Xlsx', data, { headers })
+        .then(response => {
+          console.log(response);
+        });
+    } else {
+      alert('ข้อมูลไม่ถูกต้อง กรุณาตรวจสอบ')
+    }
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -287,10 +374,19 @@ export default function History_of_assets() {
                 direction="row"
                 justifyContent="flex-end"
                 alignItems="center"
+                spacing={2}
               >
-                <Button variant="contained" onClick={handleClickOpen}>
-                  เพิ่มทรัพย์สิน
-                </Button>
+                <Grid item>
+                  <Button variant="contained" color='success' component="label">
+                    Upload XLSX
+                    <input hidden multiple type="file" onChange={fileSelected} />
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button variant="contained" color='success' onClick={handleClickOpen}>
+                    เพิ่มทรัพย์สิน
+                  </Button>
+                </Grid>
               </Grid>
               <Box
                 sx={{
@@ -444,6 +540,48 @@ export default function History_of_assets() {
                   <Button onClick={handleSubmit_Add} variant="contained">บันทึก</Button>
                   <Button onClick={handleClose} autoFocus variant="contained" color="error">
                     ยกเลิก
+                  </Button>
+                </DialogActions>
+              </Dialog>
+              <Dialog
+                fullWidth
+                maxWidth='lg'
+                open={openXlsx}
+                onClose={handleCloseXlsx}
+              >
+                <DialogTitle>
+                  ต้องการอัพโหลดไฟล์ {nameExcel} ไปที่ข้อมูลหลักใช่หรือไม่ ?
+                </DialogTitle>
+                <DialogContent>
+                  <StripedDataGrid
+                    sx={{
+                      mt: 1,
+                      pl: 2,
+                      pr: 2,
+                      pt: 2,
+                      boxShadow: 1,
+                      [`& .${gridClasses.cell}`]: {
+                        py: 1,
+                      },
+                    }}
+                    componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
+                    rows={dataFile}
+                    columns={field}
+                    getRowId={(row) => row?.Code}
+                    pageSize={10}
+                    autoHeight
+                    disableColumnMenu
+                    getRowClassName={(params) =>
+                      params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                    }
+                    disableSelectionOnClick
+                    {...other}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleSubmitXlsx} variant='contained'>Submit</Button>
+                  <Button onClick={handleCloseXlsx} variant='contained' color='error' autoFocus>
+                    Cancel
                   </Button>
                 </DialogActions>
               </Dialog>
