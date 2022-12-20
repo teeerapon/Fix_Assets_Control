@@ -24,7 +24,6 @@ import DateAdapter from '@mui/lab/AdapterDateFns';
 import DatePicker from '@mui/lab/DatePicker';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import * as XLSX from 'xlsx';
-import readXlsxFile from 'read-excel-file'
 
 
 const ODD_OPACITY = 0.2;
