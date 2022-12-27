@@ -212,6 +212,12 @@ export default function Nac_Main() {
     return a + b
   })
 
+  const sum_vat = serviceList.map(function (elt) {
+    return (/^\d+\.\d+$/.test(elt.priceSeals - (elt.priceSeals * (7 / 100))) || /^\d+$/.test(elt.priceSeals - (elt.priceSeals * (7 / 100)))) ? parseFloat(elt.priceSeals - (elt.priceSeals * (7 / 100))) : 0;
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+
 
   // const handleClickShowPassword = () => {
   //   setValuesVisibility({ ...valuesVisibility, showText: !valuesVisibility.showText });
@@ -846,9 +852,9 @@ export default function Nac_Main() {
                   <Table aria-label="customized table" style={{ width: 1100 }}>
                     <TableHead>
                       <TableRow style={{ width: '100%' }}>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 180 }} >รหัสทรัพย์สิน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 150 }} >รหัสทรัพย์สิน</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 150 }} >Serial No.</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 180 }} >ชื่อ</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 150 }} >ชื่อ</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 115 }} >วันที่ขึ้นทะเบียน</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >
                           ต้นทุน
@@ -867,6 +873,7 @@ export default function Nac_Main() {
                         </StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >BV</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >ราคาขาย</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >ราคาก่อน VAT</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >กำไร/ขาดทุน</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
                           <IconButton
@@ -989,6 +996,20 @@ export default function Nac_Main() {
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <TextField
+                                key={index}
+                                fullWidth
+                                name="VAT"
+                                id="VAT"
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
+                                variant="standard"
+                                value={
+                                  !singleService.priceSeals ? singleService.priceSeals :
+                                    (singleService.priceSeals).toLocaleString() - ((singleService.priceSeals) * 7 / 100)
+                                }
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
                                 fullWidth
                                 disabled
                                 key={index}
@@ -1061,6 +1082,17 @@ export default function Nac_Main() {
                           variant="standard"
                         />
                       </StyledTableCell>
+                      <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                          <TextField
+                            required
+                            fullWidth
+                            disabled
+                            type={valuesVisibility.showText ? "text" : "password"}
+                            value={(Math.floor(sum_vat * 1000) / 1000)}
+                            inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
                       <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                         <TextField
                           required
