@@ -319,6 +319,7 @@ export default function Nac_Seals_Approve() {
   const [Real_Price, setReal_Price] = React.useState();
   const [alert, setAlert] = React.useState(false);
   const [valueAlert, setValueAlert] = React.useState(false);
+  const [finance_aprrove_id, setFinance_aprrove_id] = React.useState();
 
   const [ExamineApprove, setExamineApprove] = React.useState([]);
   const [ExecApprove, setExecApprove] = React.useState([]);
@@ -350,8 +351,15 @@ export default function Nac_Seals_Approve() {
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
+
   const profit_seals = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.priceSeals - elt.bookValue) || /^\d+$/.test(elt.priceSeals - elt.bookValue)) ? parseFloat(elt.priceSeals - elt.bookValue) : 0;
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+
+  const sum_vat = serviceList.map(function (elt) {
+    return (/^\d+\.\d+$/.test(elt.priceSeals - (elt.priceSeals * (7 / 100))) || /^\d+$/.test(elt.priceSeals - (elt.priceSeals * (7 / 100)))) ? parseFloat(elt.priceSeals - (elt.priceSeals * (7 / 100))) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
@@ -456,6 +464,7 @@ export default function Nac_Seals_Approve() {
       setReal_Price(responseHeaders.data[0].real_price)
       setVerifyApprove(responseHeaders.data[0].verify_by_userid)
       setVerifyApproveDate(responseHeaders.data[0].verify_date)
+      setFinance_aprrove_id(responseHeaders.data[0].finance_aprrove_id)
     }
 
     // เรียก Detail มาแสดง
@@ -1306,11 +1315,12 @@ export default function Nac_Seals_Approve() {
       setAlert(true);
       setValueAlert(alert_value)
     } else {
-      if (selectNAC === 4 || selectNAC === 5 || selectNAC === 12 || selectNAC === 13) {
+      if (selectNAC === 4 || selectNAC === 5 || selectNAC === 12 || selectNAC === 13 || selectNAC === 15) {
         const usercode = data.UserCode
         const nac_status =
-          selectNAC === 4 ? 5 : (selectNAC === 12 && Real_Price >= priceSeals) ? 13 :
-            (selectNAC === 12 && Real_Price < priceSeals) ? 99 : selectNAC === 13 ? 6 : undefined
+          selectNAC === 4 ? 5 : (selectNAC === 12 && Real_Price >= priceSeals) ? 15 :
+            (selectNAC === 12 && Real_Price < priceSeals) ? 99 : selectNAC === 15 ? 13 :
+              selectNAC === 13 ? 6 : undefined;
         const source_approve = headers.source_approve_userid
         const source_approve_date = headers.source_approve_date
         const des_delivery = headers.des_userid
@@ -1341,7 +1351,7 @@ export default function Nac_Seals_Approve() {
         if ('data' in responseForUpdate) {
           const comment = selectNAC === 4 ? 'ตรวจรับเอกสารแล้ว'
             : selectNAC === 99 ? 'แนบเอกสาร ในรายการแล้ว'
-              : selectNAC === 13 ? 'ปิดรายการแล้ว' : 'ยืนยันเอกสารแล้ว'
+              : selectNAC === 13 ? 'ปิดรายการแล้ว' : selectNAC === 15 ? 'ตรวจสอบรายการแล้ว' : 'ยืนยันเอกสารแล้ว'
           const responseComment = await store_FA_control_comment({
             nac_code,
             usercode,
@@ -1383,7 +1393,8 @@ export default function Nac_Seals_Approve() {
             }
             swal("ทำรายการสำเร็จ", selectNAC === 4 ? 'ตรวจรับเอกสารแล้ว'
               : selectNAC === 99 ? 'แนบเอกสาร ในรายการแล้ว'
-                : selectNAC === 13 ? 'ปิดรายการแล้ว' : 'ยืนยันเอกสารแล้ว', "success", {
+                : selectNAC === 13 ? 'ปิดรายการแล้ว' : selectNAC === 15 ? 'ตรวจสอบรายการแล้ว'
+                  : 'ยืนยันเอกสารแล้ว', "success", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
@@ -1592,7 +1603,7 @@ export default function Nac_Seals_Approve() {
             </Toolbar>
           </AppBar>
           <AnimatedPage>
-            <Container component="main" maxWidth="lg" sx={{ mb: 12 }}>
+            <Container component="main" maxWidth='lg' sx={{ mb: 12 }}>
               <Paper variant="outlined" sx={{ p: { xs: 1, md: 2 }, mt: 4 }}>
                 <Table aria-label="customized table" style={{ width: '1100' }}>
                   {/* <Grid container>
@@ -1695,7 +1706,7 @@ export default function Nac_Seals_Approve() {
                     * กรุณากรอกข้อมูลสำหรับขายทรัพย์สิน
                   </Typography>
                   <TableContainer component={Paper}>
-                    <Table aria-label="customized table">
+                    <Table aria-label="customized table" style={{ width: 1100 }}>
                       <TableHead>
                         <TableRow>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
@@ -1841,12 +1852,13 @@ export default function Nac_Seals_Approve() {
                     <Table aria-label="customized table" style={{ width: 1100 }}>
                       <TableHead>
                         <TableRow style={{ width: '100%' }}>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '18%' }} >รหัสทรัพย์สิน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '12.5%' }} >Serial No.</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >ชื่อ</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '12.5%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >
-                            <Stack direction="row" alignItems="center" spacing={1}>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 150 }} >รหัสทรัพย์สิน</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 150 }} >Serial No.</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 150 }} >ชื่อ</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 115 }} >วันที่ขึ้นทะเบียน</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >
+                            ต้นทุน
+                            {/* <Stack direction="row" alignItems="center" spacing={1}>
                               <Typography sx={{ pl: 0.5 }}>
                                 ต้นทุน
                               </Typography>
@@ -1857,11 +1869,12 @@ export default function Nac_Seals_Approve() {
                               >
                                 {valuesVisibility.showText ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
                               </IconButton>
-                            </Stack>
+                            </Stack> */}
                           </StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >BV</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >ราคาขาย</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >กำไร/ขาดทุน</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >BV</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >ราคาขาย</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >ราคาก่อน VAT</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >กำไร/ขาดทุน</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
                             <IconButton
                               size="large"
@@ -2013,6 +2026,22 @@ export default function Nac_Seals_Approve() {
                                 <TextField
                                   key={index}
                                   fullWidth
+                                  disabled={selectNAC === 1 && (data.UserCode === headers.create_by) ? false : true}
+                                  name="VAT"
+                                  id="VAT"
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
+                                  variant="standard"
+                                  value={
+                                    (!singleService.priceSeals && selectNAC !== 1) ? 0 :
+                                      !singleService.priceSeals ? singleService.priceSeals :
+                                        (singleService.priceSeals).toLocaleString() - ((singleService.priceSeals) * 7 / 100)
+                                  }
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                                <TextField
+                                  key={index}
+                                  fullWidth
                                   disabled
                                   name="profit"
                                   id="profit"
@@ -2043,7 +2072,7 @@ export default function Nac_Seals_Approve() {
                       <StyledTableRow>
                         <StyledTableCell align="start" style={{ "borderWidth": "1px", 'border-right': 0 }}>
                           <Typography>
-                            ต้นทุนรวมทั้งหมด
+                            รวม
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell align="start" style={{ border: `none` }}>
@@ -2091,6 +2120,17 @@ export default function Nac_Seals_Approve() {
                             fullWidth
                             disabled
                             type={valuesVisibility.showText ? "text" : "password"}
+                            value={(Math.floor(sum_vat * 1000) / 1000)}
+                            inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                          <TextField
+                            required
+                            fullWidth
+                            disabled
+                            type={valuesVisibility.showText ? "text" : "password"}
                             value={price_seals === 0 ? '' : (price_seals - book_V).toLocaleString()}
                             inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                             variant="standard"
@@ -2107,7 +2147,7 @@ export default function Nac_Seals_Approve() {
                         ) : (
                           <React.Fragment>
                             <StyledTableRow>
-                              <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '53.1%' }}>
+                              <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 534.5 }}>
                                 <Typography>
                                   ราคาขายจริงรวมทั้งหมด
                                 </Typography>
@@ -2140,7 +2180,7 @@ export default function Nac_Seals_Approve() {
                     <Table aria-label="customized table" style={{ width: 1100 }}>
                       <TableHead>
                         <StyledTableRow>
-                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
+                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >
                             <TextField
                               required
                               fullWidth
@@ -2175,7 +2215,7 @@ export default function Nac_Seals_Approve() {
                               variant="standard"
                             />
                           </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }}>
                             <TextField
                               required
                               fullWidth
@@ -2211,7 +2251,7 @@ export default function Nac_Seals_Approve() {
                               variant="standard"
                             />
                           </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }}>
                             <TextField
                               required
                               fullWidth
@@ -2246,7 +2286,7 @@ export default function Nac_Seals_Approve() {
                               variant="standard"
                             />
                           </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
+                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >
                             <TextField
                               required
                               fullWidth
@@ -2261,12 +2301,42 @@ export default function Nac_Seals_Approve() {
                                       spacing={0}>
                                       <InputAdornment position="start">
                                         <Typography color="black" >
-                                          บัญชี/การเงิน :
+                                          บัญชี :
                                         </Typography>
                                       </InputAdornment>
                                       <InputAdornment position="start">
                                         <Typography color="black" >
                                           {!headers.account_aprrove_id ? '' : '[' + headers.account_aprrove_id + ']'}
+                                        </Typography>
+                                      </InputAdornment>
+                                    </Stack>
+                                  </React.Fragment>
+                                ),
+                              }}
+                              variant="standard"
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >
+                            <TextField
+                              required
+                              fullWidth
+                              disabled
+                              sx={{ pt: 1 }}
+                              InputProps={{
+                                startAdornment: (
+                                  <React.Fragment>
+                                    <Stack direction="row"
+                                      justifyContent="space-evenly"
+                                      alignItems="center"
+                                      spacing={0}>
+                                      <InputAdornment position="start">
+                                        <Typography color="black" >
+                                          การเงิน :
+                                        </Typography>
+                                      </InputAdornment>
+                                      <InputAdornment position="start">
+                                        <Typography color="black" >
+                                          {finance_aprrove_id ? '[' + finance_aprrove_id + ']' : ''}
                                         </Typography>
                                       </InputAdornment>
                                     </Stack>
@@ -2379,15 +2449,15 @@ export default function Nac_Seals_Approve() {
                                 ตรวจรับเอกสาร
                               </Button>
                             </React.Fragment>
-                          ) : (selectNAC === 13) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? (
+                          ) : (selectNAC === 13 || selectNAC === 15) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? (
                             <React.Fragment>
                               <Button
                                 variant="contained"
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 startIcon={<CloudDownloadRoundedIcon />}
-                                disabled={(selectNAC === 13) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
+                                disabled={(selectNAC === 13 || selectNAC === 15) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
                                 onClick={handleSubmitComplete}>
-                                ปิดรายการ
+                                {selectNAC === 13 ? 'ปิดรายการ' : 'บัญชีตรวจสอบ'}
                               </Button>
                             </React.Fragment>
                           ) : (selectNAC === 12) && ((headers.create_by === data.UserCode) || (checkUserWeb === 'admin') || (checkUserWeb === 'operatorI')) ? (

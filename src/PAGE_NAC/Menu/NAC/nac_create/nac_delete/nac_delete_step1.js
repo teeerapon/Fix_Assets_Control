@@ -912,28 +912,29 @@ export default function Nac_Main() {
                   </Table>
                   <Table aria-label="customized table" style={{ width: 1100 }}>
                     <TableHead>
-                      <TableRow style={{ width: '100%' }}>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '18%' }} >รหัสทรัพย์สิน</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '12.5%' }} >Serial No.</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >ชื่อ</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '12.5%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >
-                          <Stack direction="row" alignItems="center" spacing={1}>
-                            <Typography sx={{ pl: 0.5 }}>
-                              ต้นทุน
-                            </Typography>
-                            <IconButton
-                              sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
-                              onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
-                            >
-                              {valuesVisibility.showText ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
-                            </IconButton>
-                          </Stack>
+                    <TableRow style={{ width: '100%' }}>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 180 }} >รหัสทรัพย์สิน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 150 }} >Serial No.</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 180 }} >ชื่อ</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 115 }} >วันที่ขึ้นทะเบียน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >
+                          ต้นทุน
+                          {/* <Stack direction="row" alignItems="center" spacing={1}>
+                              <Typography sx={{ pl: 0.5 }}>
+                                ต้นทุน
+                              </Typography>
+                              <IconButton
+                                sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                              >
+                                {valuesVisibility.showText ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
+                              </IconButton>
+                            </Stack> */}
                         </StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >BV</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >ราคาขาย</StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >กำไร/ขาดทุน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >BV</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >ราคาขาย</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >กำไร/ขาดทุน</StyledTableCell>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
                           <IconButton
                             size="large"
@@ -1089,7 +1090,7 @@ export default function Nac_Main() {
                     <StyledTableRow>
                       <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'border-right': 0 }}>
                         <Typography>
-                          ต้นทุนรวมทั้งหมด
+                          รวม
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="start" style={{ border: `none` }}>
@@ -1269,7 +1270,7 @@ export default function Nac_Main() {
                                     spacing={0}>
                                     <InputAdornment position="start">
                                       <Typography color="black" >
-                                        บัญชี/การเงิน :
+                                        บัญชี :
                                       </Typography>
                                     </InputAdornment>
                                     <InputAdornment position="start">

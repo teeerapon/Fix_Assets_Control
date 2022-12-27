@@ -1931,7 +1931,7 @@ export default function Nac_Main_wait() {
                         <StyledTableRow>
                           <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '55%' }}>
                             <Typography>
-                              ต้นทุนรวมทั้งหมด
+                              รวม
                             </Typography>
                           </StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '45%' }}>
@@ -2081,7 +2081,7 @@ export default function Nac_Main_wait() {
                                       spacing={0}>
                                       <InputAdornment position="start">
                                         <Typography color="black" >
-                                          บัญชี/การเงิน :
+                                          บัญชี :
                                         </Typography>
                                       </InputAdornment>
                                       <InputAdornment position="start">
