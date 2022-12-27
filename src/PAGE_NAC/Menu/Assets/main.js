@@ -149,7 +149,7 @@ export default function History_of_assets() {
       let arrayField = []
 
       for (let i = 0; i < col.length; i++) {
-        if (col[i] === 'BranchID' || col[i] === 'Price' || col[i] === 'Position') {
+        if (col[i] === 'BranchID' || col[i] === 'Price' || col[i] === 'Position' || col[i] === 'OwnerCode') {
           arrayField[i] = {
             field: col[i],
             width: 80,
@@ -157,7 +157,7 @@ export default function History_of_assets() {
         } else if (col[i] === 'Code' || col[i] === 'Name') {
           arrayField[i] = {
             field: col[i],
-            width: 180,
+            width: 160,
           }
         } else if (col[i] === 'CreateDate') {
           arrayField[i] = {
@@ -188,7 +188,6 @@ export default function History_of_assets() {
   };
 
   const handleSubmitXlsx = async () => {
-    const data = { string: JSON.stringify(dataFile) }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
@@ -196,20 +195,44 @@ export default function History_of_assets() {
     if (
       field[0].field === 'Code' &&
       field[1].field === 'Name' &&
-      field[2].field === 'BranchID' &&
-      field[3].field === 'SerialNo' &&
-      field[4].field === 'Price' &&
-      field[5].field === 'CreateDate' &&
-      field[6].field === 'CreateBy' &&
-      field[7].field === 'Position' &&
-      field[8].field === 'Details'
+      field[2].field === 'OwnerCode' &&
+      field[3].field === 'BranchID' &&
+      field[4].field === 'SerialNo' &&
+      field[5].field === 'Price' &&
+      field[6].field === 'CreateDate' &&
+      field[7].field === 'CreateBy' &&
+      field[8].field === 'Position' &&
+      field[9].field === 'Details'
     ) {
-      await Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_New_Assets_Xlsx', data, { headers })
-        .then(response => {
-          console.log(response);
-        });
+      const accessToken = Math.random().toString(36).substr(2)
+      for (let i = 0; i < dataFile.length; i++) {
+        const data = {
+          Code: dataFile[i].Code
+          , Name: dataFile[i].Name
+          , OwnerCode: dataFile[i].OwnerCode
+          , BranchID: dataFile[i].BranchID
+          , SerialNo: dataFile[i].SerialNo
+          , Price: dataFile[i].Price
+          , CreateDate: dataFile[i].CreateDate
+          , CreateBy: dataFile[i].CreateBy
+          , Position: dataFile[i].Position
+          , Details: dataFile[i].Details
+          , keyID: accessToken
+        }
+        await Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_New_Assets_Xlsx', data, { headers })
+      }
+      const body = { count: dataFile.length, keyID: accessToken }
+      await Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_import_dataXLSX_toAssets', body, { headers })
+        .then((response) => {
+          if (response.data[0].response === 'ทำรายการสำเร็จ') {
+            alert(response.data[0].response)
+            window.location.href = '/FETCH_ASSETS';
+          } else {
+            alert(response.data[0].response)
+          }
+        })
     } else {
-      alert('ข้อมูลไม่ถูกต้อง กรุณาตรวจสอบ')
+      alert('ข้อมูล (Columns) ไม่ถูกต้อง กรุณาตรวจสอบ')
     }
   };
 
@@ -250,6 +273,7 @@ export default function History_of_assets() {
               'Authorization': 'application/json; charset=utf-8',
               'Accept': 'application/json'
             };
+            alert(`เพิ่มทรัพย์สินสำเร็จ`)
             Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_fetch_assets', userCode, { headers })
               .then(response => setDataHistory(response.data.data));
             setOpen(false);
