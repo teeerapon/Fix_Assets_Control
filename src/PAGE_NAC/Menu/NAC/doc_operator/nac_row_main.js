@@ -338,7 +338,8 @@ export default function History_of_assets() {
                                   '#F4A460' : params.row.nac_status === 12 ?
                                     '#DDA0DD' : params.row.nac_status === 13 ?
                                       '#6A5ACD' : params.row.nac_status === 14 ?
-                                        '#708090' : '#DC143C'
+                                        '#6A5ACD' : params.row.nac_status === 15 ?
+                                          '#708090' : '#DC143C'
               }}
             >
               {params.row.status_name}
@@ -358,7 +359,7 @@ export default function History_of_assets() {
         `${(params.row.nac_status === 2 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.vertify + '' :
           (params.row.nac_status === 3 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.approved + '' :
             ((params.row.nac_status === 2) && (params.row.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || params.row.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? '' + !params.row.vertify ? params.row.approved : params.row.vertify + '' :
-              (params.row.nac_status === 13) ? 'การเงิน' : (params.row.nac_status === 5) ? 'บัญชี' : (params.row.nac_status === 11) ? 'RSS' : ''
+              (params.row.nac_status === 15) ? 'การเงิน' : (params.row.nac_status === 5 || params.row.nac_status === 13) ? 'บัญชี' : (params.row.nac_status === 11) ? 'RSS' : ''
         }`,
     },
     {
