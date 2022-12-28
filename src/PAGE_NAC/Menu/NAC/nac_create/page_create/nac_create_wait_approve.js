@@ -55,6 +55,7 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 import Card from '@mui/material/Card';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import DialogContentText from '@mui/material/DialogContentText';
 
 function Copyright() {
   return (
@@ -324,6 +325,8 @@ export default function Nac_Main_wait() {
     text: serviceList[0].price,
     showText: data.branchid === 901 ? true : false,
   });
+  const [drop_NAC_byDes, setDrop_NAC_byDes] = React.useState(false);
+  
 
   // สำหรับหาค่า Index ของ UserCode of Auto Complete
   let resultIndex = []
@@ -362,6 +365,14 @@ export default function Nac_Main_wait() {
   const [bossApproveDate, setBossApproveDate] = React.useState();
   const [verify, setVerifyApprove] = React.useState('');
   const [verifyApproveDate, setVerifyApproveDate] = React.useState();
+
+  const handleOpen_drop_NAC_byDes = () => {
+    setDrop_NAC_byDes(true);
+  };
+
+  const handleClose_drop_NAC_byDes = () => {
+    setDrop_NAC_byDes(false);
+  };
 
 
   const fetchUserForAssetsControl = async () => {
@@ -2352,9 +2363,28 @@ export default function Nac_Main_wait() {
                                 startIcon={<ClearRoundedIcon />}
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
-                                onClick={drop_NAC}>
+                                onClick={handleOpen_drop_NAC_byDes}>
                                 ยกเลิกรายการ
                               </Button>
+                              <Dialog
+                                open={drop_NAC_byDes}
+                                onClose={handleClose_drop_NAC_byDes}
+                              >
+                                <DialogTitle id="alert-dialog-title">
+                                  {"แจ้งเตือน"}
+                                </DialogTitle>
+                                <DialogContent>
+                                  <DialogContentText>
+                                    คุณต้องการที่จะยกเลิกรายการ {headers.nac_code} ใช่หรือไม่
+                                  </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                  <Button onClick={drop_NAC} variant='contained'>ใช่</Button>
+                                  <Button onClick={handleClose_drop_NAC_byDes} variant='contained' color='error' autoFocus>
+                                    ไม่
+                                  </Button>
+                                </DialogActions>
+                              </Dialog>
                               <Button
                                 variant="contained"
                                 endIcon={<DoubleArrowRoundedIcon />}
