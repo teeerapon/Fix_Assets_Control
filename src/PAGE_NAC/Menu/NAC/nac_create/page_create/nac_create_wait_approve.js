@@ -56,6 +56,8 @@ import Card from '@mui/material/Card';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import DialogContentText from '@mui/material/DialogContentText';
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import { CSVLink } from 'react-csv'
 
 function Copyright() {
   return (
@@ -311,6 +313,7 @@ export default function Nac_Main_wait() {
   const [AllAssetsControl, setAllAssetsControl] = React.useState([]);
   const [alert, setAlert] = React.useState(false);
   const [valueAlert, setValueAlert] = React.useState(false);
+  const [exportToExcel, setExportToExcel] = React.useState([]);
 
   const [ExamineApprove, setExamineApprove] = React.useState([]);
   const [ExecApprove, setExecApprove] = React.useState([]);
@@ -326,7 +329,7 @@ export default function Nac_Main_wait() {
     showText: data.branchid === 901 ? true : false,
   });
   const [drop_NAC_byDes, setDrop_NAC_byDes] = React.useState(false);
-  
+
 
   // สำหรับหาค่า Index ของ UserCode of Auto Complete
   let resultIndex = []
@@ -373,6 +376,14 @@ export default function Nac_Main_wait() {
   const handleClose_drop_NAC_byDes = () => {
     setDrop_NAC_byDes(false);
   };
+
+  const Export_PDF_DATA_NAC = () => {
+    window.location.href = 'http://ptecdba:10230/reports/fa/nac.aspx?nac_code=' + headers.nac_code
+  }
+
+  const Export_CSV_DATA_NAC = () => {
+    window.location.href = 'http://ptecdba:10230/reports/fa/nac.aspx?nac_code=' + headers.nac_code
+  }
 
 
   const fetchUserForAssetsControl = async () => {
@@ -455,6 +466,17 @@ export default function Nac_Main_wait() {
         , date_asset: res.nacdtl_date_asset
       };
     }));
+
+    setExportToExcel(responseDTLs.map((res) => {
+      return {
+        Code: res.nacdtl_assetsCode,
+        serialNo: res.nacdtl_assetsSeria,
+        name: res.nacdtl_assetsName,
+        dtl: res.nacdtl_assetsDtl,
+        price: res.nacdtl_assetsPrice,
+      };
+    }));
+
     setChecked(responseDTLs.map((res) => {
       return {
         assets_code: res.nacdtl_assetsCode
@@ -1623,9 +1645,40 @@ export default function Nac_Main_wait() {
                   </Grid>
                 </Grid>
                 <React.Fragment>
-                  <Typography sx={{ pb: 1, pt: 1 }} color='error'>
-                    * กรุณากรอกข้อมูลสำหรับเพิ่มบัญชีทรัพย์สิน
-                  </Typography>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="flex-start"
+                    spacing={2}
+                    sx={{ pt: 2 }}
+                  >
+                    <Typography sx={{ pb: 1, pt: 1 }} color='error'>
+                      * กรุณากรอกข้อมูลสำหรับเพิ่มบัญชีทรัพย์สิน
+                    </Typography>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="flex-start"
+                      spacing={2}
+                    >
+                      <Button
+                        onClick={Export_PDF_DATA_NAC}
+                        variant='contained'
+                        color='warning'
+                        size='small'
+                      >
+                        Dowload PDF
+                      </Button>
+                      <CSVLink
+                        data={exportToExcel}
+                        className='btn btn-success btn-sm'
+                        target="_blank"
+                        filename={`${headers.nac_code}.csv`}
+                      >
+                        Dowload CSV
+                      </CSVLink>
+                    </Stack>
+                  </Stack>
                   <TableContainer component={Paper}>
                     <Table aria-label="customized table" style={{ width: 1100 }}>
                       <TableHead>

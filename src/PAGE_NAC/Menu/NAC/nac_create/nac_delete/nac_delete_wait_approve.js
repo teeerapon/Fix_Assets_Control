@@ -54,6 +54,8 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 import Card from '@mui/material/Card';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import { CSVLink } from 'react-csv'
 
 function Copyright() {
   return (
@@ -316,6 +318,7 @@ export default function Nac_Seals_Approve() {
   const [AllAssetsControl, setAllAssetsControl] = React.useState([]);
   const [alert, setAlert] = React.useState(false);
   const [valueAlert, setValueAlert] = React.useState(false);
+  const [exportToExcel, setExportToExcel] = React.useState([]);
 
   const [ExamineApprove, setExamineApprove] = React.useState([]);
   const [ExecApprove, setExecApprove] = React.useState([]);
@@ -475,6 +478,19 @@ export default function Nac_Seals_Approve() {
       };
     }));
 
+    setExportToExcel(responseDTLs.map((res) => {
+      return {
+        Code: res.nacdtl_assetsCode
+        , serialNo: res.nacdtl_assetsSeria
+        , name: res.nacdtl_assetsName
+        , price: res.nacdtl_assetsPrice
+        , bookValue: !res.nacdtl_bookV ? '' : res.nacdtl_bookV
+        , priceSeals: 0
+        , Price_Before_VAT: !res.nacdtl_PriceSeals ? '' : res.nacdtl_PriceSeals - (res.nacdtl_PriceSeals * (7 / 100))
+        , profit: !res.nacdtl_profit ? '' : (res.nacdtl_PriceSeals - (res.nacdtl_PriceSeals * (7 / 100)) - res.nacdtl_bookV)
+      };
+    }));
+
     setChecked(responseDTLs.map((res) => {
       return {
         assets_code: res.nacdtl_assetsCode
@@ -535,6 +551,10 @@ export default function Nac_Seals_Approve() {
     //setCheckExamineApproveDes(CheckExamineApproveDes)
     setExecApprove(ExecApprove)
     setCheckApprove(CheckApprove)
+  }
+
+  const Export_PDF_DATA_NAC = () => {
+    window.location.href = 'http://ptecdba:10230/reports/fa/nac_sale.aspx?nac_code=' + headers.nac_code
   }
 
 
@@ -1652,9 +1672,40 @@ export default function Nac_Seals_Approve() {
                   </Grid>
                 </Grid>
                 <React.Fragment>
-                  <Typography sx={{ pb: 1, pt: 1 }} color='error'>
-                    * กรุณากรอกข้อมูลสำหรับตัดจากบัญชีทรัพย์สิน
-                  </Typography>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="flex-start"
+                    spacing={2}
+                    sx={{ pt: 2 }}
+                  >
+                    <Typography sx={{ pb: 1, pt: 1 }} color='error'>
+                      * กรุณากรอกข้อมูลสำหรับตัดจากบัญชีทรัพย์สิน
+                    </Typography>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="flex-start"
+                      spacing={2}
+                    >
+                      <Button
+                        onClick={Export_PDF_DATA_NAC}
+                        variant='contained'
+                        color='warning'
+                        size='small'
+                      >
+                        Dowload PDF
+                      </Button>
+                      <CSVLink
+                        data={exportToExcel}
+                        className='btn btn-success btn-sm'
+                        target="_blank"
+                        filename={`${headers.nac_code}.csv`}
+                      >
+                        Dowload CSV
+                      </CSVLink>
+                    </Stack>
+                  </Stack>
                   <TableContainer component={Paper}>
                     <Table aria-label="customized table">
                       <TableHead>

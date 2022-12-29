@@ -54,6 +54,8 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 import Card from '@mui/material/Card';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import { CSVLink } from 'react-csv'
 
 function Copyright() {
   return (
@@ -320,6 +322,7 @@ export default function Nac_Seals_Approve() {
   const [alert, setAlert] = React.useState(false);
   const [valueAlert, setValueAlert] = React.useState(false);
   const [finance_aprrove_id, setFinance_aprrove_id] = React.useState();
+  const [exportToExcel, setExportToExcel] = React.useState([]);
 
   const [ExamineApprove, setExamineApprove] = React.useState([]);
   const [ExecApprove, setExecApprove] = React.useState([]);
@@ -353,7 +356,7 @@ export default function Nac_Seals_Approve() {
   })
 
   const profit_seals = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.priceSeals - elt.bookValue) || /^\d+$/.test(elt.priceSeals - elt.bookValue)) ? parseFloat(elt.priceSeals - elt.bookValue) : 0;
+    return (/^\d+\.\d+$/.test((elt.priceSeals - (elt.priceSeals * (7 / 100))) - elt.bookValue) || /^\d+$/.test((elt.priceSeals - (elt.priceSeals * (7 / 100))) - elt.bookValue)) ? parseFloat((elt.priceSeals - (elt.priceSeals * (7 / 100))) - elt.bookValue) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
@@ -417,6 +420,14 @@ export default function Nac_Seals_Approve() {
     setUsers_pureDep(users_pure)
     setUserForAssetsControl(UserForAssetsControl.data);
   };
+
+  const Export_PDF_DATA_NAC = () => {
+    window.location.href = 'http://ptecdba:10230/reports/fa/nac_sale.aspx?nac_code=' + headers.nac_code
+  }
+
+  const Export_CSV_DATA_NAC = () => {
+    window.location.href = 'http://ptecdba:10230/reports/fa/nac.aspx?nac_code=' + headers.nac_code
+  }
 
   const fetchSelectDTL_Headers = async () => {
 
@@ -484,6 +495,19 @@ export default function Nac_Seals_Approve() {
         , priceSeals: res.nacdtl_PriceSeals
         , profit: !res.nacdtl_profit ? '' : res.nacdtl_profit
         , date_asset: res.nacdtl_date_asset
+      };
+    }));
+
+    setExportToExcel(responseDTLs.map((res) => {
+      return {
+        Code: res.nacdtl_assetsCode
+        , serialNo: res.nacdtl_assetsSeria
+        , name: res.nacdtl_assetsName
+        , price: res.nacdtl_assetsPrice
+        , bookValue: !res.nacdtl_bookV ? '' : res.nacdtl_bookV
+        , priceSeals: !res.nacdtl_PriceSeals ? '' : res.nacdtl_PriceSeals
+        , Price_Before_VAT: !res.nacdtl_PriceSeals ? '' : res.nacdtl_PriceSeals - (res.nacdtl_PriceSeals * (7 / 100))
+        , profit: !res.nacdtl_profit ? '' : (res.nacdtl_PriceSeals - (res.nacdtl_PriceSeals * (7 / 100)) - res.nacdtl_bookV)
       };
     }));
 
@@ -1702,9 +1726,40 @@ export default function Nac_Seals_Approve() {
                   </Grid>
                 </Grid>
                 <React.Fragment>
-                  <Typography sx={{ pb: 1, pt: 1 }} color='error'>
-                    * กรุณากรอกข้อมูลสำหรับขายทรัพย์สิน
-                  </Typography>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="flex-start"
+                    spacing={2}
+                    sx={{ pt: 2 }}
+                  >
+                    <Typography sx={{ pb: 1, pt: 1 }} color='error'>
+                      * กรุณากรอกข้อมูลสำหรับขายทรัพย์สิน
+                    </Typography>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="flex-start"
+                      spacing={2}
+                    >
+                      <Button
+                        onClick={Export_PDF_DATA_NAC}
+                        variant='contained'
+                        color='warning'
+                        size='small'
+                      >
+                        Dowload PDF
+                      </Button>
+                      <CSVLink
+                        data={exportToExcel}
+                        className='btn btn-success btn-sm'
+                        target="_blank"
+                        filename={`${headers.nac_code}.csv`}
+                      >
+                        Dowload CSV
+                      </CSVLink>
+                    </Stack>
+                  </Stack>
                   <TableContainer component={Paper}>
                     <Table aria-label="customized table" style={{ width: 1100 }}>
                       <TableHead>
@@ -2049,7 +2104,7 @@ export default function Nac_Seals_Approve() {
                                   type={valuesVisibility.showText ? "text" : "password"}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={(singleService.priceSeals - singleService.bookValue).toLocaleString()}
+                                  value={((singleService.priceSeals) - ((singleService.priceSeals) * 7 / 100) - singleService.bookValue).toLocaleString()}
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
@@ -2109,7 +2164,7 @@ export default function Nac_Seals_Approve() {
                             fullWidth
                             disabled
                             //type={valuesVisibility.showText ? "text" : "password"}
-                            value={price_seals === 0 ? '' : price_seals.toLocaleString()}
+                            value={price_seals ? price_seals.toLocaleString() : 0}
                             inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                             variant="standard"
                           />
@@ -2131,7 +2186,7 @@ export default function Nac_Seals_Approve() {
                             fullWidth
                             disabled
                             type={valuesVisibility.showText ? "text" : "password"}
-                            value={price_seals === 0 ? '' : (price_seals - book_V).toLocaleString()}
+                            value={price_seals === 0 ? '' : profit_seals.toLocaleString()}
                             inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                             variant="standard"
                           />

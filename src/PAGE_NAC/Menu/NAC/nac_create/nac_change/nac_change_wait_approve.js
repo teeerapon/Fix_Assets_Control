@@ -57,6 +57,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import { CSVLink } from 'react-csv'
 
 function Copyright() {
   return (
@@ -297,6 +299,8 @@ export default function Nac_Main_wait() {
     return a + b
   })
 
+  const [exportToExcel, setExportToExcel] = React.useState([]);
+
   const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
@@ -447,7 +451,7 @@ export default function Nac_Main_wait() {
         date_asset: responseDTLs_draff[i].CreateDate,
       }
     }
-    setServiceList_Main(listPoST_draff.map((res) => {
+    setServiceList_Main(responseDTLs_draff.map((res) => {
       return {
         dtl_id: res.dtl_id,
         assetsCode: res.assetsCode,
@@ -512,6 +516,16 @@ export default function Nac_Main_wait() {
       };
     }));
 
+    setExportToExcel(listPoST.map((res) => {
+      return {
+        Code: res.assetsCode,
+        serialNo: res.serialNo,
+        name: res.name,
+        dtl: res.dtl,
+        price: res.price,
+      };
+    }));
+
     //เรียก Approve มาแสดง
     const user_source = responseHeaders.data[0].source_userid;
     const responseExecDocID = await store_FA_control_execDocID({
@@ -553,6 +567,10 @@ export default function Nac_Main_wait() {
     //setExamineApproveDes(ExamineApproveDes)
     setExecApprove(ExecApprove)
     setCheckApprove(CheckApprove)
+  }
+
+  const Export_PDF_DATA_NAC = () => {
+    window.location.href = 'http://ptecdba:10230/reports/fa/nac.aspx?nac_code=' + headers.nac_code
   }
 
 
@@ -1541,9 +1559,40 @@ export default function Nac_Main_wait() {
                   </Grid>
                 </Grid>
                 <React.Fragment>
-                  <Typography sx={{ pb: 1, pt: 1 }} color='error'>
-                    * กรุณากรอกข้อมูลสำหรับเปลี่ยนแปลงรายละเอียดทรัพย์สิน
-                  </Typography>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="flex-start"
+                    spacing={2}
+                    sx={{ pt: 2 }}
+                  >
+                    <Typography sx={{ pb: 1, pt: 1 }} color='error'>
+                      * กรุณากรอกข้อมูลสำหรับเปลี่ยนแปลงรายละเอียดทรัพย์สิน
+                    </Typography>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="flex-start"
+                      spacing={2}
+                    >
+                      <Button
+                        onClick={Export_PDF_DATA_NAC}
+                        variant='contained'
+                        color='warning'
+                        size='small'
+                      >
+                        Dowload PDF
+                      </Button>
+                      <CSVLink
+                        data={exportToExcel}
+                        className='btn btn-success btn-sm'
+                        target="_blank"
+                        filename={`${headers.nac_code}.csv`}
+                      >
+                        Dowload CSV
+                      </CSVLink>
+                    </Stack>
+                  </Stack>
                   <TableContainer component={Paper}>
                     <Table aria-label="customized table">
                       <TableHead>

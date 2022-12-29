@@ -56,6 +56,8 @@ import Card from '@mui/material/Card';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import DialogContentText from '@mui/material/DialogContentText';
+import { CSVLink } from 'react-csv'
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 
 function Copyright() {
   return (
@@ -306,6 +308,7 @@ export default function Nac_Main_wait() {
   const [openDialogReply, setOpenDialogReply] = React.useState(false);
   const [UserForAssetsControl, setUserForAssetsControl] = React.useState([]);
   const [AllAssetsControl, setAllAssetsControl] = React.useState([]);
+  const [exportToExcel, setExportToExcel] = React.useState([]);
 
   const [ExamineApprove, setExamineApprove] = React.useState([]);
   const [ExecApprove, setExecApprove] = React.useState([]);
@@ -376,6 +379,13 @@ export default function Nac_Main_wait() {
     setDrop_NAC_byDes(false);
   };
 
+  const Export_PDF_DATA_NAC = () => {
+    window.location.href = 'http://ptecdba:10230/reports/fa/nac.aspx?nac_code=' + headers.nac_code
+  }
+
+  const Export_CSV_DATA_NAC = () => {
+    window.location.href = 'http://ptecdba:10230/reports/fa/nac.aspx?nac_code=' + headers.nac_code
+  }
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
@@ -455,6 +465,16 @@ export default function Nac_Main_wait() {
         , price: res.nacdtl_assetsPrice
         , asset_id: res.nacdtl_id
         , date_asset: res.nacdtl_date_asset
+      };
+    }));
+
+    setExportToExcel(responseDTLs.map((res) => {
+      return {
+        Code: res.nacdtl_assetsCode,
+        serialNo: res.nacdtl_assetsSeria,
+        name: res.nacdtl_assetsName,
+        dtl: res.nacdtl_assetsDtl,
+        price: res.nacdtl_assetsPrice,
       };
     }));
 
@@ -1662,9 +1682,40 @@ export default function Nac_Main_wait() {
                   </Grid>
                 </Grid>
                 <React.Fragment>
-                  <Typography sx={{ pb: 1, pt: 1 }} color='error'>
-                    * กรุณากรอกข้อมูลสำหรับโยกย้ายทรัพย์สิน
-                  </Typography>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="flex-start"
+                    spacing={2}
+                    sx={{ pt: 2 }}
+                  >
+                    <Typography sx={{ pb: 1, pt: 1 }} color='error'>
+                      * กรุณากรอกข้อมูลสำหรับโยกย้ายทรัพย์สิน
+                    </Typography>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="flex-start"
+                      spacing={2}
+                    >
+                      <Button
+                        onClick={Export_PDF_DATA_NAC}
+                        variant='contained'
+                        color='warning'
+                        size='small'
+                      >
+                        Dowload PDF
+                      </Button>
+                      <CSVLink
+                        data={exportToExcel}
+                        className='btn btn-success btn-sm'
+                        target="_blank"
+                        filename={`${headers.nac_code}.csv`}
+                      >
+                        Dowload CSV
+                      </CSVLink>
+                    </Stack>
+                  </Stack>
                   <TableContainer component={Paper}>
                     <Table aria-label="customized table" sx={{ width: 1100 }}>
                       <TableHead>
