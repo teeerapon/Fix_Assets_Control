@@ -24,6 +24,13 @@ import { styled } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import Chip from '@mui/material/Chip';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
 
 const theme = createTheme();
 
@@ -100,6 +107,36 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
   const [path, setPath] = React.useState();
   const [pathFetch, setPathFetch] = React.useState([]);
   const navigate = useNavigate();
+
+  function stringToColor(string) {
+    let hash = 0;
+    let i;
+
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = '#';
+
+    for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+
+    return color;
+  }
+
+  function stringAvatar(name) {
+    return {
+      sx: {
+        bgcolor: stringToColor(name),
+        fontSize: `12px`
+      },
+      children: (name.includes('PTEC')) === true ? `${name.split('C')[1]}` : `${name}`,
+    };
+  }
 
   const fetchComment = async () => {
     const responseFetch = await qureyNAC_comment({
@@ -240,41 +277,42 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                       backgroundColor: (theme) => theme.palette.grey[200]
                     }}
                   />
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'baseline',
-                      mb: 2,
-                    }}
-                  >
-                    <Grid sx={{ pb: 1 }}></Grid>
-                    {!pathFetch[0] ? (
-                      <React.Fragment></React.Fragment>
-                    ) : (
-                      <React.Fragment>
-                        <Box sx={{ flexGrow: 1 }}>
-                          <Grid container sx={{ p: 1, pb: 0 }}>
-                            {pathFetch.map((res, index) => (
-                              <React.Fragment>
-                                <Grid item>
-                                  <Tooltip title={res.linkpath}>
-                                    <Chip
-                                      variant="contained"
-                                      onClick={() => window.open(res.linkpath, "_blank")}
-                                      sx={{ m: 0.5 }}
-                                      label={res.userid + ' : ' + res.description}
-                                      style={{ maxWidth: 'fit-content' }}
-                                    />
-                                  </Tooltip>
-                                </Grid>
-                              </React.Fragment>
-                            ))}
-                          </Grid>
-                        </Box>
-                      </React.Fragment>
-                    )}
-                  </Box>
+                  <Grid sx={{ pb: 1 }}></Grid>
+                  {!pathFetch[0] ? null : (
+                    <React.Fragment>
+                      {pathFetch.map((res, index) => (
+                        <React.Fragment>
+                          <CardContent
+                            cols={3}
+                            sx={{ pl: 1, pr: 1, p: 0, m: 1 }}
+                            style={{
+                              'backgroundColor': (res.userid === data.UserCode) ? 'rgba(0, 120, 255,1)' : 'rgb(232, 232, 232)',
+                              borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20,
+                            }}
+                          >
+                            <Stack>
+                              <ListItem
+                                button={true}
+                                onClick={() => window.open(res.linkpath, "_blank")}
+                                key={index}
+                              >
+                                <ListItemAvatar>
+                                  <Avatar {...stringAvatar(res.userid)} />
+                                </ListItemAvatar>
+                                <Tooltip title={res.linkpath}>
+                                  <ListItemText
+                                    primary={<Typography variant="subtitle2" style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : null }}>{res.userid}</Typography>}
+                                    secondary={<Typography variant="body2" style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : 'rgb(92,92,92)' }}>{res.description.includes('/') === true ? res.description.split('/')[res.description.split('/').length - 1] : res.description}</Typography>}
+                                  />
+                                </Tooltip>
+                              </ListItem>
+                              <Divider variant="middle" />
+                            </Stack>
+                          </CardContent>
+                        </React.Fragment>
+                      ))}
+                    </React.Fragment>
+                  )}
                   <CardActions titleTypographyProps={{ align: 'center' }}
                     subheaderTypographyProps={{
                       align: 'center',
@@ -313,44 +351,27 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                   <Grid sx={{ pb: 1 }}></Grid>
                   {commentFetch.map((res, index) => (
                     <React.Fragment>
-                      <CardContent cols={3} sx={{ p: 3, pb: 0, pt: 1 }}>
+                      <CardContent
+                        cols={3}
+                        sx={{ pl: 1, pr: 1, p: 0, m: 1 }}
+                        style={{
+                          'backgroundColor': (res.userid === data.UserCode) ? 'rgba(0, 120, 255,1)' : 'rgb(232, 232, 232)',
+                          borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20,
+                        }}
+                      >
                         <Stack>
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              justifyContent: (res.userid === data.UserCode) ? 'end' : 'start',
-                              alignItems: 'baseline',
-                              pr: (res.userid === data.UserCode) ? 1 : 0
-                            }}
+                          <ListItem
+                            key={index}
                           >
-                            <Typography sx={{ fontSize: 12, pl: 2 }} style={{ 'color': 'rgb(160, 160, 160)', 'font-weight': '400' }}>
-                              {res.userid}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{(res.create_date).split('T')[0]}  {(res.create_date).split('T')[1].split('.')[0].split(':')[0]}:{(res.create_date).split('T')[1].split('.')[0].split(':')[1]}
-                            </Typography>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              justifyContent: (res.userid === data.UserCode) ? 'end' : 'start',
-                              alignItems: 'baseline',
-                            }}
-                          >
-                            <Card
-                              style={{
-                                'backgroundColor': (res.userid === data.UserCode) ? 'rgb(0, 120, 255)' : 'rgb(232, 232, 232)',
-                                'color': (res.userid === data.UserCode) ? 'white' : 'black',
-                                borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20
-                              }}
-                            >
-                              <CardContent style={{
-                                'color': (res.userid === data.UserCode) ? 'white' : 'black'
-                                , 'padding-bottom': '12px'
-                              }}>
-                                <Typography sx={{ fontSize: 14 }}>
-                                  {res.comment}
-                                </Typography>
-                              </CardContent>
-                            </Card>
-                          </Box>
+                            <ListItemAvatar>
+                              <Avatar {...stringAvatar(res.userid)} />
+                            </ListItemAvatar>
+                            <ListItemText
+                              primary={<Typography variant="subtitle2" style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : null }}>{`${res.userid} (${(res.create_date).split('T')[0]}  ${(res.create_date).split('T')[1].split('.')[0].split(':')[0]}:${(res.create_date).split('T')[1].split('.')[0].split(':')[1]})`}</Typography>}
+                              secondary={<Typography variant="body2" style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : 'rgb(92,92,92)' }}>{res.comment}</Typography>}
+                            />
+                          </ListItem>
+                          <Divider variant="middle" />
                         </Stack>
                       </CardContent>
                     </React.Fragment>
@@ -421,6 +442,6 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
       </Dialog>
       <hr></hr>
       <br />
-    </React.Fragment>
+    </React.Fragment >
   );
 }

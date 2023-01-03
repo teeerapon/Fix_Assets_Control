@@ -31,6 +31,18 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
+import Avatar from '@mui/material/Avatar';
+
+function stringAvatar(name) {
+  return {
+    sx: {
+      bgcolor: 'rgba(234,234,234,1)',
+      fontSize: `14px`,
+      color: 'rgba(0,0,0,1)'
+    },
+    children: (name.includes('PTEC')) === true ? `${name.split('C')[1]}` : `${name}`,
+  };
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -107,7 +119,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
     }
   };
 
-  function handle_Home(){
+  function handle_Home() {
     navigate('/')
   }
 
@@ -258,7 +270,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                   </Button>
                 </Box>
                 <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                  <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
+                  <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1, pr: 2 }} className={classes.root} >
                     {data.name}
                   </Typography>
                 </div>
@@ -266,7 +278,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                   <React.Fragment>
                     <Box sx={{ flexGrow: 0 }}>
                       <IconButton
-                        size="large"
+                        size="small"
                         aria-label="account of current user"
                         aria-controls="menu-appbar"
                         aria-haspopup="true"
@@ -274,7 +286,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                         color="inherit"
                       >
 
-                        <AccountCircle />
+                        <Avatar sx={{ width: 18, height: 18 }}{...stringAvatar(data.UserCode)} />
                       </IconButton>
                       <Menu
                         sx={{ mt: '45px' }}
@@ -636,7 +648,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                   </Button>
                 </Box>
                 <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                  <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
+                  <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1, pr: 2 }} className={classes.root} >
                     {data.name}
                   </Typography>
                 </div>
@@ -644,7 +656,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                   <React.Fragment>
                     <Box sx={{ flexGrow: 0 }}>
                       <IconButton
-                        size="large"
+                        size="small"
                         aria-label="account of current user"
                         aria-controls="menu-appbar"
                         aria-haspopup="true"
@@ -652,7 +664,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                         color="inherit"
                       >
 
-                        <AccountCircle />
+                        <Avatar sx={{ width: 18, height: 18 }}{...stringAvatar(data.UserCode)} />
                       </IconButton>
                       <Menu
                         sx={{ mt: '45px' }}
