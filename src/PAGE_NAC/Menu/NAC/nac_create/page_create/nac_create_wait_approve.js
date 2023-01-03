@@ -2434,7 +2434,7 @@ export default function Nac_Main_wait() {
                                 <DialogActions>
                                   <Button onClick={drop_NAC} variant='contained'>ใช่</Button>
                                   <Button onClick={handleClose_drop_NAC_byDes} variant='contained' color='error' autoFocus>
-                                    ไม่
+                                    ไม่ใช่
                                   </Button>
                                 </DialogActions>
                               </Dialog>
