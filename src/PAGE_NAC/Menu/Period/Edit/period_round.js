@@ -129,7 +129,7 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 }));
 
 async function EditPeriodData_Update(credentials) {
-  return fetch('http://192.168.220.1:32001/api/update_period', {
+  return fetch('http://vpnptec.dyndns.org:32001:32001/api/update_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -140,7 +140,7 @@ async function EditPeriodData_Update(credentials) {
 }
 
 async function DeletePeriodData(credentials) {
-  return fetch('http://192.168.220.1:32001/api/delete_period', {
+  return fetch('http://vpnptec.dyndns.org:32001:32001/api/delete_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -341,7 +341,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://192.168.220.1:32001/api/get_branch_period', userCode, { headers })
+    Axios.post('http://vpnptec.dyndns.org:32001:32001/api/get_branch_period', userCode, { headers })
       .then(response => setDataBranchID_Main(response.data.data));
   }, []);
 
