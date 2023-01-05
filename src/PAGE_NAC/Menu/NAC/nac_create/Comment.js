@@ -351,15 +351,16 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                   <Grid sx={{ pb: 1 }}></Grid>
                   {commentFetch.map((res, index) => (
                     <React.Fragment>
-                      <CardContent
-                        cols={3}
-                        sx={{ pl: 1, pr: 1, p: 0, m: 1 }}
-                        style={{
-                          'backgroundColor': (res.userid === data.UserCode) ? 'rgba(0, 120, 255,1)' : 'rgb(232, 232, 232)',
-                          borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20,
-                        }}
-                      >
-                        <Stack>
+                      <Stack direction="row" justifyContent={(res.userid === data.UserCode) ? 'flex-end' : 'flex-start'}>
+                        <CardContent
+                          cols={3}
+                          sx={{ pl: 1, pr: 1, p: 0, m: 1 }}
+                          style={{
+                            'backgroundColor': (res.userid === data.UserCode) ? 'rgba(0, 120, 255,1)' : 'rgb(232, 232, 232)',
+                            borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20,
+                            paddingBottom: 0,
+                          }}
+                        >
                           <ListItem
                             key={index}
                           >
@@ -371,9 +372,8 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                               secondary={<Typography variant="body2" style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : 'rgb(92,92,92)' }}>{res.comment}</Typography>}
                             />
                           </ListItem>
-                          <Divider variant="middle" />
-                        </Stack>
-                      </CardContent>
+                        </CardContent>
+                      </Stack>
                     </React.Fragment>
                   ))}
                   <CardActions titleTypographyProps={{ align: 'center' }}
