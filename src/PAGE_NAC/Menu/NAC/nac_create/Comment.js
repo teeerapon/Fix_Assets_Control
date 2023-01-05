@@ -23,14 +23,14 @@ import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
-import Chip from '@mui/material/Chip';
-import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+import FilePresentIcon from '@mui/icons-material/FilePresent';
 
 const theme = createTheme();
 
@@ -292,21 +292,23 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                           >
                             <Stack>
                               <ListItem
-                                button={true}
-                                onClick={() => window.open(res.linkpath, "_blank")}
                                 key={index}
+                                secondaryAction={
+                                  <Tooltip title={res.linkpath}>
+                                    <IconButton onClick={() => window.open(res.linkpath, "_blank")} edge="end" aria-label="comments">
+                                      <FilePresentIcon />
+                                    </IconButton>
+                                  </Tooltip>
+                                }
                               >
                                 <ListItemAvatar>
                                   <Avatar {...stringAvatar(res.userid)} />
                                 </ListItemAvatar>
-                                <Tooltip title={res.linkpath}>
-                                  <ListItemText
-                                    primary={<Typography variant="subtitle2" style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : null }}>{res.userid}</Typography>}
-                                    secondary={<Typography variant="body2" style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : 'rgb(92,92,92)' }}>{res.description.includes('/') === true ? res.description.split('/')[res.description.split('/').length - 1] : res.description}</Typography>}
-                                  />
-                                </Tooltip>
+                                <ListItemText
+                                  primary={<Typography variant="subtitle2" style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : null }}>{res.userid}</Typography>}
+                                  secondary={<Typography variant="body2" style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : 'rgb(92,92,92)' }}>{res.description.includes('/') === true ? res.description.split('/')[res.description.split('/').length - 1] : res.description}</Typography>}
+                                />
                               </ListItem>
-                              <Divider variant="middle" />
                             </Stack>
                           </CardContent>
                         </React.Fragment>
