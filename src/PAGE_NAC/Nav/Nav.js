@@ -32,6 +32,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import Avatar from '@mui/material/Avatar';
+import Axios from "axios"
 
 function stringAvatar(name) {
   return {
@@ -77,6 +78,22 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
   const [openList3, setOpenList3] = React.useState(false);
   const [openList4, setOpenList4] = React.useState(false);
   const navigate = useNavigate();
+  const [permission_menuID, setPermission_menuID] = React.useState();
+  const [permission_menu, setPermission_menu] = React.useState();
+
+  React.useEffect(() => {
+    // POST request using axios with set headers
+    const body = { Permission_TypeID: 1, userID: data.userid }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.post('http://vpnptec.dyndns.org:32001/api/select_Permission_Menu_NAC', body, { headers })
+      .then(response => {
+        setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
+        setPermission_menu(response.data.data)
+      });
+  }, []);
 
 
   const handleClickList = (e, index) => {
@@ -212,7 +229,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
     },
   });
 
-  if (checkUserWeb !== 'null') {
+  if (permission_menu) {
     return (
       <>
         <Box sx={{ display: 'flex' }}>
@@ -365,17 +382,21 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                 </ListItem>
                 <Collapse in={openList2} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
-                    <ListItemButton onClick={NAC_NEW}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เพิ่มบัญชีทรัพย์สิน
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
+                    {(permission_menuID ? permission_menuID.includes(1) : null) === true ?
+                      <React.Fragment>
+                        <ListItemButton onClick={NAC_NEW}>
+                          <ListItemText>
+                            <Typography
+                              sx={{ display: 'inline' }}
+                              component="span"
+                              variant="caption"
+                            >
+                              <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เพิ่มบัญชีทรัพย์สิน
+                            </Typography>
+                          </ListItemText>
+                        </ListItemButton>
+                      </React.Fragment>
+                      : null}
                     <ListItemButton onClick={NAC_NAC}>
                       <ListItemText>
                         <Typography
@@ -449,57 +470,65 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
-                    <ListItemButton onClick={NAC_OPERATOR}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการ NAC ทั้งหมด
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
+                    {(permission_menuID ? permission_menuID.includes(2) : null) === true ?
+                      <ListItemButton onClick={NAC_OPERATOR}>
+                        <ListItemText>
+                          <Typography
+                            sx={{ display: 'inline' }}
+                            component="span"
+                            variant="caption"
+                          >
+                            <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการ NAC ทั้งหมด
+                          </Typography>
+                        </ListItemText>
+                      </ListItemButton>
+                      : null}
                   </List>
                 </Collapse>
-                <ListItem disablePadding>
-                  <ListItemButton onClick={handleClickList3}>
-                    <ListItemIcon><AccessAlarmIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        PERIOD
-                      </Typography>
-                    </ListItemText>
-                    {openList3 ? <ExpandLess /> : <ExpandMore />}
-                  </ListItemButton>
-                </ListItem>
+                {(permission_menuID ? permission_menuID.includes(3 || 4) : null) === true ?
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={handleClickList3}>
+                      <ListItemIcon><AccessAlarmIcon fontSize="small" /></ListItemIcon>
+                      <ListItemText>
+                        <Typography
+                          component="span"
+                          variant="caption"
+                        >
+                          PERIOD
+                        </Typography>
+                      </ListItemText>
+                      {openList3 ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                  </ListItem>
+                  : null}
                 <Collapse in={openList3} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
-                    <ListItemButton onClick={PeriodOpen}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เพิ่มรอบตรวจนับ
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    <ListItemButton onClick={PeriodEdit}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; แก้ไขรอบตรวจนับ
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
+                    {(permission_menuID ? permission_menuID.includes(3) : null) === true ?
+                      <ListItemButton onClick={PeriodOpen}>
+                        <ListItemText>
+                          <Typography
+                            sx={{ display: 'inline' }}
+                            component="span"
+                            variant="caption"
+                          >
+                            <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เพิ่มรอบตรวจนับ
+                          </Typography>
+                        </ListItemText>
+                      </ListItemButton>
+                      : null}
+                    {(permission_menuID ? permission_menuID.includes(4) : null) === true ?
+                      <ListItemButton onClick={PeriodEdit}>
+                        <ListItemText>
+                          <Typography
+                            sx={{ display: 'inline' }}
+                            component="span"
+                            variant="caption"
+                          >
+                            <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; แก้ไขรอบตรวจนับ
+                          </Typography>
+                        </ListItemText>
+                      </ListItemButton>
+                      : null}
                   </List>
                 </Collapse>
                 <ListItem disablePadding>
@@ -517,32 +546,36 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                   </ListItemButton>
                 </ListItem>
                 <Collapse in={openList4} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    <ListItemButton onClick={FETCH_ASSETS}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทรัพย์สินทั้งหมด
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                  </List>
-                  <List component="div" disablePadding>
-                    <ListItemButton onClick={REPORT_ALL}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตรวจนับทรัพย์สินทั้งหมด
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                  </List>
+                  {(permission_menuID ? permission_menuID.includes(5) : null) === true ?
+                    <List component="div" disablePadding>
+                      <ListItemButton onClick={FETCH_ASSETS}>
+                        <ListItemText>
+                          <Typography
+                            sx={{ display: 'inline' }}
+                            component="span"
+                            variant="caption"
+                          >
+                            <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทรัพย์สินทั้งหมด
+                          </Typography>
+                        </ListItemText>
+                      </ListItemButton>
+                    </List>
+                    : null}
+                  {(permission_menuID ? permission_menuID.includes(7) : null) === true ?
+                    <List component="div" disablePadding>
+                      <ListItemButton onClick={REPORT_ALL}>
+                        <ListItemText>
+                          <Typography
+                            sx={{ display: 'inline' }}
+                            component="span"
+                            variant="caption"
+                          >
+                            <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตรวจนับทรัพย์สินทั้งหมด
+                          </Typography>
+                        </ListItemText>
+                      </ListItemButton>
+                    </List>
+                    : null}
                   <List component="div" disablePadding>
                     <ListItemButton onClick={REPORT}>
                       <ListItemText>
@@ -556,19 +589,21 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                       </ListItemText>
                     </ListItemButton>
                   </List>
-                  <List component="div" disablePadding>
-                    <ListItemButton onClick={History_of_Assets}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติทรัพย์สิน
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                  </List>
+                  {(permission_menuID ? permission_menuID.includes(8) : null) === true ?
+                    <List component="div" disablePadding>
+                      <ListItemButton onClick={History_of_Assets}>
+                        <ListItemText>
+                          <Typography
+                            sx={{ display: 'inline' }}
+                            component="span"
+                            variant="caption"
+                          >
+                            <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติทรัพย์สิน
+                          </Typography>
+                        </ListItemText>
+                      </ListItemButton>
+                    </List>
+                    : null}
                 </Collapse>
                 {/* <ListItem disablePadding>
                   <ListItemButton onClick={REPORT}>

@@ -300,6 +300,20 @@ export default function Nac_Seals_Approve() {
   const mins = ((d.getMinutes()) + 100).toString().slice(-2);
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
+  const [permission_menuID, setPermission_menuID] = React.useState();
+
+  React.useEffect(() => {
+    // POST request using axios with set headers
+    const body = { Permission_TypeID: 1, userID: data.userid }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.post('http://vpnptec.dyndns.org:32001/api/select_Permission_Menu_NAC', body, { headers })
+      .then(response => {
+        setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
+      });
+  }, []);
 
   const navigate = useNavigate();
   const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
@@ -331,7 +345,6 @@ export default function Nac_Seals_Approve() {
   //const [CheckExamineApproveDes, setCheckExamineApproveDes] = React.useState([]);
   //const [ExamineApproveDes, setExamineApproveDes] = React.useState([]);
   const [checked, setChecked] = React.useState([{ assets_code: "", statusCheck: "", asset_id: "" }]);
-  const [userBookValue] = React.useState(['SSP', 'JRK', 'TCM', 'TPD', 'TPS', 'RYS', 'SPP', 'NDL']);
   const [description, setDescription] = React.useState();
   const checkUserWeb = localStorage.getItem('sucurity');
   const [valuesVisibility, setValuesVisibility] = React.useState({
@@ -933,7 +946,7 @@ export default function Nac_Seals_Approve() {
           setAlert(true);
           setValueAlert(alert_value)
         } else {
-          if (data.UserCode === headers.create_by || CheckExamineApprove.includes(data.UserCode) === true || CheckApprove.includes(data.UserCode) === true || checkUserWeb === 'admin' || userBookValue.includes(data.UserCode)) {
+          if (data.UserCode === headers.create_by || CheckExamineApprove.includes(data.UserCode) === true || CheckApprove.includes(data.UserCode) === true || (permission_menuID ? permission_menuID.includes(10) : null) === true || (permission_menuID ? permission_menuID.includes(9) : null) === true) {
             const usercode = data.UserCode
             const nac_status = (selectNAC === 11) ? 10 : 11
             const source_approve = sourceApprove
@@ -1213,7 +1226,7 @@ export default function Nac_Seals_Approve() {
         });
       }
     }
-    else if ((CheckExamineApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false && ExamineApprove.filter(function (el) { return (el != null && el.status === 0) }).length === 1) || checkUserWeb === 'admin') {
+    else if ((CheckExamineApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false && ExamineApprove.filter(function (el) { return (el != null && el.status === 0) }).length === 1) || (permission_menuID ? permission_menuID.includes(10) : null) === true) {
       const usercode = data.UserCode
       const nac_status = 3
       const source_approve = sourceApprove
@@ -1277,7 +1290,7 @@ export default function Nac_Seals_Approve() {
 
   // ExecApprove
   const handleExecApprove = async () => {
-    if (CheckApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false || checkUserWeb === 'admin') {
+    if (CheckApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true) {
       const usercode = data.UserCode
       const nac_status = !headers.real_price ? 12 : 13
       const source_approve = data.UserCode
@@ -1449,13 +1462,13 @@ export default function Nac_Seals_Approve() {
     const usercode = data.UserCode
     const nac_status = 0
     const source_approve =
-      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? verify : data.UserCode
+      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true)) ? verify : data.UserCode
     const source_approve_date =
-      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? verifyApproveDate : datenow
+      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true)) ? verifyApproveDate : datenow
     const des_approve = des_deliveryApprove
     const des_approve_date = des_deliveryApproveDate
-    const verify_by = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? data.UserCode : bossApprove
-    const verify_date = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? datenow : bossApproveDate
+    const verify_by = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true)) ? data.UserCode : bossApprove
+    const verify_date = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true)) ? datenow : bossApproveDate
     const nac_type = headers.nac_type
     const responseForUpdate = await store_FA_control_updateStatus({
       usercode,
@@ -2050,7 +2063,7 @@ export default function Nac_Seals_Approve() {
                                 <TextField
                                   key={index}
                                   fullWidth
-                                  disabled={(selectNAC === 11 && (checkUserWeb === 'admin' || checkUserWeb === 'User_BV' || checkUserWeb === 'operatorI')) ? false : true}
+                                  disabled={(selectNAC === 11 && ((permission_menuID ? permission_menuID.includes(10) : null) === true || checkUserWeb === 'User_BV' || checkUserWeb === 'operatorI')) ? false : true}
                                   name="bookValue"
                                   id="bookValue"
                                   variant="standard"
@@ -2089,7 +2102,7 @@ export default function Nac_Seals_Approve() {
                                   value={
                                     (!singleService.priceSeals && selectNAC !== 1) ? 0 :
                                       !singleService.priceSeals ? singleService.priceSeals :
-                                        (singleService.priceSeals).toLocaleString() - ((singleService.priceSeals) * 7 / 100)
+                                        ((singleService.priceSeals) - ((singleService.priceSeals) * 7 / 100)).toLocaleString()
                                   }
                                 />
                               </StyledTableCell>
@@ -2412,7 +2425,7 @@ export default function Nac_Seals_Approve() {
                           alignItems="center"
                           spacing={3}
                         >
-                          {((selectNAC === 1 || selectNAC === 7) && data.UserCode === headers.create_by) || (selectNAC === 11 && (checkUserWeb === 'admin')) || (selectNAC === 11 && userBookValue.includes(data.UserCode)) ? (
+                          {((selectNAC === 1 || selectNAC === 7) && data.UserCode === headers.create_by) || (selectNAC === 11 && ((permission_menuID ? permission_menuID.includes(10) : null) === true)) || (selectNAC === 11 && (permission_menuID ? permission_menuID.includes(9) : null) === true) ? (
                             <React.Fragment>
 
                               <Button
@@ -2428,7 +2441,7 @@ export default function Nac_Seals_Approve() {
                                 variant="contained"
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 endIcon={<DoubleArrowRoundedIcon />}
-                                disabled={((selectNAC === 1 || selectNAC === 7) && data.UserCode === headers.create_by) || (selectNAC === 11 && (checkUserWeb === 'admin')) || (selectNAC === 11 && userBookValue.includes(data.UserCode)) ? false : ExamineApprove.length === 0 ? false : true}
+                                disabled={((selectNAC === 1 || selectNAC === 7) && data.UserCode === headers.create_by) || (selectNAC === 11 && ((permission_menuID ? permission_menuID.includes(10) : null) === true)) || (selectNAC === 11 && (permission_menuID ? permission_menuID.includes(9) : null) === true) ? false : ExamineApprove.length === 0 ? false : true}
                                 onClick={handleSubmit}
                               >
                                 <React.Fragment>
@@ -2437,7 +2450,7 @@ export default function Nac_Seals_Approve() {
                               </Button>
 
                             </React.Fragment>
-                          ) : ((selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) || (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin')))) ? (
+                          ) : ((selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) || (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true)))) ? (
                             <React.Fragment>
                               {(headers.real_price > 0) ? null : (
                                 <React.Fragment>
@@ -2448,8 +2461,8 @@ export default function Nac_Seals_Approve() {
                                     style={{ 'backgroundColor': 'orange' }}
                                     startIcon={<ReplyAllRoundedIcon />}
                                     disabled={
-                                      (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
-                                        (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                      (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
+                                        (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
                                           true
                                     }>
                                     ตีกลับเอกสาร
@@ -2457,8 +2470,8 @@ export default function Nac_Seals_Approve() {
                                   <Button
                                     variant="contained"
                                     color='error'
-                                    disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false
-                                      : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                    disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false
+                                      : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
                                         true
                                     }
                                     onClick={CancelApprove}
@@ -2477,8 +2490,8 @@ export default function Nac_Seals_Approve() {
                                 onClick={(selectNAC === 2 || selectNAC === 11) ? handleExamineApprove : handleExecApprove}
                                 startIcon={selectNAC === 3 ? <CheckRoundedIcon /> : <VisibilityRoundedIcon />}
                                 disabled={
-                                  (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
-                                    (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                  (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
+                                    (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
                                       true
                                 }>
                                 <React.Fragment>
@@ -2486,42 +2499,42 @@ export default function Nac_Seals_Approve() {
                                 </React.Fragment>
                               </Button>
                             </React.Fragment>
-                          ) : ((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin')) && (!headers.des_date)) ? (
+                          ) : ((selectNAC === 4) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) && (!headers.des_date)) ? (
                             <React.Fragment>
                               <Button
                                 variant="contained"
                                 style={{ 'backgroundColor': 'orange' }}
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin')) && (!headers.des_date)) ? false : true}
+                                disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) && (!headers.des_date)) ? false : true}
                               //</Grid>onClick={handleSubmitComplete}>
                               >ไม่รับเอกสาร
                               </Button>
                               <Button
                                 variant="contained"
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin')) && (!headers.des_date)) ? false : true}
+                                disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) && (!headers.des_date)) ? false : true}
                                 onClick={handleSubmitComplete}>
                                 ตรวจรับเอกสาร
                               </Button>
                             </React.Fragment>
-                          ) : (selectNAC === 13 || selectNAC === 15) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? (
+                          ) : (selectNAC === 13 || selectNAC === 15) && (((permission_menuID ? permission_menuID.includes(10) : null) === true && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? (
                             <React.Fragment>
                               <Button
                                 variant="contained"
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 startIcon={<CloudDownloadRoundedIcon />}
-                                disabled={(selectNAC === 13 || selectNAC === 15) && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
+                                disabled={(selectNAC === 13 || selectNAC === 15) && (((permission_menuID ? permission_menuID.includes(10) : null) === true && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
                                 onClick={handleSubmitComplete}>
                                 {selectNAC === 13 ? 'ปิดรายการ' : 'บัญชีตรวจสอบ'}
                               </Button>
                             </React.Fragment>
-                          ) : (selectNAC === 12) && ((headers.create_by === data.UserCode) || (checkUserWeb === 'admin') || (checkUserWeb === 'operatorI')) ? (
+                          ) : (selectNAC === 12) && ((headers.create_by === data.UserCode) || ((permission_menuID ? permission_menuID.includes(10) : null) === true) || (checkUserWeb === 'operatorI')) ? (
                             <React.Fragment>
                               <Button
                                 variant="contained"
                                 endIcon={<DoubleArrowRoundedIcon />}
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                disabled={(selectNAC === 12) && ((headers.create_by === data.UserCode) || (checkUserWeb === 'admin') || (checkUserWeb === 'operatorI')) ? false : true}
+                                disabled={(selectNAC === 12) && ((headers.create_by === data.UserCode) || ((permission_menuID ? permission_menuID.includes(10) : null) === true) || (checkUserWeb === 'operatorI')) ? false : true}
                                 onClick={handleSubmitComplete}>
                                 ยืนยันรายการ
                               </Button>

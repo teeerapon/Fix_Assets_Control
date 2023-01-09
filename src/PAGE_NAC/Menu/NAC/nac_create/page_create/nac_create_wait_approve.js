@@ -290,6 +290,20 @@ export default function Nac_Main_wait() {
   const mins = ((d.getMinutes()) + 100).toString().slice(-2);
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
+  const [permission_menuID, setPermission_menuID] = React.useState();
+
+  React.useEffect(() => {
+    // POST request using axios with set headers
+    const body = { Permission_TypeID: 1, userID: data.userid }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.post('http://vpnptec.dyndns.org:32001/api/select_Permission_Menu_NAC', body, { headers })
+      .then(response => {
+        setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
+      });
+  }, []);
 
   const navigate = useNavigate();
   const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: "" }]);
@@ -1026,7 +1040,7 @@ export default function Nac_Main_wait() {
 
   // ExamineApprove
   const handleExamineApprove = async () => {
-    if (CheckExamineApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false || checkUserWeb === 'admin') {
+    if (CheckExamineApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true) {
       const usercode = data.UserCode
       const nac_status = 4
       const source_approve = sourceApprove
@@ -1081,7 +1095,7 @@ export default function Nac_Main_wait() {
 
   // ExecApprove
   const handleExecApprove = async () => {
-    if (CheckApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false || checkUserWeb === 'admin') {
+    if (CheckApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true) {
       const usercode = data.UserCode
       const nac_status = 4
       const source_approve = data.UserCode
@@ -1370,13 +1384,13 @@ export default function Nac_Main_wait() {
     const usercode = data.UserCode
     const nac_status = 0
     const source_approve =
-      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? sourceApprove : data.UserCode
+      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true)) ? sourceApprove : data.UserCode
     const source_approve_date =
-      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? sourceDateApproveDate : datenow
+      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true)) ? sourceDateApproveDate : datenow
     const des_approve = des_deliveryApprove
     const des_approve_date = des_deliveryApproveDate
-    const verify_by = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? data.UserCode : bossApprove
-    const verify_date = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || checkUserWeb === 'admin')) ? datenow : bossApproveDate
+    const verify_by = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true)) ? data.UserCode : bossApprove
+    const verify_date = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true)) ? datenow : bossApproveDate
     const nac_type = headers.nac_type
     const responseForUpdate = await store_FA_control_updateStatus({
       usercode,
@@ -2341,7 +2355,7 @@ export default function Nac_Main_wait() {
                           alignItems="center"
                           spacing={3}
                         >
-                          {((selectNAC === 1 || selectNAC === 7) && (data.UserCode === headers.create_by || (checkUserWeb === 'admin'))) ? (
+                          {((selectNAC === 1 || selectNAC === 7) && (data.UserCode === headers.create_by || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? (
                             <React.Fragment>
                               <Button
                                 variant="contained"
@@ -2349,7 +2363,7 @@ export default function Nac_Main_wait() {
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 style={{ 'backgroundColor': 'orange' }}
                                 startIcon={<SystemUpdateAltRoundedIcon />}
-                                disabled={(data.UserCode === headers.create_by || (checkUserWeb === 'admin')) ? false : true}>
+                                disabled={(data.UserCode === headers.create_by || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) ? false : true}>
                                 อัปเดต
                               </Button>
                               <Button
@@ -2357,7 +2371,7 @@ export default function Nac_Main_wait() {
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 endIcon={<DoubleArrowRoundedIcon />}
                                 disabled={
-                                  (data.UserCode === headers.create_by || (checkUserWeb === 'admin')) ? false :
+                                  (data.UserCode === headers.create_by || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) ? false :
                                     ExamineApprove.length === 0 ? false : true}
                                 onClick={handleSubmit
                                 }>
@@ -2366,7 +2380,7 @@ export default function Nac_Main_wait() {
                                 </React.Fragment>
                               </Button>
                             </React.Fragment>
-                          ) : ((selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) || (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin')))) ? (
+                          ) : ((selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) || (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true)))) ? (
                             <React.Fragment>
                               <Button
                                 variant="contained"
@@ -2374,8 +2388,8 @@ export default function Nac_Main_wait() {
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 style={{ 'backgroundColor': 'orange' }}
                                 disabled={
-                                  (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
-                                    (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                  (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
+                                    (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
                                       true
                                 }
                                 startIcon={<ReplyAllRoundedIcon />}>
@@ -2389,8 +2403,8 @@ export default function Nac_Main_wait() {
                                     'primary'}
                                 onClick={selectNAC === 2 ? handleExamineApprove : handleExecApprove}
                                 disabled={
-                                  (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
-                                    (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (checkUserWeb === 'admin'))) ? false :
+                                  (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
+                                    (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
                                       true
                                 }
                                 startIcon={selectNAC === 2 ? <CheckRoundedIcon /> : <VisibilityRoundedIcon />}>
@@ -2399,14 +2413,14 @@ export default function Nac_Main_wait() {
                                 </React.Fragment>
                               </Button>
                             </React.Fragment>
-                          ) : ((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? (
+                          ) : ((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? (
                             <React.Fragment>
                               <Button
                                 variant="contained"
                                 style={{ 'backgroundColor': 'orange' }}
                                 startIcon={<SystemUpdateAltRoundedIcon />}
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
+                                disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false : true}
                                 onClick={handleupdate_checked}>
                                 อัปเดต
                               </Button>
@@ -2415,7 +2429,7 @@ export default function Nac_Main_wait() {
                                 color='error'
                                 startIcon={<ClearRoundedIcon />}
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
+                                disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false : true}
                                 onClick={handleOpen_drop_NAC_byDes}>
                                 ยกเลิกรายการ
                               </Button>
@@ -2442,18 +2456,18 @@ export default function Nac_Main_wait() {
                                 variant="contained"
                                 endIcon={<DoubleArrowRoundedIcon />}
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || (checkUserWeb === 'admin'))) ? false : true}
+                                disabled={((selectNAC === 4 || selectNAC === 14) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false : true}
                                 onClick={handleSubmitComplete}>
                                 รับทรัพย์สิน
                               </Button>
                             </React.Fragment>
-                          ) : selectNAC === 5 && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? (
+                          ) : selectNAC === 5 && (((permission_menuID ? permission_menuID.includes(10) : null) === true && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? (
                             <React.Fragment>
                               <Button
                                 variant="contained"
                                 startIcon={<CloudDownloadRoundedIcon />}
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                disabled={selectNAC === 5 && ((checkUserWeb === 'admin' && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
+                                disabled={selectNAC === 5 && (((permission_menuID ? permission_menuID.includes(10) : null) === true && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
                                 onClick={handleSubmitComplete}>
                                 ปิดรายการ
                               </Button>

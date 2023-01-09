@@ -131,6 +131,20 @@ export default function History_of_assets() {
   const [field, setField] = React.useState()
   const [openXlsx, setOpenXlsx] = React.useState(false);
   const [nameExcel, setNameExcel] = React.useState()
+  const [permission_menuID, setPermission_menuID] = React.useState();
+
+  React.useEffect(() => {
+    // POST request using axios with set headers
+    const body = { Permission_TypeID: 1, userID: data.userid }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.post('http://vpnptec.dyndns.org:32001/api/select_Permission_Menu_NAC', body, { headers })
+      .then(response => {
+        setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
+      });
+  }, []);
 
   const fileSelected = (event) => {
     event.preventDefault();
@@ -400,13 +414,13 @@ export default function History_of_assets() {
                 spacing={2}
               >
                 <Grid item>
-                  <Button variant="contained" color='success' component="label">
+                  <Button variant="contained" disabled={(permission_menuID ? permission_menuID.includes(6) : null) === true ? false : true} color='success' component="label">
                     Upload XLSX
                     <input hidden multiple type="file" onChange={fileSelected} />
                   </Button>
                 </Grid>
                 <Grid item>
-                  <Button variant="contained" color='success' onClick={handleClickOpen}>
+                  <Button variant="contained" color='success' disabled={(permission_menuID ? permission_menuID.includes(6) : null) === true ? false : true} onClick={handleClickOpen}>
                     เพิ่มทรัพย์สิน
                   </Button>
                 </Grid>

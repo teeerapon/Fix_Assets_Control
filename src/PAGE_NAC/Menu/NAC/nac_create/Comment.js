@@ -286,7 +286,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                             cols={3}
                             sx={{ pl: 1, pr: 1, p: 0, m: 1 }}
                             style={{
-                              'backgroundColor': (res.userid === data.UserCode) ? 'rgba(0, 120, 255,1)' : 'rgb(232, 232, 232)',
+                              'backgroundColor': 'rgb(232, 232, 232)',
                               borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20,
                             }}
                           >
@@ -305,8 +305,8 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                                   <Avatar {...stringAvatar(res.userid)} />
                                 </ListItemAvatar>
                                 <ListItemText
-                                  primary={<Typography variant="subtitle2" style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : null }}>{res.userid}</Typography>}
-                                  secondary={<Typography variant="body2" style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : 'rgb(92,92,92)' }}>{res.description.includes('/') === true ? res.description.split('/')[res.description.split('/').length - 1] : res.description}</Typography>}
+                                  primary={<Typography variant="subtitle2" >{res.userid}</Typography>}
+                                  secondary={<Typography variant="body2" style={{ color: 'rgb(92,92,92)' }}>{res.description.includes('/') === true ? res.description.split('/')[res.description.split('/').length - 1] : res.description}</Typography>}
                                 />
                               </ListItem>
                             </Stack>
@@ -360,7 +360,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                           style={{
                             'backgroundColor': (res.userid === data.UserCode) ? 'rgba(0, 120, 255,1)' : 'rgb(232, 232, 232)',
                             borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20,
-                            paddingBottom: 0,
+                            paddingBottom: 0, maxWidth: '48%',
                           }}
                         >
                           <ListItem
