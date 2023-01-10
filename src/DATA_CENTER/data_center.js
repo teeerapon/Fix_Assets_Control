@@ -59,6 +59,7 @@ const featuredPosts = [
     initial: 'NAC',
     description: '',
     url_link: '/NAC_MAIN',
+    permission_set: false,
   },
   {
     title: 'Record of Processing Activity',
@@ -66,6 +67,16 @@ const featuredPosts = [
     initial: 'RoPA',
     description: '',
     url_link: '/ROPA_MAIN',
+    permission_set: false,
+  },
+  {
+    title: 'Permission System Admin',
+    thai_sub: 'ระบบควบคุมสิทธิ์การใช้งาน',
+    initial: 'PSA',
+    description: '',
+    url_link: '/',
+    permission_set: true,
+    // data.depid
   },
 ];
 
@@ -75,8 +86,9 @@ export default function Blog() {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = React.useState(0);
   const maxSteps = mainFeaturedPost.length;
+  const data = JSON.parse(localStorage.getItem('data'));
 
-  const handleStepChange = (step: number) => {
+  const handleStepChange = (step) => {
     setActiveStep(step);
   };
 
@@ -185,7 +197,7 @@ export default function Blog() {
                     key={post.url_link}
                     xs={12}
                     sm={post.url_link === '/' ? 6 : 12}
-                    md={6}
+                    md={4}
                   >
                     <Card>
                       <CardHeader
@@ -229,8 +241,8 @@ export default function Blog() {
                       <CardActions>
                         <Button
                           fullWidth
-                          variant={post.url_link === '/' ? 'outlined' : 'contained'}
-                          disabled={post.url_link === '/' ? true : false}
+                          variant={(post.url_link === '/' && post.permission_set === false) ? 'outlined' : 'contained'}
+                          disabled={(post.url_link === '/' && post.permission_set === false) ? true : false}
                           onClick={() => navigate(post.url_link)}
                         >
                           {post.url_link === '/' ? 'Coming Soon' : 'GO'}

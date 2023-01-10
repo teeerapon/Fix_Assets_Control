@@ -2258,13 +2258,13 @@ export default function Nac_Main_wait() {
                                 ตรวจรับเอกสาร
                               </Button>
                             </React.Fragment>
-                          ) : (selectNAC === 5) && (((permission_menuID ? permission_menuID.includes(10) : null) === true && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? (
+                          ) : (selectNAC === 5) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined) ) ? (
                             <React.Fragment>
                               <Button
                                 variant="contained"
                                 startIcon={<CloudDownloadRoundedIcon />}
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                disabled={(selectNAC === 5) && (((permission_menuID ? permission_menuID.includes(10) : null) === true && headers.des_date !== undefined) || (checkUserWeb === 'operatorI' && headers.des_date !== undefined)) ? false : true}
+                                disabled={(selectNAC === 5) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined) ) ? false : true}
                                 onClick={handleSubmitComplete}>
                                 ปิดรายการ
                               </Button>
