@@ -140,7 +140,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/select_Permission_Menu_NAC', body, { headers })
+    Axios.post('http://192.168.220.1:32001/api/select_Permission_Menu_NAC', body, { headers })
       .then(response => {
         setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
       });
@@ -233,10 +233,10 @@ export default function History_of_assets() {
           , Details: dataFile[i].Details
           , keyID: accessToken
         }
-        await Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_New_Assets_Xlsx', data, { headers })
+        await Axios.post('http://192.168.220.1:32001/api/FA_Control_New_Assets_Xlsx', data, { headers })
       }
       const body = { count: dataFile.length, keyID: accessToken }
-      await Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_import_dataXLSX_toAssets', body, { headers })
+      await Axios.post('http://192.168.220.1:32001/api/FA_Control_import_dataXLSX_toAssets', body, { headers })
         .then((response) => {
           if (response.data[0].response === 'ทำรายการสำเร็จ') {
             alert(response.data[0].response)
@@ -279,7 +279,7 @@ export default function History_of_assets() {
     } else if (!price || price < 1) {
       alert('กรุณากรอกราคาให้ถูกต้อง')
     } else {
-      await Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_New_Assets', body, { headers })
+      await Axios.post('http://192.168.220.1:32001/api/FA_Control_New_Assets', body, { headers })
         .then(response => {
           if (response.data !== undefined) {
             const userCode = { userCode: data.UserCode }
@@ -288,7 +288,7 @@ export default function History_of_assets() {
               'Accept': 'application/json'
             };
             alert(`เพิ่มทรัพย์สินสำเร็จ`)
-            Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_fetch_assets', userCode, { headers })
+            Axios.post('http://192.168.220.1:32001/api/store_FA_control_fetch_assets', userCode, { headers })
               .then(response => setDataHistory(response.data.data));
             setOpen(false);
           }
@@ -377,7 +377,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_fetch_assets', userCode, { headers })
+    Axios.post('http://192.168.220.1:32001/api/store_FA_control_fetch_assets', userCode, { headers })
       .then(response => setDataHistory(response.data.data));
   }, []);
 

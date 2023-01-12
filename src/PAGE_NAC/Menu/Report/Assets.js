@@ -157,7 +157,7 @@ const filterOptions2 = createFilterOptions({
 });
 
 async function Store_FA_control_create_doc(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_create_doc', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_create_doc', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -169,7 +169,7 @@ async function Store_FA_control_create_doc(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/AutoDeapartMent', {
+  return fetch('http://192.168.220.1:32001/api/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -181,7 +181,7 @@ async function AutoDeapartMent(credentials) {
 }
 
 async function Store_FA_control_Create_from_reported(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/Store_FA_control_Create_from_reported', {
+  return fetch('http://192.168.220.1:32001/api/Store_FA_control_Create_from_reported', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -197,7 +197,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_CheckAssetCode_Process', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -234,7 +234,7 @@ export default function Reported_of_assets() {
   const [des_Department, setDes_Department] = React.useState();
   const [des_BU, setDes_BU] = React.useState();
   const [des_delivery, setDes_delivery] = React.useState();
-  const [source_Department, setSource_Department] = React.useState(data.branchid === 901 ? null : 'ROD');
+  const [source_Department, setSource_Department] = React.useState(data.branchid === 901 ? null : data.DepCode);
   const [source_BU, setSource_BU] = React.useState(data.branchid === 901 ? null : 'Oil');
   const [source, setSource] = React.useState(data.branchid === 901 ? null : data.UserCode);
   const [source_Description, setSource_Description] = React.useState();
@@ -258,7 +258,7 @@ export default function Reported_of_assets() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://vpnptec.dyndns.org:32001/api/getsUserForAssetsControl"
+      "http://192.168.220.1:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []
@@ -281,7 +281,7 @@ export default function Reported_of_assets() {
   const handleChangeSource_Department = (event) => {
     event.preventDefault();
     if (data.branchid !== 901) {
-      setSource_Department('ROD');
+      setSource_Department(data.DepCode);
     } else {
       setSource_Department(event.target.value);
     }
@@ -311,67 +311,11 @@ export default function Reported_of_assets() {
       setSource_Department('')
       setSource_BU('')
     } else {
-      if (response.data[0].DepID === null) {
-        setSource_Department('ROD')
+      if(response.data[0].BranchID !== 901){
+        setSource_Department(response.data[0].DepCode)
         setSource_BU('Oil')
-      } else if (response.data[0].DepID === 1) {
-        setSource_Department('ITO')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 2) {
-        setSource_Department('AFD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 3) {
-        setSource_Department('ROD')
-        if (response.data[0].branchid !== 901) {
-          setSource_BU('Oil')
-        } else {
-          setSource_BU('Center')
-        }
-      }
-      else if (response.data[0].DepID === 4) {
-        setSource_Department('SSD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 5) {
-        setSource_Department('HRD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 6) {
-        setSource_Department('GAD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 7) {
-        setSource_Department('SLD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 8) {
-        setSource_Department('MMD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 9) {
-        setSource_Department('PMD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 10) {
-        setSource_Department('SCD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 11) {
-        setSource_Department('BDO')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 12) {
-        setSource_Department('MDO')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 14) {
-        setSource_Department('CSO')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 15) {
-        setSource_Department('MMD2')
+      }else{
+        setSource_Department(response.data[0].DepCode)
         setSource_BU('Center')
       }
     }
@@ -403,68 +347,12 @@ export default function Reported_of_assets() {
       setDes_Department('')
       setDes_BU('')
     } else {
-      if (response.data[0].DepID === null) {
-        setDes_Department('ROD')
-        setDes_BU('Oil')
-      } else if (response.data[0].DepID === 1) {
-        setDes_Department('ITO')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 2) {
-        setDes_Department('AFD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 3) {
-        setDes_Department('ROD')
-        if (response.data[0].branchid !== 901) {
-          setDes_BU('Oil')
-        } else {
-          setDes_BU('Center')
-        }
-      }
-      else if (response.data[0].DepID === 4) {
-        setDes_Department('SSD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 5) {
-        setDes_Department('HRD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 6) {
-        setDes_Department('GAD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 7) {
-        setDes_Department('SLD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 8) {
-        setDes_Department('MMD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 9) {
-        setDes_Department('PMD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 10) {
-        setDes_Department('SCD')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 11) {
-        setDes_Department('BDO')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 12) {
-        setDes_Department('MDO')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 14) {
-        setDes_Department('CSO')
-        setDes_BU('Center')
-      }
-      else if (response.data[0].DepID === 15) {
-        setDes_Department('MMD2')
-        setDes_BU('Center')
+      if(response.data[0].BranchID !== 901){
+        setSource_Department(response.data[0].DepCode)
+        setSource_BU('Oil')
+      }else{
+        setSource_Department(response.data[0].DepCode)
+        setSource_BU('Center')
       }
     }
   };
@@ -715,7 +603,7 @@ export default function Reported_of_assets() {
             'Authorization': 'application/json; charset=utf-8',
             'Accept': 'application/json'
           };
-          await Axios.put('http://vpnptec.dyndns.org:32001/api/updateReference', body, { headers })
+          await Axios.put('http://192.168.220.1:32001/api/updateReference', body, { headers })
 
           reported_of_assets.forEach(function (x, index) {
             if (x.RowID === params.row.RowID) {

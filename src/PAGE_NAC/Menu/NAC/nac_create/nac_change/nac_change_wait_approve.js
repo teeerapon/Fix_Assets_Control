@@ -91,7 +91,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function store_FA_control_select_dtl(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_dtl', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_select_dtl', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -103,7 +103,7 @@ async function store_FA_control_select_dtl(credentials) {
 }
 
 async function store_FA_control_select_dtl_Draff(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_dtl_draff', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_select_dtl_draff', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -115,7 +115,7 @@ async function store_FA_control_select_dtl_Draff(credentials) {
 }
 
 async function store_FA_control_select_headers(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_headers', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_select_headers', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -127,7 +127,7 @@ async function store_FA_control_select_headers(credentials) {
 }
 
 async function SelectDTL_Control(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/SelectDTL_Control', {
+  return fetch('http://192.168.220.1:32001/api/SelectDTL_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -138,7 +138,7 @@ async function SelectDTL_Control(credentials) {
 }
 
 async function SelectAssetsControl(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/AssetsAll_Control', {
+  return fetch('http://192.168.220.1:32001/api/AssetsAll_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -149,7 +149,7 @@ async function SelectAssetsControl(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/AutoDeapartMent', {
+  return fetch('http://192.168.220.1:32001/api/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -169,7 +169,7 @@ const filterOptions2 = createFilterOptions({
 });
 
 async function store_FA_control_update_DTLandHeaders(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_update_DTLandHeaders', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_update_DTLandHeaders', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -181,7 +181,7 @@ async function store_FA_control_update_DTLandHeaders(credentials) {
 }
 
 async function store_FA_control_update_DTL(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_update_DTL', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_update_DTL', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -193,7 +193,7 @@ async function store_FA_control_update_DTL(credentials) {
 }
 
 async function store_FA_control_execDocID(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_execDocID', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_execDocID', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -205,7 +205,7 @@ async function store_FA_control_execDocID(credentials) {
 }
 
 async function store_FA_control_updateStatus(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_updateStatus', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_updateStatus', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -217,7 +217,7 @@ async function store_FA_control_updateStatus(credentials) {
 }
 
 async function store_FA_control_comment(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_comment', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_comment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -229,7 +229,7 @@ async function store_FA_control_comment(credentials) {
 }
 
 async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_CheckAssetCode_Process', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -241,7 +241,7 @@ async function store_FA_control_CheckAssetCode_Process(credentials) {
 }
 
 async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/stroe_FA_control_DTL_ConfirmSuccess', {
+  return fetch('http://192.168.220.1:32001/api/stroe_FA_control_DTL_ConfirmSuccess', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -253,7 +253,7 @@ async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
 }
 
 async function store_FA_control_upadate_table(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_upadate_table', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_control_upadate_table', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -265,7 +265,7 @@ async function store_FA_control_upadate_table(credentials) {
 }
 
 async function store_FA_SendMail(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_SendMail', {
+  return fetch('http://192.168.220.1:32001/api/store_FA_SendMail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -300,12 +300,12 @@ export default function Nac_Main_wait() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/select_Permission_Menu_NAC', body, { headers })
+    Axios.post('http://192.168.220.1:32001/api/select_Permission_Menu_NAC', body, { headers })
       .then(response => {
         setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
       });
   }, []);
-  
+
   const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: "" }]);
   const [serviceList_Main, setServiceList_Main] = React.useState([{ AssetID: "", assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", price: "" }])
   const sum_price = serviceList.map(function (elt) {
@@ -388,7 +388,7 @@ export default function Nac_Main_wait() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://vpnptec.dyndns.org:32001/api/getsUserForAssetsControl"
+      "http://192.168.220.1:32001/api/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []
@@ -766,67 +766,11 @@ export default function Nac_Main_wait() {
       setSource_Department('')
       setSource_BU('')
     } else {
-      if (response.data[0].DepID === null) {
-        setSource_Department('ROD')
+      if (response.data[0].BranchID !== 901) {
+        setSource_Department(response.data[0].DepCode)
         setSource_BU('Oil')
-      } else if (response.data[0].DepID === 1) {
-        setSource_Department('ITO')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 2) {
-        setSource_Department('AFD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 3) {
-        setSource_Department('ROD')
-        if (response.data[0].branchid !== 901) {
-          setSource_BU('Oil')
-        } else {
-          setSource_BU('Center')
-        }
-      }
-      else if (response.data[0].DepID === 4) {
-        setSource_Department('SSD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 5) {
-        setSource_Department('HRD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 6) {
-        setSource_Department('GAD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 7) {
-        setSource_Department('SLD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 8) {
-        setSource_Department('MMD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 9) {
-        setSource_Department('PMD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 10) {
-        setSource_Department('SCD')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 11) {
-        setSource_Department('BDO')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 12) {
-        setSource_Department('MDO')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 14) {
-        setSource_Department('CSO')
-        setSource_BU('Center')
-      }
-      else if (response.data[0].DepID === 15) {
-        setSource_Department('MMD2')
+      } else {
+        setSource_Department(response.data[0].DepCode)
         setSource_BU('Center')
       }
     }
@@ -2258,13 +2202,13 @@ export default function Nac_Main_wait() {
                                 ตรวจรับเอกสาร
                               </Button>
                             </React.Fragment>
-                          ) : (selectNAC === 5) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined) ) ? (
+                          ) : (selectNAC === 5) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined)) ? (
                             <React.Fragment>
                               <Button
                                 variant="contained"
                                 startIcon={<CloudDownloadRoundedIcon />}
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                disabled={(selectNAC === 5) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined) ) ? false : true}
+                                disabled={(selectNAC === 5) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined)) ? false : true}
                                 onClick={handleSubmitComplete}>
                                 ปิดรายการ
                               </Button>
