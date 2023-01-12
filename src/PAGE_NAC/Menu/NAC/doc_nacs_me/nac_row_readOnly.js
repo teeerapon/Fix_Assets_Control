@@ -46,7 +46,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function store_FA_control_drop_NAC(credentials) {
-  return fetch('http://192.168.220.1:32001/api/store_FA_control_drop_NAC', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_drop_NAC', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -58,7 +58,7 @@ async function store_FA_control_drop_NAC(credentials) {
 }
 
 async function store_FA_control_execDocID(credentials) {
-  return fetch('http://192.168.220.1:32001/api/store_FA_control_execDocID', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_execDocID', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',

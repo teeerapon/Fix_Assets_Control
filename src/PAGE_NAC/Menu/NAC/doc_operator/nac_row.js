@@ -129,7 +129,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function store_FA_control_select_NAC_approve(credentials) {
-  return fetch('http://192.168.220.1:32001/api/store_FA_control_select_NAC_approve', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC_approve', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',

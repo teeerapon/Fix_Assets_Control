@@ -36,7 +36,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function EditPeriodData(credentials) {
-  return fetch('http://192.168.220.1:32001/api/update_period', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/update_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'

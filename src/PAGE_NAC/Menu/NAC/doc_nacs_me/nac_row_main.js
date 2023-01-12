@@ -123,7 +123,7 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 }));
 
 async function store_FA_control_drop_NAC(credentials) {
-  return fetch('http://192.168.220.1:32001/api/store_FA_control_drop_NAC', {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_drop_NAC', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -162,7 +162,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://192.168.220.1:32001/api/store_FA_control_select_NAC', usercode, { headers })
+    Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC', usercode, { headers })
       .then(response => setSelectNAC(response.data.data));
   }, []);
 

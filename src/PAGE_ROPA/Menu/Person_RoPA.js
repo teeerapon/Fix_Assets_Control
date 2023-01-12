@@ -292,7 +292,7 @@ export default function Permission_to_RoPA() {
       },
     ];
 
-    await Axios.post('http://192.168.220.1:32001/api/Ropa_SetActive_User', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_SetActive_User', body, { headers })
       .then(response => {
         setColumns(columns_User)
         setRopa_List(response.data.data)
@@ -304,7 +304,7 @@ export default function Permission_to_RoPA() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    await Axios.get('http://192.168.220.1:32001/api/Ropa_List', { headers })
+    await Axios.get('http://vpnptec.dyndns.org:32001/api/Ropa_List', { headers })
       .then(response => {
         setColumns(null)
         setRopa_List(response.data)
@@ -374,7 +374,7 @@ export default function Permission_to_RoPA() {
       },
     ];
 
-    await Axios.post('http://192.168.220.1:32001/api/Ropa_List_User', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_List_User', body, { headers })
       .then(response => {
         setColumns(columns_User)
         setRopa_List(response.data.data)
@@ -439,7 +439,7 @@ export default function Permission_to_RoPA() {
       },
     ];
 
-    await Axios.post('http://192.168.220.1:32001/api/Ropa_List_Collection', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_List_Collection', body, { headers })
       .then(response => {
         setColumns(columns_User_Collection)
         setRopa_List(response.data.data);
@@ -510,7 +510,7 @@ export default function Permission_to_RoPA() {
       },
     ];
 
-    await Axios.post('http://192.168.220.1:32001/api/Ropa_List_User', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_List_User', body, { headers })
       .then(response => {
         setColumns(columns_User)
         setRopa_List(response.data.data)
@@ -542,7 +542,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    await Axios.post('http://192.168.220.1:32001/api/Ropa_List_By_ID', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_List_By_ID', body, { headers })
       .then(response => {
         setRopa_type(response.data.data)
         setAllowner(response.data.data)
@@ -576,7 +576,7 @@ export default function Permission_to_RoPA() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    await Axios.post('http://192.168.220.1:32001/api/RopaSave', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/RopaSave', body, { headers })
 
     window.location.href = '/PERSON_ROPA';
     setOpen(false);
@@ -591,7 +591,7 @@ export default function Permission_to_RoPA() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://192.168.220.1:32001/api/Ropa_Close_Save', body, { headers })
+    Axios.post('http://vpnptec.dyndns.org:32001/api/Ropa_Close_Save', body, { headers })
 
     setOpen(false);
   };
@@ -659,10 +659,10 @@ export default function Permission_to_RoPA() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.get('http://192.168.220.1:32001/api/Ropa_List', { headers })
+    Axios.get('http://vpnptec.dyndns.org:32001/api/Ropa_List', { headers })
       .then(response => setRopa_List(response.data));
 
-    Axios.get('http://192.168.220.1:32001/api/Ropa_List_Dep', { headers })
+    Axios.get('http://vpnptec.dyndns.org:32001/api/Ropa_List_Dep', { headers })
       .then(response => setList_dep(response.data));
   }, []);
 
@@ -690,7 +690,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    await Axios.post('http://192.168.220.1:32001/api/addType', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/addType', body, { headers })
       .then(response => setRopa_type(response.data.data));
 
     setValueRopa_type('')
@@ -705,7 +705,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    await Axios.post('http://192.168.220.1:32001/api/addOwner', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/addOwner', body, { headers })
       .then(response => {
         if (!response.data) {
           alert('ไม่พบ user นี้ในระบบ')
@@ -726,7 +726,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    await Axios.post('http://192.168.220.1:32001/api/addPermissionAccess', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/addPermissionAccess', body, { headers })
       .then(response => {
         if (!response.data) {
           alert('ไม่พบ user นี้ในระบบ')
@@ -747,7 +747,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    await Axios.post('http://192.168.220.1:32001/api/removeType', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/removeType', body, { headers })
       .then(response => setRopa_type(response.data))
 
   };
@@ -761,7 +761,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    await Axios.post('http://192.168.220.1:32001/api/removeOwner', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/removeOwner', body, { headers })
       .then(response => setAllowner(response.data))
 
   };
@@ -775,7 +775,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    await Axios.post('http://192.168.220.1:32001/api/removePermissionAccess', body, { headers })
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/removePermissionAccess', body, { headers })
       .then(response => setAllaccess(response.data))
 
   };
