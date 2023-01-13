@@ -100,6 +100,16 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 function App() {
 
+  const date_login = localStorage.getItem('date_login') ?? undefined;
+  const d = new Date();
+  const year = (d.getFullYear()).toString();
+  const month = ((d.getMonth()) + 101).toString().slice(-2);
+  const date = ((d.getDate()) + 100).toString().slice(-2);
+  const hours = ((d.getHours()) + 100).toString().slice(-2);
+  const mins = ((d.getMinutes()) + 100).toString().slice(-2);
+  const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
+  const datenow = `${year+month+date+hours+mins+seconds}`
+
   const location = useLocation();
   const token = localStorage.getItem('token');
   const checkUserWeb = localStorage.getItem('sucurity');
@@ -145,7 +155,7 @@ function App() {
     setOpen(false);
   };
 
-  if (!token) {
+  if (!token || !date_login || ((datenow - date_login) > 30000) === true) {
     return <Signin />
     // } else if (location.pathname === ('/' || '/DATA_CENTER')) {
     //  เอาตรงนี้ออกเมื่อ DataCenter เสร็จ

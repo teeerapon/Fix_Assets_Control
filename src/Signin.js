@@ -77,6 +77,16 @@ async function ChackUserWeb(credentials) {
 }
 
 export default function Signin() {
+
+  const d = new Date();
+  const year = (d.getFullYear()).toString();
+  const month = ((d.getMonth()) + 101).toString().slice(-2);
+  const date = ((d.getDate()) + 100).toString().slice(-2);
+  const hours = ((d.getHours()) + 100).toString().slice(-2);
+  const mins = ((d.getMinutes()) + 100).toString().slice(-2);
+  const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
+  const datenow = `${year+month+date+hours+mins+seconds}`
+  
   const classes = useStyles();
   const URL_LINK = useLocation()
   const [UserCode, setUserCode] = useState();
@@ -109,12 +119,14 @@ export default function Signin() {
             localStorage.setItem('sucurity', resChackUserWeb['data'][0]['approverid']);
             localStorage.setItem('token', response['token']);
             localStorage.setItem('data', JSON.stringify(response['data'][0]));
+            localStorage.setItem('date_login', datenow);
             localStorage.setItem('permission', JSON.stringify(responseForPermission['data']));
             window.location.href = URL_LINK.pathname;
           } else {
             localStorage.setItem('sucurity', resChackUserWeb['data'][0]['approverid']);
             localStorage.setItem('token', response['token']);
             localStorage.setItem('data', JSON.stringify(response['data'][0]));
+            localStorage.setItem('date_login', datenow);
             localStorage.setItem('permission', JSON.stringify(responseForPermission['data']));
             window.location.href = '/NAC_MAIN';
           }
@@ -124,6 +136,7 @@ export default function Signin() {
       }
     }
   }
+
 
   return (
     <Grid container className={classes.root}>
