@@ -43,6 +43,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import '../../../../../App.css'
 
 function Copyright() {
   return (
@@ -563,7 +564,7 @@ export default function Nac_Main() {
                 <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                   <Box gridColumn="span 10">
                     <AnimatedPage>
-                      <Typography variant="h5" color="inherit" noWrap sx={{ pt: 1 }}>
+                      <Typography variant="h5" color="inherit"  sx={{ pt: 1 }}>
                         การเปลี่ยนแปลงทรัพย์สินถาวร
                       </Typography>
                     </AnimatedPage>
@@ -589,16 +590,16 @@ export default function Nac_Main() {
                     </Box>
                   </Grid>
                   <Grid xs={8}>
-                    <Typography component="h1" variant="h4" align="center">
+                    <Typography component="h1" variant="h4" align="center" className='font-sm font-md'>
                       <b>PURE THAI ENERGY CO.,LTD.</b>
                     </Typography>
-                    <Typography sx={{ mb: 1 }} component="h1" variant="h6" align="center" className='pt-2'>
+                    <Typography sx={{ mb: 1 }} component="h1" variant="h6" align="center" className='pt-2 font-vsm font-vmd'>
                       เปลี่ยนแปลงรายการทรัพย์สินถาวร (Notice of Asset Change - NAC)
                     </Typography>
                   </Grid>
                   <Grid xs={2}>
                     <TableContainer component={Paper}>
-                      <Table aria-label="customized table">
+                      <Table aria-label="customized table" style={{ width: '100%' }}>
                         <TableBody>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
                             <TextField
@@ -644,12 +645,12 @@ export default function Nac_Main() {
                               <React.Fragment>
                                 <Grid container>
                                   <Grid xs={6}>
-                                    <Typography align='center' color="inherit" noWrap>
+                                    <Typography align='center' color="inherit" >
                                       Department
                                     </Typography>
                                   </Grid>
                                   <Grid xs={6}>
-                                    <Typography align='center' color="inherit" noWrap>
+                                    <Typography align='center' color="inherit" >
                                       BU
                                     </Typography>
                                   </Grid>
@@ -1019,7 +1020,7 @@ export default function Nac_Main() {
                         </StyledTableRow>
                       </TableBody>
                     </Table>
-                    <Table aria-label="customized table" style={{ width: '100%' }}>
+                    <Table aria-label="customized table" style={{ width: 1100 }}>
                       <TableHead>
                         <StyledTableRow>
                           <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >

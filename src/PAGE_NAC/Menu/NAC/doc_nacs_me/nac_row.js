@@ -257,7 +257,7 @@ export default function NAC_ROW() {
                 <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                   <Box gridColumn="span 10">
                     <AnimatedPage>
-                      <Typography variant="h5" color="inherit" noWrap sx={{ pt: 1 }}>
+                      <Typography variant="h5" color="inherit"  sx={{ pt: 1 }}>
                         สถานะรายการเปลี่ยนแปลงทรัพย์สิน
                       </Typography>
                     </AnimatedPage>
@@ -278,7 +278,7 @@ export default function NAC_ROW() {
               <React.Fragment>
                 <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', pl: 1 }}>
-                    <Typography variant="h6" color="inherit" noWrap>
+                    <Typography variant="h6" color="inherit" >
                       ค้นหา
                     </Typography>
                   </Box>
@@ -338,7 +338,7 @@ export default function NAC_ROW() {
                                   alignItems="center"
                                   spacing={2}
                                 >
-                                  <Typography variant="subtitle1" color="inherit" noWrap>
+                                  <Typography variant="subtitle1" color="inherit" >
                                     ไม่พบรายการ
                                   </Typography>
                                 </Stack>
@@ -406,7 +406,7 @@ export default function NAC_ROW() {
                 <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                   <Box gridColumn="span 10">
                     <AnimatedPage>
-                      <Typography variant="h5" color="inherit" noWrap sx={{ pt: 1 }}>
+                      <Typography variant="h5" color="inherit"  sx={{ pt: 1 }}>
                         สถานะรายการเปลี่ยนแปลงทรัพย์สิน
                       </Typography>
                     </AnimatedPage>
@@ -427,7 +427,7 @@ export default function NAC_ROW() {
               <React.Fragment>
                 <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', pl: 1 }}>
-                    <Typography variant="h6" color="inherit" noWrap>
+                    <Typography variant="h6" color="inherit" >
                       ค้นหา
                     </Typography>
                   </Box>

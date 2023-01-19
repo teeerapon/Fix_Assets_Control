@@ -168,26 +168,28 @@ export default function History_of_assets() {
   })
 
   const columns = [
-    { field: 'nacdtl_assetsCode', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130, },
-    { field: 'nacdtl_assetsName', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', flex: 1 },
+    { field: 'nacdtl_assetsCode', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
+    { field: 'nacdtl_assetsName', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
     {
       field: 'nacdtl_assetsPrice',
       headerName: 'ราคาทุน',
       headerClassName: 'super-app-theme--header',
+      minWidth: 100, 
       flex: 1,
       valueGetter: (params) =>
         `${params.row.nacdtl_assetsPrice.toLocaleString() || ''}`,
     },
-    { field: 'nac_code', headerName: 'เลขที่ NAC', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',flex: 1 },
-    { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', width: 235 },
-    { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', flex: 1, },
-    { field: 'source_approve_userid', headerName: 'ผู้อนุมัติ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', flex: 1, },
-    { field: 'account_aprrove_id', headerName: 'ผู้ปิดรายการ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', flex: 1, },
+    { field: 'nac_code', headerName: 'เลขที่ NAC', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',minWidth: 130, flex: 1 },
+    { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', minWidth: 200, flex: 1 },
+    { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', minWidth: 100, flex: 1 },
+    { field: 'source_approve_userid', headerName: 'ผู้อนุมัติ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', minWidth: 100, flex: 1 },
+    { field: 'account_aprrove_id', headerName: 'ผู้ปิดรายการ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', minWidth: 100, flex: 1 },
     {
       field: 'update_date',
       headerName: 'วันที่ปิดรายการ',
       type: 'date',
       headerClassName: 'super-app-theme--header',
+      minWidth: 170, 
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -241,7 +243,7 @@ export default function History_of_assets() {
         >
           <Toolbar>
             <AnimatedPage>
-              <Typography variant="h5" color="inherit" noWrap>
+              <Typography variant="h5" color="inherit" >
                 ประวัติทรัพย์สินที่ดำเนินการเสร็จสิ้น
               </Typography>
             </AnimatedPage>
@@ -250,7 +252,7 @@ export default function History_of_assets() {
         <AnimatedPage>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
-              <TableContainer >
+              <TableContainer className='hide-sm hide-md'>
                 <Table aria-label="customized table" style={{ width: '100%' }}>
                   <Stack
                     direction="row"
@@ -401,9 +403,6 @@ export default function History_of_assets() {
                   autoHeight
                   disableColumnMenu
                   //autoHeight={true}
-                  getRowClassName={(params) =>
-                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                  }
                   disableSelectionOnClick
                   {...other}
                 //checkboxSelection

@@ -17,6 +17,7 @@ import { autoPlay } from 'react-swipeable-views-utils';
 import MobileStepper from '@mui/material/MobileStepper';
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider'
+import '../App.css'
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -74,7 +75,7 @@ const featuredPosts = [
     thai_sub: 'ระบบควบคุมสิทธิ์การใช้งาน',
     initial: 'PSA',
     description: '',
-    url_link: '/',
+    url_link: '/Permission_NAC',
     permission_set: true,
     // data.depid
   },
@@ -145,7 +146,7 @@ export default function Blog() {
                       pb: { md: 0 },
                     }}
                   >
-                    <Typography component="h1" variant="h3" gutterBottom>
+                    <Typography component="h1" variant="h3" gutterBottom className='font-sm'>
                       <b>{mainFeaturedPost[0].title}</b>
                     </Typography>
                   </Box>
@@ -159,7 +160,7 @@ export default function Blog() {
                       pt: { md: 0 },
                     }}
                   >
-                    <Typography variant="body2" paragraph>
+                    <Typography variant="body2" paragraph className='font-vsm'>
                       {mainFeaturedPost[0].description}
                     </Typography>
                   </Box>

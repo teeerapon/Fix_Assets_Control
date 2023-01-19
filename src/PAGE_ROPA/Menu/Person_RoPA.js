@@ -53,7 +53,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 
 const ODD_OPACITY = 0.2;
 
-const IOSSwitch = styled((props: SwitchProps) => (
+const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
 ))(({ theme }) => ({
   width: 42,
@@ -237,7 +237,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    const columns_User: GridColDef_User[] = [
+    const columns_User = [
       {
         field: 'UserName',
         headerName: 'ชื่อ-นามสกุล',
@@ -319,7 +319,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    const columns_User: GridColDef_User[] = [
+    const columns_User = [
       {
         field: 'UserName',
         headerName: 'ชื่อ-นามสกุล',
@@ -413,7 +413,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    const columns_User_Collection: GridColDef_User[] = [
+    const columns_User_Collection = [
       {
         field: 'DataName',
         headerName: 'ข้อมูลที่จัดเก็บ',
@@ -455,7 +455,7 @@ export default function Permission_to_RoPA() {
       'Accept': 'application/json'
     };
 
-    const columns_User: GridColDef_User[] = [
+    const columns_User = [
       {
         field: 'UserName',
         headerName: 'ชื่อ-นามสกุล',
@@ -786,7 +786,7 @@ export default function Permission_to_RoPA() {
     }))
   }
 
-  const columns_main: GridColDef[] = [
+  const columns_main = [
     {
       field: 'Depcode',
       headerName: 'DepCode',
@@ -893,7 +893,7 @@ export default function Permission_to_RoPA() {
       >
         <Toolbar>
           <AnimatedPage>
-            <Typography variant="h5" color="inherit" noWrap>
+            <Typography variant="h5" color="inherit" >
               ประเภทข้อมูลส่วนบุคคล
             </Typography>
           </AnimatedPage>

@@ -18,6 +18,7 @@ import AnimatedPage from '../../../AnimatedPage.jsx'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import '../../../App.css'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -220,7 +221,7 @@ export default function Report() {
         >
           <Toolbar>
             <AnimatedPage>
-              <Typography variant="h5" color="inherit" noWrap>
+              <Typography variant="h5" color="inherit" >
                 รายงานการตรวจนับ
               </Typography>
             </AnimatedPage>
@@ -231,7 +232,7 @@ export default function Report() {
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
               <form className={classes.form} noValidate onSubmit={handleSubmit}>
                 <center className="pt-2">
-                  <Typography component="h1" variant="h4" align="center">
+                  <Typography component="h1" variant="h4" align="center" className='font-sm-bold'>
                     <b>PURE THAI ENERGY CO.,LTD.</b>
                   </Typography>
                   <Typography variant="h6" gutterBottom className='pt-5'>

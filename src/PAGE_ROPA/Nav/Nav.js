@@ -24,6 +24,7 @@ import ListItemText from '@mui/material/ListItemText';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import TypeSpecimenIcon from '@mui/icons-material/TypeSpecimen';
+import '../../App.css'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -143,7 +144,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                       style={{ color: '#ea0c80' }}
                       variant="h5"
                       component="React.Fragment"
-                      noWrap
+                      
                       sx={{
                         flexGrow: 1,
                         fontFamily: 'monospace',
@@ -160,7 +161,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                       style={{ color: '#07519e' }}
                       variant="h5"
                       component="React.Fragment"
-                      noWrap
+                      
                       sx={{
                         flexGrow: 1,
                         fontFamily: 'monospace',

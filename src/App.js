@@ -46,6 +46,8 @@ import ROPA_MAIN from './PAGE_ROPA/main';
 import ROPA_NAV from './PAGE_ROPA/Nav/Nav';
 import PERSON_ROPA from './PAGE_ROPA/Menu/Person_RoPA';
 
+// Permission_NAC
+import Permission_NAC from './PAGE_NAC/Menu/NAC/Permission_NAC';
 
 const drawerWidth = 250;
 
@@ -144,6 +146,7 @@ function App() {
       '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/',
       '/NAC_ROW/NAC_SEALS_APPROVE/',
       '/FETCH_ASSETS',
+      '/Permission_NAC',
       '*',
     ]
 
@@ -227,6 +230,7 @@ function App() {
               {/* เอาตรงนี้ออกเมื่อ DataCenter เสร็จ */}
               <Route path="/" element={<HomePage />} />
               {/*  */}
+              <Route path="/Permission_NAC" element={<Permission_NAC />} />
               <Route path="/NAC_MAIN" element={<HomePage />} />
               <Route path="/Report" element={<Report />} />
               <Route path="/AssetPage" element={<AssetPage />} />

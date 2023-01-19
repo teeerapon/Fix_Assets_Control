@@ -24,6 +24,7 @@ import ListItemText from '@mui/material/ListItemText';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import TypeSpecimenIcon from '@mui/icons-material/TypeSpecimen';
+import '../../App.css'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -144,14 +145,14 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
               >
                 <MenuIcon />
               </IconButton>
-              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} style={{ height: 80 }}>
+              <Box sx={{ flexGrow: 1, display: { md: 'flex' } }} className='hide-sm'>
                 <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
                   <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
                     <Typography
                       style={{ color: '#ea0c80' }}
                       variant="h5"
                       component="React.Fragment"
-                      noWrap
+                      
                       sx={{
                         flexGrow: 1,
                         fontFamily: 'monospace',
@@ -168,7 +169,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                       style={{ color: '#07519e' }}
                       variant="h5"
                       component="React.Fragment"
-                      noWrap
+                      
                       sx={{
                         flexGrow: 1,
                         fontFamily: 'monospace',
@@ -184,7 +185,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                   </div>
                 </Button>
               </Box>
-              <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
+              <div size="large" aria-label="account of current user" aria-controls="menu-appbar" className='hide-sm'>
                 <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
                   {data.name}
                 </Typography>

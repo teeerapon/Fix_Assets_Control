@@ -695,12 +695,12 @@ const EnhancedTableToolbar = (props) => {
                                     <React.Fragment>
                                       <Grid container>
                                         <Grid xs={6}>
-                                          <Typography align='center' color="inherit" noWrap>
+                                          <Typography align='center' color="inherit" >
                                             Department
                                           </Typography>
                                         </Grid>
                                         <Grid xs={6}>
-                                          <Typography align='center' color="inherit" noWrap>
+                                          <Typography align='center' color="inherit" >
                                             BU
                                           </Typography>
                                         </Grid>
@@ -794,12 +794,12 @@ const EnhancedTableToolbar = (props) => {
                                     <React.Fragment>
                                       <Grid container>
                                         <Grid xs={6}>
-                                          <Typography align='center' color="inherit" noWrap>
+                                          <Typography align='center' color="inherit" >
                                             Department
                                           </Typography>
                                         </Grid>
                                         <Grid xs={6}>
-                                          <Typography align='center' color="inherit" noWrap>
+                                          <Typography align='center' color="inherit" >
                                             BU
                                           </Typography>
                                         </Grid>
@@ -899,12 +899,12 @@ const EnhancedTableToolbar = (props) => {
                                     <React.Fragment>
                                       <Grid container>
                                         <Grid xs={6}>
-                                          <Typography align='center' color="inherit" noWrap>
+                                          <Typography align='center' color="inherit" >
                                             Department
                                           </Typography>
                                         </Grid>
                                         <Grid xs={6}>
-                                          <Typography align='center' color="inherit" noWrap>
+                                          <Typography align='center' color="inherit" >
                                             BU
                                           </Typography>
                                         </Grid>
@@ -1155,7 +1155,7 @@ export default function EnhancedTable() {
       >
         <Toolbar>
           <AnimatedPage>
-            <Typography variant="h5" color="inherit" noWrap>
+            <Typography variant="h5" color="inherit" >
               รายการการตรวจนับทรัพย์สินทั้งหมดของสาขาที่ {!row ? 'Loading...' : row[0].BranchID}
             </Typography>
           </AnimatedPage>

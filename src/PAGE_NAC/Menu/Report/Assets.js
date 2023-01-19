@@ -39,6 +39,7 @@ import Button from '@mui/material/Button';
 import FormGroup from '@mui/material/FormGroup';
 import NoteAdd from '@mui/icons-material/NoteAdd';
 import Snackbar from '@mui/material/Snackbar';
+import '../../../App.css'
 
 const ODD_OPACITY = 0.2;
 
@@ -311,10 +312,10 @@ export default function Reported_of_assets() {
       setSource_Department('')
       setSource_BU('')
     } else {
-      if(response.data[0].BranchID !== 901){
+      if (response.data[0].BranchID !== 901) {
         setSource_Department(response.data[0].DepCode)
         setSource_BU('Oil')
-      }else{
+      } else {
         setSource_Department(response.data[0].DepCode)
         setSource_BU('Center')
       }
@@ -347,12 +348,12 @@ export default function Reported_of_assets() {
       setDes_Department('')
       setDes_BU('')
     } else {
-      if(response.data[0].BranchID !== 901){
-        setSource_Department(response.data[0].DepCode)
-        setSource_BU('Oil')
-      }else{
-        setSource_Department(response.data[0].DepCode)
-        setSource_BU('Center')
+      if (response.data[0].BranchID !== 901) {
+        setDes_Department(response.data[0].DepCode)
+        setDes_BU('Oil')
+      } else {
+        setDes_Department(response.data[0].DepCode)
+        setDes_BU('Center')
       }
     }
   };
@@ -510,12 +511,13 @@ export default function Reported_of_assets() {
   };
 
   const columns = [
-    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130 },
-    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', flex: 1 },
+    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
+    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
     {
       field: 'Date',
       headerName: 'วันที่ตรวจนับ',
       headerClassName: 'super-app-theme--header',
+      minWidth: 170, 
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -543,6 +545,7 @@ export default function Reported_of_assets() {
       field: 'EndDate_Success',
       headerName: 'วันที่ทำ NAC ล่าสุด',
       headerClassName: 'super-app-theme--header',
+      minWidth: 170, 
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -572,6 +575,7 @@ export default function Reported_of_assets() {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',
+      minWidth: 100, 
       flex: 1,
       valueGetter: (params) =>
         `${params.row.UserID || ''}`,
@@ -580,6 +584,7 @@ export default function Reported_of_assets() {
       field: 'detail',
       headerName: 'สถานะล่าสุด',
       headerClassName: 'super-app-theme--header',
+      minWidth: 130, 
       flex: 1,
       valueGetter: (params) =>
         `${params.row.detail || ''}`,
@@ -588,6 +593,7 @@ export default function Reported_of_assets() {
       field: 'Reference',
       headerName: 'สถานะครั้งนี้',
       headerClassName: 'super-app-theme--header',
+      minWidth: 130, 
       flex: 1,
       renderCell: (params) => {
         const handleChange_select = async (event, params) => {
@@ -644,6 +650,7 @@ export default function Reported_of_assets() {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',
+      minWidth: 130, 
       flex: 1,
       renderCell: (params) => {
         return (
@@ -684,7 +691,7 @@ export default function Reported_of_assets() {
       >
         <Toolbar>
           <AnimatedPage>
-            <Typography variant="h5" color="inherit" noWrap>
+            <Typography variant="h5" color="inherit" className='font-vsm'>
               รายการการตรวจนับทรัพย์สินทั้งหมดของสาขาที่ {!reported_of_assets ? 'Loading...' : reported_of_assets[0].BranchID}
             </Typography>
           </AnimatedPage>
@@ -703,7 +710,7 @@ export default function Reported_of_assets() {
                   sx={{ mb: 2, mt: 2 }}
                 >
                   <Card
-                    
+
                     style={{
                       'cursor': 'pointer',
                       'flex': 1,
@@ -713,16 +720,16 @@ export default function Reported_of_assets() {
                     }}
                   >
                     <CardContent>
-                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom className='hide-sm font-md-sm'>
                         รวมทรัพย์สินที่ตรวจนับแล้ว
                       </Typography>
-                      <Typography variant="h5" component="div" style={{ color: 'green' }}>
+                      <Typography variant="h5" component="div" style={{ color: 'green' }} className='font-vsm font-md-sm'>
                         <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'ตรวจนับแล้ว') }).length} รายการ</b>
                       </Typography>
                     </CardContent>
                   </Card>
                   <Card
-                    
+
                     style={{
                       'cursor': 'pointer',
                       'flex': 1,
@@ -732,16 +739,16 @@ export default function Reported_of_assets() {
                     }}
                   >
                     <CardContent>
-                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom className='hide-sm font-md-sm'>
                         รวมทรัพย์สินที่คงเหลือ
                       </Typography>
-                      <Typography variant="h5" component="div" style={{ color: 'red' }}>
+                      <Typography variant="h5" component="div" style={{ color: 'red' }} className='font-vsm font-md-sm'>
                         <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'ยังไม่ได้ตรวจนับ') }).length} รายการ</b>
                       </Typography>
                     </CardContent>
                   </Card>
                   <Card
-                    
+
                     style={{
                       'cursor': 'pointer',
                       'flex': 1,
@@ -751,16 +758,16 @@ export default function Reported_of_assets() {
                     }}
                   >
                     <CardContent>
-                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom className='hide-sm font-md-sm'>
                         ทรัพย์สินสาขาอื่น ๆ
                       </Typography>
-                      <Typography variant="h5" component="div" style={{ color: 'orange' }}>
+                      <Typography variant="h5" component="div" style={{ color: 'orange' }} className='font-vsm font-md-sm'>
                         <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'นับแล้ว ต่างสาขา') }).length} รายการ</b>
                       </Typography>
                     </CardContent>
                   </Card>
                   <Card
-                    
+
                     style={{
                       'cursor': 'pointer',
                       'flex': 1,
@@ -770,10 +777,10 @@ export default function Reported_of_assets() {
                     }}
                   >
                     <CardContent>
-                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom className='hide-sm font-md-sm'>
                         ทรัพย์สินทั้งหมด
                       </Typography>
-                      <Typography variant="h5" component="div" style={{ color: 'blue' }}>
+                      <Typography variant="h5" component="div" style={{ color: 'blue' }} className='font-vsm font-md-sm'>
                         <b>{reported_of_assets.length} รายการ</b>
                       </Typography>
                     </CardContent>
@@ -817,9 +824,6 @@ export default function Reported_of_assets() {
                 rowsPerPageOptions={[10, 20, 50, 100]}
                 disableColumnMenu
                 autoHeight
-                getRowClassName={(params) =>
-                  params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                }
                 disableSelectionOnClick
                 {...other}
                 onSelectionModelChange={(newSelectionModel) => handleClick_Value(newSelectionModel)}
@@ -836,12 +840,13 @@ export default function Reported_of_assets() {
               justifyContent="flex-start"
               spacing={2}
             >
-              <DialogTitle>กรุณาเลือกประเภทรายการ</DialogTitle>
+              <DialogTitle className='font-vsm'>กรุณาเลือกประเภทรายการ</DialogTitle>
               <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel variant="standard" htmlFor="demo-dialog-native"></InputLabel>
+                <InputLabel className='font-vsm' variant="standard" htmlFor="demo-dialog-native"></InputLabel>
                 <NativeSelect
                   defaultValue={[]}
                   onChange={handleChange}
+                  className='font-vsm'
                   inputProps={{
                     name: 'age',
                     id: 'uncontrolled-native',
@@ -864,8 +869,8 @@ export default function Reported_of_assets() {
                         <Table aria-label="customized table" style={{ width: '100%' }}>
                           <TableHead>
                             <TableRow>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ส่งมอบ</StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับมอบ</StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }} className='font-vsm-sm'>หน่วยงานที่ส่งมอบ</StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }} className='font-vsm-sm'>หน่วยงานที่รับมอบ</StyledTableCell>
                             </TableRow>
                           </TableHead>
                           <React.Fragment>
@@ -875,12 +880,12 @@ export default function Reported_of_assets() {
                                   <React.Fragment>
                                     <Grid container>
                                       <Grid xs={6}>
-                                        <Typography align='center' color="inherit" noWrap>
+                                        <Typography align='center' color="inherit" className='font-vsm-sm'>
                                           Department
                                         </Typography>
                                       </Grid>
                                       <Grid xs={6}>
-                                        <Typography align='center' color="inherit" noWrap>
+                                        <Typography align='center' color="inherit" className='font-vsm-sm'>
                                           BU
                                         </Typography>
                                       </Grid>
@@ -959,7 +964,7 @@ export default function Reported_of_assets() {
                                       InputProps={{
                                         startAdornment: (
                                           <InputAdornment position="start">
-                                            <Typography color="black">
+                                            <Typography color="black" className='font-vsm-sm'>
                                               หมายเหตุ :
                                             </Typography>
                                           </InputAdornment>
@@ -973,12 +978,12 @@ export default function Reported_of_assets() {
                                   <React.Fragment>
                                     <Grid container>
                                       <Grid xs={6}>
-                                        <Typography align='center' color="inherit" noWrap>
+                                        <Typography align='center' color="inherit" className='font-vsm-sm'>
                                           Department
                                         </Typography>
                                       </Grid>
                                       <Grid xs={6}>
-                                        <Typography align='center' color="inherit" noWrap>
+                                        <Typography align='center' color="inherit" className='font-vsm-sm'>
                                           BU
                                         </Typography>
                                       </Grid>
@@ -1043,7 +1048,7 @@ export default function Reported_of_assets() {
                                       InputProps={{
                                         startAdornment: (
                                           <InputAdornment position="start">
-                                            <Typography color="black">
+                                            <Typography color="black" className='font-vsm-sm'>
                                               หมายเหตุ :
                                             </Typography>
                                           </InputAdornment>
@@ -1067,8 +1072,8 @@ export default function Reported_of_assets() {
                         <Table aria-label="customized table" style={{ width: '100%' }}>
                           <TableHead>
                             <TableRow>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ส่งมอบ</StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับมอบ</StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }} className='font-vsm-sm'>หน่วยงานที่ส่งมอบ</StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }} className='font-vsm-sm'>หน่วยงานที่รับมอบ</StyledTableCell>
                             </TableRow>
                           </TableHead>
                           <React.Fragment>
@@ -1078,12 +1083,12 @@ export default function Reported_of_assets() {
                                   <React.Fragment>
                                     <Grid container>
                                       <Grid xs={6}>
-                                        <Typography align='center' color="inherit" noWrap>
+                                        <Typography align='center' color="inherit" className='font-vsm-sm'>
                                           Department
                                         </Typography>
                                       </Grid>
                                       <Grid xs={6}>
-                                        <Typography align='center' color="inherit" noWrap>
+                                        <Typography align='center' color="inherit" className='font-vsm-sm'>
                                           BU
                                         </Typography>
                                       </Grid>
@@ -1163,7 +1168,7 @@ export default function Reported_of_assets() {
                                       InputProps={{
                                         startAdornment: (
                                           <InputAdornment position="start">
-                                            <Typography color="black">
+                                            <Typography color="black" className='font-vsm-sm'>
                                               หมายเหตุ :
                                             </Typography>
                                           </InputAdornment>

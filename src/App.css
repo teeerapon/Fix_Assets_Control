@@ -36,3 +36,40 @@
     transform: rotate(360deg);
   }
 }
+
+@media only screen and (max-width: 375px) {
+  .hide-sm {
+    display: none;
+  }
+  .font-sm {
+    font-size: 1rem !important;
+  }
+  .font-sm-bold {
+    font-size: 1.3rem !important;
+    font-weight: bold;
+  }
+  .font-vsm {
+    font-size: .8rem !important;
+  }
+  .font-vsm-sm {
+    font-size: .6rem !important;
+  }
+  .font-vsm-sm {
+    font-size: .5rem !important;
+  }
+}
+
+@media only screen and (max-width: 768px) and (min-width: 376px) {
+  .hide-md {
+    display: none;
+  }
+  .font-md {
+    font-size: 1.5rem !important;
+  }
+  .font-md-sm {
+    font-size: .8rem !important;
+  }
+  .font-vmd {
+    font-size: 1.2rem !important;
+  }
+}

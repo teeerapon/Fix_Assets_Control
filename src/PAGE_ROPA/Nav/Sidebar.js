@@ -26,7 +26,7 @@ const Aside = () => {
             letterSpacing: '1px',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
+            whiteSpace: '',
           }}
         >
           {intl.formatMessage({ id: 'sidebarTitle' })}
@@ -92,7 +92,7 @@ const Aside = () => {
             rel="noopener noreferrer"
           >
             <FaGithub />
-            <span style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+            <span style={{ whiteSpace: '', textOverflow: 'ellipsis', overflow: 'hidden' }}>
               {intl.formatMessage({ id: 'viewSource' })}
             </span>
           </a>

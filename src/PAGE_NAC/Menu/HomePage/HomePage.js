@@ -7,6 +7,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import logoPure from '../../../image/Picture1.png'
 import CssBaseline from '@mui/material/CssBaseline';
+import '../../../App.css'
 
 export default function MenuAppBar() {
   return (
@@ -22,7 +23,7 @@ export default function MenuAppBar() {
       >
         <Toolbar>
           <AnimatedPage>
-            <Typography variant="h5" color="inherit" noWrap>
+            <Typography variant="h5" color="inherit"  className='font-sm'>
               หน้าแรกระบบควบคุมและเปลี่ยนแปลงทรัพย์สิน
             </Typography>
           </AnimatedPage>
@@ -40,14 +41,14 @@ export default function MenuAppBar() {
           <Container component="main" sx={{ mt: 8, mb: 0 }} maxWidth="md">
             <center>
               <img style={{ maxWidth: '50%' }} src={logoPure} loading="lazy" />
-              <Typography sx={{ mt: 2 }} variant="h3" component="h2" gutterBottom>
+              <Typography sx={{ mt: 2 }} variant="h3" component="h2" gutterBottom className='font-sm font-md'>
                 <b> {'(PURE THAI ENERGY CO.,LTD)'} </b>
               </Typography>
             </center>
           </Container>
           <Container component="main" sx={{ mt: 0, mb: 2 }} maxWidth="sm">
             <center>
-              <Typography variant="h5" component="h2" gutterBottom>
+              <Typography variant="h5" component="h2" gutterBottom className='font-vsm'>
                 {'ยินดีต้อนรับสู่เว็บไซต์ เพียวพลังงานไทย จำกัด'}
                 {'ที่ใช้สำหรับการจัดการเปลี่ยนแปลงและควบคุมทรัพย์สิน'}
               </Typography>

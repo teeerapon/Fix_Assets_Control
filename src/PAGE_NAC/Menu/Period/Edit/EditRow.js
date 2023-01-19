@@ -144,17 +144,17 @@ export default function EditPeriod({ editFormData, handleEditClickCancel }) {
         </LocalizationProvider>
       </StyledTableCell>
       <StyledTableCell align="left" >
-        <Typography focused color="inherit" variant="body2" name="Description" noWrap>
+        <Typography focused color="inherit" variant="body2" name="Description" >
           {Description}
         </Typography>
       </StyledTableCell>
       <StyledTableCell align="center" >
-        <Typography focused color="inherit" variant="body2" name="BranchID" noWrap>
+        <Typography focused color="inherit" variant="body2" name="BranchID" >
           {(BranchID === 0 || BranchID === '0') ? 'ทุกสาขา' : BranchID}
         </Typography>
       </StyledTableCell>
       <StyledTableCell align="left" >
-        <Typography focused style={{'color': datenow >= BeginDate && datenow <=EndDate ? 'green' : 'red' }} name="Datetime" variant="body2" noWrap>
+        <Typography focused style={{'color': datenow >= BeginDate && datenow <=EndDate ? 'green' : 'red' }} name="Datetime" variant="body2" >
           {datenow >= BeginDate && datenow <=EndDate ? 'อยู่ระหว่างเปิดใช้งาน' : 'ปิดการใช้งานแล้ว' }
         </Typography>
       </StyledTableCell>

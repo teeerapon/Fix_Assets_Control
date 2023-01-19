@@ -201,7 +201,7 @@ export default function EditPeriod() {
       >
         <Toolbar>
           <AnimatedPage>
-            <Typography variant="h5" color="inherit" noWrap>
+            <Typography variant="h5" color="inherit" >
               แก้ไขรอบตรวจนับ
             </Typography>
           </AnimatedPage>

@@ -58,6 +58,7 @@ import MuiAlert from '@mui/material/Alert';
 import DialogContentText from '@mui/material/DialogContentText';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { CSVLink } from 'react-csv'
+import '../../../../../App.css'
 
 function Copyright() {
   return (
@@ -1417,7 +1418,7 @@ export default function Nac_Main_wait() {
         >
           <Stack direction="row" spacing={3}>
             <CircularProgress disableShrink color="inherit" />
-            <Typography variant="h4" color="inherit" noWrap>
+            <Typography variant="h4" color="inherit" >
               Loading...
             </Typography>
           </Stack>
@@ -1450,7 +1451,7 @@ export default function Nac_Main_wait() {
                 <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                   <Box gridColumn="span 10">
                     <AnimatedPage>
-                      <Typography variant="h5" color="inherit" noWrap sx={{ pt: 1 }}>
+                      <Typography variant="h5" color="inherit"  sx={{ pt: 1 }}>
                         การเปลี่ยนแปลงทรัพย์สินถาวร
                       </Typography>
                     </AnimatedPage>
@@ -1518,26 +1519,26 @@ export default function Nac_Main_wait() {
                     </Box>
                   </Grid>
                   <Grid xs={8}>
-                    <Typography component="h1" variant="h4" align="center">
+                    <Typography component="h1" variant="h4" align="center" className='font-sm font-md'>
                       <b>PURE THAI ENERGY CO.,LTD.</b>
                     </Typography>
-                    <Typography sx={{ mb: 1 }} component="h1" variant="h6" align="center" className='pt-2'>
+                    <Typography sx={{ mb: 1 }} component="h1" variant="h6" align="center" className='pt-2 font-vsm font-vmd'>
                       เปลี่ยนแปลงรายการทรัพย์สินถาวร (Notice of Asset Change - NAC)
                     </Typography>
                   </Grid>
                   <Grid xs={2}>
                     <TableContainer component={Paper}>
-                      <Table aria-label="customized table">
+                      <Table aria-label="customized table" style={{ width: '100%' }}>
                         <TableBody>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                            <Typography align='center' color="inherit" noWrap>
+                            <Typography align='center' color="inherit" >
                               {nac_code}
                             </Typography>
                           </StyledTableCell>
                         </TableBody>
                         <TableBody>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                            <Typography align='center' color="inherit" noWrap>
+                            <Typography align='center' color="inherit" >
                               {!headers.create_date ? '' : (headers.create_date).split('T')[0]}
                             </Typography>
                           </StyledTableCell>
@@ -1606,12 +1607,12 @@ export default function Nac_Main_wait() {
                               <React.Fragment>
                                 <Grid container>
                                   <Grid xs={6}>
-                                    <Typography align='center' color="inherit" noWrap>
+                                    <Typography align='center' color="inherit" >
                                       Department
                                     </Typography>
                                   </Grid>
                                   <Grid xs={6}>
-                                    <Typography align='center' color="inherit" noWrap>
+                                    <Typography align='center' color="inherit" >
                                       BU
                                     </Typography>
                                   </Grid>
@@ -1716,12 +1717,12 @@ export default function Nac_Main_wait() {
                               <React.Fragment>
                                 <Grid container>
                                   <Grid xs={6}>
-                                    <Typography align='center' color="inherit" noWrap>
+                                    <Typography align='center' color="inherit" >
                                       Department
                                     </Typography>
                                   </Grid>
                                   <Grid xs={6}>
-                                    <Typography align='center' color="inherit" noWrap>
+                                    <Typography align='center' color="inherit" >
                                       BU
                                     </Typography>
                                   </Grid>

@@ -320,15 +320,16 @@ export default function History_of_assets() {
   }
 
   const columns = [
-    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 150 },
-    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', flex: 1 },
-    { field: 'SerialNo', headerName: 'SerialNo', headerClassName: 'super-app-theme--header', flex: 1 },
-    { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', flex: 1 },
-    { field: 'Details', headerName: 'หมายเหตุ', headerClassName: 'super-app-theme--header', flex: 1 },
+    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
+    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
+    { field: 'SerialNo', headerName: 'SerialNo', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
+    { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
+    { field: 'Details', headerName: 'หมายเหตุ', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
     {
       field: 'Price',
       headerName: 'ราคาทุน',
       headerClassName: 'super-app-theme--header',
+      minWidth: 130, 
       flex: 1,
       valueGetter: (params) =>
         `${params.row.Price.toLocaleString() || ''}`,
@@ -337,6 +338,7 @@ export default function History_of_assets() {
       field: 'BranchID',
       headerName: 'สาขา',
       headerClassName: 'super-app-theme--header',
+      minWidth: 100, 
       flex: 1,
       valueGetter: (params) =>
         params.row.BranchID === 901 ? 'HO' : params.row.BranchID,
@@ -345,6 +347,7 @@ export default function History_of_assets() {
       field: 'CreateDate',
       headerName: 'วันที่ขึ้นทะเบียน',
       headerClassName: 'super-app-theme--header',
+      minWidth: 170, 
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -397,7 +400,7 @@ export default function History_of_assets() {
         >
           <Toolbar>
             <AnimatedPage>
-              <Typography variant="h5" color="inherit" noWrap>
+              <Typography variant="h5" color="inherit" >
                 ทรัพย์สินทั้งหมด
               </Typography>
             </AnimatedPage>
@@ -453,9 +456,6 @@ export default function History_of_assets() {
                   rowsPerPageOptions={[10, 20, 50, 100]}
                   autoHeight
                   disableColumnMenu
-                  getRowClassName={(params) =>
-                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                  }
                   disableSelectionOnClick
                   {...other}
                 //checkboxSelection
@@ -608,9 +608,6 @@ export default function History_of_assets() {
                     pageSize={10}
                     autoHeight
                     disableColumnMenu
-                    getRowClassName={(params) =>
-                      params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                    }
                     disableSelectionOnClick
                     {...other}
                   />

@@ -73,10 +73,10 @@ export default function AddressForm() {
   } else {
     return (
       <>
-        <Typography component="h1" variant="h4" align="center">
+        <Typography component="h1" variant="h4" align="center" class="font-sm">
           <b>PURE THAI ENERGY CO.,LTD.</b>
         </Typography>
-        <Typography component="h1" variant="h6" align="center" className='pt-2'>
+        <Typography component="h1" variant="h6" align="center" className='pt-2 font-vsm'>
           ขั้นตอนตรวจสอบข้อมูล
         </Typography>
         <center>
@@ -108,7 +108,7 @@ export default function AddressForm() {
             <Grid item xs={12}>
               <Stack spacing={3}>
                 <Alert variant="outlined" severity="error">
-                  <Typography variant="body" color='error' noWrap>
+                  <Typography variant="body" color='error' >
                     วันที่สิ้นสุด (2022-10-11 0.00 น.) ผลลัพธ์คือ (2022-10-10 24.00 น.)
                   </Typography>
                 </Alert>

@@ -220,13 +220,14 @@ export default function History_of_assets() {
   };
 
   const columns = [
-    { field: 'Description', headerName: 'คำอธิบาย', headerClassName: 'super-app-theme--header', flex: 1 },
+    { field: 'Description', headerName: 'คำอธิบาย', headerClassName: 'super-app-theme--header', minWidth: 170, flex: 1 },
     {
       field: 'BeginDate',
       headerName: 'วันที่เริ่มต้น',
       headerClassName: 'super-app-theme--header',
       headerAlign: 'center',
       align: 'center',
+      minWidth: 170,
       flex: 1,
       renderCell: (params) => {
         return (
@@ -254,6 +255,7 @@ export default function History_of_assets() {
       headerClassName: 'super-app-theme--header',
       headerAlign: 'center',
       align: 'center',
+      minWidth: 170,
       flex: 1,
       renderCell: (params) => {
         return (
@@ -287,6 +289,7 @@ export default function History_of_assets() {
       field: 'status',
       headerName: 'สถานะการใช้งาน',
       headerClassName: 'super-app-theme--header',
+      minWidth: 150,
       flex: 1,
       renderCell: (params) => {
         return (
@@ -447,7 +450,7 @@ export default function History_of_assets() {
         >
           <Toolbar>
             <AnimatedPage>
-              <Typography variant="h5" color="inherit" noWrap>
+              <Typography variant="h5" color="inherit" >
                 สถานะรอบตรวจนับทั้งหมด
               </Typography>
             </AnimatedPage>
@@ -463,7 +466,7 @@ export default function History_of_assets() {
                 }}
               >
                 <Alert variant="outlined" severity="error">
-                  <Typography variant="body" color='error' noWrap sx={{ mt: 5 }}>
+                  <Typography variant="body" color='error' sx={{ mt: 5 }}>
                     วันที่สิ้นสุด (2022-10-11 0.00 น.) ผลลัพธ์คือ (2022-10-10 24.00 น.)
                   </Typography>
                 </Alert>
@@ -486,9 +489,6 @@ export default function History_of_assets() {
                   getRowId={(dataBranchID_Main) => dataBranchID_Main.PeriodID}
                   //autoHeight={true}
                   disableColumnMenu
-                  getRowClassName={(params) =>
-                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                  }
                   disableSelectionOnClick
                   {...other}
                 />

@@ -130,13 +130,14 @@ export default function Reported_of_assets() {
   const [pageSize, setPageSize] = React.useState(10);
 
   const columns = [
-    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 130 },
-    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', flex: 1 },
-    { field: 'BranchID', headerName: 'สาขา', headerClassName: 'super-app-theme--header', flex: 1, headerAlign: 'center', align: 'center', },
+    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
+    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
+    { field: 'BranchID', headerName: 'สาขา', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', flex: 1 },
     {
       field: 'Date',
       headerName: 'วันที่ตรวจนับ',
       headerClassName: 'super-app-theme--header',
+      minWidth: 170,
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -164,6 +165,7 @@ export default function Reported_of_assets() {
       field: 'EndDate_Success',
       headerName: 'วันที่ทำ NAC ล่าสุด',
       headerClassName: 'super-app-theme--header',
+      minWidth: 170,
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -193,6 +195,7 @@ export default function Reported_of_assets() {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',
+      minWidth: 100,
       flex: 1,
       valueGetter: (params) =>
         `${params.row.UserID || ''}`,
@@ -201,6 +204,7 @@ export default function Reported_of_assets() {
       field: 'detail',
       headerName: 'สถานะล่าสุด',
       headerClassName: 'super-app-theme--header',
+      minWidth: 130,
       flex: 1,
       valueGetter: (params) =>
         `${params.row.detail || ''}`,
@@ -209,6 +213,7 @@ export default function Reported_of_assets() {
       field: 'Reference',
       headerName: 'สถานะครั้งนี้',
       headerClassName: 'super-app-theme--header',
+      minWidth: 130,
       flex: 1,
       renderCell: (params) => {
 
@@ -259,6 +264,7 @@ export default function Reported_of_assets() {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',
+      minWidth: 130,
       flex: 1,
       renderCell: (params) => {
         return (
@@ -317,7 +323,7 @@ export default function Reported_of_assets() {
         >
           <Toolbar>
             <AnimatedPage>
-              <Typography variant="h5" color="inherit" noWrap>
+              <Typography variant="h5" color="inherit" >
                 รายงานการตรวจนับทั้งหมด
               </Typography>
             </AnimatedPage>
@@ -372,9 +378,6 @@ export default function Reported_of_assets() {
                   autoHeight
                   disableColumnMenu
                   //autoHeight={true}
-                  getRowClassName={(params) =>
-                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                  }
                   disableSelectionOnClick
                   {...other}
                 //checkboxSelection

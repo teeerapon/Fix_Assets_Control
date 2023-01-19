@@ -26,6 +26,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArticleIcon from '@mui/icons-material/Article';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ClearIcon from '@mui/icons-material/Clear';
+import '../../../../App.css'
 
 const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(0.8),
@@ -218,8 +219,8 @@ export default function History_of_assets() {
   }
 
   const columns = [
-    { field: 'nac_code', headerName: 'เลขที่เอกสาร', headerClassName: 'super-app-theme--header', width: 130, },
-    { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', flex: 1 },
+    { field: 'nac_code', headerName: 'เลขที่เอกสาร', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
+    { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', minWidth: 170, flex: 1 },
     // {
     //   field: 'create_by',
     //   headerName: 'ผู้ทำรายการ',
@@ -246,7 +247,8 @@ export default function History_of_assets() {
       field: 'create_date',
       headerName: 'วันที่สร้างเอกสาร',
       headerClassName: 'super-app-theme--header',
-      width: 150,
+      minWidth: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
@@ -273,7 +275,8 @@ export default function History_of_assets() {
       field: 'source_userid',
       headerName: 'ผู้ส่ง',
       headerClassName: 'super-app-theme--header',
-      width: 120,
+      minWidth: 120,
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
@@ -294,7 +297,8 @@ export default function History_of_assets() {
       field: 'des_userid',
       headerName: 'ผู้รับ',
       headerClassName: 'super-app-theme--header',
-      width: 120,
+      minWidth: 120,
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
@@ -315,7 +319,8 @@ export default function History_of_assets() {
       field: 'status_name',
       headerName: 'สถานะรายการ',
       headerClassName: 'super-app-theme--header',
-      width: 160,
+      minWidth: 160,
+      flex: 1,
       headerAlign: 'center',
       renderCell: (params) => {
         return (
@@ -354,7 +359,8 @@ export default function History_of_assets() {
       headerClassName: 'super-app-theme--header',
       align: 'center',
       headerAlign: 'center',
-      width: 130,
+      minWidth: 130,
+      flex: 1,
       valueGetter: (params) =>
         `${(params.row.nac_status === 2 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.vertify + '' :
           (params.row.nac_status === 3 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.approved + '' :
@@ -449,7 +455,7 @@ export default function History_of_assets() {
       >
         <Toolbar>
           <AnimatedPage>
-            <Typography variant="h5" color="inherit" noWrap>
+            <Typography variant="h5" color="inherit" >
               สถานะรายการ NAC
             </Typography>
           </AnimatedPage>
@@ -484,9 +490,6 @@ export default function History_of_assets() {
                 onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                 pagination
                 disableColumnMenu
-                getRowClassName={(params) =>
-                  params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                }
                 disableSelectionOnClick
                 onPageChange={(newPage) => change_page_NacOperation(newPage)}
                 rowsPerPageOptions={[10, 20, 50, 100]}

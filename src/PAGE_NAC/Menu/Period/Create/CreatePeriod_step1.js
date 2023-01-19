@@ -16,6 +16,7 @@ import swal from 'sweetalert';
 import Radio from '@mui/material/Radio';
 import DatePicker from '@mui/lab/DatePicker';
 import { Outlet, useNavigate } from "react-router";
+import '../../../../App.css'
 
 const steps = ['กรอกข้อมูล', 'ตรวจสอบข้อมูล', 'เสร็จสิ้น'];
 
@@ -87,13 +88,13 @@ export default function AddressForm() {
   } else {
     return (
       <React.Fragment>
-        <Typography component="h1" variant="h4" align="center">
-          <b>PURE THAI ENERGY CO.,LTD.</b>
-        </Typography>
-        <Typography component="h1" variant="h6" align="center" className='pt-2'>
-          ขั้นตอนการกรอกข้อมูล
-        </Typography>
         <center>
+          <Typography component="h1" variant="h4" align="center" class="font-sm">
+            <b>PURE THAI ENERGY CO.,LTD.</b>
+          </Typography>
+          <Typography component="h1" variant="h6" align="center" className='pt-2 font-vsm'>
+            ขั้นตอนการกรอกข้อมูล
+          </Typography>
           <Stepper activeStep={activeStep} sx={{ pt: 5, pb: 5 }} className="col-md-10">
             {steps.map((label) => (
               <Step key={label}>
@@ -122,7 +123,7 @@ export default function AddressForm() {
             <Grid item xs={12}>
               <Stack spacing={3}>
                 <Alert variant="outlined" severity="error">
-                  <Typography variant="body" color='error' noWrap>
+                  <Typography variant="body" color='error' >
                     วันที่สิ้นสุด (2022-10-11 0.00 น.) ผลลัพธ์คือ (2022-10-10 24.00 น.)
                   </Typography>
                 </Alert>
