@@ -158,23 +158,36 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 
 export default function Permission_NAC() {
 
+  const data = JSON.parse(localStorage.getItem('data'));
   const [menu, setMenu] = React.useState([]);
   const [user, setUser] = React.useState([]);
-  const [menuActive, setMenuActive] = React.useState();
+  const [menuActive, setMenuActive] = React.useState([]);
+  const [selectUser, setSelectUser] = React.useState();
 
-  const selectValue = async (e, index) => {
-    const UserCode = e.target.innerText
-    const body = { Permission_TypeID: 1, UserCode: UserCode }
+  const setActive_User = async (event, params) => {
+    const body = { admin: data.UserCode, UserCode: selectUser, menuid: params.row.menuid, id: event.target.id }
+    const bodyII = { Permission_TypeID: 1, UserCode: selectUser }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    await Axios.post("http://192.168.220.1:32001/api/Select_Permission_Menu_NAC", body, { headers })
-      .then(response => setMenuActive(response.data.data))
+    await Axios.post("http://vpnptec.dyndns.org:32001/api/Fix_Assets_Control_UPDATE_Permission", body, { headers })
+      .then(async response => {
+        if (response.data.data) {
+          await Axios.post("http://vpnptec.dyndns.org:32001/api/Select_Permission_Menu_NAC", bodyII, { headers })
+            .then(response => {
+              if (response.data.data) {
+                setMenuActive((response.data.data).map((res) => res.menuid))
+                setSelectUser(selectUser)
+              } else {
+                setMenuActive(null)
+              }
+            })
+        } else {
+          alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง')
+        }
+      })
 
-  }
-
-  const setActive_User = async (event, params) => {
   }
 
   async function fetchData() {
@@ -183,8 +196,8 @@ export default function Permission_NAC() {
       'Accept': 'application/json'
     };
 
-    const { data } = await Axios.get("http://192.168.220.1:32001/api/getsUserForAssetsControl")
-    await Axios.post("http://192.168.220.1:32001/api/Permission_Menu_NAC", {}, { headers })
+    const { data } = await Axios.get("http://vpnptec.dyndns.org:32001/api/getsUserForAssetsControl")
+    await Axios.post("http://vpnptec.dyndns.org:32001/api/Permission_Menu_NAC", {}, { headers })
       .then(response => setMenu(response.data.data))
 
     setUser(data.data);
@@ -199,7 +212,8 @@ export default function Permission_NAC() {
       field: 'menuid',
       headerName: 'ลำดับ',
       headerClassName: 'super-app-theme--header',
-      width: 100,
+      minWidth: 100,
+      flex : 1,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
@@ -216,7 +230,8 @@ export default function Permission_NAC() {
       field: 'menu_name',
       headerName: 'ข้อความ',
       headerClassName: 'super-app-theme--header',
-      flex: 1,
+      minWidth: 250,
+      flex : 1,
       renderCell: (params) => {
         return (
           <React.Fragment>
@@ -231,7 +246,8 @@ export default function Permission_NAC() {
       field: 'Permission',
       headerName: 'สิทธิ์',
       headerClassName: 'super-app-theme--header',
-      width: 220,
+      minWidth: 220,
+      flex : 1,
       disableExport: true,
       headerAlign: 'center',
       align: 'center',
@@ -242,10 +258,12 @@ export default function Permission_NAC() {
               control={
                 <IOSSwitch
                   sx={{ m: 1 }}
+                  id={(menuActive.findIndex((res) => res === params.row.menuid) < 0) ? 0 : 1}
+                  checked={(menuActive.findIndex((res) => res === params.row.menuid) < 0) ? false : true}
                   onChange={(event) => setActive_User(event, params)}
                 />
               }
-              label='ไม่ได้ใช้งาน'
+              label={(menuActive.findIndex((res) => res === params.row.menuid) < 0) ? 'ไม่ได้ใช้งาน' : 'กำลังใช้งาน'}
             />
           </React.Fragment>
         );
@@ -253,51 +271,79 @@ export default function Permission_NAC() {
     },
   ]
 
-  return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="lg" sx={{ pt: 3, pb: 3 }}>
-        <Autocomplete
-          freeSolo
-          sx={{ pb: 2 }}
-          options={user}
-          getOptionLabel={(option) => option.UserCode}
-          filterOptions={filterOptions2}
-          onChange={selectValue}
-          renderInput={(params) =>
-            <TextField
-              fullWidth
-              label='รหัสพนักงาน'
-              {...params}
-            />}
-        />
-        <Box
-          sx={{
-            height: 683,
-            width: '100%',
-          }}
-        >
-          <StripedDataGrid
-            sx={{
-              pl: 2,
-              pr: 2,
-              pt: 2,
-              boxShadow: 1,
-              [`& .${gridClasses.cell}`]: {
-                py: 1,
-              },
-            }}
-            rows={menu}
-            columns={columns_I}
-            getRowId={(res) => res.menuid}
-            disableColumnMenu
-            autoHeight
-            pageSize={12}
-            disableSelectionOnClick
-            {...other}
-          //checkboxSelection
+  const selectValue = async (e) => {
+    const UserCode = e.target.innerText
+    const body = { Permission_TypeID: 1, UserCode: UserCode }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    await Axios.post("http://vpnptec.dyndns.org:32001/api/Select_Permission_Menu_NAC", body, { headers })
+      .then(response => {
+        if (response.data.data) {
+          setMenuActive((response.data.data).map((res) => res.menuid))
+          setSelectUser(e.target.innerText)
+        } else {
+          setMenuActive(null)
+        }
+      })
+
+  }
+
+  if (data.DepCode == ('101ITO' || 'ITO')) {
+    return (
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="lg" sx={{ pt: 3, pb: 3 }}>
+          <Autocomplete
+            freeSolo
+            sx={{ pb: 2 }}
+            size="small"
+            options={user}
+            getOptionLabel={(option) => option.UserCode}
+            filterOptions={filterOptions2}
+            onChange={selectValue}
+            renderInput={(params) =>
+              <TextField
+                fullWidth
+                size="small"
+                label='รหัสพนักงาน'
+                {...params}
+              />}
           />
-        </Box>
-      </Container>
-    </ThemeProvider>
-  );
+          <Box
+            sx={{
+              height: 683,
+              width: '100%',
+              mb: 8
+            }}
+          >
+            <StripedDataGrid
+              sx={{
+                pl: 2,
+                pr: 2,
+                pt: 2,
+                boxShadow: 1,
+                [`& .${gridClasses.cell}`]: {
+                  py: 1,
+                },
+              }}
+              rows={menu}
+              columns={columns_I}
+              getRowId={(res) => res.menuid}
+              disableColumnMenu
+              autoHeight
+              density='compact'
+              pageSize={menu.length}
+              disableSelectionOnClick
+              {...other}
+            //checkboxSelection
+            />
+          </Box>
+        </Container>
+      </ThemeProvider>
+    );
+  } else {
+    alert('ไม่มีสิทธิ์ในรายการนี้')
+    window.location.href = '/DATA_CENTER';
+  }
 }
