@@ -119,7 +119,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
       setFileName(e.target.files[0].name);
       setPath(e.target.files[0].name)
     } else {
-      alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ csv, xls, txt, ppt, doc, pdf, jpg, png, gif')
+      alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
       setFile(null)
       setFileName("")
       setDescription('')
