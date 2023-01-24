@@ -114,9 +114,17 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
   const [fileName, setFileName] = React.useState("");
 
   const handleUploadFile = async (e) => {
-    setFile(e.target.files[0]);
-    setFileName(e.target.files[0].name);
-    setDescription(e.target.files[0].name)
+    if (['csv','xls','txt','ppt','doc','pdf','jpg','png','gif'].indexOf((e.target.files[0].name).split('.')[1])) {
+      setFile(e.target.files[0]);
+      setFileName(e.target.files[0].name);
+      setPath(e.target.files[0].name)
+    } else {
+      alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ csv, xls, txt, ppt, doc, pdf, jpg, png, gif')
+      setFile(null)
+      setFileName("")
+      setDescription('')
+      setPath('')
+    }
   }
 
   function stringToColor(string) {
@@ -250,7 +258,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
               setDescription('')
               setPath('')
               const usercode = data.UserCode
-              const linkpath = 'http://vpnptec.dyndns.org:33080/'+ description
+              const linkpath = 'http://vpnptec.dyndns.org:33080/' + res.data.attach[0].ATT + '.' + path.split('.').pop();
               const responsePath = await stroe_FA_control_Path({
                 nac_code,
                 usercode,
@@ -468,13 +476,29 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
             autoFocus
             margin="dense"
             id="link_document"
-            label="ลิ้งเอกสารที่ต้องการ"
             type="text"
             value={path}
             onChange={handleChangePath}
             fullWidth
             variant="standard"
             sx={{ pb: 2 }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">
+                  <IconButton color="info" aria-label="upload picture" component="label">
+                    <input hidden type="file" name='file' onChange={handleUploadFile} />
+                    <CloudDownloadIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Typography variant='body' color='black'>
+                    แนบลิ้งเอกสารที่นี่ :
+                  </Typography>
+                </InputAdornment>
+              )
+            }}
           />
           <TextField
             autoFocus
@@ -486,14 +510,13 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
             fullWidth
             variant="standard"
             InputProps={{
-              endAdornment: (
+              startAdornment: (
                 <InputAdornment position="start">
-                  <IconButton color="info" aria-label="upload picture" component="label">
-                    <input hidden type="file" name='file' onChange={handleUploadFile} />
-                    <CloudDownloadIcon />
-                  </IconButton>
+                  <Typography variant='body' color='black'>
+                    คำอธิบาย :
+                  </Typography>
                 </InputAdornment>
-              ),
+              )
             }}
           />
         </DialogContent>
