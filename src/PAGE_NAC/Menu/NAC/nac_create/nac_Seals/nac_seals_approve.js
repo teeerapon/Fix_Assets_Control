@@ -2047,7 +2047,7 @@ export default function Nac_Seals_Approve() {
                                   value={
                                     (!singleService.priceSeals && selectNAC !== 1) ? 0 :
                                       !singleService.priceSeals ? singleService.priceSeals :
-                                        ((singleService.priceSeals) - ((singleService.priceSeals) * 7 / 100)).toLocaleString()
+                                        ((singleService.priceSeals*100)/107).toLocaleString()
                                   }
                                 />
                               </StyledTableCell>
@@ -2062,7 +2062,7 @@ export default function Nac_Seals_Approve() {
                                   type={valuesVisibility.showText ? "text" : "password"}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={((singleService.priceSeals) - ((singleService.priceSeals) * 7 / 100) - singleService.bookValue).toLocaleString()}
+                                  value={(((singleService.priceSeals*100)/107) - singleService.bookValue).toLocaleString()}
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
