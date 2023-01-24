@@ -250,7 +250,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
               setDescription('')
               setPath('')
               const usercode = data.UserCode
-              const linkpath = 'http://vpnptec.dyndns.org:32001/'+ path
+              const linkpath = 'http://vpnptec.dyndns.org:33080/'+ description
               const responsePath = await stroe_FA_control_Path({
                 nac_code,
                 usercode,
