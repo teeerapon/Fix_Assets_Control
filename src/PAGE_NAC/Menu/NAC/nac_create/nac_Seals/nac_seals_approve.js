@@ -359,7 +359,7 @@ export default function Nac_Seals_Approve() {
     return a + b
   })
   const book_V = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.bookValue) || /^\d+$/.test(elt.bookValue)) ? parseFloat(elt.bookValue) : 0;
+    return (/^\d+\.\d+$/.test(elt.bookValue.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) || /^\d+$/.test(elt.bookValue.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }))) ? parseFloat(elt.bookValue.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
@@ -370,13 +370,13 @@ export default function Nac_Seals_Approve() {
   })
 
   const profit_seals = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test((elt.priceSeals - (elt.priceSeals * (7 / 100))) - elt.bookValue) || /^\d+$/.test((elt.priceSeals - (elt.priceSeals * (7 / 100))) - elt.bookValue)) ? parseFloat((elt.priceSeals - (elt.priceSeals * (7 / 100))) - elt.bookValue) : 0;
+    return (/^\d+\.\d+$/.test(((elt.priceSeals*100)/107) - elt.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) || /^\d+$/.test(((elt.priceSeals*100)/107) - elt.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) ? parseFloat((((elt.priceSeals*100)/107) - elt.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
 
   const sum_vat = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.priceSeals - (elt.priceSeals * (7 / 100))) || /^\d+$/.test(elt.priceSeals - (elt.priceSeals * (7 / 100)))) ? parseFloat(elt.priceSeals - (elt.priceSeals * (7 / 100))) : 0;
+    return (/^\d+\.\d+$/.test((elt.priceSeals*100)/107).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) || /^\d+$/.test((elt.priceSeals*100)/107).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) ? parseFloat(((elt.priceSeals*100)/107).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
@@ -2133,7 +2133,7 @@ export default function Nac_Seals_Approve() {
                             fullWidth
                             disabled
                             type={valuesVisibility.showText ? "text" : "password"}
-                            value={(Math.floor(sum_vat * 1000) / 1000)}
+                            value={sum_vat.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                             inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                             variant="standard"
                           />

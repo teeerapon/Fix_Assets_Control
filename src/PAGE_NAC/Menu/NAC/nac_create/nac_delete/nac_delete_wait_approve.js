@@ -355,7 +355,7 @@ export default function Nac_Seals_Approve() {
     return a + b
   })
   const book_V = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.bookValue) || /^\d+$/.test(elt.bookValue)) ? parseFloat(elt.bookValue) : 0;
+    return (/^\d+\.\d+$/.test(elt.bookValue.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) || /^\d+$/.test(elt.bookValue.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }))) ? parseFloat(elt.bookValue.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
@@ -364,8 +364,9 @@ export default function Nac_Seals_Approve() {
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
+
   const profit_seals = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.priceSeals - elt.bookValue) || /^\d+$/.test(elt.priceSeals - elt.bookValue)) ? parseFloat(elt.priceSeals - elt.bookValue) : 0;
+    return (/^\d+\.\d+$/.test(((elt.priceSeals*100)/107) - elt.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) || /^\d+$/.test(((elt.priceSeals*100)/107) - elt.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) ? parseFloat((((elt.priceSeals*100)/107) - elt.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
     return a + b
   })
