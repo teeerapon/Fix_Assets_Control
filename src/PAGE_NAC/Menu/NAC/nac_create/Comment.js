@@ -31,6 +31,9 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
+import InputAdornment from '@mui/material/InputAdornment';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import Axios from "axios"
 
 const theme = createTheme();
 
@@ -107,6 +110,14 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
   const [path, setPath] = React.useState();
   const [pathFetch, setPathFetch] = React.useState([]);
   const navigate = useNavigate();
+  const [file, setFile] = React.useState();
+  const [fileName, setFileName] = React.useState("");
+
+  const handleUploadFile = async (e) => {
+    setFile(e.target.files[0]);
+    setFileName(e.target.files[0].name);
+    setDescription(e.target.files[0].name)
+  }
 
   function stringToColor(string) {
     let hash = 0;
@@ -209,18 +220,56 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
         }
       });
     } else {
-      const usercode = data.UserCode
-      const linkpath = path
-      const responsePath = await stroe_FA_control_Path({
-        nac_code,
-        usercode,
-        linkpath,
-        description
-      })
-      if ('data' in responsePath) {
-        setPathFetch(responsePath.data)
-        setPath(null)
-        setOpenDialog(false)
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("fileName", fileName);
+      const headers = {
+        'Authorization': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
+      };
+      if (!file && path && description) {
+        const usercode = data.UserCode
+        const linkpath = path
+        const responsePath = await stroe_FA_control_Path({
+          nac_code,
+          usercode,
+          linkpath,
+          description
+        })
+        if ('data' in responsePath) {
+          setPathFetch(responsePath.data)
+          setPath(null)
+          setOpenDialog(false)
+        }
+      } else if (file && path && description) {
+        try {
+          await Axios.post("http://vpnptec.dyndns.org:32001/api/check_files", formData, { headers })
+            .then(async (res) => {
+              setFile(null)
+              setFileName("")
+              setDescription('')
+              setPath('')
+              const usercode = data.UserCode
+              const linkpath = 'http://vpnptec.dyndns.org:32001/'+ path
+              const responsePath = await stroe_FA_control_Path({
+                nac_code,
+                usercode,
+                linkpath,
+                description
+              })
+              if ('data' in responsePath) {
+                setPathFetch(responsePath.data)
+                setPath(null)
+                setOpenDialog(false)
+              }
+            })
+        } catch (ex) {
+          alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง')
+          setFile(null)
+          setFileName("")
+          setDescription('')
+          setPath('')
+        }
       }
     }
   }
@@ -421,6 +470,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
             id="link_document"
             label="ลิ้งเอกสารที่ต้องการ"
             type="text"
+            value={path}
             onChange={handleChangePath}
             fullWidth
             variant="standard"
@@ -430,11 +480,21 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
             autoFocus
             margin="dense"
             id="like_description"
-            label="คำอธิบาย"
+            value={description}
             onChange={handleChangeDescription}
             type="text"
             fullWidth
             variant="standard"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">
+                  <IconButton color="info" aria-label="upload picture" component="label">
+                    <input hidden type="file" name='file' onChange={handleUploadFile} />
+                    <CloudDownloadIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
         </DialogContent>
         <DialogActions>
