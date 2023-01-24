@@ -957,7 +957,7 @@ export default function Nac_Main() {
                                   key={index}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
                                   disabled
-                                  value={!serviceList_Main[index].price ? serviceList_Main[index].price : (serviceList_Main[index].price).toLocaleString()}
+                                  value={!serviceList_Main[index].price ? serviceList_Main[index].price : (serviceList_Main[index].price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                   variant="standard"
                                 />
                                 <TextField
@@ -968,7 +968,7 @@ export default function Nac_Main() {
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   type={valuesVisibility.showText ? "text" : "password"}
                                   // onChange={(e) => handleServiceChange(e, index)}
-                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
+                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                   variant="standard"
                                 />
                               </StyledTableCell>
@@ -1003,7 +1003,7 @@ export default function Nac_Main() {
                               fullWidth
                               disabled
                               type={valuesVisibility.showText ? "text" : "password"}
-                              value={result === 0 ? '' : result.toLocaleString()}
+                              value={result === 0 ? '' : result.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                               inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                               InputProps={{
                                 endAdornment: (

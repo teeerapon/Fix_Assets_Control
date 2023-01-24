@@ -1901,7 +1901,7 @@ export default function Nac_Main_wait() {
                                   key={index}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
                                   disabled
-                                  value={!serviceList_Main[index].price ? serviceList_Main[index].price : (serviceList_Main[index].price).toLocaleString()}
+                                  value={!serviceList_Main[index].price ? serviceList_Main[index].price : (serviceList_Main[index].price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                   variant="standard"
                                 />
                                 <TextField
@@ -1913,7 +1913,7 @@ export default function Nac_Main_wait() {
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
                                   type={valuesVisibility.showText ? "text" : "password"}
-                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
+                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                   variant="standard"
                                 />
                               </StyledTableCell>
@@ -1950,7 +1950,7 @@ export default function Nac_Main_wait() {
                               disabled
                               type={valuesVisibility.showText ? "text" : "password"}
                               inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
-                              value={sum_price === 0 ? '' : sum_price.toLocaleString()}
+                              value={sum_price === 0 ? '' : sum_price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                               InputProps={{
                                 endAdornment: (
                                   <InputAdornment position="start">

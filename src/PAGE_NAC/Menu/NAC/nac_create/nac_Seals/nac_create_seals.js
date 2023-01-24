@@ -910,7 +910,7 @@ export default function Nac_Main() {
                                 id="price"
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 disabled
-                                value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
+                                value={!singleService.price ? singleService.price : (singleService.price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
@@ -949,7 +949,7 @@ export default function Nac_Main() {
                                 variant="standard"
                                 value={
                                   !singleService.priceSeals ? singleService.priceSeals :
-                                    (singleService.priceSeals).toLocaleString() - ((singleService.priceSeals) * 7 / 100)
+                                    (singleService.priceSeals).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) - ((singleService.priceSeals) * 7 / 100)
                                 }
                               />
                             </StyledTableCell>
@@ -961,7 +961,7 @@ export default function Nac_Main() {
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 name="profit"
                                 id="profit"
-                                value={(!singleService.priceSeals || singleService.priceSeals === 0) ? '' : (singleService.priceSeals - singleService.bookValue).toLocaleString()}
+                                value={(!singleService.priceSeals || singleService.priceSeals === 0) ? '' : (singleService.priceSeals - singleService.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
@@ -1000,7 +1000,7 @@ export default function Nac_Main() {
                           fullWidth
                           disabled
                           type={valuesVisibility.showText ? "text" : "password"}
-                          value={result === 0 ? '' : result.toLocaleString()}
+                          value={result === 0 ? '' : result.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                           variant="standard"
                         />
@@ -1011,7 +1011,7 @@ export default function Nac_Main() {
                           fullWidth
                           disabled
                           type={valuesVisibility.showText ? "text" : "password"}
-                          value={book_V === 0 ? '' : book_V.toLocaleString()}
+                          value={book_V === 0 ? '' : book_V.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                           variant="standard"
                         />
@@ -1022,7 +1022,7 @@ export default function Nac_Main() {
                           fullWidth
                           disabled
                           type={valuesVisibility.showText ? "text" : "password"}
-                          value={price_seals === 0 ? '' : price_seals.toLocaleString()}
+                          value={price_seals === 0 ? '' : price_seals.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                           variant="standard"
                         />
@@ -1044,7 +1044,7 @@ export default function Nac_Main() {
                           fullWidth
                           disabled
                           type={valuesVisibility.showText ? "text" : "password"}
-                          value={profit_seals === 0 ? '' : (price_seals - book_V).toLocaleString()}
+                          value={profit_seals === 0 ? '' : (price_seals - book_V).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                           variant="standard"
                         />

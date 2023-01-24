@@ -991,7 +991,7 @@ export default function Nac_Main() {
                                   id="price"
                                   type={valuesVisibility.showText ? "text" : "password"}
                                   disabled
-                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
+                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   variant="standard"
                                 />
@@ -1027,7 +1027,7 @@ export default function Nac_Main() {
                               fullWidth
                               disabled
                               type={valuesVisibility.showText ? "text" : "password"}
-                              value={result === 0 ? '' : result.toLocaleString()}
+                              value={result === 0 ? '' : result.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                               inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                               InputProps={{
                                 endAdornment: (

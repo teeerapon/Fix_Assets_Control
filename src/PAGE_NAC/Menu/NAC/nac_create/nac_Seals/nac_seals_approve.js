@@ -1999,7 +1999,7 @@ export default function Nac_Seals_Approve() {
                                   name="price"
                                   id="price"
                                   type={valuesVisibility.showText ? "text" : "password"}
-                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
+                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   variant="standard"
                                 />
@@ -2015,7 +2015,7 @@ export default function Nac_Seals_Approve() {
                                   type={valuesVisibility.showText ? "text" : "password"}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={!singleService.bookValue ? singleService.bookValue : (singleService.bookValue).toLocaleString()}
+                                  value={!singleService.bookValue ? singleService.bookValue : (singleService.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
@@ -2031,7 +2031,7 @@ export default function Nac_Seals_Approve() {
                                   value={
                                     (!singleService.priceSeals && selectNAC !== 1) ? 0 :
                                       !singleService.priceSeals ? singleService.priceSeals :
-                                        (singleService.priceSeals).toLocaleString()
+                                        (singleService.priceSeals).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
                                   }
                                 />
                               </StyledTableCell>
@@ -2047,7 +2047,7 @@ export default function Nac_Seals_Approve() {
                                   value={
                                     (!singleService.priceSeals && selectNAC !== 1) ? 0 :
                                       !singleService.priceSeals ? singleService.priceSeals :
-                                        ((singleService.priceSeals*100)/107).toLocaleString()
+                                        ((singleService.priceSeals*100)/107).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
                                   }
                                 />
                               </StyledTableCell>
@@ -2062,7 +2062,7 @@ export default function Nac_Seals_Approve() {
                                   type={valuesVisibility.showText ? "text" : "password"}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={(((singleService.priceSeals*100)/107) - singleService.bookValue).toLocaleString()}
+                                  value={(((singleService.priceSeals*100)/107) - singleService.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
@@ -2100,7 +2100,7 @@ export default function Nac_Seals_Approve() {
                             fullWidth
                             disabled
                             type={valuesVisibility.showText ? "text" : "password"}
-                            value={result === 0 ? '' : result.toLocaleString()}
+                            value={result === 0 ? '' : result.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                             inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                             variant="standard"
                           />
@@ -2111,7 +2111,7 @@ export default function Nac_Seals_Approve() {
                             fullWidth
                             disabled
                             type={valuesVisibility.showText ? "text" : "password"}
-                            value={book_V === 0 ? '' : book_V.toLocaleString()}
+                            value={book_V === 0 ? '' : book_V.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                             inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                             variant="standard"
                           />
@@ -2122,7 +2122,7 @@ export default function Nac_Seals_Approve() {
                             fullWidth
                             disabled
                             //type={valuesVisibility.showText ? "text" : "password"}
-                            value={price_seals ? price_seals.toLocaleString() : 0}
+                            value={price_seals ? price_seals.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) : 0}
                             inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                             variant="standard"
                           />
@@ -2144,7 +2144,7 @@ export default function Nac_Seals_Approve() {
                             fullWidth
                             disabled
                             type={valuesVisibility.showText ? "text" : "password"}
-                            value={price_seals === 0 ? '' : profit_seals.toLocaleString()}
+                            value={price_seals === 0 ? '' : profit_seals.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                             inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                             variant="standard"
                           />
@@ -2172,7 +2172,7 @@ export default function Nac_Seals_Approve() {
                                   disabled={selectNAC === 12 ? false : true}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                   onChange={handleChangePriceSealReal}
-                                  value={!headers.real_price ? Real_Price : (headers.real_price).toLocaleString()}
+                                  value={!headers.real_price ? Real_Price : (headers.real_price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                   InputProps={{
                                     endAdornment: (
                                       <InputAdornment position="start">

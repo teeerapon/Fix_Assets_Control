@@ -2011,7 +2011,7 @@ export default function Nac_Main_wait() {
                                   id="price"
                                   onChange={(e) => handleServiceChange(e, index)}
                                   type={valuesVisibility.showText ? "text" : "password"}
-                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
+                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   variant="standard"
                                 />
@@ -2078,7 +2078,7 @@ export default function Nac_Main_wait() {
                               disabled
                               type={valuesVisibility.showText ? "text" : "password"}
                               inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
-                              value={sum_price === 0 ? '' : sum_price.toLocaleString()}
+                              value={sum_price === 0 ? '' : sum_price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                               InputProps={{
                                 endAdornment: (
                                   <InputAdornment position="start">

@@ -917,7 +917,7 @@ export default function Nac_Main() {
                                 disabled
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 // onChange={(e) => handleServiceChange(e, index)}
-                                value={!singleService.price ? singleService.price : (singleService.price).toLocaleString()}
+                                value={!singleService.price ? singleService.price : (singleService.price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
                               />
@@ -929,7 +929,7 @@ export default function Nac_Main() {
                                 key={index}
                                 name="bookValue"
                                 id="bookValue"
-                                value={!serviceList[index].bookValue ? '' : serviceList[index].bookValue.toLocaleString()}
+                                value={!serviceList[index].bookValue ? '' : serviceList[index].bookValue.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
@@ -954,7 +954,7 @@ export default function Nac_Main() {
                                 key={index}
                                 name="profit"
                                 id="profit"
-                                value={!serviceList[index].profit ? '' : serviceList[index].priceSeals.toLocaleString()}
+                                value={!serviceList[index].profit ? '' : serviceList[index].priceSeals.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                 type={valuesVisibility.showText ? "text" : "password"}
                                 inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                 variant="standard"
@@ -994,7 +994,7 @@ export default function Nac_Main() {
                           fullWidth
                           disabled
                           type={valuesVisibility.showText ? "text" : "password"}
-                          value={result === 0 ? '' : result.toLocaleString()}
+                          value={result === 0 ? '' : result.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                           variant="standard"
                         />
@@ -1005,7 +1005,7 @@ export default function Nac_Main() {
                           fullWidth
                           disabled
                           type={valuesVisibility.showText ? "text" : "password"}
-                          value={book_V === 0 ? '' : book_V.toLocaleString()}
+                          value={book_V === 0 ? '' : book_V.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                           variant="standard"
                         />
@@ -1026,7 +1026,7 @@ export default function Nac_Main() {
                           fullWidth
                           disabled
                           type={valuesVisibility.showText ? "text" : "password"}
-                          value={price_seals === 0 ? '' : (price_seals - book_V).toLocaleString()}
+                          value={price_seals === 0 ? '' : (price_seals - book_V).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                           variant="standard"
                         />

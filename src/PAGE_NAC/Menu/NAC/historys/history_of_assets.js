@@ -177,7 +177,7 @@ export default function History_of_assets() {
       minWidth: 100, 
       flex: 1,
       valueGetter: (params) =>
-        `${params.row.nacdtl_assetsPrice.toLocaleString() || ''}`,
+        `${params.row.nacdtl_assetsPrice.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) || ''}`,
     },
     { field: 'nac_code', headerName: 'เลขที่ NAC', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',minWidth: 130, flex: 1 },
     { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', minWidth: 200, flex: 1 },
