@@ -350,25 +350,32 @@ export default function Nac_Seals_Approve() {
   });
 
   const result = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : 0;
+    return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : elt.price;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return parseFloat(a.toFixed(2)) + parseFloat(b.toFixed(2))
   })
   const book_V = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.bookValue.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) || /^\d+$/.test(elt.bookValue.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }))) ? parseFloat(elt.bookValue.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) : 0;
+    return (/^\d+\.\d+$/.test(elt.bookValue) || /^\d+$/.test(elt.bookValue)) ? parseFloat(elt.bookValue) : elt.bookValue;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return parseFloat(a.toFixed(2)) + parseFloat(b.toFixed(2))
   })
+
   const price_seals = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.priceSeals) || /^\d+$/.test(elt.priceSeals)) ? parseFloat(elt.priceSeals) : 0;
+    return (/^\d+\.\d+$/.test(elt.priceSeals) || /^\d+$/.test(elt.priceSeals)) ? parseFloat(elt.priceSeals) : elt.priceSeals;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return parseFloat(a.toFixed(2)) + parseFloat(b.toFixed(2))
   })
 
   const profit_seals = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(((elt.priceSeals*100)/107) - elt.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) || /^\d+$/.test(((elt.priceSeals*100)/107) - elt.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) ? parseFloat((((elt.priceSeals*100)/107) - elt.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) : 0;
+    return (/^\d+\.\d+$/.test(((elt.priceSeals*100)/107) - elt.bookValue) || /^\d+$/.test(((elt.priceSeals*100)/107) - elt.bookValue)) ? parseFloat((((elt.priceSeals*100)/107) - elt.bookValue)) : (((elt.priceSeals*100)/107) - elt.bookValue);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return parseFloat(a.toFixed(2)) + parseFloat(b.toFixed(2))
+  })
+
+  const sum_vat = serviceList.map(function (elt) {
+    return (/^\d+\.\d+$/.test((elt.priceSeals*100)/107) || /^\d+$/.test((elt.priceSeals*100)/107)) ? parseFloat(((elt.priceSeals*100)/107)) : ((elt.priceSeals*100)/107);
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return parseFloat(a.toFixed(2)) + parseFloat(b.toFixed(2))
   })
 
 
