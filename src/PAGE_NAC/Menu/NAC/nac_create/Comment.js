@@ -33,7 +33,9 @@ import Avatar from '@mui/material/Avatar';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
 import InputAdornment from '@mui/material/InputAdornment';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import ClearIcon from '@mui/icons-material/Clear';
 import Axios from "axios"
+import DialogContentText from '@mui/material/DialogContentText';
 
 const theme = createTheme();
 
@@ -112,9 +114,33 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
   const navigate = useNavigate();
   const [file, setFile] = React.useState();
   const [fileName, setFileName] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const [path_Description, setPathDescription] = React.useState([{ linkpath_id: '', path_Description: '' }]);
+
+  const handleClickOpen = async (e) => {
+    setPathDescription([{ linkpath_id: e.currentTarget.id, path_Description: e.currentTarget.name }])
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const delete_path = async (e) => {
+    const body = { linkpath_id: path_Description[0].linkpath_id }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    await Axios.post("http://vpnptec.dyndns.org:32001/api/FA_Control_Delete_PATH", body, { headers })
+      .then((response) => {
+        setOpen(false);
+        setPathFetch(response.data.data)
+      })
+  }
 
   const handleUploadFile = async (e) => {
-    if (['csv','xls','txt','ppt','doc','pdf','jpg','png','gif'].indexOf((e.target.files[0].name).split('.')[1])) {
+    if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
       setFile(e.target.files[0]);
       setFileName(e.target.files[0].name);
       setPath(e.target.files[0].name)
@@ -351,11 +377,29 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                               <ListItem
                                 key={index}
                                 secondaryAction={
-                                  <Tooltip title={res.linkpath}>
-                                    <IconButton onClick={() => window.open(res.linkpath, "_blank")} edge="end" aria-label="comments">
-                                      <FilePresentIcon />
-                                    </IconButton>
-                                  </Tooltip>
+                                  (res.userid === data.UserCode || data.UserCode === 'TPS') ? (
+                                    <React.Fragment>
+                                      <Tooltip title={res.linkpath}>
+                                        <IconButton onClick={() => window.open(res.linkpath, "_blank")} edge="end" aria-label="comments">
+                                          <FilePresentIcon />
+                                        </IconButton>
+                                      </Tooltip>
+                                      <Tooltip title='delete path'>
+                                        <IconButton onClick={handleClickOpen} id={res.linkpath_id} name={res.description} edge="end" aria-label="comments">
+                                          <ClearIcon />
+                                        </IconButton>
+                                      </Tooltip>
+                                    </React.Fragment>
+                                  ) :
+                                    (
+                                      <React.Fragment>
+                                        <Tooltip title={res.linkpath}>
+                                          <IconButton onClick={() => window.open(res.linkpath, "_blank")} edge="end" aria-label="comments">
+                                            <FilePresentIcon />
+                                          </IconButton>
+                                        </Tooltip>
+                                      </React.Fragment>
+                                    )
                                 }
                               >
                                 <ListItemAvatar>
@@ -523,6 +567,25 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
         <DialogActions>
           <Button onClick={handleSubmitPath} variant='contained'>บันทึก</Button>
           <Button onClick={handleCloseDialog} variant='contained' color='error'>ยกเลิก</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle id="alert-dialog-title">
+          แจ้งเตือน
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            คุณต้องการที่จะลบรายการ ({path_Description[0].path_Description}) นี้ใช่หรือไม่ ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={delete_path} variant='contained'>ใช่</Button>
+          <Button onClick={handleClose} autoFocus variant='contained' color='error'>
+            ไม่ใช่
+          </Button>
         </DialogActions>
       </Dialog>
       <hr></hr>
