@@ -402,38 +402,6 @@ export default function History_of_assets() {
                 >
                   <DeleteIcon />
                 </Button>
-                <Dialog
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">
-                    {"แจ้งเตือน"}
-                  </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      ท่านแน่ใจที่จะลบรายการ {!getNac_Code ? '' : getNac_Code} ใช่หรือไม่
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button
-                      variant="contained"
-                      sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
-                      onClick={handleDrop_NAC}
-                    >ใช่
-                    </Button>
-                    <Button
-                      variant="contained"
-                      sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
-                      color='error'
-                      onClick={handleClose}
-                      autoFocus
-                    >
-                      ไม่
-                    </Button>
-                  </DialogActions>
-                </Dialog>
               </Grid>
             </Grid>
           </React.Fragment>
@@ -507,6 +475,38 @@ export default function History_of_assets() {
                 {...other}
               />
             </Box>
+            <Dialog
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    {"แจ้งเตือน"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      ท่านแน่ใจที่จะลบรายการ {!getNac_Code ? '' : getNac_Code} ใช่หรือไม่
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      variant="contained"
+                      sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                      onClick={handleDrop_NAC}
+                    >ใช่
+                    </Button>
+                    <Button
+                      variant="contained"
+                      sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
+                      color='error'
+                      onClick={handleClose}
+                      autoFocus
+                    >
+                      ไม่
+                    </Button>
+                  </DialogActions>
+                </Dialog>
           </Container>
         </Box>
       </AnimatedPage>

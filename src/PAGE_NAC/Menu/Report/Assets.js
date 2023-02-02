@@ -581,13 +581,13 @@ export default function Reported_of_assets() {
         `${params.row.UserID || ''}`,
     },
     {
-      field: 'detail',
+      field: 'Details',
       headerName: 'สถานะล่าสุด',
       headerClassName: 'super-app-theme--header',
       minWidth: 130, 
       flex: 1,
       valueGetter: (params) =>
-        `${params.row.detail || ''}`,
+        `${params.row.Details || ''}`,
     },
     {
       field: 'Reference',
