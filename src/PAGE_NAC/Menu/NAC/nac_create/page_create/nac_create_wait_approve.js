@@ -1102,9 +1102,10 @@ export default function Nac_Main_wait() {
     }
     if (selectNAC === 4 || selectNAC === 5 || selectNAC === 14) {
       if (checkFullChecked.includes(0) === true) {
-        const alert_value = 'มีทรัพย์สินบางรายการที่ยังไม่ได้รับ กรุณาลองใหม่อีกครั้ง'
+        const alert_value = 'กรุณาคลิกตรวจสอบ !'
         setAlert(true);
         setValueAlert(alert_value)
+        document.getElementById('validate_checkbox').scrollIntoView();
       } else {
         const usercode = data.UserCode
         const nac_status = ((selectNAC === 4 || selectNAC === 14) && checkFullChecked.includes(0) === true) ? 14 : ((selectNAC === 4 || selectNAC === 14) && checkFullChecked.includes(0) === false) ? 5 : 6
@@ -1852,7 +1853,7 @@ export default function Nac_Main_wait() {
                           </StyledTableCell>
                           {(selectNAC >= 4 && selectNAC < 7) || selectNAC === 8 || selectNAC === 14 ? (
                             <React.Fragment>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
+                              <StyledTableCell id='validate_checkbox' align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
                                 <Typography>
                                   ตรวจสอบ
                                 </Typography>
@@ -2022,6 +2023,7 @@ export default function Nac_Main_wait() {
                                     <Checkbox
                                       key={index}
                                       name='checkBox'
+                                      sx={{ color: valueAlert ? "red" : null }}
                                       disabled={selectNAC === 4 || selectNAC === 14 ? false : true}
                                       checked={(checked[index] !== undefined && checked[index].statusCheck === 1) ? true : false}
                                       onChange={(e) => handleCheckBox(e, index)}
