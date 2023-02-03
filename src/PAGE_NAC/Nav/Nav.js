@@ -32,6 +32,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import Avatar from '@mui/material/Avatar';
+import StoreIcon from '@mui/icons-material/Store';
 import Axios from "axios"
 import '../../App.css'
 
@@ -64,14 +65,10 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, open, handleDrawerOpen, handleDrawerClose }) {
+export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader, theme, open, handleDrawerOpen, handleDrawerClose }) {
   const classes = useStyles();
   const [auth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [anchorEl2, setAnchorEl2] = React.useState(null);
-  const [anchorEl3, setAnchorEl3] = React.useState(null);
-  const [anchorEl4, setAnchorEl4] = React.useState(null);
-  const [anchorEl5, setAnchorEl5] = React.useState(null);
   const data = JSON.parse(localStorage.getItem('data'));
   const checkUserWeb = localStorage.getItem('sucurity');
   const [openList, setOpenList] = React.useState(false);
@@ -143,6 +140,10 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
 
   function PeriodEdit() {
     navigate('/EditPeriod')
+  };
+
+  function Account_BrnachAssets() {
+    navigate('/Account_BrnachAssets')
   };
 
   function REPORT() {
@@ -230,7 +231,7 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
     },
   });
 
-  if (permission_menu) {
+  if (permission_menu && data.branchid === 901) {
     return (
       <>
         <Box sx={{ display: 'flex' }}>
@@ -855,6 +856,19 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
                     </ListItemButton>
                   </List>
                 </Collapse>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={Account_BrnachAssets}>
+                    <ListItemIcon><StoreIcon fontSize="small" /></ListItemIcon>
+                    <ListItemText>
+                      <Typography
+                        component="span"
+                        variant="caption"
+                      >
+                        ทะเบียนทรัพย์สินสาขา
+                      </Typography>
+                    </ListItemText>
+                  </ListItemButton>
+                </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton onClick={REPORT}>
                     <ListItemIcon><ViewTimelineIcon fontSize="small" /></ListItemIcon>

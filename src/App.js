@@ -21,6 +21,7 @@ import CreatePeriod2 from './PAGE_NAC/Menu/Period/Create/main2';
 import CreatePeriod3 from './PAGE_NAC/Menu/Period/Create/main3';
 import EditPeriod from './PAGE_NAC/Menu/Period/Edit/period_round';
 import FETCH_ASSETS from './PAGE_NAC/Menu/Assets/main';
+import Account_BrnachAssets from './PAGE_NAC/Menu/Assets/branch';
 // รายการ อนุมัติ และ ของฉัน
 import NAC_ROW from './PAGE_NAC/Menu/NAC/doc_nacs_me/nac_row_main';
 import NAC_OPERATOR from './PAGE_NAC/Menu/NAC/doc_operator/nac_row_main';
@@ -146,6 +147,7 @@ function App() {
       '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/',
       '/NAC_ROW/NAC_SEALS_APPROVE/',
       '/FETCH_ASSETS',
+      '/Account_BrnachAssets',
       '/Permission_NAC',
       '*',
     ]
@@ -241,6 +243,7 @@ function App() {
               <Route path="/EditPeriod" element={<EditPeriod />} />
               <Route path="/History_of_Assets" element={<History_of_Assets />} />
               <Route path="/FETCH_ASSETS" element={<FETCH_ASSETS />} />
+              <Route path="/Account_BrnachAssets" element={<Account_BrnachAssets />} />
               {/* รายการ อนุมัติ และ ของฉัน */}
               <Route path="/NAC_ROW" element={<NAC_ROW />} />
               <Route path="/NAC_OPERATOR" element={<NAC_OPERATOR />} />
