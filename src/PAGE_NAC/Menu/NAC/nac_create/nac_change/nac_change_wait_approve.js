@@ -467,15 +467,16 @@ export default function Nac_Main_wait() {
         date_asset: responseDTLs_draff[i].CreateDate,
       }
     }
-    setServiceList_Main(responseDTLs_draff.map((res) => {
+    setServiceList_Main(listPoST_draff.map((res) => {
       return {
-        dtl_id: res.dtl_id,
+        dtl_id: res.asset_id,
         assetsCode: res.assetsCode,
         serialNo: res.serialNo,
         name: res.name,
         dtl: res.dtl,
         count: res.count,
         price: res.price,
+        date_asset : res.date_asset,
         asset_id: res.asset_id,
       };
     }));
@@ -528,6 +529,7 @@ export default function Nac_Main_wait() {
         dtl: res.dtl,
         count: res.count,
         price: res.price,
+        date_asset : res.date_asset,
         asset_id: res.asset_id,
       };
     }));
