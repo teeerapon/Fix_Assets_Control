@@ -341,8 +341,8 @@ export default function History_of_assets() {
                                   '#F4A460' : params.row.nac_status === 12 ?
                                     '#DDA0DD' : params.row.nac_status === 13 ?
                                       '#6A5ACD' : params.row.nac_status === 14 ?
-                                        '#6A5ACD' : params.row.nac_status === 15 ?
-                                          '#708090' : '#DC143C'
+                                        '#708090' : params.row.nac_status === 15 ?
+                                          '#6A5ACD' : '#DC143C'
               }}
             >
               {params.row.status_name}

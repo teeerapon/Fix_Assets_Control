@@ -54,6 +54,7 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 import Card from '@mui/material/Card';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import DialogContentText from '@mui/material/DialogContentText';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { CSVLink } from 'react-csv'
 import '../../../../../App.css'
@@ -286,6 +287,18 @@ async function store_FA_SendMail(credentials) {
     .then(data => data.json())
 }
 
+async function store_FA_control_drop_NAC(credentials) {
+  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_drop_NAC', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -353,6 +366,8 @@ export default function Nac_Seals_Approve() {
     showText: data.branchid === 901 ? true : false,
   });
 
+  const [drop_NAC_byDes, setDrop_NAC_byDes] = React.useState(false);
+
   const result = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : elt.price;
   }).reduce(function (a, b) { // sum all resulting numbers
@@ -371,13 +386,13 @@ export default function Nac_Seals_Approve() {
   })
 
   const profit_seals = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(((elt.priceSeals*100)/107) - elt.bookValue) || /^\d+$/.test(((elt.priceSeals*100)/107) - elt.bookValue)) ? parseFloat((((elt.priceSeals*100)/107) - elt.bookValue)) : (((elt.priceSeals*100)/107) - elt.bookValue);
+    return (/^\d+\.\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue) || /^\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue)) ? parseFloat((((elt.priceSeals * 100) / 107) - elt.bookValue)) : (((elt.priceSeals * 100) / 107) - elt.bookValue);
   }).reduce(function (a, b) { // sum all resulting numbers
     return parseFloat(a ? a.toFixed(2) : 0) + parseFloat(b ? b.toFixed(2) : 0)
   })
 
   const sum_vat = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test((elt.priceSeals*100)/107) || /^\d+$/.test((elt.priceSeals*100)/107)) ? parseFloat(((elt.priceSeals*100)/107)) : ((elt.priceSeals*100)/107);
+    return (/^\d+\.\d+$/.test((elt.priceSeals * 100) / 107) || /^\d+$/.test((elt.priceSeals * 100) / 107)) ? parseFloat(((elt.priceSeals * 100) / 107)) : ((elt.priceSeals * 100) / 107);
   }).reduce(function (a, b) { // sum all resulting numbers
     return parseFloat(a ? a.toFixed(2) : 0) + parseFloat(b ? b.toFixed(2) : 0)
   })
@@ -419,6 +434,34 @@ export default function Nac_Seals_Approve() {
   const [bossApproveDate, setBossApproveDate] = React.useState();
   const [verify, setVerifyApprove] = React.useState('');
   const [verifyApproveDate, setVerifyApproveDate] = React.useState();
+
+
+  const handleOpen_drop_NAC_byDes = () => {
+    setDrop_NAC_byDes(true);
+  };
+
+  const handleClose_drop_NAC_byDes = () => {
+    setDrop_NAC_byDes(false);
+  };
+
+  //ยกเลิกรายการ
+  const drop_NAC = async () => {
+    const usercode = data.UserCode
+    const response = await store_FA_control_drop_NAC({
+      usercode,
+      nac_code,
+    });
+    if ('data' in response) {
+      swal("ทำรายการสำเร็จ", 'ทำการลบรายการ ' + response.data[0].nac_code + ' แล้ว', "success", {
+        buttons: false,
+        timer: 2000,
+      }).then((value) => {
+        window.location.href = "/NAC_OPERATOR";
+      });
+    } else {
+      swal("ทำรายการไม่สำเร็จ", 'ไม่สามารถลบ ' + response.data[0].nac_code + ' ได้', "error")
+    }
+  }
 
 
   const fetchUserForAssetsControl = async () => {
@@ -751,10 +794,10 @@ export default function Nac_Seals_Approve() {
       setSource_Department('')
       setSource_BU('')
     } else {
-      if(response.data[0].BranchID !== 901){
+      if (response.data[0].BranchID !== 901) {
         setSource_Department(response.data[0].DepCode)
         setSource_BU('Oil')
-      }else{
+      } else {
         setSource_Department(response.data[0].DepCode)
         setSource_BU('Center')
       }
@@ -1569,7 +1612,7 @@ export default function Nac_Seals_Approve() {
                 <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                   <Box gridColumn="span 10">
                     <AnimatedPage>
-                      <Typography variant="h5" color="inherit"  sx={{ pt: 1 }}>
+                      <Typography variant="h5" color="inherit" sx={{ pt: 1 }}>
                         การเปลี่ยนแปลงทรัพย์สินถาวร
                       </Typography>
                     </AnimatedPage>
@@ -1641,7 +1684,8 @@ export default function Nac_Seals_Approve() {
                                       '#F4A460' : headers.nac_status === 12 ?
                                         '#DDA0DD' : headers.nac_status === 13 ?
                                           '#6A5ACD' : headers.nac_status === 14 ?
-                                            '#708090' : '#DC143C'
+                                            '#708090' : headers.nac_status === 15 ?
+                                              '#6A5ACD' : '#DC143C'
                   }}
                   sx={{ p: 1, pt: 2, pl: 10, pr: 3, mb: 0, mt: 4, color: 'RGB(255,255,255)' }}
                 >
@@ -2048,7 +2092,7 @@ export default function Nac_Seals_Approve() {
                                   value={
                                     (!singleService.priceSeals && selectNAC !== 1) ? 0 :
                                       !singleService.priceSeals ? singleService.priceSeals :
-                                        ((singleService.priceSeals*100)/107).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
+                                        ((singleService.priceSeals * 100) / 107).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
                                   }
                                 />
                               </StyledTableCell>
@@ -2063,7 +2107,7 @@ export default function Nac_Seals_Approve() {
                                   type={valuesVisibility.showText ? "text" : "password"}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={(((singleService.priceSeals*100)/107) - singleService.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
+                                  value={(((singleService.priceSeals * 100) / 107) - singleService.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
@@ -2463,13 +2507,21 @@ export default function Nac_Seals_Approve() {
                                 ตรวจรับเอกสาร
                               </Button>
                             </React.Fragment>
-                          ) : (selectNAC === 13 || selectNAC === 15) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined) ) ? (
+                          ) : (selectNAC === 13 || selectNAC === 15) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined)) ? (
                             <React.Fragment>
+                              <Button
+                                variant="contained"
+                                color='error'
+                                startIcon={<ClearRoundedIcon />}
+                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                onClick={handleOpen_drop_NAC_byDes}>
+                                ยกเลิกรายการ
+                              </Button>
                               <Button
                                 variant="contained"
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 startIcon={<CloudDownloadRoundedIcon />}
-                                disabled={(selectNAC === 13 || selectNAC === 15) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined) ) ? false : true}
+                                disabled={(selectNAC === 13 || selectNAC === 15) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined)) ? false : true}
                                 onClick={handleSubmitComplete}>
                                 {selectNAC === 13 ? 'ปิดรายการ' : 'บัญชีตรวจสอบ'}
                               </Button>
@@ -2503,8 +2555,26 @@ export default function Nac_Seals_Approve() {
                 setDescription={setDescription}
                 setOpenDialog={setOpenDialog}
               />
-
             </Container>
+            <Dialog
+              open={drop_NAC_byDes}
+              onClose={handleClose_drop_NAC_byDes}
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"แจ้งเตือน"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  คุณต้องการที่จะยกเลิกรายการ {headers.nac_code} ใช่หรือไม่
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={drop_NAC} variant='contained'>ใช่</Button>
+                <Button onClick={handleClose_drop_NAC_byDes} variant='contained' color='error' autoFocus>
+                  ไม่ใช่
+                </Button>
+              </DialogActions>
+            </Dialog>
             <Dialog open={openDialogReply} onClose={handleCloseDialogReply} >
               <DialogTitle>กรุณาระบุข้อความ/เหตุผล ที่ตีกลับเอกสาร</DialogTitle>
               <DialogContent sx={{ width: 500 }}>

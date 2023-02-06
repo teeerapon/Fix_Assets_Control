@@ -683,10 +683,10 @@ export default function Nac_Main_wait() {
       setSource_Department('')
       setSource_BU('')
     } else {
-      if(response.data[0].BranchID !== 901){
+      if (response.data[0].BranchID !== 901) {
         setSource_Department(response.data[0].DepCode)
         setSource_BU('Oil')
-      }else{
+      } else {
         setSource_Department(response.data[0].DepCode)
         setSource_BU('Center')
       }
@@ -1452,7 +1452,7 @@ export default function Nac_Main_wait() {
                 <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                   <Box gridColumn="span 10">
                     <AnimatedPage>
-                      <Typography variant="h5" color="inherit"  sx={{ pt: 1 }}>
+                      <Typography variant="h5" color="inherit" sx={{ pt: 1 }}>
                         การเปลี่ยนแปลงทรัพย์สินถาวร
                       </Typography>
                     </AnimatedPage>
@@ -1505,7 +1505,8 @@ export default function Nac_Main_wait() {
                                       '#F4A460' : headers.nac_status === 12 ?
                                         '#DDA0DD' : headers.nac_status === 13 ?
                                           '#6A5ACD' : headers.nac_status === 14 ?
-                                            '#708090' : '#DC143C'
+                                            '#708090' : headers.nac_status === 15 ?
+                                              '#6A5ACD' : '#DC143C'
                   }}
                   sx={{ p: 1, pt: 2, pl: 10, pr: 3, mb: 0, mt: 4, color: 'RGB(255,255,255)' }}
                 >
@@ -2324,25 +2325,6 @@ export default function Nac_Main_wait() {
                                 onClick={handleOpen_drop_NAC_byDes}>
                                 ยกเลิกรายการ
                               </Button>
-                              <Dialog
-                                open={drop_NAC_byDes}
-                                onClose={handleClose_drop_NAC_byDes}
-                              >
-                                <DialogTitle id="alert-dialog-title">
-                                  {"แจ้งเตือน"}
-                                </DialogTitle>
-                                <DialogContent>
-                                  <DialogContentText>
-                                    คุณต้องการที่จะยกเลิกรายการ {headers.nac_code} ใช่หรือไม่
-                                  </DialogContentText>
-                                </DialogContent>
-                                <DialogActions>
-                                  <Button onClick={drop_NAC} variant='contained'>ใช่</Button>
-                                  <Button onClick={handleClose_drop_NAC_byDes} variant='contained' color='error' autoFocus>
-                                    ไม่ใช่
-                                  </Button>
-                                </DialogActions>
-                              </Dialog>
                               <Button
                                 variant="contained"
                                 endIcon={<DoubleArrowRoundedIcon />}
@@ -2352,13 +2334,21 @@ export default function Nac_Main_wait() {
                                 รับทรัพย์สิน
                               </Button>
                             </React.Fragment>
-                          ) : selectNAC === 5 && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined) ) ? (
+                          ) : selectNAC === 5 && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined)) ? (
                             <React.Fragment>
+                              <Button
+                                variant="contained"
+                                color='error'
+                                startIcon={<ClearRoundedIcon />}
+                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                onClick={handleOpen_drop_NAC_byDes}>
+                                ยกเลิกรายการ
+                              </Button>
                               <Button
                                 variant="contained"
                                 startIcon={<CloudDownloadRoundedIcon />}
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                disabled={selectNAC === 5 && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined) ) ? false : true}
+                                disabled={selectNAC === 5 && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined)) ? false : true}
                                 onClick={handleSubmitComplete}>
                                 ปิดรายการ
                               </Button>
@@ -2400,6 +2390,25 @@ export default function Nac_Main_wait() {
                 <DialogActions>
                   <Button onClick={handleReply} variant='contained'>บันทึก</Button>
                   <Button onClick={handleCloseDialogReply} variant='contained' color='error'>ยกเลิก</Button>
+                </DialogActions>
+              </Dialog>
+              <Dialog
+                open={drop_NAC_byDes}
+                onClose={handleClose_drop_NAC_byDes}
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"แจ้งเตือน"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    คุณต้องการที่จะยกเลิกรายการ {headers.nac_code} ใช่หรือไม่
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={drop_NAC} variant='contained'>ใช่</Button>
+                  <Button onClick={handleClose_drop_NAC_byDes} variant='contained' color='error' autoFocus>
+                    ไม่ใช่
+                  </Button>
                 </DialogActions>
               </Dialog>
             </Container>
