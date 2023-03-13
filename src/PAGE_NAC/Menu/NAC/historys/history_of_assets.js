@@ -15,6 +15,7 @@ import Axios from "axios"
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const ODD_OPACITY = 0.2;
 
@@ -116,6 +117,7 @@ export default function History_of_assets() {
   const data = JSON.parse(localStorage.getItem('data'));
   const checkUserWeb = localStorage.getItem('sucurity');
   const [pageSize, setPageSize] = React.useState(10);
+  const [progress, setProgress] = React.useState();
 
   const dataChange = !dataHistory ? [] : dataHistory.map(function (elt) {
     if (elt.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && (datenow.split('-')[1] === (!elt.update_date ? '' : elt.update_date.split('-')[1]))) {
@@ -222,8 +224,14 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_HistorysAssets', userCode, { headers })
-      .then(response => setDataHistory(response.data.data));
+    Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_HistorysAssets', userCode, { headers }).catch(function (error) {
+      if (error.toJSON().message === 'Request failed with status code 400') {
+        setProgress(1)
+      }
+    }).then(response => {
+      setDataHistory(response.data.data)
+      setProgress(1)
+    });
   }, []);
 
 
@@ -250,6 +258,7 @@ export default function History_of_assets() {
           </Toolbar>
         </AppBar>
         <AnimatedPage>
+        {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
               <TableContainer className='hide-sm hide-md'>

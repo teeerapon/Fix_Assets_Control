@@ -26,6 +26,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArticleIcon from '@mui/icons-material/Article';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ClearIcon from '@mui/icons-material/Clear';
+import LinearProgress from '@mui/material/LinearProgress';
 import '../../../../App.css'
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -138,6 +139,7 @@ async function store_FA_control_drop_NAC(credentials) {
 export default function History_of_assets() {
 
   const [selectNAC, setSelectNAC] = React.useState();
+  const [progress, setProgress] = React.useState();
   const data = JSON.parse(localStorage.getItem('data'));
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
@@ -163,9 +165,14 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC_approve', usercode, { headers })
-      .then(response => setSelectNAC(response.data.data));
-
+    Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
+      if (error.toJSON().message === 'Request failed with status code 400') {
+        setProgress(1)
+      }
+    }).then(response => {
+      setSelectNAC(response.data.data)
+      setProgress(1)
+    });
   }, []);
 
   const handleClickOpen = (event, params) => {
@@ -430,6 +437,7 @@ export default function History_of_assets() {
         </Toolbar>
       </AppBar>
       <AnimatedPage>
+        {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
         <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
           <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
             <Box

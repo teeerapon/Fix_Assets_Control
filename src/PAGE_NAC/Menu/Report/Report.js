@@ -172,10 +172,11 @@ export default function Report() {
         UserBranch
       })
       const response3 = await Reported3({
-        RoundID,
+        UserBranch,
         BranchID,
-        UserBranch
+        RoundID
       })
+      console.log(UserBranch,BranchID,RoundID);
       if ('data' in response || 'data' in response2 || 'data' in response3) {
         swal("ทำรายการสำเร็จ", "ค้นหาข้อมูลเสร็จสิ้น", "success", {
           buttons: false,

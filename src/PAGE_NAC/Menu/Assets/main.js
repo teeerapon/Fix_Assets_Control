@@ -24,6 +24,7 @@ import DateAdapter from '@mui/lab/AdapterDateFns';
 import DatePicker from '@mui/lab/DatePicker';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import * as XLSX from 'xlsx';
+import LinearProgress from '@mui/material/LinearProgress';
 
 
 const ODD_OPACITY = 0.2;
@@ -132,6 +133,7 @@ export default function History_of_assets() {
   const [openXlsx, setOpenXlsx] = React.useState(false);
   const [nameExcel, setNameExcel] = React.useState()
   const [permission_menuID, setPermission_menuID] = React.useState();
+  const [progress, setProgress] = React.useState();
 
   React.useEffect(() => {
     // POST request using axios with set headers
@@ -140,10 +142,14 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/select_Permission_Menu_NAC', body, { headers })
-      .then(response => {
-        setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
-      });
+    Axios.post('http://vpnptec.dyndns.org:32001/api/select_Permission_Menu_NAC', body, { headers }).catch(function (error) {
+      if (error.toJSON().message === 'Request failed with status code 400') {
+        setProgress(1)
+      }
+    }).then(response => {
+      setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
+      setProgress(1)
+    });
   }, []);
 
   const fileSelected = (event) => {
@@ -240,6 +246,13 @@ export default function History_of_assets() {
         .then((response) => {
           if (response.data[0].response === 'ทำรายการสำเร็จ') {
             alert(response.data[0].response)
+            setOpen(false);
+            setCode(null)
+            setName(null)
+            setSerialNo(null)
+            setPrice(null)
+            setDetails(null)
+            setCeate_Date(null)
             window.location.href = '/FETCH_ASSETS';
           } else {
             alert(response.data[0].response)
@@ -329,7 +342,7 @@ export default function History_of_assets() {
       field: 'Price',
       headerName: 'ราคาทุน',
       headerClassName: 'super-app-theme--header',
-      minWidth: 130, 
+      minWidth: 130,
       flex: 1,
       valueGetter: (params) =>
         `${params.row.Price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) || ''}`,
@@ -338,7 +351,7 @@ export default function History_of_assets() {
       field: 'BranchID',
       headerName: 'สาขา',
       headerClassName: 'super-app-theme--header',
-      minWidth: 100, 
+      minWidth: 100,
       flex: 1,
       valueGetter: (params) =>
         params.row.BranchID === 901 ? 'HO' : params.row.BranchID,
@@ -347,7 +360,7 @@ export default function History_of_assets() {
       field: 'CreateDate',
       headerName: 'วันที่ขึ้นทะเบียน',
       headerClassName: 'super-app-theme--header',
-      minWidth: 170, 
+      minWidth: 170,
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -407,6 +420,7 @@ export default function History_of_assets() {
           </Toolbar>
         </AppBar>
         <AnimatedPage>
+          {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
               <Grid
