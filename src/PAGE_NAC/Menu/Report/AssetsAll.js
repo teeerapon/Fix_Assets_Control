@@ -21,6 +21,7 @@ import Grid from '@mui/material/Grid';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const ODD_OPACITY = 0.2;
 
@@ -128,6 +129,7 @@ export default function Reported_of_assets() {
   const [status_all] = React.useState(['none', 'สภาพดี', 'ชำรุดรอซ่อม', 'รอตัดขาย', 'รอตัดชำรุด', 'QR Code ไม่สมบูรณ์ (สภาพดี)', 'QR Code ไม่สมบูรณ์ (ชำรุดรอซ่อม)', 'QR Code ไม่สมบูรณ์ (รอตัดขาย)', 'QR Code ไม่สมบูรณ์ (รอตัดชำรุด)']);
   const [valueOfIndex, setValueOfIndex] = React.useState([]);
   const [pageSize, setPageSize] = React.useState(10);
+  const [progress, setProgress] = React.useState();
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
@@ -292,19 +294,32 @@ export default function Reported_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers })
-      .then(response => setSelectMenu(response.data.data));
+    Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers }).catch(function (error) {
+      if (error.toJSON().message === 'Request failed with status code 400') {
+        setProgress(1)
+      }
+    }).then(response => {
+      setSelectMenu(response.data.data)
+      setProgress(1)
+    });
   }, []);
 
   const handleChange = async (event) => {
+    setProgress(0)
     setDescription_value(event.target.innerText);
     const Description = { Description: event.target.innerText }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    await Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers })
-      .then(response => setReported_of_assets(response.data.data));
+    await Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers }).catch(function (error) {
+      if (error.toJSON().message === 'Request failed with status code 400') {
+        setProgress(1)
+      }
+    }).then(response => {
+      setReported_of_assets(response.data.data)
+      setProgress(1)
+    });
   };
 
   if (checkUserWeb === 'null') {
@@ -330,6 +345,7 @@ export default function Reported_of_assets() {
           </Toolbar>
         </AppBar>
         <AnimatedPage>
+          {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
               <Autocomplete

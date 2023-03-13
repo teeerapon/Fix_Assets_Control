@@ -32,6 +32,7 @@ import swal from 'sweetalert';
 import Alert from '@mui/material/Alert';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Paper from '@mui/material/Paper';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const ODD_OPACITY = 0.2;
 
@@ -176,6 +177,7 @@ export default function History_of_assets() {
     BranchID: '',
     Code: ''
   });
+  const [progress, setProgress] = React.useState();
 
   const handleClickOpen = (event, params) => {
     setOpen(true);
@@ -283,7 +285,7 @@ export default function History_of_assets() {
       headerClassName: 'super-app-theme--header',
       width: 100,
       valueGetter: (params) =>
-        params.row.Code === 'CO' ? 'HO' : params.row.Code === 0 ? 'CO' : params.row.Code,
+        params.row.Code === 'CO' ? 'HO' : (params.row.Code === 0 || !params.row.Code) ? 'CO' : params.row.Code,
     },
     {
       field: 'status',
@@ -344,8 +346,14 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/get_branch_period', userCode, { headers })
-      .then(response => setDataBranchID_Main(response.data.data));
+    Axios.post('http://vpnptec.dyndns.org:32001/api/get_branch_period', userCode, { headers }).catch(function (error) {
+      if (error.toJSON().message === 'Request failed with status code 400') {
+        setProgress(1)
+      }
+    }).then(response => {
+      setDataBranchID_Main(response.data.data)
+      setProgress(1)
+    });
   }, []);
 
   const handleSubmit_Update = async () => {
@@ -457,6 +465,7 @@ export default function History_of_assets() {
           </Toolbar>
         </AppBar>
         <AnimatedPage>
+        {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
               <Box
@@ -487,7 +496,7 @@ export default function History_of_assets() {
                   pageSize={10}
                   //rowsPerPageOptions={[5]}
                   getRowId={(dataBranchID_Main) => dataBranchID_Main.PeriodID}
-                  //autoHeight={true}
+                  autoHeight={true}
                   disableColumnMenu
                   disableSelectionOnClick
                   {...other}

@@ -10,6 +10,7 @@ import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
 import Axios from "axios"
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import LinearProgress from '@mui/material/LinearProgress';
 
 
 const ODD_OPACITY = 0.2;
@@ -105,6 +106,7 @@ export default function History_of_assets() {
   const data = JSON.parse(localStorage.getItem('data'));
   const checkUserWeb = localStorage.getItem('sucurity');
   const [pageSize, setPageSize] = React.useState(10);
+  const [progress, setProgress] = React.useState();
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
@@ -167,10 +169,14 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_fetch_assets', userCode, { headers })
-      .then(response => {
-        setDataHistory((response.data.data).filter((res) => res.BranchID === data.branchid));
-      });
+    Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_fetch_assets', userCode, { headers }).catch(function (error) {
+      if (error.toJSON().message === 'Request failed with status code 400') {
+        setProgress(1)
+      }
+    }).then(response => {
+      setDataHistory((response.data.data).filter((res) => res.BranchID === data.branchid));
+      setProgress(1)
+    });
   }, []);
 
   if (checkUserWeb !== 'null') {

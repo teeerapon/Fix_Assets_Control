@@ -231,6 +231,8 @@ export default function Reported_of_assets() {
   const dataDepID = data.depid
   const [UserForAssetsControl, setUserForAssetsControl] = React.useState([]);
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
+  const [nameSource, setNmaeSource] = React.useState(data.branchid === 901 ? null : data.manager);
+  const [nameDes, setNmaeDes] = React.useState();
 
   const [des_Department, setDes_Department] = React.useState();
   const [des_BU, setDes_BU] = React.useState();
@@ -311,13 +313,16 @@ export default function Reported_of_assets() {
     if (!UserCode) {
       setSource_Department('')
       setSource_BU('')
+      setNmaeSource('')
     } else {
       if (response.data[0].BranchID !== 901) {
         setSource_Department(response.data[0].DepCode)
         setSource_BU('Oil')
+        setNmaeSource(response.data[0].manager)
       } else {
         setSource_Department(response.data[0].DepCode)
         setSource_BU('Center')
+        setNmaeSource(response.data[0].Name)
       }
     }
   };
@@ -347,13 +352,16 @@ export default function Reported_of_assets() {
     if (!UserCode) {
       setDes_Department('')
       setDes_BU('')
+      setNmaeDes('')
     } else {
       if (response.data[0].BranchID !== 901) {
         setDes_Department(response.data[0].DepCode)
         setDes_BU('Oil')
+        setNmaeDes(response.data[0].manager)
       } else {
         setDes_Department(response.data[0].DepCode)
         setDes_BU('Center')
+        setNmaeDes(response.data[0].Name)
       }
     }
   };
@@ -364,14 +372,25 @@ export default function Reported_of_assets() {
 
   const handleClose = (event, reason) => {
     if (reason !== 'backdropClick') {
-      setValue(0)
-      setOpen(false);
-      setDes_Department(null)
-      setDes_BU(null)
-      setDes_delivery(null)
-      setSource_Department(null)
-      setSource_BU(null)
-      setSource(null)
+      if (data.branchid === 901) {
+        setValue(0)
+        setOpen(false);
+        setDes_Department(null)
+        setDes_BU(null)
+        setDes_delivery(null)
+        setSource_Department(null)
+        setNmaeDes('')
+        setSource_BU(null)
+        setSource(null)
+        setNmaeSource('')
+      }else{
+        setValue(0)
+        setOpen(false);
+        setDes_Department(null)
+        setDes_BU(null)
+        setDes_delivery(null)
+        setNmaeDes('')
+      }
     }
   };
 
@@ -517,7 +536,7 @@ export default function Reported_of_assets() {
       field: 'Date',
       headerName: 'วันที่ตรวจนับ',
       headerClassName: 'super-app-theme--header',
-      minWidth: 170, 
+      minWidth: 170,
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -545,7 +564,7 @@ export default function Reported_of_assets() {
       field: 'EndDate_Success',
       headerName: 'วันที่ทำ NAC ล่าสุด',
       headerClassName: 'super-app-theme--header',
-      minWidth: 170, 
+      minWidth: 170,
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -575,7 +594,7 @@ export default function Reported_of_assets() {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',
-      minWidth: 100, 
+      minWidth: 100,
       flex: 1,
       valueGetter: (params) =>
         `${params.row.UserID || ''}`,
@@ -584,7 +603,7 @@ export default function Reported_of_assets() {
       field: 'Details',
       headerName: 'สถานะล่าสุด',
       headerClassName: 'super-app-theme--header',
-      minWidth: 130, 
+      minWidth: 130,
       flex: 1,
       valueGetter: (params) =>
         `${params.row.Details || ''}`,
@@ -593,7 +612,7 @@ export default function Reported_of_assets() {
       field: 'Reference',
       headerName: 'สถานะครั้งนี้',
       headerClassName: 'super-app-theme--header',
-      minWidth: 130, 
+      minWidth: 130,
       flex: 1,
       renderCell: (params) => {
         const handleChange_select = async (event, params) => {
@@ -650,7 +669,7 @@ export default function Reported_of_assets() {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',
-      minWidth: 130, 
+      minWidth: 130,
       flex: 1,
       renderCell: (params) => {
         return (
@@ -929,14 +948,25 @@ export default function Reported_of_assets() {
                                           filterOptions={filterOptions2}
                                           onChange={handleAutoSource_DeapartMent}
                                           renderInput={(params) => (
-                                            <TextField
-                                              {...params}
-                                              variant="standard"
-                                              label='ผู้ส่งมอบ'
-                                              fullWidth
-                                              autoComplete="family-name"
-                                              sx={{ pt: 1 }}
-                                            />
+                                            <React.Fragment>
+                                              <TextField
+                                                {...params}
+                                                variant="standard"
+                                                label='ผู้ส่งมอบ'
+                                                fullWidth
+                                                autoComplete="family-name"
+                                                sx={{ pt: 1 }}
+                                              />
+                                              <TextField
+                                                variant="standard"
+                                                fullWidth
+                                                autoComplete="family-name"
+                                                disabled
+                                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                                value={nameSource}
+                                                sx={{ pt: 1 }}
+                                              />
+                                            </React.Fragment>
                                           )}
                                         />
                                       </React.Fragment>
@@ -951,6 +981,15 @@ export default function Reported_of_assets() {
                                           value={source}
                                           sx={{ pt: 1 }}
                                           variant="standard"
+                                        />
+                                        <TextField
+                                          variant="standard"
+                                          fullWidth
+                                          autoComplete="family-name"
+                                          disabled
+                                          inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                          value={nameSource}
+                                          sx={{ pt: 1 }}
                                         />
                                       </React.Fragment>
                                     )}
@@ -1026,17 +1065,29 @@ export default function Reported_of_assets() {
                                       filterOptions={filterOptions2}
                                       //value={des_delivery[resultIndex[0].indexOf(des_delivery)]}
                                       onChange={handleAutoDes_DeapartMent}
-                                      renderInput={(params) =>
-                                        <TextField
-                                          fullWidth
-                                          autoComplete="family-name"
-                                          onChange={handleChangeDes_delivery2}
-                                          value={des_delivery}
-                                          sx={{ pt: 1 }}
-                                          variant="standard"
-                                          label='ผู้รับมอบ'
-                                          {...params}
-                                        />}
+                                      renderInput={(params) => (
+                                        <React.Fragment>
+                                          <TextField
+                                            fullWidth
+                                            autoComplete="family-name"
+                                            onChange={handleChangeDes_delivery2}
+                                            value={des_delivery}
+                                            sx={{ pt: 1 }}
+                                            variant="standard"
+                                            label='ผู้รับมอบ'
+                                            {...params}
+                                          />
+                                          <TextField
+                                            variant="standard"
+                                            fullWidth
+                                            autoComplete="family-name"
+                                            disabled
+                                            inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                            value={nameDes}
+                                            sx={{ pt: 1 }}
+                                          />
+                                        </React.Fragment>
+                                      )}
                                     />
                                     <TextField
                                       required
@@ -1133,14 +1184,25 @@ export default function Reported_of_assets() {
                                           //value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
                                           onChange={handleAutoSource_DeapartMent}
                                           renderInput={(params) => (
-                                            <TextField
-                                              {...params}
-                                              variant="standard"
-                                              label='ผู้ส่งมอบ'
-                                              fullWidth
-                                              autoComplete="family-name"
-                                              sx={{ pt: 1 }}
-                                            />
+                                            <React.Fragment>
+                                              <TextField
+                                                {...params}
+                                                variant="standard"
+                                                label='ผู้ส่งมอบ'
+                                                fullWidth
+                                                autoComplete="family-name"
+                                                sx={{ pt: 1 }}
+                                              />
+                                              <TextField
+                                                variant="standard"
+                                                fullWidth
+                                                autoComplete="family-name"
+                                                disabled
+                                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                                value={nameSource}
+                                                sx={{ pt: 1 }}
+                                              />
+                                            </React.Fragment>
                                           )}
                                         />
                                       </React.Fragment>
@@ -1155,6 +1217,15 @@ export default function Reported_of_assets() {
                                           value={source}
                                           sx={{ pt: 1 }}
                                           variant="standard"
+                                        />
+                                        <TextField
+                                          variant="standard"
+                                          fullWidth
+                                          autoComplete="family-name"
+                                          disabled
+                                          inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                          value={nameSource}
+                                          sx={{ pt: 1 }}
                                         />
                                       </React.Fragment>
                                     )}
