@@ -564,8 +564,8 @@ export default function Nac_Seals_Approve() {
         , price: res.nacdtl_assetsPrice
         , bookValue: !res.nacdtl_bookV ? '' : res.nacdtl_bookV
         , priceSeals: !res.nacdtl_PriceSeals ? '' : res.nacdtl_PriceSeals
-        , Price_Before_VAT: !res.nacdtl_PriceSeals ? '' : res.nacdtl_PriceSeals - (res.nacdtl_PriceSeals * (7 / 100))
-        , profit: !res.nacdtl_profit ? '' : (res.nacdtl_PriceSeals - (res.nacdtl_PriceSeals * (7 / 100)) - res.nacdtl_bookV)
+        , Price_Before_VAT: !res.nacdtl_PriceSeals ? '' : (res.nacdtl_PriceSeals*(100/107)).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
+        , profit: !res.nacdtl_profit ? '' : ((res.nacdtl_PriceSeals*(100/107)) - res.nacdtl_bookV).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
       };
     }));
 
@@ -1566,7 +1566,7 @@ export default function Nac_Seals_Approve() {
   };
 
 
-  if (headers.length === 0) {
+  if (serviceList[0].assetsCode === '') {
     return (
       <React.Fragment>
         <Box

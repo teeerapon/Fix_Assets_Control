@@ -1407,7 +1407,7 @@ export default function Nac_Main_wait() {
     setAlert(false);
   };
 
-  if (headers.length === 0) {
+  if (serviceList[0].assetsCode === '') {
     return (
       <React.Fragment>
         <Box

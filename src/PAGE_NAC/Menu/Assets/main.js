@@ -240,6 +240,13 @@ export default function History_of_assets() {
         .then((response) => {
           if (response.data[0].response === 'ทำรายการสำเร็จ') {
             alert(response.data[0].response)
+            setOpen(false);
+            setCode(null)
+            setName(null)
+            setSerialNo(null)
+            setPrice(null)
+            setDetails(null)
+            setCeate_Date(null)
             window.location.href = '/FETCH_ASSETS';
           } else {
             alert(response.data[0].response)
