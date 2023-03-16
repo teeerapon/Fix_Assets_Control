@@ -1529,10 +1529,6 @@ export default function Nac_Seals_Approve() {
     setAlert(false);
   };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 215bcc0cba0fbda011191c6461f60387f27fed0a
   if (serviceList[0].assetsCode === '') {
     return (
       <React.Fragment>
