@@ -569,8 +569,13 @@ export default function Nac_Seals_Approve() {
         , price: res.nacdtl_assetsPrice
         , bookValue: !res.nacdtl_bookV ? '' : res.nacdtl_bookV
         , priceSeals: !res.nacdtl_PriceSeals ? '' : res.nacdtl_PriceSeals
+<<<<<<< HEAD
         , Price_Before_VAT: !res.nacdtl_PriceSeals ? '' : (res.nacdtl_PriceSeals * (100 / 107)).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
         , profit: ((res.nacdtl_PriceSeals * (100 / 107)) - res.nacdtl_bookV).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
+=======
+        , Price_Before_VAT: !res.nacdtl_PriceSeals ? '' : (res.nacdtl_PriceSeals*(100/107)).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
+        , profit: !res.nacdtl_profit ? '' : ((res.nacdtl_PriceSeals*(100/107)) - res.nacdtl_bookV).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
+>>>>>>> 215bcc0cba0fbda011191c6461f60387f27fed0a
       };
     }));
 
@@ -1588,6 +1593,10 @@ export default function Nac_Seals_Approve() {
     setAlert(false);
   };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 215bcc0cba0fbda011191c6461f60387f27fed0a
   if (serviceList[0].assetsCode === '') {
     return (
       <React.Fragment>
