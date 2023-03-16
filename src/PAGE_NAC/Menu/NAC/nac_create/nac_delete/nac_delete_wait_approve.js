@@ -1822,6 +1822,15 @@ export default function Nac_Seals_Approve() {
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                       onChange={handleChangeSource_Name}
                                       value={nameSource}
+                                      InputProps={{
+                                        startAdornment: (
+                                          <InputAdornment position="start">
+                                            <Typography color="black">
+                                              ลงชื่อผู้ส่งมอบ :
+                                            </Typography>
+                                          </InputAdornment>
+                                        ),
+                                      }}
                                       sx={{ pt: 1 }}
                                     />
                                   </React.Fragment>
@@ -1845,6 +1854,15 @@ export default function Nac_Seals_Approve() {
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                       onChange={handleChangeSource_Name}
                                       value={nameSource}
+                                      InputProps={{
+                                        startAdornment: (
+                                          <InputAdornment position="start">
+                                            <Typography color="black">
+                                              ลงชื่อผู้ส่งมอบ :
+                                            </Typography>
+                                          </InputAdornment>
+                                        ),
+                                      }}
                                       sx={{ pt: 1 }}
                                     />
                                   </React.Fragment>
