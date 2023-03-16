@@ -977,6 +977,15 @@ export default function Reported_of_assets() {
                                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                           onChange={handleChangeSource_Name}
                                           value={nameSource}
+                                          InputProps={{
+                                            startAdornment: (
+                                              <InputAdornment position="start">
+                                                <Typography color="black">
+                                                  ลงชื่อผู้ส่งมอบ :
+                                                </Typography>
+                                              </InputAdornment>
+                                            ),
+                                          }}
                                           sx={{ pt: 1 }}
                                         />
                                       </React.Fragment>
@@ -999,6 +1008,15 @@ export default function Reported_of_assets() {
                                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                           onChange={handleChangeSource_Name}
                                           value={nameSource}
+                                          InputProps={{
+                                            startAdornment: (
+                                              <InputAdornment position="start">
+                                                <Typography color="black">
+                                                  ลงชื่อผู้ส่งมอบ :
+                                                </Typography>
+                                              </InputAdornment>
+                                            ),
+                                          }}
                                           sx={{ pt: 1 }}
                                         />
                                       </React.Fragment>
@@ -1097,6 +1115,15 @@ export default function Reported_of_assets() {
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                       onChange={handleChangeDes_Name}
                                       value={nameDes}
+                                      InputProps={{
+                                        startAdornment: (
+                                          <InputAdornment position="start">
+                                            <Typography color="black">
+                                              ลงชื่อผู้รับมอบ :
+                                            </Typography>
+                                          </InputAdornment>
+                                        ),
+                                      }}
                                       sx={{ pt: 1 }}
                                     />
                                     <TextField
@@ -1213,6 +1240,15 @@ export default function Reported_of_assets() {
                                           disabled
                                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                           value={nameSource}
+                                          InputProps={{
+                                            startAdornment: (
+                                              <InputAdornment position="start">
+                                                <Typography color="black">
+                                                  ลงชื่อผู้ส่งมอบ :
+                                                </Typography>
+                                              </InputAdornment>
+                                            ),
+                                          }}
                                           sx={{ pt: 1 }}
                                         />
                                       </React.Fragment>
@@ -1235,6 +1271,15 @@ export default function Reported_of_assets() {
                                           disabled
                                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                           value={nameSource}
+                                          InputProps={{
+                                            startAdornment: (
+                                              <InputAdornment position="start">
+                                                <Typography color="black">
+                                                  ลงชื่อผู้ส่งมอบ :
+                                                </Typography>
+                                              </InputAdornment>
+                                            ),
+                                          }}
                                           sx={{ pt: 1 }}
                                         />
                                       </React.Fragment>
