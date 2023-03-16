@@ -166,6 +166,10 @@ export default function Nac_Main() {
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
+  const data = JSON.parse(localStorage.getItem('data'));
+  const [nameSource, setNmaeSource] = React.useState();
+  const [nameDes, setNmaeDes] = React.useState();
+
   const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
   const result = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : 0;
@@ -173,7 +177,6 @@ export default function Nac_Main() {
     return a + b
   })
   const navigate = useNavigate();
-  const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
   const [AllAssetsControl, setAllAssetsControl] = React.useState([]);
   const [UserForAssetsControl, setUserForAssetsControl] = React.useState([]);
@@ -343,7 +346,7 @@ export default function Nac_Main() {
   };
 
   const handleChangeSource_deliveryDate = (newValue) => {
-    setSourceDate(newValue);
+    setSourceDate(newValue)
   };
 
   const handleChangeSource_Description = (event) => {
@@ -360,15 +363,21 @@ export default function Nac_Main() {
     if (!UserCode) {
       setSource_Department('')
       setSource_BU('')
+      setNmaeSource('')
     } else {
-      if(response.data[0].BranchID !== 901){
+      if (response.data[0].BranchID !== 901) {
         setSource_Department(response.data[0].DepCode)
         setSource_BU('Oil')
-      }else{
+      } else {
         setSource_Department(response.data[0].DepCode)
         setSource_BU('Center')
       }
     }
+  };
+
+  const handleChangeSource_Name = (event) => {
+    event.preventDefault();
+    setNmaeSource(event.target.value);
   };
 
   //Des
@@ -401,6 +410,7 @@ export default function Nac_Main() {
     if (!UserCode) {
       setDes_Department('')
       setDes_BU('')
+      setNmaeDes('')
     } else {
       if (response.data[0].BranchID !== 901) {
         setDes_Department(response.data[0].DepCode)
@@ -410,6 +420,11 @@ export default function Nac_Main() {
         setDes_BU('Center')
       }
     }
+  };
+
+  const handleChangeDes_Name = (event) => {
+    event.preventDefault();
+    setNmaeDes(event.target.value);
   };
 
   const handleNext = async () => {
@@ -437,10 +452,12 @@ export default function Nac_Main() {
             des_Department,
             des_BU,
             des_delivery,
+            nameDes,
             des_deliveryDate,
             source_Department,
             source_BU,
             source,
+            nameSource,
             sourceDate,
             des_Description,
             source_Description,
@@ -531,7 +548,7 @@ export default function Nac_Main() {
               <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                 <Box gridColumn="span 10">
                   <AnimatedPage>
-                    <Typography variant="h5" color="inherit"  sx={{ pt: 1 }}>
+                    <Typography variant="h5" color="inherit" sx={{ pt: 1 }}>
                       การเปลี่ยนแปลงทรัพย์สินถาวร
                     </Typography>
                   </AnimatedPage>
@@ -662,15 +679,26 @@ export default function Nac_Main() {
                                     value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
                                     onChange={handleAutoSource_DeapartMent}
                                     renderInput={(params) => (
-                                      <TextField
-                                        {...params}
-                                        variant="standard"
-                                        label='ผู้ส่งมอบ'
-                                        fullWidth
-                                        autoComplete="family-name"
-                                        sx={{ pt: 1 }}
-                                      />
+                                      <React.Fragment>
+                                        <TextField
+                                          {...params}
+                                          variant="standard"
+                                          label='ผู้ส่งมอบ'
+                                          fullWidth
+                                          autoComplete="family-name"
+                                          sx={{ pt: 1 }}
+                                        />
+                                      </React.Fragment>
                                     )}
+                                  />
+                                  <TextField
+                                    variant="standard"
+                                    fullWidth
+                                    autoComplete="family-name"
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                    onChange={handleChangeSource_Name}
+                                    value={nameSource}
+                                    sx={{ pt: 1 }}
                                   />
                                 </React.Fragment>
                               ) : (
@@ -684,6 +712,15 @@ export default function Nac_Main() {
                                     value={source}
                                     sx={{ pt: 1 }}
                                     variant="standard"
+                                  />
+                                  <TextField
+                                    variant="standard"
+                                    fullWidth
+                                    autoComplete="family-name"
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                    onChange={handleChangeSource_Name}
+                                    value={nameSource}
+                                    sx={{ pt: 1 }}
                                   />
                                 </React.Fragment>
                               )}
@@ -784,17 +821,29 @@ export default function Nac_Main() {
                                 filterOptions={filterOptions2}
                                 value={des_delivery}
                                 onChange={handleAutoDes_DeapartMent}
-                                renderInput={(params) =>
-                                  <TextField
-                                    fullWidth
-                                    autoComplete="family-name"
-                                    onChange={handleChangeDes_delivery2}
-                                    value={des_delivery}
-                                    sx={{ pt: 1 }}
-                                    variant="standard"
-                                    label='ผู้รับมอบ'
-                                    {...params}
-                                  />}
+                                renderInput={(params) => (
+                                  <React.Fragment>
+                                    <TextField
+                                      fullWidth
+                                      autoComplete="family-name"
+                                      onChange={handleChangeDes_delivery2}
+                                      value={des_delivery}
+                                      sx={{ pt: 1 }}
+                                      variant="standard"
+                                      label='ผู้รับมอบ'
+                                      {...params}
+                                    />
+                                  </React.Fragment>
+                                )}
+                              />
+                              <TextField
+                                variant="standard"
+                                fullWidth
+                                autoComplete="family-name"
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                onChange={handleChangeDes_Name}
+                                value={nameDes}
+                                sx={{ pt: 1 }}
                               />
                               <TextField
                                 required

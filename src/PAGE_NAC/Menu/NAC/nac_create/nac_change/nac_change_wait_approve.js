@@ -308,6 +308,9 @@ export default function Nac_Main_wait() {
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
   const [permission_menuID, setPermission_menuID] = React.useState();
 
+  const data = JSON.parse(localStorage.getItem('data'));
+  const [nameSource, setNmaeSource] = React.useState();
+
   React.useEffect(() => {
     // POST request using axios with set headers
     const body = { Permission_TypeID: 1, userID: data.userid }
@@ -331,7 +334,6 @@ export default function Nac_Main_wait() {
 
   const [exportToExcel, setExportToExcel] = React.useState([]);
 
-  const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
   const { nac_id } = useParams()
@@ -473,6 +475,7 @@ export default function Nac_Main_wait() {
       setSource_Department(responseHeaders.data[0].source_dep_owner)
       setSource_BU(responseHeaders.data[0].source_bu_owner)
       setSource(responseHeaders.data[0].source_userid)
+      setNmaeSource(responseHeaders.data[0].source_name)
       setSourceDate(responseHeaders.data[0].source_date)
       setSource_Description(responseHeaders.data[0].source_remark)
       setSource_Approve(responseHeaders.data[0].source_approve_userid)
@@ -811,6 +814,7 @@ export default function Nac_Main_wait() {
     if (!UserCode) {
       setSource_Department('')
       setSource_BU('')
+      setNmaeSource('')
     } else {
       if (response.data[0].BranchID !== 901) {
         setSource_Department(response.data[0].DepCode)
@@ -820,6 +824,11 @@ export default function Nac_Main_wait() {
         setSource_BU('Center')
       }
     }
+  };
+
+  const handleChangeSource_Name = (event) => {
+    event.preventDefault();
+    setNmaeSource(event.target.value);
   };
 
   //Des
@@ -850,6 +859,7 @@ export default function Nac_Main_wait() {
         const nac_status = 1
         const sumPrice = sum_price
         const nac_type = headers.nac_type
+        const nameDes = null
         const response = await store_FA_control_update_DTLandHeaders({
           usercode,
           nac_code,
@@ -859,11 +869,13 @@ export default function Nac_Main_wait() {
           des_department,
           des_BU,
           des_delivery,
+          nameDes,
           des_deliveryDate,
           des_description,
           source_department,
           source_BU,
           source,
+          nameSource,
           sourceDate,
           source_description,
         });
@@ -917,8 +929,8 @@ export default function Nac_Main_wait() {
   };
 
   const handleSubmit = async () => {
-    if (!source || !source_department || !source_BU || !sourceDate) {
-      const alert_value = 'กรุณากรอกข้อมูลผู้ยืนยันให้ครบถ้วน'
+    if (!source || !source_department || !source_BU || !sourceDate || !nameSource) {
+      const alert_value = 'กรุณากรอกข้อมูลผู้ส่งมอบให้ครบถ้วน'
       setAlert(true);
       setValueAlert(alert_value)
     } else {
@@ -1407,7 +1419,8 @@ export default function Nac_Main_wait() {
     setAlert(false);
   };
 
-  if (headers.length === 0) {
+
+  if (serviceList[0].assetsCode === '') {
     return (
       <React.Fragment>
         <Box
@@ -1427,7 +1440,7 @@ export default function Nac_Main_wait() {
         </Box>
       </React.Fragment>
     );
-  } else {
+  } else if (headers.nac_type === '3' || headers.nac_type === 3) {
     return (
       <React.Fragment>
         <Stack spacing={2} sx={{ width: '100%' }}>
@@ -1661,29 +1674,67 @@ export default function Nac_Main_wait() {
                                     variant="standard"
                                   />
                                 </Stack>
-                                <Autocomplete
-                                  freeSolo
-                                  name='source'
-                                  id='source'
-                                  size="small"
-                                  disabled={data.branchid === 901 && (selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  options={users_pureDep}
-                                  getOptionLabel={(option) => option.UserCode}
-                                  filterOptions={filterOptions2}
-                                  value={!source ? '' : UserForAssetsControl[resultIndex[0].indexOf(source)]}
-                                  onChange={handleAutoSource_DeapartMent}
-                                  renderInput={(params) => (
+                                {data.branchid === 901 ? (
+                                  <React.Fragment>
+                                    <Autocomplete
+                                      freeSolo
+                                      name='source'
+                                      id='source'
+                                      size="small"
+                                      disabled={data.branchid === 901 && (selectNAC === 1 || selectNAC === 7) ? false : true}
+                                      options={users_pureDep}
+                                      getOptionLabel={(option) => option.UserCode}
+                                      filterOptions={filterOptions2}
+                                      value={!source ? '' : UserForAssetsControl[resultIndex[0].indexOf(source)]}
+                                      onChange={handleAutoSource_DeapartMent}
+                                      renderInput={(params) => (
+                                        <React.Fragment>
+                                          <TextField
+                                            {...params}
+                                            variant="standard"
+                                            label='ผู้ส่งมอบ'
+                                            fullWidth
+                                            autoComplete="family-name"
+                                            sx={{ pt: 1 }}
+                                          />
+                                        </React.Fragment>
+                                      )}
+                                    />
                                     <TextField
-                                      {...params}
                                       variant="standard"
-                                      label='ผู้ยืนยัน'
                                       fullWidth
                                       autoComplete="family-name"
-                                      onChange={handleChangeSource_delivery2}
+                                      disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                      onChange={handleChangeSource_Name}
+                                      value={nameSource}
                                       sx={{ pt: 1 }}
                                     />
-                                  )}
-                                />
+                                  </React.Fragment>
+                                ) : (
+                                  <React.Fragment>
+                                    <TextField
+                                      required
+                                      fullWidth
+                                      name='source'
+                                      id='source'
+                                      label='ผู้ส่งมอบ'
+                                      value={source}
+                                      sx={{ pt: 1 }}
+                                      variant="standard"
+                                    />
+                                    <TextField
+                                      variant="standard"
+                                      fullWidth
+                                      autoComplete="family-name"
+                                      disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                      onChange={handleChangeSource_Name}
+                                      value={nameSource}
+                                      sx={{ pt: 1 }}
+                                    />
+                                  </React.Fragment>
+                                )}
                                 <LocalizationProvider dateAdapter={DateAdapter}>
                                   <DatePicker
                                     inputFormat="yyyy-MM-dd"
@@ -2332,5 +2383,13 @@ export default function Nac_Main_wait() {
         </ThemeProvider>
       </React.Fragment >
     );
+  } else {
+    return (
+      <div className="container">
+        <center>
+          <h1 className="pt-5">404 Not Found</h1>
+        </center>
+      </div>
+    )
   }
 }

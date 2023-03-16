@@ -178,9 +178,11 @@ export default function Nac_Main() {
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
+  const data = JSON.parse(localStorage.getItem('data'));
+  const [nameSource, setNmaeSource] = React.useState();
+
   const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
   const navigate = useNavigate();
-  const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
   const [AllAssetsControl, setAllAssetsControl] = React.useState([]);
@@ -194,24 +196,32 @@ export default function Nac_Main() {
   const nac_type = 4;
 
   const result = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : 0;
+    return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : elt.price;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return parseFloat(a ? a.toFixed(2) : 0) + parseFloat(b ? b.toFixed(2) : 0)
   })
   const book_V = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.bookValue) || /^\d+$/.test(elt.bookValue)) ? parseFloat(elt.bookValue) : 0;
+    return (/^\d+\.\d+$/.test(elt.bookValue) || /^\d+$/.test(elt.bookValue)) ? parseFloat(elt.bookValue) : elt.bookValue;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return parseFloat(a ? a.toFixed(2) : 0) + parseFloat(b ? b.toFixed(2) : 0)
   })
+
   const price_seals = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.priceSeals) || /^\d+$/.test(elt.priceSeals)) ? parseFloat(elt.priceSeals) : 0;
+    return (/^\d+\.\d+$/.test(elt.priceSeals) || /^\d+$/.test(elt.priceSeals)) ? parseFloat(elt.priceSeals) : elt.priceSeals;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return parseFloat(a ? a.toFixed(2) : 0) + parseFloat(b ? b.toFixed(2) : 0)
   })
+
   const profit_seals = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.priceSeals - elt.bookValue) || /^\d+$/.test(elt.priceSeals - elt.bookValue)) ? parseFloat(elt.priceSeals - elt.bookValue) : 0;
+    return (/^\d+\.\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue) || /^\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue)) ? parseFloat((((elt.priceSeals * 100) / 107) - elt.bookValue)) : (((elt.priceSeals * 100) / 107) - elt.bookValue);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return parseFloat(a ? a.toFixed(2) : 0) + parseFloat(b ? b.toFixed(2) : 0)
+  })
+
+  const sum_vat = serviceList.map(function (elt) {
+    return (/^\d+\.\d+$/.test((elt.priceSeals * 100) / 107) || /^\d+$/.test((elt.priceSeals * 100) / 107)) ? parseFloat(((elt.priceSeals * 100) / 107)) : ((elt.priceSeals * 100) / 107);
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return parseFloat(a ? a.toFixed(2) : 0) + parseFloat(b ? b.toFixed(2) : 0)
   })
 
 
@@ -403,6 +413,7 @@ export default function Nac_Main() {
     if (!UserCode) {
       setSource_Department('')
       setSource_BU('')
+      setNmaeSource('')
     } else {
       if (response.data[0].BranchID !== 901) {
         setSource_Department(response.data[0].DepCode)
@@ -412,6 +423,11 @@ export default function Nac_Main() {
         setSource_BU('Center')
       }
     }
+  };
+
+  const handleChangeSource_Name = (event) => {
+    event.preventDefault();
+    setNmaeSource(event.target.value);
   };
 
   //Des
@@ -468,16 +484,19 @@ export default function Nac_Main() {
         const usercode = data.UserCode
         const worktype = nac_type
         const sumPrice = result
+        const nameDes = null
         const response = await Store_FA_control_create_doc({
           usercode,
           worktype,
           des_Department,
           des_BU,
           des_delivery,
+          nameDes,
           des_deliveryDate,
           source_Department,
           source_BU,
           source,
+          nameSource,
           sourceDate,
           des_Description,
           source_Description,
@@ -583,7 +602,7 @@ export default function Nac_Main() {
               <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                 <Box gridColumn="span 10">
                   <AnimatedPage>
-                    <Typography variant="h5" color="inherit"  sx={{ pt: 1 }}>
+                    <Typography variant="h5" color="inherit" sx={{ pt: 1 }}>
                       การเปลี่ยนแปลงทรัพย์สินถาวร
                     </Typography>
                   </AnimatedPage>
@@ -712,17 +731,27 @@ export default function Nac_Main() {
                                     filterOptions={filterOptions2}
                                     onChange={handleAutoSource_DeapartMent}
                                     value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
-                                    renderInput={(params) =>
-                                      <TextField
-                                        fullWidth
-                                        autoComplete="family-name"
-                                        onChange={handleChangeSource_delivery2}
-                                        value={source}
-                                        sx={{ pt: 1 }}
-                                        variant="standard"
-                                        label='ผู้ยืนยัน'
-                                        {...params}
-                                      />}
+                                    renderInput={(params) => (
+                                      <React.Fragment>
+                                        <TextField
+                                          {...params}
+                                          variant="standard"
+                                          label='ผู้ส่งมอบ'
+                                          fullWidth
+                                          autoComplete="family-name"
+                                          sx={{ pt: 1 }}
+                                        />
+                                      </React.Fragment>
+                                    )}
+                                  />
+                                  <TextField
+                                    variant="standard"
+                                    fullWidth
+                                    autoComplete="family-name"
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                    onChange={handleChangeSource_Name}
+                                    value={nameSource}
+                                    sx={{ pt: 1 }}
                                   />
                                 </React.Fragment>
                               ) : (
@@ -732,10 +761,19 @@ export default function Nac_Main() {
                                     fullWidth
                                     name='source'
                                     id='source'
-                                    label='ผู้ยืนยัน'
+                                    label='ผู้ส่งมอบ'
                                     value={source}
                                     sx={{ pt: 1 }}
                                     variant="standard"
+                                  />
+                                  <TextField
+                                    variant="standard"
+                                    fullWidth
+                                    autoComplete="family-name"
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                    onChange={handleChangeSource_Name}
+                                    value={nameSource}
+                                    sx={{ pt: 1 }}
                                   />
                                 </React.Fragment>
                               )}
@@ -1015,7 +1053,7 @@ export default function Nac_Main() {
                           required
                           fullWidth
                           disabled
-                          value={result === 0 ? '' : 0}
+                          value={(result === 0 || !result) ? '' : 0}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                           variant="standard"
                         />
@@ -1026,7 +1064,7 @@ export default function Nac_Main() {
                           fullWidth
                           disabled
                           type={valuesVisibility.showText ? "text" : "password"}
-                          value={price_seals === 0 ? '' : (price_seals - book_V).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
+                          value={(price_seals === 0 || !price_seals) ? '' : (price_seals - book_V).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                           variant="standard"
                         />

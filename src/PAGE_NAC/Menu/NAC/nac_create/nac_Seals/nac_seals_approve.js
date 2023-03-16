@@ -316,6 +316,10 @@ export default function Nac_Seals_Approve() {
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
   const [permission_menuID, setPermission_menuID] = React.useState();
 
+  const data = JSON.parse(localStorage.getItem('data'));
+  const [nameSource, setNmaeSource] = React.useState();
+  const [realPrice_Date, setRealPrice_Date] = React.useState();
+
   React.useEffect(() => {
     // POST request using axios with set headers
     const body = { Permission_TypeID: 1, userID: data.userid }
@@ -333,7 +337,6 @@ export default function Nac_Seals_Approve() {
   const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
   const sum_price = serviceList.reduce((total, serviceList) => total = total + serviceList.price, 0);
   const priceSeals = serviceList.reduce((total, serviceList) => total = total + serviceList.priceSeals, 0);
-  const data = JSON.parse(localStorage.getItem('data'));
   const dataDepID = data.depid
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
   const { nac_id } = useParams()
@@ -515,6 +518,7 @@ export default function Nac_Seals_Approve() {
       setSource_Department(responseHeaders.data[0].source_dep_owner)
       setSource_BU(responseHeaders.data[0].source_bu_owner)
       setSource(responseHeaders.data[0].source_userid)
+      setNmaeSource(responseHeaders.data[0].source_name)
       setSourceDate(responseHeaders.data[0].source_date)
       setSource_Description(responseHeaders.data[0].source_remark)
       setSource_Approve(responseHeaders.data[0].source_approve_userid)
@@ -531,6 +535,7 @@ export default function Nac_Seals_Approve() {
       setBossApprove(responseHeaders.data[0].source_approve_userid)
       setBossApproveDate(responseHeaders.data[0].source_approve_date)
       setReal_Price(responseHeaders.data[0].real_price)
+      setRealPrice_Date(responseHeaders.data[0].realPrice_Date)
       setVerifyApprove(responseHeaders.data[0].verify_by_userid)
       setVerifyApproveDate(responseHeaders.data[0].verify_date)
       setFinance_aprrove_id(responseHeaders.data[0].finance_aprrove_id)
@@ -564,8 +569,8 @@ export default function Nac_Seals_Approve() {
         , price: res.nacdtl_assetsPrice
         , bookValue: !res.nacdtl_bookV ? '' : res.nacdtl_bookV
         , priceSeals: !res.nacdtl_PriceSeals ? '' : res.nacdtl_PriceSeals
-        , Price_Before_VAT: !res.nacdtl_PriceSeals ? '' : res.nacdtl_PriceSeals - (res.nacdtl_PriceSeals * (7 / 100))
-        , profit: !res.nacdtl_profit ? '' : (res.nacdtl_PriceSeals - (res.nacdtl_PriceSeals * (7 / 100)) - res.nacdtl_bookV)
+        , Price_Before_VAT: !res.nacdtl_PriceSeals ? '' : (res.nacdtl_PriceSeals * (100 / 107)).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
+        , profit: ((res.nacdtl_PriceSeals * (100 / 107)) - res.nacdtl_bookV).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
       };
     }));
 
@@ -793,6 +798,7 @@ export default function Nac_Seals_Approve() {
     if (!UserCode) {
       setSource_Department('')
       setSource_BU('')
+      setNmaeSource('')
     } else {
       if (response.data[0].BranchID !== 901) {
         setSource_Department(response.data[0].DepCode)
@@ -802,6 +808,15 @@ export default function Nac_Seals_Approve() {
         setSource_BU('Center')
       }
     }
+  };
+
+  const handleChangeSource_Name = (event) => {
+    event.preventDefault();
+    setNmaeSource(event.target.value);
+  };
+
+  const handleChangeRealPrice_Date = (newValue) => {
+    setRealPrice_Date(newValue);
   };
 
   //Des
@@ -839,6 +854,7 @@ export default function Nac_Seals_Approve() {
         const sumPrice = sum_price
         const nac_type = headers.nac_type
         const new_Price = headers.real_price
+        const nameDes = null
         const response = await store_FA_control_update_DTLandHeaders({
           usercode,
           nac_code,
@@ -848,11 +864,13 @@ export default function Nac_Seals_Approve() {
           des_department,
           des_BU,
           des_delivery,
+          nameDes,
           des_deliveryDate,
           des_description,
           source_department,
           source_BU,
           source,
+          nameSource,
           sourceDate,
           source_description,
         });
@@ -920,7 +938,7 @@ export default function Nac_Seals_Approve() {
   };
 
   const handleSubmit = async () => {
-    if (!source || !source_department || !source_BU || !sourceDate) {
+    if (!source || !source_department || !source_BU || !sourceDate || !nameSource) {
       const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' : 'กรุณากรอกวันที่ของผู้ส่ง'
       setAlert(true);
       setValueAlert(alert_value)
@@ -968,6 +986,7 @@ export default function Nac_Seals_Approve() {
                   verify_by,
                   verify_date,
                   new_Price,
+                  realPrice_Date
                 });
                 for (let i = 0; i < serviceList.length; i++) {
                   const dtl_id = serviceList[i].dtl_id
@@ -1062,6 +1081,7 @@ export default function Nac_Seals_Approve() {
                   verify_by,
                   verify_date,
                   new_Price,
+                  realPrice_Date
                 });
                 for (let i = 0; i < serviceList.length; i++) {
                   const dtl_id = serviceList[i].dtl_id
@@ -1196,14 +1216,14 @@ export default function Nac_Seals_Approve() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
+            window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
           });
         } else {
           swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
+            window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
           });
         }
       } else {
@@ -1211,7 +1231,7 @@ export default function Nac_Seals_Approve() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
+          window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
         });
       }
     }
@@ -1256,14 +1276,14 @@ export default function Nac_Seals_Approve() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
+            window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
           });
         } else {
           swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
+            window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
           });
         }
       } else {
@@ -1271,7 +1291,7 @@ export default function Nac_Seals_Approve() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
+          window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
         });
       }
     }
@@ -1281,7 +1301,7 @@ export default function Nac_Seals_Approve() {
   const handleExecApprove = async () => {
     if (CheckApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true) {
       const usercode = data.UserCode
-      const nac_status = !headers.real_price ? 12 : 13
+      const nac_status = !headers.real_price ? 12 : 15
       const source_approve = data.UserCode
       const source_approve_date = datenow
       const des_approve = des_deliveryApprove
@@ -1306,6 +1326,7 @@ export default function Nac_Seals_Approve() {
         verify_by,
         verify_date,
         new_Price,
+        realPrice_Date
       });
       const comment = 'อนุมัติรายการแล้ว'
       const responseComment = await store_FA_control_comment({
@@ -1321,14 +1342,14 @@ export default function Nac_Seals_Approve() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
+          window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
         });
       } else {
         swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
+          window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
         });
       }
     }
@@ -1336,8 +1357,8 @@ export default function Nac_Seals_Approve() {
 
   // Submit รายการ
   const handleSubmitComplete = async () => {
-    if (!Real_Price) {
-      const alert_value = 'กรุณาใส่ราคาขายจริง'
+    if (!Real_Price || !realPrice_Date) {
+      const alert_value = 'กรุณาใส่ราคาขายจริงและวันที่โอนเงิน'
       setAlert(true);
       setValueAlert(alert_value)
     } else {
@@ -1373,6 +1394,7 @@ export default function Nac_Seals_Approve() {
           verify_by,
           verify_date,
           new_Price,
+          realPrice_Date
         });
         if ('data' in responseForUpdate) {
           const comment = selectNAC === 4 ? 'ตรวจรับเอกสารแล้ว'
@@ -1539,6 +1561,7 @@ export default function Nac_Seals_Approve() {
       verify_by,
       verify_date,
       new_Price,
+      realPrice_Date
     });
     if ('data' in responseForUpdate) {
       const comment = 'ตีกลับรายการเนื่องจาก "' + commentReply + '"'
@@ -1565,8 +1588,7 @@ export default function Nac_Seals_Approve() {
     setAlert(false);
   };
 
-
-  if (headers.length === 0) {
+  if (serviceList[0].assetsCode === '') {
     return (
       <React.Fragment>
         <Box
@@ -1586,7 +1608,7 @@ export default function Nac_Seals_Approve() {
         </Box>
       </React.Fragment>
     );
-  } else {
+  } else if (headers.nac_type === '5' || headers.nac_type === 5) {
     return (
       <React.Fragment>
         <Stack spacing={2} sx={{ width: '100%' }}>
@@ -1825,29 +1847,67 @@ export default function Nac_Seals_Approve() {
                                     variant="standard"
                                   />
                                 </Stack>
-                                <Autocomplete
-                                  freeSolo
-                                  name='source'
-                                  id='source'
-                                  size="small"
-                                  disabled={data.branchid === 901 && (selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  options={users_pureDep}
-                                  getOptionLabel={(option) => option.UserCode}
-                                  filterOptions={filterOptions2}
-                                  value={!source ? '' : UserForAssetsControl[resultIndex[0].indexOf(source)]}
-                                  onChange={handleAutoSource_DeapartMent}
-                                  renderInput={(params) => (
+                                {data.branchid === 901 ? (
+                                  <React.Fragment>
+                                    <Autocomplete
+                                      freeSolo
+                                      name='source'
+                                      id='source'
+                                      size="small"
+                                      disabled={data.branchid === 901 && (selectNAC === 1 || selectNAC === 7) ? false : true}
+                                      options={users_pureDep}
+                                      getOptionLabel={(option) => option.UserCode}
+                                      filterOptions={filterOptions2}
+                                      value={!source ? '' : UserForAssetsControl[resultIndex[0].indexOf(source)]}
+                                      onChange={handleAutoSource_DeapartMent}
+                                      renderInput={(params) => (
+                                        <React.Fragment>
+                                          <TextField
+                                            {...params}
+                                            variant="standard"
+                                            label='ผู้ส่งมอบ'
+                                            fullWidth
+                                            autoComplete="family-name"
+                                            sx={{ pt: 1 }}
+                                          />
+                                        </React.Fragment>
+                                      )}
+                                    />
                                     <TextField
-                                      {...params}
                                       variant="standard"
-                                      label='ผู้ยืนยัน'
                                       fullWidth
                                       autoComplete="family-name"
-                                      onChange={handleChangeSource_delivery2}
+                                      disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                      onChange={handleChangeSource_Name}
+                                      value={nameSource}
                                       sx={{ pt: 1 }}
                                     />
-                                  )}
-                                />
+                                  </React.Fragment>
+                                ) : (
+                                  <React.Fragment>
+                                    <TextField
+                                      required
+                                      fullWidth
+                                      name='source'
+                                      id='source'
+                                      label='ผู้ส่งมอบ'
+                                      value={source}
+                                      sx={{ pt: 1 }}
+                                      variant="standard"
+                                    />
+                                    <TextField
+                                      variant="standard"
+                                      fullWidth
+                                      autoComplete="family-name"
+                                      disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                      onChange={handleChangeSource_Name}
+                                      value={nameSource}
+                                      sx={{ pt: 1 }}
+                                    />
+                                  </React.Fragment>
+                                )}
                                 <LocalizationProvider dateAdapter={DateAdapter}>
                                   <DatePicker
                                     inputFormat="yyyy-MM-dd"
@@ -2229,6 +2289,33 @@ export default function Nac_Seals_Approve() {
                                   }}
                                   variant="standard"
                                 />
+                              </StyledTableCell>
+                            </StyledTableRow>
+                            <StyledTableRow>
+                              <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 534.5 }}>
+                                <Typography>
+                                  วันที่โอนเงินให้สำนักงาน
+                                </Typography>
+                              </StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                                <LocalizationProvider dateAdapter={DateAdapter}>
+                                  <DatePicker
+                                    inputFormat="yyyy-MM-dd"
+                                    disabled={selectNAC === 12 ? false : true}
+                                    onChange={handleChangeRealPrice_Date}
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
+                                    name='realPrice_Date'
+                                    value={!realPrice_Date ? null : realPrice_Date}
+                                    renderInput={(params) =>
+                                      <TextField
+                                        required
+                                        fullWidth
+                                        autoComplete="family-name"
+                                        sx={{ pt: 1 }}
+                                        variant="standard"
+                                        {...params} />}
+                                  />
+                                </LocalizationProvider>
                               </StyledTableCell>
                             </StyledTableRow>
                           </React.Fragment>
@@ -2620,5 +2707,13 @@ export default function Nac_Seals_Approve() {
         </ThemeProvider>
       </React.Fragment >
     );
+  } else {
+    return (
+      <div className="container">
+        <center>
+          <h1 className="pt-5">404 Not Found</h1>
+        </center>
+      </div>
+    )
   }
 }

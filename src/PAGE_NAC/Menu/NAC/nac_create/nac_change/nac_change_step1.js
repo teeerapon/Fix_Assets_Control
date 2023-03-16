@@ -169,6 +169,9 @@ export default function Nac_Main() {
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
+  const data = JSON.parse(localStorage.getItem('data'));
+  const [nameSource, setNmaeSource] = React.useState();
+
   const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
   const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", price: "" }])
   const result = serviceList.map(function (elt) {
@@ -177,7 +180,6 @@ export default function Nac_Main() {
     return a + b
   })
   const navigate = useNavigate();
-  const data = JSON.parse(localStorage.getItem('data'));
   const checkUserWeb = localStorage.getItem('sucurity');
   const dataDepID = data.depid
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
@@ -402,6 +404,7 @@ export default function Nac_Main() {
     if (!UserCode) {
       setSource_Department('')
       setSource_BU('')
+      setNmaeSource('')
     } else {
       if (response.data[0].BranchID !== 901) {
         setSource_Department(response.data[0].DepCode)
@@ -411,6 +414,11 @@ export default function Nac_Main() {
         setSource_BU('Center')
       }
     }
+  };
+
+  const handleChangeSource_Name = (event) => {
+    event.preventDefault();
+    setNmaeSource(event.target.value);
   };
 
   //Des
@@ -463,16 +471,19 @@ export default function Nac_Main() {
         const usercode = data.UserCode
         const worktype = nac_type
         const sumPrice = result
+        const nameDes = null
         const response = await Store_FA_control_create_doc({
           usercode,
           worktype,
           des_Department,
           des_BU,
           des_delivery,
+          nameDes,
           des_deliveryDate,
           source_Department,
           source_BU,
           source,
+          nameSource,
           sourceDate,
           des_Description,
           source_Description,
@@ -564,7 +575,7 @@ export default function Nac_Main() {
                 <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                   <Box gridColumn="span 10">
                     <AnimatedPage>
-                      <Typography variant="h5" color="inherit"  sx={{ pt: 1 }}>
+                      <Typography variant="h5" color="inherit" sx={{ pt: 1 }}>
                         การเปลี่ยนแปลงทรัพย์สินถาวร
                       </Typography>
                     </AnimatedPage>
@@ -693,17 +704,27 @@ export default function Nac_Main() {
                                       filterOptions={filterOptions2}
                                       onChange={handleAutoSource_DeapartMent}
                                       value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
-                                      renderInput={(params) =>
-                                        <TextField
-                                          fullWidth
-                                          autoComplete="family-name"
-                                          onChange={handleChangeSource_delivery2}
-                                          value={source}
-                                          sx={{ pt: 1 }}
-                                          variant="standard"
-                                          label='ผู้ยืนยัน'
-                                          {...params}
-                                        />}
+                                      renderInput={(params) => (
+                                        <React.Fragment>
+                                          <TextField
+                                            {...params}
+                                            variant="standard"
+                                            label='ผู้ส่งมอบ'
+                                            fullWidth
+                                            autoComplete="family-name"
+                                            sx={{ pt: 1 }}
+                                          />
+                                        </React.Fragment>
+                                      )}
+                                    />
+                                    <TextField
+                                      variant="standard"
+                                      fullWidth
+                                      autoComplete="family-name"
+                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                      onChange={handleChangeSource_Name}
+                                      value={nameSource}
+                                      sx={{ pt: 1 }}
                                     />
                                   </React.Fragment>
                                 ) : (
@@ -713,10 +734,19 @@ export default function Nac_Main() {
                                       fullWidth
                                       name='source'
                                       id='source'
-                                      label='ผู้ยืนยัน'
+                                      label='ผู้ส่งมอบ'
                                       value={source}
                                       sx={{ pt: 1 }}
                                       variant="standard"
+                                    />
+                                    <TextField
+                                      variant="standard"
+                                      fullWidth
+                                      autoComplete="family-name"
+                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                      onChange={handleChangeSource_Name}
+                                      value={nameSource}
+                                      sx={{ pt: 1 }}
                                     />
                                   </React.Fragment>
                                 )}
