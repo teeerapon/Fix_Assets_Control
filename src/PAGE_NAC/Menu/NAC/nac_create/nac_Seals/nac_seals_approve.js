@@ -474,7 +474,7 @@ export default function Nac_Seals_Approve() {
           const nacdtl_assetsPrice = list[index].price
           const asset_id = list[index].asset_id
           const image_1 = list[index]['image_1']
-          const image_2 = list[index].image_2
+          const image_2 = null
           await store_FA_control_update_DTL({
             dtl_id,
             usercode,
@@ -517,7 +517,7 @@ export default function Nac_Seals_Approve() {
     const nacdtl_assetsPrice = list[index].price
     const asset_id = list[index].asset_id
     const image_1 = list[index]['image_1']
-    const image_2 = list[index].image_2
+    const image_2 = null
     await store_FA_control_update_DTL({
       dtl_id,
       usercode,
@@ -2424,10 +2424,10 @@ export default function Nac_Seals_Approve() {
                                 <TextField
                                   required
                                   fullWidth
-                                  disabled={selectNAC === 12 ? false : true}
+                                  disabled={(selectNAC === 12 || selectNAC === 13 || selectNAC === 15) ? false : true}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                   onChange={handleChangePriceSealReal}
-                                  value={!headers.real_price ? Real_Price : (headers.real_price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
+                                  value={Real_Price ? (Real_Price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) : Real_Price}
                                   InputProps={{
                                     endAdornment: (
                                       <InputAdornment position="start">

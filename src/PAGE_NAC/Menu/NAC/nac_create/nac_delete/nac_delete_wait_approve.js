@@ -470,7 +470,7 @@ export default function Nac_Seals_Approve() {
           const nacdtl_assetsPrice = list[index].price
           const asset_id = list[index].asset_id
           const image_1 = list[index]['image_1']
-          const image_2 = list[index].image_2
+          const image_2 = null
           await store_FA_control_update_DTL({
             dtl_id,
             usercode,
@@ -513,7 +513,7 @@ export default function Nac_Seals_Approve() {
     const nacdtl_assetsPrice = list[index].price
     const asset_id = list[index].asset_id
     const image_1 = list[index]['image_1']
-    const image_2 = list[index].image_2
+    const image_2 = null
     await store_FA_control_update_DTL({
       dtl_id,
       usercode,
@@ -2210,6 +2210,34 @@ export default function Nac_Seals_Approve() {
                                   onChange={(e) => handleServiceChange(e, index)}
                                   value={!singleService.bookValue ? '' : (0 - singleService.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                 />
+                              </StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                                {singleService.image_1 === '' ?
+                                  <React.Fragment>
+                                    <Stack direction="row" spacing={1}>
+                                      <Tooltip title="Image 1">
+                                        <IconButton color='error' aria-label="upload picture" component="label">
+                                          <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e, index)} />
+                                          <FilePresentIcon sx={{ fontSize: 20 }} />
+                                        </IconButton>
+                                      </Tooltip>
+                                    </Stack>
+                                  </React.Fragment> :
+                                  <React.Fragment>
+                                    <Stack direction="row" spacing={1}>
+                                      <Tooltip title={TooltipImage_1 ? TooltipImage_1 : singleService.image_1}>
+                                        <IconButton onClick={() => window.open(singleService.image_1, "_blank")} aria-label="upload picture" component="label">
+                                          <FilePresentIcon sx={{ fontSize: 20 }} />
+                                        </IconButton>
+                                      </Tooltip>
+                                      <Tooltip title='delete image 1'>
+                                        <IconButton component="label">
+                                          <ClearIcon onClick={(e) => handleCancelUploadFile_1(e, index)} sx={{ fontSize: 20 }} />
+                                        </IconButton>
+                                      </Tooltip>
+                                    </Stack>
+                                  </React.Fragment>
+                                }
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 {serviceList.length !== 0 && (
