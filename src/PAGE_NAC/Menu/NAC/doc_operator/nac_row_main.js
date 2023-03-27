@@ -403,7 +403,7 @@ export default function History_of_assets() {
                 <Button
                   variant="contained"
                   color="error"
-                  disabled={checkUserWeb === 'admin' ? false : true}
+                  disabled={(checkUserWeb === 'admin' && params.row.nac_status !== 17) ? false : true}
                   onClick={(event) => handleClickOpen(event, params)}
                   sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
                 >

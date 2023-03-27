@@ -56,6 +56,9 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import DialogContentText from '@mui/material/DialogContentText';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import Tooltip from '@mui/material/Tooltip';
+import FilePresentIcon from '@mui/icons-material/FilePresent';
+import ClearIcon from '@mui/icons-material/Clear';
 import { CSVLink } from 'react-csv'
 import '../../../../../App.css'
 
@@ -319,6 +322,7 @@ export default function Nac_Seals_Approve() {
   const data = JSON.parse(localStorage.getItem('data'));
   const [nameSource, setNmaeSource] = React.useState();
   const [realPrice_Date, setRealPrice_Date] = React.useState();
+  const [TooltipImage_1, setTooltipImage_1] = React.useState();
 
   React.useEffect(() => {
     // POST request using axios with set headers
@@ -334,7 +338,7 @@ export default function Nac_Seals_Approve() {
   }, []);
 
   const navigate = useNavigate();
-  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
+  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "", image_1: "" }]);
   const sum_price = serviceList.reduce((total, serviceList) => total = total + serviceList.price, 0);
   const priceSeals = serviceList.reduce((total, serviceList) => total = total + serviceList.priceSeals, 0);
   const dataDepID = data.depid
@@ -437,6 +441,99 @@ export default function Nac_Seals_Approve() {
   const [bossApproveDate, setBossApproveDate] = React.useState();
   const [verify, setVerifyApprove] = React.useState('');
   const [verifyApproveDate, setVerifyApproveDate] = React.useState();
+
+  const handleUploadFile_1 = async (e, index) => {
+    e.preventDefault();
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    if (['jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
+
+      const formData_1 = new FormData();
+      formData_1.append("file", e.target.files[0]);
+      formData_1.append("fileName", e.target.files[0].name);
+
+      await Axios.post("http://vpnptec.dyndns.org:32001/api/check_files_NewNAC", formData_1, { headers })
+        .then(async (res) => {
+          const list = [...serviceList];
+          list[index]['image_1'] = 'http://vpnptec.dyndns.org:33080/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
+          setTooltipImage_1(e.target.files[0].name)
+          setServiceList(list)
+
+          const usercode = data.UserCode
+          const dtl_id = list[index].dtl_id
+          const nacdtl_row = index
+          const nacdtl_assetsCode = list[index].assetsCode
+          const nacdtl_assetsName = list[index].name
+          const nacdtl_assetsSeria = list[index].serialNo
+          const nacdtl_assetsDtl = list[index].dtl
+          const nacdtl_assetsCount = list[index].count
+          const nacdtl_assetsPrice = list[index].price
+          const asset_id = list[index].asset_id
+          const image_1 = list[index]['image_1']
+          const image_2 = list[index].image_2
+          await store_FA_control_update_DTL({
+            dtl_id,
+            usercode,
+            nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
+            nacdtl_row,
+            nacdtl_assetsCode,
+            nacdtl_assetsName,
+            nacdtl_assetsSeria,
+            nacdtl_assetsDtl,
+            nacdtl_assetsCount,
+            nacdtl_assetsPrice,
+            asset_id,
+            image_1,
+            image_2
+          });
+
+        });
+
+    } else {
+      alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+    }
+  }
+
+  const handleCancelUploadFile_1 = async (e, index) => {
+    e.preventDefault();
+
+    const list = [...serviceList];
+    list[index]['image_1'] = "";
+    setServiceList(list)
+    setTooltipImage_1(null)
+
+    const usercode = data.UserCode
+    const dtl_id = list[index].dtl_id
+    const nacdtl_row = index
+    const nacdtl_assetsCode = list[index].assetsCode
+    const nacdtl_assetsName = list[index].name
+    const nacdtl_assetsSeria = list[index].serialNo
+    const nacdtl_assetsDtl = list[index].dtl
+    const nacdtl_assetsCount = list[index].count
+    const nacdtl_assetsPrice = list[index].price
+    const asset_id = list[index].asset_id
+    const image_1 = list[index]['image_1']
+    const image_2 = list[index].image_2
+    await store_FA_control_update_DTL({
+      dtl_id,
+      usercode,
+      nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
+      nacdtl_row,
+      nacdtl_assetsCode,
+      nacdtl_assetsName,
+      nacdtl_assetsSeria,
+      nacdtl_assetsDtl,
+      nacdtl_assetsCount,
+      nacdtl_assetsPrice,
+      asset_id,
+      image_1,
+      image_2
+    });
+  }
 
 
   const handleOpen_drop_NAC_byDes = () => {
@@ -558,6 +655,8 @@ export default function Nac_Seals_Approve() {
         , priceSeals: res.nacdtl_PriceSeals
         , profit: !res.nacdtl_profit ? '' : res.nacdtl_profit
         , date_asset: res.nacdtl_date_asset
+        , image_1: !res.nacdtl_image_1 ? '' : res.nacdtl_image_1
+        , image_2: !res.nacdtl_image_2 ? '' : res.nacdtl_image_2
       };
     }));
 
@@ -571,8 +670,8 @@ export default function Nac_Seals_Approve() {
         , priceSeals: !res.nacdtl_PriceSeals ? '' : res.nacdtl_PriceSeals
         , Price_Before_VAT: !res.nacdtl_PriceSeals ? '' : (res.nacdtl_PriceSeals * (100 / 107)).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
         , profit: ((res.nacdtl_PriceSeals * (100 / 107)) - res.nacdtl_bookV).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
-        , Price_Before_VAT: !res.nacdtl_PriceSeals ? '' : (res.nacdtl_PriceSeals*(100/107)).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
-        , profit: !res.nacdtl_profit ? '' : ((res.nacdtl_PriceSeals*(100/107)) - res.nacdtl_bookV).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
+        , Price_Before_VAT: !res.nacdtl_PriceSeals ? '' : (res.nacdtl_PriceSeals * (100 / 107)).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
+        , profit: !res.nacdtl_profit ? '' : ((res.nacdtl_PriceSeals * (100 / 107)) - res.nacdtl_bookV).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })
       };
     }));
 
@@ -945,7 +1044,7 @@ export default function Nac_Seals_Approve() {
       setAlert(true);
       setValueAlert(alert_value)
     } else {
-      if (!serviceList[0].assetsCode) {
+      if (!serviceList[0].assetsCode || (serviceList.map((res) => res.image_1)).includes('') === true) {
         const alert_value = 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน'
         setAlert(true);
         setValueAlert(alert_value)
@@ -1590,7 +1689,7 @@ export default function Nac_Seals_Approve() {
     setAlert(false);
   };
 
-if (serviceList[0].assetsCode === '') {
+  if (serviceList[0].assetsCode === '') {
     return (
       <React.Fragment>
         <Box
@@ -2013,6 +2112,7 @@ if (serviceList[0].assetsCode === '') {
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >ราคาขาย</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >ราคาก่อน VAT</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >กำไร/ขาดทุน</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >รูปภาพ</StyledTableCell>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
                             <IconButton
                               size="large"
@@ -2191,6 +2291,34 @@ if (serviceList[0].assetsCode === '') {
                                 />
                               </StyledTableCell>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                                {singleService.image_1 === '' ?
+                                  <React.Fragment>
+                                    <Stack direction="row" spacing={1}>
+                                      <Tooltip title="Image 1">
+                                        <IconButton color='error' aria-label="upload picture" component="label">
+                                          <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e, index)} />
+                                          <FilePresentIcon sx={{ fontSize: 20 }} />
+                                        </IconButton>
+                                      </Tooltip>
+                                    </Stack>
+                                  </React.Fragment> :
+                                  <React.Fragment>
+                                    <Stack direction="row" spacing={1}>
+                                      <Tooltip title={TooltipImage_1 ? TooltipImage_1 : singleService.image_1}>
+                                        <IconButton onClick={() => window.open(singleService.image_1, "_blank")} aria-label="upload picture" component="label">
+                                          <FilePresentIcon sx={{ fontSize: 20 }} />
+                                        </IconButton>
+                                      </Tooltip>
+                                      <Tooltip title='delete image 1'>
+                                        <IconButton component="label">
+                                          <ClearIcon onClick={(e) => handleCancelUploadFile_1(e, index)} sx={{ fontSize: 20 }} />
+                                        </IconButton>
+                                      </Tooltip>
+                                    </Stack>
+                                  </React.Fragment>
+                                }
+                              </StyledTableCell>
+                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 {serviceList.length !== 0 && (
                                   <IconButton
                                     size="large"
@@ -2273,6 +2401,8 @@ if (serviceList[0].assetsCode === '') {
                             inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                             variant="standard"
                           />
+                        </StyledTableCell>
+                        <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                         </StyledTableCell>
                         <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                         </StyledTableCell>

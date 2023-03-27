@@ -133,6 +133,15 @@ export default function History_of_assets() {
         params.row.BranchID === 901 ? 'HO' : params.row.BranchID,
     },
     {
+      field: 'Position',
+      headerName: 'Position',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 100,
+      flex: 1,
+      valueGetter: (params) =>
+        params.row.BranchID === 901 ? 'HO' : params.row.Position,
+    },
+    {
       field: 'CreateDate',
       headerName: 'วันที่ขึ้นทะเบียน',
       headerClassName: 'super-app-theme--header',
