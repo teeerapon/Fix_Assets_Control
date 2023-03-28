@@ -930,7 +930,8 @@ export default function Nac_Main_wait() {
 
   const handleSubmit = async () => {
     if (!source || !source_department || !source_BU || !sourceDate || !nameSource) {
-      const alert_value = 'กรุณากรอกข้อมูลผู้ส่งมอบให้ครบถ้วน'
+      const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' :
+        !nameSource ? 'กรุณาลงชื่อผู้ส่งมอบ' : 'กรุณากรอกวันที่ของผู้ส่ง'
       setAlert(true);
       setValueAlert(alert_value)
     } else {
@@ -1692,6 +1693,7 @@ export default function Nac_Main_wait() {
                                             {...params}
                                             variant="standard"
                                             label='ผู้ส่งมอบ'
+                                            error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
                                             fullWidth
                                             autoComplete="family-name"
                                             sx={{ pt: 1 }}
@@ -1703,6 +1705,7 @@ export default function Nac_Main_wait() {
                                       variant="standard"
                                       fullWidth
                                       autoComplete="family-name"
+                                      error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                       disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                       onChange={handleChangeSource_Name}
@@ -1735,6 +1738,7 @@ export default function Nac_Main_wait() {
                                       variant="standard"
                                       fullWidth
                                       autoComplete="family-name"
+                                      error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                       disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                       onChange={handleChangeSource_Name}

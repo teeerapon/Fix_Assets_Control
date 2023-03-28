@@ -436,8 +436,9 @@ export default function Nac_Main() {
   };
 
   const handleNext = async () => {
-    if ((!source || !source_Department || !source_BU || !sourceDate) || (!des_delivery)) {
-      const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' : !des_delivery ? 'กรุณากรอกข้อมูลผู้รับ' : 'กรุณากรอกวันที่ของผู้ส่ง'
+    if ((!source || !source_Department || !source_BU || !sourceDate || !nameSource) || (!des_delivery || !nameDes)) {
+      const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' :
+        !nameSource ? 'กรุณาลงชื่อผู้ส่งมอบ' : !des_delivery ? 'กรุณากรอกข้อมูลผู้รับ' : !nameDes ? 'กรุณาลงชื่อผู้รับมอบ' : 'กรุณากรอกวันที่ของผู้ส่ง'
       setAlert(true);
       setValueAlert(alert_value)
     } else {
@@ -690,6 +691,7 @@ export default function Nac_Main() {
                                             variant="standard"
                                             label='ผู้ส่งมอบ'
                                             fullWidth
+                                            error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
                                             autoComplete="family-name"
                                             sx={{ pt: 1 }}
                                           />
@@ -700,6 +702,7 @@ export default function Nac_Main() {
                                       variant="standard"
                                       fullWidth
                                       autoComplete="family-name"
+                                      error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                       onChange={handleChangeSource_Name}
                                       value={nameSource}
@@ -723,6 +726,7 @@ export default function Nac_Main() {
                                       name='source'
                                       id='source'
                                       label='ผู้ส่งมอบ'
+                                      error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
                                       value={source}
                                       sx={{ pt: 1 }}
                                       variant="standard"
@@ -731,6 +735,7 @@ export default function Nac_Main() {
                                       variant="standard"
                                       fullWidth
                                       autoComplete="family-name"
+                                      error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                       onChange={handleChangeSource_Name}
                                       value={nameSource}
@@ -854,6 +859,7 @@ export default function Nac_Main() {
                                         sx={{ pt: 1 }}
                                         variant="standard"
                                         label='ผู้รับมอบ'
+                                        error={valueAlert === 'กรุณากรอกข้อมูลผู้รับ' ? true : false}
                                         {...params}
                                       />
                                     </React.Fragment>
@@ -866,6 +872,7 @@ export default function Nac_Main() {
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                   onChange={handleChangeDes_Name}
                                   value={nameDes}
+                                  error={valueAlert === 'กรุณาลงชื่อผู้รับมอบ' ? true : false}
                                   InputProps={{
                                     startAdornment: (
                                       <InputAdornment position="start">

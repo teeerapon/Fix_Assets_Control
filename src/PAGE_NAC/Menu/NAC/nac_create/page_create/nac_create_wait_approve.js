@@ -320,7 +320,7 @@ export default function Nac_Main_wait() {
   }, []);
 
   const navigate = useNavigate();
-  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: "", image_1: "", image_2: ""}]);
+  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: "", image_1: "", image_2: "" }]);
   const sum_price = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
@@ -1038,8 +1038,9 @@ export default function Nac_Main_wait() {
   };
 
   const handleSubmit = async () => {
-    if (!source || !source_department || !source_BU || !sourceDate || !nameSource || !nameDes) {
-      const alert_value = 'กรุณากรอกข้อมูลผู้ส่งมอบให้ครบถ้วน'
+    if ((!source || !sourceDate || !nameSource) || (!des_delivery || !nameDes)) {
+      const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !nameSource ? 'กรุณาลงชื่อผู้ส่งมอบ' :
+        !des_delivery ? 'กรุณากรอกข้อมูลผู้รับ' : !nameDes ? 'กรุณาลงชื่อผู้รับมอบ' : 'กรุณากรอกวันที่ของผู้ส่ง'
       setAlert(true);
       setValueAlert(alert_value)
     } else {
@@ -1880,6 +1881,7 @@ export default function Nac_Main_wait() {
                                             variant="standard"
                                             label='ผู้ส่งมอบ'
                                             fullWidth
+                                            error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
                                             autoComplete="family-name"
                                             sx={{ pt: 1 }}
                                           />
@@ -1890,6 +1892,7 @@ export default function Nac_Main_wait() {
                                       variant="standard"
                                       fullWidth
                                       autoComplete="family-name"
+                                      error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                       disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                       onChange={handleChangeSource_Name}
@@ -1914,6 +1917,7 @@ export default function Nac_Main_wait() {
                                       name='source'
                                       id='source'
                                       label='ผู้ส่งมอบ'
+                                      error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
                                       value={source}
                                       sx={{ pt: 1 }}
                                       variant="standard"
@@ -1922,6 +1926,7 @@ export default function Nac_Main_wait() {
                                       variant="standard"
                                       fullWidth
                                       autoComplete="family-name"
+                                      error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                       disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                       onChange={handleChangeSource_Name}
@@ -2046,6 +2051,7 @@ export default function Nac_Main_wait() {
                                         variant="standard"
                                         label='ผู้รับมอบ'
                                         fullWidth
+                                        error={valueAlert === 'กรุณากรอกข้อมูลผู้รับ' ? true : false}
                                         autoComplete="family-name"
                                         onChange={handleChangeDes_delivery2}
                                         sx={{ pt: 1 }}
@@ -2061,6 +2067,7 @@ export default function Nac_Main_wait() {
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                   onChange={handleChangeSource_Des}
                                   value={nameDes}
+                                  error={valueAlert === 'กรุณาลงชื่อผู้รับมอบ' ? true : false}
                                   InputProps={{
                                     startAdornment: (
                                       <InputAdornment position="start">

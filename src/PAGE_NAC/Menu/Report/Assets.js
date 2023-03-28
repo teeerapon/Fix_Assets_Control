@@ -413,8 +413,9 @@ export default function Reported_of_assets() {
 
   const handleCreate_NAC = async () => {
     if (value !== 2 || value !== '2') {
-      if (!source || !source_Department || !source_BU || !nameSource || !nameDes) {
-        const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' : 'กรุณากรอกวันที่ของผู้ส่ง'
+      if (!source || !source_Department || !source_BU || !nameSource) {
+        const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' :
+          !nameSource ? 'กรุณาลงชื่อผู้ส่งมอบ' : 'กรุณากรอกวันที่ของผู้ส่ง'
         setAlert(true);
         setValueAlert(alert_value)
       } else if (value === 0 || value === '0' || !value) {
@@ -468,11 +469,13 @@ export default function Reported_of_assets() {
       }
     } else {
       if (!source || !source_Department || !source_BU || !nameSource) {
-        const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' : 'กรุณากรอกวันที่ของผู้ส่ง'
+        const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' :
+          !nameSource ? 'กรุณาลงชื่อผู้ส่งมอบ' : 'กรุณากรอกวันที่ของผู้ส่ง'
         setAlert(true);
         setValueAlert(alert_value)
-      } else if (!des_Department || !des_BU || !des_delivery) {
-        const alert_value = !des_delivery ? 'กรุณากรอกข้อมูลผู้รับ' : !des_Department ? 'กรุณากรอกข้อมูลแผนกของผู้รับ' : 'กรุณากรอกวันที่ของผู้รับ'
+      } else if (!des_Department || !des_BU || !des_delivery || !nameDes) {
+        const alert_value = !des_delivery ? 'กรุณากรอกข้อมูลผู้รับ' : !des_Department ? 'กรุณากรอกข้อมูลแผนกของผู้รับ' :
+          !nameDes ? 'กรุณาลงชื่อผู้รับมอบ' : 'กรุณากรอกวันที่ของผู้รับ'
         setAlert(true);
         setValueAlert(alert_value)
       } else if (value === 0 || value === '0' || !value) {
@@ -963,6 +966,7 @@ export default function Reported_of_assets() {
                                                 {...params}
                                                 variant="standard"
                                                 label='ผู้ส่งมอบ'
+                                                error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
                                                 fullWidth
                                                 autoComplete="family-name"
                                                 sx={{ pt: 1 }}
@@ -974,6 +978,7 @@ export default function Reported_of_assets() {
                                           variant="standard"
                                           fullWidth
                                           autoComplete="family-name"
+                                          error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                           onChange={handleChangeSource_Name}
                                           value={nameSource}
@@ -997,6 +1002,7 @@ export default function Reported_of_assets() {
                                           name='source'
                                           id='source'
                                           label='ผู้ส่งมอบ'
+                                          error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
                                           value={source}
                                           sx={{ pt: 1 }}
                                           variant="standard"
@@ -1005,6 +1011,7 @@ export default function Reported_of_assets() {
                                           variant="standard"
                                           fullWidth
                                           autoComplete="family-name"
+                                          error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                           onChange={handleChangeSource_Name}
                                           value={nameSource}
@@ -1103,6 +1110,7 @@ export default function Reported_of_assets() {
                                             sx={{ pt: 1 }}
                                             variant="standard"
                                             label='ผู้รับมอบ'
+                                            error={valueAlert === 'กรุณากรอกข้อมูลผู้รับ' ? true : false}
                                             {...params}
                                           />
                                         </React.Fragment>
@@ -1115,6 +1123,7 @@ export default function Reported_of_assets() {
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                       onChange={handleChangeDes_Name}
                                       value={nameDes}
+                                      error={valueAlert === 'กรุณาลงชื่อผู้รับมอบ' ? true : false}
                                       InputProps={{
                                         startAdornment: (
                                           <InputAdornment position="start">
@@ -1227,6 +1236,7 @@ export default function Reported_of_assets() {
                                                 variant="standard"
                                                 label='ผู้ส่งมอบ'
                                                 fullWidth
+                                                error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
                                                 autoComplete="family-name"
                                                 sx={{ pt: 1 }}
                                               />
@@ -1240,6 +1250,7 @@ export default function Reported_of_assets() {
                                           disabled
                                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                           value={nameSource}
+                                          error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                           InputProps={{
                                             startAdornment: (
                                               <InputAdornment position="start">
@@ -1260,6 +1271,7 @@ export default function Reported_of_assets() {
                                           name='source'
                                           id='source'
                                           label='ผู้ส่งมอบ'
+                                          error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
                                           value={source}
                                           sx={{ pt: 1 }}
                                           variant="standard"
@@ -1271,6 +1283,7 @@ export default function Reported_of_assets() {
                                           disabled
                                           inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                           value={nameSource}
+                                          error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                           InputProps={{
                                             startAdornment: (
                                               <InputAdornment position="start">
