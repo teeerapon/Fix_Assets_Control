@@ -1247,10 +1247,10 @@ export default function Reported_of_assets() {
                                           variant="standard"
                                           fullWidth
                                           autoComplete="family-name"
-                                          disabled
-                                          inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
-                                          value={nameSource}
                                           error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
+                                          inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                          onChange={handleChangeSource_Name}
+                                          value={nameSource}
                                           InputProps={{
                                             startAdornment: (
                                               <InputAdornment position="start">
@@ -1280,10 +1280,10 @@ export default function Reported_of_assets() {
                                           variant="standard"
                                           fullWidth
                                           autoComplete="family-name"
-                                          disabled
-                                          inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
-                                          value={nameSource}
                                           error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
+                                          inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                          onChange={handleChangeSource_Name}
+                                          value={nameSource}
                                           InputProps={{
                                             startAdornment: (
                                               <InputAdornment position="start">
