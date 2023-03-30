@@ -27,6 +27,9 @@ import ArticleIcon from '@mui/icons-material/Article';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ClearIcon from '@mui/icons-material/Clear';
 import LinearProgress from '@mui/material/LinearProgress';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 import '../../../../App.css'
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -149,6 +152,261 @@ export default function History_of_assets() {
   const [getNac_Code, setGetNac_Code] = React.useState();
   const [newPage_value, setNewPage_value] = React.useState(0);
   const [pageSize, setPageSize] = React.useState(10);
+  const [filterNAC, setFilterNAC] = React.useState({ "nac_code": '', "name": '', "source_userid": '', "des_userid": '', "status_name": '' })
+  const [selectFilterNAC, setSelectFilterNAC] = React.useState();
+
+
+  const nacStatusName = [
+    'ไม่ผ่านการอนุมัติ'
+    , 'รอยืนยันรายการ'
+    , 'รอตรวจสอบ'
+    , 'รออนุมัติ'
+    , 'ปลายทางตรวจรับ'
+    , 'รอปิดรายการ'
+    , 'ดำเนินการเสร็จสิ้น'
+    , 'ตีกลับเอกสาร'
+    , 'ไม่พบทรัพย์สิน'
+    , 'รอกรอก Book Value'
+    , 'กรอกราคาขายจริง'
+    , 'รอปิดรายการ'
+    , 'ได้รับทรัพย์สินไม่ครบ'
+    , 'บัญชีตรวจสอบ'
+    , 'ยกเลิกรายการแล้ว'
+  ]
+
+  const nacHeaders = [
+    'เพิ่มบัญชีทรัพย์สินถาวร'
+    , 'โยกย้ายทรัพย์สิน'
+    , 'ขายทรัพย์สิน'
+    , 'ตัดจากบัญชีทรัพย์สินถาวร'
+    , 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน'
+  ]
+
+  const filteringNAC_Code = (e, index) => {
+    const NAC_Code = e.target.innerText
+
+    var filter = {
+      nac_code: NAC_Code
+      , name: filterNAC.name
+      , source_userid: filterNAC.source_userid
+      , des_userid: filterNAC.des_userid
+      , status_name: filterNAC.status_name
+    }
+
+    setFilterNAC(filter);
+
+    localStorage.setItem('filterNAC', JSON.stringify(filter));
+
+    const check = JSON.parse(JSON.stringify(filter),
+      (key, value) => value === null || value === '' ? undefined : value);
+
+
+    if (JSON.stringify(check) == '{}') {
+      setSelectNAC(selectFilterNAC)
+    } else {
+      // POST request using axios with set headers
+      const usercode = { usercode: data.UserCode }
+      const headers = {
+        'Authorization': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
+      };
+
+      Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
+        if (error.toJSON().message === 'Request failed with status code 400') {
+          setProgress(1)
+        }
+      }).then(response => {
+        setSelectNAC((response.data.data).filter(function (item) {
+          for (var key in check) {
+            if (item[key] === undefined || item[key] != check[key])
+              return false;
+          }
+          return true;
+        }))
+        setProgress(1)
+      });
+    }
+  }
+
+  const filteringNAC_Headers = (e, index) => {
+    const NAC_Headers = e.target.innerText
+
+    var filter = {
+      nac_code: filterNAC.nac_code
+      , name: NAC_Headers
+      , source_userid: filterNAC.source_userid
+      , des_userid: filterNAC.des_userid
+      , status_name: filterNAC.status_name
+    }
+
+    setFilterNAC(filter);
+
+    localStorage.setItem('filterNAC', JSON.stringify(filter));
+
+    const check = JSON.parse(JSON.stringify(filter),
+      (key, value) => value === null || value === '' ? undefined : value);
+
+    if (JSON.stringify(check) == '{}') {
+      setSelectNAC(selectFilterNAC)
+    } else {
+      // POST request using axios with set headers
+      const usercode = { usercode: data.UserCode }
+      const headers = {
+        'Authorization': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
+      };
+
+      Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
+        if (error.toJSON().message === 'Request failed with status code 400') {
+          setProgress(1)
+        }
+      }).then(response => {
+        setSelectNAC((response.data.data).filter(function (item) {
+          for (var key in check) {
+            if (item[key] === undefined || item[key] != check[key])
+              return false;
+          }
+          return true;
+        }))
+        setProgress(1)
+      });
+    }
+  }
+
+  const filteringNAC_statusName = (e, index) => {
+    const NAC_statusName = e.target.innerText
+
+    var filter = {
+      nac_code: filterNAC.nac_code
+      , name: filterNAC.name
+      , source_userid: filterNAC.source_userid
+      , des_userid: filterNAC.des_userid
+      , status_name: NAC_statusName
+    }
+
+    setFilterNAC(filter);
+
+    localStorage.setItem('filterNAC', JSON.stringify(filter));
+
+    const check = JSON.parse(JSON.stringify(filter),
+      (key, value) => value === null || value === '' ? undefined : value);
+
+    if (JSON.stringify(check) == '{}') {
+      setSelectNAC(selectFilterNAC)
+    } else {
+      // POST request using axios with set headers
+      const usercode = { usercode: data.UserCode }
+      const headers = {
+        'Authorization': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
+      };
+
+      Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
+        if (error.toJSON().message === 'Request failed with status code 400') {
+          setProgress(1)
+        }
+      }).then(response => {
+        setSelectNAC((response.data.data).filter(function (item) {
+          for (var key in check) {
+            if (item[key] === undefined || item[key] != check[key])
+              return false;
+          }
+          return true;
+        }))
+        setProgress(1)
+      });
+    }
+  }
+
+  const filteringNAC_Source_userid = (e, index) => {
+    const NAC_Source_userid = e.target.innerText
+
+    var filter = {
+      nac_code: filterNAC.nac_code
+      , name: filterNAC.name
+      , source_userid: NAC_Source_userid
+      , des_userid: filterNAC.des_userid
+      , status_name: filterNAC.status_name
+    }
+
+    setFilterNAC(filter);
+
+    localStorage.setItem('filterNAC', JSON.stringify(filter));
+
+    const check = JSON.parse(JSON.stringify(filter),
+      (key, value) => value === null || value === '' ? undefined : value);
+
+    if (JSON.stringify(check) == '{}') {
+      setSelectNAC(selectFilterNAC)
+    } else {
+      // POST request using axios with set headers
+      const usercode = { usercode: data.UserCode }
+      const headers = {
+        'Authorization': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
+      };
+
+      Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
+        if (error.toJSON().message === 'Request failed with status code 400') {
+          setProgress(1)
+        }
+      }).then(response => {
+        setSelectNAC((response.data.data).filter(function (item) {
+          for (var key in check) {
+            if (item[key] === undefined || item[key] != check[key])
+              return false;
+          }
+          return true;
+        }))
+        setProgress(1)
+      });
+    }
+  }
+
+  const filteringNAC_Des_userid = (e, index) => {
+    const NAC_Des_userid = e.target.innerText
+
+    var filter = {
+      nac_code: filterNAC.nac_code
+      , name: filterNAC.name
+      , source_userid: filterNAC.source_userid
+      , des_userid: NAC_Des_userid
+      , status_name: filterNAC.status_name
+    }
+
+    setFilterNAC(filter);
+
+    localStorage.setItem('filterNAC', JSON.stringify(filter));
+
+    const check = JSON.parse(JSON.stringify(filter),
+      (key, value) => value === null || value === '' ? undefined : value);
+
+    if (JSON.stringify(check) == '{}') {
+      setSelectNAC(selectFilterNAC)
+    } else {
+      // POST request using axios with set headers
+      const usercode = { usercode: data.UserCode }
+      const headers = {
+        'Authorization': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
+      };
+
+      Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
+        if (error.toJSON().message === 'Request failed with status code 400') {
+          setProgress(1)
+        }
+      }).then(response => {
+        setSelectNAC((response.data.data).filter(function (item) {
+          for (var key in check) {
+            if (item[key] === undefined || item[key] != check[key])
+              return false;
+          }
+          return true;
+        }))
+        setProgress(1)
+      });
+    }
+  }
 
   const change_page_NacOperation = (newPage) => {
     setNewPage_value(newPage)
@@ -170,8 +428,24 @@ export default function History_of_assets() {
         setProgress(1)
       }
     }).then(response => {
-      setSelectNAC(response.data.data)
+
+      setSelectFilterNAC(response.data.data)
       setProgress(1)
+      const check = JSON.parse(localStorage.getItem('filterNAC'),
+        (key, value) => value === null || value === '' ? undefined : value);
+
+      if (JSON.stringify(check) == '{}' || !JSON.stringify(check)) {
+        setSelectNAC(response.data.data)
+      } else {
+        setFilterNAC(check)
+        setSelectNAC((response.data.data).filter(function (item) {
+          for (var key in check) {
+            if (item[key] === undefined || item[key] != check[key])
+              return false;
+          }
+          return true;
+        }))
+      }
     });
   }, []);
 
@@ -446,6 +720,64 @@ export default function History_of_assets() {
                 width: '100%',
               }}
             >
+              <Stack direction="row" spacing={2}>
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  size='small'
+                  sx={{ width: 300 }}
+                  value={filterNAC.nac_code}
+                  onChange={(e) => filteringNAC_Code(e)}
+                  options={selectNAC ? selectNAC.map((res) => res.nac_code) : []}
+                  renderInput={(params) => <TextField label="ค้นหาด้วยเลขที่ NAC" {...params} />}
+                />
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  size='small'
+                  sx={{ width: 300 }}
+                  value={filterNAC.name}
+                  onChange={(e) => filteringNAC_Headers(e)}
+                  options={nacHeaders}
+                  renderInput={(params) => <TextField label="ค้นหาด้วยหัวข้อรายการ" {...params} />}
+                />
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  size='small'
+                  sx={{ width: 300 }}
+                  value={filterNAC.source_userid}
+                  onChange={(e) => filteringNAC_Source_userid(e)}
+                  options={
+                    selectNAC ? selectNAC.map((res) => res.source_userid).filter(x => !!x)
+                      .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
+                  }
+                  renderInput={(params) => <TextField label="ค้นหาด้วยผู้ส่งมอบ" {...params} />}
+                />
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  size='small'
+                  sx={{ width: 300 }}
+                  value={filterNAC.des_userid}
+                  onChange={(e) => filteringNAC_Des_userid(e)}
+                  options={
+                    selectNAC ? selectNAC.map((res) => res.des_userid).filter(x => !!x)
+                      .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
+                  }
+                  renderInput={(params) => <TextField label="ค้นหาด้วยผู้รับมอบ" {...params} />}
+                />
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  size='small'
+                  sx={{ width: 300 }}
+                  value={filterNAC.status_name}
+                  onChange={(e) => filteringNAC_statusName(e)}
+                  options={nacStatusName.reduce((x, y) => x.includes(y) ? x : [...x, y], [])}
+                  renderInput={(params) => <TextField label="ค้นหาด้วยสถานะ" {...params} />}
+                />
+              </Stack>
               <StripedDataGrid
                 sx={{
                   mt: 3,

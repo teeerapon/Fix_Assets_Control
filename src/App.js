@@ -111,7 +111,7 @@ function App() {
   const hours = ((d.getHours()) + 100).toString().slice(-2);
   const mins = ((d.getMinutes()) + 100).toString().slice(-2);
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
-  const datenow = `${year+month+date+hours+mins+seconds}`
+  const datenow = `${year + month + date + hours + mins + seconds}`
 
   const location = useLocation();
   const token = localStorage.getItem('token');
@@ -161,6 +161,20 @@ function App() {
   };
 
   if (!token || !date_login || ((datenow - date_login) > 30000) === true) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("data");
+    localStorage.removeItem("permission");
+    localStorage.removeItem("Allaseets");
+    localStorage.removeItem("aseetsCounted");
+    localStorage.removeItem("assetsWrong");
+    localStorage.removeItem("DataCreatePeriod");
+    localStorage.removeItem("NacCode");
+    localStorage.removeItem("pagination");
+    localStorage.removeItem("pagination_user");
+    localStorage.removeItem("filterModel");
+    localStorage.removeItem("filterModel_user");
+    localStorage.removeItem("filterNAC");
+    localStorage.removeItem("filterNAC_user");
     return <Signin />
     // } else if (location.pathname === ('/' || '/DATA_CENTER')) {
     //  เอาตรงนี้ออกเมื่อ DataCenter เสร็จ
