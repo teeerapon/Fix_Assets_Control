@@ -459,7 +459,7 @@ export default function Nac_Seals_Approve() {
       await Axios.post("http://vpnptec.dyndns.org:32001/api/check_files_NewNAC", formData_1, { headers })
         .then(async (res) => {
           const list = [...serviceList];
-          list[index]['image_1'] = 'http://vpnptec.dyndns.org:33080/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
+          list[index]['image_1'] = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
           setTooltipImage_1(e.target.files[0].name)
           setServiceList(list)
 
