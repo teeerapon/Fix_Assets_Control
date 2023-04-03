@@ -2450,7 +2450,7 @@ export default function Nac_Seals_Approve() {
                                 <LocalizationProvider dateAdapter={DateAdapter}>
                                   <DatePicker
                                     inputFormat="yyyy-MM-dd"
-                                    disabled={selectNAC === 12 ? false : true}
+                                    disabled={(selectNAC === 12 || selectNAC === 13 || selectNAC === 15 || selectNAC === 5) ? false : true}
                                     onChange={handleChangeRealPrice_Date}
                                     inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                     name='realPrice_Date'
