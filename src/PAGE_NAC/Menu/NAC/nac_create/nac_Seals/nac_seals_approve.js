@@ -946,7 +946,7 @@ export default function Nac_Seals_Approve() {
       setValueAlert(alert_value)
     } else {
       const usercode = data.UserCode
-      const nac_status = (selectNAC === 11) ? 11 : 1
+      const nac_status = (selectNAC === 11) ? 11 : (selectNAC === 15) ? 15 : 1
       const sumPrice = sum_price
       const nac_type = headers.nac_type
       const new_Price = headers.real_price
@@ -969,6 +969,8 @@ export default function Nac_Seals_Approve() {
         nameSource,
         sourceDate,
         source_description,
+        new_Price,
+        realPrice_Date
       });
       if ('data' in response) {
         for (let i = 0; i < serviceList.length; i++) {
@@ -2752,6 +2754,14 @@ export default function Nac_Seals_Approve() {
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 onClick={handleOpen_drop_NAC_byDes}>
                                 ยกเลิกรายการ
+                              </Button>
+                              <Button
+                                variant="contained"
+                                onClick={handleSave}
+                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                startIcon={<SystemUpdateAltRoundedIcon />}
+                                style={{ 'backgroundColor': 'orange' }}>
+                                อัปเดต
                               </Button>
                               <Button
                                 variant="contained"
