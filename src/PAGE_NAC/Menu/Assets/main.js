@@ -25,6 +25,14 @@ import DatePicker from '@mui/lab/DatePicker';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import * as XLSX from 'xlsx';
 import LinearProgress from '@mui/material/LinearProgress';
+import Badge from '@mui/material/Badge';
+import ImageIcon from '@mui/icons-material/Image';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import ImageListItemBar from '@mui/material/ImageListItemBar';
+import IconButton from '@mui/material/IconButton';
+import FilePresentIcon from '@mui/icons-material/FilePresent';
+
 
 
 const ODD_OPACITY = 0.2;
@@ -134,6 +142,102 @@ export default function History_of_assets() {
   const [nameExcel, setNameExcel] = React.useState()
   const [permission_menuID, setPermission_menuID] = React.useState();
   const [progress, setProgress] = React.useState();
+  const [openImage, setOpenImage] = React.useState(false);
+  const [imageData, setImageData] = React.useState({ Code: '', Name: '', image_1: '', image_2: '' })
+
+  const handleUploadFile_1 = async (e, index) => {
+    e.preventDefault();
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    if (['jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
+
+      const formData_1 = new FormData();
+      formData_1.append("file", e.target.files[0]);
+      formData_1.append("fileName", e.target.files[0].name);
+
+      await Axios.post("http://vpnptec.dyndns.org:32001/api/check_files_NewNAC", formData_1, { headers })
+        .then(async (res) => {
+          const Code = imageData.Code
+          const image_1 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
+
+          const body = { Code: Code, image_1: image_1 }
+
+          await Axios.post("http://vpnptec.dyndns.org:32001/api/FA_Control_Edit_EBook", body, { headers })
+            .then(async (res) => {
+              if (res.data) {
+                alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
+                setImageData({
+                  Code: res.data[0].Code
+                  , Name: res.data[0].Name
+                  , image_1: res.data[0].ImagePath
+                  , image_2: res.data[0].ImagePath_2
+                })
+              }
+            })
+        })
+
+    } else {
+      alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+    }
+  }
+
+  const handleUploadFile_2 = async (e, index) => {
+    e.preventDefault();
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
+
+      const formData_2 = new FormData();
+      formData_2.append("file", e.target.files[0]);
+      formData_2.append("fileName", e.target.files[0].name);
+
+      await Axios.post("http://vpnptec.dyndns.org:32001/api/check_files_NewNAC", formData_2, { headers })
+        .then(async (res) => {
+          const Code = imageData.Code
+          const image_1 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
+
+          const body = { Code: Code, image_1: image_1 }
+
+          await Axios.post("http://vpnptec.dyndns.org:32001/api/FA_Control_Edit_EBook", body, { headers })
+            .then(async (res) => {
+              if (res.data) {
+                alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
+                setImageData({
+                  Code: res.data[0].Code
+                  , Name: res.data[0].Name
+                  , image_1: res.data[0].ImagePath
+                  , image_2: res.data[0].ImagePath_2
+                })
+              }
+            })
+        })
+
+    } else {
+      alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+    }
+  }
+
+  const handleClickOpenImage = (event, params) => {
+    setOpenImage(true);
+    setImageData({
+      Code: params.row.Code
+      , Name: params.row.Name
+      , image_1: params.row.ImagePath
+      , image_2: params.row.ImagePath_2
+    })
+  };
+
+  const handleCloseImage = () => {
+    setOpenImage(false);
+  };
 
   React.useEffect(() => {
     // POST request using axios with set headers
@@ -393,6 +497,28 @@ export default function History_of_assets() {
         )
       }
     },
+    {
+      field: 'ImagePath',
+      headerName: 'Images',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 50,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            <IconButton color="primary" onClick={(event) => handleClickOpenImage(event, params)} component="label">
+              <Badge
+                badgeContent={(params.row.ImagePath && params.row.ImagePath_2) ? 2 : (params.row.ImagePath || params.row.ImagePath_2) ? 1 : 0}
+                color="primary">
+                <ImageIcon color="action" />
+              </Badge>
+            </IconButton>
+          </React.Fragment>
+        )
+      }
+    },
   ];
 
   React.useEffect(() => {
@@ -640,6 +766,77 @@ export default function History_of_assets() {
                   <Button onClick={handleCloseXlsx} variant='contained' color='error' autoFocus>
                     Cancel
                   </Button>
+                </DialogActions>
+              </Dialog>
+              <Dialog
+                open={openImage}
+                onClose={handleCloseImage}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {imageData.Name}
+                </DialogTitle>
+                <DialogContent>
+                  <ImageList gap={6} sx={{ transform: 'translateZ(0)' }}>
+                    <ImageListItem key={imageData.image_1}>
+                      <img
+                        src={`${imageData.image_1}?w=248&fit=crop&auto=format`}
+                        srcSet={`${imageData.image_1}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                        alt={imageData.Name}
+                        onError={({ currentTarget }) => {
+                          currentTarget.onerror = null; // prevents looping
+                          currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
+                        }}
+                        loading="lazy"
+                      />
+                      <ImageListItemBar
+                        sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+                        position="below"
+                        title={<span>&nbsp; &nbsp;{imageData.Code} (รูปที่ 1)</span>}
+                        actionIcon={
+                          <IconButton
+                            sx={{ color: 'rgba(255, 255, 255, 1)' }}
+                            aria-label={`info about ${imageData.Code}`}
+                            component="label"
+                          >
+                            <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e)} />
+                            <FilePresentIcon sx={{ fontSize: 20 }} />
+                          </IconButton>
+                        }
+                      />
+                    </ImageListItem>
+                    <ImageListItem key={imageData.image_2}>
+                      <img
+                        src={`${imageData.image_2}?w=248&fit=crop&auto=format`}
+                        srcSet={`${imageData.image_2}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                        alt={imageData.Name}
+                        onError={({ currentTarget }) => {
+                          currentTarget.onerror = null; // prevents looping
+                          currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
+                        }}
+                        loading="lazy"
+                      />
+                      <ImageListItemBar
+                        sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+                        position="below"
+                        title={<span>&nbsp; &nbsp;{imageData.Code} (รูปที่ 2)</span>}
+                        actionIcon={
+                          <IconButton
+                            sx={{ color: 'rgba(255, 255, 255, 1)' }}
+                            aria-label={`info about ${imageData.Code}`}
+                            component="label"
+                          >
+                            <input hidden type="file" name='file' onChange={(e) => handleUploadFile_2(e)} />
+                            <FilePresentIcon sx={{ fontSize: 20 }} />
+                          </IconButton>
+                        }
+                      />
+                    </ImageListItem>
+                  </ImageList>
+                </DialogContent>
+                <DialogActions>
+                  <Button variant='contained' onClick={handleCloseImage}>Close</Button>
                 </DialogActions>
               </Dialog>
             </Container>
