@@ -664,7 +664,7 @@ export default function Nac_Seals_Approve() {
       return {
         Code: res.nacdtl_assetsCode
         , serialNo: res.nacdtl_assetsSeria
-        , name: res.nacdtl_assetsName
+        , name: res.nacdtl_assetsName.replace(`"`, `''`)
         , price: res.nacdtl_assetsPrice
         , bookValue: !res.nacdtl_bookV ? '' : res.nacdtl_bookV
         , priceSeals: !res.nacdtl_PriceSeals ? '' : res.nacdtl_PriceSeals

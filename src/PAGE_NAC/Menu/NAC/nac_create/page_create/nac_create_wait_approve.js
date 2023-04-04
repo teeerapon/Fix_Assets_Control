@@ -686,7 +686,7 @@ export default function Nac_Main_wait() {
       return {
         Code: res.nacdtl_assetsCode,
         serialNo: res.nacdtl_assetsSeria,
-        name: res.nacdtl_assetsName,
+        name: res.nacdtl_assetsName.replace(`"`, `''`),
         dtl: res.nacdtl_assetsDtl,
         price: res.nacdtl_assetsPrice,
       };
