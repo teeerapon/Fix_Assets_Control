@@ -120,109 +120,13 @@ export default function History_of_assets() {
   const checkUserWeb = localStorage.getItem('sucurity');
   const [pageSize, setPageSize] = React.useState(10);
   const [progress, setProgress] = React.useState();
-  const [openImage, setOpenImage] = React.useState(false);
-  const [imageData, setImageData] = React.useState({ Code: '', Name: '', image_1: '', image_2: '' })
-
-  const handleUploadFile_1 = async (e, index) => {
-    e.preventDefault();
-
-    const headers = {
-      'Authorization': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    };
-
-    if (['jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
-
-      const formData_1 = new FormData();
-      formData_1.append("file", e.target.files[0]);
-      formData_1.append("fileName", e.target.files[0].name);
-
-      await Axios.post("http://vpnptec.dyndns.org:32001/api/check_files_NewNAC", formData_1, { headers })
-        .then(async (res) => {
-          const Code = imageData.Code
-          const image_1 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
-
-          const body = { Code: Code, image_1: image_1 }
-
-          await Axios.post("http://vpnptec.dyndns.org:32001/api/FA_Control_Edit_EBook", body, { headers })
-            .then(async (res) => {
-              if (res.data) {
-                alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
-                setImageData({
-                  Code: res.data[0].Code
-                  , Name: res.data[0].Name
-                  , image_1: res.data[0].ImagePath
-                  , image_2: res.data[0].ImagePath_2
-                })
-              }
-            })
-        })
-
-    } else {
-      alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
-    }
-  }
-
-  const handleUploadFile_2 = async (e, index) => {
-    e.preventDefault();
-
-    const headers = {
-      'Authorization': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    };
-
-    if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
-
-      const formData_2 = new FormData();
-      formData_2.append("file", e.target.files[0]);
-      formData_2.append("fileName", e.target.files[0].name);
-
-      await Axios.post("http://vpnptec.dyndns.org:32001/api/check_files_NewNAC", formData_2, { headers })
-        .then(async (res) => {
-          const Code = imageData.Code
-          const image_1 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
-
-          const body = { Code: Code, image_1: image_1 }
-
-          await Axios.post("http://vpnptec.dyndns.org:32001/api/FA_Control_Edit_EBook", body, { headers })
-            .then(async (res) => {
-              if (res.data) {
-                alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
-                setImageData({
-                  Code: res.data[0].Code
-                  , Name: res.data[0].Name
-                  , image_1: res.data[0].ImagePath
-                  , image_2: res.data[0].ImagePath_2
-                })
-              }
-            })
-        })
-
-    } else {
-      alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
-    }
-  }
-
-  const handleClickOpenImage = (event, params) => {
-    setOpenImage(true);
-    setImageData({
-      Code: params.row.Code
-      , Name: params.row.Name
-      , image_1: params.row.ImagePath
-      , image_2: params.row.ImagePath_2
-    })
-  };
-
-  const handleCloseImage = () => {
-    setOpenImage(false);
-  };
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
     { field: 'SerialNo', headerName: 'SerialNo', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
     { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
-    { field: 'Details', headerName: 'หมายเหตุ', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
+    // { field: 'Details', headerName: 'หมายเหตุ', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
     {
       field: 'Price',
       headerName: 'ราคาทุน',
@@ -241,15 +145,15 @@ export default function History_of_assets() {
       valueGetter: (params) =>
         params.row.BranchID === 901 ? 'HO' : params.row.BranchID,
     },
-    {
-      field: 'Position',
-      headerName: 'Position',
-      headerClassName: 'super-app-theme--header',
-      minWidth: 100,
-      flex: 1,
-      valueGetter: (params) =>
-        params.row.BranchID === 901 ? 'HO' : params.row.Position,
-    },
+    // {
+    //   field: 'Position',
+    //   headerName: 'Position',
+    //   headerClassName: 'super-app-theme--header',
+    //   minWidth: 100,
+    //   flex: 1,
+    //   valueGetter: (params) =>
+    //     params.row.BranchID === 901 ? 'HO' : params.row.Position,
+    // },
     {
       field: 'CreateDate',
       headerName: 'วันที่ขึ้นทะเบียน',
@@ -280,22 +184,168 @@ export default function History_of_assets() {
     },
     {
       field: 'ImagePath',
-      headerName: 'Images',
+      headerName: 'Images 1',
       headerClassName: 'super-app-theme--header',
-      minWidth: 50,
+      minWidth: 200,
       headerAlign: 'center',
       align: 'center',
       flex: 1,
       renderCell: (params) => {
+
+        const handleUploadFile_1 = async (e, params) => {
+          e.preventDefault();
+
+          const headers = {
+            'Authorization': 'application/json; charset=utf-8',
+            'Accept': 'application/json'
+          };
+
+          if (['jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
+
+            const formData_1 = new FormData();
+            formData_1.append("file", e.target.files[0]);
+            formData_1.append("fileName", e.target.files[0].name);
+
+            await Axios.post("http://vpnptec.dyndns.org:32001/api/check_files_NewNAC", formData_1, { headers })
+              .then(async (res) => {
+                const Code = params.row.Code
+                const image_1 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
+
+                const body = { Code: Code, image_1: image_1 }
+
+                await Axios.post("http://vpnptec.dyndns.org:32001/api/FA_Control_Edit_EBook", body, { headers })
+                  .then(async (res) => {
+                    if (res.data) {
+                      alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
+                      dataHistory.forEach(function (x, index) {
+                        if (x.RowID === params.row.RowID) {
+                          const list = [...dataHistory]
+                          list[index]['ImagePath'] = image_1
+                          setDataHistory(list)
+                        }
+                      })
+                    }
+                  })
+              })
+
+          } else {
+            alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+          }
+        }
+
         return (
           <React.Fragment>
-            <IconButton color="primary" onClick={(event) => handleClickOpenImage(event, params)} component="label">
-              <Badge
-                badgeContent={(params.row.ImagePath && params.row.ImagePath_2) ? 2 : (params.row.ImagePath || params.row.ImagePath_2) ? 1 : 0}
-                color="primary">
-                <ImageIcon color="action" />
-              </Badge>
-            </IconButton>
+            <ImageListItem key={params.row.ImagePath}>
+              <img
+                src={`${params.row.ImagePath}?w=248&fit=crop&auto=format`}
+                srcSet={`${params.row.ImagePath}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                alt={params.row.Name}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null; // prevents looping
+                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
+                }}
+                loading="lazy"
+              />
+              <ImageListItemBar
+                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+                position="below"
+                title={<span>&nbsp; &nbsp;(รูปที่ 1)</span>}
+                actionIcon={
+                  <IconButton
+                    sx={{ color: 'rgba(255, 255, 255, 1)' }}
+                    aria-label={`info about ${params.row.Code}`}
+                    component="label"
+                  >
+                    <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e, params)} />
+                    <FilePresentIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                }
+              />
+            </ImageListItem>
+          </React.Fragment>
+        )
+      }
+    },
+    {
+      field: 'ImagePath_2',
+      headerName: 'Images 2',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 200,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      renderCell: (params) => {
+
+        const handleUploadFile_2 = async (e, params) => {
+          e.preventDefault();
+
+          const headers = {
+            'Authorization': 'application/json; charset=utf-8',
+            'Accept': 'application/json'
+          };
+
+          if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
+
+            const formData_2 = new FormData();
+            formData_2.append("file", e.target.files[0]);
+            formData_2.append("fileName", e.target.files[0].name);
+
+            await Axios.post("http://vpnptec.dyndns.org:32001/api/check_files_NewNAC", formData_2, { headers })
+              .then(async (res) => {
+                const Code = params.row.Code
+                const image_1 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
+
+                const body = { Code: Code, image_1: image_1 }
+
+                await Axios.post("http://vpnptec.dyndns.org:32001/api/FA_Control_Edit_EBook", body, { headers })
+                  .then(async (res) => {
+                    if (res.data) {
+                      alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
+                      dataHistory.forEach(function (x, index) {
+                        if (x.RowID === params.row.RowID) {
+                          const list = [...dataHistory]
+                          list[index]['ImagePath_2'] = image_1
+                          setDataHistory(list)
+                        }
+                      })
+                    }
+                  })
+              })
+
+          } else {
+            alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+          }
+        }
+
+        return (
+          <React.Fragment>
+            <ImageListItem key={params.row.ImagePath_2}>
+              <img
+                src={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format`}
+                srcSet={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                alt={params.row.Name}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null; // prevents looping
+                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
+                }}
+                loading="lazy"
+              />
+              <ImageListItemBar
+                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+                position="below"
+                title={<span>&nbsp; &nbsp;(รูปที่ 2)</span>}
+                actionIcon={
+                  <IconButton
+                    sx={{ color: 'rgba(255, 255, 255, 1)' }}
+                    aria-label={`info about ${params.row.Code}`}
+                    component="label"
+                  >
+                    <input hidden type="file" name='file' onChange={(e) => handleUploadFile_2(e, params)} />
+                    <FilePresentIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                }
+              />
+            </ImageListItem>
           </React.Fragment>
         )
       }
@@ -370,7 +420,8 @@ export default function History_of_assets() {
                   onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                   pagination
                   rowsPerPageOptions={[10, 20, 50, 100]}
-                  autoHeight
+                  getRowHeight={() => 'auto'}
+                  // autoHeight
                   disableColumnMenu
                   disableSelectionOnClick
                   {...other}
@@ -379,77 +430,6 @@ export default function History_of_assets() {
               </Box>
             </Container>
           </Box>
-          <Dialog
-            open={openImage}
-            onClose={handleCloseImage}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              {imageData.Name}
-            </DialogTitle>
-            <DialogContent>
-              <ImageList gap={1} sx={{ transform: 'translateZ(0)' }}>
-                <ImageListItem key={imageData.image_1}>
-                  <img
-                    src={`${imageData.image_1}?w=248&fit=crop&auto=format`}
-                    srcSet={`${imageData.image_1}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                    alt={imageData.Name}
-                    onError={({ currentTarget }) => {
-                      currentTarget.onerror = null; // prevents looping
-                      currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
-                    }}
-                    loading="lazy"
-                  />
-                  <ImageListItemBar
-                    sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
-                    position="below"
-                    title={<span>&nbsp; &nbsp;{imageData.Code} (รูปที่ 1)</span>}
-                    actionIcon={
-                      <IconButton
-                        sx={{ color: 'rgba(255, 255, 255, 1)' }}
-                        aria-label={`info about ${imageData.Code}`}
-                        component="label"
-                      >
-                        <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e)} />
-                        <FilePresentIcon sx={{ fontSize: 20 }} />
-                      </IconButton>
-                    }
-                  />
-                </ImageListItem>
-                <ImageListItem key={imageData.image_2}>
-                  <img
-                    src={`${imageData.image_2}?w=248&fit=crop&auto=format`}
-                    srcSet={`${imageData.image_2}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                    alt={imageData.Name}
-                    onError={({ currentTarget }) => {
-                      currentTarget.onerror = null; // prevents looping
-                      currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
-                    }}
-                    loading="lazy"
-                  />
-                  <ImageListItemBar
-                    sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
-                    position="below"
-                    title={<span>&nbsp; &nbsp;{imageData.Code} (รูปที่ 2)</span>}
-                    actionIcon={
-                      <IconButton
-                        sx={{ color: 'rgba(255, 255, 255, 1)' }}
-                        aria-label={`info about ${imageData.Code}`}
-                        component="label"
-                      >
-                        <input hidden type="file" name='file' onChange={(e) => handleUploadFile_2(e)} />
-                        <FilePresentIcon sx={{ fontSize: 20 }} />
-                      </IconButton>
-                    }
-                  />
-                </ImageListItem>
-              </ImageList>
-            </DialogContent>
-            <DialogActions>
-              <Button variant='contained' onClick={handleCloseImage}>Close</Button>
-            </DialogActions>
-          </Dialog>
         </AnimatedPage>
       </React.Fragment>
     );

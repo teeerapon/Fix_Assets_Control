@@ -22,6 +22,8 @@ import CreatePeriod3 from './PAGE_NAC/Menu/Period/Create/main3';
 import EditPeriod from './PAGE_NAC/Menu/Period/Edit/period_round';
 import FETCH_ASSETS from './PAGE_NAC/Menu/Assets/main';
 import Account_BrnachAssets from './PAGE_NAC/Menu/Assets/branch';
+import EBookBranch from './PAGE_NAC/Menu/Assets/eBook_branch';
+import EBookMain from './PAGE_NAC/Menu/Assets/eBook_main';
 // รายการ อนุมัติ และ ของฉัน
 import NAC_ROW from './PAGE_NAC/Menu/NAC/doc_nacs_me/nac_row_main';
 import NAC_OPERATOR from './PAGE_NAC/Menu/NAC/doc_operator/nac_row_main';
@@ -149,6 +151,8 @@ function App() {
       '/FETCH_ASSETS',
       '/Account_BrnachAssets',
       '/Permission_NAC',
+      '/EBookBranch',
+      '/EBookMain',
       '*',
     ]
 
@@ -258,6 +262,8 @@ function App() {
               <Route path="/History_of_Assets" element={<History_of_Assets />} />
               <Route path="/FETCH_ASSETS" element={<FETCH_ASSETS />} />
               <Route path="/Account_BrnachAssets" element={<Account_BrnachAssets />} />
+              <Route path="/EBookBranch" element={<EBookBranch />} />
+              <Route path="/EBookMain" element={<EBookMain />} />
               {/* รายการ อนุมัติ และ ของฉัน */}
               <Route path="/NAC_ROW" element={<NAC_ROW />} />
               <Route path="/NAC_OPERATOR" element={<NAC_OPERATOR />} />

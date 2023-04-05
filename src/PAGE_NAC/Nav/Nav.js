@@ -166,6 +166,14 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     navigate('/NAC_CREATE_MAIN1')
   };
 
+  function eBook_branch() {
+    navigate('/EBookBranch')
+  }
+
+  function eBook_main() {
+    navigate('/EBookMain')
+  }
+
   function NAC_NEW() {
     navigate('/NAC_CREATE_STEP1')
   };
@@ -257,7 +265,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                         style={{ color: '#ea0c80' }}
                         variant="h5"
                         component="React.Fragment"
-                        
+
                         sx={{
                           flexGrow: 1,
                           fontFamily: 'monospace',
@@ -274,7 +282,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                         style={{ color: '#07519e' }}
                         variant="h5"
                         component="React.Fragment"
-                        
+
                         sx={{
                           flexGrow: 1,
                           fontFamily: 'monospace',
@@ -551,19 +559,34 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                 </ListItem>
                 <Collapse in={openList4} timeout="auto" unmountOnExit>
                   {(permission_menuID ? permission_menuID.includes(5) : null) === true ?
-                    <List component="div" disablePadding>
-                      <ListItemButton onClick={FETCH_ASSETS}>
-                        <ListItemText>
-                          <Typography
-                            sx={{ display: 'inline' }}
-                            component="span"
-                            variant="caption"
-                          >
-                            <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทรัพย์สินทั้งหมด
-                          </Typography>
-                        </ListItemText>
-                      </ListItemButton>
-                    </List>
+                    <React.Fragment>
+                      <List component="div" disablePadding>
+                        <ListItemButton onClick={eBook_main}>
+                          <ListItemText>
+                            <Typography
+                              sx={{ display: 'inline' }}
+                              component="span"
+                              variant="caption"
+                            >
+                              <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book Assets
+                            </Typography>
+                          </ListItemText>
+                        </ListItemButton>
+                      </List>
+                      <List component="div" disablePadding>
+                        <ListItemButton onClick={FETCH_ASSETS}>
+                          <ListItemText>
+                            <Typography
+                              sx={{ display: 'inline' }}
+                              component="span"
+                              variant="caption"
+                            >
+                              <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทะเบียนทรัพย์สินทั้งหมด
+                            </Typography>
+                          </ListItemText>
+                        </ListItemButton>
+                      </List>
+                    </React.Fragment>
                     : null}
                   {(permission_menuID ? permission_menuID.includes(7) : null) === true ?
                     <List component="div" disablePadding>
@@ -653,7 +676,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                         style={{ color: '#ea0c80' }}
                         variant="h5"
                         component="React.Fragment"
-                        
+
                         sx={{
                           flexGrow: 1,
                           fontFamily: 'monospace',
@@ -670,7 +693,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                         style={{ color: '#07519e' }}
                         variant="h5"
                         component="React.Fragment"
-                        
+
                         sx={{
                           flexGrow: 1,
                           fontFamily: 'monospace',
@@ -858,6 +881,20 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                     </ListItemButton>
                   </List>
                 </Collapse>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={eBook_branch}>
+                    <ListItemIcon><StoreIcon fontSize="small" /></ListItemIcon>
+                    <ListItemText>
+                      <Typography
+                        sx={{ display: 'inline' }}
+                        component="span"
+                        variant="caption"
+                      >
+                        E-Book Assets
+                      </Typography>
+                    </ListItemText>
+                  </ListItemButton>
+                </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton onClick={Account_BrnachAssets}>
                     <ListItemIcon><StoreIcon fontSize="small" /></ListItemIcon>
