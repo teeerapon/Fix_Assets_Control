@@ -278,28 +278,28 @@ export default function History_of_assets() {
         )
       }
     },
-    // {
-    //   field: 'ImagePath',
-    //   headerName: 'Images',
-    //   headerClassName: 'super-app-theme--header',
-    //   minWidth: 50,
-    //   headerAlign: 'center',
-    //   align: 'center',
-    //   flex: 1,
-    //   renderCell: (params) => {
-    //     return (
-    //       <React.Fragment>
-    //         <IconButton color="primary" onClick={(event) => handleClickOpenImage(event, params)} component="label">
-    //           <Badge
-    //             badgeContent={(params.row.ImagePath && params.row.ImagePath_2) ? 2 : (params.row.ImagePath || params.row.ImagePath_2) ? 1 : 0}
-    //             color="primary">
-    //             <ImageIcon color="action" />
-    //           </Badge>
-    //         </IconButton>
-    //       </React.Fragment>
-    //     )
-    //   }
-    // },
+    {
+      field: 'ImagePath',
+      headerName: 'Images',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 50,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            <IconButton color="primary" onClick={(event) => handleClickOpenImage(event, params)} component="label">
+              <Badge
+                badgeContent={(params.row.ImagePath && params.row.ImagePath_2) ? 2 : (params.row.ImagePath || params.row.ImagePath_2) ? 1 : 0}
+                color="primary">
+                <ImageIcon color="action" />
+              </Badge>
+            </IconButton>
+          </React.Fragment>
+        )
+      }
+    },
   ];
 
   React.useEffect(() => {
@@ -379,7 +379,7 @@ export default function History_of_assets() {
               </Box>
             </Container>
           </Box>
-          {/* <Dialog
+          <Dialog
             open={openImage}
             onClose={handleCloseImage}
             aria-labelledby="alert-dialog-title"
@@ -449,7 +449,7 @@ export default function History_of_assets() {
             <DialogActions>
               <Button variant='contained' onClick={handleCloseImage}>Close</Button>
             </DialogActions>
-          </Dialog> */}
+          </Dialog>
         </AnimatedPage>
       </React.Fragment>
     );
