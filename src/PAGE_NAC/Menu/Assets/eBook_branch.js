@@ -218,7 +218,7 @@ export default function History_of_assets() {
                     if (res.data) {
                       alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
                       dataHistory.forEach(function (x, index) {
-                        if (x.RowID === params.row.RowID) {
+                        if (x.Code === params.row.Code) {
                           const list = [...dataHistory]
                           list[index]['ImagePath'] = image_1
                           setDataHistory(list)
@@ -249,7 +249,7 @@ export default function History_of_assets() {
               <ImageListItemBar
                 sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
                 position="below"
-                title={<span>&nbsp; &nbsp;(รูปที่ 1)</span>}
+                title={<span>&nbsp; &nbsp;{params.row.Code}_1</span>}
                 actionIcon={
                   <IconButton
                     sx={{ color: 'rgba(255, 255, 255, 1)' }}
@@ -302,7 +302,7 @@ export default function History_of_assets() {
                     if (res.data) {
                       alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
                       dataHistory.forEach(function (x, index) {
-                        if (x.RowID === params.row.RowID) {
+                        if (x.Code === params.row.Code) {
                           const list = [...dataHistory]
                           list[index]['ImagePath_2'] = image_1
                           setDataHistory(list)
@@ -333,7 +333,7 @@ export default function History_of_assets() {
               <ImageListItemBar
                 sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
                 position="below"
-                title={<span>&nbsp; &nbsp;(รูปที่ 2)</span>}
+                title={<span>&nbsp; &nbsp;{params.row.Code}_2</span>}
                 actionIcon={
                   <IconButton
                     sx={{ color: 'rgba(255, 255, 255, 1)' }}
