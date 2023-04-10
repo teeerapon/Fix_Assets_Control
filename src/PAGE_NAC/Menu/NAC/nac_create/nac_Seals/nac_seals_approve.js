@@ -940,98 +940,91 @@ export default function Nac_Seals_Approve() {
 
   // Update Document
   const handleSave = async () => {
-    if (!serviceList[0].assetsCode) {
-      const alert_value = 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน'
+    const usercode = data.UserCode
+    const nac_status = headers.nac_status
+    const sumPrice = sum_price
+    const nac_type = headers.nac_type
+    const new_Price = headers.real_price
+    const nameDes = null
+    const response = await store_FA_control_update_DTLandHeaders({
+      usercode,
+      nac_code,
+      nac_status,
+      sumPrice,
+      nac_type,
+      des_department,
+      des_BU,
+      des_delivery,
+      nameDes,
+      des_deliveryDate,
+      des_description,
+      source_department,
+      source_BU,
+      source,
+      nameSource,
+      sourceDate,
+      source_description,
+      new_Price,
+      realPrice_Date
+    });
+    if ('data' in response) {
+      for (let i = 0; i < serviceList.length; i++) {
+        const dtl_id = serviceList[i].dtl_id
+        const nacdtl_row = i
+        const nacdtl_assetsCode = serviceList[i].assetsCode
+        const nacdtl_assetsName = serviceList[i].name
+        const nacdtl_assetsSeria = serviceList[i].serialNo
+        const nacdtl_assetsDtl = serviceList[i].dtl
+        const nacdtl_assetsCount = serviceList[i].count
+        const nacdtl_assetsPrice = serviceList[i].price
+        const asset_id = serviceList[i].asset_id
+        const responseDTL = await store_FA_control_update_DTL({
+          dtl_id,
+          usercode,
+          nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
+          nacdtl_row,
+          nacdtl_assetsCode,
+          nacdtl_assetsName,
+          nacdtl_assetsSeria,
+          nacdtl_assetsDtl,
+          nacdtl_assetsCount,
+          nacdtl_assetsPrice,
+          asset_id
+        });
+        if ('data' in responseDTL) {
+          const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
+          const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
+          const nacdtl_profit = serviceList[i].priceSeals - serviceList[i].bookValue
+          const asset_id = responseDTL.data[i].nacdtl_id
+          const nac_status = (selectNAC === 11) ? 11 : 1
+          await store_FA_control_updateDTL_seals({
+            usercode,
+            nac_code,
+            nac_status,
+            nac_type,
+            nacdtl_bookV,
+            nacdtl_PriceSeals,
+            nacdtl_profit,
+            asset_id,
+            nacdtl_assetsCode
+          });
+        } else {
+          const alert_value = 'คำขออัปเดตรายการผิดพลาด'
+          setAlert(true);
+          setValueAlert(alert_value)
+        }
+      }
+      swal("ทำรายการสำเร็จ", 'อัปเดตรายการแล้ว', "success", {
+        buttons: false,
+        timer: 2000,
+      }).then((value) => {
+        window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
+      });
+    } else {
+      const alert_value = 'กรุณาลองใหม่ภายหลัง'
       setAlert(true);
       setValueAlert(alert_value)
-    } else {
-      const usercode = data.UserCode
-      const nac_status = (selectNAC === 11) ? 11 : (selectNAC === 15) ? 15 : 1
-      const sumPrice = sum_price
-      const nac_type = headers.nac_type
-      const new_Price = headers.real_price
-      const nameDes = null
-      const response = await store_FA_control_update_DTLandHeaders({
-        usercode,
-        nac_code,
-        nac_status,
-        sumPrice,
-        nac_type,
-        des_department,
-        des_BU,
-        des_delivery,
-        nameDes,
-        des_deliveryDate,
-        des_description,
-        source_department,
-        source_BU,
-        source,
-        nameSource,
-        sourceDate,
-        source_description,
-        new_Price,
-        realPrice_Date
-      });
-      if ('data' in response) {
-        for (let i = 0; i < serviceList.length; i++) {
-          const dtl_id = serviceList[i].dtl_id
-          const nacdtl_row = i
-          const nacdtl_assetsCode = serviceList[i].assetsCode
-          const nacdtl_assetsName = serviceList[i].name
-          const nacdtl_assetsSeria = serviceList[i].serialNo
-          const nacdtl_assetsDtl = serviceList[i].dtl
-          const nacdtl_assetsCount = serviceList[i].count
-          const nacdtl_assetsPrice = serviceList[i].price
-          const asset_id = serviceList[i].asset_id
-          const responseDTL = await store_FA_control_update_DTL({
-            dtl_id,
-            usercode,
-            nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
-            nacdtl_row,
-            nacdtl_assetsCode,
-            nacdtl_assetsName,
-            nacdtl_assetsSeria,
-            nacdtl_assetsDtl,
-            nacdtl_assetsCount,
-            nacdtl_assetsPrice,
-            asset_id
-          });
-          if ('data' in responseDTL) {
-            const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
-            const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
-            const nacdtl_profit = serviceList[i].priceSeals - serviceList[i].bookValue
-            const asset_id = responseDTL.data[i].nacdtl_id
-            const nac_status = (selectNAC === 11) ? 11 : 1
-            await store_FA_control_updateDTL_seals({
-              usercode,
-              nac_code,
-              nac_status,
-              nac_type,
-              nacdtl_bookV,
-              nacdtl_PriceSeals,
-              nacdtl_profit,
-              asset_id,
-              nacdtl_assetsCode
-            });
-          } else {
-            const alert_value = 'คำขออัปเดตรายการผิดพลาด'
-            setAlert(true);
-            setValueAlert(alert_value)
-          }
-        }
-        swal("ทำรายการสำเร็จ", 'อัปเดตรายการแล้ว', "success", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
-        });
-      } else {
-        const alert_value = 'กรุณาลองใหม่ภายหลัง'
-        setAlert(true);
-        setValueAlert(alert_value)
-      }
     }
-    //navigate("/NAC_CREATE_MAIN1/NAC_CREATE_MAIN1_STEP2")
   };
 
   const handleSubmit = async () => {

@@ -436,9 +436,9 @@ export default function Nac_Main() {
   };
 
   const handleNext = async () => {
-    if ((!source || !source_Department || !source_BU || !sourceDate || !nameSource) || (!des_delivery || !nameDes)) {
+    if ((!source || !source_Department || !source_BU || !sourceDate || !nameSource) || !des_delivery) {
       const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' :
-        !nameSource ? 'กรุณาลงชื่อผู้ส่งมอบ' : !des_delivery ? 'กรุณากรอกข้อมูลผู้รับ' : !nameDes ? 'กรุณาลงชื่อผู้รับมอบ' : 'กรุณากรอกวันที่ของผู้ส่ง'
+        !nameSource ? 'กรุณาลงชื่อผู้ส่งมอบ' : !des_delivery ? 'กรุณากรอกข้อมูลผู้รับ'  : 'กรุณากรอกวันที่ของผู้ส่ง'
       setAlert(true);
       setValueAlert(alert_value)
     } else {
