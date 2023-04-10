@@ -14,6 +14,7 @@ import swal from 'sweetalert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArticleIcon from '@mui/icons-material/Article';
 import Paper from '@mui/material/Paper';
+import config from '../../../../config'
 // import Typography from '@mui/material/Typography';
 // import { useNavigate } from "react-router";
 
@@ -46,7 +47,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function store_FA_control_drop_NAC(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_drop_NAC', {
+  return fetch(config.http + '/store_FA_control_drop_NAC', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -58,7 +59,7 @@ async function store_FA_control_drop_NAC(credentials) {
 }
 
 async function store_FA_control_execDocID(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_execDocID', {
+  return fetch(config.http + '/store_FA_control_execDocID', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -70,7 +71,7 @@ async function store_FA_control_execDocID(credentials) {
 }
 
 async function ChackUserWeb(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/ChackUserWeb', {
+  return fetch(config.http + '/ChackUserWeb', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',

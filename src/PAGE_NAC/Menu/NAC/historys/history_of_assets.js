@@ -16,6 +16,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import LinearProgress from '@mui/material/LinearProgress';
+import config from '../../../../config.js'
 
 const ODD_OPACITY = 0.2;
 
@@ -224,7 +225,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_HistorysAssets', userCode, { headers }).catch(function (error) {
+    Axios.post(config.http + '/store_FA_control_HistorysAssets', userCode, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }

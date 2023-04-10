@@ -25,6 +25,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 
+import config from '../../../config'
+
 
 const ODD_OPACITY = 0.2;
 
@@ -137,14 +139,14 @@ export default function History_of_assets() {
       formData_1.append("file", e.target.files[0]);
       formData_1.append("fileName", e.target.files[0].name);
 
-      await Axios.post("http://vpnptec.dyndns.org:32001/api/check_files_NewNAC", formData_1, { headers })
+      await Axios.post(config.http + "/check_files_NewNAC", formData_1, { headers })
         .then(async (res) => {
           const Code = imageData.Code
           const image_1 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
 
           const body = { Code: Code, image_1: image_1 }
 
-          await Axios.post("http://vpnptec.dyndns.org:32001/api/FA_Control_Edit_EBook", body, { headers })
+          await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
             .then(async (res) => {
               if (res.data) {
                 alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
@@ -177,14 +179,14 @@ export default function History_of_assets() {
       formData_2.append("file", e.target.files[0]);
       formData_2.append("fileName", e.target.files[0].name);
 
-      await Axios.post("http://vpnptec.dyndns.org:32001/api/check_files_NewNAC", formData_2, { headers })
+      await Axios.post(config.http + "/check_files_NewNAC", formData_2, { headers })
         .then(async (res) => {
           const Code = imageData.Code
           const image_1 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
 
           const body = { Code: Code, image_1: image_1 }
 
-          await Axios.post("http://vpnptec.dyndns.org:32001/api/FA_Control_Edit_EBook", body, { headers })
+          await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
             .then(async (res) => {
               if (res.data) {
                 alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
@@ -309,7 +311,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_fetch_assets', userCode, { headers }).catch(function (error) {
+    Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }

@@ -40,6 +40,7 @@ import FormGroup from '@mui/material/FormGroup';
 import NoteAdd from '@mui/icons-material/NoteAdd';
 import Snackbar from '@mui/material/Snackbar';
 import '../../../App.css'
+import config from '../../../config'
 
 const ODD_OPACITY = 0.2;
 
@@ -158,7 +159,7 @@ const filterOptions2 = createFilterOptions({
 });
 
 async function Store_FA_control_create_doc(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_create_doc', {
+  return fetch(config.http + '/store_FA_control_create_doc', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -170,7 +171,7 @@ async function Store_FA_control_create_doc(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/AutoDeapartMent', {
+  return fetch(config.http + '/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -182,7 +183,7 @@ async function AutoDeapartMent(credentials) {
 }
 
 async function Store_FA_control_Create_from_reported(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/Store_FA_control_Create_from_reported', {
+  return fetch(config.http + '/Store_FA_control_Create_from_reported', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -198,7 +199,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_CheckAssetCode_Process', {
+  return fetch(config.http + '/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -261,7 +262,7 @@ export default function Reported_of_assets() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://vpnptec.dyndns.org:32001/api/getsUserForAssetsControl"
+      config.http + "/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []
@@ -640,7 +641,7 @@ export default function Reported_of_assets() {
             'Authorization': 'application/json; charset=utf-8',
             'Accept': 'application/json'
           };
-          await Axios.put('http://vpnptec.dyndns.org:32001/api/updateReference', body, { headers })
+          await Axios.put(config.http + '/updateReference', body, { headers })
 
           reported_of_assets.forEach(function (x, index) {
             if (x.RowID === params.row.RowID) {

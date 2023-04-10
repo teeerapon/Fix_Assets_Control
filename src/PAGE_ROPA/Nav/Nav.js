@@ -25,6 +25,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import TypeSpecimenIcon from '@mui/icons-material/TypeSpecimen';
 import '../../App.css'
+import config from '../../config'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 async function ChackUserWeb(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/ChackUserWeb', {
+  return fetch(config.http + '/ChackUserWeb', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',

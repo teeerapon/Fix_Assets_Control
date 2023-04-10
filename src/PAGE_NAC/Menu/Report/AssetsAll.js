@@ -22,6 +22,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
 import LinearProgress from '@mui/material/LinearProgress';
+import config from '../../../config'
 
 const ODD_OPACITY = 0.2;
 
@@ -232,7 +233,7 @@ export default function Reported_of_assets() {
             'Authorization': 'application/json; charset=utf-8',
             'Accept': 'application/json'
           };
-          await Axios.put('http://vpnptec.dyndns.org:32001/api/updateReference', body, { headers })
+          await Axios.put(config.http + '/updateReference', body, { headers })
 
           reported_of_assets.forEach(function (x, index) {
             if (x.RowID === params.row.RowID) {
@@ -294,7 +295,7 @@ export default function Reported_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers }).catch(function (error) {
+    Axios.post(config.http + '/FA_Control_Report_All_Counted_by_Description', Description, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }
@@ -312,7 +313,7 @@ export default function Reported_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    await Axios.post('http://vpnptec.dyndns.org:32001/api/FA_Control_Report_All_Counted_by_Description', Description, { headers }).catch(function (error) {
+    await Axios.post(config.http + '/FA_Control_Report_All_Counted_by_Description', Description, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }

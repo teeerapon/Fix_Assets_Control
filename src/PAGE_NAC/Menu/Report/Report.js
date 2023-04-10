@@ -19,6 +19,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import '../../../App.css'
+import config from '../../../config'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 async function Reported(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/testGetBranch', {
+  return fetch(config.http + '/testGetBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -48,7 +49,7 @@ async function Reported(credentials) {
 }
 
 async function Reported2(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/getAssetbyUserBranch', {
+  return fetch(config.http + '/getAssetbyUserBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -59,7 +60,7 @@ async function Reported2(credentials) {
 }
 
 async function Reported3(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/wrongBranch', {
+  return fetch(config.http + '/wrongBranch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -70,7 +71,7 @@ async function Reported3(credentials) {
 }
 
 async function getPeriods(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/period_round', {
+  return fetch(config.http + '/period_round', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'

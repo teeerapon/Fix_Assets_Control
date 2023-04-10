@@ -11,12 +11,13 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { Outlet, useNavigate } from "react-router";
 import swal from 'sweetalert';
+import config from '../../../../config'
 
 const steps = ['กรอกข้อมูล', 'ตรวจสอบข้อมูล', 'เสร็จสิ้น'];
 
 
 async function PeriodCreate(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/craete_period', {
+  return fetch(config.http + '/craete_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'

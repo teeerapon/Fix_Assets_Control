@@ -30,6 +30,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
+import config from '../../../../config.js'
 
 const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(0.8),
@@ -127,7 +128,7 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 }));
 
 async function store_FA_control_drop_NAC(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_drop_NAC', {
+  return fetch(config.http + '/store_FA_control_drop_NAC', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -210,7 +211,7 @@ export default function History_of_assets() {
         'Accept': 'application/json'
       };
 
-      Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC', usercode, { headers }).catch(function (error) {
+      Axios.post(config.http + '/store_FA_control_select_NAC', usercode, { headers }).catch(function (error) {
         if (error.toJSON().message === 'Request failed with status code 400') {
           setProgress(1)
         }
@@ -255,7 +256,7 @@ export default function History_of_assets() {
         'Accept': 'application/json'
       };
 
-      Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC', usercode, { headers }).catch(function (error) {
+      Axios.post(config.http + '/store_FA_control_select_NAC', usercode, { headers }).catch(function (error) {
         if (error.toJSON().message === 'Request failed with status code 400') {
           setProgress(1)
         }
@@ -300,7 +301,7 @@ export default function History_of_assets() {
         'Accept': 'application/json'
       };
 
-      Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC', usercode, { headers }).catch(function (error) {
+      Axios.post(config.http + '/store_FA_control_select_NAC', usercode, { headers }).catch(function (error) {
         if (error.toJSON().message === 'Request failed with status code 400') {
           setProgress(1)
         }
@@ -345,7 +346,7 @@ export default function History_of_assets() {
         'Accept': 'application/json'
       };
 
-      Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC', usercode, { headers }).catch(function (error) {
+      Axios.post(config.http + '/store_FA_control_select_NAC', usercode, { headers }).catch(function (error) {
         if (error.toJSON().message === 'Request failed with status code 400') {
           setProgress(1)
         }
@@ -390,7 +391,7 @@ export default function History_of_assets() {
         'Accept': 'application/json'
       };
 
-      Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC', usercode, { headers }).catch(function (error) {
+      Axios.post(config.http + '/store_FA_control_select_NAC', usercode, { headers }).catch(function (error) {
         if (error.toJSON().message === 'Request failed with status code 400') {
           setProgress(1)
         }
@@ -422,7 +423,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC', usercode, { headers }).catch(function (error) {
+    Axios.post(config.http + '/store_FA_control_select_NAC', usercode, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }

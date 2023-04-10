@@ -36,6 +36,7 @@ import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import ClearIcon from '@mui/icons-material/Clear';
 import Axios from "axios"
 import DialogContentText from '@mui/material/DialogContentText';
+import config from '../../../../config'
 
 const theme = createTheme();
 
@@ -57,7 +58,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function store_FA_control_comment(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_comment', {
+  return fetch(config.http + '/store_FA_control_comment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -69,7 +70,7 @@ async function store_FA_control_comment(credentials) {
 }
 
 async function stroe_FA_control_Path(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/stroe_FA_control_Path', {
+  return fetch(config.http + '/stroe_FA_control_Path', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -81,7 +82,7 @@ async function stroe_FA_control_Path(credentials) {
 }
 
 async function qureyNAC_comment(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/qureyNAC_comment', {
+  return fetch(config.http + '/qureyNAC_comment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -93,7 +94,7 @@ async function qureyNAC_comment(credentials) {
 }
 
 async function qureyNAC_path(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/qureyNAC_path', {
+  return fetch(config.http + '/qureyNAC_path', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -132,7 +133,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    await Axios.post("http://vpnptec.dyndns.org:32001/api/FA_Control_Delete_PATH", body, { headers })
+    await Axios.post(config.http + "/FA_Control_Delete_PATH", body, { headers })
       .then((response) => {
         setOpen(false);
         setPathFetch(response.data.data)
@@ -277,7 +278,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
         }
       } else if (file && path && description) {
         try {
-          await Axios.post("http://vpnptec.dyndns.org:32001/api/check_files", formData, { headers })
+          await Axios.post(config.http + "/check_files", formData, { headers })
             .then(async (res) => {
               setFile(null)
               setFileName("")

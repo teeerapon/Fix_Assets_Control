@@ -35,6 +35,7 @@ import Avatar from '@mui/material/Avatar';
 import StoreIcon from '@mui/icons-material/Store';
 import Axios from "axios"
 import '../../App.css'
+import config from '../../config'
 
 function stringAvatar(name) {
   return {
@@ -86,7 +87,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/select_Permission_Menu_NAC', body, { headers })
+    Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers })
       .then(response => {
         setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
         setPermission_menu(response.data.data)

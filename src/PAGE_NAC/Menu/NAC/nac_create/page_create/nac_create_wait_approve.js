@@ -66,6 +66,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import ListItemText from '@mui/material/ListItemText';
 import DoneIcon from '@mui/icons-material/Done';
 import '../../../../../App.css'
+import config from '../../../../../config.js'
 
 function Copyright() {
   return (
@@ -98,7 +99,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function store_FA_control_select_dtl(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_dtl', {
+  return fetch(config.http + '/store_FA_control_select_dtl', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -110,7 +111,7 @@ async function store_FA_control_select_dtl(credentials) {
 }
 
 async function store_FA_control_select_headers(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_headers', {
+  return fetch(config.http + '/store_FA_control_select_headers', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -122,7 +123,7 @@ async function store_FA_control_select_headers(credentials) {
 }
 
 async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_CheckAssetCode_Process', {
+  return fetch(config.http + '/store_FA_control_CheckAssetCode_Process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -134,7 +135,7 @@ async function store_FA_control_CheckAssetCode_Process(credentials) {
 }
 
 async function SelectDTL_Control(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/SelectDTL_Control', {
+  return fetch(config.http + '/SelectDTL_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -145,7 +146,7 @@ async function SelectDTL_Control(credentials) {
 }
 
 async function SelectAssetsControl(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/AssetsAll_Control', {
+  return fetch(config.http + '/AssetsAll_Control', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -156,7 +157,7 @@ async function SelectAssetsControl(credentials) {
 }
 
 async function AutoDeapartMent(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/AutoDeapartMent', {
+  return fetch(config.http + '/AutoDeapartMent', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -176,7 +177,7 @@ const filterOptions2 = createFilterOptions({
 });
 
 async function store_FA_control_update_DTLandHeaders(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_update_DTLandHeaders', {
+  return fetch(config.http + '/store_FA_control_update_DTLandHeaders', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -188,7 +189,7 @@ async function store_FA_control_update_DTLandHeaders(credentials) {
 }
 
 async function store_FA_control_update_DTL(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_update_DTL', {
+  return fetch(config.http + '/store_FA_control_update_DTL', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -200,7 +201,7 @@ async function store_FA_control_update_DTL(credentials) {
 }
 
 async function store_FA_control_execDocID(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_execDocID', {
+  return fetch(config.http + '/store_FA_control_execDocID', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -212,7 +213,7 @@ async function store_FA_control_execDocID(credentials) {
 }
 
 async function store_FA_control_updateStatus(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_updateStatus', {
+  return fetch(config.http + '/store_FA_control_updateStatus', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -224,7 +225,7 @@ async function store_FA_control_updateStatus(credentials) {
 }
 
 async function store_FA_control_comment(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_comment', {
+  return fetch(config.http + '/store_FA_control_comment', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -236,7 +237,7 @@ async function store_FA_control_comment(credentials) {
 }
 
 async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/stroe_FA_control_DTL_ConfirmSuccess', {
+  return fetch(config.http + '/stroe_FA_control_DTL_ConfirmSuccess', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -248,7 +249,7 @@ async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
 }
 
 async function store_FA_control_upadate_table(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_upadate_table', {
+  return fetch(config.http + '/store_FA_control_upadate_table', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -260,7 +261,7 @@ async function store_FA_control_upadate_table(credentials) {
 }
 
 async function store_FA_SendMail(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_SendMail', {
+  return fetch(config.http + '/store_FA_SendMail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -276,7 +277,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 async function store_FA_control_drop_NAC(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_drop_NAC', {
+  return fetch(config.http + '/store_FA_control_drop_NAC', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -313,7 +314,7 @@ export default function Nac_Main_wait() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/select_Permission_Menu_NAC', body, { headers })
+    Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers })
       .then(response => {
         setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
       });
@@ -410,7 +411,7 @@ export default function Nac_Main_wait() {
       formData_1.append("file", e.target.files[0]);
       formData_1.append("fileName", e.target.files[0].name);
 
-      await Axios.post("http://vpnptec.dyndns.org:32001/api/check_files_NewNAC", formData_1, { headers })
+      await Axios.post(config.http + "/check_files_NewNAC", formData_1, { headers })
         .then(async (res) => {
           const list = [...serviceList];
           list[index]['image_1'] = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
@@ -503,7 +504,7 @@ export default function Nac_Main_wait() {
       formData_2.append("file", e.target.files[0]);
       formData_2.append("fileName", e.target.files[0].name);
 
-      await Axios.post("http://vpnptec.dyndns.org:32001/api/check_files_NewNAC", formData_2, { headers })
+      await Axios.post(config.http + "/check_files_NewNAC", formData_2, { headers })
         .then(async (res) => {
           const list = [...serviceList];
           list[index]['image_2'] = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
@@ -599,7 +600,7 @@ export default function Nac_Main_wait() {
 
   const fetchUserForAssetsControl = async () => {
     const { data } = await Axios.get(
-      "http://vpnptec.dyndns.org:32001/api/getsUserForAssetsControl"
+      config.http + "/getsUserForAssetsControl"
     );
     const UserForAssetsControl = data;
     const users_pure = []

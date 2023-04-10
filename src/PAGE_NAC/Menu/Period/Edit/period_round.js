@@ -33,6 +33,7 @@ import Alert from '@mui/material/Alert';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Paper from '@mui/material/Paper';
 import LinearProgress from '@mui/material/LinearProgress';
+import config from '../../../../config'
 
 const ODD_OPACITY = 0.2;
 
@@ -130,7 +131,7 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 }));
 
 async function EditPeriodData_Update(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/update_period', {
+  return fetch(config.http + '/update_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -141,7 +142,7 @@ async function EditPeriodData_Update(credentials) {
 }
 
 async function DeletePeriodData(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/delete_period', {
+  return fetch(config.http + '/delete_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -346,7 +347,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post('http://vpnptec.dyndns.org:32001/api/get_branch_period', userCode, { headers }).catch(function (error) {
+    Axios.post(config.http + '/get_branch_period', userCode, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }

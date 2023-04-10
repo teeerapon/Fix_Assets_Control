@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import swal from 'sweetalert';
+import config from '../../../../config'
 // import MenuItem from '@mui/material/MenuItem';
 // import FormControl from '@mui/material/FormControl';
 // import Select from '@mui/material/Select';
@@ -36,7 +37,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function EditPeriodData(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/update_period', {
+  return fetch(config.http + '/update_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'

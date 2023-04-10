@@ -13,6 +13,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import swal from 'sweetalert';
 import ArticleIcon from '@mui/icons-material/Article';
 import DeleteIcon from '@mui/icons-material/Delete';
+import config from '../../../../config'
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
@@ -35,7 +36,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function DeletePeriodData(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/delete_period', {
+  return fetch(config.http + '/delete_period', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -46,7 +47,7 @@ async function DeletePeriodData(credentials) {
 }
 
 async function ChackUserWeb(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/ChackUserWeb', {
+  return fetch(config.http + '/ChackUserWeb', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',

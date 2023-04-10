@@ -33,6 +33,7 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import 'reactjs-popup/dist/index.css';
+import config from '../../../../config.js'
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -129,7 +130,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 async function store_FA_control_select_NAC_approve(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/store_FA_control_select_NAC_approve', {
+  return fetch(config.http + '/store_FA_control_select_NAC_approve', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',

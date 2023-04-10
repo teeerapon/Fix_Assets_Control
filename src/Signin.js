@@ -13,6 +13,8 @@ import { useLocation } from 'react-router';
 //DATA_CENTER
 import DATA_CENTER from './DATA_CENTER/data_center'
 
+import config from './config';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
@@ -43,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
 // เพื่อใช้ทดสอบ
 async function loginUser(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/login', {
+  return fetch(config.http + '/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -54,7 +56,7 @@ async function loginUser(credentials) {
 }
 
 async function permission(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/permission_branch', {
+  return fetch(config.http + '/permission_branch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
@@ -65,7 +67,7 @@ async function permission(credentials) {
 }
 
 async function ChackUserWeb(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/ChackUserWeb', {
+  return fetch(config.http + '/ChackUserWeb', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',

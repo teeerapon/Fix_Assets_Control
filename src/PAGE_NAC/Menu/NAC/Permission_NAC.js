@@ -11,6 +11,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import config from '../../../config'
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -171,10 +172,10 @@ export default function Permission_NAC() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    await Axios.post("http://vpnptec.dyndns.org:32001/api/Fix_Assets_Control_UPDATE_Permission", body, { headers })
+    await Axios.post(config.http + "/Fix_Assets_Control_UPDATE_Permission", body, { headers })
       .then(async response => {
         if (response.data.data) {
-          await Axios.post("http://vpnptec.dyndns.org:32001/api/Select_Permission_Menu_NAC", bodyII, { headers })
+          await Axios.post(config.http + "/Select_Permission_Menu_NAC", bodyII, { headers })
             .then(response => {
               if (response.data.data) {
                 setMenuActive((response.data.data).map((res) => res.menuid))
@@ -196,8 +197,8 @@ export default function Permission_NAC() {
       'Accept': 'application/json'
     };
 
-    const { data } = await Axios.get("http://vpnptec.dyndns.org:32001/api/getsUserForAssetsControl")
-    await Axios.post("http://vpnptec.dyndns.org:32001/api/Permission_Menu_NAC", {}, { headers })
+    const { data } = await Axios.get(config.http + "/getsUserForAssetsControl")
+    await Axios.post(config.http + "/Permission_Menu_NAC", {}, { headers })
       .then(response => setMenu(response.data.data))
 
     setUser(data.data);
@@ -278,7 +279,7 @@ export default function Permission_NAC() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    await Axios.post("http://vpnptec.dyndns.org:32001/api/Select_Permission_Menu_NAC", body, { headers })
+    await Axios.post(config.http + "/Select_Permission_Menu_NAC", body, { headers })
       .then(response => {
         if (response.data.data) {
           setMenuActive((response.data.data).map((res) => res.menuid))

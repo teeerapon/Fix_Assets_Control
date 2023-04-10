@@ -28,6 +28,7 @@ import { useTheme } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import config from '../../../../config.js'
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -101,7 +102,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 async function getPeriods(credentials) {
-  return fetch('http://vpnptec.dyndns.org:32001/api/round_website', {
+  return fetch(config.http + '/round_website', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8'
