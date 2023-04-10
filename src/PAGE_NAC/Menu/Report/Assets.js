@@ -473,9 +473,8 @@ export default function Reported_of_assets() {
           !nameSource ? 'กรุณาลงชื่อผู้ส่งมอบ' : 'กรุณากรอกวันที่ของผู้ส่ง'
         setAlert(true);
         setValueAlert(alert_value)
-      } else if (!des_Department || !des_BU || !des_delivery || !nameDes) {
-        const alert_value = !des_delivery ? 'กรุณากรอกข้อมูลผู้รับ' : !des_Department ? 'กรุณากรอกข้อมูลแผนกของผู้รับ' :
-          !nameDes ? 'กรุณาลงชื่อผู้รับมอบ' : 'กรุณากรอกวันที่ของผู้รับ'
+      } else if (!des_Department || !des_BU || !des_delivery) {
+        const alert_value = !des_delivery ? 'กรุณากรอกข้อมูลผู้รับ' : !des_Department ? 'กรุณากรอกข้อมูลแผนกของผู้รับ' : 'กรุณากรอกวันที่ของผู้รับ'
         setAlert(true);
         setValueAlert(alert_value)
       } else if (value === 0 || value === '0' || !value) {
