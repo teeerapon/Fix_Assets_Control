@@ -447,7 +447,7 @@ export default function Nac_Seals_Approve() {
       'Accept': 'application/json'
     };
 
-    if (['jpg', 'png', 'gif','xbm','tif','pjp','svgz','jpeg','jfif','bmp','webp','svg'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
+    if (['jpg', 'png', 'gif', 'xbm', 'tif', 'pjp', 'svgz', 'jpeg', 'jfif', 'bmp', 'webp', 'svg'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
 
       const formData_1 = new FormData();
       formData_1.append("file", e.target.files[0]);
@@ -470,7 +470,7 @@ export default function Nac_Seals_Approve() {
           const nacdtl_assetsCount = list[index].count
           const nacdtl_assetsPrice = list[index].price
           const asset_id = list[index].asset_id
-          const image_1 = list[index]['image_1']
+          const image_1 = list[index].image_1
           const image_2 = null
           await store_FA_control_update_DTL({
             dtl_id,
@@ -513,7 +513,7 @@ export default function Nac_Seals_Approve() {
     const nacdtl_assetsCount = list[index].count
     const nacdtl_assetsPrice = list[index].price
     const asset_id = list[index].asset_id
-    const image_1 = list[index]['image_1']
+    const image_1 = list[index].image_1
     const image_2 = null
     await store_FA_control_update_DTL({
       dtl_id,
@@ -952,6 +952,8 @@ export default function Nac_Seals_Approve() {
         const nacdtl_assetsCount = serviceList[i].count
         const nacdtl_assetsPrice = serviceList[i].price
         const asset_id = serviceList[i].asset_id
+        const image_1 = serviceList[i].image_1
+        const image_2 = null
         const responseDTL = await store_FA_control_update_DTL({
           dtl_id,
           usercode,
@@ -963,7 +965,9 @@ export default function Nac_Seals_Approve() {
           nacdtl_assetsDtl,
           nacdtl_assetsCount,
           nacdtl_assetsPrice,
-          asset_id
+          asset_id,
+          image_1,
+          image_2
         });
         if ('data' in responseDTL) {
           const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
@@ -1062,6 +1066,8 @@ export default function Nac_Seals_Approve() {
                   const nacdtl_assetsCount = serviceList[i].count
                   const nacdtl_assetsPrice = serviceList[i].price
                   const asset_id = serviceList[i].asset_id
+                  const image_1 = serviceList[i].image_1
+                  const image_2 = null
                   const responseDTL = await store_FA_control_update_DTL({
                     dtl_id,
                     usercode,
@@ -1073,7 +1079,9 @@ export default function Nac_Seals_Approve() {
                     nacdtl_assetsDtl,
                     nacdtl_assetsCount,
                     nacdtl_assetsPrice,
-                    asset_id
+                    asset_id,
+                    image_1,
+                    image_2
                   });
                   if ('data' in responseDTL) {
                     const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
@@ -1150,6 +1158,8 @@ export default function Nac_Seals_Approve() {
                 const nacdtl_assetsCount = serviceList[i].count
                 const nacdtl_assetsPrice = serviceList[i].price
                 const asset_id = serviceList[i].asset_id
+                const image_1 = serviceList[i].image_1
+                const image_2 = null
                 const responseDTL = await store_FA_control_update_DTL({
                   dtl_id,
                   usercode,
@@ -1161,7 +1171,9 @@ export default function Nac_Seals_Approve() {
                   nacdtl_assetsDtl,
                   nacdtl_assetsCount,
                   nacdtl_assetsPrice,
-                  asset_id
+                  asset_id,
+                  image_1,
+                  image_2
                 });
                 if ('data' in responseDTL) {
                   const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
