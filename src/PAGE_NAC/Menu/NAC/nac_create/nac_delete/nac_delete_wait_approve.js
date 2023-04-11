@@ -491,7 +491,7 @@ export default function Nac_Seals_Approve() {
         });
 
     } else {
-      alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+      swal('ทำรายการไม่สำเร็จ','ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .jpg, .png, .gif', "error")
     }
   }
 

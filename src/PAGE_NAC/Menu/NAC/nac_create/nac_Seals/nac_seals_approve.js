@@ -459,6 +459,7 @@ export default function Nac_Seals_Approve() {
 
       await Axios.post(config.http + "/check_files_NewNAC", formData_1, { headers })
         .then(async (res) => {
+          console.log(res);
           const list = [...serviceList];
           list[index]['image_1'] = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
           setTooltipImage_1(e.target.files[0].name)
@@ -495,7 +496,7 @@ export default function Nac_Seals_Approve() {
         });
 
     } else {
-      alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+      swal('ทำรายการไม่สำเร็จ','ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .jpg, .png, .gif', "error")
     }
   }
 
