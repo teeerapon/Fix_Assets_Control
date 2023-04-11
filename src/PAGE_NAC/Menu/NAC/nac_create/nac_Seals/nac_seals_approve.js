@@ -451,7 +451,7 @@ export default function Nac_Seals_Approve() {
       'Accept': 'application/json'
     };
 
-    if (['jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
+    if (['jpg', 'png', 'gif','xbm','tif','pjp','svgz','jpeg','jfif','bmp','webp','svg'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
 
       const formData_1 = new FormData();
       formData_1.append("file", e.target.files[0]);
@@ -495,7 +495,7 @@ export default function Nac_Seals_Approve() {
         });
 
     } else {
-      alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+      swal('ทำรายการไม่สำเร็จ',`ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ 'jpg', 'png', 'gif','xbm','tif','pjp','svgz','jpeg','jfif','bmp','webp','svg'`,`error`)
     }
   }
 
@@ -2291,7 +2291,7 @@ export default function Nac_Seals_Approve() {
                                     <Stack direction="row" spacing={1}>
                                       <Tooltip title="Image 1">
                                         <IconButton color='error' aria-label="upload picture" component="label">
-                                          <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e, index)} />
+                                          <input hidden type="file" name='file' accept='image/*' onChange={(e) => handleUploadFile_1(e, index)} />
                                           <FilePresentIcon sx={{ fontSize: 20 }} />
                                         </IconButton>
                                       </Tooltip>
