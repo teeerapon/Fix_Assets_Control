@@ -774,7 +774,7 @@ export default function Nac_Main_wait() {
   };
 
   const handleServiceAdd = () => {
-    setServiceList([...serviceList, { dtl_id: 0, assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: 0 }]);
+    setServiceList([...serviceList, { dtl_id: 0, assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "", asset_id: 0, image_1: "", image_2: "" }]);
   };
 
   const handleServiceRemove = (index) => {

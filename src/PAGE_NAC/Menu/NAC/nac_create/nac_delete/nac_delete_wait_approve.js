@@ -761,7 +761,7 @@ export default function Nac_Seals_Approve() {
   };
 
   const handleServiceAdd = () => {
-    setServiceList([...serviceList, { dtl_id: 0, assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "" }]);
+    setServiceList([...serviceList, { dtl_id: 0, assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "", image_1: "" }]);
   };
 
   const handleServiceRemove = (index) => {
