@@ -641,7 +641,6 @@ export default function Nac_Seals_Approve() {
         , profit: !res.nacdtl_profit ? '' : res.nacdtl_profit
         , date_asset: res.nacdtl_date_asset
         , image_1: !res.nacdtl_image_1 ? '' : res.nacdtl_image_1
-        , image_2: !res.nacdtl_image_2 ? '' : res.nacdtl_image_2
       };
     }));
 
@@ -974,7 +973,7 @@ export default function Nac_Seals_Approve() {
           const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
           const nacdtl_profit = !serviceList[i].priceSeals ? 0 - serviceList[i].bookValue : serviceList[i].priceSeals - serviceList[i].bookValue
           const asset_id = responseDTL.data[i].nacdtl_id
-          const nac_status = (selectNAC === 11) ? 11 : 1
+          const nac_status = headers.nac_status
           await store_FA_control_updateDTL_seals({
             usercode,
             nac_code,

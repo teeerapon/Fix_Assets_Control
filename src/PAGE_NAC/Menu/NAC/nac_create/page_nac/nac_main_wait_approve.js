@@ -584,7 +584,6 @@ export default function Nac_Main_wait() {
         , asset_id: res.nacdtl_id
         , date_asset: res.nacdtl_date_asset
         , image_1: !res.nacdtl_image_1 ? '' : res.nacdtl_image_1
-        , image_2: !res.nacdtl_image_2 ? '' : res.nacdtl_image_2
       };
     }));
 
