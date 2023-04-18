@@ -294,9 +294,9 @@ export default function History_of_assets() {
             await Axios.post(config.http + "/check_files_NewNAC", formData_2, { headers })
               .then(async (res) => {
                 const Code = params.row.Code
-                const image_1 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
+                const image_2 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
 
-                const body = { Code: Code, image_1: image_1 }
+                const body = { Code: Code, image_2: image_2 }
 
                 await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
                   .then(async (res) => {
@@ -305,7 +305,7 @@ export default function History_of_assets() {
                       dataHistory.forEach(function (x, index) {
                         if (x.Code === params.row.Code) {
                           const list = [...dataHistory]
-                          list[index]['ImagePath_2'] = image_1
+                          list[index]['ImagePath_2'] = image_2
                           setDataHistory(list)
                         }
                       })
