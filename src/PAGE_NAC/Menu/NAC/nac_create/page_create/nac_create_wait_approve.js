@@ -590,11 +590,12 @@ export default function Nac_Main_wait() {
   };
 
   const Export_PDF_DATA_NAC = () => {
-    window.location.href = 'http://ptecdba:10230/reports/fa/nac.aspx?nac_code=' + headers.nac_code
+    window.location.href = 'http://ptecdba:10250/OPS/reports/nac.aspx?nac_code=' + headers.nac_code
+    // http://ptecdba:10250/OPS/reports/nac.aspx
   }
 
   const Export_CSV_DATA_NAC = () => {
-    window.location.href = 'http://ptecdba:10230/reports/fa/nac.aspx?nac_code=' + headers.nac_code
+    window.location.href = 'http://ptecdba:10250/reports/fa/nac.aspx?nac_code=' + headers.nac_code
   }
 
 
@@ -1773,16 +1774,16 @@ export default function Nac_Main_wait() {
                         color='warning'
                         size='small'
                       >
-                        Dowload PDF
+                        Dowload Report
                       </Button>
-                      <CSVLink
+                      {/* <CSVLink
                         data={exportToExcel}
                         className='btn btn-success btn-sm'
                         target="_blank"
                         filename={`${headers.nac_code}.csv`}
                       >
                         Dowload CSV
-                      </CSVLink>
+                      </CSVLink> */}
                     </Stack>
                   </Stack>
                   <TableContainer component={Paper}>
