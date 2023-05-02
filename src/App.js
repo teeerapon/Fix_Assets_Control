@@ -24,6 +24,7 @@ import FETCH_ASSETS from './PAGE_NAC/Menu/Assets/main';
 import Account_BrnachAssets from './PAGE_NAC/Menu/Assets/branch';
 import EBookBranch from './PAGE_NAC/Menu/Assets/eBook_branch';
 import EBookMain from './PAGE_NAC/Menu/Assets/eBook_main';
+import BSAssetsMain from './PAGE_NAC/Menu/Assets/bs_assets';
 // รายการ อนุมัติ และ ของฉัน
 import NAC_ROW from './PAGE_NAC/Menu/NAC/doc_nacs_me/nac_row_main';
 import NAC_OPERATOR from './PAGE_NAC/Menu/NAC/doc_operator/nac_row_main';
@@ -153,6 +154,7 @@ function App() {
       '/Permission_NAC',
       '/EBookBranch',
       '/EBookMain',
+      '/BSAssetsMain',
       '*',
     ]
 
@@ -264,6 +266,7 @@ function App() {
               <Route path="/Account_BrnachAssets" element={<Account_BrnachAssets />} />
               <Route path="/EBookBranch" element={<EBookBranch />} />
               <Route path="/EBookMain" element={<EBookMain />} />
+              <Route path="/BSAssetsMain" element={<BSAssetsMain />} />
               {/* รายการ อนุมัติ และ ของฉัน */}
               <Route path="/NAC_ROW" element={<NAC_ROW />} />
               <Route path="/NAC_OPERATOR" element={<NAC_OPERATOR />} />

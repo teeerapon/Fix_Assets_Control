@@ -365,7 +365,7 @@ export default function History_of_assets() {
         setProgress(1)
       }
     }).then(response => {
-      setDataHistory((response.data.data).filter((res) => res.BranchID === data.branchid));
+      setDataHistory((response.data.data).filter((res) => res.BranchID === data.branchid && res.bac_status === 1));
       setProgress(1)
     });
   }, []);

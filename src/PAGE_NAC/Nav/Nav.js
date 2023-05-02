@@ -33,6 +33,7 @@ import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import Avatar from '@mui/material/Avatar';
 import StoreIcon from '@mui/icons-material/Store';
+import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import Axios from "axios"
 import '../../App.css'
 import config from '../../config'
@@ -76,6 +77,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
   const [openList2, setOpenList2] = React.useState(false);
   const [openList3, setOpenList3] = React.useState(false);
   const [openList4, setOpenList4] = React.useState(false);
+  const [openList5, setOpenList5] = React.useState(false);
   const navigate = useNavigate();
   const [permission_menuID, setPermission_menuID] = React.useState();
   const [permission_menu, setPermission_menu] = React.useState();
@@ -100,6 +102,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     setOpenList2(false)
     setOpenList3(false)
     setOpenList4(false)
+    setOpenList5(false);
   };
 
   const handleClickList2 = (e, index) => {
@@ -107,6 +110,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     setOpenList(false);
     setOpenList3(false)
     setOpenList4(false)
+    setOpenList5(false);
   };
 
   const handleClickList3 = (e, index) => {
@@ -114,6 +118,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     setOpenList(false);
     setOpenList2(false);
     setOpenList4(false);
+    setOpenList5(false);
   };
 
   const handleClickList4 = (e, index) => {
@@ -121,6 +126,15 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     setOpenList(false);
     setOpenList2(false);
     setOpenList3(false);
+    setOpenList5(false);
+  };
+
+  const handleClickList5 = (e, index) => {
+    setOpenList5(!openList5);
+    setOpenList(false);
+    setOpenList2(false);
+    setOpenList3(false);
+    setOpenList4(false);
   };
 
   function PeriodOpen() {
@@ -149,6 +163,10 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   function REPORT() {
     navigate('/Report')
+  };
+
+  function BSAssetsMain() {
+    navigate('/BSAssetsMain')
   };
 
   function REPORT_ALL() {
@@ -496,6 +514,48 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                         </ListItemText>
                       </ListItemButton>
                       : null}
+                  </List>
+                </Collapse>
+                {(permission_menuID ? permission_menuID.includes(13) : null) === true ?
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={handleClickList5}>
+                      <ListItemIcon><DomainAddIcon fontSize="small" /></ListItemIcon>
+                      <ListItemText>
+                        <Typography
+                          component="span"
+                          variant="caption"
+                        >
+                          BPC
+                        </Typography>
+                      </ListItemText>
+                      {openList3 ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                  </ListItem>
+                  : null}
+                <Collapse in={openList5} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItemButton onClick={BSAssetsMain}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทะเบียนทรัพย์สินผู้ร่วม
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                    <ListItemButton onClick={PeriodEdit}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ดำเนินการทรัพย์สินผู้ร่วม
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
                   </List>
                 </Collapse>
                 {(permission_menuID ? permission_menuID.includes(3 || 4) : null) === true ?
@@ -882,36 +942,51 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                     </ListItemButton>
                   </List>
                 </Collapse>
+                {(permission_menuID ? permission_menuID.includes(13) : null) === true ?
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={handleClickList5}>
+                      <ListItemIcon><DomainAddIcon fontSize="small" /></ListItemIcon>
+                      <ListItemText>
+                        <Typography
+                          component="span"
+                          variant="caption"
+                        >
+                          BPC
+                        </Typography>
+                      </ListItemText>
+                      {openList3 ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                  </ListItem>
+                  : null}
+                <Collapse in={openList5} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItemButton onClick={BSAssetsMain}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทะเบียนทรัพย์สินผู้ร่วม
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                    <ListItemButton onClick={PeriodEdit}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ดำเนินการทรัพย์สินผู้ร่วม
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                  </List>
+                </Collapse>
                 <ListItem disablePadding>
-                  <ListItemButton onClick={eBook_branch}>
-                    <ListItemIcon><StoreIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        sx={{ display: 'inline' }}
-                        component="span"
-                        variant="caption"
-                      >
-                        E-Book Assets
-                      </Typography>
-                    </ListItemText>
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton onClick={Account_BrnachAssets}>
-                    <ListItemIcon><StoreIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        ทะเบียนทรัพย์สินสาขา
-                      </Typography>
-                    </ListItemText>
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton onClick={REPORT}>
-                    <ListItemIcon><ViewTimelineIcon fontSize="small" /></ListItemIcon>
+                  <ListItemButton onClick={handleClickList4}>
+                    <ListItemIcon><WorkHistoryIcon fontSize="small" /></ListItemIcon>
                     <ListItemText>
                       <Typography
                         component="span"
@@ -920,8 +995,50 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                         REPORT
                       </Typography>
                     </ListItemText>
+                    {openList4 ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
                 </ListItem>
+                <Collapse in={openList4} timeout="auto" unmountOnExit>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={eBook_branch}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book Assets
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                  </ListItem>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={Account_BrnachAssets}>
+                    <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทะเบียนทรัพย์สินสาขา
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                  </ListItem>
+                  <List component="div" disablePadding>
+                    <ListItemButton onClick={REPORT}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; REPORT
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                  </List>
+                </Collapse>
               </List>
               <Divider />
             </Drawer>

@@ -386,7 +386,7 @@ export default function History_of_assets() {
       'Accept': 'application/json'
     };
     Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
-      .then(response => setDataHistory(response.data.data));
+      .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 1)));
   }, []);
 
   if (checkUserWeb === 'null') {

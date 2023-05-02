@@ -17,13 +17,18 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateAdapter from '@mui/lab/AdapterDateFns';
-import DatePicker from '@mui/lab/DatePicker';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import * as XLSX from 'xlsx';
 import LinearProgress from '@mui/material/LinearProgress';
 import config from '../../../config'
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import ImageIcon from '@mui/icons-material/Image';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import ImageListItemBar from '@mui/material/ImageListItemBar';
+import IconButton from '@mui/material/IconButton';
+import FilePresentIcon from '@mui/icons-material/FilePresent';
 import CircularProgress from '@mui/material/CircularProgress';
 
 
@@ -117,14 +122,13 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 
 export default function History_of_assets() {
 
-  const [dataHistory, setDataHistory] = React.useState();
+  const [dataHistory, setDataHistory] = React.useState([]);
   const data = JSON.parse(localStorage.getItem('data'));
   const checkUserWeb = localStorage.getItem('sucurity');
   const [open, setOpen] = React.useState(false);
-  const [code, setCode] = React.useState();
+  const [bac_type, setBac_type] = React.useState();
   const [name, setName] = React.useState();
   const [serialNo, setSerialNo] = React.useState();
-  const [create_Date, setCeate_Date] = React.useState(null);
   const [price, setPrice] = React.useState();
   const [details, setDetails] = React.useState();
   const [branchID, setBranchID] = React.useState();
@@ -135,6 +139,7 @@ export default function History_of_assets() {
   const [nameExcel, setNameExcel] = React.useState()
   const [permission_menuID, setPermission_menuID] = React.useState();
   const [progress, setProgress] = React.useState();
+  const [status_all] = React.useState(['none', 'สภาพดี', 'ชำรุด', 'สูญหาย', 'คืนผู้ร่วมแล้ว']);
   const [arraySubmit, setArraySubmit] = React.useState()
 
   React.useEffect(() => {
@@ -145,7 +150,7 @@ export default function History_of_assets() {
       'Accept': 'application/json'
     };
     Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers }).catch(function (error) {
-      if (error.toJSON().message === 'Request failed with status code 400') {
+      if (error.toJSON().message === 'Request failed with status no 400') {
         setProgress(1)
       }
     }).then(response => {
@@ -171,20 +176,10 @@ export default function History_of_assets() {
       let arrayField = []
 
       for (let i = 0; i < col.length; i++) {
-        if (col[i] === 'BranchID' || col[i] === 'Price' || col[i] === 'Position' || col[i] === 'OwnerCode') {
+        if (col[i] === 'BranchID' || col[i] === 'Price' || col[i] === 'Position' || col[i] === 'OwnerCode' || col[i] === 'No' || col[i] === 'bac_type') {
           arrayField[i] = {
             field: col[i],
             width: 80,
-          }
-        } else if (col[i] === 'Code' || col[i] === 'Name') {
-          arrayField[i] = {
-            field: col[i],
-            width: 160,
-          }
-        } else if (col[i] === 'CreateDate') {
-          arrayField[i] = {
-            field: col[i],
-            width: 120,
           }
         } else {
           arrayField[i] = {
@@ -193,13 +188,13 @@ export default function History_of_assets() {
           }
         }
       }
-      if (columnsHeader[0].indexOf('Code') >= 0) {
+      if (columnsHeader[0].indexOf('No') >= 0) {
         setField(arrayField)
         setDataFile(dataParse)
         setOpenXlsx(true)
         setNameExcel(f.name)
       } else {
-        alert('ไม่พบหัวข้อรหัสทรัพย์สิน (Code !)')
+        alert('ไม่พบหัวข้อรหัสทรัพย์สิน (No !)')
       }
     };
     reader.readAsBinaryString(f)
@@ -215,28 +210,25 @@ export default function History_of_assets() {
       'Accept': 'application/json'
     };
     if (
-      field[0].field === 'Code' &&
+      field[0].field === 'No' &&
       field[1].field === 'Name' &&
       field[2].field === 'OwnerCode' &&
       field[3].field === 'BranchID' &&
       field[4].field === 'SerialNo' &&
       field[5].field === 'Price' &&
-      field[6].field === 'CreateDate' &&
-      field[7].field === 'CreateBy' &&
-      field[8].field === 'Position' &&
-      field[9].field === 'Details'
+      field[6].field === 'Position' &&
+      field[7].field === 'Details' &&
+      field[8].field === 'bac_type'
     ) {
       const accessToken = Math.random().toString(36).substr(2)
       for (let i = 0; i < dataFile.length; i++) {
         const data = {
-          Code: dataFile[i].Code
+          bac_type: dataFile[i].bac_type
           , Name: dataFile[i].Name
           , OwnerCode: dataFile[i].OwnerCode
           , BranchID: dataFile[i].BranchID
           , SerialNo: dataFile[i].SerialNo
           , Price: dataFile[i].Price
-          , CreateDate: dataFile[i].CreateDate
-          , CreateBy: dataFile[i].CreateBy
           , Position: dataFile[i].Position
           , Details: dataFile[i].Details
           , keyID: accessToken
@@ -252,13 +244,12 @@ export default function History_of_assets() {
           if (response.data[0].response === 'ทำรายการสำเร็จ') {
             alert(response.data[0].response)
             setOpen(false);
-            setCode(null)
+            setBac_type(null)
             setName(null)
             setSerialNo(null)
             setPrice(null)
             setDetails(null)
-            setCeate_Date(null)
-            window.location.href = '/FETCH_ASSETS';
+            window.location.href = '/BSAssetsMain';
           } else {
             alert(response.data[0].response)
           }
@@ -274,27 +265,26 @@ export default function History_of_assets() {
 
   const handleClose = () => {
     setOpen(false);
-    setCode(null)
+    setBac_type(null)
     setName(null)
     setSerialNo(null)
     setPrice(null)
     setDetails(null)
-    setCeate_Date(null)
   };
 
   const handleSubmit_Add = async () => {
-    const body = { UserCode: data.UserCode, Code: code, Name: name, BranchID: branchID, Details: details, SerialNo: serialNo, Price: price, Create_Date: create_Date }
+    const body = { UserCode: data.UserCode, bac_type: bac_type, Name: name, BranchID: branchID, Details: details, SerialNo: serialNo, Price: price }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    if (!code) {
-      alert('กรุณากรอกรหัสทรัพย์สินให้ถูกต้อง')
+    if (!bac_type) {
+      alert('กรุณากรอกลำดับเลขที่')
     } else if (!name) {
       alert('กรุณากรอกชื่อทรัพย์สินให้ถูกต้อง')
     } else if (!branchID || branchID < 1) {
       alert('กรุณากรอกสาขาให้ถูกต้อง')
-    } else if (!price || price < 1) {
+    } else if (!price) {
       alert('กรุณากรอกราคาให้ถูกต้อง')
     } else {
       await Axios.post(config.http + '/FA_Control_New_Assets', body, { headers })
@@ -307,7 +297,7 @@ export default function History_of_assets() {
             };
             alert(`เพิ่มทรัพย์สินสำเร็จ`)
             Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
-              .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 1)));
+              .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 2)));
             setOpen(false);
           }
         });
@@ -316,7 +306,7 @@ export default function History_of_assets() {
   };
 
   const handleChange_Code = (event) => {
-    setCode(event.target.value)
+    setBac_type(event.target.value)
   }
   const handleChange_Name = (event) => {
     setName(event.target.value)
@@ -330,9 +320,6 @@ export default function History_of_assets() {
   const handleChange_Details = (event) => {
     setDetails(event.target.value)
   }
-  const handleChange_Ceate_Date = (newValue) => {
-    setCeate_Date(!newValue.toISOString().split('T')[0] ? null : newValue.toISOString().split('T')[0])
-  }
   const handleChange_BranchID = (event) => {
     setBranchID(event.target.value)
   }
@@ -340,17 +327,49 @@ export default function History_of_assets() {
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
-    { field: 'SerialNo', headerName: 'SerialNo', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
     { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
-    { field: 'Details', headerName: 'หมายเหตุ', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
     {
-      field: 'Price',
-      headerName: 'ราคาทุน',
+      field: 'Details',
+      headerName: 'หมายเหตุ',
       headerClassName: 'super-app-theme--header',
-      minWidth: 130,
+      minWidth: 100,
       flex: 1,
-      valueGetter: (params) =>
-        `${params.row.Price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) || ''}`,
+      renderCell: (params) => {
+        const handleChange_select = async (event, params) => {
+
+          const body = {
+            Details: event.target.value,
+            UserID: data.userid,
+            Code: params.row.Code
+          }
+
+          dataHistory.forEach(function (x, index) {
+            if (x.AssetID === params.row.AssetID) {
+              const list = [...dataHistory]
+              list[index]['Old_Details'] = list[index]['Details']
+              list[index]['Details'] = event.target.value
+              list[index]['change_status'] = 1
+              setDataHistory(list)
+              setArraySubmit(list.filter((res) => res.change_status === 1))
+            }
+          })
+
+        };
+
+        return (
+          <React.Fragment>
+            <FormControl fullWidth size="small">
+              <Select
+                label={false}
+                value={!params.row.Details ? 'none' : params.row.Details}
+                onChange={(event) => handleChange_select(event, params)}
+              >
+                {status_all.map((status) => (<MenuItem value={status}>{status}</MenuItem>))}
+              </Select>
+            </FormControl>
+          </React.Fragment >
+        )
+      }
     },
     {
       field: 'BranchID',
@@ -371,55 +390,172 @@ export default function History_of_assets() {
         params.row.BranchID === 901 ? 'HO' : params.row.Position,
     },
     {
-      field: 'CreateDate',
-      headerName: 'วันที่ขึ้นทะเบียน',
+      field: 'ImagePath',
+      headerName: 'Images 1',
       headerClassName: 'super-app-theme--header',
-      minWidth: 170,
-      flex: 1,
+      minWidth: 200,
       headerAlign: 'center',
       align: 'center',
+      flex: 1,
       renderCell: (params) => {
+
+        const handleUploadFile_1 = async (e, params) => {
+          e.preventDefault();
+
+          const headers = {
+            'Authorization': 'application/json; charset=utf-8',
+            'Accept': 'application/json'
+          };
+
+          if (['jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
+
+            const formData_1 = new FormData();
+            formData_1.append("file", e.target.files[0]);
+            formData_1.append("fileName", e.target.files[0].name);
+
+            await Axios.post(config.http + "/check_files_NewNAC", formData_1, { headers })
+              .then(async (res) => {
+                const Code = params.row.Code
+                const image_1 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
+
+                const body = { Code: Code, image_1: image_1 }
+
+                await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
+                  .then(async (res) => {
+                    if (res.data) {
+                      alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
+                      dataHistory.forEach(function (x, index) {
+                        if (x.Code === params.row.Code) {
+                          const list = [...dataHistory]
+                          list[index]['ImagePath'] = image_1
+                          setDataHistory(list)
+                        }
+                      })
+                    }
+                  })
+              })
+
+          } else {
+            alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+          }
+        }
+
         return (
           <React.Fragment>
-            {params.row.CreateDate ?
-              <Stack
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                spacing={1}
-              >
-                <CalendarMonthIcon />
-                <Typography variant='body2'>
-                  {params.row.CreateDate.split('T')[0] || ''}
-                </Typography>
-              </Stack>
-              : null}
+            <ImageListItem key={params.row.ImagePath}>
+              <img
+                src={`${params.row.ImagePath}?w=248&fit=crop&auto=format`}
+                srcSet={`${params.row.ImagePath}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                alt={params.row.Name}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null; // prevents looping
+                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
+                }}
+                loading="lazy"
+              />
+              <ImageListItemBar
+                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+                position="below"
+                title={<span>&nbsp; &nbsp;{params.row.Code}_1</span>}
+                actionIcon={
+                  <IconButton
+                    sx={{ color: 'rgba(255, 255, 255, 1)' }}
+                    aria-label={`info about ${params.row.Code}`}
+                    component="label"
+                  >
+                    <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e, params)} />
+                    <FilePresentIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                }
+              />
+            </ImageListItem>
           </React.Fragment>
         )
       }
     },
-    // {
-    //   field: 'ImagePath',
-    //   headerName: 'Images',
-    //   headerClassName: 'super-app-theme--header',
-    //   minWidth: 50,
-    //   headerAlign: 'center',
-    //   align: 'center',
-    //   flex: 1,
-    //   renderCell: (params) => {
-    //     return (
-    //       <React.Fragment>
-    //         <IconButton color="primary" onClick={(event) => handleClickOpenImage(event, params)} component="label">
-    //           <Badge
-    //             badgeContent={(params.row.ImagePath && params.row.ImagePath_2) ? 2 : (params.row.ImagePath || params.row.ImagePath_2) ? 1 : 0}
-    //             color="primary">
-    //             <ImageIcon color="action" />
-    //           </Badge>
-    //         </IconButton>
-    //       </React.Fragment>
-    //     )
-    //   }
-    // },
+    {
+      field: 'ImagePath_2',
+      headerName: 'Images 2',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 200,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      renderCell: (params) => {
+
+        const handleUploadFile_2 = async (e, params) => {
+          e.preventDefault();
+
+          const headers = {
+            'Authorization': 'application/json; charset=utf-8',
+            'Accept': 'application/json'
+          };
+
+          if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
+
+            const formData_2 = new FormData();
+            formData_2.append("file", e.target.files[0]);
+            formData_2.append("fileName", e.target.files[0].name);
+
+            await Axios.post(config.http + "/check_files_NewNAC", formData_2, { headers })
+              .then(async (res) => {
+                const Code = params.row.Code
+                const image_2 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
+
+                const body = { Code: Code, image_2: image_2 }
+
+                await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
+                  .then(async (res) => {
+                    if (res.data) {
+                      alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
+                      dataHistory.forEach(function (x, index) {
+                        if (x.Code === params.row.Code) {
+                          const list = [...dataHistory]
+                          list[index]['ImagePath_2'] = image_2
+                          setDataHistory(list)
+                        }
+                      })
+                    }
+                  })
+              })
+          } else {
+            alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+          }
+        }
+
+        return (
+          <React.Fragment>
+            <ImageListItem key={params.row.ImagePath_2}>
+              <img
+                src={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format`}
+                srcSet={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                alt={params.row.Name}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null; // prevents looping
+                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
+                }}
+                loading="lazy"
+              />
+              <ImageListItemBar
+                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+                position="below"
+                title={<span>&nbsp; &nbsp;{params.row.Code}_2</span>}
+                actionIcon={
+                  <IconButton
+                    sx={{ color: 'rgba(255, 255, 255, 1)' }}
+                    aria-label={`info about ${params.row.Code}`}
+                    component="label"
+                  >
+                    <input hidden type="file" name='file' onChange={(e) => handleUploadFile_2(e, params)} />
+                    <FilePresentIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                }
+              />
+            </ImageListItem>
+          </React.Fragment>
+        )
+      }
+    },
   ];
 
   React.useEffect(() => {
@@ -430,7 +566,7 @@ export default function History_of_assets() {
       'Accept': 'application/json'
     };
     Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
-      .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 1)));
+      .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 2)));
   }, []);
 
   if (checkUserWeb === 'null') {
@@ -450,7 +586,7 @@ export default function History_of_assets() {
           <Toolbar>
             <AnimatedPage>
               <Typography variant="h5" color="inherit" >
-                ทรัพย์สินทั้งหมด
+                ทรัพย์สินผู้ร่วมทั้งหมด
               </Typography>
             </AnimatedPage>
           </Toolbar>
@@ -467,13 +603,18 @@ export default function History_of_assets() {
                 spacing={2}
               >
                 <Grid item>
-                  <Button variant="contained" disabled={(permission_menuID ? permission_menuID.includes(6) : null) === true ? false : true} color='success' component="label">
+                  <Button variant="contained" disabled={arraySubmit ? false : true} color='success' component="label">
+                    Send Mail
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button variant="contained" disabled={(permission_menuID ? permission_menuID.includes(14) : null) === true ? false : true} color='success' component="label">
                     Upload XLSX
                     <input hidden multiple type="file" onChange={fileSelected} />
                   </Button>
                 </Grid>
                 <Grid item>
-                  <Button variant="contained" color='success' disabled={(permission_menuID ? permission_menuID.includes(6) : null) === true ? false : true} onClick={handleClickOpen}>
+                  <Button variant="contained" color='success' disabled={(permission_menuID ? permission_menuID.includes(15) : null) === true ? false : true} onClick={handleClickOpen}>
                     เพิ่มทรัพย์สิน
                   </Button>
                 </Grid>
@@ -504,7 +645,8 @@ export default function History_of_assets() {
                   onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                   pagination
                   rowsPerPageOptions={[10, 20, 50, 100]}
-                  autoHeight
+                  getRowHeight={() => 'auto'}
+                  // autoHeight
                   disableColumnMenu
                   disableSelectionOnClick
                   {...other}
@@ -528,12 +670,12 @@ export default function History_of_assets() {
                           <TextField
                             size="small"
                             autoComplete="given-name"
-                            name="Code"
-                            value={code}
-                            onChange={(event) => handleChange_Code(event)}
+                            name="Name"
+                            value={name}
+                            onChange={(event) => handleChange_Name(event)}
                             required
                             fullWidth
-                            label="รหัสทรัพย์สิน"
+                            label="ชื่อ"
                             autoFocus
                           />
                         </Grid>
@@ -541,12 +683,12 @@ export default function History_of_assets() {
                           <TextField
                             size="small"
                             autoComplete="given-name"
-                            name="Name"
-                            value={name}
-                            onChange={(event) => handleChange_Name(event)}
+                            name="bac_type"
+                            value={bac_type}
+                            onChange={(event) => handleChange_Code(event)}
                             required
                             fullWidth
-                            label="ชื่อ"
+                            label="ประเภททรัพย์สิน"
                             autoFocus
                           />
                         </Grid>
@@ -563,23 +705,6 @@ export default function History_of_assets() {
                             label="สาขา"
                             autoFocus
                           />
-                        </Grid>
-                        <Grid item xs={12}>
-                          <LocalizationProvider dateAdapter={DateAdapter}>
-                            <DatePicker
-                              label="วันที่ขึ้นทะเบียน"
-                              value={create_Date}
-                              onChange={handleChange_Ceate_Date}
-                              inputFormat="yyyy-MM-dd"
-                              renderInput={(params) =>
-                                <TextField
-                                  fullWidth
-                                  size="small"
-                                  autoComplete="family-name"
-                                  required
-                                  {...params} />}
-                            />
-                          </LocalizationProvider>
                         </Grid>
                         <Grid item xs={12}>
                           <TextField
@@ -668,7 +793,7 @@ export default function History_of_assets() {
                           componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
                           rows={dataFile}
                           columns={field}
-                          getRowId={(row) => row?.Code}
+                          getRowId={(row) => `${row?.No}`}
                           pageSize={10}
                           autoHeight
                           disableColumnMenu
