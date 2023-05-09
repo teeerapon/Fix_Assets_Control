@@ -163,24 +163,24 @@ export default function History_of_assets() {
       valueGetter: (params) =>
         `${params.row.Price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) || ''}`,
     },
-    {
-      field: 'BranchID',
-      headerName: 'สาขา',
-      headerClassName: 'super-app-theme--header',
-      minWidth: 100,
-      flex: 1,
-      valueGetter: (params) =>
-        params.row.BranchID === 901 ? 'HO' : params.row.BranchID,
-    },
     // {
-    //   field: 'Position',
-    //   headerName: 'Position',
+    //   field: 'BranchID',
+    //   headerName: 'สาขา',
     //   headerClassName: 'super-app-theme--header',
     //   minWidth: 100,
     //   flex: 1,
     //   valueGetter: (params) =>
-    //     params.row.BranchID === 901 ? 'HO' : params.row.Position,
+    //     params.row.BranchID === 901 ? 'HO' : params.row.BranchID,
     // },
+    {
+      field: 'Position',
+      headerName: 'Position',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 100,
+      flex: 1,
+      valueGetter: (params) =>
+        params.row.BranchID === 901 ? 'HO' : params.row.Position,
+    },
     {
       field: 'CreateDate',
       headerName: 'วันที่ขึ้นทะเบียน',
@@ -246,7 +246,7 @@ export default function History_of_assets() {
                       swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", {
                         buttons: false,
                         timer: 2000,
-                      }).then((value)=>{
+                      }).then((value) => {
                         dataHistory.forEach(function (x, index) {
                           if (x.Code === params.row.Code) {
                             const list = [...dataHistory]
@@ -337,7 +337,7 @@ export default function History_of_assets() {
                       swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", {
                         buttons: false,
                         timer: 2000,
-                      }).then((value)=>{
+                      }).then((value) => {
                         dataHistory.forEach(function (x, index) {
                           if (x.Code === params.row.Code) {
                             const list = [...dataHistory]
