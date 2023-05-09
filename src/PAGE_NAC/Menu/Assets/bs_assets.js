@@ -30,6 +30,11 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
 import CircularProgress from '@mui/material/CircularProgress';
+import FormLabel from '@mui/material/FormLabel';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+import Checkbox from '@mui/material/Checkbox';
 
 
 
@@ -141,6 +146,77 @@ export default function History_of_assets() {
   const [progress, setProgress] = React.useState();
   const [status_all] = React.useState(['none', 'สภาพดี', 'ชำรุด', 'สูญหาย', 'คืนผู้ร่วมแล้ว']);
   const [arraySubmit, setArraySubmit] = React.useState()
+  const [openSendMail, setOpenSendMail] = React.useState(false);
+  const [arraySubmitSendMail, setArraySubmitSendMail] = React.useState()
+  const [valueOfIndex, setValueOfIndex] = React.useState();
+  const [mailto, setMailto] = React.useState({ ME: true, KTT: false, GRP: false, ROD: false });
+
+  const handleChangeMailto = (event) => {
+    setMailto({
+      ...mailto,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
+  const { ME, KTT, GRP, ROD } = mailto;
+
+  const handleClick_Value = async (newSelectionModel) => {
+    setValueOfIndex(newSelectionModel);
+    setArraySubmitSendMail(dataHistory.filter((res) => newSelectionModel.includes(res.AssetID)));
+  }
+
+  const handleSubmit_SendMail = async () => {
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    for (let i = 0; i < arraySubmitSendMail.length; i++) {
+      const bodyDetails = { "Code": arraySubmitSendMail[i].Code, "Details": arraySubmitSendMail[i].Details }
+      await Axios.post(config.http + '/FA_Control_BPC_UpdateDetails', bodyDetails, { headers })
+    }
+
+    const headers_colums = `
+    <tr style="background-color: royalblue;color:#ffffff;">
+      <td><center>รหัสทรัพย์สิน</center></td>
+      <td>ชื่อ</td>
+      <td>ผู้ถือครอง</td>
+      <td>Position</td>
+      <td>หมายเหตุ</td>
+      <td>Comments</td>
+    </tr>`
+
+    // image :  <td>ImagePath</td>
+    // image :  <td>ImagePath_2</td>
+
+    var str = '';
+    for (var i = 0; i < arraySubmitSendMail.length; i++) {
+      str += `
+      <tr>
+        <td style="width:130px"><center>${arraySubmitSendMail[i].Code}</center></td>
+        <td>${arraySubmitSendMail[i].Name}</td>
+        <td><center>${arraySubmitSendMail[i].OwnerID}</center></td>
+        <td><center>${arraySubmitSendMail[i].Position}</center></td>
+        <td>${arraySubmitSendMail[i].Details}</td>
+        <td>${arraySubmitSendMail[i].Comments ?? ''}</td>
+      </tr>`;
+    }
+
+    // image :    <td><img src="${arraySubmitSendMail[i].ImagePath ?? 'http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg'}" alt=""></td>
+    // image :    <td><img src="${arraySubmitSendMail[i].ImagePath_2 ?? 'http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg'}" alt=""></td>
+
+    const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}${str.trim()}</table>`
+
+    const body = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html }
+
+    await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body, { headers })
+      .then((res) => {
+        alert(res.data.response)
+        window.location.href = '/BSAssetsMain'
+      })
+
+  };
 
   React.useEffect(() => {
     // POST request using axios with set headers
@@ -324,36 +400,37 @@ export default function History_of_assets() {
     setBranchID(event.target.value)
   }
 
-  const columns = [
-    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
-    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
-    { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
+  const columns_Mail = [
+    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1, headerAlign: 'center', align: 'center', },
+    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1, },
+    { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', width: 100, headerAlign: 'center', align: 'center', },
+    {
+      field: 'Position',
+      headerName: 'Position',
+      headerClassName: 'super-app-theme--header',
+      width: 100,
+      headerAlign: 'center',
+      align: 'center',
+      valueGetter: (params) =>
+        params.row.BranchID === 901 ? 'HO' : params.row.Position,
+    },
     {
       field: 'Details',
       headerName: 'หมายเหตุ',
       headerClassName: 'super-app-theme--header',
-      minWidth: 100,
+      minWidth: 150,
       flex: 1,
       renderCell: (params) => {
         const handleChange_select = async (event, params) => {
 
-          const body = {
-            Details: event.target.value,
-            UserID: data.userid,
-            Code: params.row.Code
-          }
-
-          dataHistory.forEach(function (x, index) {
+          arraySubmitSendMail.forEach(function (x, index) {
             if (x.AssetID === params.row.AssetID) {
-              const list = [...dataHistory]
+              const list = [...arraySubmitSendMail]
               list[index]['Old_Details'] = list[index]['Details']
               list[index]['Details'] = event.target.value
-              list[index]['change_status'] = 1
-              setDataHistory(list)
-              setArraySubmit(list.filter((res) => res.change_status === 1))
+              setArraySubmitSendMail(list)
             }
           })
-
         };
 
         return (
@@ -372,22 +449,122 @@ export default function History_of_assets() {
       }
     },
     {
-      field: 'BranchID',
-      headerName: 'สาขา',
+      field: 'Comments',
+      headerName: 'Comments',
       headerClassName: 'super-app-theme--header',
-      minWidth: 100,
+      minWidth: 150,
       flex: 1,
-      valueGetter: (params) =>
-        params.row.BranchID === 901 ? 'HO' : params.row.BranchID,
+      renderCell: (params) => {
+        const handleChange_comments = async (event, params) => {
+          arraySubmitSendMail.forEach(function (x, index) {
+            if (x.AssetID === params.row.AssetID) {
+              const list = [...arraySubmitSendMail]
+              list[index]['Comments'] = event.target.value
+              setArraySubmitSendMail(list)
+            }
+          })
+        }
+
+        return (
+          <React.Fragment>
+            <TextField
+              id="outlined-multiline-flexible"
+              size='small'
+              value={params.row.Comments}
+              onChange={(event) => handleChange_comments(event, params)}
+              label="Comments..."
+            />
+          </React.Fragment >
+        )
+      }
     },
+    {
+      field: 'ImagePath',
+      headerName: 'Images 1',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 200,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            <ImageListItem key={params.row.ImagePath}>
+              <img
+                src={`${params.row.ImagePath}?w = 248 & fit=crop & auto=format`}
+                srcSet={`${params.row.ImagePath}?w = 248 & fit=crop & auto=format & dpr=2 2x`}
+                alt={params.row.Name}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null; // prevents looping
+                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
+                }}
+                loading="lazy"
+              />
+              <ImageListItemBar
+                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+                position="below"
+                title={<span>&nbsp; &nbsp;{params.row.Code}_1</span>}
+              />
+            </ImageListItem>
+          </React.Fragment>
+        )
+      }
+    },
+    {
+      field: 'ImagePath_2',
+      headerName: 'Images 2',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 200,
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            <ImageListItem key={params.row.ImagePath_2}>
+              <img
+                src={`${params.row.ImagePath_2}?w = 248 & fit=crop & auto=format`}
+                srcSet={`${params.row.ImagePath_2}?w = 248 & fit=crop & auto=format & dpr=2 2x`}
+                alt={params.row.Name}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null; // prevents looping
+                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
+                }}
+                loading="lazy"
+              />
+              <ImageListItemBar
+                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+                position="below"
+                title={<span>&nbsp; &nbsp;{params.row.Code}_2</span>}
+              />
+            </ImageListItem>
+          </React.Fragment>
+        )
+      }
+    },
+  ];
+
+  const columns = [
+    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1, headerAlign: 'center', align: 'center', },
+    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1, },
+    { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', width: 150, headerAlign: 'center', align: 'center', },
+
     {
       field: 'Position',
       headerName: 'Position',
       headerClassName: 'super-app-theme--header',
-      minWidth: 100,
-      flex: 1,
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
       valueGetter: (params) =>
         params.row.BranchID === 901 ? 'HO' : params.row.Position,
+    },
+    {
+      field: 'Details',
+      headerName: 'หมายเหตุ',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 150,
+      flex: 1,
     },
     {
       field: 'ImagePath',
@@ -440,12 +617,13 @@ export default function History_of_assets() {
           }
         }
 
+
         return (
           <React.Fragment>
             <ImageListItem key={params.row.ImagePath}>
               <img
-                src={`${params.row.ImagePath}?w=248&fit=crop&auto=format`}
-                srcSet={`${params.row.ImagePath}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                src={`${params.row.ImagePath}?w = 248 & fit=crop & auto=format`}
+                srcSet={`${params.row.ImagePath}?w = 248 & fit=crop & auto=format & dpr=2 2x`}
                 alt={params.row.Name}
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null; // prevents looping
@@ -460,7 +638,7 @@ export default function History_of_assets() {
                 actionIcon={
                   <IconButton
                     sx={{ color: 'rgba(255, 255, 255, 1)' }}
-                    aria-label={`info about ${params.row.Code}`}
+                    aria-label={`info about ${params.row.Code} `}
                     component="label"
                   >
                     <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e, params)} />
@@ -527,8 +705,8 @@ export default function History_of_assets() {
           <React.Fragment>
             <ImageListItem key={params.row.ImagePath_2}>
               <img
-                src={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format`}
-                srcSet={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                src={`${params.row.ImagePath_2}?w = 248 & fit=crop & auto=format`}
+                srcSet={`${params.row.ImagePath_2}?w = 248 & fit=crop & auto=format & dpr=2 2x`}
                 alt={params.row.Name}
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null; // prevents looping
@@ -543,7 +721,7 @@ export default function History_of_assets() {
                 actionIcon={
                   <IconButton
                     sx={{ color: 'rgba(255, 255, 255, 1)' }}
-                    aria-label={`info about ${params.row.Code}`}
+                    aria-label={`info about ${params.row.Code} `}
                     component="label"
                   >
                     <input hidden type="file" name='file' onChange={(e) => handleUploadFile_2(e, params)} />
@@ -569,6 +747,15 @@ export default function History_of_assets() {
       .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 2)));
   }, []);
 
+  const handleClickOpenSendMail = () => {
+    setOpenSendMail(true);
+  };
+
+  const handleCloseSendMail = () => {
+    setOpenSendMail(false);
+  };
+
+
   if (checkUserWeb === 'null') {
     window.location.href = '/NAC_MAIN';
   } else {
@@ -580,7 +767,7 @@ export default function History_of_assets() {
           elevation={0}
           sx={{
             position: 'relative',
-            borderBottom: (t) => `1px solid ${t.palette.divider}`,
+            borderBottom: (t) => `1px solid ${t.palette.divider} `,
           }}
         >
           <Toolbar>
@@ -598,25 +785,27 @@ export default function History_of_assets() {
               <Grid
                 container
                 direction="row"
-                justifyContent="flex-end"
+                justifyContent="space-between"
                 alignItems="center"
                 spacing={2}
               >
                 <Grid item>
-                  <Button variant="contained" disabled={arraySubmit ? false : true} color='success' component="label">
+                  <Button variant="contained" onClick={handleClickOpenSendMail} disabled={valueOfIndex ? false : true} component="label">
                     Send Mail
                   </Button>
                 </Grid>
                 <Grid item>
-                  <Button variant="contained" disabled={(permission_menuID ? permission_menuID.includes(14) : null) === true ? false : true} color='success' component="label">
-                    Upload XLSX
-                    <input hidden multiple type="file" onChange={fileSelected} />
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button variant="contained" color='success' disabled={(permission_menuID ? permission_menuID.includes(15) : null) === true ? false : true} onClick={handleClickOpen}>
-                    เพิ่มทรัพย์สิน
-                  </Button>
+                  <Stack direction="row" spacing={2}>
+                    <React.Fragment>
+                      <Button variant="contained" disabled={(permission_menuID ? permission_menuID.includes(14) : null) === true ? false : true} color='success' component="label">
+                        Upload XLSX
+                        <input hidden multiple type="file" onChange={fileSelected} />
+                      </Button>
+                      <Button variant="contained" color='success' disabled={(permission_menuID ? permission_menuID.includes(15) : null) === true ? false : true} onClick={handleClickOpen}>
+                        เพิ่มทรัพย์สิน
+                      </Button>
+                    </React.Fragment>
+                  </Stack>
                 </Grid>
               </Grid>
               <Box
@@ -632,7 +821,7 @@ export default function History_of_assets() {
                     pr: 2,
                     pt: 2,
                     boxShadow: 1,
-                    [`& .${gridClasses.cell}`]: {
+                    [`& .${gridClasses.cell} `]: {
                       py: 1,
                     },
                   }}
@@ -649,8 +838,11 @@ export default function History_of_assets() {
                   // autoHeight
                   disableColumnMenu
                   disableSelectionOnClick
+                  checkboxSelection
+                  onSelectionModelChange={(newSelectionModel) => handleClick_Value(newSelectionModel)}
+                  selectionModel={valueOfIndex}
+                  keepNonExistentRowsSelected
                   {...other}
-                //checkboxSelection
                 />
               </Box>
               <Dialog
@@ -786,14 +978,15 @@ export default function History_of_assets() {
                             pr: 2,
                             pt: 2,
                             boxShadow: 1,
-                            [`& .${gridClasses.cell}`]: {
+                            [`& .${gridClasses.cell} `]: {
                               py: 1,
                             },
                           }}
                           componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
                           rows={dataFile}
                           columns={field}
-                          getRowId={(row) => `${row?.No}`}
+                          getRowHeight={() => 'auto'}
+                          getRowId={(row) => `${row?.No} `}
                           pageSize={10}
                           autoHeight
                           disableColumnMenu
@@ -834,6 +1027,63 @@ export default function History_of_assets() {
                     </React.Fragment>
                     : null
                 }
+              </Dialog>
+              <Dialog
+                fullWidth
+                maxWidth='lg'
+                open={openSendMail}
+                onClose={handleCloseSendMail}
+              >
+                <DialogTitle>
+                  {"กรุณาตรวจสอบข้อมูลให้ถูกต้องก่อนท่จะส่งอีเมล"}
+                </DialogTitle>
+                <DialogContent>
+                  <React.Fragment>
+                    <Box sx={{ display: 'flex' }}>
+                      <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
+                        <FormLabel component="legend">กรุณาเลือกบุคคลที่ท่านต้องการส่งอีเมล</FormLabel>
+                        <FormGroup aria-label="position" row>
+                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="ME" disabled checked={ME} />} label="ME" labelPlacement="end" />
+                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="KTT" checked={KTT} />} label="KTT" labelPlacement="end" />
+                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="GRP" checked={GRP} />} label="GRP" labelPlacement="end" />
+                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="ROD" checked={ROD} />} label="หน่วยงาน ROD" labelPlacement="end" />
+                        </FormGroup>
+                      </FormControl>
+                    </Box>
+                    <StripedDataGrid
+                      sx={{
+                        mt: 1,
+                        pl: 2,
+                        pr: 2,
+                        pt: 2,
+                        boxShadow: 1,
+                        [`& .${gridClasses.cell} `]: {
+                          py: 1,
+                        },
+                      }}
+                      componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
+                      rows={arraySubmitSendMail ?? []}
+                      columns={columns_Mail}
+                      getRowId={(row) => row.AssetID}
+                      pageSize={10}
+                      getRowHeight={() => 'auto'}
+                      autoHeight
+                      disableColumnMenu
+                      disableSelectionOnClick
+                      checkboxSelection
+                      onSelectionModelChange={(newSelectionModel) => handleClick_Value(newSelectionModel)}
+                      selectionModel={valueOfIndex}
+                      keepNonExistentRowsSelected
+                      {...other}
+                    />
+                  </React.Fragment>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleSubmit_SendMail} variant='contained'>Submit</Button>
+                  <Button onClick={handleCloseSendMail} autoFocus variant='contained' color='error'>
+                    Cancel
+                  </Button>
+                </DialogActions>
               </Dialog>
             </Container>
           </Box>

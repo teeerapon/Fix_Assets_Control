@@ -1,10 +1,10 @@
 
 
-const http = 'http://vpnptec.dyndns.org:32001/api'
-const http_test = 'http://192.168.220.1:32001/api'
+const https = 'http://vpnptec.dyndns.org:32001/api'
+const httpss = 'http://192.168.220.1:32001/api'
+const http = 'https://5f02-61-7-147-129.ngrok-free.app/api'
 
 
 export default {
-  http,
-  http_test
+  http
 };
