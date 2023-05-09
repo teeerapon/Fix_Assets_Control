@@ -75,9 +75,9 @@ export default function AddressForm() {
       localStorage.setItem('DataCreatePeriod', JSON.stringify({ brachID1, valueDateTime1, valueDateTime2, valueDescription, valueBrachID1 }));
       navigate("/CreatePeriod2")
     } else if (valueBrachID1 == null) {
-      swal("ทำรายการไม่สำเร็จ", "กรุณากรอกข้อมูลหมายเลขสาขา", "warning")
+      swal("แจ้งเตือน", "กรุณากรอกข้อมูลหมายเลขสาขา", "warning")
     } else {
-      swal("ทำรายการไม่สำเร็จ", "กรุณากรอกข้อมูลในครบถ้วน", "warning")
+      swal("แจ้งเตือน", "กรุณากรอกข้อมูลในครบถ้วน", "warning")
     }
     //console.warn(new Date(valueDateTime1).toISOString().split('T')[0])
     //console.warn(new Date(valueDateTime2).toISOString().split('T')[0])

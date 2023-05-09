@@ -541,7 +541,7 @@ export default function Nac_Main() {
               }
             }
           } else {
-            swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่ภายหลัง', "error", {
+            swal("แจ้งเตือน", 'กรุณาลองใหม่ภายหลัง', "error", {
               buttons: false,
               timer: 2000,
             })

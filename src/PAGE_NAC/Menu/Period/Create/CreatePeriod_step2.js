@@ -57,14 +57,14 @@ export default function AddressForm() {
         usercode
       });
       if (response.data[0]) {
-        swal("ทำรายการสำเร็จ", `เปิดรอบตรวจนับสาขา ${BranchID === ('901' || 901) ? 'HO' : BranchID} แล้ว`, "success", {
+        swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${BranchID === ('901' || 901) ? 'HO' : BranchID} แล้ว`, "success", {
           buttons: false,
           timer: 1500,
         }).then((value) => {
           navigate('/EditPeriod')
         });
       } else {
-        swal("ทำรายการไม่สำเร็จ", 'กรุณาลองใหม่อีกครั้ง', "error");
+        swal("แจ้งเตือน", 'กรุณาลองใหม่อีกครั้ง', "error");
       }
     }
   }

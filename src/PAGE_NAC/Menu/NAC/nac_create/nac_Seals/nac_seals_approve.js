@@ -554,14 +554,14 @@ export default function Nac_Seals_Approve() {
       nac_code,
     });
     if ('data' in response) {
-      swal("ทำรายการสำเร็จ", 'ทำการลบรายการ ' + response.data[0].nac_code + ' แล้ว', "success", {
+      swal("แจ้งเตือน", 'ทำการลบรายการ ' + response.data[0].nac_code + ' แล้ว', "success", {
         buttons: false,
         timer: 2000,
       }).then((value) => {
         window.location.href = "/NAC_OPERATOR";
       });
     } else {
-      swal("ทำรายการไม่สำเร็จ", 'ไม่สามารถลบ ' + response.data[0].nac_code + ' ได้', "error")
+      swal("แจ้งเตือน", 'ไม่สามารถลบ ' + response.data[0].nac_code + ' ได้', "error")
     }
   }
 
@@ -603,7 +603,7 @@ export default function Nac_Seals_Approve() {
       nac_code
     });
     if (responseHeaders.message === "ไม่พบข้อมูล") {
-      swal("ทำรายการไม่สำเร็จ", 'ไม่พบรายการนี้แล้ว', "error", {
+      swal("แจ้งเตือน", 'ไม่พบรายการนี้แล้ว', "error", {
         buttons: false,
         timer: 2000,
       }).then((value) => {
@@ -1019,7 +1019,7 @@ export default function Nac_Seals_Approve() {
           setValueAlert(alert_value)
         }
       }
-      swal("ทำรายการสำเร็จ", 'อัปเดตรายการแล้ว', "success", {
+      swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", {
         buttons: false,
         timer: 2000,
       }).then((value) => {
@@ -1140,14 +1140,14 @@ export default function Nac_Seals_Approve() {
                   nac_code
                 })
                 if ('data' in responseComment) {
-                  swal("ทำรายการสำเร็จ", 'คุณกรอก Book Value ในรายการแล้ว', "success", {
+                  swal("แจ้งเตือน", 'คุณกรอก Book Value ในรายการแล้ว', "success", {
                     buttons: false,
                     timer: 2000,
                   }).then((value) => {
                     window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
                   });
                 } else {
-                  swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+                  swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
                     buttons: false,
                     timer: 2000,
                   }).then((value) => {
@@ -1239,14 +1239,14 @@ export default function Nac_Seals_Approve() {
                   nac_code
                 })
                 if ('data' in responseComment) {
-                  swal("ทำรายการสำเร็จ", 'คุณยืนยันรายการแล้ว', "success", {
+                  swal("แจ้งเตือน", 'คุณยืนยันรายการแล้ว', "success", {
                     buttons: false,
                     timer: 2000,
                   }).then((value) => {
                     window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
                   });
                 } else {
-                  swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+                  swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
                     buttons: false,
                     timer: 2000,
                   }).then((value) => {
@@ -1260,7 +1260,7 @@ export default function Nac_Seals_Approve() {
               }
             }
           } else {
-            swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+            swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
@@ -1316,14 +1316,14 @@ export default function Nac_Seals_Approve() {
           nac_code
         })
         if ('data' in responseComment) {
-          swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการแล้ว', "success", {
+          swal("แจ้งเตือน", 'คุณตรวจสอบรายการแล้ว', "success", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
             window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
           });
         } else {
-          swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+          swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
@@ -1331,7 +1331,7 @@ export default function Nac_Seals_Approve() {
           });
         }
       } else {
-        swal("ทำรายการไม่สำเร็จ", 'คุณไม่ได้รับอนุญาติให้ทำรายการนี้', "error", {
+        swal("แจ้งเตือน", 'คุณไม่ได้รับอนุญาติให้ทำรายการนี้', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
@@ -1376,14 +1376,14 @@ export default function Nac_Seals_Approve() {
           nac_code
         })
         if ('data' in responseComment) {
-          swal("ทำรายการสำเร็จ", 'คุณตรวจสอบรายการแล้ว', "success", {
+          swal("แจ้งเตือน", 'คุณตรวจสอบรายการแล้ว', "success", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
             window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
           });
         } else {
-          swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+          swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
@@ -1391,7 +1391,7 @@ export default function Nac_Seals_Approve() {
           });
         }
       } else {
-        swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
@@ -1442,14 +1442,14 @@ export default function Nac_Seals_Approve() {
         nac_code
       })
       if ('data' in responseComment) {
-        swal("ทำรายการสำเร็จ", 'คุณอนุมัติรายการแล้ว', "success", {
+        swal("แจ้งเตือน", 'คุณอนุมัติรายการแล้ว', "success", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
           window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
         });
       } else {
-        swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
@@ -1543,7 +1543,7 @@ export default function Nac_Seals_Approve() {
                 })
               }
             }
-            swal("ทำรายการสำเร็จ", selectNAC === 4 ? 'ตรวจรับเอกสารแล้ว'
+            swal("แจ้งเตือน", selectNAC === 4 ? 'ตรวจรับเอกสารแล้ว'
               : selectNAC === 99 ? 'แนบเอกสาร ในรายการแล้ว'
                 : selectNAC === 13 ? 'ปิดรายการแล้ว' : selectNAC === 15 ? 'ตรวจสอบรายการแล้ว'
                   : 'ยืนยันเอกสารแล้ว', "success", {
@@ -1553,7 +1553,7 @@ export default function Nac_Seals_Approve() {
               window.location.href = (selectNAC === 12 && Real_Price < priceSeals) ? '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code + '-1' : '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
             });
           } else {
-            swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+            swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
@@ -1562,7 +1562,7 @@ export default function Nac_Seals_Approve() {
           }
         }
       } else {
-        swal("ทำรายการไม่สำเร็จ", 'สถานะการทำรายการผิด', "error", {
+        swal("แจ้งเตือน", 'สถานะการทำรายการผิด', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
@@ -1609,14 +1609,14 @@ export default function Nac_Seals_Approve() {
         comment
       })
       if ('data' in responseComment) {
-        swal("ทำรายการสำเร็จ", 'คุณได้ยกเลิกรายการแล้ว', "success", {
+        swal("แจ้งเตือน", 'คุณได้ยกเลิกรายการแล้ว', "success", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
           window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE/' + nac_code
         });
       } else {
-        swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
@@ -1624,7 +1624,7 @@ export default function Nac_Seals_Approve() {
         });
       }
     } else {
-      swal("ทำรายการไม่สำเร็จ", 'เกิดข้อพิดพลาด', "error", {
+      swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
         buttons: false,
         timer: 2000,
       }).then((value) => {

@@ -35,6 +35,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import Checkbox from '@mui/material/Checkbox';
+import swal from 'sweetalert';
 
 
 
@@ -212,8 +213,13 @@ export default function History_of_assets() {
 
     await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body, { headers })
       .then((res) => {
-        alert(res.data.response)
-        window.location.href = '/BSAssetsMain'
+        swal("แจ้งเตือน", res.data.response, "success", {
+          buttons: false,
+          timer: 2000,
+        }).then((res) => {
+          window.location.href = '/BSAssetsMain'
+        })
+
       })
 
   };
@@ -270,7 +276,10 @@ export default function History_of_assets() {
         setOpenXlsx(true)
         setNameExcel(f.name)
       } else {
-        alert('ไม่พบหัวข้อรหัสทรัพย์สิน (No !)')
+        swal("แจ้งเตือน", 'ไม่พบหัวข้อรหัสทรัพย์สิน (No !)', "error", {
+          buttons: false,
+          timer: 2000,
+        })
       }
     };
     reader.readAsBinaryString(f)
@@ -318,20 +327,30 @@ export default function History_of_assets() {
       await Axios.post(config.http + '/FA_Control_import_dataXLSX_toAssets', body, { headers })
         .then((response) => {
           if (response.data[0].response === 'ทำรายการสำเร็จ') {
-            alert(response.data[0].response)
-            setOpen(false);
-            setBac_type(null)
-            setName(null)
-            setSerialNo(null)
-            setPrice(null)
-            setDetails(null)
-            window.location.href = '/BSAssetsMain';
+            swal("แจ้งเตือน", response.data[0].response, "success", {
+              buttons: false,
+              timer: 2000,
+            }).then((value) => {
+              setOpen(false);
+              setBac_type(null)
+              setName(null)
+              setSerialNo(null)
+              setPrice(null)
+              setDetails(null)
+              window.location.href = '/BSAssetsMain';
+            })
           } else {
-            alert(response.data[0].response)
+            swal("แจ้งเตือน", response.data[0].response, "error", {
+              buttons: false,
+              timer: 2000,
+            })
           }
         })
     } else {
-      alert('ข้อมูล (Columns) ไม่ถูกต้อง กรุณาตรวจสอบ')
+      swal("แจ้งเตือน", 'ข้อมูล (Columns) ไม่ถูกต้อง กรุณาตรวจสอบ', "error", {
+        buttons: false,
+        timer: 2000,
+      })
     }
   };
 
@@ -355,13 +374,25 @@ export default function History_of_assets() {
       'Accept': 'application/json'
     };
     if (!bac_type) {
-      alert('กรุณากรอกลำดับเลขที่')
+      swal("แจ้งเตือน", 'กรุณากรอกลำดับเลขที่', "error", {
+        buttons: false,
+        timer: 2000,
+      })
     } else if (!name) {
-      alert('กรุณากรอกชื่อทรัพย์สินให้ถูกต้อง')
+      swal("แจ้งเตือน", 'กรุณากรอกชื่อทรัพย์สินให้ถูกต้อง', "error", {
+        buttons: false,
+        timer: 2000,
+      })
     } else if (!branchID || branchID < 1) {
-      alert('กรุณากรอกสาขาให้ถูกต้อง')
+      swal("แจ้งเตือน", 'กรุณากรอกสาขาให้ถูกต้อง', "error", {
+        buttons: false,
+        timer: 2000,
+      })
     } else if (!price) {
-      alert('กรุณากรอกราคาให้ถูกต้อง')
+      swal("แจ้งเตือน", 'กรุณากรอกราคาให้ถูกต้อง', "error", {
+        buttons: false,
+        timer: 2000,
+      })
     } else {
       await Axios.post(config.http + '/FA_Control_New_Assets', body, { headers })
         .then(response => {
@@ -371,10 +402,14 @@ export default function History_of_assets() {
               'Authorization': 'application/json; charset=utf-8',
               'Accept': 'application/json'
             };
-            alert(`เพิ่มทรัพย์สินสำเร็จ`)
-            Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
-              .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 2)));
-            setOpen(false);
+            swal("แจ้งเตือน", 'เพิ่มทรัพย์สินสำเร็จ', "success", {
+              buttons: false,
+              timer: 2000,
+            }).then((value) => {
+              Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
+                .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 2)));
+              setOpen(false);
+            })
           }
         });
     }
@@ -600,20 +635,27 @@ export default function History_of_assets() {
                 await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
                   .then(async (res) => {
                     if (res.data) {
-                      alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
-                      dataHistory.forEach(function (x, index) {
-                        if (x.Code === params.row.Code) {
-                          const list = [...dataHistory]
-                          list[index]['ImagePath'] = image_1
-                          setDataHistory(list)
-                        }
+                      swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", {
+                        buttons: false,
+                        timer: 2000,
+                      }).then((value) => {
+                        dataHistory.forEach(function (x, index) {
+                          if (x.Code === params.row.Code) {
+                            const list = [...dataHistory]
+                            list[index]['ImagePath'] = image_1
+                            setDataHistory(list)
+                          }
+                        })
                       })
                     }
                   })
               })
 
           } else {
-            alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
+              buttons: false,
+              timer: 2000,
+            })
           }
         }
 
@@ -685,19 +727,26 @@ export default function History_of_assets() {
                 await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
                   .then(async (res) => {
                     if (res.data) {
-                      alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
-                      dataHistory.forEach(function (x, index) {
-                        if (x.Code === params.row.Code) {
-                          const list = [...dataHistory]
-                          list[index]['ImagePath_2'] = image_2
-                          setDataHistory(list)
-                        }
+                      swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", {
+                        buttons: false,
+                        timer: 2000,
+                      }).then((value) => {
+                        dataHistory.forEach(function (x, index) {
+                          if (x.Code === params.row.Code) {
+                            const list = [...dataHistory]
+                            list[index]['ImagePath_2'] = image_2
+                            setDataHistory(list)
+                          }
+                        })
                       })
                     }
                   })
               })
           } else {
-            alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
+              buttons: false,
+              timer: 2000,
+            })
           }
         }
 

@@ -33,6 +33,7 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
 import config from '../../../config'
+import swal from 'sweetalert';
 
 
 
@@ -242,20 +243,27 @@ export default function History_of_assets() {
                 await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
                   .then(async (res) => {
                     if (res.data) {
-                      alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
-                      dataHistory.forEach(function (x, index) {
-                        if (x.Code === params.row.Code) {
-                          const list = [...dataHistory]
-                          list[index]['ImagePath'] = image_1
-                          setDataHistory(list)
-                        }
+                      swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", {
+                        buttons: false,
+                        timer: 2000,
+                      }).then((value)=>{
+                        dataHistory.forEach(function (x, index) {
+                          if (x.Code === params.row.Code) {
+                            const list = [...dataHistory]
+                            list[index]['ImagePath'] = image_1
+                            setDataHistory(list)
+                          }
+                        })
                       })
                     }
                   })
               })
 
           } else {
-            alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
+              buttons: false,
+              timer: 2000,
+            })
           }
         }
 
@@ -326,20 +334,27 @@ export default function History_of_assets() {
                 await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
                   .then(async (res) => {
                     if (res.data) {
-                      alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
-                      dataHistory.forEach(function (x, index) {
-                        if (x.Code === params.row.Code) {
-                          const list = [...dataHistory]
-                          list[index]['ImagePath_2'] = image_2
-                          setDataHistory(list)
-                        }
+                      swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", {
+                        buttons: false,
+                        timer: 2000,
+                      }).then((value)=>{
+                        dataHistory.forEach(function (x, index) {
+                          if (x.Code === params.row.Code) {
+                            const list = [...dataHistory]
+                            list[index]['ImagePath_2'] = image_2
+                            setDataHistory(list)
+                          }
+                        })
                       })
                     }
                   })
               })
 
           } else {
-            alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
+              buttons: false,
+              timer: 2000,
+            })
           }
         }
 

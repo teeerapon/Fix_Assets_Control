@@ -12,6 +12,7 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import config from '../../../config'
+import swal from 'sweetalert';
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -185,7 +186,10 @@ export default function Permission_NAC() {
               }
             })
         } else {
-          alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง')
+          swal("แจ้งเตือน", 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง', "error", {
+            buttons: false,
+            timer: 2000,
+          })
         }
       })
 
@@ -214,7 +218,7 @@ export default function Permission_NAC() {
       headerName: 'ลำดับ',
       headerClassName: 'super-app-theme--header',
       minWidth: 100,
-      flex : 1,
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
@@ -232,7 +236,7 @@ export default function Permission_NAC() {
       headerName: 'ข้อความ',
       headerClassName: 'super-app-theme--header',
       minWidth: 250,
-      flex : 1,
+      flex: 1,
       renderCell: (params) => {
         return (
           <React.Fragment>
@@ -248,7 +252,7 @@ export default function Permission_NAC() {
       headerName: 'สิทธิ์',
       headerClassName: 'super-app-theme--header',
       minWidth: 220,
-      flex : 1,
+      flex: 1,
       disableExport: true,
       headerAlign: 'center',
       align: 'center',
@@ -344,7 +348,11 @@ export default function Permission_NAC() {
       </ThemeProvider>
     );
   } else {
-    alert('ไม่มีสิทธิ์ในรายการนี้')
-    window.location.href = '/DATA_CENTER';
+    swal("แจ้งเตือน", 'ไม่มีสิทธิ์ในรายการนี้', "error", {
+      buttons: false,
+      timer: 2000,
+    }).then((value) => {
+      window.location.href = '/DATA_CENTER';
+    })
   }
 }

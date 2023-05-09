@@ -146,11 +146,15 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
       setFileName(e.target.files[0].name);
       setPath(e.target.files[0].name)
     } else {
-      alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
-      setFile(null)
-      setFileName("")
-      setDescription('')
-      setPath('')
+      swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
+        buttons: false,
+        timer: 2000,
+      }).then((value) => {
+        setFile(null)
+        setFileName("")
+        setDescription('')
+        setPath('')
+      })
     }
   }
 
@@ -206,7 +210,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
 
   const handleSubmitComment = async (e) => {
     if (!comment) {
-      swal("ทำรายการไม่สำเร็จ", 'กรุณาเติมข้อความ', "error", {
+      swal("แจ้งเตือน", 'กรุณาเติมข้อความ', "error", {
         buttons: false,
         timer: 2000,
       }).then((value) => {
@@ -238,7 +242,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
 
   const handleSubmitPath = async (e) => {
     if (!path || !description) {
-      swal("ทำรายการไม่สำเร็จ", 'กรุณาเติมข้อความ', "error", {
+      swal("แจ้งเตือน", 'กรุณาเติมข้อความ', "error", {
         buttons: false,
         timer: 2000,
       }).then((value) => {
@@ -299,11 +303,15 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
               }
             })
         } catch (ex) {
-          alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง')
-          setFile(null)
-          setFileName("")
-          setDescription('')
-          setPath('')
+          swal("แจ้งเตือน", 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง', "error", {
+            buttons: false,
+            timer: 2000,
+          }).then((value) => {
+            setFile(null)
+            setFileName("")
+            setDescription('')
+            setPath('')
+          })
         }
       }
     }

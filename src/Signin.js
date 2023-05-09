@@ -110,10 +110,10 @@ export default function Signin() {
       usercode
     });
     if (UserCode == null || Password == null) {
-      swal("ทำรายการไม่สำเร็จ", 'กรุณากรอกข้อมูลเพื่อล็อคอินเข้าสู่ระบบ', "error");
+      swal("แจ้งเตือน", 'กรุณากรอกข้อมูลเพื่อล็อคอินเข้าสู่ระบบ', "error");
     } else {
       if ('token' in response) {
-        swal("ทำรายการสำเร็จ", 'คุณได้เข้าสู่กระบบแล้ว', "success", {
+        swal("แจ้งเตือน", 'คุณได้เข้าสู่กระบบแล้ว', "success", {
           buttons: false,
           timer: 1500,
         }).then((value) => {
@@ -134,7 +134,7 @@ export default function Signin() {
           }
         });
       } else {
-        swal("ทำรายการไม่สำเร็จ", 'UserCode หรือ Password ไม่ถูกต้อง', "error");
+        swal("แจ้งเตือน", 'UserCode หรือ Password ไม่ถูกต้อง', "error");
       }
     }
   }

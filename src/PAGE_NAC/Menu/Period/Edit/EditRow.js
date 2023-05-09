@@ -77,7 +77,7 @@ export default function EditPeriod({ editFormData, handleEditClickCancel }) {
     });
     if (response.message !== 'ไม่สามารถแก้ไขได้ เนื่องจากมีการตรวจนับทรัพย์สิน') {
       if (response['data'] !== 'มีการเปิดช่วงเวลาทับกัน') {
-        swal("ทำรายการสำเร็จ", response.message, "success", {
+        swal("แจ้งเตือน", response.message, "success", {
           buttons: false,
           timer: 2000,
         })
@@ -85,13 +85,13 @@ export default function EditPeriod({ editFormData, handleEditClickCancel }) {
             window.location.href = "/EditPeriod";
           });
       } else {
-        swal("ทำรายการไม่สำเร็จ", response['data'], "error")
+        swal("แจ้งเตือน", response['data'], "error")
           .then((value) => {
             window.location.href = "/EditPeriod";
           });
       }
     } else {
-      swal("ทำรายการไม่สำเร็จ", response.message, "error")
+      swal("แจ้งเตือน", response.message, "error")
         .then((value) => {
           window.location.href = "/EditPeriod";
         });

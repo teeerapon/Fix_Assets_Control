@@ -24,6 +24,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
+import swal from 'sweetalert';
 
 import config from '../../../config'
 
@@ -149,7 +150,6 @@ export default function History_of_assets() {
           await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
             .then(async (res) => {
               if (res.data) {
-                alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
                 setImageData({
                   Code: res.data[0].Code
                   , Name: res.data[0].Name
@@ -157,11 +157,18 @@ export default function History_of_assets() {
                   , image_2: res.data[0].ImagePath_2
                 })
               }
+              swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ ', "success", {
+                buttons: false,
+                timer: 2000,
+              })
             })
         })
 
     } else {
-      alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+      swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
+        buttons: false,
+        timer: 2000,
+      })
     }
   }
 
@@ -189,19 +196,25 @@ export default function History_of_assets() {
           await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
             .then(async (res) => {
               if (res.data) {
-                alert('เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ')
                 setImageData({
                   Code: res.data[0].Code
                   , Name: res.data[0].Name
                   , image_1: res.data[0].ImagePath
                   , image_2: res.data[0].ImagePath_2
                 })
+                swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", {
+                  buttons: false,
+                  timer: 2000,
+                })
               }
             })
         })
 
     } else {
-      alert('ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif')
+      swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
+        buttons: false,
+        timer: 2000,
+      })
     }
   }
 

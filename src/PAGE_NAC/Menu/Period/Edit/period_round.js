@@ -372,7 +372,7 @@ export default function History_of_assets() {
     });
     if (response.message !== 'ไม่สามารถแก้ไขได้ เนื่องจากมีการตรวจนับทรัพย์สิน') {
       if (response['data'] !== 'มีการเปิดช่วงเวลาทับกัน') {
-        swal("ทำรายการสำเร็จ", response.message, "success", {
+        swal("แจ้งเตือน", response.message, "success", {
           buttons: false,
           timer: 2000,
         })
@@ -380,13 +380,13 @@ export default function History_of_assets() {
             window.location.href = "/EditPeriod";
           });
       } else {
-        swal("ทำรายการไม่สำเร็จ", response['data'], "error")
+        swal("แจ้งเตือน", response['data'], "error")
           .then((value) => {
             window.location.href = "/EditPeriod";
           });
       }
     } else {
-      swal("ทำรายการไม่สำเร็จ", response.message, "error")
+      swal("แจ้งเตือน", response.message, "error")
         .then((value) => {
           window.location.href = "/EditPeriod";
         });
@@ -403,7 +403,7 @@ export default function History_of_assets() {
       BranchID,
     });
     if (response.message !== 'ไม่สามารถลบได้ เนื่องจากมีการตรวจนับทรัพย์สิน') {
-      swal("ทำรายการสำเร็จ", 'รอบตรวจนับทรัพย์สินถูกลบแล้ว', "success", {
+      swal("แจ้งเตือน", 'รอบตรวจนับทรัพย์สินถูกลบแล้ว', "success", {
         buttons: false,
         timer: 2000,
       })
@@ -411,7 +411,7 @@ export default function History_of_assets() {
           window.location.href = "/EditPeriod";
         });
     } else {
-      swal("ทำรายการไม่สำเร็จ", response.message, "error")
+      swal("แจ้งเตือน", response.message, "error")
         .then((value) => {
           window.location.href = "/EditPeriod";
         });

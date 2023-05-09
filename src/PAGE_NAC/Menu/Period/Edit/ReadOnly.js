@@ -108,7 +108,7 @@ export default function ReadOnly({ periodData, handleEditClick }) {
       BranchID,
     });
     if (response.message !== 'ไม่สามารถลบได้ เนื่องจากมีการตรวจนับทรัพย์สิน') {
-      swal("ทำรายการสำเร็จ", response.message, "success", {
+      swal("แจ้งเตือน", response.message, "success", {
         buttons: false,
         timer: 2000,
       })
@@ -116,7 +116,7 @@ export default function ReadOnly({ periodData, handleEditClick }) {
           window.location.href = "/EditPeriod";
         });
     } else {
-      swal("ทำรายการไม่สำเร็จ", response.message, "error")
+      swal("แจ้งเตือน", response.message, "error")
         .then((value) => {
           window.location.href = "/EditPeriod";
         });

@@ -179,7 +179,7 @@ export default function Report() {
       })
       console.log(UserBranch,BranchID,RoundID);
       if ('data' in response || 'data' in response2 || 'data' in response3) {
-        swal("ทำรายการสำเร็จ", "ค้นหาข้อมูลเสร็จสิ้น", "success", {
+        swal("แจ้งเตือน", "ค้นหาข้อมูลเสร็จสิ้น", "success", {
           buttons: false,
           timer: 2000,
         })
@@ -188,10 +188,10 @@ export default function Report() {
             navigate("/AssetPage")
           });
       } else {
-        swal("ทำรายการไม่สำเร็จ", "ไม่พบรายการบันทึกทรัพย์สิน", "error");
+        swal("แจ้งเตือน", "ไม่พบรายการบันทึกทรัพย์สิน", "error");
       }
     } else {
-      swal("ทำรายการไม่สำเร็จ", "กรุณากรอกข้อมูลในครบถ้วน", "warning");
+      swal("แจ้งเตือน", "กรุณากรอกข้อมูลในครบถ้วน", "warning");
     }
   }
 

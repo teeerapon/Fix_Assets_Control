@@ -51,6 +51,7 @@ import ImageList from '@mui/material/ImageList';
 import LayersIcon from '@mui/icons-material/Layers';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import config from '../../config'
+import swal from 'sweetalert';
 
 const ODD_OPACITY = 0.2;
 
@@ -709,7 +710,10 @@ export default function Permission_to_RoPA() {
     await Axios.post(config.http + '/addOwner', body, { headers })
       .then(response => {
         if (!response.data) {
-          alert('ไม่พบ user นี้ในระบบ')
+          swal("แจ้งเตือน", 'ไม่พบ user นี้ในระบบ', "error", {
+            buttons: false,
+            timer: 2000,
+          })
         } else {
           setAllowner(response.data)
         }
@@ -730,7 +734,10 @@ export default function Permission_to_RoPA() {
     await Axios.post(config.http + '/addPermissionAccess', body, { headers })
       .then(response => {
         if (!response.data) {
-          alert('ไม่พบ user นี้ในระบบ')
+          swal("แจ้งเตือน", 'ไม่พบ user นี้ในระบบ', "error", {
+            buttons: false,
+            timer: 2000,
+          })
         } else {
           setAllaccess(response.data)
         }
