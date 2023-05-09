@@ -184,7 +184,8 @@ export default function History_of_assets() {
       <td>ชื่อ</td>
       <td>ผู้ถือครอง</td>
       <td>Position</td>
-      <td>หมายเหตุ</td>
+      <td>สถานะเดิม</td>
+      <td>สถานะปัจจุบัน</td>
       <td>Comments</td>
     </tr>`
 
@@ -199,6 +200,7 @@ export default function History_of_assets() {
         <td>${arraySubmitSendMail[i].Name}</td>
         <td><center>${arraySubmitSendMail[i].OwnerID}</center></td>
         <td><center>${arraySubmitSendMail[i].Position}</center></td>
+        <td>${arraySubmitSendMail[i].Old_Details ?? ''}</td>
         <td>${arraySubmitSendMail[i].Details ?? ''}</td>
         <td>${arraySubmitSendMail[i].Comments ?? ''}</td>
       </tr>`;
