@@ -199,7 +199,7 @@ export default function History_of_assets() {
         <td>${arraySubmitSendMail[i].Name}</td>
         <td><center>${arraySubmitSendMail[i].OwnerID}</center></td>
         <td><center>${arraySubmitSendMail[i].Position}</center></td>
-        <td>${arraySubmitSendMail[i].Details}</td>
+        <td>${arraySubmitSendMail[i].Details ?? ''}</td>
         <td>${arraySubmitSendMail[i].Comments ?? ''}</td>
       </tr>`;
     }
@@ -212,11 +212,12 @@ export default function History_of_assets() {
     const body = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html }
 
     await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body, { headers })
-      .then((res) => {
-        swal("แจ้งเตือน", res.data.response, "success", {
+      .then(async (res) => {
+        await swal("แจ้งเตือน", res.data[0].response, "success", {
           buttons: false,
           timer: 2000,
-        }).then((res) => {
+        }).then((value) => {
+          setOpenSendMail(false);
           window.location.href = '/BSAssetsMain'
         })
 
