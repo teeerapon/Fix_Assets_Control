@@ -545,7 +545,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
-                    <ListItemButton onClick={PeriodEdit}>
+                    {/* <ListItemButton onClick={PeriodEdit}>
                       <ListItemText>
                         <Typography
                           sx={{ display: 'inline' }}
@@ -555,7 +555,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ดำเนินการทรัพย์สินผู้ร่วม
                         </Typography>
                       </ListItemText>
-                    </ListItemButton>
+                    </ListItemButton> */}
                   </List>
                 </Collapse>
                 {(permission_menuID ? permission_menuID.includes(3 || 4) : null) === true ?
