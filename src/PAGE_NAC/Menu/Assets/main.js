@@ -695,6 +695,7 @@ export default function History_of_assets() {
                               py: 1,
                             },
                           }}
+                          components={{ Toolbar: GridToolbar }}
                           componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
                           rows={dataFile}
                           columns={field}

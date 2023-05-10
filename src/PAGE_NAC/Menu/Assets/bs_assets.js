@@ -173,41 +173,34 @@ export default function History_of_assets() {
       'Accept': 'application/json'
     };
 
-    for (let i = 0; i < arraySubmitSendMail.length; i++) {
-      const bodyDetails = { "Code": arraySubmitSendMail[i].Code, "Details": arraySubmitSendMail[i].Details }
-      await Axios.post(config.http + '/FA_Control_BPC_UpdateDetails', bodyDetails, { headers })
-    }
-
     const headers_colums = `
     <tr style="background-color: royalblue;color:#ffffff;">
       <td><center>รหัสทรัพย์สิน</center></td>
       <td>ชื่อ</td>
       <td>ผู้ถือครอง</td>
       <td>Position</td>
-      <td>สถานะเดิม</td>
+      <td>สถานะล่าสุด</td>
       <td>สถานะปัจจุบัน</td>
       <td>Comments</td>
     </tr>`
 
-    // image :  <td>ImagePath</td>
-    // image :  <td>ImagePath_2</td>
-
     var str = '';
-    for (var i = 0; i < arraySubmitSendMail.length; i++) {
-      str += `
-      <tr>
-        <td style="width:130px"><center>${arraySubmitSendMail[i].Code}</center></td>
-        <td>${arraySubmitSendMail[i].Name}</td>
-        <td><center>${arraySubmitSendMail[i].OwnerID}</center></td>
-        <td><center>${arraySubmitSendMail[i].Position}</center></td>
-        <td>${arraySubmitSendMail[i].Old_Details ?? ''}</td>
-        <td>${arraySubmitSendMail[i].Details ?? ''}</td>
-        <td>${arraySubmitSendMail[i].Comments ?? ''}</td>
-      </tr>`;
+    for (let i = 0; i < arraySubmitSendMail.length; i++) {
+      const bodyDetails = { "userCode": data.UserCode, "Code": arraySubmitSendMail[i].Code, "Details": arraySubmitSendMail[i].Details }
+      await Axios.post(config.http + '/FA_Control_BPC_UpdateDetails', bodyDetails, { headers })
+        .then((res) => {
+          str += `
+        <tr>
+          <td style="width:130px"><center>${res.data[0].Code}</center></td>
+          <td>${res.data[0].Name}</td>
+          <td><center>${res.data[0].OwnerID}</center></td>
+          <td><center>${res.data[0].Position}</center></td>
+          <td>${res.data[0].Old_UpdateBy ? `${res.data[0].Old_UpdateBy} (${res.data[0].Old_UpdateDate})` : ''} ${res.data[0].Old_Details ?? ''}</td>
+          <td>(${data.UserCode}) ${res.data[0].Details ?? ''}</td>
+          <td>${res.data[0].Comments ?? ''}</td>
+        </tr>`;
+        })
     }
-
-    // image :    <td><img src="${arraySubmitSendMail[i].ImagePath ?? 'http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg'}" alt=""></td>
-    // image :    <td><img src="${arraySubmitSendMail[i].ImagePath_2 ?? 'http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg'}" alt=""></td>
 
     const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}${str.trim()}</table>`
 
@@ -297,6 +290,18 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
+
+    const headers_colums = `
+    <tr style="background-color: royalblue;color:#ffffff;">
+      <td><center>รหัสทรัพย์สิน</center></td>
+      <td>ชื่อ</td>
+      <td>ผู้ถือครอง</td>
+      <td>Position</td>
+      <td>สถานะปัจจุบัน</td>
+    </tr>`
+
+    var str = '';
+
     if (
       field[0].field === 'No' &&
       field[1].field === 'Name' &&
@@ -322,10 +327,23 @@ export default function History_of_assets() {
           , keyID: accessToken
         }
         await Axios.post(config.http + '/FA_Control_New_Assets_Xlsx', data, { headers })
-          .then((response) => {
+          .then((res) => {
+            str += `
+        <tr>
+          <td style="width:130px"><center>${res.data[0].Code}</center></td>
+          <td>${res.data[0].Name}</td>
+          <td><center>${res.data[0].OwnerID}</center></td>
+          <td><center>${res.data[0].Position}</center></td>
+          <td>(${data.UserCode}) ${res.data[0].Details ?? ''}</td>
+        </tr>`;
             setArraySubmit(i + 1);
           })
       }
+
+      const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}${str.trim()}</table>`
+
+      const body_html = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html }
+
       const body = { count: dataFile.length, keyID: accessToken }
       await Axios.post(config.http + '/FA_Control_import_dataXLSX_toAssets', body, { headers })
         .then((response) => {
@@ -333,14 +351,26 @@ export default function History_of_assets() {
             swal("แจ้งเตือน", response.data[0].response, "success", {
               buttons: false,
               timer: 2000,
-            }).then((value) => {
+            }).then(async (value) => {
               setOpen(false);
               setBac_type(null)
               setName(null)
               setSerialNo(null)
               setPrice(null)
               setDetails(null)
-              window.location.href = '/BSAssetsMain';
+
+              await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body_html, { headers })
+                .then(async (res) => {
+                  await swal("แจ้งเตือน", res.data[0].response, "success", {
+                    buttons: false,
+                    timer: 2000,
+                  }).then((value) => {
+                    setOpenSendMail(false);
+                    window.location.href = '/BSAssetsMain'
+                  })
+
+                })
+
             })
           } else {
             swal("แจ้งเตือน", response.data[0].response, "error", {
@@ -453,8 +483,17 @@ export default function History_of_assets() {
         params.row.BranchID === 901 ? 'HO' : params.row.Position,
     },
     {
+      field: 'Old_Details',
+      headerName: 'สถานะล่าสุด',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 150,
+      flex: 1,
+      valueGetter: (params) =>
+        `${params.row.Old_UpdateBy ?? ''} ${params.row.Old_UpdateDate ?? ''} ${params.row.Old_Details ?? ''}`
+    },
+    {
       field: 'Details',
-      headerName: 'หมายเหตุ',
+      headerName: 'สถานะปัจจุบัน',
       headerClassName: 'super-app-theme--header',
       minWidth: 150,
       flex: 1,
@@ -464,7 +503,6 @@ export default function History_of_assets() {
           arraySubmitSendMail.forEach(function (x, index) {
             if (x.AssetID === params.row.AssetID) {
               const list = [...arraySubmitSendMail]
-              list[index]['Old_Details'] = list[index]['Details']
               list[index]['Details'] = event.target.value
               setArraySubmitSendMail(list)
             }
@@ -516,70 +554,6 @@ export default function History_of_assets() {
         )
       }
     },
-    {
-      field: 'ImagePath',
-      headerName: 'Images 1',
-      headerClassName: 'super-app-theme--header',
-      minWidth: 200,
-      headerAlign: 'center',
-      align: 'center',
-      flex: 1,
-      renderCell: (params) => {
-        return (
-          <React.Fragment>
-            <ImageListItem key={params.row.ImagePath}>
-              <img
-                src={`${params.row.ImagePath}?w = 248 & fit=crop & auto=format`}
-                srcSet={`${params.row.ImagePath}?w = 248 & fit=crop & auto=format & dpr=2 2x`}
-                alt={params.row.Name}
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null; // prevents looping
-                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
-                }}
-                loading="lazy"
-              />
-              <ImageListItemBar
-                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
-                position="below"
-                title={<span>&nbsp; &nbsp;{params.row.Code}_1</span>}
-              />
-            </ImageListItem>
-          </React.Fragment>
-        )
-      }
-    },
-    {
-      field: 'ImagePath_2',
-      headerName: 'Images 2',
-      headerClassName: 'super-app-theme--header',
-      minWidth: 200,
-      headerAlign: 'center',
-      align: 'center',
-      flex: 1,
-      renderCell: (params) => {
-        return (
-          <React.Fragment>
-            <ImageListItem key={params.row.ImagePath_2}>
-              <img
-                src={`${params.row.ImagePath_2}?w = 248 & fit=crop & auto=format`}
-                srcSet={`${params.row.ImagePath_2}?w = 248 & fit=crop & auto=format & dpr=2 2x`}
-                alt={params.row.Name}
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null; // prevents looping
-                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
-                }}
-                loading="lazy"
-              />
-              <ImageListItemBar
-                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
-                position="below"
-                title={<span>&nbsp; &nbsp;{params.row.Code}_2</span>}
-              />
-            </ImageListItem>
-          </React.Fragment>
-        )
-      }
-    },
   ];
 
   const columns = [
@@ -598,8 +572,17 @@ export default function History_of_assets() {
         params.row.BranchID === 901 ? 'HO' : params.row.Position,
     },
     {
+      field: 'Old_Details',
+      headerName: 'สถานะล่าสุด',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 150,
+      flex: 1,
+      valueGetter: (params) =>
+        `${params.row.Old_UpdateBy ? `${params.row.Old_UpdateBy} (${params.row.Old_UpdateDate})` : ''} ${params.row.Old_Details ?? ''}`
+    },
+    {
       field: 'Details',
-      headerName: 'หมายเหตุ',
+      headerName: 'สถานะปัจจุบัน',
       headerClassName: 'super-app-theme--header',
       minWidth: 150,
       flex: 1,
@@ -1023,6 +1006,17 @@ export default function History_of_assets() {
                   {
                     ((dataFile ? dataFile.length : []) === (arraySubmit ? arraySubmit : (dataFile ? dataFile.length : []))) ?
                       <React.Fragment>
+                        <Box sx={{ display: 'flex' }}>
+                          <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
+                            <FormLabel component="legend">กรุณาเลือกบุคคลที่ท่านต้องการส่งอีเมล</FormLabel>
+                            <FormGroup aria-label="position" row>
+                              <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="ME" disabled checked={ME} />} label="ME" labelPlacement="end" />
+                              <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="KTT" checked={KTT} />} label="KTT" labelPlacement="end" />
+                              <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="GRP" checked={GRP} />} label="GRP" labelPlacement="end" />
+                              <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="ROD" checked={ROD} />} label="หน่วยงาน ROD" labelPlacement="end" />
+                            </FormGroup>
+                          </FormControl>
+                        </Box>
                         <StripedDataGrid
                           sx={{
                             mt: 1,
@@ -1034,6 +1028,7 @@ export default function History_of_assets() {
                               py: 1,
                             },
                           }}
+                          components={{ Toolbar: GridToolbar }}
                           componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
                           rows={dataFile}
                           columns={field}
@@ -1113,6 +1108,7 @@ export default function History_of_assets() {
                           py: 1,
                         },
                       }}
+                      components={{ Toolbar: GridToolbar }}
                       componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
                       rows={arraySubmitSendMail ?? []}
                       columns={columns_Mail}
