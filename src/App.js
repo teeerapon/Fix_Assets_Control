@@ -236,11 +236,7 @@ function App() {
     );
     //} else if (nAC_MENU.includes(location.pathname) === true || ((location.pathname.split('/')[3] ?? '').includes('NAC') === true)) {
     //  เอาตรงนี้ออกเมื่อ DataCenter เสร็จ
-  } else if (
-    location.pathname === ('/') ||
-    nAC_MENU.includes(location.pathname) === true ||
-    ((location.pathname.split('/')[3] ?? '').includes('NAC') === true)
-  ) {
+  } else if (location.pathname === ('/') || nAC_MENU.includes(location.pathname) === true) {
     // 
     return (
       <IntlProvider>
