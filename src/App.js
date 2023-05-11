@@ -25,6 +25,7 @@ import Account_BrnachAssets from './PAGE_NAC/Menu/Assets/branch';
 import EBookBranch from './PAGE_NAC/Menu/Assets/eBook_branch';
 import EBookMain from './PAGE_NAC/Menu/Assets/eBook_main';
 import BSAssetsMain from './PAGE_NAC/Menu/Assets/bs_assets';
+import TempBSAssetsMain from './PAGE_NAC/Menu/Assets/tempBS_assets';
 // รายการ อนุมัติ และ ของฉัน
 import NAC_ROW from './PAGE_NAC/Menu/NAC/doc_nacs_me/nac_row_main';
 import NAC_OPERATOR from './PAGE_NAC/Menu/NAC/doc_operator/nac_row_main';
@@ -121,6 +122,7 @@ function App() {
   const checkUserWeb = localStorage.getItem('sucurity');
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+
   const roPA = [
     '/ROPA_MAIN',
     '/PERSON_ROPA',
@@ -144,17 +146,18 @@ function App() {
       '/NAC_CHANGE_STEP1',
       '/NAC_DELETE_STEP1',
       '/NAC_SEALS_STEP1',
-      '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/',
-      '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/',
-      '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/',
-      '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/',
-      '/NAC_ROW/NAC_SEALS_APPROVE/',
+      '/NAC_ROW/NAC_CREATE_WAIT_APPROVE',
+      '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE',
+      '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE',
+      '/NAC_ROW/NAC_DELETE_WAIT_APPROVE',
+      '/NAC_ROW/NAC_SEALS_APPROVE',
       '/FETCH_ASSETS',
       '/Account_BrnachAssets',
       '/Permission_NAC',
       '/EBookBranch',
       '/EBookMain',
       '/BSAssetsMain',
+      '/FA_Control_BPC_SELECT_TEMP',
       '*',
     ]
 
@@ -233,7 +236,11 @@ function App() {
     );
     //} else if (nAC_MENU.includes(location.pathname) === true || ((location.pathname.split('/')[3] ?? '').includes('NAC') === true)) {
     //  เอาตรงนี้ออกเมื่อ DataCenter เสร็จ
-  } else if (location.pathname === ('/') || nAC_MENU.includes(location.pathname) === true || ((location.pathname.split('/')[3] ?? '').includes('NAC') === true)) {
+  } else if (
+    location.pathname === ('/') ||
+    nAC_MENU.includes(location.pathname) === true ||
+    ((location.pathname.split('/')[3] ?? '').includes('NAC') === true)
+  ) {
     // 
     return (
       <IntlProvider>
@@ -267,6 +274,7 @@ function App() {
               <Route path="/EBookBranch" element={<EBookBranch />} />
               <Route path="/EBookMain" element={<EBookMain />} />
               <Route path="/BSAssetsMain" element={<BSAssetsMain />} />
+              <Route path="/FA_Control_BPC_SELECT_TEMP" element={<TempBSAssetsMain />} />
               {/* รายการ อนุมัติ และ ของฉัน */}
               <Route path="/NAC_ROW" element={<NAC_ROW />} />
               <Route path="/NAC_OPERATOR" element={<NAC_OPERATOR />} />
@@ -277,11 +285,11 @@ function App() {
               <Route path="/NAC_DELETE_STEP1" element={<NAC_DELETE_STEP1 />} />
               <Route path="/NAC_SEALS_STEP1" element={<NAC_SEALS_STEP1 />} />
               {/* รออนุมัติ */}
-              <Route path="/NAC_ROW/NAC_CREATE_WAIT_APPROVE/:nac_id" element={<NAC_CREATE_WAIT_APPROVE />} />
-              <Route path="/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/:nac_id" element={<NAC_CHANGE_WAIT_APPROVE />} />
-              <Route path="/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/:nac_id" element={<NAC_CREATE_NEW_WAIT_APPROVE />} />
-              <Route path="/NAC_ROW/NAC_DELETE_WAIT_APPROVE/:nac_id" element={<NAC_DELETE_WAIT_APPROVE />} />
-              <Route path="/NAC_ROW/NAC_SEALS_APPROVE/:nac_id" element={<NAC_SEALS_APPROVE />} />
+              <Route path="/NAC_ROW/NAC_CREATE_WAIT_APPROVE" element={<NAC_CREATE_WAIT_APPROVE />} />
+              <Route path="/NAC_ROW/NAC_CHANGE_WAIT_APPROVE" element={<NAC_CHANGE_WAIT_APPROVE />} />
+              <Route path="/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE" element={<NAC_CREATE_NEW_WAIT_APPROVE />} />
+              <Route path="/NAC_ROW/NAC_DELETE_WAIT_APPROVE" element={<NAC_DELETE_WAIT_APPROVE />} />
+              <Route path="/NAC_ROW/NAC_SEALS_APPROVE" element={<NAC_SEALS_APPROVE />} />
               <Route path="*" element={<Page404 />} />
             </Routes>
           </AnimatePresence>

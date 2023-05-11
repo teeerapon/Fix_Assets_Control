@@ -23,8 +23,6 @@ import config from '../../../config'
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import ImageIcon from '@mui/icons-material/Image';
-import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
@@ -33,7 +31,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import FormLabel from '@mui/material/FormLabel';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import FormHelperText from '@mui/material/FormHelperText';
 import Checkbox from '@mui/material/Checkbox';
 import swal from 'sweetalert';
 
@@ -168,39 +165,36 @@ export default function History_of_assets() {
 
   const handleSubmit_SendMail = async () => {
 
+    var str = '';
+    var headers_colums = '';
+    var resTAB = '';
+    var today = new Date();
+    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date + ' ' + time;
+
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
 
-    const headers_colums = `
-    <tr style="background-color: royalblue;color:#ffffff;">
-      <td><center>รหัสทรัพย์สิน</center></td>
-      <td>ชื่อ</td>
-      <td>ผู้ถือครอง</td>
-      <td>Position</td>
-      <td>สถานะล่าสุด</td>
-      <td>สถานะปัจจุบัน</td>
-      <td>Comments</td>
-    </tr>`
-
-    var str = '';
     for (let i = 0; i < arraySubmitSendMail.length; i++) {
       const bodyDetails = { "userCode": data.UserCode, "Code": arraySubmitSendMail[i].Code, "Details": arraySubmitSendMail[i].Details }
       await Axios.post(config.http + '/FA_Control_BPC_UpdateDetails', bodyDetails, { headers })
         .then((res) => {
-          str += `
-        <tr>
-          <td style="width:130px"><center>${res.data[0].Code}</center></td>
-          <td>${res.data[0].Name}</td>
-          <td><center>${res.data[0].OwnerID}</center></td>
-          <td><center>${res.data[0].Position}</center></td>
-          <td>${res.data[0].Old_UpdateBy ? `${res.data[0].Old_UpdateBy} (${res.data[0].Old_UpdateDate})` : ''} ${res.data[0].Old_Details ?? ''}</td>
-          <td>(${data.UserCode}) ${res.data[0].Details ?? ''}</td>
-          <td>${res.data[0].Comments ?? ''}</td>
-        </tr>`;
+          resTAB = res.data[0].TAB
         })
     }
+
+    headers_colums = `
+    <tr style="background-color: royalblue;color:#ffffff;">
+      <td>การขึ้นทะเบียนทรัพย์สินผู้ร่วม วันที่ ${dateTime}</td>
+      <td>ผู้ดำเนินการ ${data.UserCode}</td>
+    </tr>
+    <tr>
+      <td colspan="6">เช็คข้อมูลได้ที่ URL : <a href=${config.http}/FA_Control_BPC_SELECT_TEMP?keyID=${resTAB.data[0].TAB}>คลิกที่นี่</a></td>
+    </tr>
+    `
 
     const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}${str.trim()}</table>`
 
@@ -291,16 +285,12 @@ export default function History_of_assets() {
       'Accept': 'application/json'
     };
 
-    const headers_colums = `
-    <tr style="background-color: royalblue;color:#ffffff;">
-      <td><center>รหัสทรัพย์สิน</center></td>
-      <td>ชื่อ</td>
-      <td>ผู้ถือครอง</td>
-      <td>Position</td>
-      <td>สถานะปัจจุบัน</td>
-    </tr>`
-
     var str = '';
+    var headers_colums = '';
+    var today = new Date();
+    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date + ' ' + time;
 
     if (
       field[0].field === 'No' &&
@@ -313,71 +303,67 @@ export default function History_of_assets() {
       field[7].field === 'Details' &&
       field[8].field === 'bac_type'
     ) {
-      const accessToken = Math.random().toString(36).substr(2)
-      for (let i = 0; i < dataFile.length; i++) {
-        const data = {
-          bac_type: dataFile[i].bac_type
-          , Name: dataFile[i].Name
-          , OwnerCode: dataFile[i].OwnerCode
-          , BranchID: dataFile[i].BranchID
-          , SerialNo: dataFile[i].SerialNo
-          , Price: dataFile[i].Price
-          , Position: dataFile[i].Position
-          , Details: dataFile[i].Details
-          , keyID: accessToken
-        }
-        await Axios.post(config.http + '/FA_Control_New_Assets_Xlsx', data, { headers })
-          .then((res) => {
-            str += `
-        <tr>
-          <td style="width:130px"><center>${res.data[0].Code}</center></td>
-          <td>${res.data[0].Name}</td>
-          <td><center>${res.data[0].OwnerID}</center></td>
-          <td><center>${res.data[0].Position}</center></td>
-          <td>(${data.UserCode}) ${res.data[0].Details ?? ''}</td>
-        </tr>`;
-            setArraySubmit(i + 1);
-          })
-      }
-
-      const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}${str.trim()}</table>`
-
-      const body_html = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html }
-
-      const body = { count: dataFile.length, keyID: accessToken }
-      await Axios.post(config.http + '/FA_Control_import_dataXLSX_toAssets', body, { headers })
-        .then((response) => {
-          if (response.data[0].response === 'ทำรายการสำเร็จ') {
-            swal("แจ้งเตือน", response.data[0].response, "success", {
-              buttons: false,
-              timer: 2000,
-            }).then(async (value) => {
-              setOpen(false);
-              setBac_type(null)
-              setName(null)
-              setSerialNo(null)
-              setPrice(null)
-              setDetails(null)
-
-              await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body_html, { headers })
-                .then(async (res) => {
-                  await swal("แจ้งเตือน", res.data[0].response, "success", {
-                    buttons: false,
-                    timer: 2000,
-                  }).then((value) => {
-                    setOpenSendMail(false);
-                    window.location.href = '/BSAssetsMain'
-                  })
-
-                })
-
-            })
-          } else {
-            swal("แจ้งเตือน", response.data[0].response, "error", {
-              buttons: false,
-              timer: 2000,
-            })
+      await Axios.post(config.http + '/FA_Control_BPC_Running_NO', data, { headers })
+        .then(async (resTAB) => {
+          for (let i = 0; i < dataFile.length; i++) {
+            const data = {
+              bac_type: dataFile[i].bac_type
+              , Name: dataFile[i].Name
+              , OwnerCode: dataFile[i].OwnerCode
+              , BranchID: dataFile[i].BranchID
+              , SerialNo: dataFile[i].SerialNo
+              , Price: dataFile[i].Price
+              , Position: dataFile[i].Position
+              , Details: dataFile[i].Details
+              , keyID: resTAB.data[0].TAB
+            }
+            await Axios.post(config.http + '/FA_Control_New_Assets_Xlsx', data, { headers })
+              .then((res) => {
+                setArraySubmit(i + 1);
+              })
           }
+
+          headers_colums = `
+          <tr style="background-color: royalblue;color:#ffffff;">
+            <td>การขึ้นทะเบียนทรัพย์สินผู้ร่วม วันที่ ${dateTime}</td>
+            <td>ผู้ดำเนินการ ${data.UserCode}</td>
+          </tr>
+          <tr>
+          <td colspan="6">เช็คข้อมูลได้ที่ URL : <a href=${config.http}/FA_Control_BPC_SELECT_TEMP?keyID=${resTAB.data[0].TAB}>คลิกที่นี่</a></td>
+          </tr>
+          `
+
+          const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}</table>`
+
+          const body_html = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html }
+
+          const body = { count: dataFile.length, keyID: resTAB.data[0].TAB }
+          await Axios.post(config.http + '/FA_Control_import_dataXLSX_toAssets', body, { headers })
+            .then(async (response) => {
+              if (response.data[0].response === 'ทำรายการสำเร็จ') {
+                await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body_html, { headers })
+                  .then(async (res) => {
+                    await swal("แจ้งเตือน", response.data[0].response, "success", {
+                      buttons: false,
+                      timer: 2000,
+                    }).then((value) => {
+                      setOpenSendMail(false);
+                      setOpen(false);
+                      setBac_type(null)
+                      setName(null)
+                      setSerialNo(null)
+                      setPrice(null)
+                      setDetails(null)
+                      window.location.href = '/BSAssetsMain'
+                    })
+                  })
+              } else {
+                swal("แจ้งเตือน", response.data[0].response, "error", {
+                  buttons: false,
+                  timer: 2000,
+                })
+              }
+            })
         })
     } else {
       swal("แจ้งเตือน", 'ข้อมูล (Columns) ไม่ถูกต้อง กรุณาตรวจสอบ', "error", {

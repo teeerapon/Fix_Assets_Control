@@ -226,15 +226,15 @@ export default function NAC_ROW() {
     event.preventDefault();
     localStorage.setItem('NacCode', JSON.stringify({ nac_code: selectNAC.nac_code, nac_status: selectNAC.nac_status }));
     if (selectNAC.workflowtypeid === 1) {
-      navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/' + selectNAC.nac_code)
+      navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + selectNAC.nac_code)
     } else if (selectNAC.workflowtypeid === 2) {
-      navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + selectNAC.nac_code)
+      navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + selectNAC.nac_code)
     } else if (selectNAC.workflowtypeid === 3) {
-      navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + selectNAC.nac_code)
+      navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' + selectNAC.nac_code)
     } else if (selectNAC.workflowtypeid === 4) {
-      navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + selectNAC.nac_code)
+      navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + selectNAC.nac_code)
     } else if (selectNAC.workflowtypeid === 5) {
-      navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + selectNAC.nac_code)
+      navigate('/NAC_ROW/NAC_SEALS_APPROVE?' + selectNAC.nac_code)
     } else {
       navigate('/NAC_MAIN')
     }

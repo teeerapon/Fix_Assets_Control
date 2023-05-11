@@ -532,7 +532,7 @@ export default function Nac_Main() {
                   nacdtl_assetsCode
                 });
                 localStorage.setItem('NacCode', JSON.stringify({ nac_code: responseDTL.data[0].nac_code, nac_status: 1 }));
-                navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + responseDTL.data[0].nac_code)
+                navigate('/NAC_ROW/NAC_SEALS_APPROVE?' + responseDTL.data[0].nac_code)
               } else {
                 swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error", {
                   buttons: false,

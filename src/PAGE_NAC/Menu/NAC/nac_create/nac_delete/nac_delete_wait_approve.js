@@ -1,6 +1,5 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import { useParams } from 'react-router';
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
@@ -341,8 +340,8 @@ export default function Nac_Seals_Approve() {
   const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "", image_1: "" }]);
   const dataDepID = data.depid
   const [users_pureDep, setUsers_pureDep] = React.useState([]);
-  const { nac_id } = useParams()
-  const nac_code = nac_id.split('=')[0]
+  const queryString = window.location.search;
+  const nac_code = queryString.split('?')[1]
   const [nac_status, setNac_status] = React.useState();
   const [selectNAC, setSelectNAC] = React.useState();
   const [headers, setHeaders] = React.useState([]);
@@ -989,7 +988,7 @@ export default function Nac_Seals_Approve() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
+            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
           });
         } else {
           swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error", {
@@ -1115,14 +1114,14 @@ export default function Nac_Seals_Approve() {
                     buttons: false,
                     timer: 2000,
                   }).then((value) => {
-                    window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
+                    window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
                   });
                 } else {
                   swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
                     buttons: false,
                     timer: 2000,
                   }).then((value) => {
-                    window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
+                    window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
                   });
                 }
               } else {
@@ -1205,14 +1204,14 @@ export default function Nac_Seals_Approve() {
                       buttons: false,
                       timer: 2000,
                     }).then((value) => {
-                      window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
+                      window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
                     });
                   } else {
                     swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
                       buttons: false,
                       timer: 2000,
                     }).then((value) => {
-                      window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
+                      window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
                     });
                   }
                 }
@@ -1223,7 +1222,7 @@ export default function Nac_Seals_Approve() {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
+              window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
             });
           }
         }
@@ -1490,14 +1489,14 @@ export default function Nac_Seals_Approve() {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
+            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
           });
         } else {
           swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
             buttons: false,
             timer: 2000,
           }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
+            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
           });
         }
       }
@@ -1506,7 +1505,7 @@ export default function Nac_Seals_Approve() {
         buttons: false,
         timer: 2000,
       }).then((value) => {
-        window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
+        window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
       });
     }
   };
@@ -1552,14 +1551,14 @@ export default function Nac_Seals_Approve() {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
+          window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
         });
       } else {
         swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
           buttons: false,
           timer: 2000,
         }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
+          window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
         });
       }
     } else {
@@ -1567,7 +1566,7 @@ export default function Nac_Seals_Approve() {
         buttons: false,
         timer: 2000,
       }).then((value) => {
-        window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
+        window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
       });
     }
   };
@@ -1615,7 +1614,7 @@ export default function Nac_Seals_Approve() {
           nac_code
         })
         setOpenDialogReply(false);
-        window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + nac_code
+        window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
       }
     }
   }

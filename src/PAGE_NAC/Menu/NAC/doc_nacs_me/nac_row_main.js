@@ -464,15 +464,15 @@ export default function History_of_assets() {
     localStorage.removeItem("pagination");
     localStorage.setItem('NacCode', JSON.stringify({ nac_code: params.row.nac_code, nac_status: params.row.nac_status }));
     if (params.row.workflowtypeid === 1) {
-      navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE/' + params.row.nac_code)
+      navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + params.row.nac_code)
     } else if (params.row.workflowtypeid === 2) {
-      navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + params.row.nac_code)
+      navigate('/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + params.row.nac_code)
     } else if (params.row.workflowtypeid === 3) {
-      navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' + params.row.nac_code)
+      navigate('/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' + params.row.nac_code)
     } else if (params.row.workflowtypeid === 4) {
-      navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' + params.row.nac_code)
+      navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + params.row.nac_code)
     } else if (params.row.workflowtypeid === 5) {
-      navigate('/NAC_ROW/NAC_SEALS_APPROVE/' + params.row.nac_code)
+      navigate('/NAC_ROW/NAC_SEALS_APPROVE?' + params.row.nac_code)
     } else {
       navigate('/NAC_MAIN')
     }
