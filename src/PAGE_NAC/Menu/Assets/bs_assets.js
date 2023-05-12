@@ -167,7 +167,6 @@ export default function History_of_assets() {
 
     var str = '';
     var headers_colums = '';
-    var resTAB = '';
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -178,39 +177,39 @@ export default function History_of_assets() {
       'Accept': 'application/json'
     };
 
-    for (let i = 0; i < arraySubmitSendMail.length; i++) {
-      const bodyDetails = { "userCode": data.UserCode, "Code": arraySubmitSendMail[i].Code, "Details": arraySubmitSendMail[i].Details }
-      await Axios.post(config.http + '/FA_Control_BPC_UpdateDetails', bodyDetails, { headers })
-        .then((res) => {
-          resTAB = res.data[0].TAB
-        })
-    }
+    await Axios.post(config.http + '/FA_Control_BPC_Running_NO', data, { headers })
+      .then(async (resTAB) => {
+        for (let i = 0; i < arraySubmitSendMail.length; i++) {
+          const bodyDetails = { "userCode": data.UserCode, "Code": arraySubmitSendMail[i].Code, "Details": arraySubmitSendMail[i].Details, "keyID": resTAB.data[0].TAB }
+          await Axios.post(config.http + '/FA_Control_BPC_UpdateDetails', bodyDetails, { headers })
+        }
 
-    headers_colums = `
-    <tr style="background-color: royalblue;color:#ffffff;">
-      <td>การขึ้นทะเบียนทรัพย์สินผู้ร่วม วันที่ ${dateTime}</td>
-      <td>ผู้ดำเนินการ ${data.UserCode}</td>
-    </tr>
-    <tr>
-      <td colspan="6">เช็คข้อมูลได้ที่ URL : <a href=${config.http}/FA_Control_BPC_SELECT_TEMP?keyID=${resTAB.data[0].TAB}>คลิกที่นี่</a></td>
-    </tr>
-    `
+        headers_colums = `
+        <tr style="background-color: royalblue;color:#ffffff;">
+          <td>การขึ้นทะเบียนทรัพย์สินผู้ร่วม วันที่ ${dateTime}</td>
+          <td>ผู้ดำเนินการ ${data.UserCode}</td>
+        </tr>
+        <tr>
+          <td colspan="6">เช็คข้อมูลได้ที่ URL : <a href=${window.location.origin}/FA_Control_BPC_SELECT_TEMP?keyID=${resTAB.data[0].TAB}>คลิกที่นี่</a></td>
+        </tr>
+        `
 
-    const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}${str.trim()}</table>`
+        const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}${str.trim()}</table>`
 
-    const body = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html }
+        const body = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html }
 
-    await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body, { headers })
-      .then(async (res) => {
-        await swal("แจ้งเตือน", res.data[0].response, "success", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
-          setOpenSendMail(false);
-          window.location.href = '/BSAssetsMain'
-        })
+        await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body, { headers })
+          .then(async (res) => {
+            await swal("แจ้งเตือน", res.data[0].response, "success", {
+              buttons: false,
+              timer: 2000,
+            }).then((value) => {
+              setOpenSendMail(false);
+              window.location.href = '/BSAssetsMain'
+            })
 
-      })
+          })
+      });
 
   };
 
@@ -285,7 +284,6 @@ export default function History_of_assets() {
       'Accept': 'application/json'
     };
 
-    var str = '';
     var headers_colums = '';
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -306,8 +304,9 @@ export default function History_of_assets() {
       await Axios.post(config.http + '/FA_Control_BPC_Running_NO', data, { headers })
         .then(async (resTAB) => {
           for (let i = 0; i < dataFile.length; i++) {
-            const data = {
-              bac_type: dataFile[i].bac_type
+            const body = {
+              UserCode: data.UserCode
+              , bac_type: dataFile[i].bac_type
               , Name: dataFile[i].Name
               , OwnerCode: dataFile[i].OwnerCode
               , BranchID: dataFile[i].BranchID
@@ -317,7 +316,7 @@ export default function History_of_assets() {
               , Details: dataFile[i].Details
               , keyID: resTAB.data[0].TAB
             }
-            await Axios.post(config.http + '/FA_Control_New_Assets_Xlsx', data, { headers })
+            await Axios.post(config.http + '/FA_Control_New_Assets_Xlsx', body, { headers })
               .then((res) => {
                 setArraySubmit(i + 1);
               })
@@ -329,7 +328,7 @@ export default function History_of_assets() {
             <td>ผู้ดำเนินการ ${data.UserCode}</td>
           </tr>
           <tr>
-          <td colspan="6">เช็คข้อมูลได้ที่ URL : <a href=${config.http}/FA_Control_BPC_SELECT_TEMP?keyID=${resTAB.data[0].TAB}>คลิกที่นี่</a></td>
+          <td colspan="6">เช็คข้อมูลได้ที่ URL : <a href=${window.location.origin}/FA_Control_BPC_SELECT_TEMP?keyID=${resTAB.data[0].TAB}>คลิกที่นี่</a></td>
           </tr>
           `
 
@@ -543,15 +542,15 @@ export default function History_of_assets() {
   ];
 
   const columns = [
-    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1, headerAlign: 'center', align: 'center', },
+    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', width: 150, headerAlign: 'center', align: 'center', },
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1, },
-    { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', width: 150, headerAlign: 'center', align: 'center', },
+    { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', width: 100, headerAlign: 'center', align: 'center', },
 
     {
       field: 'Position',
       headerName: 'Position',
       headerClassName: 'super-app-theme--header',
-      width: 150,
+      width: 100,
       headerAlign: 'center',
       align: 'center',
       valueGetter: (params) =>
@@ -561,17 +560,21 @@ export default function History_of_assets() {
       field: 'Old_Details',
       headerName: 'สถานะล่าสุด',
       headerClassName: 'super-app-theme--header',
-      minWidth: 150,
+      minWidth: 130,
       flex: 1,
       valueGetter: (params) =>
-        `${params.row.Old_UpdateBy ? `${params.row.Old_UpdateBy} (${params.row.Old_UpdateDate})` : ''} ${params.row.Old_Details ?? ''}`
+        params.row.Old_Details === '' || !params.row.Old_Details ? '' :
+          `ผู้อัปเดท-เวลาล่าสุด : ${params.row.Old_UpdateBy ? `${params.row.Old_UpdateBy} (${params.row.Old_UpdateDate})` : 'none'} สถานะล่าสุด : ${params.row.Old_Details ?? 'none'}`
     },
     {
       field: 'Details',
       headerName: 'สถานะปัจจุบัน',
       headerClassName: 'super-app-theme--header',
-      minWidth: 150,
+      minWidth: 130,
       flex: 1,
+      valueGetter: (params) =>
+        params.row.Details === '' || !params.row.Details ? '' :
+          `ผู้อัปเดท-เวลาปัจจุบัน : ${params.row.UpdateBy ? `${params.row.UpdateBy} (${params.row.UpdateDate})` : 'none'} สถานะปัจจุบัน : ${params.row.Details ?? 'none'}`
     },
     {
       field: 'ImagePath',

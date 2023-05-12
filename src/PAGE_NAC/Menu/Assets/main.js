@@ -230,49 +230,52 @@ export default function History_of_assets() {
       field[8].field === 'Position' &&
       field[9].field === 'Details'
     ) {
-      const accessToken = Math.random().toString(36).substr(2)
-      for (let i = 0; i < dataFile.length; i++) {
-        const data = {
-          Code: dataFile[i].Code
-          , Name: dataFile[i].Name
-          , OwnerCode: dataFile[i].OwnerCode
-          , BranchID: dataFile[i].BranchID
-          , SerialNo: dataFile[i].SerialNo
-          , Price: dataFile[i].Price
-          , CreateDate: dataFile[i].CreateDate
-          , CreateBy: dataFile[i].CreateBy
-          , Position: dataFile[i].Position
-          , Details: dataFile[i].Details
-          , keyID: accessToken
-        }
-        await Axios.post(config.http + '/FA_Control_New_Assets_Xlsx', data, { headers })
-          .then((response) => {
-            setArraySubmit(i + 1);
-          })
-      }
-      const body = { count: dataFile.length, keyID: accessToken }
-      await Axios.post(config.http + '/FA_Control_import_dataXLSX_toAssets', body, { headers })
-        .then((response) => {
-          if (response.data[0].response === 'ทำรายการสำเร็จ') {
-            swal("แจ้งเตือน", response.data[0].response, "success", {
-              buttons: false,
-              timer: 2000,
-            }).then((value) => {
-              setOpen(false);
-              setCode(null)
-              setName(null)
-              setSerialNo(null)
-              setPrice(null)
-              setDetails(null)
-              setCeate_Date(null)
-              window.location.href = '/FETCH_ASSETS';
-            })
-          } else {
-            swal("แจ้งเตือน", response.data[0].response, "error", {
-              buttons: false,
-              timer: 2000,
-            })
+      await Axios.post(config.http + '/FA_Control_BPC_Running_NO', data, { headers })
+        .then(async (resTAB) => {
+          for (let i = 0; i < dataFile.length; i++) {
+            const body = {
+              UserCode: data.UserCode
+              , Code: dataFile[i].Code
+              , Name: dataFile[i].Name
+              , OwnerCode: dataFile[i].OwnerCode
+              , BranchID: dataFile[i].BranchID
+              , SerialNo: dataFile[i].SerialNo
+              , Price: dataFile[i].Price
+              , CreateDate: dataFile[i].CreateDate
+              , CreateBy: dataFile[i].CreateBy
+              , Position: dataFile[i].Position
+              , Details: dataFile[i].Details
+              , keyID: resTAB.data[0].TAB
+            }
+            await Axios.post(config.http + '/FA_Control_New_Assets_Xlsx', body, { headers })
+              .then((response) => {
+                setArraySubmit(i + 1);
+              })
           }
+          const body = { count: dataFile.length, keyID: resTAB.data[0].TAB }
+          await Axios.post(config.http + '/FA_Control_import_dataXLSX_toAssets', body, { headers })
+            .then((response) => {
+              if (response.data[0].response === 'ทำรายการสำเร็จ') {
+                swal("แจ้งเตือน", response.data[0].response, "success", {
+                  buttons: false,
+                  timer: 2000,
+                }).then((value) => {
+                  setOpen(false);
+                  setCode(null)
+                  setName(null)
+                  setSerialNo(null)
+                  setPrice(null)
+                  setDetails(null)
+                  setCeate_Date(null)
+                  window.location.href = '/FETCH_ASSETS';
+                })
+              } else {
+                swal("แจ้งเตือน", response.data[0].response, "error", {
+                  buttons: false,
+                  timer: 2000,
+                })
+              }
+            })
         })
     } else {
       swal("แจ้งเตือน", 'ข้อมูล (Columns) ไม่ถูกต้อง กรุณาตรวจสอบ', "error", {

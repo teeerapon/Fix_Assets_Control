@@ -5,35 +5,11 @@ import Typography from '@mui/material/Typography';
 import AnimatedPage from '../../../AnimatedPage';
 import React from 'react';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Stack from '@mui/material/Stack';
 import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
 import Axios from "axios"
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateAdapter from '@mui/lab/AdapterDateFns';
-import DatePicker from '@mui/lab/DatePicker';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import * as XLSX from 'xlsx';
 import LinearProgress from '@mui/material/LinearProgress';
-import Badge from '@mui/material/Badge';
-import ImageIcon from '@mui/icons-material/Image';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import IconButton from '@mui/material/IconButton';
-import FilePresentIcon from '@mui/icons-material/FilePresent';
 import config from '../../../config'
-import swal from 'sweetalert';
 
 
 
@@ -128,7 +104,6 @@ export default function History_of_assets() {
 
   const [dataHistory, setDataHistory] = React.useState();
   const data = JSON.parse(localStorage.getItem('data'));
-  const [pageSize, setPageSize] = React.useState(10);
   const checkUserWeb = localStorage.getItem('sucurity');
   const [progress, setProgress] = React.useState();
   const queryString = window.location.search;
@@ -151,259 +126,50 @@ export default function History_of_assets() {
   }, []);
 
   const columns = [
-    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
-    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
-    { field: 'SerialNo', headerName: 'SerialNo', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
-    { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
-    // { field: 'Details', headerName: 'หมายเหตุ', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
-    {
-      field: 'Price',
-      headerName: 'ราคาทุน',
-      headerClassName: 'super-app-theme--header',
-      minWidth: 130,
-      flex: 1,
-      valueGetter: (params) =>
-        `${params.row.Price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) || ''}`,
-    },
-    // {
-    //   field: 'BranchID',
-    //   headerName: 'สาขา',
-    //   headerClassName: 'super-app-theme--header',
-    //   minWidth: 100,
-    //   flex: 1,
-    //   valueGetter: (params) =>
-    //     params.row.BranchID === 901 ? 'HO' : params.row.BranchID,
-    // },
+    { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1, headerAlign: 'center', align: 'center', },
+    { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1, },
+    { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', width: 130, headerAlign: 'center', align: 'center', },
     {
       field: 'Position',
       headerName: 'Position',
       headerClassName: 'super-app-theme--header',
-      minWidth: 100,
-      flex: 1,
+      width: 130,
+      headerAlign: 'center',
+      align: 'center',
       valueGetter: (params) =>
         params.row.BranchID === 901 ? 'HO' : params.row.Position,
     },
     {
-      field: 'CreateDate',
-      headerName: 'วันที่ขึ้นทะเบียน',
+      field: 'Old_Details',
+      headerName: 'สถานะล่าสุด',
       headerClassName: 'super-app-theme--header',
-      minWidth: 170,
+      minWidth: 130,
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      renderCell: (params) => {
-        return (
-          <React.Fragment>
-            {params.row.CreateDate ?
-              <Stack
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                spacing={1}
-              >
-                <CalendarMonthIcon />
-                <Typography variant='body2'>
-                  {params.row.CreateDate.split('T')[0] || ''}
-                </Typography>
-              </Stack>
-              : null}
-          </React.Fragment>
-        )
-      }
+      valueGetter: (params) =>
+        params.row.Old_Details === '' || !params.row.Old_Details ? '' :
+          `ผู้อัปเดท-เวลาล่าสุด : ${params.row.Old_UpdateBy ? `${params.row.Old_UpdateBy} (${params.row.Old_UpdateDate})` : 'none'} สถานะล่าสุด : ${params.row.Old_Details ?? 'none'}`
     },
     {
-      field: 'ImagePath',
-      headerName: 'Images 1',
+      field: 'Details',
+      headerName: 'สถานะปัจจุบัน',
       headerClassName: 'super-app-theme--header',
-      minWidth: 200,
-      headerAlign: 'center',
-      align: 'center',
+      minWidth: 130,
       flex: 1,
-      renderCell: (params) => {
-
-        const handleUploadFile_1 = async (e, params) => {
-          e.preventDefault();
-
-          const headers = {
-            'Authorization': 'application/json; charset=utf-8',
-            'Accept': 'application/json'
-          };
-
-          if (['jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
-
-            const formData_1 = new FormData();
-            formData_1.append("file", e.target.files[0]);
-            formData_1.append("fileName", e.target.files[0].name);
-
-            await Axios.post(config.http + "/check_files_NewNAC", formData_1, { headers })
-              .then(async (res) => {
-                const Code = params.row.Code
-                const image_1 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
-
-                const body = { Code: Code, image_1: image_1 }
-
-                await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
-                  .then(async (res) => {
-                    if (res.data) {
-                      swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", {
-                        buttons: false,
-                        timer: 2000,
-                      }).then((value) => {
-                        dataHistory.forEach(function (x, index) {
-                          if (x.Code === params.row.Code) {
-                            const list = [...dataHistory]
-                            list[index]['ImagePath'] = image_1
-                            setDataHistory(list)
-                          }
-                        })
-                      })
-                    }
-                  })
-              })
-
-          } else {
-            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
-              buttons: false,
-              timer: 2000,
-            })
-          }
-        }
-
-        return (
-          <React.Fragment>
-            <ImageListItem key={params.row.ImagePath}>
-              <img
-                src={`${params.row.ImagePath}?w=248&fit=crop&auto=format`}
-                srcSet={`${params.row.ImagePath}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                alt={params.row.Name}
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null; // prevents looping
-                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
-                }}
-                loading="lazy"
-              />
-              <ImageListItemBar
-                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
-                position="below"
-                title={<span>&nbsp; &nbsp;{params.row.Code}_1</span>}
-                actionIcon={
-                  <IconButton
-                    sx={{ color: 'rgba(255, 255, 255, 1)' }}
-                    aria-label={`info about ${params.row.Code}`}
-                    component="label"
-                  >
-                    <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e, params)} />
-                    <FilePresentIcon sx={{ fontSize: 20 }} />
-                  </IconButton>
-                }
-              />
-            </ImageListItem>
-          </React.Fragment>
-        )
-      }
-    },
-    {
-      field: 'ImagePath_2',
-      headerName: 'Images 2',
-      headerClassName: 'super-app-theme--header',
-      minWidth: 200,
-      headerAlign: 'center',
-      align: 'center',
-      flex: 1,
-      renderCell: (params) => {
-
-        const handleUploadFile_2 = async (e, params) => {
-          e.preventDefault();
-
-          const headers = {
-            'Authorization': 'application/json; charset=utf-8',
-            'Accept': 'application/json'
-          };
-
-          if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
-
-            const formData_2 = new FormData();
-            formData_2.append("file", e.target.files[0]);
-            formData_2.append("fileName", e.target.files[0].name);
-
-            await Axios.post(config.http + "/check_files_NewNAC", formData_2, { headers })
-              .then(async (res) => {
-                const Code = params.row.Code
-                const image_2 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
-
-                const body = { Code: Code, image_2: image_2 }
-
-                await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
-                  .then(async (res) => {
-                    if (res.data) {
-                      swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", {
-                        buttons: false,
-                        timer: 2000,
-                      }).then((value) => {
-                        dataHistory.forEach(function (x, index) {
-                          if (x.Code === params.row.Code) {
-                            const list = [...dataHistory]
-                            list[index]['ImagePath_2'] = image_2
-                            setDataHistory(list)
-                          }
-                        })
-                      })
-                    }
-                  })
-              })
-
-          } else {
-            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
-              buttons: false,
-              timer: 2000,
-            })
-          }
-        }
-
-        return (
-          <React.Fragment>
-            <ImageListItem key={params.row.ImagePath_2}>
-              <img
-                src={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format`}
-                srcSet={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                alt={params.row.Name}
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null; // prevents looping
-                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
-                }}
-                loading="lazy"
-              />
-              <ImageListItemBar
-                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
-                position="below"
-                title={<span>&nbsp; &nbsp;{params.row.Code}_2</span>}
-                actionIcon={
-                  <IconButton
-                    sx={{ color: 'rgba(255, 255, 255, 1)' }}
-                    aria-label={`info about ${params.row.Code}`}
-                    component="label"
-                  >
-                    <input hidden type="file" name='file' onChange={(e) => handleUploadFile_2(e, params)} />
-                    <FilePresentIcon sx={{ fontSize: 20 }} />
-                  </IconButton>
-                }
-              />
-            </ImageListItem>
-          </React.Fragment>
-        )
-      }
+      valueGetter: (params) =>
+        params.row.Details === '' || !params.row.Details ? '' :
+          `ผู้อัปเดท-เวลาปัจจุบัน : ${params.row.UpdateBy ? `${params.row.UpdateBy} (${params.row.UpdateDate})` : 'none'} สถานะปัจจุบัน : ${params.row.Details ?? 'none'}`
     },
   ];
 
   React.useEffect(() => {
     // POST request using axios with set headers
-    const userCode = { userCode: data.UserCode }
+    const body = { keyID: keyID }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
-      .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 1)));
+    Axios.post(config.http + '/FA_Control_BPC_SELECT_TEMP', body, { headers })
+      .then(response => setDataHistory(response.data));
   }, []);
 
   if (checkUserWeb === 'null') {
@@ -423,7 +189,7 @@ export default function History_of_assets() {
           <Toolbar>
             <AnimatedPage>
               <Typography variant="h5" color="inherit" >
-                ทรัพย์สินทั้งหมด
+                ทะเบียนทรัพย์สินผู้ร่วมวันที่ {dataHistory ? dataHistory[0].UpdateDate : '...'}
               </Typography>
             </AnimatedPage>
           </Toolbar>
@@ -453,12 +219,9 @@ export default function History_of_assets() {
                   componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
                   rows={dataHistory ?? []}
                   columns={columns}
-                  getRowId={(dataHistory) => dataHistory.AssetID}
-                  pageSize={pageSize}
-                  onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                  pagination
-                  rowsPerPageOptions={[10, 20, 50, 100]}
-                  getRowHeight={() => 'auto'}
+                  getRowId={(row) => row?.Code}
+                  getRowHeight={(res) => 'auto'}
+                  pageSize={10}
                   // autoHeight
                   disableColumnMenu
                   disableSelectionOnClick
