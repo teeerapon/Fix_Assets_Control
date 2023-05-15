@@ -564,7 +564,8 @@ export default function History_of_assets() {
       flex: 1,
       valueGetter: (params) =>
         params.row.Old_Details === '' || !params.row.Old_Details ? '' :
-          `ผู้อัปเดท-เวลาล่าสุด : ${params.row.Old_UpdateBy ? `${params.row.Old_UpdateBy} (${params.row.Old_UpdateDate})` : 'none'} สถานะล่าสุด : ${params.row.Old_Details ?? 'none'}`
+          !params.row.Old_UpdateBy ? `${params.row.Old_Details}` :
+            `ผู้อัปเดท-เวลาล่าสุด : ${params.row.Old_UpdateBy ? `${params.row.Old_UpdateBy} (${params.row.Old_UpdateDate})` : 'none'} สถานะล่าสุด : ${params.row.Old_Details ?? 'none'}`
     },
     {
       field: 'Details',
@@ -574,7 +575,8 @@ export default function History_of_assets() {
       flex: 1,
       valueGetter: (params) =>
         params.row.Details === '' || !params.row.Details ? '' :
-          `ผู้อัปเดท-เวลาปัจจุบัน : ${params.row.UpdateBy ? `${params.row.UpdateBy} (${params.row.UpdateDate})` : 'none'} สถานะปัจจุบัน : ${params.row.Details ?? 'none'}`
+          !params.row.UpdateBy ? `${params.row.Details}` :
+            `ผู้อัปเดท-เวลาปัจจุบัน : ${params.row.UpdateBy ? `${params.row.UpdateBy} (${params.row.UpdateDate})` : 'none'} สถานะปัจจุบัน : ${params.row.Details ?? 'none'}`
     },
     {
       field: 'ImagePath',
