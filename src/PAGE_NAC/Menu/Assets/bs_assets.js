@@ -413,21 +413,58 @@ export default function History_of_assets() {
       })
     } else {
       await Axios.post(config.http + '/FA_Control_New_Assets', body, { headers })
-        .then(response => {
+        .then(async (response) => {
           if (response.data !== undefined) {
             const userCode = { userCode: data.UserCode }
             const headers = {
               'Authorization': 'application/json; charset=utf-8',
               'Accept': 'application/json'
             };
-            swal("แจ้งเตือน", 'เพิ่มทรัพย์สินสำเร็จ', "success", {
-              buttons: false,
-              timer: 2000,
-            }).then((value) => {
-              Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
-                .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 2)));
-              setOpen(false);
-            })
+
+            var headers_colums = '';
+            var today = new Date();
+            var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            var dateTime = date + ' ' + time;
+
+            var headers_colums = `
+            <tr style="background-color: royalblue;color:#ffffff;">
+              <td colspan="4">การขึ้นทะเบียนทรัพย์สินผู้ร่วม วันที่ ${dateTime}</td>
+              <td colspan="2">ผู้ดำเนินการ ${data.UserCode}</td>
+            </tr>
+            <tr>
+              <td>รหัสทรัพย์สิน</td>
+              <td>ชื่อ</td>
+              <td>ผู้ถือครอง</td>
+              <td>Position</td>
+              <td>สถานะล่าสุด</td>
+              <td>สถานะปัจจุบัน</td>
+            </tr>
+            <tr>
+              <td>${response.data.data[0].Code}</td>
+              <td>${name}</td>
+              <td>${data.UserCode}</td>
+              <td>${branchID}</td>
+              <td>''</td>
+              <td>${details}</td>
+          </tr>
+            `
+
+            const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}</table>`
+
+            const body_html = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html }
+
+            await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body_html, { headers })
+              .then(() => {
+                swal("แจ้งเตือน", 'เพิ่มทรัพย์สินสำเร็จ', "success", {
+                  buttons: false,
+                  timer: 2000,
+                }).then(async (value) => {
+                  Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
+                    .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 2)));
+                  setOpen(false);
+                })
+              })
           }
         });
     }
@@ -882,7 +919,18 @@ export default function History_of_assets() {
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    <Box component="form" noValidate sx={{ mt: 4, width: 300, }}>
+                    <Box sx={{ display: 'flex' }}>
+                      <FormControl sx={{ m: 2 }} component="fieldset" variant="standard">
+                        <FormLabel component="legend">กรุณาเลือกบุคคลที่ท่านต้องการส่งอีเมล</FormLabel>
+                        <FormGroup aria-label="position" row>
+                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="ME" disabled checked={ME} />} label="ME" labelPlacement="end" />
+                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="KTT" checked={KTT} />} label="KTT" labelPlacement="end" />
+                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="GRP" checked={GRP} />} label="GRP" labelPlacement="end" />
+                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="ROD" checked={ROD} />} label="หน่วยงาน ROD" labelPlacement="end" />
+                        </FormGroup>
+                      </FormControl>
+                    </Box>
+                    <Box component="form" noValidate sx={{ mt: 4, width: 400, }}>
                       <Grid container spacing={2}>
                         <Grid item xs={12}>
                           <TextField
@@ -967,9 +1015,9 @@ export default function History_of_assets() {
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleSubmit_Add} variant="contained">บันทึก</Button>
+                  <Button onClick={handleSubmit_Add} variant="contained">Submit</Button>
                   <Button onClick={handleClose} autoFocus variant="contained" color="error">
-                    ยกเลิก
+                    Cancel
                   </Button>
                 </DialogActions>
               </Dialog>
@@ -1103,7 +1151,7 @@ export default function History_of_assets() {
                       componentsProps={{
                         toolbar: {
                           csvOptions: {
-                            utf8WithBom: true, 
+                            utf8WithBom: true,
                             fileName: `ทะเบียนทรัพย์สินผู้ร่วม`,
                             delimiter: ';',
                           }

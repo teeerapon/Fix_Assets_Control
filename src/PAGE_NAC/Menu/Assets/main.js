@@ -657,9 +657,9 @@ export default function History_of_assets() {
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleSubmit_Add} variant="contained">บันทึก</Button>
+                  <Button onClick={handleSubmit_Add} variant="contained">Submit</Button>
                   <Button onClick={handleClose} autoFocus variant="contained" color="error">
-                    ยกเลิก
+                    Cancel
                   </Button>
                 </DialogActions>
               </Dialog>
