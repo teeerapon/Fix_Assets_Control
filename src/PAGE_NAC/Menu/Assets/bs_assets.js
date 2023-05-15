@@ -313,7 +313,7 @@ export default function History_of_assets() {
               , SerialNo: dataFile[i].SerialNo
               , Price: dataFile[i].Price
               , Position: dataFile[i].Position
-              , Details: dataFile[i].Details
+              , Details: !dataFile[i].Details ? 'สภาพดี' : dataFile[i].Details
               , keyID: resTAB.data[0].TAB
             }
             await Axios.post(config.http + '/FA_Control_New_Assets_Xlsx', body, { headers })
@@ -565,7 +565,7 @@ export default function History_of_assets() {
       valueGetter: (params) =>
         params.row.Old_Details === '' || !params.row.Old_Details ? '' :
           !params.row.Old_UpdateBy ? `${params.row.Old_Details}` :
-            `ผู้อัปเดท-เวลาล่าสุด : ${params.row.Old_UpdateBy ? `${params.row.Old_UpdateBy} (${params.row.Old_UpdateDate})` : 'none'} สถานะล่าสุด : ${params.row.Old_Details ?? 'none'}`
+            `ผู้อัปเดท/เวลาอัปเดท : ${params.row.Old_UpdateBy ? `${params.row.Old_UpdateBy} (${params.row.Old_UpdateDate})` : 'none'} สถานะล่าสุด : ${params.row.Old_Details ?? 'none'}`
     },
     {
       field: 'Details',
@@ -576,7 +576,7 @@ export default function History_of_assets() {
       valueGetter: (params) =>
         params.row.Details === '' || !params.row.Details ? '' :
           !params.row.UpdateBy ? `${params.row.Details}` :
-            `ผู้อัปเดท-เวลาปัจจุบัน : ${params.row.UpdateBy ? `${params.row.UpdateBy} (${params.row.UpdateDate})` : 'none'} สถานะปัจจุบัน : ${params.row.Details ?? 'none'}`
+            `ผู้อัปเดท/เวลาอัปเดท : ${params.row.UpdateBy ? `${params.row.UpdateBy} (${params.row.UpdateDate})` : 'none'} สถานะปัจจุบัน : ${params.row.Details ?? 'none'}`
     },
     {
       field: 'ImagePath',
@@ -1100,7 +1100,15 @@ export default function History_of_assets() {
                         },
                       }}
                       components={{ Toolbar: GridToolbar }}
-                      componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
+                      componentsProps={{
+                        toolbar: {
+                          csvOptions: {
+                            utf8WithBom: true, 
+                            fileName: `ทะเบียนทรัพย์สินผู้ร่วม`,
+                            delimiter: ';',
+                          }
+                        }
+                      }}
                       rows={arraySubmitSendMail ?? []}
                       columns={columns_Mail}
                       getRowId={(row) => row.AssetID}

@@ -377,7 +377,15 @@ export default function History_of_assets() {
                     },
                   }}
                   components={{ Toolbar: GridToolbar }}
-                  componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
+                  componentsProps={{
+                    toolbar: {
+                      csvOptions: {
+                        utf8WithBom: true, 
+                        fileName: `ทะเบียนทรัพย์สินสาขา ${data.branchid}`,
+                        delimiter: ';',
+                      }
+                    }
+                  }}
                   rows={dataHistory ?? []}
                   columns={columns}
                   getRowId={(dataHistory) => dataHistory.AssetID}
@@ -394,77 +402,6 @@ export default function History_of_assets() {
               </Box>
             </Container>
           </Box>
-          {/* <Dialog
-            open={openImage}
-            onClose={handleCloseImage}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              {imageData.Name}
-            </DialogTitle>
-            <DialogContent>
-              <ImageList gap={1} sx={{ transform: 'translateZ(0)' }}>
-                <ImageListItem key={imageData.image_1}>
-                  <img
-                    src={`${imageData.image_1}?w=248&fit=crop&auto=format`}
-                    srcSet={`${imageData.image_1}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                    alt={imageData.Name}
-                    onError={({ currentTarget }) => {
-                      currentTarget.onerror = null; // prevents looping
-                      currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
-                    }}
-                    loading="lazy"
-                  />
-                  <ImageListItemBar
-                    sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
-                    position="below"
-                    title={<span>&nbsp; &nbsp;{imageData.Code} (รูปที่ 1)</span>}
-                    actionIcon={
-                      <IconButton
-                        sx={{ color: 'rgba(255, 255, 255, 1)' }}
-                        aria-label={`info about ${imageData.Code}`}
-                        component="label"
-                      >
-                        <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e)} />
-                        <FilePresentIcon sx={{ fontSize: 20 }} />
-                      </IconButton>
-                    }
-                  />
-                </ImageListItem>
-                <ImageListItem key={imageData.image_2}>
-                  <img
-                    src={`${imageData.image_2}?w=248&fit=crop&auto=format`}
-                    srcSet={`${imageData.image_2}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                    alt={imageData.Name}
-                    onError={({ currentTarget }) => {
-                      currentTarget.onerror = null; // prevents looping
-                      currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
-                    }}
-                    loading="lazy"
-                  />
-                  <ImageListItemBar
-                    sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
-                    position="below"
-                    title={<span>&nbsp; &nbsp;{imageData.Code} (รูปที่ 2)</span>}
-                    actionIcon={
-                      <IconButton
-                        sx={{ color: 'rgba(255, 255, 255, 1)' }}
-                        aria-label={`info about ${imageData.Code}`}
-                        component="label"
-                      >
-                        <input hidden type="file" name='file' onChange={(e) => handleUploadFile_2(e)} />
-                        <FilePresentIcon sx={{ fontSize: 20 }} />
-                      </IconButton>
-                    }
-                  />
-                </ImageListItem>
-              </ImageList>
-            </DialogContent>
-            <DialogActions>
-              <Button variant='contained' onClick={handleCloseImage}>Close</Button>
-            </DialogActions>
-          </Dialog> */}
         </AnimatedPage>
       </React.Fragment>
     );

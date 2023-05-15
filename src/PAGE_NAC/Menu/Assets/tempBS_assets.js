@@ -6,7 +6,7 @@ import AnimatedPage from '../../../AnimatedPage';
 import React from 'react';
 import Box from '@mui/material/Box';
 import { alpha, styled } from '@mui/material/styles';
-import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, gridClasses, GridToolbar, nlNL } from '@mui/x-data-grid';
 import Axios from "axios"
 import LinearProgress from '@mui/material/LinearProgress';
 import config from '../../../config'
@@ -148,7 +148,7 @@ export default function History_of_assets() {
       valueGetter: (params) =>
         params.row.Old_Details === '' || !params.row.Old_Details ? '' :
           !params.row.Old_UpdateBy ? `${params.row.Old_Details}` :
-            `ผู้อัปเดท-เวลาล่าสุด : ${params.row.Old_UpdateBy ? `${params.row.Old_UpdateBy} (${params.row.Old_UpdateDate})` : 'none'} สถานะล่าสุด : ${params.row.Old_Details ?? 'none'}`
+            `ผู้อัปเดท/เวลาอัปเดท : ${params.row.Old_UpdateBy ? `${params.row.Old_UpdateBy} (${params.row.Old_UpdateDate})` : 'none'} สถานะล่าสุด : ${params.row.Old_Details ?? 'none'}`
     },
     {
       field: 'Details',
@@ -159,7 +159,7 @@ export default function History_of_assets() {
       valueGetter: (params) =>
         params.row.Details === '' || !params.row.Details ? '' :
           !params.row.UpdateBy ? `${params.row.Details}` :
-            `ผู้อัปเดท-เวลาปัจจุบัน : ${params.row.UpdateBy ? `${params.row.UpdateBy} (${params.row.UpdateDate})` : 'none'} สถานะปัจจุบัน : ${params.row.Details ?? 'none'}`
+            `ผู้อัปเดท/เวลาอัปเดท : ${params.row.UpdateBy ? `${params.row.UpdateBy} (${params.row.UpdateDate})` : 'none'} สถานะปัจจุบัน : ${params.row.Details ?? 'none'}`
     },
   ];
 
@@ -218,7 +218,15 @@ export default function History_of_assets() {
                     },
                   }}
                   components={{ Toolbar: GridToolbar }}
-                  componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
+                  componentsProps={{
+                    toolbar: {
+                      csvOptions: {
+                        utf8WithBom: true,
+                        fileName: `ทะเบียนทรัพย์สินผู้ร่วมวันที่ ${dataHistory ? dataHistory[0].UpdateDate : '...'}`,
+                        delimiter: ';',
+                      }
+                    }
+                  }}
                   rows={dataHistory ?? []}
                   columns={columns}
                   getRowId={(row) => row?.Code}

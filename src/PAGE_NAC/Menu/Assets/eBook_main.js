@@ -448,7 +448,15 @@ export default function History_of_assets() {
                     },
                   }}
                   components={{ Toolbar: GridToolbar }}
-                  componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
+                  componentsProps={{
+                    toolbar: {
+                      csvOptions: {
+                        utf8WithBom: true,
+                        fileName: `ทะเบียนทรัพย์สินอิเล็กทรอนิกทุกสาขา}`,
+                        delimiter: ';',
+                      }
+                    }
+                  }}
                   rows={dataHistory ?? []}
                   columns={columns}
                   getRowId={(dataHistory) => dataHistory.AssetID}

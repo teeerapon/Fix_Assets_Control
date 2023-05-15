@@ -699,7 +699,15 @@ export default function History_of_assets() {
                             },
                           }}
                           components={{ Toolbar: GridToolbar }}
-                          componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
+                          componentsProps={{
+                            toolbar: {
+                              csvOptions: {
+                                utf8WithBom: true,
+                                fileName: `ทะเบียนทรัพย์สินทั้งหมด`,
+                                delimiter: ';',
+                              }
+                            }
+                          }}
                           rows={dataFile}
                           columns={field}
                           getRowId={(row) => row?.Code}
