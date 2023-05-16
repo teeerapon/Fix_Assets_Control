@@ -196,7 +196,7 @@ export default function History_of_assets() {
 
         const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}${str.trim()}</table>`
 
-        const body = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html }
+        const body = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html, code_ref : resTAB.data[0].TAB }
 
         await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body, { headers })
           .then(async (res) => {
