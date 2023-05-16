@@ -888,7 +888,7 @@ export default function Reported_of_assets() {
                   <option value={2}>โยกย้ายทรัพย์สิน</option>
                   {/* <option value={3}>เปลี่ยนแปลงรายละเอียดทรัพย์สิน</option> */}
                   <option value={5}>ขายทรัพย์สิน</option>
-                  <option value={4}>ตัดจากบัญชีทรัพย์สิน</option>
+                  {/* <option value={4}>ตัดจากบัญชีทรัพย์สิน</option> */}
                 </NativeSelect>
               </FormControl>
             </Stack>

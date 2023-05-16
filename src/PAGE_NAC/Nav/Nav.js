@@ -900,7 +900,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
-                    <ListItemButton onClick={NAC_DELETE}>
+                    {/* <ListItemButton onClick={NAC_DELETE}>
                       <ListItemText>
                         <Typography
                           sx={{ display: 'inline' }}
@@ -910,7 +910,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตัดบัญชีทรัพย์สินถาวร
                         </Typography>
                       </ListItemText>
-                    </ListItemButton>
+                    </ListItemButton> */}
                   </List>
                 </Collapse>
                 <ListItem disablePadding>
@@ -1014,7 +1014,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                   </ListItem>
                   <ListItem disablePadding>
                     <ListItemButton onClick={Account_BrnachAssets}>
-                    <ListItemText>
+                      <ListItemText>
                         <Typography
                           sx={{ display: 'inline' }}
                           component="span"

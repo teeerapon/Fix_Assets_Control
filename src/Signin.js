@@ -87,8 +87,8 @@ export default function Signin() {
   const hours = ((d.getHours()) + 100).toString().slice(-2);
   const mins = ((d.getMinutes()) + 100).toString().slice(-2);
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
-  const datenow = `${year+month+date+hours+mins+seconds}`
-  
+  const datenow = `${year + month + date + hours + mins + seconds}`
+
   const classes = useStyles();
   const URL_LINK = useLocation()
   const [UserCode, setUserCode] = useState();
@@ -134,7 +134,10 @@ export default function Signin() {
           }
         });
       } else {
-        swal("แจ้งเตือน", 'UserCode หรือ Password ไม่ถูกต้อง', "error");
+        swal("แจ้งเตือน", 'UserCode หรือ Password ไม่ถูกต้อง', "error", {
+          buttons: false,
+          timer: 2000,
+        });
       }
     }
   }

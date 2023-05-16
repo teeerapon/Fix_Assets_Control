@@ -1549,14 +1549,18 @@ export default function Nac_Seals_Approve() {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              window.location.href = (selectNAC === 12 && Real_Price < priceSeals) ? '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code + '-1' : '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code
+              window.location.href = responseForUpdate.data[0].nac_type === 4 ? '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code :
+                (selectNAC === 12 && Real_Price < priceSeals) ? '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code + '-1' :
+                  '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code
             });
           } else {
             swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
               buttons: false,
               timer: 2000,
             }).then((value) => {
-              window.location.href = (selectNAC === 12 && Real_Price < priceSeals) ? '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code + '-1' : '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code
+              window.location.href = responseForUpdate.data[0].nac_type === 4 ? '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code :
+                (selectNAC === 12 && Real_Price < priceSeals) ? '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code + '-1' :
+                  '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code
             });
           }
         }
