@@ -2,7 +2,7 @@ import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
-import AnimatedPage from '../../../AnimatedPage';
+import AnimatedPage from '../../../../AnimatedPage';
 import React from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -19,7 +19,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import * as XLSX from 'xlsx';
 import LinearProgress from '@mui/material/LinearProgress';
-import config from '../../../config'
+import config from '../../../../config'
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -142,7 +142,7 @@ export default function History_of_assets() {
   const [nameExcel, setNameExcel] = React.useState()
   const [permission_menuID, setPermission_menuID] = React.useState();
   const [progress, setProgress] = React.useState();
-  const [status_all] = React.useState(['none', 'สภาพดี', 'ชำรุด', 'สูญหาย', 'คืนผู้ร่วมแล้ว']);
+  const [status_all] = React.useState(['none', 'สภาพดี', 'ชำรุด', 'สูญหาย', 'คืนผู้ร่วมแล้ว', 'ไม่ระบุในสัญญา (สภาพดี)', 'ไม่ระบุในสัญญา (ชำรุด)', 'ไม่ระบุในสัญญา (สูญหาย)', 'ไม่ระบุในสัญญา (คืนผู้ร่วมแล้ว)']);
   const [arraySubmit, setArraySubmit] = React.useState()
   const [openSendMail, setOpenSendMail] = React.useState(false);
   const [arraySubmitSendMail, setArraySubmitSendMail] = React.useState()
@@ -180,12 +180,20 @@ export default function History_of_assets() {
     await Axios.post(config.http + '/FA_Control_BPC_Running_NO', data, { headers })
       .then(async (resTAB) => {
         for (let i = 0; i < arraySubmitSendMail.length; i++) {
-          const bodyDetails = { "userCode": data.UserCode, "Code": arraySubmitSendMail[i].Code, "Details": arraySubmitSendMail[i].Details, "keyID": resTAB.data[0].TAB }
+          const bodyDetails =
+          {
+            "userCode": data.UserCode,
+            "Code": arraySubmitSendMail[i].Code,
+            "Details": arraySubmitSendMail[i].Details,
+            "keyID": resTAB.data[0].TAB,
+            "Comments": arraySubmitSendMail[i].Comments
+          }
           await Axios.post(config.http + '/FA_Control_BPC_UpdateDetails', bodyDetails, { headers })
         }
 
         headers_colums = `
         <tr style="background-color: royalblue;color:#ffffff;">
+          <td>เลขที่อ้างอิง ${resTAB.data[0].TAB}</td>
           <td>การขึ้นทะเบียนทรัพย์สินผู้ร่วม วันที่ ${dateTime}</td>
           <td>ผู้ดำเนินการ ${data.UserCode}</td>
         </tr>
@@ -196,7 +204,7 @@ export default function History_of_assets() {
 
         const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}${str.trim()}</table>`
 
-        const body = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html, code_ref : resTAB.data[0].TAB }
+        const body = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html, code_ref: resTAB.data[0].TAB }
 
         await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body, { headers })
           .then(async (res) => {
@@ -324,11 +332,12 @@ export default function History_of_assets() {
 
           headers_colums = `
           <tr style="background-color: royalblue;color:#ffffff;">
+            <td>เลขที่อ้างอิง ${resTAB.data[0].TAB}</td>
             <td>การขึ้นทะเบียนทรัพย์สินผู้ร่วม วันที่ ${dateTime}</td>
             <td>ผู้ดำเนินการ ${data.UserCode}</td>
           </tr>
           <tr>
-          <td colspan="6">เช็คข้อมูลได้ที่ URL : <a href=${window.location.origin}/FA_Control_BPC_SELECT_TEMP?keyID=${resTAB.data[0].TAB}>คลิกที่นี่</a></td>
+            <td colspan="6">เช็คข้อมูลได้ที่ URL : <a href=${window.location.origin}/FA_Control_BPC_SELECT_TEMP?keyID=${resTAB.data[0].TAB}>คลิกที่นี่</a></td>
           </tr>
           `
 
@@ -386,89 +395,85 @@ export default function History_of_assets() {
   };
 
   const handleSubmit_Add = async () => {
-    const body = { UserCode: data.UserCode, bac_type: bac_type, Name: name, BranchID: branchID, Details: details, SerialNo: serialNo, Price: price }
+
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    if (!bac_type) {
-      swal("แจ้งเตือน", 'กรุณากรอกลำดับเลขที่', "error", {
-        buttons: false,
-        timer: 2000,
+
+    await Axios.post(config.http + '/FA_Control_BPC_Running_NO', data, { headers })
+      .then(async (resTAB) => {
+        const body = { UserCode: data.UserCode, bac_type: bac_type, Name: name, BranchID: branchID, Details: details, SerialNo: serialNo, Price: price, keyID: resTAB.data[0].TAB }
+        const headers = {
+          'Authorization': 'application/json; charset=utf-8',
+          'Accept': 'application/json'
+        };
+        if (!bac_type) {
+          swal("แจ้งเตือน", 'กรุณากรอกลำดับเลขที่', "error", {
+            buttons: false,
+            timer: 2000,
+          })
+        } else if (!name) {
+          swal("แจ้งเตือน", 'กรุณากรอกชื่อทรัพย์สินให้ถูกต้อง', "error", {
+            buttons: false,
+            timer: 2000,
+          })
+        } else if (!branchID || branchID < 1) {
+          swal("แจ้งเตือน", 'กรุณากรอกสาขาให้ถูกต้อง', "error", {
+            buttons: false,
+            timer: 2000,
+          })
+        } else if (!price) {
+          swal("แจ้งเตือน", 'กรุณากรอกราคาให้ถูกต้อง', "error", {
+            buttons: false,
+            timer: 2000,
+          })
+        } else {
+          await Axios.post(config.http + '/FA_Control_New_Assets', body, { headers })
+            .then(async (response) => {
+              if (response.data !== undefined) {
+                const userCode = { userCode: data.UserCode }
+                const headers = {
+                  'Authorization': 'application/json; charset=utf-8',
+                  'Accept': 'application/json'
+                };
+
+                var headers_colums = '';
+                var today = new Date();
+                var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                var dateTime = date + ' ' + time;
+
+                var headers_colums = `
+                <tr style="background-color: royalblue;color:#ffffff;">
+                  <td>เลขที่อ้างอิง ${resTAB.data[0].TAB}</td>
+                  <td>การขึ้นทะเบียนทรัพย์สินผู้ร่วม วันที่ ${dateTime}</td>
+                  <td>ผู้ดำเนินการ ${data.UserCode}</td>
+                </tr>
+                <tr>
+                  <td colspan="6">เช็คข้อมูลได้ที่ URL : <a href=${window.location.origin}/FA_Control_BPC_SELECT_TEMP?keyID=${resTAB.data[0].TAB}>คลิกที่นี่</a></td>
+                </tr>
+                `
+
+                const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}</table>`
+
+                const body_html = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html }
+
+                await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body_html, { headers })
+                  .then(() => {
+                    swal("แจ้งเตือน", 'เพิ่มทรัพย์สินสำเร็จ', "success", {
+                      buttons: false,
+                      timer: 2000,
+                    }).then(async (value) => {
+                      Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
+                        .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 2)));
+                      setOpen(false);
+                    })
+                  })
+              }
+            });
+        }
       })
-    } else if (!name) {
-      swal("แจ้งเตือน", 'กรุณากรอกชื่อทรัพย์สินให้ถูกต้อง', "error", {
-        buttons: false,
-        timer: 2000,
-      })
-    } else if (!branchID || branchID < 1) {
-      swal("แจ้งเตือน", 'กรุณากรอกสาขาให้ถูกต้อง', "error", {
-        buttons: false,
-        timer: 2000,
-      })
-    } else if (!price) {
-      swal("แจ้งเตือน", 'กรุณากรอกราคาให้ถูกต้อง', "error", {
-        buttons: false,
-        timer: 2000,
-      })
-    } else {
-      await Axios.post(config.http + '/FA_Control_New_Assets', body, { headers })
-        .then(async (response) => {
-          if (response.data !== undefined) {
-            const userCode = { userCode: data.UserCode }
-            const headers = {
-              'Authorization': 'application/json; charset=utf-8',
-              'Accept': 'application/json'
-            };
-
-            var headers_colums = '';
-            var today = new Date();
-            var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-            var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-            var dateTime = date + ' ' + time;
-
-            var headers_colums = `
-            <tr style="background-color: royalblue;color:#ffffff;">
-              <td colspan="4">การขึ้นทะเบียนทรัพย์สินผู้ร่วม วันที่ ${dateTime}</td>
-              <td colspan="2">ผู้ดำเนินการ ${data.UserCode}</td>
-            </tr>
-            <tr>
-              <td>รหัสทรัพย์สิน</td>
-              <td>ชื่อ</td>
-              <td>ผู้ถือครอง</td>
-              <td>Position</td>
-              <td>สถานะล่าสุด</td>
-              <td>สถานะปัจจุบัน</td>
-            </tr>
-            <tr>
-              <td>${response.data.data[0].Code}</td>
-              <td>${name}</td>
-              <td>${data.UserCode}</td>
-              <td>${branchID}</td>
-              <td>''</td>
-              <td>${details}</td>
-          </tr>
-            `
-
-            const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}</table>`
-
-            const body_html = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html }
-
-            await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body_html, { headers })
-              .then(() => {
-                swal("แจ้งเตือน", 'เพิ่มทรัพย์สินสำเร็จ', "success", {
-                  buttons: false,
-                  timer: 2000,
-                }).then(async (value) => {
-                  Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
-                    .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 2)));
-                  setOpen(false);
-                })
-              })
-          }
-        });
-    }
-
   };
 
   const handleChange_Code = (event) => {
@@ -536,7 +541,7 @@ export default function History_of_assets() {
             <FormControl fullWidth size="small">
               <Select
                 label={false}
-                value={!params.row.Details ? 'none' : params.row.Details}
+                value={!params.row.Details ? 'none' : params.row.Details === 'ไม่ระบุในสัญญา' ? 'ไม่ระบุในสัญญา (สภาพดี)' : params.row.Details}
                 onChange={(event) => handleChange_select(event, params)}
               >
                 {status_all.map((status) => (<MenuItem value={status}>{status}</MenuItem>))}

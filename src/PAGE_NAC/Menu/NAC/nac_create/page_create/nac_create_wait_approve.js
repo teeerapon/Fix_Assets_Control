@@ -1024,9 +1024,9 @@ export default function Nac_Main_wait() {
   };
 
   const handleSubmit = async () => {
-    if ((!source || !sourceDate || !nameSource) || (!des_delivery || !nameDes)) {
+    if ((!source || !sourceDate || !nameSource) || (!des_delivery)) {
       const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !nameSource ? 'กรุณาลงชื่อผู้ส่งมอบ' :
-        !des_delivery ? 'กรุณากรอกข้อมูลผู้รับ' : !nameDes ? 'กรุณาลงชื่อผู้รับมอบ' : 'กรุณากรอกวันที่ของผู้ส่ง'
+        !des_delivery ? 'กรุณากรอกข้อมูลผู้รับ' : 'กรุณากรอกวันที่ของผู้ส่ง'
       setAlert(true);
       setValueAlert(alert_value)
     } else {
@@ -1301,9 +1301,9 @@ export default function Nac_Main_wait() {
     for (let i = 0; i < checked.length; i++) {
       checkFullChecked[i] = checked[i].statusCheck
     }
-    if (selectNAC === 4 || selectNAC === 5 || selectNAC === 14) {
+    if (selectNAC === 4 || selectNAC === 5 || selectNAC === 14 || !nameDes) {
       if ((checkFullChecked.includes(0) === true) || (serviceList.map((res) => res.image_1)).includes('') === true || (serviceList.map((res) => res.image_2)).includes('') === true) {
-        const alert_value = 'กรุณาตรวจสอบรายการ ว่าได้รับทรัพย์สินและอัพโหลดรูปภาพเรียบร้อยแล้ว'
+        const alert_value = !nameDes ? 'กรุณาลงชื่อผู้รับมอบ' : 'กรุณาตรวจสอบรายการ ว่าได้รับทรัพย์สินและอัพโหลดรูปภาพเรียบร้อยแล้ว'
         setAlert(true);
         setValueAlert(alert_value)
         document.getElementById('validate_checkbox').scrollIntoView();

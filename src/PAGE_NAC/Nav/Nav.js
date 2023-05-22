@@ -157,6 +157,10 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     navigate('/EditPeriod')
   };
 
+  function Transection_List() {
+    navigate('/TransectionList')
+  };
+
   function Account_BrnachAssets() {
     navigate('/Account_BrnachAssets')
   };
@@ -545,7 +549,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
-                    <ListItemButton onClick={PeriodEdit}>
+                    <ListItemButton onClick={Transection_List}>
                       <ListItemText>
                         <Typography
                           sx={{ display: 'inline' }}
@@ -971,7 +975,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
-                    <ListItemButton onClick={PeriodEdit}>
+                    <ListItemButton onClick={Transection_List}>
                       <ListItemText>
                         <Typography
                           sx={{ display: 'inline' }}

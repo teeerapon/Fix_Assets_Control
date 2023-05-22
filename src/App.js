@@ -24,8 +24,9 @@ import FETCH_ASSETS from './PAGE_NAC/Menu/Assets/main';
 import Account_BrnachAssets from './PAGE_NAC/Menu/Assets/branch';
 import EBookBranch from './PAGE_NAC/Menu/Assets/eBook_branch';
 import EBookMain from './PAGE_NAC/Menu/Assets/eBook_main';
-import BSAssetsMain from './PAGE_NAC/Menu/Assets/bs_assets';
-import TempBSAssetsMain from './PAGE_NAC/Menu/Assets/tempBS_assets';
+import BSAssetsMain from './PAGE_NAC/Menu/Assets/BPC/bs_assets';
+import TempBSAssetsMain from './PAGE_NAC/Menu/Assets/BPC/tempBS_assets';
+import TransectionList from './PAGE_NAC/Menu/Assets/BPC/transection_List';
 // รายการ อนุมัติ และ ของฉัน
 import NAC_ROW from './PAGE_NAC/Menu/NAC/doc_nacs_me/nac_row_main';
 import NAC_OPERATOR from './PAGE_NAC/Menu/NAC/doc_operator/nac_row_main';
@@ -157,6 +158,7 @@ function App() {
       '/EBookBranch',
       '/EBookMain',
       '/BSAssetsMain',
+      '/TransectionList',
       '/FA_Control_BPC_SELECT_TEMP',
       '*',
     ]
@@ -271,6 +273,7 @@ function App() {
               <Route path="/EBookMain" element={<EBookMain />} />
               <Route path="/BSAssetsMain" element={<BSAssetsMain />} />
               <Route path="/FA_Control_BPC_SELECT_TEMP" element={<TempBSAssetsMain />} />
+              <Route path="/TransectionList" element={<TransectionList />} />
               {/* รายการ อนุมัติ และ ของฉัน */}
               <Route path="/NAC_ROW" element={<NAC_ROW />} />
               <Route path="/NAC_OPERATOR" element={<NAC_OPERATOR />} />

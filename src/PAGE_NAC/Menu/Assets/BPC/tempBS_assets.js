@@ -2,14 +2,14 @@ import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
-import AnimatedPage from '../../../AnimatedPage';
+import AnimatedPage from '../../../../AnimatedPage';
 import React from 'react';
 import Box from '@mui/material/Box';
 import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, gridClasses, GridToolbar, nlNL } from '@mui/x-data-grid';
 import Axios from "axios"
 import LinearProgress from '@mui/material/LinearProgress';
-import config from '../../../config'
+import config from '../../../../config'
 
 
 
@@ -140,15 +140,20 @@ export default function History_of_assets() {
         params.row.BranchID === 901 ? 'HO' : params.row.Position,
     },
     {
-      field: 'Old_Details',
-      headerName: 'สถานะล่าสุด',
+      field: 'UpdateBy',
+      headerName: 'สถานะปัจจุบัน',
       headerClassName: 'super-app-theme--header',
-      minWidth: 130,
-      flex: 1,
-      valueGetter: (params) =>
-        params.row.Old_Details === '' || !params.row.Old_Details ? '' :
-          !params.row.Old_UpdateBy ? `${params.row.Old_Details}` :
-            `ผู้อัปเดท/เวลาอัปเดท : ${params.row.Old_UpdateBy ? `${params.row.Old_UpdateBy} (${params.row.Old_UpdateDate})` : 'none'} สถานะล่าสุด : ${params.row.Old_Details ?? 'none'}`
+      Width: 130,
+      headerAlign: 'center',
+      align: 'center',
+    },
+    {
+      field: 'UpdateDate',
+      headerName: 'สถานะปัจจุบัน',
+      headerClassName: 'super-app-theme--header',
+      width: 160,
+      headerAlign: 'center',
+      align: 'center',
     },
     {
       field: 'Details',
@@ -156,11 +161,14 @@ export default function History_of_assets() {
       headerClassName: 'super-app-theme--header',
       minWidth: 130,
       flex: 1,
-      valueGetter: (params) =>
-        params.row.Details === '' || !params.row.Details ? '' :
-          !params.row.UpdateBy ? `${params.row.Details}` :
-            `ผู้อัปเดท/เวลาอัปเดท : ${params.row.UpdateBy ? `${params.row.UpdateBy} (${params.row.UpdateDate})` : 'none'} สถานะปัจจุบัน : ${params.row.Details ?? 'none'}`
     },
+    {
+      field: 'Comments',
+      headerName: 'Comments',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 130,
+      flex: 1,
+    }
   ];
 
   React.useEffect(() => {
@@ -230,7 +238,7 @@ export default function History_of_assets() {
                   rows={dataHistory ?? []}
                   columns={columns}
                   getRowId={(row) => row?.Code}
-                  getRowHeight={(res) => 'auto'}
+                  // getRowHeight={(res) => 'auto'}
                   pageSize={10}
                   // autoHeight
                   disableColumnMenu
