@@ -9,34 +9,12 @@ import Stack from '@mui/material/Stack';
 import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
 import Axios from "axios"
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-import * as XLSX from 'xlsx';
 import LinearProgress from '@mui/material/LinearProgress';
 import config from '../../../../config'
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import IconButton from '@mui/material/IconButton';
-import FilePresentIcon from '@mui/icons-material/FilePresent';
-import CircularProgress from '@mui/material/CircularProgress';
-import FormLabel from '@mui/material/FormLabel';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import swal from 'sweetalert';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ArticleIcon from '@mui/icons-material/Article'
 import { Outlet, useNavigate } from "react-router";
 import Autocomplete from '@mui/material/Autocomplete';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 const ODD_OPACITY = 0.2;
 
@@ -333,7 +311,32 @@ export default function History_of_assets() {
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1, headerAlign: 'center', align: 'center', },
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 250, headerAlign: 'center' },
     { field: 'CreateBy', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', width: 130, headerAlign: 'center', align: 'center', },
-    { field: 'CreateDate', headerName: 'เวลาที่ทำรายการ', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1, headerAlign: 'center', align: 'center', },
+    {
+      field: 'CreateDate',
+      headerName: 'เวลาที่ทำรายการ',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 150,
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => {
+        return (
+          <React.Fragment >
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              spacing={1}
+            >
+              <CalendarMonthIcon />
+              <Typography variant='body2'>
+                {params.row.CreateDate}
+              </Typography>
+            </Stack>
+          </React.Fragment >
+        )
+      }
+    },
     { field: 'Details', headerName: 'รายละเอียด', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1, headerAlign: 'center' },
     { field: 'Comments', headerName: 'ความคิดเห็น', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1, headerAlign: 'center', },
     { field: 'tab_code', headerName: 'เลขที่อ้างอิง', headerClassName: 'super-app-theme--header', width: 130, headerAlign: 'center', align: 'center', },

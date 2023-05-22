@@ -10,6 +10,8 @@ import { DataGrid, gridClasses, GridToolbar, nlNL } from '@mui/x-data-grid';
 import Axios from "axios"
 import LinearProgress from '@mui/material/LinearProgress';
 import config from '../../../../config'
+import Stack from '@mui/material/Stack';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 
 
@@ -154,6 +156,23 @@ export default function History_of_assets() {
       width: 160,
       headerAlign: 'center',
       align: 'center',
+      renderCell: (params) => {
+        return (
+          <React.Fragment >
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              spacing={1}
+            >
+              <CalendarMonthIcon />
+              <Typography variant='body2'>
+                {params.row.UpdateDate}
+              </Typography>
+            </Stack>
+          </React.Fragment >
+        )
+      }
     },
     {
       field: 'Details',

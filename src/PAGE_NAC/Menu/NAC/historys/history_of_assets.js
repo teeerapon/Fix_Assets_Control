@@ -17,6 +17,8 @@ import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import LinearProgress from '@mui/material/LinearProgress';
 import config from '../../../../config.js'
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
 const ODD_OPACITY = 0.2;
 
@@ -119,56 +121,204 @@ export default function History_of_assets() {
   const checkUserWeb = localStorage.getItem('sucurity');
   const [pageSize, setPageSize] = React.useState(10);
   const [progress, setProgress] = React.useState();
+  const [filter, setFilter] = React.useState({ "nacdtl_assetsCode": '', "name": '', "source_approve_userid": '', "update_date": '', "nac_code": '' })
 
-  const dataChange = !dataHistory ? [] : dataHistory.map(function (elt) {
-    if (elt.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && (datenow.split('-')[1] === (!elt.update_date ? '' : elt.update_date.split('-')[1]))) {
-      return 1
-    } else {
-      return 0
-    }
-  }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
-  })
 
-  const dataAdd = !dataHistory ? [] : dataHistory.map(function (elt) {
-    if (elt.name === 'เพิ่มบัญชีทรัพย์สินถาวร' && (datenow.split('-')[1] === (!elt.update_date ? '' : elt.update_date.split('-')[1]))) {
-      return 1
-    } else {
-      return 0
-    }
-  }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
-  })
+  const filter_Code = (e, index) => {
 
-  const dataTranfers = !dataHistory ? [] : dataHistory.map(function (elt) {
-    if (elt.name === 'โยกย้ายทรัพย์สิน' && (datenow.split('-')[1] === (!elt.update_date ? '' : elt.update_date.split('-')[1]))) {
-      return 1
-    } else {
-      return 0
+    var filterJSON = {
+      nacdtl_assetsCode: e.target.innerText
+      , name: filter.name
+      , source_approve_userid: filter.source_approve_userid
+      , update_date: filter.update_date
+      , nac_code: filter.nac_code
     }
-  }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
-  })
 
-  const dataDelete = !dataHistory ? [] : dataHistory.map(function (elt) {
-    if (elt.name === 'ตัดจากบัญชีทรัพย์สินถาวร' && (datenow.split('-')[1] === (!elt.update_date ? '' : elt.update_date.split('-')[1]))) {
-      return 1
-    } else {
-      return 0
-    }
-  }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
-  })
+    setFilter(filterJSON);
 
-  const dataSeals = !dataHistory ? [] : dataHistory.map(function (elt) {
-    if (elt.name === 'ขายทรัพย์สิน' && (datenow.split('-')[1] === (!elt.update_date ? '' : elt.update_date.split('-')[1]))) {
-      return 1
-    } else {
-      return 0
+    const check = JSON.parse(JSON.stringify(filterJSON),
+      (key, value) => value === null || value === '' ? undefined : value);
+
+    // POST request using axios with set headers
+    const body = { userCode: data.UserCode }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.post(config.http + '/store_FA_control_HistorysAssets', body, { headers }).catch(function (error) {
+      if (error.toJSON().message === 'Request failed with status code 400') {
+        setProgress(1)
+      }
+    }).then(response => {
+      if (response.data) {
+        setProgress(1)
+        setDataHistory((response.data.data).filter(function (item) {
+          for (var key in check) {
+            if (item[key] === undefined || item[key] != check[key])
+              return false;
+          }
+          return true;
+        }))
+      }
+    });
+  }
+
+  const filter_CreateBy = (e, index) => {
+
+    var filterJSON = {
+      nacdtl_assetsCode: filter.nacdtl_assetsCode
+      , name: filter.name
+      , source_approve_userid: e.target.innerText
+      , update_date: filter.update_date
+      , nac_code: filter.nac_code
     }
-  }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
-  })
+
+    setFilter(filterJSON);
+
+    const check = JSON.parse(JSON.stringify(filterJSON),
+      (key, value) => value === null || value === '' ? undefined : value);
+
+    // POST request using axios with set headers
+    const body = { userCode: data.UserCode }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.post(config.http + '/store_FA_control_HistorysAssets', body, { headers }).catch(function (error) {
+      if (error.toJSON().message === 'Request failed with status code 400') {
+        setProgress(1)
+      }
+    }).then(response => {
+      if (response.data) {
+        setProgress(1)
+        setDataHistory((response.data.data).filter(function (item) {
+          for (var key in check) {
+            if (item[key] === undefined || item[key] != check[key])
+              return false;
+          }
+          return true;
+        }))
+      }
+    });
+  }
+
+  const filter_TabCode = (e, index) => {
+
+    var filterJSON = {
+      nacdtl_assetsCode: filter.nacdtl_assetsCode
+      , name: filter.name
+      , source_approve_userid: filter.source_approve_userid
+      , update_date: filter.update_date
+      , nac_code: e.target.innerText
+    }
+
+    setFilter(filterJSON);
+
+    const check = JSON.parse(JSON.stringify(filterJSON),
+      (key, value) => value === null || value === '' ? undefined : value);
+
+    // POST request using axios with set headers
+    const body = { userCode: data.UserCode }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.post(config.http + '/store_FA_control_HistorysAssets', body, { headers }).catch(function (error) {
+      if (error.toJSON().message === 'Request failed with status code 400') {
+        setProgress(1)
+      }
+    }).then(response => {
+      if (response.data) {
+        setProgress(1)
+        setDataHistory((response.data.data).filter(function (item) {
+          for (var key in check) {
+            if (item[key] === undefined || item[key] != check[key])
+              return false;
+          }
+          return true;
+        }))
+      }
+    });
+  }
+
+  const filter_CreateDate = (e, index) => {
+
+    var filterJSON = {
+      nacdtl_assetsCode: filter.nacdtl_assetsCode
+      , name: filter.name
+      , source_approve_userid: filter.source_approve_userid
+      , update_date: e.target.innerText
+      , nac_code: filter.nac_code
+    }
+
+    setFilter(filterJSON);
+
+    const check = JSON.parse(JSON.stringify(filterJSON),
+      (key, value) => value === null || value === '' ? undefined : value);
+
+    // POST request using axios with set headers
+    const body = { userCode: data.UserCode }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.post(config.http + '/store_FA_control_HistorysAssets', body, { headers }).catch(function (error) {
+      if (error.toJSON().message === 'Request failed with status code 400') {
+        setProgress(1)
+      }
+    }).then(response => {
+      if (response.data) {
+        setProgress(1)
+        setDataHistory((response.data.data).filter(function (item) {
+          for (var key in check) {
+            if (item[key] === undefined || item[key] != check[key])
+              return false;
+          }
+          return true;
+        }))
+      }
+    });
+  }
+
+  const filter_Name = (e, index) => {
+
+    var filterJSON = {
+      nacdtl_assetsCode: filter.nacdtl_assetsCode
+      , name: e.target.innerText
+      , source_approve_userid: filter.source_approve_userid
+      , update_date: filter.update_date
+      , nac_code: filter.nac_code
+    }
+
+    setFilter(filterJSON);
+
+    const check = JSON.parse(JSON.stringify(filterJSON),
+      (key, value) => value === null || value === '' ? undefined : value);
+
+    // POST request using axios with set headers
+    const body = { userCode: data.UserCode }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.post(config.http + '/store_FA_control_HistorysAssets', body, { headers }).catch(function (error) {
+      if (error.toJSON().message === 'Request failed with status code 400') {
+        setProgress(1)
+      }
+    }).then(response => {
+      if (response.data) {
+        setProgress(1)
+        setDataHistory((response.data.data).filter(function (item) {
+          for (var key in check) {
+            if (item[key] === undefined || item[key] != check[key])
+              return false;
+          }
+          return true;
+        }))
+        setProgress(1)
+      }
+    });
+  }
 
   const columns = [
     { field: 'nacdtl_assetsCode', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
@@ -177,12 +327,12 @@ export default function History_of_assets() {
       field: 'nacdtl_assetsPrice',
       headerName: 'ราคาทุน',
       headerClassName: 'super-app-theme--header',
-      minWidth: 100, 
+      minWidth: 100,
       flex: 1,
       valueGetter: (params) =>
         `${params.row.nacdtl_assetsPrice.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) || ''}`,
     },
-    { field: 'nac_code', headerName: 'เลขที่ NAC', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center',minWidth: 130, flex: 1 },
+    { field: 'nac_code', headerName: 'เลขที่ NAC', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', minWidth: 130, flex: 1 },
     { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', minWidth: 200, flex: 1 },
     { field: 'create_by', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', minWidth: 100, flex: 1 },
     { field: 'source_approve_userid', headerName: 'ผู้อนุมัติ', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', minWidth: 100, flex: 1 },
@@ -192,7 +342,7 @@ export default function History_of_assets() {
       headerName: 'วันที่ปิดรายการ',
       type: 'date',
       headerClassName: 'super-app-theme--header',
-      minWidth: 170, 
+      minWidth: 170,
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -259,131 +409,76 @@ export default function History_of_assets() {
           </Toolbar>
         </AppBar>
         <AnimatedPage>
-        {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
+          {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
-              <TableContainer className='hide-sm hide-md'>
-                <Table aria-label="customized table" style={{ width: '100%' }}>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="flex-start"
-                    spacing={2}
-                    sx={{ mb: 2, mt: 2 }}
-                  >
-                    <Card
-                      style={{
-                        'cursor': 'pointer',
-                        'flex': 1,
-                        'margin': '0px 20px',
-                        'padding': '15px',
-                        'paddingBottom': '5px',
-                        'border-radius': '10px',
-                      }}
-                    >
-                      <CardContent>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                          เพิ่มบัญชีทรัพย์สินถาวร
-                        </Typography>
-                        <Typography sx={{ fontSize: 16 }} component="div">
-                          <b>{!dataHistory ? 0 : dataAdd} รายการ</b>
-                        </Typography>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                          เดือน {monthString[d.getMonth()]}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                    <Card
-                      style={{
-                        'cursor': 'pointer',
-                        'flex': 1,
-                        'margin': '0px 20px',
-                        'padding': '15px',
-                        'paddingBottom': '5px',
-                        'border-radius': '10px',
-                      }}
-                    >
-                      <CardContent>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                          โยกย้ายทรัพย์สิน
-                        </Typography>
-                        <Typography sx={{ fontSize: 16 }} component="div">
-                          <b>{!dataHistory ? 0 : dataTranfers} รายการ</b>
-                        </Typography>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                          เดือน {monthString[d.getMonth()]}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                    <Card
-                      style={{
-                        'cursor': 'pointer',
-                        'flex': 1,
-                        'margin': '0px 20px',
-                        'padding': '15px',
-                        'paddingBottom': '5px',
-                        'border-radius': '10px',
-                      }}
-                    >
-                      <CardContent>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                          เปลี่ยนแปลงรายละเอียด
-                        </Typography>
-                        <Typography sx={{ fontSize: 16 }} component="div">
-                          <b>{!dataHistory ? 0 : dataChange} รายการ</b>
-                        </Typography>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                          เดือน {monthString[d.getMonth()]}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                    <Card
-                      style={{
-                        'cursor': 'pointer',
-                        'flex': 1,
-                        'margin': '0px 20px',
-                        'padding': '15px',
-                        'paddingBottom': '5px',
-                        'border-radius': '10px',
-                      }}
-                    >
-                      <CardContent>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                          ตัดทรัพย์สินถาวร
-                        </Typography>
-                        <Typography sx={{ fontSize: 16 }} component="div">
-                          <b>{!dataHistory ? 0 : dataDelete} รายการ</b>
-                        </Typography>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                          เดือน {monthString[d.getMonth()]}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                    <Card
-                      style={{
-                        'cursor': 'pointer',
-                        'flex': 1,
-                        'margin': '0px 20px',
-                        'padding': '15px',
-                        'paddingBottom': '5px',
-                        'border-radius': '10px',
-                      }}
-                    >
-                      <CardContent>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                          ขายทรัพย์สิน
-                        </Typography>
-                        <Typography sx={{ fontSize: 16 }} component="div">
-                          <b>{!dataHistory ? 0 : dataSeals} รายการ</b>
-                        </Typography>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                          เดือน {monthString[d.getMonth()]}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Stack>
-                </Table>
-              </TableContainer>
+              <Stack direction="row" spacing={2} sx={{ pb: 2, pt: 1 }}>
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  size='small'
+                  sx={{ width: 300 }}
+                  value={filter.nacdtl_assetsCode}
+                  onChange={(e) => filter_Code(e)}
+                  options={
+                    dataHistory ? dataHistory.map((res) => res.nacdtl_assetsCode).filter(x => !!x)
+                      .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
+                  }
+                  renderInput={(params) => <TextField label="ค้นหาด้วยรหัสทรัพย์สิน..." {...params} />}
+                />
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  size='small'
+                  sx={{ width: 300 }}
+                  value={filter.name}
+                  onChange={(e) => filter_Name(e)}
+                  options={
+                    dataHistory ? dataHistory.map((res) => res.name).filter(x => !!x)
+                      .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
+                  }
+                  renderInput={(params) => <TextField label="ค้นหาด้วยชื่อหัวข้อ..." {...params} />}
+                />
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  size='small'
+                  sx={{ width: 300 }}
+                  value={filter.source_approve_userid}
+                  onChange={(e) => filter_CreateBy(e)}
+                  options={
+                    dataHistory ? dataHistory.map((res) => res.source_approve_userid).filter(x => !!x)
+                      .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
+                  }
+                  renderInput={(params) => <TextField label="ค้นหาด้วยผู้อนุมัติรายการ..." {...params} />}
+                />
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  size='small'
+                  sx={{ width: 300 }}
+                  value={filter.update_date}
+                  onChange={(e) => filter_CreateDate(e)}
+                  options={
+                    dataHistory ? dataHistory.map((res) => res.update_date).filter(x => !!x)
+                      .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
+                  }
+                  renderInput={(params) => <TextField label="ค้นหาด้วยวันที่ปิดรายการ..." {...params} />}
+                />
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  size='small'
+                  sx={{ width: 300 }}
+                  value={filter.nac_code}
+                  onChange={(e) => filter_TabCode(e)}
+                  options={
+                    dataHistory ? dataHistory.map((res) => res.nac_code).filter(x => !!x)
+                      .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
+                  }
+                  renderInput={(params) => <TextField label="ค้นหาด้วยเลขที่ NAC..." {...params} />}
+                />
+              </Stack>
               <Box
                 sx={{
                   height: 683,
