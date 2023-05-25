@@ -448,6 +448,7 @@ export default function History_of_assets() {
       }
     }).then(response => {
       if (response.data) {
+        console.log(response.data);
         setProgress(1)
         setDataHistory(response.data)
       }
