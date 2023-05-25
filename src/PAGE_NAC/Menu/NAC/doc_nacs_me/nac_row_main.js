@@ -728,7 +728,7 @@ export default function History_of_assets() {
                   value={filterNAC.nac_code}
                   onChange={(e) => filteringNAC_Code(e)}
                   options={selectNAC ? selectNAC.map((res) => res.nac_code) : []}
-                  renderInput={(params) => <TextField label="ค้นหาด้วยเลขที่ NAC" {...params} />}
+                  renderInput={(params) => <TextField label="เลขที่ NAC" {...params} />}
                 />
                 <Autocomplete
                   disablePortal
@@ -738,7 +738,7 @@ export default function History_of_assets() {
                   value={filterNAC.name}
                   onChange={(e) => filteringNAC_Headers(e)}
                   options={nacHeaders}
-                  renderInput={(params) => <TextField label="ค้นหาด้วยหัวข้อรายการ" {...params} />}
+                  renderInput={(params) => <TextField label="หัวข้อรายการ" {...params} />}
                 />
                 <Autocomplete
                   disablePortal
@@ -751,7 +751,7 @@ export default function History_of_assets() {
                     selectNAC ? selectNAC.map((res) => res.source_userid).filter(x => !!x)
                       .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
                   }
-                  renderInput={(params) => <TextField label="ค้นหาด้วยผู้ส่งมอบ" {...params} />}
+                  renderInput={(params) => <TextField label="ผู้ส่งมอบ" {...params} />}
                 />
                 <Autocomplete
                   disablePortal
@@ -764,7 +764,7 @@ export default function History_of_assets() {
                     selectNAC ? selectNAC.map((res) => res.des_userid).filter(x => !!x)
                       .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
                   }
-                  renderInput={(params) => <TextField label="ค้นหาด้วยผู้รับมอบ" {...params} />}
+                  renderInput={(params) => <TextField label="ผู้รับมอบ" {...params} />}
                 />
                 <Autocomplete
                   disablePortal
@@ -774,7 +774,7 @@ export default function History_of_assets() {
                   value={filterNAC.status_name}
                   onChange={(e) => filteringNAC_statusName(e)}
                   options={nacStatusName.reduce((x, y) => x.includes(y) ? x : [...x, y], [])}
-                  renderInput={(params) => <TextField label="ค้นหาด้วยสถานะ" {...params} />}
+                  renderInput={(params) => <TextField label="สถานะ" {...params} />}
                 />
               </Stack>
               <StripedDataGrid

@@ -109,7 +109,7 @@ export default function History_of_assets() {
   const [dataHistory, setDataHistory] = React.useState();
   const [progress, setProgress] = React.useState();
   const navigate = useNavigate();
-  const [filter, setFilter] = React.useState({ "Code": '', "Name": '', "CreateBy": '', "CreateDate": '', "tab_code": '' })
+  const [filter, setFilter] = React.useState({ "Code": '', "Name": '', "CreateBy": '', "CreateDate": '', Position: '', "tab_code": '', "Details": '' })
 
   const filter_Code = (e, index) => {
 
@@ -118,7 +118,50 @@ export default function History_of_assets() {
       , Name: filter.Name
       , CreateBy: filter.CreateBy
       , CreateDate: filter.CreateDate
+      , Position: filter.Position
       , tab_code: filter.tab_code
+      , Details: filter.Details
+    }
+
+    setFilter(filterJSON);
+
+    const check = JSON.parse(JSON.stringify(filterJSON),
+      (key, value) => value === null || value === '' ? undefined : value);
+
+    // POST request using axios with set headers
+    const body = { keyID: '' }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
+      if (error.toJSON().message === 'Request failed with status code 400') {
+        setProgress(1)
+      }
+    }).then(response => {
+      if (response.data) {
+        setProgress(1)
+        setDataHistory((response.data).filter(function (item) {
+          for (var key in check) {
+            if (item[key] === undefined || item[key] != check[key])
+              return false;
+          }
+          return true;
+        }))
+      }
+    });
+  }
+
+  const filter_Position = (e, index) => {
+
+    var filterJSON = {
+      Code: filter.Code
+      , Name: filter.Name
+      , CreateBy: filter.CreateBy
+      , CreateDate: filter.CreateDate
+      , Position: e.target.innerText
+      , tab_code: filter.tab_code
+      , Details: filter.Details
     }
 
     setFilter(filterJSON);
@@ -157,7 +200,9 @@ export default function History_of_assets() {
       , Name: filter.Name
       , CreateBy: e.target.innerText
       , CreateDate: filter.CreateDate
+      , Position: filter.Position
       , tab_code: filter.tab_code
+      , Details: filter.Details
     }
 
     setFilter(filterJSON);
@@ -196,7 +241,9 @@ export default function History_of_assets() {
       , Name: filter.Name
       , CreateBy: filter.CreateBy
       , CreateDate: filter.CreateDate
+      , Position: filter.Position
       , tab_code: e.target.innerText
+      , Details: filter.Details
     }
 
     setFilter(filterJSON);
@@ -235,7 +282,9 @@ export default function History_of_assets() {
       , Name: filter.Name
       , CreateBy: filter.CreateBy
       , CreateDate: e.target.innerText
+      , Position: filter.Position
       , tab_code: filter.tab_code
+      , Details: filter.Details
     }
 
     setFilter(filterJSON);
@@ -274,7 +323,9 @@ export default function History_of_assets() {
       , Name: e.target.innerText
       , CreateBy: filter.CreateBy
       , CreateDate: filter.CreateDate
+      , Position: filter.Position
       , tab_code: filter.tab_code
+      , Details: filter.Details
     }
 
     setFilter(filterJSON);
@@ -307,15 +358,57 @@ export default function History_of_assets() {
     });
   }
 
+  const filter_Details = (e, index) => {
+
+    var filterJSON = {
+      Code: filter.Code
+      , Name: filter.Name
+      , CreateBy: filter.CreateBy
+      , CreateDate: filter.CreateDate
+      , Position: filter.Position
+      , tab_code: filter.tab_code
+      , Details: e.target.innerText
+    }
+
+    setFilter(filterJSON);
+
+    const check = JSON.parse(JSON.stringify(filterJSON),
+      (key, value) => value === null || value === '' ? undefined : value);
+
+    // POST request using axios with set headers
+    const body = { keyID: '' }
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
+      if (error.toJSON().message === 'Request failed with status code 400') {
+        setProgress(1)
+      }
+    }).then(response => {
+      if (response.data) {
+        setProgress(1)
+        setDataHistory((response.data).filter(function (item) {
+          for (var key in check) {
+            if (item[key] === undefined || item[key] != check[key])
+              return false;
+          }
+          return true;
+        }))
+      }
+    });
+  }
+
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1, headerAlign: 'center', align: 'center', },
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 250, headerAlign: 'center' },
+    { field: 'Position', headerName: 'Position', headerClassName: 'super-app-theme--header', width: 130, headerAlign: 'center', align: 'center', },
     { field: 'CreateBy', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', width: 130, headerAlign: 'center', align: 'center', },
     {
       field: 'CreateDate',
       headerName: 'เวลาที่ทำรายการ',
       headerClassName: 'super-app-theme--header',
-      minWidth: 150,
+      minWidth: 180,
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -391,67 +484,95 @@ export default function History_of_assets() {
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
+                  fullWidth
                   size='small'
-                  sx={{ width: 300 }}
                   value={filter.Code}
                   onChange={(e) => filter_Code(e)}
                   options={
                     dataHistory ? dataHistory.map((res) => res.Code).filter(x => !!x)
                       .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
                   }
-                  renderInput={(params) => <TextField label="ค้นหาด้วยรหัสทรัพย์สิน..." {...params} />}
+                  renderInput={(params) => <TextField label="รหัสทรัพย์สิน" {...params} />}
                 />
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  sx={{ width: 300 }}
+                  fullWidth
                   value={filter.Name}
                   onChange={(e) => filter_Name(e)}
                   options={
                     dataHistory ? dataHistory.map((res) => res.Name).filter(x => !!x)
                       .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
                   }
-                  renderInput={(params) => <TextField label="ค้นหาด้วยชื่อทรัพย์สิน..." {...params} />}
+                  renderInput={(params) => <TextField label="ชื่อทรัพย์สิน" {...params} />}
                 />
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  sx={{ width: 300 }}
+                  fullWidth
+                  value={filter.Position}
+                  onChange={(e) => filter_Position(e)}
+                  options={
+                    dataHistory ? dataHistory.map((res) => res.Position).filter(x => !!x)
+                      .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
+                  }
+                  renderInput={(params) => <TextField label="Position" {...params} />}
+                />
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  size='small'
+                  fullWidth
                   value={filter.CreateBy}
                   onChange={(e) => filter_CreateBy(e)}
                   options={
                     dataHistory ? dataHistory.map((res) => res.CreateBy).filter(x => !!x)
                       .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
                   }
-                  renderInput={(params) => <TextField label="ค้นหาด้วย initial..." {...params} />}
+                  renderInput={(params) => <TextField label="ผู้ทำรายการ" {...params} />}
                 />
+              </Stack>
+              <Stack direction="row" spacing={2} sx={{ pb: 2, pt: 1 }}>
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  sx={{ width: 300 }}
+                  fullWidth
                   value={filter.CreateDate}
                   onChange={(e) => filter_CreateDate(e)}
                   options={
                     dataHistory ? dataHistory.map((res) => res.CreateDate).filter(x => !!x)
                       .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
                   }
-                  renderInput={(params) => <TextField label="ค้นหาด้วยวันที่-เวลา..." {...params} />}
+                  renderInput={(params) => <TextField label="วันที่-เวลา" {...params} />}
                 />
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  sx={{ width: 300 }}
-                  value={filter.CreateDate}
+                  fullWidth
+                  value={filter.tab_code}
                   onChange={(e) => filter_TabCode(e)}
                   options={
                     dataHistory ? dataHistory.map((res) => res.tab_code).filter(x => !!x)
                       .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
                   }
-                  renderInput={(params) => <TextField label="ค้นหาด้วยเลขที่อ้างอิง..." {...params} />}
+                  renderInput={(params) => <TextField label="เลขที่อ้างอิง" {...params} />}
+                />
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  size='small'
+                  fullWidth
+                  value={filter.Details}
+                  onChange={(e) => filter_Details(e)}
+                  options={
+                    dataHistory ? dataHistory.map((res) => res.Details).filter(x => !!x)
+                      .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
+                  }
+                  renderInput={(params) => <TextField label="รายละเอียด" {...params} />}
                 />
               </Stack>
               <Box
@@ -477,7 +598,7 @@ export default function History_of_assets() {
                       csvOptions: {
                         utf8WithBom: true,
                         fileName: `ทะเบียนทรัพย์สินผู้ร่วมวันที่ ${dataHistory ? dataHistory[0].UpdateDate : '...'}`,
-                        delimiter: ';',
+
                       }
                     }
                   }}

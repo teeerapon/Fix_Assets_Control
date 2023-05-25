@@ -704,7 +704,7 @@ export default function History_of_assets() {
                               csvOptions: {
                                 utf8WithBom: true,
                                 fileName: `ทะเบียนทรัพย์สินทั้งหมด`,
-                                delimiter: ';',
+                                
                               }
                             }
                           }}

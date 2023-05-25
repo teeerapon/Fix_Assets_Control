@@ -424,7 +424,7 @@ export default function History_of_assets() {
                     dataHistory ? dataHistory.map((res) => res.nacdtl_assetsCode).filter(x => !!x)
                       .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
                   }
-                  renderInput={(params) => <TextField label="ค้นหาด้วยรหัสทรัพย์สิน..." {...params} />}
+                  renderInput={(params) => <TextField label="รหัสทรัพย์สิน..." {...params} />}
                 />
                 <Autocomplete
                   disablePortal
@@ -437,7 +437,7 @@ export default function History_of_assets() {
                     dataHistory ? dataHistory.map((res) => res.name).filter(x => !!x)
                       .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
                   }
-                  renderInput={(params) => <TextField label="ค้นหาด้วยชื่อหัวข้อ..." {...params} />}
+                  renderInput={(params) => <TextField label="ชื่อหัวข้อ..." {...params} />}
                 />
                 <Autocomplete
                   disablePortal
@@ -450,7 +450,7 @@ export default function History_of_assets() {
                     dataHistory ? dataHistory.map((res) => res.source_approve_userid).filter(x => !!x)
                       .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
                   }
-                  renderInput={(params) => <TextField label="ค้นหาด้วยผู้อนุมัติรายการ..." {...params} />}
+                  renderInput={(params) => <TextField label="ผู้อนุมัติรายการ..." {...params} />}
                 />
                 <Autocomplete
                   disablePortal
@@ -463,7 +463,7 @@ export default function History_of_assets() {
                     dataHistory ? dataHistory.map((res) => res.update_date).filter(x => !!x)
                       .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
                   }
-                  renderInput={(params) => <TextField label="ค้นหาด้วยวันที่ปิดรายการ..." {...params} />}
+                  renderInput={(params) => <TextField label="วันที่ปิดรายการ..." {...params} />}
                 />
                 <Autocomplete
                   disablePortal
@@ -476,7 +476,7 @@ export default function History_of_assets() {
                     dataHistory ? dataHistory.map((res) => res.nac_code).filter(x => !!x)
                       .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
                   }
-                  renderInput={(params) => <TextField label="ค้นหาด้วยเลขที่ NAC..." {...params} />}
+                  renderInput={(params) => <TextField label="เลขที่ NAC..." {...params} />}
                 />
               </Stack>
               <Box

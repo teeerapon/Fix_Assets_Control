@@ -153,7 +153,7 @@ export default function History_of_assets() {
       field: 'UpdateDate',
       headerName: 'สถานะปัจจุบัน',
       headerClassName: 'super-app-theme--header',
-      width: 160,
+      width: 180,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
@@ -250,7 +250,7 @@ export default function History_of_assets() {
                       csvOptions: {
                         utf8WithBom: true,
                         fileName: `ทะเบียนทรัพย์สินผู้ร่วมวันที่ ${dataHistory ? dataHistory[0].UpdateDate : '...'}`,
-                        delimiter: ';',
+                        
                       }
                     }
                   }}
