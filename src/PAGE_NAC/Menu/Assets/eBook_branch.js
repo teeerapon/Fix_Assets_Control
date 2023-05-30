@@ -203,7 +203,7 @@ export default function History_of_assets() {
             'Accept': 'application/json'
           };
 
-          if (['jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
+          if (['jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.').pop()) > -1) {
 
             const formData_1 = new FormData();
             formData_1.append("file", e.target.files[0]);
@@ -294,7 +294,7 @@ export default function History_of_assets() {
             'Accept': 'application/json'
           };
 
-          if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
+          if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.').pop()) > -1) {
 
             const formData_2 = new FormData();
             formData_2.append("file", e.target.files[0]);

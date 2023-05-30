@@ -141,7 +141,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
   }
 
   const handleUploadFile = async (e) => {
-    if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.')[1]) > -1) {
+    if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.').pop()) > -1) {
       setFile(e.target.files[0]);
       setFileName(e.target.files[0].name);
       setPath(e.target.files[0].name)
