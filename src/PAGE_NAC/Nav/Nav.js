@@ -548,7 +548,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           component="span"
                           variant="caption"
                         >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทะเบียนทรัพย์สินผู้ร่วม
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book BPC
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -570,7 +570,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           component="span"
                           variant="caption"
                         >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ดำเนินการทรัพย์สินผู้ร่วม
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติการดำเนินการทรัพย์สินผู้ร่วม
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -647,7 +647,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                               component="span"
                               variant="caption"
                             >
-                              <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book Assets
+                              <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book NAC
                             </Typography>
                           </ListItemText>
                         </ListItemButton>
@@ -985,7 +985,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           component="span"
                           variant="caption"
                         >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทะเบียนทรัพย์สินผู้ร่วม
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book BPC
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -1007,7 +1007,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           component="span"
                           variant="caption"
                         >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ดำเนินการทรัพย์สินผู้ร่วม
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติการดำเนินการทรัพย์สินผู้ร่วม
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -1036,7 +1036,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           component="span"
                           variant="caption"
                         >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book Assets
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book NAC
                         </Typography>
                       </ListItemText>
                     </ListItemButton>

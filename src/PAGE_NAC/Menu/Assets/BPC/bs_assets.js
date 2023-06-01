@@ -1103,7 +1103,7 @@ export default function History_of_assets() {
                   {
                     ((dataFile ? dataFile.length : []) === (arraySubmit ? arraySubmit : (dataFile ? dataFile.length : []))) ?
                       <React.Fragment>
-                        <Box sx={{ display: 'flex' }}>
+                        {/* <Box sx={{ display: 'flex' }}>
                           <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
                             <FormLabel component="legend">กรุณาเลือกบุคคลที่ท่านต้องการส่งอีเมล</FormLabel>
                             <FormGroup aria-label="position" row>
@@ -1113,7 +1113,7 @@ export default function History_of_assets() {
                               <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="ROD" checked={ROD} />} label="หน่วยงาน ROD" labelPlacement="end" />
                             </FormGroup>
                           </FormControl>
-                        </Box>
+                        </Box> */}
                         <StripedDataGrid
                           sx={{
                             mt: 1,

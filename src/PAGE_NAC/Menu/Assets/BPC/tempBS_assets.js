@@ -128,9 +128,9 @@ export default function History_of_assets() {
     const body = {
       tab_code: keyID,
       userid: data.userid,
-      statusid: (dataHistory[0].tab_status === 1 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'TCM' || data.UserCode === 'JRK') ? 2 :
-        (dataHistory[0].tab_status === 2 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'KTT') ? 3 :
-          (dataHistory[0].tab_status === 3 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'GRP') ? 4 : 0
+      statusid: ((dataHistory ? dataHistory[0].tab_statusid : null) === 1 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'TCM' || data.UserCode === 'JRK') ? 2 :
+        ((dataHistory ? dataHistory[0].tab_statusid : null) === 2 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'KTT') ? 3 :
+          ((dataHistory ? dataHistory[0].tab_statusid : null) === 3 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'GRP') ? 4 : null
     }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
@@ -141,12 +141,21 @@ export default function History_of_assets() {
         setProgress(1)
       }
     }).then(response => {
-      swal("แจ้งเตือน", response.data[0].res, "success", {
-        buttons: false,
-        timer: 2000,
-      }).then((value) => {
-        window.location.href = "/BSAssetsMain";
-      });
+      if(response.data[0].tab_statusid !== 4){
+        swal("แจ้งเตือน", response.data[0].res, "success", {
+          buttons: false,
+          timer: 2000,
+        }).then((value) => {
+          window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + keyID
+        });
+      }else{
+        swal("แจ้งเตือน", response.data[0].res, "success", {
+          buttons: false,
+          timer: 2000,
+        }).then((value) => {
+          window.location.href = "/BSAssetsMain";
+        });
+      }
     });
 
     // headers_colums = `
