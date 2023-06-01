@@ -187,49 +187,32 @@ export default function History_of_assets() {
             "Code": arraySubmitSendMail[i].Code,
             "Details": arraySubmitSendMail[i].Details,
             "keyID": resTAB.data[0].TAB,
-            "Comments": arraySubmitSendMail[i].Comments
+            "Comments": arraySubmitSendMail[i].Comments,
+            "image_1": arraySubmitSendMail[i].image_1,
+            "image_2": arraySubmitSendMail[i].image_2,
           }
           await Axios.post(config.http + '/FA_Control_BPC_UpdateDetails', bodyDetails, { headers })
         }
 
-        headers_colums = `
-        <tr style="background-color: royalblue;color:#ffffff;">
-          <td>เลขที่อ้างอิง ${resTAB.data[0].TAB}</td>
-          <td>การขึ้นทะเบียนทรัพย์สินผู้ร่วม วันที่ ${dateTime}</td>
-          <td>ผู้ดำเนินการ ${data.UserCode}</td>
-        </tr>
-        <tr>
-          <td colspan="6">เช็คข้อมูลได้ที่ URL : <a href=${window.location.origin}/FA_Control_BPC_SELECT_TEMP?keyID=${resTAB.data[0].TAB}>คลิกที่นี่</a></td>
-        </tr>
-        `
-
-        const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}${str.trim()}</table>`
-
-        const body = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html, code_ref: resTAB.data[0].TAB }
-
-        await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body, { headers })
-          .then(async (res) => {
-            await swal("แจ้งเตือน", res.data[0].response, "success", {
-              buttons: false,
-              timer: 2000,
-            }).then((value) => {
-              setOpenSendMail(false);
-              window.location.href = '/BSAssetsMain'
-            })
-
-          })
+        swal("แจ้งเตือน", 'ดำเนินการเสร็จสิ้น', "success", {
+          buttons: false,
+          timer: 2000,
+        }).then((value) => {
+          setOpenSendMail(false);
+          window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
+        })
       });
 
   };
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     // POST request using axios with set headers
     const body = { Permission_TypeID: 1, userID: data.userid }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers }).catch(function (error) {
+    await Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status no 400') {
         setProgress(1)
       }
@@ -330,49 +313,19 @@ export default function History_of_assets() {
                 setArraySubmit(i + 1);
               })
           }
-
-          headers_colums = `
-          <tr style="background-color: royalblue;color:#ffffff;">
-            <td>เลขที่อ้างอิง ${resTAB.data[0].TAB}</td>
-            <td>การขึ้นทะเบียนทรัพย์สินผู้ร่วม วันที่ ${dateTime}</td>
-            <td>ผู้ดำเนินการ ${data.UserCode}</td>
-          </tr>
-          <tr>
-            <td colspan="6">เช็คข้อมูลได้ที่ URL : <a href=${window.location.origin}/FA_Control_BPC_SELECT_TEMP?keyID=${resTAB.data[0].TAB}>คลิกที่นี่</a></td>
-          </tr>
-          `
-
-          const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}</table>`
-
-          const body_html = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html }
-
-          const body = { count: dataFile.length, keyID: resTAB.data[0].TAB }
-          await Axios.post(config.http + '/FA_Control_import_dataXLSX_toAssets', body, { headers })
-            .then(async (response) => {
-              if (response.data[0].response === 'ทำรายการสำเร็จ') {
-                await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body_html, { headers })
-                  .then(async (res) => {
-                    await swal("แจ้งเตือน", response.data[0].response, "success", {
-                      buttons: false,
-                      timer: 2000,
-                    }).then((value) => {
-                      setOpenSendMail(false);
-                      setOpen(false);
-                      setBac_type(null)
-                      setName(null)
-                      setSerialNo(null)
-                      setPrice(null)
-                      setDetails(null)
-                      window.location.href = '/BSAssetsMain'
-                    })
-                  })
-              } else {
-                swal("แจ้งเตือน", response.data[0].response, "error", {
-                  buttons: false,
-                  timer: 2000,
-                })
-              }
-            })
+          swal("แจ้งเตือน", 'ดำเนินการเสร็จสิ้น', "success", {
+            buttons: false,
+            timer: 2000,
+          }).then((value) => {
+            setOpenSendMail(false);
+            setOpen(false);
+            setBac_type(null)
+            setName(null)
+            setSerialNo(null)
+            setPrice(null)
+            setDetails(null)
+            window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
+          })
         })
     } else {
       swal("แจ้งเตือน", 'ข้อมูล (Columns) ไม่ถูกต้อง กรุณาตรวจสอบ', "error", {
@@ -433,44 +386,19 @@ export default function History_of_assets() {
           await Axios.post(config.http + '/FA_Control_New_Assets', body, { headers })
             .then(async (response) => {
               if (response.data !== undefined) {
-                const userCode = { userCode: data.UserCode }
-                const headers = {
-                  'Authorization': 'application/json; charset=utf-8',
-                  'Accept': 'application/json'
-                };
-
-                var headers_colums = '';
-                var today = new Date();
-                var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                var dateTime = date + ' ' + time;
-
-                var headers_colums = `
-                <tr style="background-color: royalblue;color:#ffffff;">
-                  <td>เลขที่อ้างอิง ${resTAB.data[0].TAB}</td>
-                  <td>การขึ้นทะเบียนทรัพย์สินผู้ร่วม วันที่ ${dateTime}</td>
-                  <td>ผู้ดำเนินการ ${data.UserCode}</td>
-                </tr>
-                <tr>
-                  <td colspan="6">เช็คข้อมูลได้ที่ URL : <a href=${window.location.origin}/FA_Control_BPC_SELECT_TEMP?keyID=${resTAB.data[0].TAB}>คลิกที่นี่</a></td>
-                </tr>
-                `
-
-                const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}</table>`
-
-                const body_html = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html }
-
-                await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body_html, { headers })
-                  .then(() => {
-                    swal("แจ้งเตือน", 'เพิ่มทรัพย์สินสำเร็จ', "success", {
-                      buttons: false,
-                      timer: 2000,
-                    }).then(async (value) => {
-                      Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
-                        .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 2)));
-                      setOpen(false);
-                    })
-                  })
+                swal("แจ้งเตือน", 'ดำเนินการเสร็จสิ้น', "success", {
+                  buttons: false,
+                  timer: 2000,
+                }).then((value) => {
+                  setOpenSendMail(false);
+                  setOpen(false);
+                  setBac_type(null)
+                  setName(null)
+                  setSerialNo(null)
+                  setPrice(null)
+                  setDetails(null)
+                  window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
+                })
               }
             });
         }
@@ -509,15 +437,6 @@ export default function History_of_assets() {
       align: 'center',
       valueGetter: (params) =>
         params.row.BranchID === 901 ? 'HO' : params.row.Position,
-    },
-    {
-      field: 'Old_Details',
-      headerName: 'สถานะล่าสุด',
-      headerClassName: 'super-app-theme--header',
-      minWidth: 150,
-      flex: 1,
-      valueGetter: (params) =>
-        `${params.row.Old_UpdateBy ?? ''} ${params.row.Old_UpdateDate ?? ''} ${params.row.Old_Details ?? ''}`
     },
     {
       field: 'Details',
@@ -575,10 +494,167 @@ export default function History_of_assets() {
               id="outlined-multiline-flexible"
               size='small'
               value={params.row.Comments}
+              multiline
               onChange={(event) => handleChange_comments(event, params)}
               label="Comments..."
             />
           </React.Fragment >
+        )
+      }
+    },
+    {
+      field: 'ImagePath',
+      headerName: 'Images 1',
+      headerClassName: 'super-app-theme--header',
+      width: 200,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => {
+
+        const handleUploadFile_1 = async (e, params) => {
+          e.preventDefault();
+
+          const headers = {
+            'Authorization': 'application/json; charset=utf-8',
+            'Accept': 'application/json'
+          };
+
+          if (['jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.').pop()) > -1) {
+
+            const formData_1 = new FormData();
+            formData_1.append("file", e.target.files[0]);
+            formData_1.append("fileName", e.target.files[0].name);
+
+            await Axios.post(config.http + "/check_files_NewNAC", formData_1, { headers })
+              .then(async (res) => {
+                const image_1 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
+
+                arraySubmitSendMail.forEach(function (x, index) {
+                  if (x.AssetID === params.row.AssetID) {
+                    const list = [...arraySubmitSendMail]
+                    list[index]['image_1'] = image_1
+                    setArraySubmitSendMail(list)
+                  }
+                })
+
+              })
+
+          } else {
+            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
+              buttons: false,
+              timer: 2000,
+            })
+          }
+        }
+
+
+        return (
+          <React.Fragment>
+            <ImageListItem key={params.row.ImagePath}>
+              <img
+                src={`${params.row.ImagePath}?w = 248 & fit=crop & auto=format`}
+                srcSet={`${params.row.ImagePath}?w = 248 & fit=crop & auto=format & dpr=2 2x`}
+                alt={params.row.Name}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null; // prevents looping
+                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
+                }}
+                loading="lazy"
+              />
+              <ImageListItemBar
+                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+                position="below"
+                title={<span>&nbsp; &nbsp;{params.row.Code}_1</span>}
+                actionIcon={
+                  <IconButton
+                    sx={{ color: 'rgba(255, 255, 255, 1)' }}
+                    aria-label={`info about ${params.row.Code} `}
+                    component="label"
+                  >
+                    <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e, params)} />
+                    <FilePresentIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                }
+              />
+            </ImageListItem>
+          </React.Fragment>
+        )
+      }
+    },
+    {
+      field: 'ImagePath_2',
+      headerName: 'Images 2',
+      headerClassName: 'super-app-theme--header',
+      width: 200,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => {
+
+        const handleUploadFile_2 = async (e, params) => {
+          e.preventDefault();
+
+          const headers = {
+            'Authorization': 'application/json; charset=utf-8',
+            'Accept': 'application/json'
+          };
+
+          if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.').pop()) > -1) {
+
+            const formData_2 = new FormData();
+            formData_2.append("file", e.target.files[0]);
+            formData_2.append("fileName", e.target.files[0].name);
+
+            await Axios.post(config.http + "/check_files_NewNAC", formData_2, { headers })
+              .then(async (res) => {
+                const image_2 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
+
+                arraySubmitSendMail.forEach(function (x, index) {
+                  if (x.AssetID === params.row.AssetID) {
+                    const list = [...arraySubmitSendMail]
+                    list[index]['image_2'] = image_2
+                    setArraySubmitSendMail(list)
+                  }
+                })
+
+              })
+          } else {
+            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
+              buttons: false,
+              timer: 2000,
+            })
+          }
+        }
+
+        return (
+          <React.Fragment>
+            <ImageListItem key={params.row.ImagePath_2}>
+              <img
+                src={`${params.row.ImagePath_2}?w = 248 & fit=crop & auto=format`}
+                srcSet={`${params.row.ImagePath_2}?w = 248 & fit=crop & auto=format & dpr=2 2x`}
+                alt={params.row.Name}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null; // prevents looping
+                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
+                }}
+                loading="lazy"
+              />
+              <ImageListItemBar
+                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+                position="below"
+                title={<span>&nbsp; &nbsp;{params.row.Code}_2</span>}
+                actionIcon={
+                  <IconButton
+                    sx={{ color: 'rgba(255, 255, 255, 1)' }}
+                    aria-label={`info about ${params.row.Code} `}
+                    component="label"
+                  >
+                    <input hidden type="file" name='file' onChange={(e) => handleUploadFile_2(e, params)} />
+                    <FilePresentIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                }
+              />
+            </ImageListItem>
+          </React.Fragment>
         )
       }
     },
@@ -600,17 +676,6 @@ export default function History_of_assets() {
         params.row.BranchID === 901 ? 'HO' : params.row.Position,
     },
     {
-      field: 'Old_Details',
-      headerName: 'สถานะล่าสุด',
-      headerClassName: 'super-app-theme--header',
-      minWidth: 130,
-      flex: 1,
-      valueGetter: (params) =>
-        params.row.Old_Details === '' || !params.row.Old_Details ? '' :
-          !params.row.Old_UpdateBy ? `${params.row.Old_Details}` :
-            `ผู้อัปเดท/เวลาอัปเดท : ${params.row.Old_UpdateBy ? `${params.row.Old_UpdateBy} (${params.row.Old_UpdateDate})` : 'none'} สถานะล่าสุด : ${params.row.Old_Details ?? 'none'}`
-    },
-    {
       field: 'Details',
       headerName: 'สถานะปัจจุบัน',
       headerClassName: 'super-app-theme--header',
@@ -625,10 +690,9 @@ export default function History_of_assets() {
       field: 'ImagePath',
       headerName: 'Images 1',
       headerClassName: 'super-app-theme--header',
-      minWidth: 200,
+      width: 200,
       headerAlign: 'center',
       align: 'center',
-      flex: 1,
       renderCell: (params) => {
 
         const handleUploadFile_1 = async (e, params) => {
@@ -717,10 +781,9 @@ export default function History_of_assets() {
       field: 'ImagePath_2',
       headerName: 'Images 2',
       headerClassName: 'super-app-theme--header',
-      minWidth: 200,
+      width: 200,
       headerAlign: 'center',
       align: 'center',
-      flex: 1,
       renderCell: (params) => {
 
         const handleUploadFile_2 = async (e, params) => {
@@ -805,14 +868,14 @@ export default function History_of_assets() {
     },
   ];
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     // POST request using axios with set headers
     const userCode = { userCode: data.UserCode }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
+    await Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
       .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 2)));
   }, []);
 
@@ -925,17 +988,6 @@ export default function History_of_assets() {
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    <Box sx={{ display: 'flex' }}>
-                      <FormControl sx={{ m: 2 }} component="fieldset" variant="standard">
-                        <FormLabel component="legend">กรุณาเลือกบุคคลที่ท่านต้องการส่งอีเมล</FormLabel>
-                        <FormGroup aria-label="position" row>
-                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="ME" disabled checked={ME} />} label="ME" labelPlacement="end" />
-                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="KTT" checked={KTT} />} label="KTT" labelPlacement="end" />
-                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="GRP" checked={GRP} />} label="GRP" labelPlacement="end" />
-                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="ROD" checked={ROD} />} label="หน่วยงาน ROD" labelPlacement="end" />
-                        </FormGroup>
-                      </FormControl>
-                    </Box>
                     <Box component="form" noValidate sx={{ mt: 4, width: 400, }}>
                       <Grid container spacing={2}>
                         <Grid item xs={12}>
@@ -1131,17 +1183,6 @@ export default function History_of_assets() {
                 </DialogTitle>
                 <DialogContent>
                   <React.Fragment>
-                    <Box sx={{ display: 'flex' }}>
-                      <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
-                        <FormLabel component="legend">กรุณาเลือกบุคคลที่ท่านต้องการส่งอีเมล</FormLabel>
-                        <FormGroup aria-label="position" row>
-                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="ME" disabled checked={ME} />} label="ME" labelPlacement="end" />
-                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="KTT" checked={KTT} />} label="KTT" labelPlacement="end" />
-                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="GRP" checked={GRP} />} label="GRP" labelPlacement="end" />
-                          <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="ROD" checked={ROD} />} label="หน่วยงาน ROD" labelPlacement="end" />
-                        </FormGroup>
-                      </FormControl>
-                    </Box>
                     <StripedDataGrid
                       sx={{
                         mt: 1,
@@ -1159,7 +1200,7 @@ export default function History_of_assets() {
                           csvOptions: {
                             utf8WithBom: true,
                             fileName: `ทะเบียนทรัพย์สินผู้ร่วม`,
-                            
+
                           }
                         }
                       }}

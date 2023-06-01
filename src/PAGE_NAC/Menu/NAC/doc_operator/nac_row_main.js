@@ -183,7 +183,7 @@ export default function History_of_assets() {
     , 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน'
   ]
 
-  const filteringNAC_Code = (e, index) => {
+  const filteringNAC_Code = async (e, index) => {
     const NAC_Code = e.target.innerText
 
     var filter = {
@@ -212,7 +212,7 @@ export default function History_of_assets() {
         'Accept': 'application/json'
       };
 
-      Axios.post(config.http + '/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
+      await Axios.post(config.http + '/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
         if (error.toJSON().message === 'Request failed with status code 400') {
           setProgress(1)
         }
@@ -229,7 +229,7 @@ export default function History_of_assets() {
     }
   }
 
-  const filteringNAC_Headers = (e, index) => {
+  const filteringNAC_Headers = async (e, index) => {
     const NAC_Headers = e.target.innerText
 
     var filter = {
@@ -257,7 +257,7 @@ export default function History_of_assets() {
         'Accept': 'application/json'
       };
 
-      Axios.post(config.http + '/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
+      await Axios.post(config.http + '/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
         if (error.toJSON().message === 'Request failed with status code 400') {
           setProgress(1)
         }
@@ -274,7 +274,7 @@ export default function History_of_assets() {
     }
   }
 
-  const filteringNAC_statusName = (e, index) => {
+  const filteringNAC_statusName = async (e, index) => {
     const NAC_statusName = e.target.innerText
 
     var filter = {
@@ -302,7 +302,7 @@ export default function History_of_assets() {
         'Accept': 'application/json'
       };
 
-      Axios.post(config.http + '/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
+      await Axios.post(config.http + '/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
         if (error.toJSON().message === 'Request failed with status code 400') {
           setProgress(1)
         }
@@ -319,7 +319,7 @@ export default function History_of_assets() {
     }
   }
 
-  const filteringNAC_Source_userid = (e, index) => {
+  const filteringNAC_Source_userid = async (e, index) => {
     const NAC_Source_userid = e.target.innerText
 
     var filter = {
@@ -347,7 +347,7 @@ export default function History_of_assets() {
         'Accept': 'application/json'
       };
 
-      Axios.post(config.http + '/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
+      await Axios.post(config.http + '/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
         if (error.toJSON().message === 'Request failed with status code 400') {
           setProgress(1)
         }
@@ -364,7 +364,7 @@ export default function History_of_assets() {
     }
   }
 
-  const filteringNAC_Des_userid = (e, index) => {
+  const filteringNAC_Des_userid = async (e, index) => {
     const NAC_Des_userid = e.target.innerText
 
     var filter = {
@@ -392,7 +392,7 @@ export default function History_of_assets() {
         'Accept': 'application/json'
       };
 
-      Axios.post(config.http + '/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
+      await Axios.post(config.http + '/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
         if (error.toJSON().message === 'Request failed with status code 400') {
           setProgress(1)
         }
@@ -417,14 +417,14 @@ export default function History_of_assets() {
     localStorage.setItem('filter_model', JSON.stringify(newFilterModel));
   }
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     // POST request using axios with set headers
     const usercode = { usercode: data.UserCode }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
+    await Axios.post(config.http + '/store_FA_control_select_NAC_approve', usercode, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }
@@ -721,12 +721,12 @@ export default function History_of_assets() {
                 width: '100%',
               }}
             >
-              <Stack direction="row" spacing={2}>
+              <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  sx={{ width: 300 }}
+                  sx={{ flexGrow: 1, padding: 1 }}
                   value={filterNAC.nac_code}
                   onChange={(e) => filteringNAC_Code(e)}
                   options={selectNAC ? selectNAC.map((res) => res.nac_code) : []}
@@ -736,7 +736,7 @@ export default function History_of_assets() {
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  sx={{ width: 300 }}
+                  sx={{ flexGrow: 1, padding: 1 }}
                   value={filterNAC.name}
                   onChange={(e) => filteringNAC_Headers(e)}
                   options={nacHeaders}
@@ -746,7 +746,7 @@ export default function History_of_assets() {
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  sx={{ width: 300 }}
+                  sx={{ flexGrow: 1, padding: 1 }}
                   value={filterNAC.source_userid}
                   onChange={(e) => filteringNAC_Source_userid(e)}
                   options={
@@ -759,7 +759,7 @@ export default function History_of_assets() {
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  sx={{ width: 300 }}
+                  sx={{ flexGrow: 1, padding: 1 }}
                   value={filterNAC.des_userid}
                   onChange={(e) => filteringNAC_Des_userid(e)}
                   options={
@@ -772,7 +772,7 @@ export default function History_of_assets() {
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  sx={{ width: 300 }}
+                  sx={{ flexGrow: 1, padding: 1 }}
                   value={filterNAC.status_name}
                   onChange={(e) => filteringNAC_statusName(e)}
                   options={nacStatusName.reduce((x, y) => x.includes(y) ? x : [...x, y], [])}

@@ -132,14 +132,14 @@ export default function History_of_assets() {
   const checkUserWeb = localStorage.getItem('sucurity');
   const [progress, setProgress] = React.useState();
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     // POST request using axios with set headers
     const body = { Permission_TypeID: 1, userID: data.userid }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers }).catch(function (error) {
+    await Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }
@@ -393,14 +393,14 @@ export default function History_of_assets() {
     },
   ];
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     // POST request using axios with set headers
     const userCode = { userCode: data.UserCode }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
+    await Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
       .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 1)));
   }, []);
 

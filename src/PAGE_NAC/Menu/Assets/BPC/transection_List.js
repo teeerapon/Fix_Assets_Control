@@ -111,7 +111,7 @@ export default function History_of_assets() {
   const navigate = useNavigate();
   const [filter, setFilter] = React.useState({ "Code": '', "Name": '', "CreateBy": '', "CreateDate": '', Position: '', "tab_code": '', "Details": '' })
 
-  const filter_Code = (e, index) => {
+  const filter_Code = async (e, index) => {
 
     var filterJSON = {
       Code: e.target.innerText
@@ -134,7 +134,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
+    await Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }
@@ -152,7 +152,7 @@ export default function History_of_assets() {
     });
   }
 
-  const filter_Position = (e, index) => {
+  const filter_Position = async (e, index) => {
 
     var filterJSON = {
       Code: filter.Code
@@ -175,7 +175,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
+    await Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }
@@ -193,7 +193,7 @@ export default function History_of_assets() {
     });
   }
 
-  const filter_CreateBy = (e, index) => {
+  const filter_CreateBy = async (e, index) => {
 
     var filterJSON = {
       Code: filter.Code
@@ -216,7 +216,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
+    await Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }
@@ -234,7 +234,7 @@ export default function History_of_assets() {
     });
   }
 
-  const filter_TabCode = (e, index) => {
+  const filter_TabCode = async (e, index) => {
 
     var filterJSON = {
       Code: filter.Code
@@ -257,7 +257,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
+    await Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }
@@ -275,7 +275,7 @@ export default function History_of_assets() {
     });
   }
 
-  const filter_CreateDate = (e, index) => {
+  const filter_CreateDate = async (e, index) => {
 
     var filterJSON = {
       Code: filter.Code
@@ -298,7 +298,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
+    await Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }
@@ -316,7 +316,7 @@ export default function History_of_assets() {
     });
   }
 
-  const filter_Name = (e, index) => {
+  const filter_Name = async (e, index) => {
 
     var filterJSON = {
       Code: filter.Code
@@ -339,7 +339,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
+    await Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }
@@ -358,7 +358,7 @@ export default function History_of_assets() {
     });
   }
 
-  const filter_Details = (e, index) => {
+  const filter_Details = async (e, index) => {
 
     var filterJSON = {
       Code: filter.Code
@@ -381,7 +381,7 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
+    await Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }
@@ -435,14 +435,14 @@ export default function History_of_assets() {
     { field: 'tab_code', headerName: 'เลขที่อ้างอิง', headerClassName: 'super-app-theme--header', width: 130, headerAlign: 'center', align: 'center', },
   ]
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     // POST request using axios with set headers
     const body = { keyID: '' }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
+    await Axios.post(config.http + '/FA_Control_BPC_GroupBy', body, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }
@@ -481,11 +481,11 @@ export default function History_of_assets() {
           {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
-              <Stack direction="row" spacing={2} sx={{ pb: 2, pt: 1 }}>
+              <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  fullWidth
+                  sx={{ flexGrow: 1, padding: 1 }}
                   size='small'
                   value={filter.Code}
                   onChange={(e) => filter_Code(e)}
@@ -499,7 +499,7 @@ export default function History_of_assets() {
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  fullWidth
+                  sx={{ flexGrow: 1, padding: 1 }}
                   value={filter.Name}
                   onChange={(e) => filter_Name(e)}
                   options={
@@ -512,7 +512,7 @@ export default function History_of_assets() {
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  fullWidth
+                  sx={{ flexGrow: 1, padding: 1 }}
                   value={filter.Position}
                   onChange={(e) => filter_Position(e)}
                   options={
@@ -525,7 +525,7 @@ export default function History_of_assets() {
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  fullWidth
+                  sx={{ flexGrow: 1, padding: 1 }}
                   value={filter.CreateBy}
                   onChange={(e) => filter_CreateBy(e)}
                   options={
@@ -535,12 +535,12 @@ export default function History_of_assets() {
                   renderInput={(params) => <TextField label="ผู้ทำรายการ" {...params} />}
                 />
               </Stack>
-              <Stack direction="row" spacing={2} sx={{ pb: 2, pt: 1 }}>
+              <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  fullWidth
+                  sx={{ flexGrow: 1, padding: 1 }}
                   value={filter.CreateDate}
                   onChange={(e) => filter_CreateDate(e)}
                   options={
@@ -553,7 +553,7 @@ export default function History_of_assets() {
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  fullWidth
+                  sx={{ flexGrow: 1, padding: 1 }}
                   value={filter.tab_code}
                   onChange={(e) => filter_TabCode(e)}
                   options={
@@ -566,7 +566,7 @@ export default function History_of_assets() {
                   disablePortal
                   id="combo-box-demo"
                   size='small'
-                  fullWidth
+                  sx={{ flexGrow: 1, padding: 1 }}
                   value={filter.Details}
                   onChange={(e) => filter_Details(e)}
                   options={
@@ -606,7 +606,7 @@ export default function History_of_assets() {
                   rows={dataHistory ?? []}
                   columns={columns}
                   getRowId={(row) => row?.AssetID}
-                  // getRowHeight={(res) => 'auto'}
+                  getRowHeight={(res) => 'auto'}
                   pageSize={10}
                   // autoHeight
                   disableColumnMenu

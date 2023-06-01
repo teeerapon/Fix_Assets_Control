@@ -317,14 +317,14 @@ export default function History_of_assets() {
     // },
   ];
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     // POST request using axios with set headers
     const userCode = { userCode: data.UserCode }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers }).catch(function (error) {
+    await Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }

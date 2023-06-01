@@ -24,18 +24,24 @@ import FETCH_ASSETS from './PAGE_NAC/Menu/Assets/main';
 import Account_BrnachAssets from './PAGE_NAC/Menu/Assets/branch';
 import EBookBranch from './PAGE_NAC/Menu/Assets/eBook_branch';
 import EBookMain from './PAGE_NAC/Menu/Assets/eBook_main';
+
+// BPC* //
 import BSAssetsMain from './PAGE_NAC/Menu/Assets/BPC/bs_assets';
 import TempBSAssetsMain from './PAGE_NAC/Menu/Assets/BPC/tempBS_assets';
 import TransectionList from './PAGE_NAC/Menu/Assets/BPC/transection_List';
+import BpcStatus from './PAGE_NAC/Menu/Assets/BPC/bpc_status';
+
 // รายการ อนุมัติ และ ของฉัน
 import NAC_ROW from './PAGE_NAC/Menu/NAC/doc_nacs_me/nac_row_main';
 import NAC_OPERATOR from './PAGE_NAC/Menu/NAC/doc_operator/nac_row_main';
+
 // ทำการราย
 import NAC_CREATE_STEP1 from './PAGE_NAC/Menu/NAC/nac_create/page_create/nac_create_step1';
 import NAC_CREATE_MAIN1 from './PAGE_NAC/Menu/NAC/nac_create/page_nac/nac_main_stepCreate';
 import NAC_CHANGE_STEP1 from './PAGE_NAC/Menu/NAC/nac_create/nac_change/nac_change_step1';
 import NAC_DELETE_STEP1 from './PAGE_NAC/Menu/NAC/nac_create/nac_delete/nac_delete_step1';
 import NAC_SEALS_STEP1 from './PAGE_NAC/Menu/NAC/nac_create/nac_Seals/nac_create_seals';
+
 // รออนุมัติ
 import NAC_CREATE_WAIT_APPROVE from './PAGE_NAC/Menu/NAC/nac_create/page_nac/nac_main_wait_approve';
 import NAC_CHANGE_WAIT_APPROVE from './PAGE_NAC/Menu/NAC/nac_create/nac_change/nac_change_wait_approve';
@@ -160,6 +166,7 @@ function App() {
       '/BSAssetsMain',
       '/TransectionList',
       '/FA_Control_BPC_SELECT_TEMP',
+      '/BpcStatus',
       '*',
     ]
 
@@ -271,9 +278,11 @@ function App() {
               <Route path="/Account_BrnachAssets" element={<Account_BrnachAssets />} />
               <Route path="/EBookBranch" element={<EBookBranch />} />
               <Route path="/EBookMain" element={<EBookMain />} />
+              {/* BPC */}
               <Route path="/BSAssetsMain" element={<BSAssetsMain />} />
               <Route path="/FA_Control_BPC_SELECT_TEMP" element={<TempBSAssetsMain />} />
               <Route path="/TransectionList" element={<TransectionList />} />
+              <Route path="/BpcStatus" element={<BpcStatus />} />
               {/* รายการ อนุมัติ และ ของฉัน */}
               <Route path="/NAC_ROW" element={<NAC_ROW />} />
               <Route path="/NAC_OPERATOR" element={<NAC_OPERATOR />} />

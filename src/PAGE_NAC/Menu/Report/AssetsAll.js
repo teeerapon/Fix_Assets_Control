@@ -288,14 +288,14 @@ export default function Reported_of_assets() {
     },
   ];
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     // POST request using axios with set headers
     const Description = { Description: '' }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/FA_Control_Report_All_Counted_by_Description', Description, { headers }).catch(function (error) {
+    await Axios.post(config.http + '/FA_Control_Report_All_Counted_by_Description', Description, { headers }).catch(function (error) {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }

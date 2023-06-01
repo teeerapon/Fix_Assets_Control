@@ -173,6 +173,10 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     navigate('/BSAssetsMain')
   };
 
+  function BpcStatus() {
+    navigate('/BpcStatus')
+  }
+
   function REPORT_ALL() {
     navigate('/Reported_Assets_Counted')
   };
@@ -281,14 +285,13 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                 >
                   <MenuIcon />
                 </IconButton>
-                <Box sx={{ flexGrow: 1, display: { md: 'flex' } }} className='hide-sm'>
+                <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
                   <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
                     <div size="small" aria-label="account of current user" aria-controls="menu-appbar">
                       <Typography
                         style={{ color: '#ea0c80' }}
                         variant="h5"
                         component="React.Fragment"
-
                         sx={{
                           flexGrow: 1,
                           fontFamily: 'monospace',
@@ -546,6 +549,17 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           variant="caption"
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทะเบียนทรัพย์สินผู้ร่วม
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                    <ListItemButton onClick={BpcStatus}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการทรัพย์สินผู้ร่วม
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
@@ -972,6 +986,17 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           variant="caption"
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทะเบียนทรัพย์สินผู้ร่วม
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                    <ListItemButton onClick={BpcStatus}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการทรัพย์สินผู้ร่วม
                         </Typography>
                       </ListItemText>
                     </ListItemButton>

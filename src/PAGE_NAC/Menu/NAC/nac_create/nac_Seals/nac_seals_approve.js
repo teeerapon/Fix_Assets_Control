@@ -324,14 +324,14 @@ export default function Nac_Seals_Approve() {
   const [realPrice_Date, setRealPrice_Date] = React.useState();
   const [TooltipImage_1, setTooltipImage_1] = React.useState();
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     // POST request using axios with set headers
     const body = { Permission_TypeID: 1, userID: data.userid }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers })
+    await Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers })
       .then(response => {
         setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
       });
