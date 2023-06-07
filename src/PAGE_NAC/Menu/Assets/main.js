@@ -26,6 +26,40 @@ import LinearProgress from '@mui/material/LinearProgress';
 import config from '../../../config'
 import CircularProgress from '@mui/material/CircularProgress';
 import swal from 'sweetalert';
+import PropTypes from 'prop-types';
+
+function CircularProgressWithLabel(props) {
+  return (
+    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+      <CircularProgress sx={{ fontSize: 100 }} variant="determinate" {...props} />
+      <Box
+        sx={{
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          position: 'absolute',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography variant="body2" component="div">
+          {`${Math.round(props.value)}%`}
+        </Typography>
+      </Box>
+    </Box>
+  );
+}
+
+CircularProgressWithLabel.propTypes = {
+  /**
+   * The value of the progress indicator for the determinate variant.
+   * Value between 0 and 100.
+   * @default 0
+   */
+  value: PropTypes.number.isRequired,
+};
 
 
 
@@ -249,7 +283,7 @@ export default function History_of_assets() {
             }
             await Axios.post(config.http + '/FA_Control_New_Assets_Xlsx', body, { headers })
               .then((response) => {
-                setArraySubmit(i + 1);
+                setArraySubmit((i / dataFile.length) * 100);
               })
           }
           const body = { count: dataFile.length, keyID: resTAB.data[0].TAB }
@@ -383,7 +417,8 @@ export default function History_of_assets() {
       minWidth: 130,
       flex: 1,
       valueGetter: (params) =>
-        `${params.row.Price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) || ''}`,
+        data.branchid === 901 ? params.row.Price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) : 'ถูกจำกัดสิทธิ์'
+      // `${(params.row.BranchID === 901) ? (params.row.Price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) : 'ถูกปิดเนื่องจากสิทธิ์'}`,
     },
     // {
     //   field: 'BranchID',
@@ -670,7 +705,7 @@ export default function History_of_assets() {
                 onClose={handleCloseXlsx}
               >
                 {
-                  ((dataFile ? dataFile.length : []) === (arraySubmit ? arraySubmit : (dataFile ? dataFile.length : []))) ?
+                  arraySubmit === 0 ?
                     <React.Fragment>
                       <DialogTitle>
                         ต้องการอัปโหลดไฟล์ {nameExcel} ไปที่ข้อมูลหลักใช่หรือไม่ ?
@@ -685,7 +720,7 @@ export default function History_of_assets() {
                 }
                 <DialogContent>
                   {
-                    ((dataFile ? dataFile.length : []) === (arraySubmit ? arraySubmit : (dataFile ? dataFile.length : []))) ?
+                    arraySubmit === 0 ?
                       <React.Fragment>
                         <StripedDataGrid
                           sx={{
@@ -729,18 +764,13 @@ export default function History_of_assets() {
                             alignItems: 'center',
                           }}
                         >
-                          <Stack direction="row" spacing={3}>
-                            <CircularProgress disableShrink color="inherit" />
-                            <Typography variant="h4" color="inherit" >
-                              ({arraySubmit}/{dataFile ? dataFile.length : 0}) Loading...
-                            </Typography>
-                          </Stack>
+                          <CircularProgressWithLabel value={arraySubmit} />
                         </Box>
                       </React.Fragment>
                   }
                 </DialogContent>
                 {
-                  ((dataFile ? dataFile.length : []) === (arraySubmit ? arraySubmit : (dataFile ? dataFile.length : []))) ?
+                  arraySubmit === 0 ?
                     <React.Fragment>
                       <DialogActions>
                         <Button onClick={handleSubmitXlsx} variant='contained'>Submit</Button>

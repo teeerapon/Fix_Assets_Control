@@ -28,13 +28,41 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
 import CircularProgress from '@mui/material/CircularProgress';
-import FormLabel from '@mui/material/FormLabel';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import swal from 'sweetalert';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import PropTypes from 'prop-types';
 
+function CircularProgressWithLabel(props) {
+  return (
+    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+      <CircularProgress sx={{ fontSize: 100 }} variant="determinate" {...props} />
+      <Box
+        sx={{
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          position: 'absolute',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography variant="body2" component="div">
+          {`${Math.round(props.value)}%`}
+        </Typography>
+      </Box>
+    </Box>
+  );
+}
+
+CircularProgressWithLabel.propTypes = {
+  /**
+   * The value of the progress indicator for the determinate variant.
+   * Value between 0 and 100.
+   * @default 0
+   */
+  value: PropTypes.number.isRequired,
+};
 
 
 const ODD_OPACITY = 0.2;
@@ -144,20 +172,13 @@ export default function History_of_assets() {
   const [permission_menuID, setPermission_menuID] = React.useState();
   const [progress, setProgress] = React.useState();
   const [status_all] = React.useState(['none', 'สภาพดี', 'ชำรุด', 'สูญหาย', 'คืนผู้ร่วมแล้ว', 'ไม่ระบุในสัญญา (สภาพดี)', 'ไม่ระบุในสัญญา (ชำรุด)', 'ไม่ระบุในสัญญา (สูญหาย)', 'ไม่ระบุในสัญญา (คืนผู้ร่วมแล้ว)']);
-  const [arraySubmit, setArraySubmit] = React.useState()
   const [openSendMail, setOpenSendMail] = React.useState(false);
   const [arraySubmitSendMail, setArraySubmitSendMail] = React.useState()
   const [valueOfIndex, setValueOfIndex] = React.useState();
   const [mailto, setMailto] = React.useState({ ME: true, KTT: false, GRP: false, ROD: false });
-
-  const handleChangeMailto = (event) => {
-    setMailto({
-      ...mailto,
-      [event.target.name]: event.target.checked,
-    });
-  };
-
-  const { ME, KTT, GRP, ROD } = mailto;
+  const [user_name, setUser_name] = React.useState();
+  const [user_Lastname, setUser_Lastname] = React.useState();
+  const [progressIcon, setProgressIcon] = React.useState(0);
 
   const handleClick_Value = async (newSelectionModel) => {
     setValueOfIndex(newSelectionModel);
@@ -166,42 +187,45 @@ export default function History_of_assets() {
 
   const handleSubmit_SendMail = async () => {
 
-    var str = '';
-    var headers_colums = '';
-    var today = new Date();
-    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date + ' ' + time;
+    if (user_name && user_Lastname) {
 
-    const headers = {
-      'Authorization': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    };
+      const headers = {
+        'Authorization': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
+      };
 
-    await Axios.post(config.http + '/FA_Control_BPC_Running_NO', data, { headers })
-      .then(async (resTAB) => {
-        for (let i = 0; i < arraySubmitSendMail.length; i++) {
-          const bodyDetails =
-          {
-            "userCode": data.UserCode,
-            "Code": arraySubmitSendMail[i].Code,
-            "Details": arraySubmitSendMail[i].Details,
-            "keyID": resTAB.data[0].TAB,
-            "Comments": arraySubmitSendMail[i].Comments,
-            "image_1": arraySubmitSendMail[i].image_1,
-            "image_2": arraySubmitSendMail[i].image_2,
+      await Axios.post(config.http + '/FA_Control_BPC_Running_NO', data, { headers })
+        .then(async (resTAB) => {
+          for (let i = 0; i < arraySubmitSendMail.length; i++) {
+            const bodyDetails =
+            {
+              "userCode": data.UserCode,
+              "Code": arraySubmitSendMail[i].Code,
+              "Details": arraySubmitSendMail[i].Details,
+              "keyID": resTAB.data[0].TAB,
+              "Comments": arraySubmitSendMail[i].Comments,
+              "image_1": arraySubmitSendMail[i].image_1,
+              "image_2": arraySubmitSendMail[i].image_2,
+              "user_name": `${user_name} ${user_Lastname}`,
+            }
+            await Axios.post(config.http + '/FA_Control_BPC_UpdateDetails', bodyDetails, { headers })
+
+            setProgressIcon((i / arraySubmitSendMail.length) * 100)
           }
-          await Axios.post(config.http + '/FA_Control_BPC_UpdateDetails', bodyDetails, { headers })
-        }
-
-        swal("แจ้งเตือน", 'ดำเนินการเสร็จสิ้น', "success", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
           setOpenSendMail(false);
-          window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
-        })
-      });
+          swal("แจ้งเตือน", 'ทำรายการสำเร็จ', "success", {
+            buttons: false,
+            timer: 2000,
+          }).then((value) => {
+            window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
+          })
+        });
+    } if (!user_name && !user_Lastname) {
+      swal("แจ้งเตือน", 'กรุณากรอกชื่อและนามสกุล (ผู้ทำรายการ)', "warning", {
+        buttons: false,
+        timer: 2000,
+      })
+    }
 
   };
 
@@ -276,12 +300,6 @@ export default function History_of_assets() {
       'Accept': 'application/json'
     };
 
-    var headers_colums = '';
-    var today = new Date();
-    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date + ' ' + time;
-
     if (
       field[0].field === 'No' &&
       field[1].field === 'Name' &&
@@ -291,7 +309,8 @@ export default function History_of_assets() {
       field[5].field === 'Price' &&
       field[6].field === 'Position' &&
       field[7].field === 'Details' &&
-      field[8].field === 'bac_type'
+      field[8].field === 'bac_type' &&
+      user_name && user_Lastname
     ) {
       await Axios.post(config.http + '/FA_Control_BPC_Running_NO', data, { headers })
         .then(async (resTAB) => {
@@ -307,28 +326,39 @@ export default function History_of_assets() {
               , Position: dataFile[i].Position
               , Details: !dataFile[i].Details ? 'สภาพดี' : dataFile[i].Details
               , keyID: resTAB.data[0].TAB
+              , user_name: `${user_name} ${user_Lastname}`,
             }
             await Axios.post(config.http + '/FA_Control_New_Assets_Xlsx', body, { headers })
               .then((res) => {
-                setArraySubmit(i + 1);
+                setProgressIcon((i / dataFile.length) * 100)
+                if (((i / (dataFile.length - 1)) * 100) === 100) {
+                  setOpenXlsx(false)
+                  setOpenSendMail(false);
+                  setOpen(false);
+                  setBac_type(null)
+                  setName(null)
+                  setSerialNo(null)
+                  setPrice(null)
+                  setDetails(null)
+
+                  swal("แจ้งเตือน", 'ทำรายการสำเร็จ', "success", {
+                    buttons: false,
+                    timer: 2000,
+                  }).then((value) => {
+                    window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
+                  })
+                }
               })
           }
-          swal("แจ้งเตือน", 'ดำเนินการเสร็จสิ้น', "success", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
-            setOpenSendMail(false);
-            setOpen(false);
-            setBac_type(null)
-            setName(null)
-            setSerialNo(null)
-            setPrice(null)
-            setDetails(null)
-            window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
-          })
         })
+
+    } else if (!user_name && !user_Lastname) {
+      swal("แจ้งเตือน", 'กรุณากรอกชื่อและนามสกุล (ผู้ทำรายการ)', "warning", {
+        buttons: false,
+        timer: 2000,
+      })
     } else {
-      swal("แจ้งเตือน", 'ข้อมูล (Columns) ไม่ถูกต้อง กรุณาตรวจสอบ', "error", {
+      swal("แจ้งเตือน", 'ข้อมูล (Columns) ไม่ถูกต้อง กรุณาตรวจสอบ', "warning", {
         buttons: false,
         timer: 2000,
       })
@@ -386,17 +416,17 @@ export default function History_of_assets() {
           await Axios.post(config.http + '/FA_Control_New_Assets', body, { headers })
             .then(async (response) => {
               if (response.data !== undefined) {
+                setOpenSendMail(false);
+                setOpen(false);
+                setBac_type(null)
+                setName(null)
+                setSerialNo(null)
+                setPrice(null)
+                setDetails(null)
                 swal("แจ้งเตือน", 'ดำเนินการเสร็จสิ้น', "success", {
                   buttons: false,
                   timer: 2000,
                 }).then((value) => {
-                  setOpenSendMail(false);
-                  setOpen(false);
-                  setBac_type(null)
-                  setName(null)
-                  setSerialNo(null)
-                  setPrice(null)
-                  setDetails(null)
                   window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
                 })
               }
@@ -1086,7 +1116,7 @@ export default function History_of_assets() {
                 onClose={handleCloseXlsx}
               >
                 {
-                  ((dataFile ? dataFile.length : []) === (arraySubmit ? arraySubmit : (dataFile ? dataFile.length : []))) ?
+                  (progressIcon === 0) ?
                     <React.Fragment>
                       <DialogTitle>
                         ต้องการอัปโหลดไฟล์ {nameExcel} ไปที่ข้อมูลหลักใช่หรือไม่ ?
@@ -1101,19 +1131,38 @@ export default function History_of_assets() {
                 }
                 <DialogContent>
                   {
-                    ((dataFile ? dataFile.length : []) === (arraySubmit ? arraySubmit : (dataFile ? dataFile.length : []))) ?
+                    (progressIcon === 0) ?
                       <React.Fragment>
-                        {/* <Box sx={{ display: 'flex' }}>
-                          <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
-                            <FormLabel component="legend">กรุณาเลือกบุคคลที่ท่านต้องการส่งอีเมล</FormLabel>
-                            <FormGroup aria-label="position" row>
-                              <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="ME" disabled checked={ME} />} label="ME" labelPlacement="end" />
-                              <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="KTT" checked={KTT} />} label="KTT" labelPlacement="end" />
-                              <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="GRP" checked={GRP} />} label="GRP" labelPlacement="end" />
-                              <FormControlLabel control={<Checkbox onChange={handleChangeMailto} name="ROD" checked={ROD} />} label="หน่วยงาน ROD" labelPlacement="end" />
-                            </FormGroup>
-                          </FormControl>
-                        </Box> */}
+                        <Typography variant="body" color="error" >
+                          *ลงชื่อ-นามสกุล (ผู้ทำรายการ)
+                        </Typography>
+                        <Box
+                          component="form"
+                          sx={{
+                            '& > :not(style)': { m: 1, ml: 0, width: '25ch' },
+                          }}
+                          noValidate
+                          autoComplete="off"
+                        >
+                          <TextField
+                            id="outlined-controlled"
+                            label="ชื่อจริง"
+                            size="small"
+                            value={user_name}
+                            onChange={(event) => {
+                              setUser_name(event.target.value);
+                            }}
+                          />
+                          <TextField
+                            id="outlined-controlled"
+                            label="นามสกุล"
+                            size="small"
+                            value={user_Lastname}
+                            onChange={(event) => {
+                              setUser_Lastname(event.target.value);
+                            }}
+                          />
+                        </Box>
                         <StripedDataGrid
                           sx={{
                             mt: 1,
@@ -1149,18 +1198,13 @@ export default function History_of_assets() {
                             alignItems: 'center',
                           }}
                         >
-                          <Stack direction="row" spacing={3}>
-                            <CircularProgress disableShrink color="inherit" />
-                            <Typography variant="h4" color="inherit" >
-                              ({arraySubmit}/{dataFile ? dataFile.length : 0}) Loading...
-                            </Typography>
-                          </Stack>
+                          <CircularProgressWithLabel value={progressIcon} />
                         </Box>
                       </React.Fragment>
                   }
                 </DialogContent>
                 {
-                  ((dataFile ? dataFile.length : []) === (arraySubmit ? arraySubmit : (dataFile ? dataFile.length : []))) ?
+                  (progressIcon === 0) ?
                     <React.Fragment>
                       <DialogActions>
                         <Button onClick={handleSubmitXlsx} variant='contained'>Submit</Button>
@@ -1183,6 +1227,36 @@ export default function History_of_assets() {
                 </DialogTitle>
                 <DialogContent>
                   <React.Fragment>
+                    <Typography variant="body" color="error" >
+                      *ลงชื่อ-นามสกุล (ผู้ทำรายการ)
+                    </Typography>
+                    <Box
+                      component="form"
+                      sx={{
+                        '& > :not(style)': { m: 1, ml: 0, width: '25ch' },
+                      }}
+                      noValidate
+                      autoComplete="off"
+                    >
+                      <TextField
+                        id="outlined-controlled"
+                        label="ชื่อจริง"
+                        size="small"
+                        value={user_name}
+                        onChange={(event) => {
+                          setUser_name(event.target.value);
+                        }}
+                      />
+                      <TextField
+                        id="outlined-controlled"
+                        label="นามสกุล"
+                        size="small"
+                        value={user_Lastname}
+                        onChange={(event) => {
+                          setUser_Lastname(event.target.value);
+                        }}
+                      />
+                    </Box>
                     <StripedDataGrid
                       sx={{
                         mt: 1,

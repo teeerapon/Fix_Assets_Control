@@ -11,12 +11,52 @@ import Axios from "axios"
 import LinearProgress from '@mui/material/LinearProgress';
 import config from '../../../../config'
 import Stack from '@mui/material/Stack';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import swal from 'sweetalert';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import PropTypes from 'prop-types';
+import CommentBPC from './comments'
+
+function CircularProgressWithLabel(props) {
+  return (
+    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+      <CircularProgress sx={{ fontSize: 100 }} variant="determinate" {...props} />
+      <Box
+        sx={{
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          position: 'absolute',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography variant="body2" component="div">
+          {`${Math.round(props.value)}%`}
+        </Typography>
+      </Box>
+    </Box>
+  );
+}
+
+CircularProgressWithLabel.propTypes = {
+  /**
+   * The value of the progress indicator for the determinate variant.
+   * Value between 0 and 100.
+   * @default 0
+   */
+  value: PropTypes.number.isRequired,
+};
 
 
 const ODD_OPACITY = 0.2;
@@ -123,14 +163,37 @@ export default function History_of_assets() {
   const queryString = window.location.search;
   const keyID = queryString.split('=')[1]
   const [permission_menuID, setPermission_menuID] = React.useState();
+  const [valueOfIndex, setValueOfIndex] = React.useState();
+  const [arraySubmitSendMail, setArraySubmitSendMail] = React.useState()
 
-  const submit_Vertify = async () => {
+  //comments
+  const [openDialogComment, setOpenDialogComment] = React.useState()
+  const [openLoadingDialog, setOpenLoadingDialog] = React.useState(false)
+  const [openLoading, setOpenLoading] = React.useState(0)
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [description, setDescription] = React.useState()
+
+
+  const handleClickOpenDialogComment = () => {
+    setOpenDialogComment(true);
+  };
+
+  const handleCloseDialogComment = () => {
+    setOpenDialogComment(false);
+  };
+
+  const handleClick_Value = async (newSelectionModel) => {
+    setValueOfIndex(newSelectionModel);
+    setArraySubmitSendMail(dataHistory.filter((res) => !newSelectionModel.includes(res.AssetID)));
+  }
+
+  const submit_CancelJobs = async () => {
     const body = {
       tab_code: keyID,
+      assetID: null,
       userid: data.userid,
-      statusid: ((dataHistory ? dataHistory[0].tab_statusid : null) === 1 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'TCM' || data.UserCode === 'JRK') ? 2 :
-        ((dataHistory ? dataHistory[0].tab_statusid : null) === 2 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'KTT') ? 3 :
-          ((dataHistory ? dataHistory[0].tab_statusid : null) === 3 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'GRP') ? 4 : null
+      statusid: 5,
+      count: 0,
     }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
@@ -140,50 +203,76 @@ export default function History_of_assets() {
       if (error.toJSON().message === 'Request failed with status code 400') {
         setProgress(1)
       }
-    }).then(response => {
-      if(response.data[0].tab_statusid !== 4){
-        swal("แจ้งเตือน", response.data[0].res, "success", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
-          window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + keyID
-        });
-      }else{
-        swal("แจ้งเตือน", response.data[0].res, "success", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
-          window.location.href = "/BSAssetsMain";
-        });
+    })
+    setOpenLoadingDialog(false)
+    swal("แจ้งเตือน", 'ตรวจสอบรายการสำเร็จ', "success", {
+      buttons: false,
+      timer: 2000,
+    }).then((value) => {
+      window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + keyID
+    })
+  }
+
+  const submit_Vertify = async () => {
+
+    if (!arraySubmitSendMail || (arraySubmitSendMail.length === dataHistory.length)) {
+      swal("แจ้งเตือน", `กรุณาเลือกอย่างน้อย 1 รายการเพื่อตรวจสอบ`, "warning", {
+        buttons: false,
+        timer: 2000,
+      })
+    } else {
+      if (arraySubmitSendMail.length === 0) {
+        const body = {
+          tab_code: keyID,
+          assetID: null,
+          userid: data.userid,
+          statusid: ((dataHistory ? dataHistory[0].tab_statusid : null) === 1 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'TCM' || data.UserCode === 'JRK') ? 2 :
+            ((dataHistory ? dataHistory[0].tab_statusid : null) === 2 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'KTT') ? 3 :
+              ((dataHistory ? dataHistory[0].tab_statusid : null) === 3 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'GRP') ? 4 : null,
+          count: 0,
+        }
+        const headers = {
+          'Authorization': 'application/json; charset=utf-8',
+          'Accept': 'application/json'
+        };
+        await Axios.post(config.http + '/FA_Control_BPC_SubmitVertify', body, { headers }).catch(function (error) {
+          if (error.toJSON().message === 'Request failed with status code 400') {
+            setProgress(1)
+          }
+        })
+      } else {
+        for (let i = 0; i < arraySubmitSendMail.length; i++) {
+          const body = {
+            tab_code: keyID,
+            assetID: arraySubmitSendMail[i].AssetID,
+            userid: data.userid,
+            statusid: ((dataHistory ? dataHistory[0].tab_statusid : null) === 1 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'TCM' || data.UserCode === 'JRK') ? 2 :
+              ((dataHistory ? dataHistory[0].tab_statusid : null) === 2 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'KTT') ? 3 :
+                ((dataHistory ? dataHistory[0].tab_statusid : null) === 3 && ((permission_menuID ? permission_menuID.includes(10) : null) === true) || data.UserCode === 'GRP') ? 4 : null,
+            count: i,
+          }
+          const headers = {
+            'Authorization': 'application/json; charset=utf-8',
+            'Accept': 'application/json'
+          };
+          await Axios.post(config.http + '/FA_Control_BPC_SubmitVertify', body, { headers }).catch(function (error) {
+            if (error.toJSON().message === 'Request failed with status code 400') {
+              setProgress(1)
+            }
+          }).then((response) => {
+            setOpenLoadingDialog(true)
+            setOpenLoading((i / arraySubmitSendMail.length) * 100)
+          })
+        }
       }
-    });
-
-    // headers_colums = `
-    // <tr style="background-color: royalblue;color:#ffffff;">
-    //   <td>เลขที่อ้างอิง ${resTAB.data[0].TAB}</td>
-    //   <td>การขึ้นทะเบียนทรัพย์สินผู้ร่วม วันที่ ${dateTime}</td>
-    //   <td>ผู้ดำเนินการ ${data.UserCode}</td>
-    // </tr>
-    // <tr>
-    //   <td colspan="6">เช็คข้อมูลได้ที่ URL : <a href=${window.location.origin}/FA_Control_BPC_SELECT_TEMP?keyID=${resTAB.data[0].TAB}>คลิกที่นี่</a></td>
-    // </tr>
-    // `
-
-    // const html = `<table style="height: 79px;" border="1" width="100%" cellspacing="0" cellpadding="0">${headers_colums.trim()}${str.trim()}</table>`
-
-    // const body = { ME: data.UserCode, KTT: mailto.KTT, GRP: mailto.GRP, ROD: mailto.ROD, data: html, code_ref: resTAB.data[0].TAB }
-
-    // await Axios.post(config.http + '/FA_Control_BPC_Sendmail', body, { headers })
-    //   .then(async (res) => {
-    //     await swal("แจ้งเตือน", res.data[0].response, "success", {
-    //       buttons: false,
-    //       timer: 2000,
-    //     }).then((value) => {
-    //       setOpenSendMail(false);
-    //       window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
-    //     })
-
-    //   })
+      setOpenLoadingDialog(false)
+      swal("แจ้งเตือน", 'ตรวจสอบรายการสำเร็จ', "success", {
+        buttons: false,
+        timer: 2000,
+      }).then((value) => {
+        window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + keyID
+      })
+    }
   }
 
   React.useEffect(async () => {
@@ -336,7 +425,7 @@ export default function History_of_assets() {
           <Toolbar>
             <AnimatedPage>
               <Typography variant="h5" color="inherit" >
-                ทะเบียนทรัพย์สินผู้ร่วมเลขที่ {keyID} ({dataHistory ? dataHistory[0].tab_status : null})
+                ทะเบียนทรัพย์สินผู้ร่วมเลขที่ {keyID}
               </Typography>
             </AnimatedPage>
           </Toolbar>
@@ -351,31 +440,42 @@ export default function History_of_assets() {
                     variant="contained"
                     color="success"
                     onClick={submit_Vertify}
-                    disabled={(dataHistory ? dataHistory[0].tab_statusid : null) === 4 ? true : false}
+                    disabled={(dataHistory ? dataHistory[0].tab_statusid : null) === 4 || (dataHistory ? dataHistory[0].tab_statusid : 0) === 5 ? true : false}
                   >
                     ตรวจสอบ
                   </Button>
                   <Button
                     variant="contained"
                     color="error"
-                    disabled={(dataHistory ? dataHistory[0].tab_statusid : null) === 4 ? true : false}
+                    onClick={submit_CancelJobs}
+                    disabled={(dataHistory ? dataHistory[0].tab_statusid : null) === 4 || (dataHistory ? dataHistory[0].tab_statusid : 0) === 5 ? true : false}
                   >
                     ยกเลิก
                   </Button>
                 </React.Fragment>
+                <Paper variant="outlined" sx={{ width: 'fit-content', padding: 1 }}>
+                  <Typography>
+                    ผู้ทำรายการ : {dataHistory ? dataHistory[0].user_name : 0}
+                  </Typography>
+                </Paper>
+                <Paper variant="outlined" sx={{ width: 'fit-content', padding: 1 }}>
+                  <Typography>
+                    สถานะรายการ : ({dataHistory ? dataHistory[0].tab_status : null})
+                  </Typography>
+                </Paper>
                 <Paper variant="outlined" sx={{ flexGrow: 1, padding: 1 }}>
                   <Stack direction="row" spacing={2}>
-                    <Typography style={{ 'color': (dataHistory ? dataHistory[0].grp_approve : 0) === 1 ? 'blue' : 'black' }}>
-                      ผู้มีสิทธิตรวจสอบเอกสารฉบับนี้ :
+                    <Typography>
+                      ผู้มีสิทธิตรวจสอบรายการ :
                     </Typography>
-                    <Typography style={{ 'color': (dataHistory ? dataHistory[0].grp_approve : 0) === 1 ? 'blue' : 'black' }}>
+                    <Typography style={{ 'color': !(dataHistory ? dataHistory[0].grp_approve : 0) ? 'black' : 'blue' }}>
                       &nbsp; (GRP)
                     </Typography>
-                    <Typography style={{ 'color': (dataHistory ? dataHistory[0].ktt_approve : 0) === 1 ? 'blue' : 'black' }}>
+                    <Typography style={{ 'color': !(dataHistory ? dataHistory[0].ktt_approve : 0) ? 'black' : 'blue' }}>
                       (KTT)
                     </Typography>
-                    <Typography style={{ 'color': (dataHistory ? dataHistory[0].rod_approve : 0) === 1 ? 'blue' : 'black' }}>
-                      (ROD)
+                    <Typography style={{ 'color': !(dataHistory ? dataHistory[0].rod_approve : 0) ? 'black' : 'blue' }}>
+                      (RSS)
                     </Typography>
                   </Stack>
                 </Paper>
@@ -409,17 +509,50 @@ export default function History_of_assets() {
                   }}
                   rows={dataHistory ?? []}
                   columns={columns}
-                  getRowId={(row) => row?.Code}
+                  getRowId={(row) => row?.AssetID}
                   getRowHeight={(res) => 'auto'}
                   pageSize={10}
                   // autoHeight
                   disableColumnMenu
-                  disableSelectionOnClick
                   {...other}
-                //checkboxSelection
+                  disableSelectionOnClick
+                  checkboxSelection={(dataHistory ? dataHistory[0].tab_statusid : 0) === 4 || (dataHistory ? dataHistory[0].tab_statusid : 0) === 5 ? false : true}
+                  onSelectionModelChange={(newSelectionModel) => handleClick_Value(newSelectionModel)}
+                  selectionModel={valueOfIndex}
+                  keepNonExistentRowsSelected
                 />
               </Box>
+              <CommentBPC
+                handleClickOpenDialogComment={handleClickOpenDialogComment}
+                openDialog={openDialog}
+                handleCloseDialogComment={handleCloseDialogComment}
+                data={data}
+                keyID={keyID}
+                description={description}
+                setDescription={setDescription}
+                setOpenDialog={setOpenDialog}
+              />
             </Container>
+            <Dialog
+              fullWidth
+              maxWidth='lg'
+              open={openLoadingDialog}
+            >
+              <DialogTitle>
+                กำลังอัปโหลดข้อมูล กรุณาอย่าปิดหน้าจอนี้ !!
+              </DialogTitle>
+              <Box
+                sx={{
+                  mt: 10,
+                  mb: 10,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <CircularProgressWithLabel value={openLoading} />
+              </Box>
+            </Dialog>
           </Box>
         </AnimatedPage>
       </React.Fragment>

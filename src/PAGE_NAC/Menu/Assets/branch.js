@@ -245,7 +245,7 @@ export default function History_of_assets() {
       minWidth: 130,
       flex: 1,
       valueGetter: (params) =>
-        `${params.row.Price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) || ''}`,
+        data.branchid === 901 ? params.row.Price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) : 'ถูกจำกัดสิทธิ์'
     },
     // {
     //   field: 'BranchID',
@@ -380,7 +380,7 @@ export default function History_of_assets() {
                   componentsProps={{
                     toolbar: {
                       csvOptions: {
-                        utf8WithBom: true, 
+                        utf8WithBom: true,
                         fileName: `ทะเบียนทรัพย์สินสาขา ${data.branchid}`,
                         delimiter: ';',
                       }
