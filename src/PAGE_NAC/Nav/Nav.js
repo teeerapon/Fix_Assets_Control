@@ -428,6 +428,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                               sx={{ display: 'inline' }}
                               component="span"
                               variant="caption"
+                              style={{ color: "rgb(231,244,17)" }}
                             >
                               <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เพิ่มบัญชีทรัพย์สิน
                             </Typography>
@@ -441,6 +442,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; โยกย้ายทรัพย์สิน
                         </Typography>
@@ -452,6 +454,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เปลี่ยนแปลงรายละเอียดทรัพย์สิน
                         </Typography>
@@ -463,6 +466,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ขายทรัพย์สิน
                         </Typography>
@@ -474,6 +478,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตัดบัญชีทรัพย์สิน
                         </Typography>
@@ -503,6 +508,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการ NAC
                         </Typography>
@@ -515,6 +521,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                             sx={{ display: 'inline' }}
                             component="span"
                             variant="caption"
+                            style={{ color: "rgb(231,244,17)" }}
                           >
                             <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการ NAC ทั้งหมด
                           </Typography>
@@ -548,6 +555,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                             sx={{ display: 'inline' }}
                             component="span"
                             variant="caption"
+                            style={{ color: "rgb(231,244,17)" }}
                           >
                             <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เพิ่มรอบตรวจนับ
                           </Typography>
@@ -561,6 +569,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                             sx={{ display: 'inline' }}
                             component="span"
                             variant="caption"
+                            style={{ color: "rgb(231,244,17)" }}
                           >
                             <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; แก้ไขรอบตรวจนับ
                           </Typography>
@@ -593,6 +602,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                               sx={{ display: 'inline' }}
                               component="span"
                               variant="caption"
+                              style={{ color: "rgb(231,244,17)" }}
                             >
                               <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book NAC
                             </Typography>
@@ -606,6 +616,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                               sx={{ display: 'inline' }}
                               component="span"
                               variant="caption"
+                              style={{ color: "rgb(231,244,17)" }}
                             >
                               <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทะเบียนทรัพย์สินทั้งหมด
                             </Typography>
@@ -622,6 +633,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                             sx={{ display: 'inline' }}
                             component="span"
                             variant="caption"
+                            style={{ color: "rgb(231,244,17)" }}
                           >
                             <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตรวจนับทรัพย์สินทั้งหมด
                           </Typography>
@@ -636,6 +648,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตรวจนับทรัพย์สิน 1 สาขา
                         </Typography>
@@ -650,6 +663,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                             sx={{ display: 'inline' }}
                             component="span"
                             variant="caption"
+                            style={{ color: "rgb(231,244,17)" }}
                           >
                             <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติทรัพย์สิน
                           </Typography>
@@ -682,6 +696,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book BPC
                         </Typography>
@@ -693,6 +708,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการทรัพย์สินผู้ร่วม
                         </Typography>
@@ -704,6 +720,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติการดำเนินการทรัพย์สินผู้ร่วม
                         </Typography>
@@ -891,44 +908,24 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; โยกย้ายทรัพย์สิน
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
-                    {/* <ListItemButton onClick={NAC_CHANGE}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เปลี่ยนแปลงรายละเอียดทรัพย์สิน
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton> */}
                     <ListItemButton onClick={NAC_SEALS}>
                       <ListItemText>
                         <Typography
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ขายทรัพย์สิน
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
-                    {/* <ListItemButton onClick={NAC_DELETE}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตัดบัญชีทรัพย์สินถาวร
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton> */}
                   </List>
                 </Collapse>
                 <ListItem disablePadding>
@@ -953,6 +950,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการ NAC
                         </Typography>
@@ -982,6 +980,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book NAC
                         </Typography>
@@ -995,6 +994,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทะเบียนทรัพย์สินสาขา
                         </Typography>
@@ -1008,6 +1008,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; REPORT
                         </Typography>
@@ -1039,6 +1040,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book BPC
                         </Typography>
@@ -1050,6 +1052,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการทรัพย์สินผู้ร่วม
                         </Typography>
@@ -1061,6 +1064,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ display: 'inline' }}
                           component="span"
                           variant="caption"
+                          style={{ color: "rgb(231,244,17)" }}
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติการดำเนินการทรัพย์สินผู้ร่วม
                         </Typography>
