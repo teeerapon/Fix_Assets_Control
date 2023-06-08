@@ -345,8 +345,8 @@ export default function History_of_assets() {
           <React.Fragment>
             <ImageListItem key={params.row.ImagePath}>
               <img
-                src={`${params.row.ImagePath}?w = 248 & fit=crop & auto=format`}
-                srcSet={`${params.row.ImagePath}?w = 248 & fit=crop & auto=format & dpr=2 2x`}
+                src={`${ params.row.ImagePath } ? w = 248 & fit=crop & auto=format`}
+                srcSet={`${ params.row.ImagePath } ? w = 248 & fit=crop & auto=format & dpr=2 2x`}
                 alt={params.row.Name}
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null; // prevents looping
@@ -376,8 +376,8 @@ export default function History_of_assets() {
           <React.Fragment>
             <ImageListItem key={params.row.ImagePath_2}>
               <img
-                src={`${params.row.ImagePath_2}?w = 248 & fit=crop & auto=format`}
-                srcSet={`${params.row.ImagePath_2}?w = 248 & fit=crop & auto=format & dpr=2 2x`}
+                src={`${ params.row.ImagePath_2 } ? w = 248 & fit=crop & auto=format`}
+                srcSet={`${ params.row.ImagePath_2 } ? w = 248 & fit=crop & auto=format & dpr=2 2x`}
                 alt={params.row.Name}
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null; // prevents looping
@@ -419,7 +419,7 @@ export default function History_of_assets() {
           elevation={0}
           sx={{
             position: 'relative',
-            borderBottom: (t) => `1px solid ${t.palette.divider}`,
+            borderBottom: (t) => `1px solid ${ t.palette.divider }`,
           }}
         >
           <Toolbar>
@@ -493,7 +493,7 @@ export default function History_of_assets() {
                     pr: 2,
                     pt: 2,
                     boxShadow: 1,
-                    [`& .${gridClasses.cell}`]: {
+                    [`& .${ gridClasses.cell }`]: {
                       py: 1,
                     },
                   }}
@@ -502,7 +502,7 @@ export default function History_of_assets() {
                     toolbar: {
                       csvOptions: {
                         utf8WithBom: true,
-                        fileName: `ทะเบียนทรัพย์สินผู้ร่วมวันที่ ${dataHistory ? dataHistory[0].UpdateDate : '...'}`,
+                        fileName: `ทะเบียนทรัพย์สินผู้ร่วมวันที่ ${ dataHistory? dataHistory[0].UpdateDate : '...'}`,
 
                       }
                     }

@@ -462,7 +462,7 @@ export default function History_of_assets() {
           <Toolbar>
             <AnimatedPage>
               <Typography variant="h5" color="inherit" >
-                ประวัติการดำเนินการทรัพย์สินผู้ร่วม
+                สถานะรายการทรัพย์สินผู้ร่วม
               </Typography>
             </AnimatedPage>
           </Toolbar>

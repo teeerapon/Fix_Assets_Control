@@ -523,59 +523,6 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                       : null}
                   </List>
                 </Collapse>
-                {(permission_menuID ? permission_menuID.includes(13) : null) === true ?
-                  <ListItem disablePadding>
-                    <ListItemButton onClick={handleClickList5}>
-                      <ListItemIcon><DomainAddIcon fontSize="small" /></ListItemIcon>
-                      <ListItemText>
-                        <Typography
-                          component="span"
-                          variant="caption"
-                        >
-                          BPC
-                        </Typography>
-                      </ListItemText>
-                      {openList3 ? <ExpandLess /> : <ExpandMore />}
-                    </ListItemButton>
-                  </ListItem>
-                  : null}
-                <Collapse in={openList5} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    <ListItemButton onClick={BSAssetsMain}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book BPC
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    <ListItemButton onClick={BpcStatus}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการทรัพย์สินผู้ร่วม
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    <ListItemButton onClick={Transection_List}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติการดำเนินการทรัพย์สินผู้ร่วม
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                  </List>
-                </Collapse>
                 {(permission_menuID ? permission_menuID.includes(3 || 4) : null) === true ?
                   <ListItem disablePadding>
                     <ListItemButton onClick={handleClickList3}>
@@ -710,6 +657,59 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                       </ListItemButton>
                     </List>
                     : null}
+                </Collapse>
+                {(permission_menuID ? permission_menuID.includes(13) : null) === true ?
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={handleClickList5}>
+                      <ListItemIcon><DomainAddIcon fontSize="small" /></ListItemIcon>
+                      <ListItemText>
+                        <Typography
+                          component="span"
+                          variant="caption"
+                        >
+                          BPC
+                        </Typography>
+                      </ListItemText>
+                      {openList3 ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                  </ListItem>
+                  : null}
+                <Collapse in={openList5} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItemButton onClick={BSAssetsMain}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book BPC
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                    <ListItemButton onClick={BpcStatus}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการทรัพย์สินผู้ร่วม
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                    <ListItemButton onClick={Transection_List}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติการดำเนินการทรัพย์สินผู้ร่วม
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                  </List>
                 </Collapse>
                 {/* <ListItem disablePadding>
                   <ListItemButton onClick={REPORT}>
@@ -960,59 +960,6 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                     </ListItemButton>
                   </List>
                 </Collapse>
-                {(permission_menuID ? permission_menuID.includes(13) : null) === true ?
-                  <ListItem disablePadding>
-                    <ListItemButton onClick={handleClickList5}>
-                      <ListItemIcon><DomainAddIcon fontSize="small" /></ListItemIcon>
-                      <ListItemText>
-                        <Typography
-                          component="span"
-                          variant="caption"
-                        >
-                          BPC
-                        </Typography>
-                      </ListItemText>
-                      {openList3 ? <ExpandLess /> : <ExpandMore />}
-                    </ListItemButton>
-                  </ListItem>
-                  : null}
-                <Collapse in={openList5} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    <ListItemButton onClick={BSAssetsMain}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book BPC
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    <ListItemButton onClick={BpcStatus}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการทรัพย์สินผู้ร่วม
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    <ListItemButton onClick={Transection_List}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติการดำเนินการทรัพย์สินผู้ร่วม
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                  </List>
-                </Collapse>
                 <ListItem disablePadding>
                   <ListItemButton onClick={handleClickList4}>
                     <ListItemIcon><WorkHistoryIcon fontSize="small" /></ListItemIcon>
@@ -1063,6 +1010,59 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           variant="caption"
                         >
                           <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; REPORT
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                  </List>
+                </Collapse>
+                {(permission_menuID ? permission_menuID.includes(13) : null) === true ?
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={handleClickList5}>
+                      <ListItemIcon><DomainAddIcon fontSize="small" /></ListItemIcon>
+                      <ListItemText>
+                        <Typography
+                          component="span"
+                          variant="caption"
+                        >
+                          BPC
+                        </Typography>
+                      </ListItemText>
+                      {openList3 ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                  </ListItem>
+                  : null}
+                <Collapse in={openList5} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItemButton onClick={BSAssetsMain}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book BPC
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                    <ListItemButton onClick={BpcStatus}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการทรัพย์สินผู้ร่วม
+                        </Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                    <ListItemButton onClick={Transection_List}>
+                      <ListItemText>
+                        <Typography
+                          sx={{ display: 'inline' }}
+                          component="span"
+                          variant="caption"
+                        >
+                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติการดำเนินการทรัพย์สินผู้ร่วม
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
