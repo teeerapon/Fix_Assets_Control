@@ -283,33 +283,45 @@ export default function History_of_assets() {
             }
             await Axios.post(config.http + '/FA_Control_New_Assets_Xlsx', body, { headers })
               .then((response) => {
-                setArraySubmit((i / dataFile.length) * 100);
+                if (response.data[0].res) {
+                  setOpenXlsx(false)
+                  swal("แจ้งเตือน", response.data[0].res, "error", {
+                    buttons: false,
+                    timer: 2000,
+                  })
+                } else {
+                  setArraySubmit((i / (dataFile.length - 1)) * 100);
+                  if (i === (dataFile.length - 1)) {
+                    const body = { count: dataFile.length, keyID: resTAB.data[0].TAB }
+                    Axios.post(config.http + '/FA_Control_import_dataXLSX_toAssets', body, { headers })
+                      .then((response) => {
+                        if (response.data[0].response === 'ทำรายการสำเร็จ') {
+                          swal("แจ้งเตือน", response.data[0].response, "success", {
+                            buttons: false,
+                            timer: 2000,
+                          }).then((value) => {
+                            setOpenXlsx(false)
+                            setOpen(false);
+                            setCode(null)
+                            setName(null)
+                            setSerialNo(null)
+                            setPrice(null)
+                            setDetails(null)
+                            setCeate_Date(null)
+                            window.location.href = '/FETCH_ASSETS';
+                          })
+                        } else {
+                          setOpenXlsx(false)
+                          swal("แจ้งเตือน", response.data[0].response, "error", {
+                            buttons: false,
+                            timer: 2000,
+                          })
+                        }
+                      })
+                  }
+                }
               })
           }
-          const body = { count: dataFile.length, keyID: resTAB.data[0].TAB }
-          await Axios.post(config.http + '/FA_Control_import_dataXLSX_toAssets', body, { headers })
-            .then((response) => {
-              if (response.data[0].response === 'ทำรายการสำเร็จ') {
-                swal("แจ้งเตือน", response.data[0].response, "success", {
-                  buttons: false,
-                  timer: 2000,
-                }).then((value) => {
-                  setOpen(false);
-                  setCode(null)
-                  setName(null)
-                  setSerialNo(null)
-                  setPrice(null)
-                  setDetails(null)
-                  setCeate_Date(null)
-                  window.location.href = '/FETCH_ASSETS';
-                })
-              } else {
-                swal("แจ้งเตือน", response.data[0].response, "error", {
-                  buttons: false,
-                  timer: 2000,
-                })
-              }
-            })
         })
     } else {
       swal("แจ้งเตือน", 'ข้อมูล (Columns) ไม่ถูกต้อง กรุณาตรวจสอบ', "error", {
@@ -705,7 +717,7 @@ export default function History_of_assets() {
                 onClose={handleCloseXlsx}
               >
                 {
-                  arraySubmit === 0 ?
+                  !arraySubmit ?
                     <React.Fragment>
                       <DialogTitle>
                         ต้องการอัปโหลดไฟล์ {nameExcel} ไปที่ข้อมูลหลักใช่หรือไม่ ?
@@ -720,7 +732,7 @@ export default function History_of_assets() {
                 }
                 <DialogContent>
                   {
-                    arraySubmit === 0 ?
+                    !arraySubmit ?
                       <React.Fragment>
                         <StripedDataGrid
                           sx={{
@@ -770,7 +782,7 @@ export default function History_of_assets() {
                   }
                 </DialogContent>
                 {
-                  arraySubmit === 0 ?
+                  !arraySubmit ?
                     <React.Fragment>
                       <DialogActions>
                         <Button onClick={handleSubmitXlsx} variant='contained'>Submit</Button>

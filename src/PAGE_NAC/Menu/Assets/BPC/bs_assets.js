@@ -329,29 +329,35 @@ export default function History_of_assets() {
               , user_name: `${user_name} ${user_Lastname}`,
             }
             await Axios.post(config.http + '/FA_Control_New_Assets_Xlsx', body, { headers })
-              .then((res) => {
-                setProgressIcon((i / dataFile.length) * 100)
-                if (((i / (dataFile.length - 1)) * 100) === 100) {
+              .then((response) => {
+                if (response.data[0].res) {
                   setOpenXlsx(false)
-                  setOpenSendMail(false);
-                  setOpen(false);
-                  setBac_type(null)
-                  setName(null)
-                  setSerialNo(null)
-                  setPrice(null)
-                  setDetails(null)
-
-                  swal("แจ้งเตือน", 'ทำรายการสำเร็จ', "success", {
+                  swal("แจ้งเตือน", response.data[0].res, "error", {
                     buttons: false,
                     timer: 2000,
-                  }).then((value) => {
-                    window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
                   })
+                } else {
+                  setProgressIcon((i / (dataFile.length - 1)) * 100)
+                  if (((i / (dataFile.length - 1)) * 100) === 100) {
+                    setOpenXlsx(false)
+                    setOpenSendMail(false);
+                    setOpen(false)
+                    setBac_type(null)
+                    setName(null)
+                    setSerialNo(null)
+                    setPrice(null)
+                    setDetails(null)
+                    swal("แจ้งเตือน", 'ทำรายการสำเร็จ', "success", {
+                      buttons: false,
+                      timer: 2000,
+                    }).then((value) => {
+                      window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
+                    })
+                  }
                 }
               })
           }
         })
-
     } else if (!user_name && !user_Lastname) {
       swal("แจ้งเตือน", 'กรุณากรอกชื่อและนามสกุล (ผู้ทำรายการ)', "warning", {
         buttons: false,
