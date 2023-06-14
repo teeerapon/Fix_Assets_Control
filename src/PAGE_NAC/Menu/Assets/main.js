@@ -285,6 +285,13 @@ export default function History_of_assets() {
               .then((response) => {
                 if (response.data[0].res) {
                   setOpenXlsx(false)
+                  setOpen(false);
+                  setCode(null)
+                  setName(null)
+                  setSerialNo(null)
+                  setPrice(null)
+                  setDetails(null)
+                  setCeate_Date(null)
                   swal("แจ้งเตือน", response.data[0].res, "error", {
                     buttons: false,
                     timer: 2000,
