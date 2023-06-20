@@ -1879,7 +1879,7 @@ export default function Nac_Main_wait() {
                                       fullWidth
                                       autoComplete="family-name"
                                       error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
-                                      disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                      //disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                       onChange={handleChangeSource_Name}
                                       value={nameSource}
@@ -1913,7 +1913,7 @@ export default function Nac_Main_wait() {
                                       fullWidth
                                       autoComplete="family-name"
                                       error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
-                                      disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                      //disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                       onChange={handleChangeSource_Name}
                                       value={nameSource}
@@ -2049,7 +2049,7 @@ export default function Nac_Main_wait() {
                                   variant="standard"
                                   fullWidth
                                   autoComplete="family-name"
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  //disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
                                   onChange={handleChangeSource_Des}
                                   value={nameDes}
@@ -2697,7 +2697,19 @@ export default function Nac_Main_wait() {
                                 ปิดรายการ
                               </Button>
                             </React.Fragment>
-                          ) : null}
+                          ) : (
+                            <React.Fragment>
+                              <Button
+                                variant="contained"
+                                onClick={handleSave}
+                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                style={{ 'backgroundColor': 'orange' }}
+                                startIcon={<SystemUpdateAltRoundedIcon />}
+                                disabled={(data.UserCode === headers.create_by || ((permission_menuID ? permission_menuID.includes(9) : null) === true)) ? false : true}>
+                                อัปเดต
+                              </Button>
+                            </React.Fragment>
+                          )}
                         </Stack>
                       </TableBody>
                     </Table>
