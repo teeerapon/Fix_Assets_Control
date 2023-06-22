@@ -317,9 +317,15 @@ export default function History_of_assets() {
                             setCeate_Date(null)
                             window.location.href = '/FETCH_ASSETS';
                           })
-                        } else {
+                        } else if(response.data[0].response) {
                           setOpenXlsx(false)
                           swal("แจ้งเตือน", response.data[0].response, "error", {
+                            buttons: false,
+                            timer: 2000,
+                          })
+                        } else {
+                          setOpenXlsx(false)
+                          swal("แจ้งเตือน", response.data, "error", {
                             buttons: false,
                             timer: 2000,
                           })
