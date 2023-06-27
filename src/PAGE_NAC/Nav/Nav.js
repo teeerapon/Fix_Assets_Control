@@ -89,31 +89,31 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const create_nac = [
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_CREATE_STEP1' ? null : 'none' }} />,
       label: 'เพิ่มบัญชีทรัพย์สิน',
       url: '/NAC_CREATE_STEP1',
       permission: (permission_menuID ? permission_menuID.includes(1) : null) === true ? 1 : 0,
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_CREATE_MAIN1' ? null : 'none' }} />,
       label: 'โยกย้ายทรัพย์สิน',
       url: '/NAC_CREATE_MAIN1'
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_CHANGE_STEP1' ? null : 'none' }} />,
       label: 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน',
       url: '/NAC_CHANGE_STEP1',
       permission: data.branchid === 901 ? 1 : 0,
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_SEALS_STEP1' ? null : 'none' }} />,
       label: 'ขายทรัพย์สิน',
       url: '/NAC_SEALS_STEP1'
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_DELETE_STEP1' ? null : 'none' }} />,
       label: 'ตัดบัญชีทรัพย์สิน',
       url: '/NAC_DELETE_STEP1',
       permission: data.branchid === 901 ? 1 : 0,
@@ -123,12 +123,12 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const nac = [
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_ROW' ? null : 'none' }} />,
       label: 'สถานะรายการ NAC',
       url: '/NAC_ROW'
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_OPERATOR' ? null : 'none' }} />,
       label: 'สถานะรายการ NAC ทั้งหมด',
       url: '/NAC_OPERATOR',
       permission: (permission_menuID ? permission_menuID.includes(2) : null) === true ? 1 : 0,
@@ -138,14 +138,14 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const period = [
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/CreatePeriod' ? null : 'none' }} />,
       label: 'เพิ่มรอบตรวจนับ',
       url: '/CreatePeriod',
       permission: (permission_menuID ? permission_menuID.includes(3) : null) === true ? 1 : 0,
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/EditPeriod' ? null : 'none' }} />,
       label: 'แก้ไขรอบตรวจนับ',
       url: '/EditPeriod',
       permission: (permission_menuID ? permission_menuID.includes(4) : null) === true ? 1 : 0,
@@ -155,30 +155,30 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const report = [
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: (location.pathname === '/EBookMain' || location.pathname === '/EBookBranch') ? null : 'none' }} />,
       label: 'E-Book NAC',
       url: data.branchid === 901 ? '/EBookMain' : '/EBookBranch',
       permission: (data.branchid !== 901 || ((permission_menuID ? permission_menuID.includes(5) : null) === true)) ? 1 : 0,
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: (location.pathname === '/FETCH_ASSETS' || location.pathname === '/Account_BrnachAssets') ? null : 'none' }} />,
       label: 'ทะเบียนทรัพย์สินทั้งหมด',
       url: data.branchid === 901 ? '/FETCH_ASSETS' : '/Account_BrnachAssets',
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/Reported_Assets_Counted' ? null : 'none' }} />,
       label: 'ตรวจนับทรัพย์สินทั้งหมด',
       url: '/Reported_Assets_Counted',
       permission: (permission_menuID ? permission_menuID.includes(7) : null) === true ? 1 : 0,
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/Report' ? null : 'none' }} />,
       label: 'ตรวจนับทรัพย์สิน 1 สาขา',
       url: '/Report'
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/History_of_Assets' ? null : 'none' }} />,
       label: 'ประวัติทรัพย์สินทำ NAC',
       url: '/History_of_Assets',
       permission: (permission_menuID ? permission_menuID.includes(8) : null) === true ? 1 : 0,
@@ -188,17 +188,17 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const bpc = [
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/BSAssetsMain' ? null : 'none' }} />,
       label: 'E-Book BPC',
       url: '/BSAssetsMain'
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/BpcStatus' ? null : 'none' }} />,
       label: 'สถานะรายการทรัพย์สินผู้ร่วม',
       url: '/BpcStatus'
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/TransectionList' ? null : 'none' }} />,
       label: 'ประวัติทรัพย์สินผู้ร่วม',
       url: '/TransectionList'
     },
@@ -554,13 +554,16 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           key={item.label}
                           onClick={() => navigate(item.url)}
                           sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
-                          style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
                         >
-                          <ListItemIcon sx={{ color: 'inherit' }}>
+                          <ListItemIcon
+                            sx={{ color: 'inherit' }}
+                            style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
+                          >
                             {item.icon}
                           </ListItemIcon>
                           <ListItemText
                             primary={item.label}
+                            style={{ color: location.pathname === item.url ? "#fff" : "rgba(255, 255, 255, 0.7)" }}
                             primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
                           />
                         </ListItemButton>
@@ -599,13 +602,16 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           key={item.label}
                           onClick={() => navigate(item.url)}
                           sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
-                          style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
                         >
-                          <ListItemIcon sx={{ color: 'inherit' }}>
+                          <ListItemIcon
+                            sx={{ color: 'inherit' }}
+                            style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
+                          >
                             {item.icon}
                           </ListItemIcon>
                           <ListItemText
                             primary={item.label}
+                            style={{ color: location.pathname === item.url ? "#fff" : "rgba(255, 255, 255, 0.7)" }}
                             primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
                           />
                         </ListItemButton>
@@ -642,13 +648,16 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           key={item.label}
                           onClick={() => navigate(item.url)}
                           sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
-                          style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
                         >
-                          <ListItemIcon sx={{ color: 'inherit' }}>
+                          <ListItemIcon
+                            sx={{ color: 'inherit' }}
+                            style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
+                          >
                             {item.icon}
                           </ListItemIcon>
                           <ListItemText
                             primary={item.label}
+                            style={{ color: location.pathname === item.url ? "#fff" : "rgba(255, 255, 255, 0.7)" }}
                             primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
                           />
                         </ListItemButton>
@@ -687,13 +696,16 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           key={item.label}
                           onClick={() => navigate(item.url)}
                           sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
-                          style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
                         >
-                          <ListItemIcon sx={{ color: 'inherit' }}>
+                          <ListItemIcon
+                            sx={{ color: 'inherit' }}
+                            style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
+                          >
                             {item.icon}
                           </ListItemIcon>
                           <ListItemText
                             primary={item.label}
+                            style={{ color: location.pathname === item.url ? "#fff" : "rgba(255, 255, 255, 0.7)" }}
                             primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
                           />
                         </ListItemButton>
@@ -732,13 +744,16 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           key={item.label}
                           onClick={() => navigate(item.url)}
                           sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
-                          style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
                         >
-                          <ListItemIcon sx={{ color: 'inherit' }}>
+                          <ListItemIcon
+                            sx={{ color: 'inherit' }}
+                            style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
+                          >
                             {item.icon}
                           </ListItemIcon>
                           <ListItemText
                             primary={item.label}
+                            style={{ color: location.pathname === item.url ? "#fff" : "rgba(255, 255, 255, 0.7)" }}
                             primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
                           />
                         </ListItemButton>
