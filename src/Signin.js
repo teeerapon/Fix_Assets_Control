@@ -10,8 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import swal from 'sweetalert';
 import { useLocation } from 'react-router';
-//DATA_CENTER
-import DATA_CENTER from './DATA_CENTER/data_center'
 
 import config from './config';
 
