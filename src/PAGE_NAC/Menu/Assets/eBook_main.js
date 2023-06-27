@@ -163,23 +163,21 @@ export default function History_of_assets() {
       valueGetter: (params) =>
         data.branchid === 901 ? params.row.Price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) : 'ถูกจำกัดสิทธิ์'
     },
-    // {
-    //   field: 'BranchID',
-    //   headerName: 'สาขา',
-    //   headerClassName: 'super-app-theme--header',
-    //   minWidth: 100,
-    //   flex: 1,
-    //   valueGetter: (params) =>
-    //     params.row.BranchID === 901 ? 'HO' : params.row.BranchID,
-    // },
     {
       field: 'Position',
       headerName: 'Position',
       headerClassName: 'super-app-theme--header',
-      minWidth: 100,
+      minWidth: 150,
       flex: 1,
       valueGetter: (params) =>
-        params.row.BranchID === 901 ? 'HO' : params.row.Position,
+        params.row.OwnerID === 'BANGBAN' ? 'W1-BANGBAN' :
+          params.row.OwnerID === 'PUREPARK' ? 'PLAZA' :
+            (params.row.OwnerID).indexOf("CJ") === true ? params.row.OwnerID :
+              params.row.OwnerID === 'IT' ? 'IT CENTER' :
+                params.row.OwnerID === 'TRAINING' ? 'TRAINING CENTER' :
+                  params.row.OwnerID === 'ADMIN_PAS' ? 'ADMIN CENTER' :
+                    params.row.BranchID === 901 ? 'HO' :
+                      params.row.Position,
     },
     {
       field: 'CreateDate',

@@ -60,8 +60,9 @@ import PERSON_ROPA from './PAGE_ROPA/Menu/Person_RoPA';
 
 // Permission_NAC
 import Permission_NAC from './PAGE_NAC/Menu/NAC/Permission_NAC';
+import Box from '@mui/material/Box';
 
-const drawerWidth = 250;
+const drawerWidth = 256;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -73,6 +74,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     marginLeft: 0,
     ...(open && {
       flexGrow: 1,
+      position: 'flex',
       whiteSpace: 'pre-wrap',
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.easeOut,
@@ -135,6 +137,7 @@ function App() {
     '/PERSON_ROPA',
     '*',
   ]
+
   const nAC_MENU =
     [
       '/NAC_MAIN',
@@ -243,10 +246,7 @@ function App() {
         </Main>
       </IntlProvider>
     );
-    //} else if (nAC_MENU.includes(location.pathname) === true || ((location.pathname.split('/')[3] ?? '').includes('NAC') === true)) {
-    //  เอาตรงนี้ออกเมื่อ DataCenter เสร็จ
   } else if (location.pathname === ('/') || nAC_MENU.includes(location.pathname) === true) {
-    // 
     return (
       <IntlProvider>
         <NavBar

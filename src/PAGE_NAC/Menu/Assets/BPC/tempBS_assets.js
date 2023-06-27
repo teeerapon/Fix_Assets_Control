@@ -334,37 +334,6 @@ export default function History_of_assets() {
       flex: 1,
     },
     {
-      field: 'ImagePath',
-      headerName: 'Images 1',
-      headerClassName: 'super-app-theme--header',
-      width: 200,
-      headerAlign: 'center',
-      align: 'center',
-      renderCell: (params) => {
-        return (
-          <React.Fragment>
-            <ImageListItem key={params.row.ImagePath}>
-              <img
-                src={`${ params.row.ImagePath } ? w = 248 & fit=crop & auto=format`}
-                srcSet={`${ params.row.ImagePath } ? w = 248 & fit=crop & auto=format & dpr=2 2x`}
-                alt={params.row.Name}
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null; // prevents looping
-                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
-                }}
-                loading="lazy"
-              />
-              <ImageListItemBar
-                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
-                position="below"
-                title={<span>&nbsp; &nbsp;{params.row.Code}_1</span>}
-              />
-            </ImageListItem>
-          </React.Fragment>
-        )
-      }
-    },
-    {
       field: 'ImagePath_2',
       headerName: 'Images 2',
       headerClassName: 'super-app-theme--header',

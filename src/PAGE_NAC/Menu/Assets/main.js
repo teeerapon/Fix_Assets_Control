@@ -171,6 +171,8 @@ export default function History_of_assets() {
   const [permission_menuID, setPermission_menuID] = React.useState();
   const [progress, setProgress] = React.useState();
   const [arraySubmit, setArraySubmit] = React.useState()
+  const [asset_group, setAsset_group] = React.useState()
+  const [group_name, setGroup_name] = React.useState()
 
   React.useEffect(async () => {
     // POST request using axios with set headers
@@ -191,6 +193,7 @@ export default function History_of_assets() {
 
   const fileSelected = (event) => {
     event.preventDefault();
+    event.stopPropagation();
     var files = event.target.files, f = files[0];
     var reader = new FileReader();
     reader.onload = function (e) {
@@ -206,17 +209,17 @@ export default function History_of_assets() {
       let arrayField = []
 
       for (let i = 0; i < col.length; i++) {
-        if (col[i] === 'BranchID' || col[i] === 'Price' || col[i] === 'Position' || col[i] === 'OwnerCode') {
+        if (col[i] === 'BranchID' || col[i] === 'Price' || col[i] === 'Position') {
           arrayField[i] = {
             field: col[i],
             width: 80,
           }
-        } else if (col[i] === 'Code' || col[i] === 'Name') {
+        } else if (col[i] === 'Code' || col[i] === 'Name' || col[i] === 'Asset_group' || col[i] === 'Group_name') {
           arrayField[i] = {
             field: col[i],
             width: 160,
           }
-        } else if (col[i] === 'CreateDate') {
+        } else if (col[i] === 'CreateDate' || col[i] === 'OwnerCode') {
           arrayField[i] = {
             field: col[i],
             width: 120,
@@ -256,13 +259,15 @@ export default function History_of_assets() {
       field[0].field === 'Code' &&
       field[1].field === 'Name' &&
       field[2].field === 'OwnerCode' &&
-      field[3].field === 'BranchID' &&
-      field[4].field === 'SerialNo' &&
-      field[5].field === 'Price' &&
-      field[6].field === 'CreateDate' &&
-      field[7].field === 'CreateBy' &&
-      field[8].field === 'Position' &&
-      field[9].field === 'Details'
+      field[3].field === 'Asset_group' &&
+      field[4].field === 'Group_name' &&
+      field[5].field === 'BranchID' &&
+      field[6].field === 'SerialNo' &&
+      field[7].field === 'Price' &&
+      field[8].field === 'CreateDate' &&
+      field[9].field === 'CreateBy' &&
+      field[10].field === 'Position' &&
+      field[11].field === 'Details'
     ) {
       await Axios.post(config.http + '/FA_Control_BPC_Running_NO', data, { headers })
         .then(async (resTAB) => {
@@ -272,6 +277,8 @@ export default function History_of_assets() {
               , Code: dataFile[i].Code
               , Name: dataFile[i].Name
               , OwnerCode: dataFile[i].OwnerCode
+              , Asset_group: dataFile[i].Asset_group
+              , Group_name: dataFile[i].Group_name
               , BranchID: dataFile[i].BranchID
               , SerialNo: dataFile[i].SerialNo
               , Price: dataFile[i].Price
@@ -317,7 +324,7 @@ export default function History_of_assets() {
                             setCeate_Date(null)
                             window.location.href = '/FETCH_ASSETS';
                           })
-                        } else if(response.data[0].response) {
+                        } else if (response.data[0].response) {
                           setOpenXlsx(false)
                           swal("แจ้งเตือน", response.data[0].response, "error", {
                             buttons: false,
@@ -359,7 +366,18 @@ export default function History_of_assets() {
   };
 
   const handleSubmit_Add = async () => {
-    const body = { UserCode: data.UserCode, Code: code, Name: name, BranchID: branchID, Details: details, SerialNo: serialNo, Price: price, Create_Date: create_Date }
+    const body = {
+      UserCode: data.UserCode,
+      Code: code,
+      Name: name,
+      Asset_group: asset_group,
+      Group_name: group_name,
+      BranchID: branchID,
+      Details: details,
+      SerialNo: serialNo,
+      Price: price,
+      Create_Date: create_Date
+    }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
@@ -433,6 +451,8 @@ export default function History_of_assets() {
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
     { field: 'SerialNo', headerName: 'SerialNo', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
+    { field: 'Asset_group', headerName: 'Asset_group', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
+    { field: 'Group_name', headerName: 'Group_name', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
     { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
     { field: 'Details', headerName: 'หมายเหตุ', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
     {
@@ -445,23 +465,21 @@ export default function History_of_assets() {
         data.branchid === 901 ? params.row.Price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) : 'ถูกจำกัดสิทธิ์'
       // `${(params.row.BranchID === 901) ? (params.row.Price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })) : 'ถูกปิดเนื่องจากสิทธิ์'}`,
     },
-    // {
-    //   field: 'BranchID',
-    //   headerName: 'สาขา',
-    //   headerClassName: 'super-app-theme--header',
-    //   minWidth: 100,
-    //   flex: 1,
-    //   valueGetter: (params) =>
-    //     params.row.BranchID === 901 ? 'HO' : params.row.BranchID,
-    // },
     {
       field: 'Position',
       headerName: 'Position',
       headerClassName: 'super-app-theme--header',
-      minWidth: 100,
+      minWidth: 150,
       flex: 1,
       valueGetter: (params) =>
-        params.row.BranchID === 901 ? 'HO' : params.row.Position,
+        params.row.OwnerID === 'BANGBAN' ? 'W1-BANGBAN' :
+          params.row.OwnerID === 'PUREPARK' ? 'PLAZA' :
+            (params.row.OwnerID).indexOf("CJ") > -1 ? params.row.OwnerID :
+              params.row.OwnerID === 'IT' ? 'IT CENTER' :
+                params.row.OwnerID === 'TRAINING' ? 'TRAINING CENTER' :
+                  params.row.OwnerID === 'ADMIN_PAS' ? 'ADMIN CENTER' :
+                    params.row.BranchID === 901 ? 'HO' :
+                      params.row.Position,
     },
     {
       field: 'CreateDate',
