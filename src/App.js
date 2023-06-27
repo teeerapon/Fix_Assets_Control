@@ -49,10 +49,6 @@ import NAC_CREATE_NEW_WAIT_APPROVE from './PAGE_NAC/Menu/NAC/nac_create/page_cre
 import NAC_DELETE_WAIT_APPROVE from './PAGE_NAC/Menu/NAC/nac_create/nac_delete/nac_delete_wait_approve';
 import NAC_SEALS_APPROVE from './PAGE_NAC/Menu/NAC/nac_create/nac_Seals/nac_seals_approve';
 
-// DATA_CENTER* //
-import DATA_CENTER from './DATA_CENTER/data_center'
-import DATA_CENTER_NAV from './DATA_CENTER/Nav/Nav'
-
 // ROPA* //
 import ROPA_MAIN from './PAGE_ROPA/main';
 import ROPA_NAV from './PAGE_ROPA/Nav/Nav';
@@ -199,54 +195,7 @@ function App() {
     return <Signin />
     // } else if (location.pathname === ('/' || '/DATA_CENTER')) {
     //  เอาตรงนี้ออกเมื่อ DataCenter เสร็จ
-  } else if (location.pathname === ('/DATA_CENTER')) {
-    // 
-    return (
-      <IntlProvider>
-        <DATA_CENTER_NAV
-          AppBar={AppBar}
-          theme={theme}
-          open={open}
-          drawerWidth={drawerWidth}
-          handleDrawerOpen={handleDrawerOpen}
-          handleDrawerClose={handleDrawerClose}
-          setOpen={setOpen}
-          DrawerHeader={DrawerHeader}
-        />
-        <Main open={open}>
-          <AnimatePresence exitBeforeEnter>
-            <Routes key={location.pathname} location={location}>
-              <Route path="/DATA_CENTER" element={<DATA_CENTER />} />
-              <Route path="*" element={<Page404 />} />
-            </Routes>
-          </AnimatePresence>
-        </Main>
-      </IntlProvider>
-    );
-  } else if (roPA.includes(location.pathname) === true || ((location.pathname.split('/')[3] ?? '').includes('ROPA') === true)) {
-    return (
-      <IntlProvider>
-        <ROPA_NAV
-          AppBar={AppBar}
-          theme={theme}
-          open={open}
-          drawerWidth={drawerWidth}
-          handleDrawerOpen={handleDrawerOpen}
-          handleDrawerClose={handleDrawerClose}
-          DrawerHeader={DrawerHeader}
-        />
-        <Main open={open}>
-          <AnimatePresence exitBeforeEnter>
-            <Routes key={location.pathname} location={location}>
-              <Route path="/ROPA_MAIN" element={<ROPA_MAIN />} />
-              <Route path="/PERSON_ROPA" element={<PERSON_ROPA />} />
-              <Route path="*" element={<Page404 />} />
-            </Routes>
-          </AnimatePresence>
-        </Main>
-      </IntlProvider>
-    );
-  } else if (location.pathname === ('/') || nAC_MENU.includes(location.pathname) === true) {
+  } else {
     return (
       <IntlProvider>
         <NavBar
@@ -299,6 +248,9 @@ function App() {
               <Route path="/NAC_ROW/NAC_DELETE_WAIT_APPROVE" element={<NAC_DELETE_WAIT_APPROVE />} />
               <Route path="/NAC_ROW/NAC_SEALS_APPROVE" element={<NAC_SEALS_APPROVE />} />
               <Route path="*" element={<Page404 />} />
+              {/* ROPA */}
+              <Route path="/ROPA_MAIN" element={<ROPA_MAIN />} />
+              <Route path="/PERSON_ROPA" element={<PERSON_ROPA />} />
             </Routes>
           </AnimatePresence>
         </Main>

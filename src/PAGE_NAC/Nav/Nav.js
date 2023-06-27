@@ -3,6 +3,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useLocation } from "react-router";
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -22,8 +23,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import CircleIcon from '@mui/icons-material/Circle';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ViewTimelineIcon from '@mui/icons-material/AlignVerticalBottom';
+import FormatShapesIcon from '@mui/icons-material/FormatShapes';
 import SubjectIcon from '@mui/icons-material/ViewTimeline';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import Collapse from '@mui/material/Collapse';
@@ -32,11 +32,13 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import Avatar from '@mui/material/Avatar';
-import StoreIcon from '@mui/icons-material/Store';
+import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import Axios from "axios"
 import '../../App.css'
 import config from '../../config'
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 function stringAvatar(name) {
   return {
@@ -68,11 +70,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader, theme, open, handleDrawerOpen, handleDrawerClose }) {
+  const location = useLocation();
   const classes = useStyles();
   const [auth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const data = JSON.parse(localStorage.getItem('data'));
   const checkUserWeb = localStorage.getItem('sucurity');
+  const [openListNAC, setOpenListNAC] = React.useState(false);
+  const [openListPMS, setOpenListPMS] = React.useState(false);
   const [openList, setOpenList] = React.useState(false);
   const [openList2, setOpenList2] = React.useState(false);
   const [openList3, setOpenList3] = React.useState(false);
@@ -81,6 +86,123 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
   const navigate = useNavigate();
   const [permission_menuID, setPermission_menuID] = React.useState();
   const [permission_menu, setPermission_menu] = React.useState();
+
+  const create_nac = [
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'เพิ่มบัญชีทรัพย์สิน',
+      url: '/NAC_CREATE_STEP1',
+      permission: (permission_menuID ? permission_menuID.includes(1) : null) === true ? 1 : 0,
+      permission_branch: data.branchid === 901 ? 1 : 0
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'โยกย้ายทรัพย์สิน',
+      url: '/NAC_CREATE_MAIN1'
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน',
+      url: '/NAC_CHANGE_STEP1',
+      permission: data.branchid === 901 ? 1 : 0,
+      permission_branch: data.branchid === 901 ? 1 : 0
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'ขายทรัพย์สิน',
+      url: '/NAC_SEALS_STEP1'
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'ตัดบัญชีทรัพย์สิน',
+      url: '/NAC_DELETE_STEP1',
+      permission: data.branchid === 901 ? 1 : 0,
+      permission_branch: data.branchid === 901 ? 1 : 0
+    },
+  ]
+
+  const nac = [
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'สถานะรายการ NAC',
+      url: '/NAC_ROW'
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'สถานะรายการ NAC ทั้งหมด',
+      url: '/NAC_OPERATOR',
+      permission: (permission_menuID ? permission_menuID.includes(2) : null) === true ? 1 : 0,
+      permission_branch: data.branchid === 901 ? 1 : 0
+    },
+  ]
+
+  const period = [
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'เพิ่มรอบตรวจนับ',
+      url: '/CreatePeriod',
+      permission: (permission_menuID ? permission_menuID.includes(3) : null) === true ? 1 : 0,
+      permission_branch: data.branchid === 901 ? 1 : 0
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'แก้ไขรอบตรวจนับ',
+      url: '/EditPeriod',
+      permission: (permission_menuID ? permission_menuID.includes(4) : null) === true ? 1 : 0,
+      permission_branch: data.branchid === 901 ? 1 : 0
+    },
+  ]
+
+  const report = [
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'E-Book NAC',
+      url: data.branchid === 901 ? '/EBookMain' : '/EBookBranch',
+      permission: (data.branchid !== 901 || ((permission_menuID ? permission_menuID.includes(5) : null) === true)) ? 1 : 0,
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'ทะเบียนทรัพย์สินทั้งหมด',
+      url: data.branchid === 901 ? '/FETCH_ASSETS' : '/Account_BrnachAssets',
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'ตรวจนับทรัพย์สินทั้งหมด',
+      url: '/Reported_Assets_Counted',
+      permission: (permission_menuID ? permission_menuID.includes(7) : null) === true ? 1 : 0,
+      permission_branch: data.branchid === 901 ? 1 : 0
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'ตรวจนับทรัพย์สิน 1 สาขา',
+      url: '/Report'
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'ประวัติทรัพย์สินทำ NAC',
+      url: '/History_of_Assets',
+      permission: (permission_menuID ? permission_menuID.includes(8) : null) === true ? 1 : 0,
+      permission_branch: data.branchid === 901 ? 1 : 0
+    },
+  ]
+
+  const bpc = [
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'E-Book BPC',
+      url: '/BSAssetsMain'
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'สถานะรายการทรัพย์สินผู้ร่วม',
+      url: '/BpcStatus'
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1 }} />,
+      label: 'ประวัติทรัพย์สินผู้ร่วม',
+      url: '/TransectionList'
+    },
+  ]
 
   React.useEffect(() => {
     // POST request using axios with set headers
@@ -137,21 +259,9 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     setOpenList4(false);
   };
 
-  function PeriodOpen() {
-    navigate('/CreatePeriod')
-  };
-
   function HomePage() {
-    if (checkUserWeb === 'admin') {
-      navigate('/DATA_CENTER')
-    } else {
-      navigate('/')
-    }
-  };
-
-  function handle_Home() {
     navigate('/')
-  }
+  };
 
   function PeriodEdit() {
     navigate('/EditPeriod')
@@ -177,40 +287,12 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     navigate('/BpcStatus')
   }
 
-  function REPORT_ALL() {
-    navigate('/Reported_Assets_Counted')
-  };
-
-  function History_of_Assets() {
-    navigate('/History_of_Assets')
-  };
-
-  function FETCH_ASSETS() {
-    navigate('/FETCH_ASSETS')
-  };
-
   function NAC_NAC() {
     navigate('/NAC_CREATE_MAIN1')
   };
 
   function eBook_branch() {
     navigate('/EBookBranch')
-  }
-
-  function eBook_main() {
-    navigate('/EBookMain')
-  }
-
-  function NAC_NEW() {
-    navigate('/NAC_CREATE_STEP1')
-  };
-
-  function NAC_CHANGE() {
-    navigate('/NAC_CHANGE_STEP1')
-  }
-
-  function NAC_DELETE() {
-    navigate('/NAC_DELETE_STEP1')
   }
 
   function NAC_SEALS() {
@@ -222,9 +304,15 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     navigate('/NAC_ROW')
   }
 
-  function NAC_OPERATOR() {
-    localStorage.removeItem("pagination_user");
-    navigate('/NAC_OPERATOR')
+  function Change_ASSETS() {
+    setOpenListNAC(!openListNAC);
+    if (!openListNAC === false) {
+      setOpenList(false);
+      setOpenList2(false);
+      setOpenList3(false);
+      setOpenList4(false);
+      setOpenList5(false);
+    }
   }
 
   const handleLogout = () => {
@@ -261,77 +349,91 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const darkTheme = createTheme({
     palette: {
-      mode: 'dark',
+      type: 'dark', // Set the theme to dark mode
       primary: {
-        main: '#1976d2',
-      },
-    },
-  });
+        main: '#1c2536' // Set the primary color to blue
+      }
+    }
+  })
 
-  if (permission_menu && data.branchid === 901) {
-    return (
-      <>
-        <Box sx={{ display: 'flex' }}>
-          <CssBaseline />
-          <ThemeProvider theme={darkTheme}>
-            <AppBar position="static" open={open} >
-              <Toolbar>
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  onClick={handleDrawerOpen}
-                  edge="start"
-                  sx={{ mr: 2, ...(open && { display: 'none' }) }}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
-                  <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
-                    <div size="small" aria-label="account of current user" aria-controls="menu-appbar">
-                      <Typography
-                        style={{ color: '#ea0c80' }}
-                        variant="h5"
-                        component="React.Fragment"
-                        sx={{
-                          flexGrow: 1,
-                          fontFamily: 'monospace',
-                          fontWeight: 700,
-                          letterSpacing: '.5rem',
-                          color: 'inherit',
-                          textDecoration: 'none',
-                        }}
-                        className={classes.root}
-                      >
-                        <b>DATA</b>
-                      </Typography>
-                      <Typography
-                        style={{ color: '#07519e' }}
-                        variant="h5"
-                        component="React.Fragment"
+  return (
+    <>
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <ThemeProvider theme={darkTheme}>
+          <AppBar position="static" open={open} >
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{ mr: 2, ...(open && { display: 'none' }) }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
+                <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
+                  <div size="small" aria-label="account of current user" aria-controls="menu-appbar">
+                    <Typography
+                      style={{ color: '#ea0c80' }}
+                      variant="h5"
+                      component="React.Fragment"
+                      sx={{
+                        flexGrow: 1,
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        letterSpacing: '.5rem',
+                        color: 'inherit',
+                        textDecoration: 'none',
+                      }}
+                      className={classes.root}
+                    >
+                      <b>DATA</b>
+                    </Typography>
+                    <Typography
+                      style={{ color: '#07519e' }}
+                      variant="h5"
+                      component="React.Fragment"
 
-                        sx={{
-                          flexGrow: 1,
-                          fontFamily: 'monospace',
-                          fontWeight: 700,
-                          letterSpacing: '.5rem',
-                          color: 'inherit',
-                          textDecoration: 'none',
-                        }}
-                        className={classes.root}
-                      >
-                        CENTER
-                      </Typography>
-                    </div>
-                  </Button>
-                </Box>
-                <div size="large" aria-label="account of current user" aria-controls="menu-appbar" className='hide-sm'>
-                  <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1, pr: 2 }} className={classes.root} >
-                    {data.name}
-                  </Typography>
-                </div>
-                {auth && (
-                  <React.Fragment>
-                    <Box sx={{ flexGrow: 0 }}>
+                      sx={{
+                        flexGrow: 1,
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        letterSpacing: '.5rem',
+                        color: 'inherit',
+                        textDecoration: 'none',
+                      }}
+                      className={classes.root}
+                    >
+                      CENTER
+                    </Typography>
+                  </div>
+                </Button>
+              </Box>
+              <div size="large" aria-label="account of current user" aria-controls="menu-appbar" className='hide-sm'>
+                <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1, pr: 2 }} className={classes.root} >
+                  {data.name}
+                </Typography>
+              </div>
+              {auth && (
+                <React.Fragment>
+                  <Box sx={{ flexGrow: 0 }}>
+                    <ThemeProvider
+                      theme={createTheme({
+                        components: {
+                          MuiListItemButton: {
+                            defaultProps: {
+                              disableTouchRipple: true,
+                            },
+                          },
+                        },
+                        palette: {
+                          mode: 'dark',
+                          background: { paper: '#1c2536' },
+                        },
+                      })}
+                    >
                       <IconButton
                         size="small"
                         aria-label="account of current user"
@@ -359,726 +461,297 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                         open={Boolean(anchorEl)}
                         onClose={handleClose}
                       >
-                        <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+                        <MenuItem disabled={data.DepCode === '101ITO' ? false : true} onClick={() => navigate(`/Permission_NAC`)}>
+                          <ListItemIcon>
+                            <ManageAccountsIcon fontSize="small" />
+                          </ListItemIcon>
+                          <ListItemText>Permission</ListItemText>
+                        </MenuItem>
+                        <MenuItem onClick={handleLogout}>
+                          <ListItemIcon>
+                            <LogoutIcon fontSize="small" />
+                          </ListItemIcon>
+                          <ListItemText>Log Out</ListItemText>
+                        </MenuItem>
                       </Menu>
-                    </Box>
-                  </React.Fragment>
-                )}
-                {/* <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                  <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                    {checkUserWeb === 'admin' ? 'ADMIN' : checkUserWeb === 'OPERATOR II' ? 'operatorII' : 'OPERATOR I'}
-                  </Typography>
-                </div> */}
-              </Toolbar>
-            </AppBar>
-            <Drawer
-              sx={{
-                flexShrink: 0,
-                '& .MuiDrawer-paper': {
-                  width: drawerWidth,
-                  boxSizing: 'border-box',
-                },
-              }}
-              variant="persistent"
-              anchor="left"
-              open={open}
-            >
-              <DrawerHeader>
-                <IconButton onClick={handleDrawerClose}>
-                  {theme.direction === 'ltr' ? <CloseIcon fontSize="small" /> : <CloseIcon />}
-                </IconButton>
-              </DrawerHeader>
-              <Divider />
-              <List>
-                <ListItem disablePadding>
-                  <ListItemButton onClick={handle_Home}>
-                    <ListItemIcon><DashboardIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        HOMEPAGE
-                      </Typography>
-                    </ListItemText>
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
+                    </ThemeProvider>
+                  </Box>
+                </React.Fragment>
+              )}
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            sx={{
+              flexShrink: 0,
+              '& .MuiDrawer-paper': {
+                width: drawerWidth,
+                boxSizing: 'border-box',
+              },
+            }}
+            PaperProps={{
+              sx: {
+                backgroundColor: "#1c2536",
+                color: "#fff",
+              }
+            }}
+            variant="persistent"
+            anchor="left"
+            open={open}
+          >
+            <DrawerHeader>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === 'ltr' ? <CloseIcon fontSize="small" style={{ color: "rgba(255, 255, 255, 0.7)", }} /> : <CloseIcon />}
+              </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <List>
+              <ListItem component="div" disablePadding>
+                <ListItemButton style={{ backgroundColor: openListNAC === true ? "rgba(255,255,255,0.05)" : null, }}>
+                  <ListItemText
+                    alignItems="flex-start"
+                    onClick={Change_ASSETS}
+                    primary="ASSETS"
+                    primaryTypographyProps={{
+                      fontSize: 14,
+                      fontWeight: 'medium',
+                      lineHeight: '20px',
+                      color: (openList || openList2 || openList3 || openList4 || openList5 || openListNAC) === true ? "#6366f1" : "#ffff",
+                      mb: '2px',
+                    }}
+                    sx={{ my: 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+              {openListNAC &&
+                <ListItem component="div" disablePadding>
                   <ListItemButton onClick={handleClickList2}>
-                    <ListItemIcon><LibraryAddIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        CREATE NAC
-                      </Typography>
+                    <ListItemIcon>
+                      <LibraryAddIcon fontSize="small" style={{ color: openList2 ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="NAC CREATE"
+                      primaryTypographyProps={{
+                        fontSize: 13,
+                        fontWeight: 'medium',
+                        lineHeight: '25px',
+                        color: openList2 ? "#ffff" : "rgba(255, 255, 255, 0.7)",
+                      }}
+                      sx={{ my: 0 }}
+                    >
                     </ListItemText>
-                    {openList2 ? <ExpandLess /> : <ExpandMore />}
+                    {openList2 ? <ExpandLess style={{ color: "#ffff", }} /> : <ExpandMore style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
                   </ListItemButton>
                 </ListItem>
-                <Collapse in={openList2} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    {(permission_menuID ? permission_menuID.includes(1) : null) === true ?
-                      <React.Fragment>
-                        <ListItemButton onClick={NAC_NEW}>
-                          <ListItemText>
-                            <Typography
-                              sx={{ display: 'inline' }}
-                              component="span"
-                              variant="caption"
-                              style={{ color: "rgb(231,244,17)" }}
-                            >
-                              <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เพิ่มบัญชีทรัพย์สิน
-                            </Typography>
-                          </ListItemText>
+              }
+              <Collapse in={openList2} timeout="auto" unmountOnExit>
+                {open &&
+                  create_nac.map((item) => {
+                    if (item.permission_branch === 0) {
+                      return null;
+                    } else {
+                      return (
+                        <ListItemButton
+                          key={item.label}
+                          onClick={() => navigate(item.url)}
+                          sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
+                          style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
+                        >
+                          <ListItemIcon sx={{ color: 'inherit' }}>
+                            {item.icon}
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={item.label}
+                            primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
+                          />
                         </ListItemButton>
-                      </React.Fragment>
-                      : null}
-                    <ListItemButton onClick={NAC_NAC}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; โยกย้ายทรัพย์สิน
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    <ListItemButton onClick={NAC_CHANGE}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เปลี่ยนแปลงรายละเอียดทรัพย์สิน
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    <ListItemButton onClick={NAC_SEALS}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ขายทรัพย์สิน
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    <ListItemButton onClick={NAC_DELETE}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตัดบัญชีทรัพย์สิน
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                  </List>
-                </Collapse>
-                <ListItem disablePadding>
+                      )
+                    }
+                  })}
+              </Collapse>
+              {openListNAC &&
+                <ListItem component="div" disablePadding>
                   <ListItemButton onClick={handleClickList}>
-                    <ListItemIcon><SubjectIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        NAC
-                      </Typography>
-                    </ListItemText>
-                    {openList ? <ExpandLess /> : <ExpandMore />}
+                    <ListItemIcon>
+                      <SubjectIcon fontSize="small" style={{ color: openList ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="NAC STATUS"
+                      primaryTypographyProps={{
+                        fontSize: 13,
+                        fontWeight: 'medium',
+                        lineHeight: '25px',
+                        color: openList ? "#ffff" : "rgba(255, 255, 255, 0.7)",
+                      }}
+                      sx={{ my: 0 }}
+                    />
+                    {openList ? <ExpandLess style={{ color: "#ffff", }} /> : <ExpandMore style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
                   </ListItemButton>
                 </ListItem>
-                <Collapse in={openList} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    <ListItemButton onClick={DOC_NAC_ME}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
+              }
+              <Collapse in={openList} timeout="auto" unmountOnExit>
+                {open &&
+                  nac.map((item) => {
+                    if (item.permission_branch === 0) {
+                      return null;
+                    } else {
+                      return (
+                        <ListItemButton
+                          key={item.label}
+                          onClick={() => navigate(item.url)}
+                          sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
+                          style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
                         >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการ NAC
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    {(permission_menuID ? permission_menuID.includes(2) : null) === true ?
-                      <ListItemButton onClick={NAC_OPERATOR}>
-                        <ListItemText>
-                          <Typography
-                            sx={{ display: 'inline' }}
-                            component="span"
-                            variant="caption"
-                            style={{ color: "rgb(231,244,17)" }}
-                          >
-                            <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการ NAC ทั้งหมด
-                          </Typography>
-                        </ListItemText>
-                      </ListItemButton>
-                      : null}
-                  </List>
-                </Collapse>
-                {(permission_menuID ? permission_menuID.includes(3 || 4) : null) === true ?
-                  <ListItem disablePadding>
-                    <ListItemButton onClick={handleClickList3}>
-                      <ListItemIcon><AccessAlarmIcon fontSize="small" /></ListItemIcon>
-                      <ListItemText>
-                        <Typography
-                          component="span"
-                          variant="caption"
-                        >
-                          PERIOD
-                        </Typography>
-                      </ListItemText>
-                      {openList3 ? <ExpandLess /> : <ExpandMore />}
-                    </ListItemButton>
-                  </ListItem>
-                  : null}
-                <Collapse in={openList3} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    {(permission_menuID ? permission_menuID.includes(3) : null) === true ?
-                      <ListItemButton onClick={PeriodOpen}>
-                        <ListItemText>
-                          <Typography
-                            sx={{ display: 'inline' }}
-                            component="span"
-                            variant="caption"
-                            style={{ color: "rgb(231,244,17)" }}
-                          >
-                            <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; เพิ่มรอบตรวจนับ
-                          </Typography>
-                        </ListItemText>
-                      </ListItemButton>
-                      : null}
-                    {(permission_menuID ? permission_menuID.includes(4) : null) === true ?
-                      <ListItemButton onClick={PeriodEdit}>
-                        <ListItemText>
-                          <Typography
-                            sx={{ display: 'inline' }}
-                            component="span"
-                            variant="caption"
-                            style={{ color: "rgb(231,244,17)" }}
-                          >
-                            <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; แก้ไขรอบตรวจนับ
-                          </Typography>
-                        </ListItemText>
-                      </ListItemButton>
-                      : null}
-                  </List>
-                </Collapse>
-                <ListItem disablePadding>
-                  <ListItemButton onClick={handleClickList4}>
-                    <ListItemIcon><WorkHistoryIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        REPORT
-                      </Typography>
-                    </ListItemText>
-                    {openList4 ? <ExpandLess /> : <ExpandMore />}
-                  </ListItemButton>
-                </ListItem>
-                <Collapse in={openList4} timeout="auto" unmountOnExit>
-                  {(permission_menuID ? permission_menuID.includes(5) : null) === true ?
-                    <React.Fragment>
-                      <List component="div" disablePadding>
-                        <ListItemButton onClick={eBook_main}>
-                          <ListItemText>
-                            <Typography
-                              sx={{ display: 'inline' }}
-                              component="span"
-                              variant="caption"
-                              style={{ color: "rgb(231,244,17)" }}
-                            >
-                              <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book NAC
-                            </Typography>
-                          </ListItemText>
+                          <ListItemIcon sx={{ color: 'inherit' }}>
+                            {item.icon}
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={item.label}
+                            primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
+                          />
                         </ListItemButton>
-                      </List>
-                      <List component="div" disablePadding>
-                        <ListItemButton onClick={FETCH_ASSETS}>
-                          <ListItemText>
-                            <Typography
-                              sx={{ display: 'inline' }}
-                              component="span"
-                              variant="caption"
-                              style={{ color: "rgb(231,244,17)" }}
-                            >
-                              <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทะเบียนทรัพย์สินทั้งหมด
-                            </Typography>
-                          </ListItemText>
+                      )
+                    }
+                  })}
+              </Collapse>
+              {(permission_menuID ? permission_menuID.includes(3 || 4) : null) === true && openListNAC === true ?
+                <ListItem disablePadding>
+                  <ListItemButton onClick={handleClickList3}>
+                    <ListItemIcon><AccessAlarmIcon fontSize="small" style={{ color: openList3 ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} /></ListItemIcon>
+                    <ListItemText
+                      primary="NAC PERIOD"
+                      primaryTypographyProps={{
+                        fontSize: 13,
+                        fontWeight: 'medium',
+                        lineHeight: '25px',
+                        color: openList3 ? "#ffff" : "rgba(255, 255, 255, 0.7)",
+                      }}
+                      sx={{ my: 0 }}
+                    />
+                    {openList3 ? <ExpandLess style={{ color: "#ffff", }} /> : <ExpandMore style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
+                  </ListItemButton>
+                </ListItem>
+                : null}
+              <Collapse in={openList3} timeout="auto" unmountOnExit>
+                {open &&
+                  period.map((item) => {
+                    if (item.permission_branch === 0) {
+                      return null;
+                    } else {
+                      return (
+                        <ListItemButton
+                          key={item.label}
+                          onClick={() => navigate(item.url)}
+                          sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
+                          style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
+                        >
+                          <ListItemIcon sx={{ color: 'inherit' }}>
+                            {item.icon}
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={item.label}
+                            primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
+                          />
                         </ListItemButton>
-                      </List>
-                    </React.Fragment>
-                    : null}
-                  {(permission_menuID ? permission_menuID.includes(7) : null) === true ?
-                    <List component="div" disablePadding>
-                      <ListItemButton onClick={REPORT_ALL}>
-                        <ListItemText>
-                          <Typography
-                            sx={{ display: 'inline' }}
-                            component="span"
-                            variant="caption"
-                            style={{ color: "rgb(231,244,17)" }}
-                          >
-                            <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตรวจนับทรัพย์สินทั้งหมด
-                          </Typography>
-                        </ListItemText>
-                      </ListItemButton>
-                    </List>
-                    : null}
-                  <List component="div" disablePadding>
-                    <ListItemButton onClick={REPORT}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ตรวจนับทรัพย์สิน 1 สาขา
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                  </List>
-                  {(permission_menuID ? permission_menuID.includes(8) : null) === true ?
-                    <List component="div" disablePadding>
-                      <ListItemButton onClick={History_of_Assets}>
-                        <ListItemText>
-                          <Typography
-                            sx={{ display: 'inline' }}
-                            component="span"
-                            variant="caption"
-                            style={{ color: "rgb(231,244,17)" }}
-                          >
-                            <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติทรัพย์สิน
-                          </Typography>
-                        </ListItemText>
-                      </ListItemButton>
-                    </List>
-                    : null}
-                </Collapse>
-                {(permission_menuID ? permission_menuID.includes(13) : null) === true ?
-                  <ListItem disablePadding>
-                    <ListItemButton onClick={handleClickList5}>
-                      <ListItemIcon><DomainAddIcon fontSize="small" /></ListItemIcon>
-                      <ListItemText>
-                        <Typography
-                          component="span"
-                          variant="caption"
-                        >
-                          BPC
-                        </Typography>
-                      </ListItemText>
-                      {openList3 ? <ExpandLess /> : <ExpandMore />}
-                    </ListItemButton>
-                  </ListItem>
-                  : null}
-                <Collapse in={openList5} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    <ListItemButton onClick={BSAssetsMain}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book BPC
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    <ListItemButton onClick={BpcStatus}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการทรัพย์สินผู้ร่วม
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    <ListItemButton onClick={Transection_List}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติการดำเนินการทรัพย์สินผู้ร่วม
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                  </List>
-                </Collapse>
-                {/* <ListItem disablePadding>
-                  <ListItemButton onClick={REPORT}>
-                    <ListItemIcon><ViewTimelineIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        REPORT
-                      </Typography>
-                    </ListItemText>
-                  </ListItemButton>
-                </ListItem> */}
-              </List>
-              <Divider />
-            </Drawer>
-            <Outlet />
-          </ThemeProvider>
-        </Box >
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Box sx={{ display: 'flex' }}>
-          <ThemeProvider theme={darkTheme}>
-            <AppBar position="static" open={open} >
-              <Toolbar>
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  onClick={handleDrawerOpen}
-                  edge="start"
-                  sx={{ mr: 2, ...(open && { display: 'none' }) }}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Box sx={{ flexGrow: 1, display: { md: 'flex' } }} className='hide-sm'>
-                  <Button disabled={checkUserWeb === 'admin' ? false : true} onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
-                    <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                      <Typography
-                        style={{ color: '#ea0c80' }}
-                        variant="h5"
-                        component="React.Fragment"
-
-                        sx={{
-                          flexGrow: 1,
-                          fontFamily: 'monospace',
-                          fontWeight: 700,
-                          letterSpacing: '.5rem',
-                          color: 'inherit',
-                          textDecoration: 'none',
-                        }}
-                        className={classes.root}
-                      >
-                        <b>DATA</b>
-                      </Typography>
-                      <Typography
-                        style={{ color: '#07519e' }}
-                        variant="h5"
-                        component="React.Fragment"
-
-                        sx={{
-                          flexGrow: 1,
-                          fontFamily: 'monospace',
-                          fontWeight: 700,
-                          letterSpacing: '.5rem',
-                          color: 'inherit',
-                          textDecoration: 'none',
-                        }}
-                        className={classes.root}
-                      >
-                        CENTER
-                      </Typography>
-                    </div>
-                  </Button>
-                </Box>
-                <div size="large" aria-label="account of current user" aria-controls="menu-appbar" className='hide-sm'>
-                  <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1, pr: 2 }} className={classes.root} >
-                    {data.name}
-                  </Typography>
-                </div>
-                {auth && (
-                  <React.Fragment>
-                    <Box sx={{ flexGrow: 0 }}>
-                      <IconButton
-                        size="small"
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
-                        onClick={handleMenu}
-                        color="inherit"
-                      >
-
-                        <Avatar sx={{ width: 18, height: 18 }}{...stringAvatar(data.UserCode)} />
-                      </IconButton>
-                      <Menu
-                        sx={{ mt: '45px' }}
-                        id="menu-appbar"
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right',
-                        }}
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                      >
-                        <MenuItem onClick={handleClose}>Profile</MenuItem>
-                        <MenuItem onClick={handleLogout}>Log Out</MenuItem>
-                      </Menu>
-                    </Box>
-                  </React.Fragment>
-                )}
-                {/* <div size="large" aria-label="account of current user" aria-controls="menu-appbar">
-                  <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1 }} className={classes.root} >
-                    USER
-                  </Typography>
-                </div> */}
-              </Toolbar>
-            </AppBar>
-            <Drawer
-              sx={{
-                // width: drawerWidth,
-                flexShrink: 0,
-                '& .MuiDrawer-paper': {
-                  width: drawerWidth,
-                  boxSizing: 'border-box',
-                },
-              }}
-              variant="persistent"
-              anchor="left"
-              open={open}
-            >
-              <DrawerHeader>
-                <IconButton onClick={handleDrawerClose}>
-                  {theme.direction === 'ltr' ? <CloseIcon /> : <CloseIcon />}
-                </IconButton>
-              </DrawerHeader>
-              <Divider />
-              <List>
-                <ListItem disablePadding>
-                  <ListItemButton onClick={handle_Home}>
-                    <ListItemIcon><DashboardIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        HOMEPAGE
-                      </Typography>
-                    </ListItemText>
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton onClick={handleClickList2}>
-                    <ListItemIcon><LibraryAddIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        CREATE NAC
-                      </Typography>
-                    </ListItemText>
-                    {openList2 ? <ExpandLess /> : <ExpandMore />}
-                  </ListItemButton>
-                </ListItem>
-                <Collapse in={openList2} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    <ListItemButton onClick={NAC_NAC}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; โยกย้ายทรัพย์สิน
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    <ListItemButton onClick={NAC_SEALS}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ขายทรัพย์สิน
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                  </List>
-                </Collapse>
-                <ListItem disablePadding>
-                  <ListItemButton onClick={handleClickList}>
-                    <ListItemIcon><SubjectIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        NAC
-                      </Typography>
-                    </ListItemText>
-                    {openList ? <ExpandLess /> : <ExpandMore />}
-                  </ListItemButton>
-                </ListItem>
-                <Collapse in={openList} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    <ListItemButton onClick={DOC_NAC_ME}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการ NAC
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                  </List>
-                </Collapse>
-                <ListItem disablePadding>
+                      )
+                    }
+                  })}
+              </Collapse>
+              {openListNAC &&
+                <ListItem component="div" disablePadding>
                   <ListItemButton onClick={handleClickList4}>
-                    <ListItemIcon><WorkHistoryIcon fontSize="small" /></ListItemIcon>
-                    <ListItemText>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                      >
-                        REPORT
-                      </Typography>
-                    </ListItemText>
-                    {openList4 ? <ExpandLess /> : <ExpandMore />}
+                    <ListItemIcon>
+                      <FormatShapesIcon fontSize="small" style={{ color: openList4 ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="ASSETS REPORT"
+                      primaryTypographyProps={{
+                        fontSize: 13,
+                        fontWeight: 'medium',
+                        lineHeight: '25px',
+                        color: openList4 ? "#ffff" : "rgba(255, 255, 255, 0.7)",
+                      }}
+                      sx={{ my: 0 }}
+                    />
+                    {openList4 ? <ExpandLess style={{ color: "#ffff", }} /> : <ExpandMore style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
                   </ListItemButton>
                 </ListItem>
-                <Collapse in={openList4} timeout="auto" unmountOnExit>
-                  <ListItem disablePadding>
-                    <ListItemButton onClick={eBook_branch}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
+              }
+              <Collapse in={openList4} timeout="auto" unmountOnExit>
+                {open &&
+                  report.map((item) => {
+                    if (item.permission_branch === 0) {
+                      return null;
+                    } else {
+                      return (
+                        <ListItemButton
+                          key={item.label}
+                          onClick={() => navigate(item.url)}
+                          sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
+                          style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
                         >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book NAC
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemButton onClick={Account_BrnachAssets}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
+                          <ListItemIcon sx={{ color: 'inherit' }}>
+                            {item.icon}
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={item.label}
+                            primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
+                          />
+                        </ListItemButton>
+                      )
+                    }
+                  })}
+              </Collapse>
+              {openListNAC === true && (permission_menuID ? permission_menuID.includes(13) : null) === true ?
+                <ListItem component="div" disablePadding>
+                  <ListItemButton onClick={handleClickList5}>
+                    <ListItemIcon>
+                      <ConnectWithoutContactIcon fontSize="small" style={{ color: openList5 ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="BPC"
+                      primaryTypographyProps={{
+                        fontSize: 13,
+                        fontWeight: 'medium',
+                        lineHeight: '25px',
+                        color: openList5 ? "#ffff" : "rgba(255, 255, 255, 0.7)",
+                      }}
+                      sx={{ my: 0 }}
+                    />
+                    {openList5 ? <ExpandLess style={{ color: "#ffff", }} /> : <ExpandMore style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
+                  </ListItemButton>
+                </ListItem>
+                : null}
+              <Collapse in={openList5} timeout="auto" unmountOnExit>
+                {open &&
+                  bpc.map((item) => {
+                    if (item.permission_branch === 0) {
+                      return null;
+                    } else {
+                      return (
+                        <ListItemButton
+                          key={item.label}
+                          onClick={() => navigate(item.url)}
+                          sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
+                          style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
                         >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ทะเบียนทรัพย์สินสาขา
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                  </ListItem>
-                  <List component="div" disablePadding>
-                    <ListItemButton onClick={REPORT}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; REPORT
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                  </List>
-                </Collapse>
-                {(permission_menuID ? permission_menuID.includes(13) : null) === true ?
-                  <ListItem disablePadding>
-                    <ListItemButton onClick={handleClickList5}>
-                      <ListItemIcon><DomainAddIcon fontSize="small" /></ListItemIcon>
-                      <ListItemText>
-                        <Typography
-                          component="span"
-                          variant="caption"
-                        >
-                          BPC
-                        </Typography>
-                      </ListItemText>
-                      {openList3 ? <ExpandLess /> : <ExpandMore />}
-                    </ListItemButton>
-                  </ListItem>
-                  : null}
-                <Collapse in={openList5} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    <ListItemButton onClick={BSAssetsMain}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; E-Book BPC
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    <ListItemButton onClick={BpcStatus}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; สถานะรายการทรัพย์สินผู้ร่วม
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                    <ListItemButton onClick={Transection_List}>
-                      <ListItemText>
-                        <Typography
-                          sx={{ display: 'inline' }}
-                          component="span"
-                          variant="caption"
-                          style={{ color: "rgb(231,244,17)" }}
-                        >
-                          <CircleIcon sx={{ fontSize: 8, mr: 1 }} />&nbsp; ประวัติการดำเนินการทรัพย์สินผู้ร่วม
-                        </Typography>
-                      </ListItemText>
-                    </ListItemButton>
-                  </List>
-                </Collapse>
-              </List>
-              <Divider />
-            </Drawer>
-            <Outlet />
-          </ThemeProvider>
-        </Box>
-      </>
-    );
-  }
+                          <ListItemIcon sx={{ color: 'inherit' }}>
+                            {item.icon}
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={item.label}
+                            primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
+                          />
+                        </ListItemButton>
+                      )
+                    }
+                  })}
+              </Collapse>
+            </List>
+            <Divider />
+          </Drawer>
+          <Outlet />
+        </ThemeProvider>
+      </Box >
+    </>
+  );
 }

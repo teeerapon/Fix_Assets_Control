@@ -115,12 +115,12 @@ export default function MenuAppBar({ drawerWidth, AppBar, DrawerHeader, theme, o
 
   const darkTheme = createTheme({
     palette: {
-      mode: 'dark',
+      type: 'dark', // Set the theme to dark mode
       primary: {
-        main: '#1976d2',
-      },
-    },
-  });
+        main: '#1c2536' // Set the primary color to blue
+      }
+    }
+  })
 
   return (
     <>
