@@ -676,6 +676,32 @@ export default function History_of_assets() {
                           />
                         </Grid>
                         <Grid item xs={12}>
+                          <TextField
+                            size="small"
+                            autoComplete="given-name"
+                            name="Asset_group"
+                            value={asset_group}
+                            onChange={(event) => setAsset_group(event.target.value)}
+                            required
+                            fullWidth
+                            label="Asset Group"
+                            autoFocus
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            size="small"
+                            autoComplete="given-name"
+                            name="group_name"
+                            value={branchID}
+                            onChange={(event) => setGroup_name(event.target.value)}
+                            required
+                            fullWidth
+                            label="Group_name"
+                            autoFocus
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
                           <LocalizationProvider dateAdapter={DateAdapter}>
                             <DatePicker
                               label="วันที่ขึ้นทะเบียน"

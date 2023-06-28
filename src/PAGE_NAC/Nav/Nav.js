@@ -76,7 +76,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
   const [anchorEl, setAnchorEl] = React.useState(null);
   const data = JSON.parse(localStorage.getItem('data'));
   const checkUserWeb = localStorage.getItem('sucurity');
-  const [openListNAC, setOpenListNAC] = React.useState(false);
+  const [openListNAC, setOpenListNAC] = React.useState(true);
   const [openListPMS, setOpenListPMS] = React.useState(false);
   const [openList, setOpenList] = React.useState(false);
   const [openList2, setOpenList2] = React.useState(false);
@@ -506,7 +506,9 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
             <Divider />
             <List>
               <ListItem component="div" disablePadding>
-                <ListItemButton style={{ backgroundColor: openListNAC === true ? "rgba(255,255,255,0.05)" : null, }}>
+                <ListItemButton
+                  // style={{ backgroundColor: openListNAC === true ? "rgba(255,255,255,0.05)" : null, }}
+                >
                   <ListItemText
                     alignItems="flex-start"
                     onClick={Change_ASSETS}
@@ -515,7 +517,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                       fontSize: 14,
                       fontWeight: 'medium',
                       lineHeight: '20px',
-                      color: (openList || openList2 || openList3 || openList4 || openList5 || openListNAC) === true ? "#6366f1" : "#ffff",
+                      // color: (openList || openList2 || openList3 || openList4 || openList5 || openListNAC) === true ? "#6366f1" : "#ffff",
                       mb: '2px',
                     }}
                     sx={{ my: 0 }}

@@ -126,47 +126,6 @@ function App() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
-  const roPA = [
-    '/ROPA_MAIN',
-    '/PERSON_ROPA',
-    '*',
-  ]
-
-  const nAC_MENU =
-    [
-      '/NAC_MAIN',
-      '/Report',
-      '/AssetPage',
-      '/Reported_Assets_Counted',
-      '/CreatePeriod',
-      '/CreatePeriod2',
-      '/CreatePeriod3',
-      '/EditPeriod',
-      '/History_of_Assets',
-      '/NAC_ROW',
-      '/NAC_OPERATOR',
-      '/NAC_CREATE_MAIN1',
-      '/NAC_CREATE_STEP1',
-      '/NAC_CHANGE_STEP1',
-      '/NAC_DELETE_STEP1',
-      '/NAC_SEALS_STEP1',
-      '/NAC_ROW/NAC_CREATE_WAIT_APPROVE',
-      '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE',
-      '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE',
-      '/NAC_ROW/NAC_DELETE_WAIT_APPROVE',
-      '/NAC_ROW/NAC_SEALS_APPROVE',
-      '/FETCH_ASSETS',
-      '/Account_BrnachAssets',
-      '/Permission_NAC',
-      '/EBookBranch',
-      '/EBookMain',
-      '/BSAssetsMain',
-      '/TransectionList',
-      '/FA_Control_BPC_SELECT_TEMP',
-      '/BpcStatus',
-      '*',
-    ]
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
