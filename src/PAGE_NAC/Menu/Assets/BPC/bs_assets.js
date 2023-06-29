@@ -652,7 +652,7 @@ export default function History_of_assets() {
     },
     {
       field: 'ImagePath',
-      headerName: 'Images 1',
+      headerName: 'รูปในสัญญา',
       headerClassName: 'super-app-theme--header',
       width: 200,
       headerAlign: 'center',
@@ -743,7 +743,7 @@ export default function History_of_assets() {
     },
     {
       field: 'ImagePath_2',
-      headerName: 'Images 2',
+      headerName: 'รูปปัจจุบัน',
       headerClassName: 'super-app-theme--header',
       width: 200,
       headerAlign: 'center',
