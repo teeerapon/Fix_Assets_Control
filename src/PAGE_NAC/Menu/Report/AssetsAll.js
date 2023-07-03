@@ -391,6 +391,7 @@ export default function Reported_of_assets() {
                   pageSize={pageSize}
                   onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                   pagination
+                  getRowHeight={() => 'auto'}
                   rowsPerPageOptions={[10, 20, 50, 100]}
                   autoHeight
                   disableColumnMenu

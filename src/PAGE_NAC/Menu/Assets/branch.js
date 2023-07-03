@@ -394,6 +394,7 @@ export default function History_of_assets() {
                   pagination
                   rowsPerPageOptions={[10, 20, 50, 100]}
                   autoHeight
+                  getRowHeight={() => 'auto'}
                   disableColumnMenu
                   disableSelectionOnClick
                   {...other}

@@ -917,6 +917,7 @@ export default function Reported_of_assets() {
                 rowsPerPageOptions={[10, 20, 50, 100]}
                 disableColumnMenu
                 autoHeight
+                getRowHeight={() => 'auto'}
                 disableSelectionOnClick
                 {...other}
                 onSelectionModelChange={(newSelectionModel) => handleClick_Value(newSelectionModel)}
