@@ -474,7 +474,7 @@ export default function History_of_assets() {
       valueGetter: (params) =>
         params.row.OwnerID === 'BANGBAN' ? 'W1-BANGBAN' :
           params.row.OwnerID === 'PUREPARK' ? 'PLAZA' :
-            (params.row.OwnerID).indexOf("CJ") > -1 ? params.row.OwnerID :
+            (params.row.OwnerID ? (params.row.OwnerID).indexOf("CJ") : params.row.OwnerID) > -1 ? params.row.OwnerID :
               params.row.OwnerID === 'IT' ? 'IT CENTER' :
                 params.row.OwnerID === 'TRAINING' ? 'TRAINING CENTER' :
                   params.row.OwnerID === 'ADMIN_PAS' ? 'ADMIN CENTER' :
