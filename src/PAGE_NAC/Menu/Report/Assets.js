@@ -210,6 +210,39 @@ async function store_FA_control_CheckAssetCode_Process(credentials) {
     .then(data => data.json())
 }
 
+async function Reported(credentials) {
+  return fetch(config.http + '/testGetBranch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
+async function Reported2(credentials) {
+  return fetch(config.http + '/getAssetbyUserBranch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
+async function Reported3(credentials) {
+  return fetch(config.http + '/wrongBranch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
+
 export default function Reported_of_assets() {
   const [reported_of_assets, setReported_of_assets] = React.useState(JSON.parse(localStorage.getItem('Allaseets')));
   const data = JSON.parse(localStorage.getItem('data'));
@@ -275,7 +308,35 @@ export default function Reported_of_assets() {
     setUserForAssetsControl(UserForAssetsControl.data);
   };
 
+  const handleReloadingPage = async e => {
+    const RoundID = reported_of_assets ? reported_of_assets[0].RoundID : null;;
+    const BranchID = reported_of_assets ? reported_of_assets[0].BranchID : null;
+    const UserBranch = data.branchid;
+    e.preventDefault();
+    const response = await Reported({
+      RoundID,
+      BranchID,
+      UserBranch
+    });
+    const response2 = await Reported2({
+      RoundID,
+      BranchID,
+      UserBranch
+    })
+    const response3 = await Reported3({
+      UserBranch,
+      BranchID,
+      RoundID
+    })
+    console.log(UserBranch, BranchID, RoundID);
+    if ('data' in response || 'data' in response2 || 'data' in response3) {
+      localStorage.setItem('Allaseets', JSON.stringify((response2).concat(response3, response.data)));
+      window.location.href = "/AssetPage"
+    }
+  }
+
   React.useEffect(() => {
+    handleReloadingPage();
     fetchUserForAssetsControl();
     // 👇️ disable the rule for a single line
 
