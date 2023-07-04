@@ -694,7 +694,7 @@ export default function History_of_assets() {
                             size="small"
                             autoComplete="given-name"
                             name="group_name"
-                            value={branchID}
+                            value={group_name}
                             onChange={(event) => setGroup_name(event.target.value)}
                             required
                             fullWidth
