@@ -308,11 +308,10 @@ export default function Reported_of_assets() {
     setUserForAssetsControl(UserForAssetsControl.data);
   };
 
-  const handleReloadingPage = async e => {
+  const handleReloadingPage = async () => {
     const RoundID = reported_of_assets ? reported_of_assets[0].RoundID : null;;
     const BranchID = reported_of_assets ? reported_of_assets[0].BranchID : null;
     const UserBranch = data.branchid;
-    e.preventDefault();
     const response = await Reported({
       RoundID,
       BranchID,
@@ -328,10 +327,9 @@ export default function Reported_of_assets() {
       BranchID,
       RoundID
     })
-    console.log(UserBranch, BranchID, RoundID);
     if ('data' in response || 'data' in response2 || 'data' in response3) {
       localStorage.setItem('Allaseets', JSON.stringify((response2).concat(response3, response.data)));
-      window.location.href = "/AssetPage"
+      setReported_of_assets((response2).concat(response3, response.data))
     }
   }
 
