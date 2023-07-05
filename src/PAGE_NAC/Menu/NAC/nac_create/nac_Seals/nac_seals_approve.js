@@ -378,30 +378,31 @@ export default function Nac_Seals_Approve() {
   const result = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : elt.price;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a ? a.toFixed(2) : 0) + parseFloat(b ? b.toFixed(2) : 0)
+    return parseFloat(a+b)
   })
+
   const book_V = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.bookValue) || /^\d+$/.test(elt.bookValue)) ? parseFloat(elt.bookValue) : elt.bookValue;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a ? a.toFixed(2) : 0) + parseFloat(b ? b.toFixed(2) : 0)
+    return parseFloat(a+b)
   })
 
   const price_seals = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.priceSeals) || /^\d+$/.test(elt.priceSeals)) ? parseFloat(elt.priceSeals) : elt.priceSeals;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a ? a.toFixed(2) : 0) + parseFloat(b ? b.toFixed(2) : 0)
+    return parseFloat(a+b)
   })
 
   const profit_seals = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue) || /^\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue)) ? parseFloat((((elt.priceSeals * 100) / 107) - elt.bookValue)) : (((elt.priceSeals * 100) / 107) - elt.bookValue);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a ? a.toFixed(2) : 0) + parseFloat(b ? b.toFixed(2) : 0)
+    return parseFloat(a+b)
   })
 
   const sum_vat = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test((elt.priceSeals * 100) / 107) || /^\d+$/.test((elt.priceSeals * 100) / 107)) ? parseFloat(((elt.priceSeals * 100) / 107)) : ((elt.priceSeals * 100) / 107);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a ? a.toFixed(2) : 0) + parseFloat(b ? b.toFixed(2) : 0)
+    return parseFloat(a+b)
   })
 
   // สำหรับหาค่า Index ของ UserCode of Auto Complete
