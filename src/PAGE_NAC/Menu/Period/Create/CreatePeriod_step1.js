@@ -17,8 +17,39 @@ import Radio from '@mui/material/Radio';
 import DatePicker from '@mui/lab/DatePicker';
 import { Outlet, useNavigate } from "react-router";
 import '../../../../App.css'
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+import Axios from "axios"
+import config from '../../../../config.js'
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 const steps = ['กรอกข้อมูล', 'ตรวจสอบข้อมูล', 'เสร็จสิ้น'];
+
+async function PeriodCreate(credentials) {
+  return fetch(config.http + '/craete_period', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+}
 
 export default function AddressForm() {
 
@@ -27,9 +58,6 @@ export default function AddressForm() {
   const year = (d.getFullYear()).toString();
   const month = ((d.getMonth()) + 101).toString().slice(-2);
   const date = ((d.getDate()) + 100).toString().slice(-2);
-  // const hours = ((d.getHours()) + 100).toString().slice(-2);
-  // const mins = ((d.getMinutes()) + 100).toString().slice(-2);
-  // const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T00:00:00.000Z`;
 
   const data = JSON.parse(localStorage.getItem('data'));
@@ -38,10 +66,34 @@ export default function AddressForm() {
   const [valueDateTime1, setValueDateTime1] = React.useState(datenow) //datenow
   const [valueDateTime2, setValueDateTime2] = React.useState(datenow) //datenow
   const [valueDescription, setValueDescription] = React.useState()
-  const [valueBrachID1, setValueBrachID1] = React.useState()
   const [brachID1, setBrachID1] = React.useState()
   const [activeStep] = React.useState(0);
   const checkUserWeb = localStorage.getItem('sucurity');
+
+  const [PositionName, setPositionName] = React.useState([]);
+  const [PositionAPIName, setPositionAPIName] = React.useState([]);
+  const [branchName, setBranchName] = React.useState([]);
+  const [branchAPIName, setBranchAPIName] = React.useState([]);
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPositionName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+  const handleBranchID = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setBranchName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
 
 
   const handleDescription = (newValue) => {
@@ -49,12 +101,17 @@ export default function AddressForm() {
   };
 
   const toggleCheckbox = (event) => {
+
     setBrachID1(event.target.value)
-    if (event.target.value == '0') {
-      setValueBrachID1(0);
-      setShowResults(showResults => false)
-    } else {
-      setShowResults(showResults => true)
+
+    if (event.target.value === '0') {
+      setShowResults(event.target.value)
+    } else if (event.target.value === '1') {
+      setPositionName([])
+      setShowResults(event.target.value)
+    } else if (event.target.value === '2') {
+      setBranchName([])
+      setShowResults(event.target.value)
     }
   }
 
@@ -62,26 +119,112 @@ export default function AddressForm() {
     setValueDateTime1(newValue);
   };
 
-  const handleBranchID = (newValue) => {
-    setValueBrachID1(newValue.target.value);
-  };
-
   const handleDateTime2 = (newValue) => {
     setValueDateTime2(newValue);
   };
 
-  const handleNext = () => {
-    if (brachID1 !== undefined && valueDateTime1 !== undefined && valueDateTime2 !== undefined && valueDescription !== undefined && valueBrachID1 !== undefined) {
-      localStorage.setItem('DataCreatePeriod', JSON.stringify({ brachID1, valueDateTime1, valueDateTime2, valueDescription, valueBrachID1 }));
-      navigate("/CreatePeriod2")
-    } else if (valueBrachID1 == null) {
-      swal("แจ้งเตือน", "กรุณากรอกข้อมูลหมายเลขสาขา", "warning")
+  const handleNext = async () => {
+
+    if (brachID1 === '0' && valueDescription) {
+
+      const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
+      const EndDate = valueDateTime2 === datenow ? datenow :  (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+      const BranchID = brachID1
+      const Description = valueDescription
+      const usercode = data.UserCode
+      const response = await PeriodCreate({
+        BeginDate,
+        EndDate,
+        BranchID,
+        Description,
+        usercode
+      });
+      if (response.data[0]) {
+        swal("แจ้งเตือน", `เปิดรอบตรวจนับสำหรับ HO แล้ว`, "success", {
+          buttons: false,
+          timer: 1500,
+        }).then((value) => {
+          navigate('/EditPeriod')
+        });
+      }
+
+    } else if (branchName.length === 0 && PositionName.length > 0 && brachID1 === '2' && valueDescription) {
+
+      for (let i = 0; i < PositionName.length; i++) {
+        const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
+        const EndDate = valueDateTime2 === datenow ? datenow :  (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+        const BranchID = 901
+        const Description = `${valueDescription} (แผนก ${PositionName[i]})`
+        const usercode = data.UserCode
+        const depcode = PositionName[i]
+        const response = await PeriodCreate({
+          BeginDate,
+          EndDate,
+          BranchID,
+          Description,
+          usercode,
+          depcode
+        });
+        if (response.data[0] && (i + 1 === PositionName.length)) {
+          swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${PositionName.join(', ')} แล้ว`, "success", {
+            buttons: false,
+            timer: 1500,
+          }).then((value) => {
+            navigate('/EditPeriod')
+          });
+        }
+      }
+
+    } else if (branchName.length > 0 && PositionName.length === 0 && brachID1 === '1' && valueDescription) {
+
+      for (let i = 0; i < branchName.length; i++) {
+        const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
+        const EndDate = valueDateTime2 === datenow ? datenow :  (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+        const BranchID = branchName[i]
+        const Description = `${valueDescription} (สาขา ${branchName[i]})`
+        const usercode = data.UserCode
+        const response = await PeriodCreate({
+          BeginDate,
+          EndDate,
+          BranchID,
+          Description,
+          usercode
+        });
+        if (response.data[0] && (i + 1 === branchName.length)) {
+          swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${branchName.join(', ')} แล้ว`, "success", {
+            buttons: false,
+            timer: 1500,
+          }).then((value) => {
+            navigate('/EditPeriod')
+          });
+        }
+      }
     } else {
-      swal("แจ้งเตือน", "กรุณากรอกข้อมูลในครบถ้วน", "warning")
+      swal("แจ้งเตือน", "กรูณาระบุข้อมูลให้ครบถ้วน", "warning")
     }
-    //console.warn(new Date(valueDateTime1).toISOString().split('T')[0])
-    //console.warn(new Date(valueDateTime2).toISOString().split('T')[0])
   };
+
+  React.useEffect(() => {
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    const body = {
+      "branchid": data.branchid
+    }
+
+    Axios.post(config.http + '/Department_List', body, { headers })
+      .then(response => {
+        setPositionAPIName((response.data.data).filter((res) => res.depid > 14))
+      });
+
+    Axios.get(config.http + '/Branch_ListAll', { headers })
+      .then(response => {
+        setBranchAPIName((response.data.data).filter((res) => res.branchid <= 120));
+      });
+
+  }, []);
 
   if (checkUserWeb === 'null') {
     window.location.href = '/NAC_MAIN';
@@ -176,26 +319,7 @@ export default function AddressForm() {
                 />
               </Stack>
             </Grid>
-            {showResults ?
-              <>
-                <Grid item xs={12} sm={6} mt={2}>
-                  <p className='text-danger'>*หมายเหตุ กรุณาระบุสาขาให้ถูกต้อง</p>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    inputProps={{ min: 1 }}
-                    id="branchID"
-                    name="branchID"
-                    onChange={handleBranchID}
-                    label="สาขา"
-                    fullWidth
-                  />
-                </Grid>
-              </>
-              : null
-            }
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
               <FormControlLabel
                 control={<Radio
                   color="secondary"
@@ -203,21 +327,94 @@ export default function AddressForm() {
                   value={0}
                   defaultChecked
                   onChange={toggleCheckbox}
-                  checked={brachID1 == 0 ? true : false} />}
+                  checked={brachID1 === '0' ? true : false} />}
                 label="เปิดทุกสาขา"
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
               <FormControlLabel
                 control={<Radio
                   color="secondary"
                   id="0"
                   value={1}
                   onChange={toggleCheckbox}
-                  checked={brachID1 == 1 ? true : false} />}
-                label="เปิดเฉพาะบางสาขา"
+                  checked={brachID1 === '1' ? true : false} />}
+                label="บางสาขา"
               />
             </Grid>
+            <Grid item xs={12} sm={4}>
+              <FormControlLabel
+                control={<Radio
+                  color="secondary"
+                  id="0"
+                  value={2}
+                  onChange={toggleCheckbox}
+                  checked={brachID1 === '2' ? true : false} />}
+                label="สำนักงาน"
+              />
+            </Grid>
+            {showResults === '1' ?
+              <>
+                <Grid item xs={12} sm={12} mt={2}>
+                  <p className='text-danger'>*หมายเหตุ กรุณาเลือกสาขา</p>
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  <div>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-multiple-checkbox-label">เลือกสาขา</InputLabel>
+                      <Select
+                        multiple
+                        value={branchName}
+                        onChange={handleBranchID}
+                        fullWidth
+                        input={<OutlinedInput label="เลือกสาขา" />}
+                        renderValue={(selected) => `สาขาที่ ${selected.join(', สาขาที่ ')}`}
+                        MenuProps={MenuProps}
+                      >
+                        {branchAPIName.map((res) => (
+                          <MenuItem key={res.branchid} value={res.branchid}>
+                            <Checkbox checked={branchName.indexOf(res.branchid) > -1} />
+                            <ListItemText primary={`สาขาที่ ${res.branchid}`} />
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </div>
+                </Grid>
+              </>
+              : null
+            }
+            {showResults === '2' ?
+              <>
+                <Grid item xs={12} sm={12} mt={2}>
+                  <p className='text-danger'>*หมายเหตุ กรุณาเลือกแผนก</p>
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  <div>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-multiple-checkbox-label">เลือกแผนก</InputLabel>
+                      <Select
+                        multiple
+                        value={PositionName}
+                        onChange={handleChange}
+                        fullWidth
+                        input={<OutlinedInput label="เลือกแผนก" />}
+                        renderValue={(selected) => selected.join(', ')}
+                        MenuProps={MenuProps}
+                      >
+                        {PositionAPIName.map((res) => (
+                          <MenuItem key={res.depcode} value={res.depcode}>
+                            <Checkbox checked={PositionName.indexOf(res.depcode) > -1} />
+                            <ListItemText primary={res.depcode} />
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </div>
+                </Grid>
+              </>
+              : null
+            }
           </Grid>
         </React.Fragment>
         <React.Fragment>
@@ -228,7 +425,7 @@ export default function AddressForm() {
                 onClick={handleNext}
                 sx={{ mt: 3, ml: 1 }}
               >
-                ต่อไป
+                Submit
               </Button>
             </Box>
           </React.Fragment>

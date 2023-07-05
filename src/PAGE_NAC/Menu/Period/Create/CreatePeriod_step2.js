@@ -48,6 +48,7 @@ export default function AddressForm() {
     const BranchID = DataCreatePeriod.valueBrachID1
     const Description = DataCreatePeriod.valueDescription
     const usercode = data.UserCode
+
     if (DataCreatePeriod.valueDateTime1 !== undefined && DataCreatePeriod.valueDateTime2 !== undefined && DataCreatePeriod.valueDescription !== undefined && DataCreatePeriod.valueBrachID1 !== undefined) {
       const response = await PeriodCreate({
         BeginDate,
