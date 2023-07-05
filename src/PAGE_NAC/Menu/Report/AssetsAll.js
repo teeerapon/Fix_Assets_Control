@@ -300,7 +300,11 @@ export default function Reported_of_assets() {
         setProgress(1)
       }
     }).then(response => {
-      setSelectMenu(response.data.data)
+      setSelectMenu((response.data.data).filter((value, index, self) =>
+      index === self.findIndex((t) => (
+        t.Description === value.Description
+      ))
+    ))
       setProgress(1)
     });
   }, []);
