@@ -135,7 +135,21 @@ export default function Reported_of_assets() {
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
-    { field: 'BranchID', headerName: 'สาขา', headerClassName: 'super-app-theme--header', headerAlign: 'center', align: 'center', flex: 1 },
+    {
+      field: 'BranchID',
+      headerName: 'สาขา',
+      headerClassName: 'super-app-theme--header',
+      headerAlign: 'center',
+      align: 'center',
+      flex: 1,
+      valueGetter: (params) =>
+        params.row.BranchID === 901 ? 'HO' :
+          params.row.BranchID === 1000001 ? 'CJ001' :
+            params.row.BranchID === 1000002 ? 'CJ002' :
+              params.row.BranchID === 1000003 ? 'PUREPARK' :
+                params.row.BranchID === 1000004 ? 'CJ003' :
+                  params.row.BranchID,
+    },
     {
       field: 'Date',
       headerName: 'วันที่ตรวจนับ',
@@ -301,10 +315,10 @@ export default function Reported_of_assets() {
       }
     }).then(response => {
       setSelectMenu((response.data.data).filter((value, index, self) =>
-      index === self.findIndex((t) => (
-        t.Description === value.Description
+        index === self.findIndex((t) => (
+          t.Description === value.Description
+        ))
       ))
-    ))
       setProgress(1)
     });
   }, []);
