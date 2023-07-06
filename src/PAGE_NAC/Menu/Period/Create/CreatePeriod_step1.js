@@ -75,6 +75,33 @@ export default function AddressForm() {
   const [branchName, setBranchName] = React.useState([]);
   const [branchAPIName, setBranchAPIName] = React.useState([]);
 
+  const [checked, setChecked] = React.useState([true, false]);
+
+  const handleChange1 = (event) => {
+    setChecked([event.target.checked, event.target.checked]);
+  };
+
+  const handleChange2 = (event) => {
+    setChecked([event.target.checked, checked[1]]);
+  };
+
+  const handleChange3 = (event) => {
+    setChecked([checked[0], event.target.checked]);
+  };
+
+  const children = (
+    <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
+      <FormControlLabel
+        label="Child 1"
+        control={<Checkbox checked={checked[0]} onChange={handleChange2} />}
+      />
+      <FormControlLabel
+        label="Child 2"
+        control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
+      />
+    </Box>
+  );
+
   const handleChange = (event) => {
     const {
       target: { value },
@@ -125,10 +152,12 @@ export default function AddressForm() {
 
   const handleNext = async () => {
 
+    let keyID = (Math.random() + 1).toString(36).substring(7);
+
     if (brachID1 === '0' && valueDescription) {
 
       const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
-      const EndDate = valueDateTime2 === datenow ? datenow :  (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+      const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
       const BranchID = brachID1
       const Description = valueDescription
       const usercode = data.UserCode
@@ -137,7 +166,8 @@ export default function AddressForm() {
         EndDate,
         BranchID,
         Description,
-        usercode
+        usercode,
+        keyID
       });
       if (response.data[0]) {
         swal("แจ้งเตือน", `เปิดรอบตรวจนับสำหรับ HO แล้ว`, "success", {
@@ -152,7 +182,7 @@ export default function AddressForm() {
 
       for (let i = 0; i < PositionName.length; i++) {
         const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
-        const EndDate = valueDateTime2 === datenow ? datenow :  (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+        const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
         const BranchID = 901
         const Description = `${valueDescription} (แผนก ${PositionName[i]})`
         const usercode = data.UserCode
@@ -163,7 +193,8 @@ export default function AddressForm() {
           BranchID,
           Description,
           usercode,
-          depcode
+          depcode,
+          keyID
         });
         if (response.data[0] && (i + 1 === PositionName.length)) {
           swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${PositionName.join(', ')} แล้ว`, "success", {
@@ -179,16 +210,17 @@ export default function AddressForm() {
 
       for (let i = 0; i < branchName.length; i++) {
         const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
-        const EndDate = valueDateTime2 === datenow ? datenow :  (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+        const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
         const BranchID = branchName[i]
-        const Description = `${valueDescription} (สาขา ${branchName[i]})`
+        const Description = `${valueDescription} (สาขา ${branchName === 1000001 ? 'CJ001' : branchName === 1000002 ? 'CJ002' : branchName === 1000003 ? 'PUREPARK' : branchName === 1000004 ? 'CJ003' : branchName})`
         const usercode = data.UserCode
         const response = await PeriodCreate({
           BeginDate,
           EndDate,
           BranchID,
           Description,
-          usercode
+          usercode,
+          keyID
         });
         if (response.data[0] && (i + 1 === branchName.length)) {
           swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${branchName.join(', ')} แล้ว`, "success", {
@@ -221,7 +253,9 @@ export default function AddressForm() {
 
     Axios.get(config.http + '/Branch_ListAll', { headers })
       .then(response => {
-        setBranchAPIName((response.data.data).filter((res) => res.branchid <= 120));
+        setBranchAPIName((response.data.data).filter((res) => res.branchid <= 120 ||
+          res.branchid === 1000001 || res.branchid === 1000002 || res.branchid === 1000003 || res.branchid === 1000004
+        ));
       });
 
   }, []);
@@ -374,7 +408,11 @@ export default function AddressForm() {
                         {branchAPIName.map((res) => (
                           <MenuItem key={res.branchid} value={res.branchid}>
                             <Checkbox checked={branchName.indexOf(res.branchid) > -1} />
-                            <ListItemText primary={`สาขาที่ ${res.branchid}`} />
+                            <ListItemText primary={`สาขาที่ ${res.branchid === 1000001 ? 'CJ001' :
+                              res.branchid === 1000002 ? 'CJ002' :
+                                res.branchid === 1000003 ? 'PUREPARK' :
+                                  res.branchid === 1000004 ? 'CJ003' : res.branchid
+                              }`} />
                           </MenuItem>
                         ))}
                       </Select>
@@ -409,6 +447,19 @@ export default function AddressForm() {
                           </MenuItem>
                         ))}
                       </Select>
+                      <div>
+                        <FormControlLabel
+                          label="Parent"
+                          control={
+                            <Checkbox
+                              checked={checked[0] && checked[1]}
+                              indeterminate={checked[0] !== checked[1]}
+                              onChange={handleChange1}
+                            />
+                          }
+                        />
+                        {children}
+                      </div>
                     </FormControl>
                   </div>
                 </Grid>
