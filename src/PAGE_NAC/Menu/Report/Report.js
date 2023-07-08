@@ -177,7 +177,7 @@ export default function Report() {
         BranchID,
         RoundID
       })
-      console.log(UserBranch,BranchID,RoundID);
+      console.log(UserBranch, BranchID, RoundID);
       if ('data' in response || 'data' in response2 || 'data' in response3) {
         swal("แจ้งเตือน", "ค้นหาข้อมูลเสร็จสิ้น", "success", {
           buttons: false,
@@ -252,7 +252,18 @@ export default function Report() {
                       >
                         {
                           permission.map((item) =>
-                            <MenuItem value={item.BranchID}>สาขาที่ : {!item.BranchID ? 'ไม่พบข้อมูลของสาขาที่สามารถเข้าถึงได้' : item.BranchID}</MenuItem>
+                            <MenuItem value={item.BranchID}>
+                              {
+                                !item.BranchID ? 'ไม่พบข้อมูลของสาขาที่สามารถเข้าถึงได้' :
+                                  item.BranchID === 901 ? `สำนักงาน (HO)` :
+                                    item.BranchID <= 120 ? `สาขาที่ : ${item.BranchID}` :
+                                      item.BranchID === 1000001 ? `สาขาที่ : CJ001 ลาดพร้าว` :
+                                        item.BranchID === 1000002 ? `สาขาที่ : CJ002 อมตะนคร` :
+                                          item.BranchID === 1000002 ? `สาขาที่ : CJ003 ตลาดไท` :
+                                            item.BranchID === 1000003 ? `สาขาที่ : PURE PARK` :
+                                              null
+                              }
+                            </MenuItem>
                           )
                         }
                       </Select>
