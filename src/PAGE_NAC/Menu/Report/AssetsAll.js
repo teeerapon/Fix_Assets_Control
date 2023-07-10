@@ -336,6 +336,7 @@ export default function Reported_of_assets() {
         setProgress(1)
       }
     }).then(response => {
+      console.log(Description);
       setReported_of_assets(response.data.data)
       setProgress(1)
     });

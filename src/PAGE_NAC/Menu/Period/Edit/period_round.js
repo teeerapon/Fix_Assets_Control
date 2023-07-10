@@ -474,7 +474,7 @@ export default function History_of_assets() {
           </Toolbar>
         </AppBar>
         <AnimatedPage>
-        {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
+          {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
               <Box
@@ -503,7 +503,8 @@ export default function History_of_assets() {
                   rows={dataBranchID_Main ?? []}
                   columns={columns}
                   pageSize={10}
-                  //rowsPerPageOptions={[5]}
+                  getRowHeight={() => 'auto'}
+                  getRowSpacing={() => 'auto'}
                   getRowId={(dataBranchID_Main) => dataBranchID_Main.PeriodID}
                   autoHeight={true}
                   disableColumnMenu
