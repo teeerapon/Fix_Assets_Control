@@ -445,7 +445,7 @@ export default function AddressForm() {
               : null
             }
             {showResults === '2' ?
-              <div>
+              <>
                 <Grid item xs={12} sm={12} mt={2}>
                   <p className='text-danger'>*หมายเหตุ กรุณาเลือกแผนก</p>
                 </Grid>
@@ -472,7 +472,7 @@ export default function AddressForm() {
                     </FormControl>
                   </div>
                 </Grid>
-              </div>
+              </>
               : null
             }
           </Grid>
