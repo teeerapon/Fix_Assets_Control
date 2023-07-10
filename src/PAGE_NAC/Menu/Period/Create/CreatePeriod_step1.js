@@ -74,33 +74,7 @@ export default function AddressForm() {
   const [PositionAPIName, setPositionAPIName] = React.useState([]);
   const [branchName, setBranchName] = React.useState([]);
   const [branchAPIName, setBranchAPIName] = React.useState([]);
-
   const [checked, setChecked] = React.useState([true, false]);
-
-  const handleChange1 = (event) => {
-    setChecked([event.target.checked, event.target.checked]);
-  };
-
-  const handleChange2 = (event) => {
-    setChecked([event.target.checked, checked[1]]);
-  };
-
-  const handleChange3 = (event) => {
-    setChecked([checked[0], event.target.checked]);
-  };
-
-  const children = (
-    <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
-      <FormControlLabel
-        label="Child 1"
-        control={<Checkbox checked={checked[0]} onChange={handleChange2} />}
-      />
-      <FormControlLabel
-        label="Child 2"
-        control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
-      />
-    </Box>
-  );
 
   const handleChange = (event) => {
     const {
@@ -194,7 +168,7 @@ export default function AddressForm() {
           Description,
           usercode,
           depcode,
-          keyID
+          keyID,
         });
         if (response.data[0] && (i + 1 === PositionName.length)) {
           swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${PositionName.join(', ')} แล้ว`, "success", {
@@ -246,9 +220,57 @@ export default function AddressForm() {
       "branchid": data.branchid
     }
 
+    Axios.get(config.http + `/users`, { headers }).then((res) => {
+      console.log(res.data);
+    })
+
     Axios.post(config.http + '/Department_List', body, { headers })
       .then(response => {
-        setPositionAPIName((response.data.data).filter((res) => res.depid > 14))
+
+        var newArray = (response.data.data).filter((res) => res.depid > 14);
+
+        newArray.unshift({
+          depid: 0,
+          branchid: 901,
+          depcode: "ALL",
+          depname: "HO ALL",
+          name: "HO ALL",
+        })
+
+        newArray.push({
+          depid: 1,
+          branchid: 901,
+          depcode: "IT CENTER",
+          depname: "IT Center",
+          name: "IT Center",
+          userid: 19
+        },
+          {
+            depid: 22,
+            branchid: 901,
+            depcode: "TRAINING",
+            depname: "TRAINING CENTER",
+            name: "TRAINING CENTER",
+            userid: 249
+          },
+          {
+            depid: 29,
+            branchid: 901,
+            depcode: "BANGBAN",
+            depname: "W1 Bang Ban",
+            name: "W1 Bang Ban",
+            userid: 249
+          },
+          {
+            depid: 0,
+            branchid: 901,
+            depcode: "ADMIN",
+            depname: "ADMIN CENTER",
+            name: "ADMIN CENTER",
+            userid: 251
+          });
+
+        setPositionAPIName(newArray)
       });
 
     Axios.get(config.http + '/Branch_ListAll', { headers })
@@ -423,7 +445,7 @@ export default function AddressForm() {
               : null
             }
             {showResults === '2' ?
-              <>
+              <div>
                 <Grid item xs={12} sm={12} mt={2}>
                   <p className='text-danger'>*หมายเหตุ กรุณาเลือกแผนก</p>
                 </Grid>
@@ -447,23 +469,10 @@ export default function AddressForm() {
                           </MenuItem>
                         ))}
                       </Select>
-                      <div>
-                        <FormControlLabel
-                          label="Parent"
-                          control={
-                            <Checkbox
-                              checked={checked[0] && checked[1]}
-                              indeterminate={checked[0] !== checked[1]}
-                              onChange={handleChange1}
-                            />
-                          }
-                        />
-                        {children}
-                      </div>
                     </FormControl>
                   </div>
                 </Grid>
-              </>
+              </div>
               : null
             }
           </Grid>
