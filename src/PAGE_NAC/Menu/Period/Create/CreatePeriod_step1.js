@@ -26,6 +26,12 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import Axios from "axios"
 import config from '../../../../config.js'
+import Autocomplete from '@mui/material/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -71,29 +77,22 @@ export default function AddressForm() {
   const checkUserWeb = localStorage.getItem('sucurity');
 
   const [PositionName, setPositionName] = React.useState([]);
+  const [topic, setTopic] = React.useState();
   const [PositionAPIName, setPositionAPIName] = React.useState([]);
   const [branchName, setBranchName] = React.useState([]);
   const [branchAPIName, setBranchAPIName] = React.useState([]);
-  const [checked, setChecked] = React.useState([true, false]);
+  const [userGroupAPI, setUserGroupAPI] = React.useState([]); //DepCode
+  const [userGroup, setUserGroup] = React.useState([]); //DepCode
+  const [userGroupCenterAPI, setUserGroupCenterAPI] = React.useState([]); //DepCode
+  const [userGroupCenter, setUserGroupCenter] = React.useState([]); //DepCode
+  const [topicBranch, setTopicBranch] = React.useState();
 
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPositionName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
+  const handleChangeTopic = (event) => {
+    setTopic(event.target.value);
   };
 
-  const handleBranchID = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setBranchName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
+  const handleChangeTopicBranch = (event) => {
+    setTopicBranch(event.target.value);
   };
 
 
@@ -105,12 +104,12 @@ export default function AddressForm() {
 
     setBrachID1(event.target.value)
 
-    if (event.target.value === '0') {
-      setShowResults(event.target.value)
-    } else if (event.target.value === '1') {
+    if (event.target.value === '1') {
+      setTopic(null)
       setPositionName([])
       setShowResults(event.target.value)
     } else if (event.target.value === '2') {
+      setTopicBranch(null);
       setBranchName([])
       setShowResults(event.target.value)
     }
@@ -128,12 +127,12 @@ export default function AddressForm() {
 
     let keyID = (Math.random() + 1).toString(36).substring(7);
 
-    if (brachID1 === '0' && valueDescription) {
+    if (topicBranch === 0 && !topic && valueDescription) {
 
       const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
       const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
-      const BranchID = brachID1
-      const Description = valueDescription
+      const BranchID = 0
+      const Description = `${valueDescription} (CO)`
       const usercode = data.UserCode
       const response = await PeriodCreate({
         BeginDate,
@@ -144,7 +143,7 @@ export default function AddressForm() {
         keyID
       });
       if (response.data[0]) {
-        swal("แจ้งเตือน", `เปิดรอบตรวจนับสำหรับ HO แล้ว`, "success", {
+        swal("แจ้งเตือน", `เปิดรอบตรวจนับสำหรับ CO แล้ว`, "success", {
           buttons: false,
           timer: 1500,
         }).then((value) => {
@@ -152,59 +151,132 @@ export default function AddressForm() {
         });
       }
 
-    } else if (branchName.length === 0 && PositionName.length > 0 && brachID1 === '2' && valueDescription) {
+    } else if (topicBranch === 1 && !topic && valueDescription) {
 
-      for (let i = 0; i < PositionName.length; i++) {
-        const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
-        const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
-        const BranchID = 901
-        const Description = `${valueDescription} (แผนก ${PositionName[i]})`
-        const usercode = data.UserCode
-        const depcode = PositionName[i]
-        const response = await PeriodCreate({
-          BeginDate,
-          EndDate,
-          BranchID,
-          Description,
-          usercode,
-          depcode,
-          keyID,
+      const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
+      const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+      const BranchID = branchName.map((res) => res.branchid).join(`, `)
+      const Description = `${valueDescription}`
+      const usercode = data.UserCode
+      const response = await PeriodCreate({
+        BeginDate,
+        EndDate,
+        BranchID,
+        Description,
+        usercode,
+        keyID
+      });
+      if (response.data[0]) {
+        swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${branchName.map((res) => res.branchid).join(', ')} แล้ว`, "success", {
+          buttons: false,
+          timer: 1500,
+        }).then((value) => {
+          navigate('/EditPeriod')
         });
-        if (response.data[0] && (i + 1 === PositionName.length)) {
-          swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${PositionName.join(', ')} แล้ว`, "success", {
-            buttons: false,
-            timer: 1500,
-          }).then((value) => {
-            navigate('/EditPeriod')
-          });
-        }
       }
 
-    } else if (branchName.length > 0 && PositionName.length === 0 && brachID1 === '1' && valueDescription) {
+    } else if (!topicBranch && topic === 0 && valueDescription) {
 
-      for (let i = 0; i < branchName.length; i++) {
-        const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
-        const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
-        const BranchID = branchName[i]
-        const Description = `${valueDescription} (สาขา ${branchName === 1000001 ? 'CJ001' : branchName === 1000002 ? 'CJ002' : branchName === 1000003 ? 'PUREPARK' : branchName === 1000004 ? 'CJ003' : branchName})`
-        const usercode = data.UserCode
-        const response = await PeriodCreate({
-          BeginDate,
-          EndDate,
-          BranchID,
-          Description,
-          usercode,
-          keyID
+      const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
+      const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+      const BranchID = 901
+      const Description = `${valueDescription} (HO)`
+      const usercode = data.UserCode
+      const response = await PeriodCreate({
+        BeginDate,
+        EndDate,
+        BranchID,
+        Description,
+        usercode,
+        keyID,
+      });
+      if (response.data[0]) {
+        swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา HO แล้ว`, "success", {
+          buttons: false,
+          timer: 1500,
+        }).then((value) => {
+          navigate('/EditPeriod')
         });
-        if (response.data[0] && (i + 1 === branchName.length)) {
-          swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${branchName.join(', ')} แล้ว`, "success", {
-            buttons: false,
-            timer: 1500,
-          }).then((value) => {
-            navigate('/EditPeriod')
-          });
-        }
       }
+
+    } else if (!topicBranch && topic === 1 && valueDescription) {
+
+      const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
+      const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+      const BranchID = 901
+      const Description = `${valueDescription}`
+      const usercode = data.UserCode
+      const personID = userGroupCenter.map((res) => res.UserCode).join(', ')
+      const response = await PeriodCreate({
+        BeginDate,
+        EndDate,
+        BranchID,
+        Description,
+        usercode,
+        personID,
+        keyID,
+      });
+      if (response.data[0]) {
+        swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${userGroupCenter.map((res) => res.UserCode).join(', ')} แล้ว`, "success", {
+          buttons: false,
+          timer: 1500,
+        }).then((value) => {
+          navigate('/EditPeriod')
+        });
+      }
+
+    }else if (!topicBranch && topic === 2 && valueDescription) {
+
+      const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
+      const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+      const BranchID = 901
+      const Description = `${valueDescription}`
+      const usercode = data.UserCode
+      const depcode = PositionName.map((res) => res.depcode).join(', ')
+      const response = await PeriodCreate({
+        BeginDate,
+        EndDate,
+        BranchID,
+        Description,
+        usercode,
+        depcode,
+        keyID,
+      });
+      if (response.data[0]) {
+        swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${PositionName.map((res) => res.depcode).join(', ')} แล้ว`, "success", {
+          buttons: false,
+          timer: 1500,
+        }).then((value) => {
+          navigate('/EditPeriod')
+        });
+      }
+
+    } else if (!topicBranch && topic === 3 && valueDescription) {
+
+      const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
+      const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+      const BranchID = 901
+      const Description = `${valueDescription}`
+      const usercode = data.UserCode
+      const personID = userGroup.map((res) => res.UserCode).join(', ')
+      const response = await PeriodCreate({
+        BeginDate,
+        EndDate,
+        BranchID,
+        Description,
+        usercode,
+        personID,
+        keyID,
+      });
+      if (response.data[0]) {
+        swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${userGroup.map((res) => res.UserCode).join(', ')} แล้ว`, "success", {
+          buttons: false,
+          timer: 1500,
+        }).then((value) => {
+          navigate('/EditPeriod')
+        });
+      }
+
     } else {
       swal("แจ้งเตือน", "กรูณาระบุข้อมูลให้ครบถ้วน", "warning")
     }
@@ -221,7 +293,8 @@ export default function AddressForm() {
     }
 
     Axios.get(config.http + `/users`, { headers }).then((res) => {
-      console.log(res.data);
+      setUserGroupAPI((res.data).filter((res) => res.BranchID === 901 && res.UserType !== 'CENTER'));
+      setUserGroupCenterAPI((res.data).filter((res) => res.BranchID === 901 && res.UserType === 'CENTER'));
     })
 
     Axios.post(config.http + '/Department_List', body, { headers })
@@ -229,46 +302,38 @@ export default function AddressForm() {
 
         var newArray = (response.data.data).filter((res) => res.depid > 14);
 
-        newArray.unshift({
-          depid: 0,
-          branchid: 901,
-          depcode: "ALL",
-          depname: "HO ALL",
-          name: "HO ALL",
-        })
-
-        newArray.push({
-          depid: 1,
-          branchid: 901,
-          depcode: "IT CENTER",
-          depname: "IT Center",
-          name: "IT Center",
-          userid: 19
-        },
-          {
-            depid: 22,
-            branchid: 901,
-            depcode: "TRAINING",
-            depname: "TRAINING CENTER",
-            name: "TRAINING CENTER",
-            userid: 249
-          },
-          {
-            depid: 29,
-            branchid: 901,
-            depcode: "BANGBAN",
-            depname: "W1 Bang Ban",
-            name: "W1 Bang Ban",
-            userid: 249
-          },
-          {
-            depid: 0,
-            branchid: 901,
-            depcode: "ADMIN",
-            depname: "ADMIN CENTER",
-            name: "ADMIN CENTER",
-            userid: 251
-          });
+        // newArray.push({
+        //   depid: 1,
+        //   branchid: 901,
+        //   depcode: "IT CENTER",
+        //   depname: "IT Center",
+        //   name: "IT Center",
+        //   userid: 19
+        // },
+        //   {
+        //     depid: 22,
+        //     branchid: 901,
+        //     depcode: "TRAINING",
+        //     depname: "TRAINING CENTER",
+        //     name: "TRAINING CENTER",
+        //     userid: 249
+        //   },
+        //   {
+        //     depid: 29,
+        //     branchid: 901,
+        //     depcode: "BANGBAN",
+        //     depname: "W1 Bang Ban",
+        //     name: "W1 Bang Ban",
+        //     userid: 249
+        //   },
+        //   {
+        //     depid: 0,
+        //     branchid: 901,
+        //     depcode: "ADMIN",
+        //     depname: "ADMIN CENTER",
+        //     name: "ADMIN CENTER",
+        //     userid: 251
+        //   });
 
         setPositionAPIName(newArray)
       });
@@ -375,19 +440,7 @@ export default function AddressForm() {
                 />
               </Stack>
             </Grid>
-            <Grid item xs={12} sm={4}>
-              <FormControlLabel
-                control={<Radio
-                  color="secondary"
-                  id="1"
-                  value={0}
-                  defaultChecked
-                  onChange={toggleCheckbox}
-                  checked={brachID1 === '0' ? true : false} />}
-                label="เปิดทุกสาขา"
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <FormControlLabel
                 control={<Radio
                   color="secondary"
@@ -395,10 +448,10 @@ export default function AddressForm() {
                   value={1}
                   onChange={toggleCheckbox}
                   checked={brachID1 === '1' ? true : false} />}
-                label="บางสาขา"
+                label="CO"
               />
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <FormControlLabel
                 control={<Radio
                   color="secondary"
@@ -406,7 +459,7 @@ export default function AddressForm() {
                   value={2}
                   onChange={toggleCheckbox}
                   checked={brachID1 === '2' ? true : false} />}
-                label="สำนักงาน"
+                label="HO"
               />
             </Grid>
             {showResults === '1' ?
@@ -417,61 +470,161 @@ export default function AddressForm() {
                 <Grid item xs={12} sm={12}>
                   <div>
                     <FormControl fullWidth>
-                      <InputLabel id="demo-multiple-checkbox-label">เลือกสาขา</InputLabel>
+                      <InputLabel id="demo-multiple-checkbox-label">เลือกคำตอบ</InputLabel>
                       <Select
-                        multiple
-                        value={branchName}
-                        onChange={handleBranchID}
+                        value={topicBranch}
+                        onChange={handleChangeTopicBranch}
                         fullWidth
-                        input={<OutlinedInput label="เลือกสาขา" />}
-                        renderValue={(selected) => `สาขาที่ ${selected.join(', สาขาที่ ')}`}
-                        MenuProps={MenuProps}
+                        input={<OutlinedInput label="เลือกแผนก" />}
                       >
-                        {branchAPIName.map((res) => (
-                          <MenuItem key={res.branchid} value={res.branchid}>
-                            <Checkbox checked={branchName.indexOf(res.branchid) > -1} />
-                            <ListItemText primary={`สาขาที่ ${res.branchid === 1000001 ? 'CJ001' :
-                              res.branchid === 1000002 ? 'CJ002' :
-                                res.branchid === 1000003 ? 'PUREPARK' :
-                                  res.branchid === 1000004 ? 'CJ003' : res.branchid
-                              }`} />
-                          </MenuItem>
-                        ))}
+                        <MenuItem value={0}>ALL</MenuItem>
+                        <MenuItem value={1}>Select Branch</MenuItem>
                       </Select>
                     </FormControl>
                   </div>
                 </Grid>
+                {topicBranch === 1 ? (
+                  <Grid item xs={12} sm={12}>
+                    <Autocomplete
+                      multiple
+                      fullWidth
+                      id="checkboxes-tags-demo"
+                      options={branchAPIName}
+                      disableCloseOnSelect
+                      getOptionLabel={(option) => option.name}
+                      onChange={(event, newValue) => {
+                        setBranchName(newValue);
+                      }}
+                      renderOption={(props, option, { selected }) => (
+                        <li {...props}>
+                          <Checkbox
+                            icon={icon}
+                            checkedIcon={checkedIcon}
+                            style={{ marginRight: 8 }}
+                            checked={selected}
+                          />
+                          {option.name}
+                        </li>
+                      )}
+                      renderInput={(params) => (
+                        <TextField {...params} label="เลือกแผนก" placeholder="Favorites" />
+                      )}
+                    />
+                  </Grid>
+                ) : null}
               </>
               : null
             }
             {showResults === '2' ?
               <>
                 <Grid item xs={12} sm={12} mt={2}>
-                  <p className='text-danger'>*หมายเหตุ กรุณาเลือกแผนก</p>
+                  <p className='text-danger'>*หมายเหตุ กรุณาเลือกคำตอบ</p>
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <div>
                     <FormControl fullWidth>
-                      <InputLabel id="demo-multiple-checkbox-label">เลือกแผนก</InputLabel>
+                      <InputLabel id="demo-multiple-checkbox-label">เลือกคำตอบ</InputLabel>
                       <Select
-                        multiple
-                        value={PositionName}
-                        onChange={handleChange}
+                        value={topic}
+                        onChange={handleChangeTopic}
                         fullWidth
                         input={<OutlinedInput label="เลือกแผนก" />}
-                        renderValue={(selected) => selected.join(', ')}
-                        MenuProps={MenuProps}
                       >
-                        {PositionAPIName.map((res) => (
-                          <MenuItem key={res.depcode} value={res.depcode}>
-                            <Checkbox checked={PositionName.indexOf(res.depcode) > -1} />
-                            <ListItemText primary={res.depcode} />
-                          </MenuItem>
-                        ))}
+                        <MenuItem value={0}>ALL</MenuItem>
+                        <MenuItem value={1}>CENTER</MenuItem>
+                        <MenuItem value={2}>DEPRTMENTS</MenuItem>
+                        <MenuItem value={3}>PERSON</MenuItem>
                       </Select>
                     </FormControl>
                   </div>
                 </Grid>
+                {topic === 1 ? (
+                  <Grid item xs={12} sm={12}>
+                    <Autocomplete
+                      multiple
+                      fullWidth
+                      id="checkboxes-tags-demo"
+                      options={userGroupCenterAPI}
+                      disableCloseOnSelect
+                      getOptionLabel={(option) => option.UserCode}
+                      onChange={(event, newValue) => {
+                        setUserGroupCenter(newValue);
+                      }}
+                      renderOption={(props, option, { selected }) => (
+                        <li {...props}>
+                          <Checkbox
+                            icon={icon}
+                            checkedIcon={checkedIcon}
+                            style={{ marginRight: 8 }}
+                            checked={selected}
+                          />
+                          {option.UserCode}
+                        </li>
+                      )}
+                      renderInput={(params) => (
+                        <TextField {...params} label="เลือกบุคคล" placeholder="Favorites" />
+                      )}
+                    />
+                  </Grid>
+                ) : null}
+                {topic === 2 ? (
+                  <Grid item xs={12} sm={12}>
+                    <Autocomplete
+                      multiple
+                      fullWidth
+                      id="checkboxes-tags-demo"
+                      options={PositionAPIName}
+                      disableCloseOnSelect
+                      getOptionLabel={(option) => option.depcode}
+                      onChange={(event, newValue) => {
+                        setPositionName(newValue);
+                      }}
+                      renderOption={(props, option, { selected }) => (
+                        <li {...props}>
+                          <Checkbox
+                            icon={icon}
+                            checkedIcon={checkedIcon}
+                            style={{ marginRight: 8 }}
+                            checked={selected}
+                          />
+                          {option.depcode}
+                        </li>
+                      )}
+                      renderInput={(params) => (
+                        <TextField {...params} label="เลือกแผนก" placeholder="Favorites" />
+                      )}
+                    />
+                  </Grid>
+                ) : null}
+                {topic === 3 ? (
+                  <Grid item xs={12} sm={12}>
+                    <Autocomplete
+                      multiple
+                      fullWidth
+                      id="checkboxes-tags-demo"
+                      options={userGroupAPI}
+                      disableCloseOnSelect
+                      getOptionLabel={(option) => option.UserCode}
+                      onChange={(event, newValue) => {
+                        setUserGroup(newValue);
+                      }}
+                      renderOption={(props, option, { selected }) => (
+                        <li {...props}>
+                          <Checkbox
+                            icon={icon}
+                            checkedIcon={checkedIcon}
+                            style={{ marginRight: 8 }}
+                            checked={selected}
+                          />
+                          {option.UserCode}
+                        </li>
+                      )}
+                      renderInput={(params) => (
+                        <TextField {...params} label="เลือกบุคคล" placeholder="Favorites" />
+                      )}
+                    />
+                  </Grid>
+                ) : null}
               </>
               : null
             }
@@ -491,7 +644,7 @@ export default function AddressForm() {
           </React.Fragment>
         </React.Fragment>
         <Outlet />
-      </React.Fragment>
+      </React.Fragment >
 
     );
   }

@@ -226,11 +226,11 @@ export default function History_of_assets() {
     { field: 'Description', headerName: 'คำอธิบาย', headerClassName: 'super-app-theme--header', minWidth: 170, flex: 1 },
     {
       field: 'DepCode',
-      headerName: 'แผนก',
+      headerName: 'แผนก/บุคคล',
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',
-      width: 100,
+      width: 130,
     },
     {
       field: 'BeginDate',
