@@ -307,7 +307,7 @@ export default function History_of_assets() {
     { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', width: 130, headerAlign: 'center', align: 'center', },
     {
       field: 'Position',
-      headerName: 'Position',
+      headerName: 'Location NAC',
       headerClassName: 'super-app-theme--header',
       width: 110,
       headerAlign: 'center',

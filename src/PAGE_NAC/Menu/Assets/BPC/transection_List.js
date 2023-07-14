@@ -404,7 +404,7 @@ export default function History_of_assets() {
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1, headerAlign: 'center', align: 'center', },
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', width: 250, headerAlign: 'center' },
-    { field: 'Position', headerName: 'Position', headerClassName: 'super-app-theme--header', width: 130, headerAlign: 'center', align: 'center', },
+    { field: 'Position', headerName: 'Location NAC', headerClassName: 'super-app-theme--header', width: 130, headerAlign: 'center', align: 'center', },
     { field: 'CreateBy', headerName: 'ผู้ทำรายการ', headerClassName: 'super-app-theme--header', width: 130, headerAlign: 'center', align: 'center', },
     {
       field: 'CreateDate',

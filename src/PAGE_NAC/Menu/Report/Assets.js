@@ -737,7 +737,7 @@ export default function Reported_of_assets() {
     },
     {
       field: 'remarker',
-      headerName: 'หมายเหตุ',
+      headerName: 'ผลการตรวจนับ',
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',

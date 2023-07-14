@@ -277,7 +277,7 @@ export default function Reported_of_assets() {
     },
     {
       field: 'remarker',
-      headerName: 'หมายเหตุ',
+      headerName: 'ผลการตรวจนับ',
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',
@@ -372,7 +372,7 @@ export default function Reported_of_assets() {
                 freeSolo
                 id="free-solo-2-demo"
                 disableClearable
-                options={!selectMenu ? null : selectMenu.map((option) => option.Description)}
+                options={!selectMenu ? [] : selectMenu.map((option) => option.Description)}
                 onChange={handleChange}
                 renderInput={(params) => (
                   <TextField

@@ -226,7 +226,15 @@ export default function History_of_assets() {
     { field: 'Description', headerName: 'คำอธิบาย', headerClassName: 'super-app-theme--header', minWidth: 170, flex: 1 },
     {
       field: 'DepCode',
-      headerName: 'แผนก/บุคคล',
+      headerName: 'แผนก',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'super-app-theme--header',
+      width: 130,
+    },
+    {
+      field: 'personID',
+      headerName: 'Location NAC',
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',

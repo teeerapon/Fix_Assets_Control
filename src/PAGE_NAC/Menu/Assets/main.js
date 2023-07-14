@@ -454,7 +454,7 @@ export default function History_of_assets() {
     { field: 'Asset_group', headerName: 'Asset_group', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
     { field: 'Group_name', headerName: 'Group_name', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
     { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
-    { field: 'Details', headerName: 'หมายเหตุ', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
+    { field: 'Details', headerName: 'รายละเอียด', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
     {
       field: 'Price',
       headerName: 'ราคาทุน',
@@ -467,7 +467,7 @@ export default function History_of_assets() {
     },
     {
       field: 'Position',
-      headerName: 'Position',
+      headerName: 'Location NAC',
       headerClassName: 'super-app-theme--header',
       minWidth: 150,
       flex: 1,
