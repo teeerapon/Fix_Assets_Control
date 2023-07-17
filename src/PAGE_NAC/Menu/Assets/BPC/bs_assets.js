@@ -30,6 +30,8 @@ import FilePresentIcon from '@mui/icons-material/FilePresent';
 import CircularProgress from '@mui/material/CircularProgress';
 import swal from 'sweetalert';
 import PropTypes from 'prop-types';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
 
 function CircularProgressWithLabel(props) {
   return (
@@ -179,6 +181,7 @@ export default function History_of_assets() {
   const [user_name, setUser_name] = React.useState();
   const [user_Lastname, setUser_Lastname] = React.useState();
   const [progressIcon, setProgressIcon] = React.useState(0);
+  const [nameImage2, setNameImage2] = React.useState();
 
   const handleClick_Value = async (newSelectionModel) => {
     setValueOfIndex(newSelectionModel);
@@ -398,54 +401,72 @@ export default function History_of_assets() {
       'Accept': 'application/json'
     };
 
-    await Axios.post(config.http + '/FA_Control_BPC_Running_NO', data, { headers })
-      .then(async (resTAB) => {
-        const body = { UserCode: data.UserCode, bac_type: bac_type, Name: name, BranchID: branchID, Details: details, SerialNo: serialNo, Price: price, keyID: resTAB.data[0].TAB }
-        const headers = {
-          'Authorization': 'application/json; charset=utf-8',
-          'Accept': 'application/json'
-        };
-        if (!bac_type) {
-          swal("แจ้งเตือน", 'กรุณากรอกลำดับเลขที่', "error", {
-            buttons: false,
-            timer: 2000,
-          })
-        } else if (!name) {
-          swal("แจ้งเตือน", 'กรุณากรอกชื่อทรัพย์สินให้ถูกต้อง', "error", {
-            buttons: false,
-            timer: 2000,
-          })
-        } else if (!branchID || branchID < 1) {
-          swal("แจ้งเตือน", 'กรุณากรอกสาขาให้ถูกต้อง', "error", {
-            buttons: false,
-            timer: 2000,
-          })
-        } else if (!price) {
-          swal("แจ้งเตือน", 'กรุณากรอกราคาให้ถูกต้อง', "error", {
-            buttons: false,
-            timer: 2000,
-          })
-        } else {
-          await Axios.post(config.http + '/FA_Control_New_Assets', body, { headers })
-            .then(async (response) => {
-              if (response.data !== undefined) {
-                setOpenSendMail(false);
-                setOpen(false);
-                setBac_type(null)
-                setName(null)
-                setSerialNo(null)
-                setPrice(null)
-                setDetails(null)
-                swal("แจ้งเตือน", 'ดำเนินการเสร็จสิ้น', "success", {
-                  buttons: false,
-                  timer: 2000,
-                }).then((value) => {
-                  window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
-                })
-              }
-            });
-        }
+    if (user_name && user_Lastname) {
+      await Axios.post(config.http + '/FA_Control_BPC_Running_NO', data, { headers })
+        .then(async (resTAB) => {
+          const body = {
+            UserCode: data.UserCode,
+            bac_type: bac_type,
+            Name: name,
+            BranchID: branchID,
+            Details: details,
+            SerialNo: serialNo,
+            Price: price,
+            keyID: resTAB.data[0].TAB,
+            image_2: nameImage2,
+            "user_name": `${user_name} ${user_Lastname}`,
+          }
+          const headers = {
+            'Authorization': 'application/json; charset=utf-8',
+            'Accept': 'application/json'
+          };
+          if (!bac_type) {
+            swal("แจ้งเตือน", 'กรุณากรอกลำดับเลขที่', "error", {
+              buttons: false,
+              timer: 2000,
+            })
+          } else if (!name) {
+            swal("แจ้งเตือน", 'กรุณากรอกชื่อทรัพย์สินให้ถูกต้อง', "error", {
+              buttons: false,
+              timer: 2000,
+            })
+          } else if (!branchID || branchID < 1) {
+            swal("แจ้งเตือน", 'กรุณากรอกสาขาให้ถูกต้อง', "error", {
+              buttons: false,
+              timer: 2000,
+            })
+          } else if (!price) {
+            swal("แจ้งเตือน", 'กรุณากรอกราคาให้ถูกต้อง', "error", {
+              buttons: false,
+              timer: 2000,
+            })
+          } else {
+            await Axios.post(config.http + '/FA_Control_New_Assets', body, { headers })
+              .then(async (response) => {
+                if (response.data !== undefined) {
+                  setOpenSendMail(false);
+                  setOpen(false);
+                  setBac_type(null)
+                  setName(null)
+                  setSerialNo(null)
+                  setPrice(null)
+                  setDetails(null)
+                  swal("แจ้งเตือน", 'ดำเนินการเสร็จสิ้น', "success", {
+                    buttons: false,
+                    timer: 2000,
+                  }).then((value) => {
+                    window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
+                  })
+                }
+              });
+          }
+        })
+    } if (!user_name && !user_Lastname) {
+      swal("แจ้งเตือน", 'กรุณากรอกชื่อและนามสกุล (ผู้ทำรายการ)', "warning", {
+        buttons: false,
+        timer: 2000,
       })
+    }
   };
 
   const handleChange_Code = (event) => {
@@ -633,7 +654,7 @@ export default function History_of_assets() {
       field: 'Position',
       headerName: 'Location NAC',
       headerClassName: 'super-app-theme--header',
-      width: 100,
+      width: 120,
       headerAlign: 'center',
       align: 'center',
       valueGetter: (params) =>
@@ -852,6 +873,35 @@ export default function History_of_assets() {
   };
 
 
+
+  const handleUploadFile_2_Out = async (e, params) => {
+    e.preventDefault();
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.').pop()) > -1) {
+
+      const formData_2 = new FormData();
+      formData_2.append("file", e.target.files[0]);
+      formData_2.append("fileName", e.target.files[0].name);
+
+      await Axios.post(config.http + "/check_files_NewNAC", formData_2, { headers })
+        .then(async (res) => {
+          const image_2 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
+          setNameImage2(image_2)
+        })
+    } else {
+      swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
+        buttons: false,
+        timer: 2000,
+      })
+    }
+  }
+
+
   if (checkUserWeb === 'null') {
     window.location.href = '/NAC_MAIN';
   } else {
@@ -955,6 +1005,35 @@ export default function History_of_assets() {
                     <Box component="form" noValidate sx={{ mt: 4, width: 400, }}>
                       <Grid container spacing={2}>
                         <Grid item xs={12}>
+                          <Typography variant="body" color="error" >
+                            *ลงชื่อ-นามสกุล (ผู้ทำรายการ)
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <TextField
+                            id="outlined-controlled"
+                            label="ชื่อจริง"
+                            fullWidth
+                            size="small"
+                            value={user_name}
+                            onChange={(event) => {
+                              setUser_name(event.target.value);
+                            }}
+                          />
+                        </Grid>
+                        <Grid item xs={6}>
+                          <TextField
+                            id="outlined-controlled"
+                            label="นามสกุล"
+                            fullWidth
+                            size="small"
+                            value={user_Lastname}
+                            onChange={(event) => {
+                              setUser_Lastname(event.target.value);
+                            }}
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
                           <TextField
                             size="small"
                             autoComplete="given-name"
@@ -963,22 +1042,26 @@ export default function History_of_assets() {
                             onChange={(event) => handleChange_Name(event)}
                             required
                             fullWidth
-                            label="ชื่อ"
+                            label="ชื่อทรัพย์สิน"
                             autoFocus
                           />
                         </Grid>
                         <Grid item xs={12}>
-                          <TextField
-                            size="small"
-                            autoComplete="given-name"
-                            name="bac_type"
-                            value={bac_type}
-                            onChange={(event) => handleChange_Code(event)}
-                            required
-                            fullWidth
-                            label="ประเภททรัพย์สิน"
-                            autoFocus
-                          />
+                          <FormControl fullWidth size='small'>
+                            <InputLabel id="demo-multiple-checkbox-label">ประเภททรัพย์สิน</InputLabel>
+                            <Select
+                              value={bac_type}
+                              onChange={(event) => setBac_type(event.target.value)}
+                              input={<OutlinedInput label="ประเภททรัพย์สิน" />}
+                            >
+                              <MenuItem value={`BLD`}>BLD (อาคาร,สิ่งปลูกสร้าง)</MenuItem>
+                              <MenuItem value={`COP`}>COP (อุปกรณ์คอมพิวเตอร์)</MenuItem>
+                              <MenuItem value={`EQU`}>EQU (อุปกรณ์และเครื่องมือ เช่น ตู้จ่าย ตู้เติมลม ถังน้ำมัน)</MenuItem>
+                              <MenuItem value={`ITG`}>ITG (ระบบ POS, GSM, Software)</MenuItem>
+                              <MenuItem value={`FUR`}>FUR (เฟอนิเจอร์)</MenuItem>
+                              <MenuItem value={`OFC`}>OFC (เครื่องมือเครื่องใช้สำนักงาน)</MenuItem>
+                            </Select>
+                          </FormControl>
                         </Grid>
                         <Grid item xs={12}>
                           <TextField
@@ -1031,6 +1114,25 @@ export default function History_of_assets() {
                             label="ราคาทุน"
                             autoFocus
                           />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <React.Fragment>
+                            <ImageListItemBar
+                              sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+                              position="below"
+                              title={<span>&nbsp; &nbsp;{nameImage2 ? `เลือกแล้ว 1 รูป` : `เลือกรูปภาพ`}</span>}
+                              actionIcon={
+                                <IconButton
+                                  sx={{ color: 'rgba(255, 255, 255, 1)' }}
+                                  aria-label={`info about ${nameImage2 ? `${nameImage2}` : null} `}
+                                  component="label"
+                                >
+                                  <input hidden type="file" name='file' onChange={(e) => handleUploadFile_2_Out(e)} />
+                                  <FilePresentIcon sx={{ fontSize: 20 }} />
+                                </IconButton>
+                              }
+                            />
+                          </React.Fragment>
                         </Grid>
                       </Grid>
                     </Box>

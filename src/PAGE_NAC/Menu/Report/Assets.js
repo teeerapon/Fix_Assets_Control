@@ -41,6 +41,9 @@ import NoteAdd from '@mui/icons-material/NoteAdd';
 import Snackbar from '@mui/material/Snackbar';
 import '../../../App.css'
 import config from '../../../config'
+import DialogContentText from '@mui/material/DialogContentText';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 
 const ODD_OPACITY = 0.2;
 
@@ -278,6 +281,53 @@ export default function Reported_of_assets() {
   const [alert, setAlert] = React.useState(false);
   const [valueAlert, setValueAlert] = React.useState(false);
   const [pageSize, setPageSize] = React.useState(10);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [dialogComment, setDialogComment] = React.useState({ Code: '', BranchID: '', RoundID: '', UserID: '', comment: '' });
+
+  const handleSumbitComment = async () => {
+    const body = dialogComment
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    await Axios.put(config.http + '/updateReference', body, { headers })
+      .then((res) => {
+        reported_of_assets.forEach(function (x, index) {
+          if (x.Code === dialogComment.Code) {
+            const list = [...reported_of_assets]
+            list[index]['comment'] = dialogComment.comment
+            setReported_of_assets(list)
+            setOpenDialog(false);
+          }
+        })
+      })
+  };
+
+  const handleChangeComment = (e) => {
+    setDialogComment({
+      Code: dialogComment.Code,
+      BranchID: dialogComment.BranchID,
+      RoundID: dialogComment.RoundID,
+      UserID: data.userid,
+      comment: e.target.value,
+    })
+  };
+
+  const handleClickOpenDialog = (event, params) => {
+    setOpenDialog(true);
+    setDialogComment({
+      Code: params.row.Code,
+      BranchID: params.row.BranchID,
+      RoundID: params.row.RoundID,
+      UserID: params.row.UserID,
+      comment: params.row.comment,
+    });
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
 
   const handleClick_Value = async (newSelectionModel) => {
     const nacdtl_assetsCode = newSelectionModel[newSelectionModel.length - 1]
@@ -732,6 +782,30 @@ export default function Reported_of_assets() {
                 </Typography>
               </React.Fragment >}
           </React.Fragment >
+        )
+      }
+    },
+    {
+      field: 'comment',
+      headerName: 'comment',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 130,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <ListItem
+            button
+            divider
+            aria-haspopup="true"
+            id={params.row.comment}
+            aria-controls="ringtone-menu"
+            aria-label="phone ringtone"
+            onClick={(event) => handleClickOpenDialog(event, params)}
+          >
+            <ListItemText primary={params.row.comment} />
+          </ListItem>
         )
       }
     },
@@ -1397,6 +1471,26 @@ export default function Reported_of_assets() {
             <DialogActions>
               <Button variant="contained" onClick={handleCreate_NAC}>ต่อไป</Button>
               <Button variant="contained" color='error' onClick={handleClose}>ยกเลิก</Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog open={openDialog} onClose={handleCloseDialog}>
+            <DialogContent>
+              <DialogContentText>
+                {dialogComment.Code}
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="comment"
+                onChange={handleChangeComment}
+                value={dialogComment.comment}
+                fullWidth
+                variant="standard"
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleSumbitComment} variant='contained'>Submit</Button>
+              <Button onClick={handleCloseDialog} variant='contained' color="error">Cancel</Button>
             </DialogActions>
           </Dialog>
         </Box>

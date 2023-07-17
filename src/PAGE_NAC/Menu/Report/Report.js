@@ -19,7 +19,11 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import '../../../App.css'
+import OutlinedInput from '@mui/material/OutlinedInput';
 import config from '../../../config'
+import Grid from '@mui/material/Grid';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -110,8 +114,24 @@ export default function Report() {
   const [showResult, setShowResult] = React.useState(false);
   const [alert, setAlert] = React.useState(false);
   const [valueAlert, setValueAlert] = React.useState(false);
+  const [topicBranch, setTopicBranch] = React.useState();
 
-  const handleChangeValue = async (event) => {
+  const handleChangeTopicBranch = (event) => {
+    if ((data.branchid === 901 && event.target.value === 1) || (data.branchid === 901 && event.target.value === 0)) {
+      setTopicBranch(event.target.value);
+    } else if (data.branchid !== 901 && event.target.value === 0) {
+      setTopicBranch(event.target.value);
+    } else {
+      swal("แจ้งเตือน", "ถูกจำกัดสิทะิ์", "error", {
+        buttons: false,
+        timer: 2000,
+      }).then(() => {
+        setTopicBranch(null);
+      })
+    }
+  };
+
+  const handleChangeValue = async (event, newValue) => {
     setPermission(event.target.value);
     const BranchID = event.target.value
     if (event.target.value !== undefined) {
@@ -136,21 +156,6 @@ export default function Report() {
 
     setAlert(false);
   };
-
-  // const fetchPeriodData = async () => {
-  //   const BranchID = !permissionData? '' : permissionData;
-  //   const response_data = await getPeriods({
-  //     BranchID
-  //   })
-  //   setPeriodData2(response_data);
-  // };
-
-  // React.useEffect(() => {
-  //   fetchPeriodData();
-  //   // 👇️ disable the rule for a single line
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   const handleChangeValue2 = (event) => {
     setPeriodData(event.target.value);
@@ -238,36 +243,72 @@ export default function Report() {
                     <b>PURE THAI ENERGY CO.,LTD.</b>
                   </Typography>
                   <Typography variant="h6" gutterBottom className='pt-5'>
-                    กรุณาเลือกสาขา
+                    กรุณาเลือกคำตอบ
                   </Typography>
                   <Box sx={{ minWidth: 120 }}>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Branch ID</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={permissionData}
-                        label="Branch ID"
-                        onChange={handleChangeValue}
-                      >
-                        {
-                          permission.map((item) =>
-                            <MenuItem value={item.BranchID}>
+                    <Grid container spacing={3} className='pt-2'>
+                      <Grid item xs={12} sm={12}>
+                        <div>
+                          <FormControl fullWidth>
+                            <InputLabel id="demo-multiple-checkbox-label">เลือกงาน</InputLabel>
+                            <Select
+                              value={topicBranch}
+                              onChange={handleChangeTopicBranch}
+                              fullWidth
+                              input={<OutlinedInput label="เลือกงาน" />}
+                            >
+                              <MenuItem value={0}>CO</MenuItem>
+                              <MenuItem value={1}>HO</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </div>
+                      </Grid>
+                      {topicBranch === 0 ? (
+                        <Grid item xs={12} sm={12}>
+                          <FormControl fullWidth>
+                            <InputLabel id="demo-multiple-checkbox-label">เลือกสาขา</InputLabel>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={permissionData}
+                              label="Branch ID"
+                              onChange={handleChangeValue}
+                              input={<OutlinedInput label="เลือกสาขา" />}
+                            >
                               {
-                                !item.BranchID ? 'ไม่พบข้อมูลของสาขาที่สามารถเข้าถึงได้' :
-                                  item.BranchID === 901 ? `สำนักงาน (HO)` :
-                                    item.BranchID <= 120 ? `สาขาที่ : ${item.BranchID}` :
-                                      item.BranchID === 1000001 ? `สาขาที่ : CJ001 ลาดพร้าว` :
-                                        item.BranchID === 1000002 ? `สาขาที่ : CJ002 อมตะนคร` :
-                                          item.BranchID === 1000002 ? `สาขาที่ : CJ003 ตลาดไท` :
-                                            item.BranchID === 1000003 ? `สาขาที่ : PURE PARK` :
-                                              null
+                                permission.filter((res) => res.BranchID !== 901).map((item) =>
+                                  <MenuItem value={item.BranchID}>{
+                                    item.BranchID === 1000001 ? `สาขาที่ : CJ001` :
+                                      item.BranchID === 1000002 ? `สาขาที่ : CJ002` :
+                                        item.BranchID === 1000004 ? `สาขาที่ : CJ003` :
+                                          item.BranchID === 1000003 ? `สาขาที่ : PURE PARK` :
+                                            `สาขาที่ : ${item.BranchID}`
+                                  }</MenuItem>
+                                )
                               }
-                            </MenuItem>
-                          )
-                        }
-                      </Select>
-                    </FormControl>
+                            </Select>
+                          </FormControl>
+                        </Grid>
+                      ) : null}
+                      {topicBranch === 1 ? (
+                        <Grid item xs={12} sm={12}>
+                          <FormControl fullWidth>
+                            <InputLabel id="demo-multiple-checkbox-label">เลือกคำตอบ</InputLabel>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={permissionData}
+                              label="Branch ID"
+                              onChange={handleChangeValue}
+                              input={<OutlinedInput label="เลือกคำตอบ" />}
+                            >
+                              <MenuItem value={1}>DEPARTMENTS</MenuItem>
+                              <MenuItem value={0}>ME</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Grid>
+                      ) : null}
+                    </Grid>
                   </Box>
                 </center>
                 {showResult ?
@@ -317,7 +358,6 @@ export default function Report() {
                 </center>
               </form>
             </Paper>
-
             <Outlet />
           </Container>
         </AnimatedPage>

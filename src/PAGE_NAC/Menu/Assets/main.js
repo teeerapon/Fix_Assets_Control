@@ -472,14 +472,7 @@ export default function History_of_assets() {
       minWidth: 150,
       flex: 1,
       valueGetter: (params) =>
-        params.row.OwnerID === 'BANGBAN' ? 'W1-BANGBAN' :
-          params.row.OwnerID === 'PUREPARK' ? 'PLAZA' :
-            (params.row.OwnerID ? (params.row.OwnerID).indexOf("CJ") : params.row.OwnerID) > -1 ? params.row.OwnerID :
-              params.row.OwnerID === 'IT' ? 'IT CENTER' :
-                params.row.OwnerID === 'TRAINING' ? 'TRAINING CENTER' :
-                  params.row.OwnerID === 'ADMIN_PAS' ? 'ADMIN CENTER' :
-                    params.row.BranchID === 901 ? 'HO' :
-                      params.row.Position,
+        params.row.Position,
     },
     {
       field: 'CreateDate',

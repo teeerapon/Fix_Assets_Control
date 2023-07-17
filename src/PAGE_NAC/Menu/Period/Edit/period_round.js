@@ -225,12 +225,12 @@ export default function History_of_assets() {
   const columns = [
     { field: 'Description', headerName: 'คำอธิบาย', headerClassName: 'super-app-theme--header', minWidth: 170, flex: 1 },
     {
-      field: 'DepCode',
-      headerName: 'แผนก',
-      headerAlign: 'center',
-      align: 'center',
+      field: 'BranchID',
+      headerName: 'หน่วยงาน',
       headerClassName: 'super-app-theme--header',
-      width: 130,
+      width: 100,
+      valueGetter: (params) =>
+        params.row.BranchID === 901 ? "HO" : "CO",
     },
     {
       field: 'personID',
@@ -239,6 +239,14 @@ export default function History_of_assets() {
       align: 'center',
       headerClassName: 'super-app-theme--header',
       width: 130,
+      valueGetter: (params) =>
+        params.row.BranchID === 901 && params.row.personID && params.row.DepCode ?
+          params.row.personID :
+          params.row.BranchID === 901 && params.row.DepCode && !params.row.personID ?
+            params.row.DepCode :
+            params.row.BranchID !== 901 && !params.row.DepCode && !params.row.personID ?
+              params.row.Code : ''
+
     },
     {
       field: 'BeginDate',
@@ -295,14 +303,6 @@ export default function History_of_assets() {
           </React.Fragment >
         )
       }
-    },
-    {
-      field: 'Code',
-      headerName: 'สาขา',
-      headerClassName: 'super-app-theme--header',
-      width: 100,
-      valueGetter: (params) =>
-        params.row.Code === 'CO' ? 'HO' : (params.row.Code === 0 || !params.row.Code) ? 'CO' : params.row.Code,
     },
     {
       field: 'status',

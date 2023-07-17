@@ -299,42 +299,7 @@ export default function AddressForm() {
 
     Axios.post(config.http + '/Department_List', body, { headers })
       .then(response => {
-
         var newArray = (response.data.data).filter((res) => res.depid > 14);
-
-        // newArray.push({
-        //   depid: 1,
-        //   branchid: 901,
-        //   depcode: "IT CENTER",
-        //   depname: "IT Center",
-        //   name: "IT Center",
-        //   userid: 19
-        // },
-        //   {
-        //     depid: 22,
-        //     branchid: 901,
-        //     depcode: "TRAINING",
-        //     depname: "TRAINING CENTER",
-        //     name: "TRAINING CENTER",
-        //     userid: 249
-        //   },
-        //   {
-        //     depid: 29,
-        //     branchid: 901,
-        //     depcode: "BANGBAN",
-        //     depname: "W1 Bang Ban",
-        //     name: "W1 Bang Ban",
-        //     userid: 249
-        //   },
-        //   {
-        //     depid: 0,
-        //     branchid: 901,
-        //     depcode: "ADMIN",
-        //     depname: "ADMIN CENTER",
-        //     name: "ADMIN CENTER",
-        //     userid: 251
-        //   });
-
         setPositionAPIName(newArray)
       });
 

@@ -5,24 +5,26 @@ import Typography from '@mui/material/Typography';
 import AnimatedPage from '../../../AnimatedPage';
 import React from 'react';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
 import Axios from "axios"
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
 import LinearProgress from '@mui/material/LinearProgress';
 import config from '../../../config'
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import Button from '@mui/material/Button';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 
 const ODD_OPACITY = 0.2;
 
@@ -128,27 +130,68 @@ export default function Reported_of_assets() {
   const checkUserWeb = localStorage.getItem('sucurity');
   const [value_status, setValue_status] = React.useState('');
   const [status_all] = React.useState(['none', 'สภาพดี', 'ชำรุดรอซ่อม', 'รอตัดขาย', 'รอตัดชำรุด', 'QR Code ไม่สมบูรณ์ (สภาพดี)', 'QR Code ไม่สมบูรณ์ (ชำรุดรอซ่อม)', 'QR Code ไม่สมบูรณ์ (รอตัดขาย)', 'QR Code ไม่สมบูรณ์ (รอตัดชำรุด)']);
-  const [valueOfIndex, setValueOfIndex] = React.useState([]);
   const [pageSize, setPageSize] = React.useState(10);
   const [progress, setProgress] = React.useState();
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [dialogComment, setDialogComment] = React.useState({ Code: '', BranchID: '', RoundID: '', UserID: '', comment: '' });
+
+  const handleSumbitComment = async () => {
+    const body = dialogComment
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+    await Axios.put(config.http + '/updateReference', body, { headers })
+      .then((res) => {
+        reported_of_assets.forEach(function (x, index) {
+          if (x.Code === dialogComment.Code) {
+            const list = [...reported_of_assets]
+            list[index]['comment'] = dialogComment.comment
+            setReported_of_assets(list)
+            setOpenDialog(false);
+          }
+        })
+      })
+  };
+
+  const handleChangeComment = (e) => {
+    setDialogComment({
+      Code: dialogComment.Code,
+      BranchID: dialogComment.BranchID,
+      RoundID: dialogComment.RoundID,
+      UserID: data.userid,
+      comment: e.target.value,
+    })
+  };
+
+  const handleClickOpenDialog = (event, params) => {
+    setOpenDialog(true);
+    setDialogComment({
+      Code: params.row.Code,
+      BranchID: params.row.BranchID,
+      RoundID: params.row.RoundID,
+      UserID: params.row.UserID,
+      comment: params.row.comment,
+    });
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
     {
-      field: 'BranchID',
-      headerName: 'สาขา',
+      field: 'Position',
+      headerName: 'Location NAC',
       headerClassName: 'super-app-theme--header',
       headerAlign: 'center',
       align: 'center',
+      minWidth: 130,
       flex: 1,
       valueGetter: (params) =>
-        params.row.BranchID === 901 ? 'HO' :
-          params.row.BranchID === 1000001 ? 'CJ001' :
-            params.row.BranchID === 1000002 ? 'CJ002' :
-              params.row.BranchID === 1000003 ? 'PUREPARK' :
-                params.row.BranchID === 1000004 ? 'CJ003' :
-                  params.row.BranchID,
+        params.row.Position,
     },
     {
       field: 'Date',
@@ -276,6 +319,30 @@ export default function Reported_of_assets() {
       }
     },
     {
+      field: 'comment',
+      headerName: 'comment',
+      headerAlign: 'center',
+      align: 'center',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 130,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <ListItem
+            button
+            divider
+            aria-haspopup="true"
+            id={params.row.comment}
+            aria-controls="ringtone-menu"
+            aria-label="phone ringtone"
+            onClick={(event) => handleClickOpenDialog(event, params)}
+          >
+            <ListItemText primary={params.row.comment} />
+          </ListItem>
+        )
+      }
+    },
+    {
       field: 'remarker',
       headerName: 'ผลการตรวจนับ',
       headerAlign: 'center',
@@ -336,7 +403,6 @@ export default function Reported_of_assets() {
         setProgress(1)
       }
     }).then(response => {
-      console.log(Description);
       setReported_of_assets(response.data.data)
       setProgress(1)
     });
@@ -422,6 +488,26 @@ export default function Reported_of_assets() {
               </Box>
             </Container>
           </Box>
+          <Dialog open={openDialog} onClose={handleCloseDialog}>
+            <DialogContent>
+              <DialogContentText>
+                {dialogComment.Code}
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="comment"
+                onChange={handleChangeComment}
+                value={dialogComment.comment}
+                fullWidth
+                variant="standard"
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleSumbitComment} variant='contained'>Submit</Button>
+              <Button onClick={handleCloseDialog} variant='contained' color="error">Cancel</Button>
+            </DialogActions>
+          </Dialog>
         </AnimatedPage>
       </React.Fragment>
     );
