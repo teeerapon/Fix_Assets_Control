@@ -182,13 +182,14 @@ export default function Reported_of_assets() {
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
+    { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1, headerAlign: 'center', align: 'center', },
     {
       field: 'Position',
       headerName: 'Location NAC',
       headerClassName: 'super-app-theme--header',
       headerAlign: 'center',
       align: 'center',
-      minWidth: 130,
+      minWidth: 100,
       flex: 1,
       valueGetter: (params) =>
         params.row.Position,
@@ -488,7 +489,7 @@ export default function Reported_of_assets() {
               </Box>
             </Container>
           </Box>
-          <Dialog open={openDialog} onClose={handleCloseDialog}>
+          <Dialog fullWidth open={openDialog} onClose={handleCloseDialog}>
             <DialogContent>
               <DialogContentText>
                 {dialogComment.Code}

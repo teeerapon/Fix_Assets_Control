@@ -378,8 +378,16 @@ export default function Reported_of_assets() {
       RoundID
     })
     if ('data' in response || 'data' in response2 || 'data' in response3) {
-      localStorage.setItem('Allaseets', JSON.stringify((response2).concat(response3, response.data)));
-      setReported_of_assets((response2).concat(response3, response.data))
+      if (data.branchid === 901) {
+        const array1 = response2.filter((res) => res.DepCode === data.DepCode)
+        const array2 = response3.filter((res) => res.DepCode === data.DepCode)
+        const array3 = (response.data).filter((res) => res.DepCode === data.DepCode)
+        localStorage.setItem('Allaseets', JSON.stringify((array1).concat(array2, array3)));
+        setReported_of_assets((array1).concat(array2, array3))
+      } else {
+        localStorage.setItem('Allaseets', JSON.stringify((response2).concat(response3, response.data)));
+        setReported_of_assets((response2).concat(response3, response.data))
+      }
     }
   }
 
@@ -654,6 +662,7 @@ export default function Reported_of_assets() {
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
+    { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1, headerAlign: 'center', align: 'center', },
     {
       field: 'Date',
       headerName: 'วันที่ตรวจนับ',
@@ -857,7 +866,8 @@ export default function Reported_of_assets() {
         <Toolbar>
           <AnimatedPage>
             <Typography variant="h5" color="inherit" className='font-vsm'>
-              รายการการตรวจนับทรัพย์สินทั้งหมดของสาขาที่ {!reported_of_assets ? 'Loading...' : reported_of_assets[0].BranchID}
+              {data.branchid === 901 ? `รายการการตรวจนับทรัพย์ HO (${data.DepCode})` : !reported_of_assets ? 'Loading...' :
+                `รายการการตรวจนับทรัพย์สินทั้งหมดของสาขาที่ ${reported_of_assets[0].BranchID}`}
             </Typography>
           </AnimatedPage>
         </Toolbar>
@@ -1473,7 +1483,7 @@ export default function Reported_of_assets() {
               <Button variant="contained" color='error' onClick={handleClose}>ยกเลิก</Button>
             </DialogActions>
           </Dialog>
-          <Dialog open={openDialog} onClose={handleCloseDialog}>
+          <Dialog fullWidth open={openDialog} onClose={handleCloseDialog}>
             <DialogContent>
               <DialogContentText>
                 {dialogComment.Code}

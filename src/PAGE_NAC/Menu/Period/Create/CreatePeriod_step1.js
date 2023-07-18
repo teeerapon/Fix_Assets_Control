@@ -225,7 +225,7 @@ export default function AddressForm() {
         });
       }
 
-    }else if (!topicBranch && topic === 2 && valueDescription) {
+    } else if (!topicBranch && topic === 2 && valueDescription) {
 
       const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
       const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
@@ -443,7 +443,7 @@ export default function AddressForm() {
                         input={<OutlinedInput label="เลือกแผนก" />}
                       >
                         <MenuItem value={0}>ALL</MenuItem>
-                        <MenuItem value={1}>Select Branch</MenuItem>
+                        <MenuItem value={1}>SELECT BRANCH</MenuItem>
                       </Select>
                     </FormControl>
                   </div>

@@ -127,26 +127,7 @@ export default function History_of_assets() {
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
     { field: 'Name', headerName: 'ชื่อ', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
     { field: 'SerialNo', headerName: 'SerialNo', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
-    { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
-    // { field: 'Details', headerName: 'ผลการตรวจนับ', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1 },
-    {
-      field: 'Price',
-      headerName: 'ราคาทุน',
-      headerClassName: 'super-app-theme--header',
-      minWidth: 130,
-      flex: 1,
-      valueGetter: (params) =>
-        data.branchid === 901 ? params.row.Price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) : 'ถูกจำกัดสิทธิ์'
-    },
-    // {
-    //   field: 'BranchID',
-    //   headerName: 'สาขา',
-    //   headerClassName: 'super-app-theme--header',
-    //   minWidth: 100,
-    //   flex: 1,
-    //   valueGetter: (params) =>
-    //     params.row.BranchID === 901 ? 'HO' : params.row.BranchID,
-    // },
+    { field: 'OwnerID', headerName: 'ผู้ถือครอง', headerClassName: 'super-app-theme--header', minWidth: 100, flex: 1, headerAlign: 'center', align: 'center', },
     {
       field: 'Position',
       headerName: 'Location NAC',
@@ -156,6 +137,15 @@ export default function History_of_assets() {
       align: 'center',
       valueGetter: (params) =>
         params.row.BranchID === 901 ? 'HO' : params.row.Position,
+    },
+    {
+      field: 'Price',
+      headerName: 'ราคาทุน',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 130,
+      flex: 1,
+      valueGetter: (params) =>
+        data.branchid === 901 ? params.row.Price.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) : 'ถูกจำกัดสิทธิ์'
     },
     {
       field: 'CreateDate',

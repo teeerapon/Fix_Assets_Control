@@ -24,6 +24,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import PropTypes from 'prop-types';
 import CommentBPC from './comments'
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import FilePresentIcon from '@mui/icons-material/FilePresent';
 
 function CircularProgressWithLabel(props) {
   return (
@@ -172,6 +177,63 @@ export default function History_of_assets() {
   const [openLoading, setOpenLoading] = React.useState(0)
   const [openDialog, setOpenDialog] = React.useState(false);
   const [description, setDescription] = React.useState()
+  const [openDialog2, setOpenDialog2] = React.useState(false);
+  const [dialogComment, setDialogComment] = React.useState({ Code: '', Name: '', keyID: '', ImagePath_2: '', Comments: '' });
+
+  const handleSumbitComment = async () => {
+    const body = dialogComment
+
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    await Axios.post(config.http + '/FA_Control_BPC_UpdateTemp', body, { headers })
+      .then((res) => {
+        dataHistory.forEach(function (x, index) {
+          if (x.Code === dialogComment.Code) {
+            const list = [...dataHistory]
+            list[index]['Comments'] = dialogComment.Comments
+            setDataHistory(list)
+            setOpenDialog2(false);
+          }
+        })
+      })
+  };
+
+  const handleChangeComment = (e) => {
+    setDialogComment({
+      Code: dialogComment.Code,
+      Name: dialogComment.Name,
+      keyID: dialogComment.keyID,
+      ImagePath_2: data.ImagePath_2,
+      Comments: e.target.value,
+    })
+  };
+
+  const handleClickOpenDialog = (event, params) => {
+
+    if (params.row.tab_status === 'ดำเนินการเสร็จสิ้น') {
+      swal("แจ้งเตือน", 'ไม่สามารถเปลี่ยนแปลงรายละเอียดได้ (ดำเนินการเสร็จสิ้นแล้ว)', "error", {
+        buttons: false,
+        timer: 2000,
+      })
+    } else {
+      setOpenDialog2(true);
+      setDialogComment({
+        Code: params.row.Code,
+        Name: params.row.Name,
+        keyID: params.row.keyID,
+        ImagePath_2: params.row.ImagePath_2,
+        Comments: params.row.Comments,
+      });
+    }
+
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog2(false);
+  };
 
 
   const handleClickOpenDialogComment = () => {
@@ -332,6 +394,21 @@ export default function History_of_assets() {
       headerClassName: 'super-app-theme--header',
       minWidth: 130,
       flex: 1,
+      renderCell: (params) => {
+        return (
+          <ListItem
+            button
+            divider
+            aria-haspopup="true"
+            id={params.row.Comments}
+            aria-controls="ringtone-menu"
+            aria-label="phone ringtone"
+            onClick={(event) => handleClickOpenDialog(event, params)}
+          >
+            <ListItemText primary={params.row.Comments} />
+          </ListItem>
+        )
+      }
     },
     {
       field: 'ImagePath_2',
@@ -341,12 +418,65 @@ export default function History_of_assets() {
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
+
+        const handleUploadFile_2 = async (e, params) => {
+          e.preventDefault();
+
+          const headers = {
+            'Authorization': 'application/json; charset=utf-8',
+            'Accept': 'application/json'
+          };
+
+          if (params.row.tab_status === 'ดำเนินการเสร็จสิ้น') {
+            swal("แจ้งเตือน", 'ไม่สามารถเปลี่ยนแปลงรายละเอียดได้ (ดำเนินการเสร็จสิ้นแล้ว)', "error", {
+              buttons: false,
+              timer: 2000,
+            })
+          } else if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.').pop()) > -1) {
+
+            const formData_2 = new FormData();
+            formData_2.append("file", e.target.files[0]);
+            formData_2.append("fileName", e.target.files[0].name);
+
+            await Axios.post(config.http + "/check_files_NewNAC", formData_2, { headers })
+              .then(async (res) => {
+
+                const image_2 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
+
+                const body = {
+                  Code: params.row.Code,
+                  Name: params.row.Name,
+                  keyID: params.row.keyID,
+                  ImagePath_2: image_2,
+                }
+
+                await Axios.post(config.http + '/FA_Control_BPC_UpdateTemp', body, { headers })
+                  .then((res) => {
+                    dataHistory.forEach(function (x, index) {
+                      if (x.Code === dialogComment.Code) {
+                        const list = [...dataHistory]
+                        list[index]['ImagePath_2'] = image_2
+                        setDataHistory(list)
+                        setOpenDialog2(false);
+                      }
+                    })
+                  })
+
+              })
+          } else {
+            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
+              buttons: false,
+              timer: 2000,
+            })
+          }
+        }
+
         return (
           <React.Fragment>
             <ImageListItem key={params.row.ImagePath_2}>
               <img
-                src={`${ params.row.ImagePath_2 } ? w = 248 & fit=crop & auto=format`}
-                srcSet={`${ params.row.ImagePath_2 } ? w = 248 & fit=crop & auto=format & dpr=2 2x`}
+                src={`${params.row.ImagePath_2}?w = 248 & fit=crop & auto=format`}
+                srcSet={`${params.row.ImagePath_2}?w = 248 & fit=crop & auto=format & dpr=2 2x`}
                 alt={params.row.Name}
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null; // prevents looping
@@ -358,6 +488,20 @@ export default function History_of_assets() {
                 sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
                 position="below"
                 title={<span>&nbsp; &nbsp;{params.row.Code}_2</span>}
+                actionIcon={
+                  <IconButton
+                    sx={{ color: 'rgba(255, 255, 255, 1)' }}
+                    aria-label={`info about ${params.row.Code} `}
+                    component="label"
+                  >
+                    <input
+                      hidden type="file"
+                      name='file'
+                      onChange={(e) => handleUploadFile_2(e, params)}
+                    />
+                    <FilePresentIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                }
               />
             </ImageListItem>
           </React.Fragment>
@@ -388,7 +532,7 @@ export default function History_of_assets() {
           elevation={0}
           sx={{
             position: 'relative',
-            borderBottom: (t) => `1px solid ${ t.palette.divider }`,
+            borderBottom: (t) => `1px solid ${t.palette.divider}`,
           }}
         >
           <Toolbar>
@@ -462,7 +606,7 @@ export default function History_of_assets() {
                     pr: 2,
                     pt: 2,
                     boxShadow: 1,
-                    [`& .${ gridClasses.cell }`]: {
+                    [`& .${gridClasses.cell}`]: {
                       py: 1,
                     },
                   }}
@@ -471,7 +615,7 @@ export default function History_of_assets() {
                     toolbar: {
                       csvOptions: {
                         utf8WithBom: true,
-                        fileName: `ทะเบียนทรัพย์สินผู้ร่วมวันที่ ${ dataHistory? dataHistory[0].UpdateDate : '...'}`,
+                        fileName: `ทะเบียนทรัพย์สินผู้ร่วมวันที่ ${dataHistory ? dataHistory[0].UpdateDate : '...'}`,
 
                       }
                     }
@@ -521,6 +665,26 @@ export default function History_of_assets() {
               >
                 <CircularProgressWithLabel value={openLoading} />
               </Box>
+            </Dialog>
+            <Dialog fullWidth open={openDialog2} onClose={handleCloseDialog}>
+              <DialogContent>
+                <DialogContentText>
+                  {dialogComment.Code} ({dialogComment.Name})
+                </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="comment"
+                  onChange={handleChangeComment}
+                  value={dialogComment.Comments}
+                  fullWidth
+                  variant="standard"
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleSumbitComment} variant='contained'>Submit</Button>
+                <Button onClick={handleCloseDialog} variant='contained' color="error">Cancel</Button>
+              </DialogActions>
             </Dialog>
           </Box>
         </AnimatedPage>

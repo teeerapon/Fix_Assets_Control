@@ -109,6 +109,7 @@ export default function Report() {
   const permission = JSON.parse(localStorage.getItem('permission'));
   const data = JSON.parse(localStorage.getItem('data'));
   const [permissionData, setPermission] = React.useState([]);
+  const [permissionDataHO, setPermissionHO] = React.useState([]);
   const [periodData2, setPeriodData2] = React.useState([]);
   const [periodData, setPeriodData] = React.useState([]);
   const [showResult, setShowResult] = React.useState(false);
@@ -119,14 +120,20 @@ export default function Report() {
   const handleChangeTopicBranch = (event) => {
     if ((data.branchid === 901 && event.target.value === 1) || (data.branchid === 901 && event.target.value === 0)) {
       setTopicBranch(event.target.value);
+      setShowResult(false)
+      setPermission([])
     } else if (data.branchid !== 901 && event.target.value === 0) {
       setTopicBranch(event.target.value);
+      setShowResult(false)
+      setPermissionHO([])
     } else {
-      swal("แจ้งเตือน", "ถูกจำกัดสิทะิ์", "error", {
+      swal("แจ้งเตือน", "ถูกจำกัดสิทธิ์", "error", {
         buttons: false,
         timer: 2000,
       }).then(() => {
         setTopicBranch(null);
+        setShowResult(false)
+        setPermissionHO(null)
       })
     }
   };
@@ -134,6 +141,7 @@ export default function Report() {
   const handleChangeValue = async (event, newValue) => {
     setPermission(event.target.value);
     const BranchID = event.target.value
+
     if (event.target.value !== undefined) {
       const response_data = await getPeriods({
         BranchID
@@ -145,6 +153,40 @@ export default function Report() {
         setAlert(true)
         setValueAlert('ไม่พบข้อมูลรอบบันทึกสำหรับแสดงรายงานได้ กรุณาลองใหม่ภายหลัง')
         setShowResult(false)
+      }
+    }
+  };
+
+  const handleChangeValueHO = async (event, newValue) => {
+    setPermissionHO(event.target.value);
+    if (event.target.value !== undefined) {
+      if (event.target.value === 1) {
+        const depCode = data.DepCode
+        const response_data = await getPeriods({
+          depCode
+        })
+        if (response_data.length !== 0) {
+          setPeriodData2(response_data);
+          setShowResult(true)
+        } else {
+          setAlert(true)
+          setValueAlert('ไม่พบข้อมูลรอบบันทึกสำหรับแสดงรายงานได้ กรุณาลองใหม่ภายหลัง')
+          setShowResult(false)
+        }
+      } else {
+        const personID = data.UserCode
+        const response_data = await getPeriods({
+          personID
+        })
+        console.log(personID);
+        if (response_data.length !== 0) {
+          setPeriodData2(response_data);
+          setShowResult(true)
+        } else {
+          setAlert(true)
+          setValueAlert('ไม่พบข้อมูลรอบบันทึกสำหรับแสดงรายงานได้ กรุณาลองใหม่ภายหลัง')
+          setShowResult(false)
+        }
       }
     }
   };
@@ -161,11 +203,12 @@ export default function Report() {
     setPeriodData(event.target.value);
   };
 
-  const handleSubmit = async e => {
-    const RoundID = periodData;
-    const BranchID = permissionData;
-    const UserBranch = data.branchid;
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const RoundID = periodData;
+    const BranchID = permissionData.length === 0 ? 901 : permissionData;
+    const UserBranch = data.branchid;
+    
     if (periodData !== "" && permissionData !== "" && permissionData !== undefined && periodData !== undefined) {
       const response = await Reported({
         RoundID,
@@ -182,15 +225,22 @@ export default function Report() {
         BranchID,
         RoundID
       })
-      console.log(UserBranch, BranchID, RoundID);
       if ('data' in response || 'data' in response2 || 'data' in response3) {
         swal("แจ้งเตือน", "ค้นหาข้อมูลเสร็จสิ้น", "success", {
           buttons: false,
           timer: 2000,
         })
           .then((value) => {
-            localStorage.setItem('Allaseets', JSON.stringify((response2).concat(response3, response.data)));
-            navigate("/AssetPage")
+            if (topicBranch === 0) {
+              localStorage.setItem('Allaseets', JSON.stringify((response2).concat(response3, response.data)));
+              navigate("/AssetPage")
+            } else {
+              const array1 = response2.filter((res) => res.DepCode === data.DepCode)
+              const array2 = response3.filter((res) => res.DepCode === data.DepCode)
+              const array3 = (response.data).filter((res) => res.DepCode === data.DepCode)
+              localStorage.setItem('Allaseets', JSON.stringify((array1).concat(array2, array3)));
+              navigate("/AssetPage")
+            }
           });
       } else {
         swal("แจ้งเตือน", "ไม่พบรายการบันทึกทรัพย์สิน", "error");
@@ -297,13 +347,13 @@ export default function Report() {
                             <Select
                               labelId="demo-simple-select-label"
                               id="demo-simple-select"
-                              value={permissionData}
-                              label="Branch ID"
-                              onChange={handleChangeValue}
+                              value={permissionDataHO}
+                              label="เลือกคำตอบ"
+                              onChange={handleChangeValueHO}
                               input={<OutlinedInput label="เลือกคำตอบ" />}
                             >
-                              <MenuItem value={1}>DEPARTMENTS</MenuItem>
-                              <MenuItem value={0}>ME</MenuItem>
+                              <MenuItem value={1}>DEPARTMENT ({data.DepCode})</MenuItem>
+                              <MenuItem value={2}>({data.UserCode})</MenuItem>
                             </Select>
                           </FormControl>
                         </Grid>
