@@ -548,10 +548,10 @@ export default function Reported_of_assets() {
         const des_deliveryDate = null
         const des_Description = null
         const sourceDate = datenow
-        const navigate_type = (value === 2 || value === '2') ? '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' :
-          (value === 3 || value === '3') ? '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE/' :
-            (value === 4 || value === '4') ? '/NAC_ROW/NAC_DELETE_WAIT_APPROVE/' :
-              '/NAC_ROW/NAC_SEALS_APPROVE/'
+        const navigate_type = (value === 2 || value === '2') ? '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' :
+          (value === 3 || value === '3') ? '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' :
+            (value === 4 || value === '4') ? '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' :
+              '/NAC_ROW/NAC_SEALS_APPROVE?'
         const response = await Store_FA_control_create_doc({
           usercode,
           worktype,
