@@ -378,7 +378,7 @@ export default function Reported_of_assets() {
       RoundID
     })
     if ('data' in response || 'data' in response2 || 'data' in response3) {
-      if (data.branchid === 901) {
+      if ((reported_of_assets ? reported_of_assets[0].RoundID : null) === 901) {
         const array1 = response2.filter((res) => res.DepCode === data.DepCode)
         const array2 = response3.filter((res) => res.DepCode === data.DepCode)
         const array3 = (response.data).filter((res) => res.DepCode === data.DepCode)
