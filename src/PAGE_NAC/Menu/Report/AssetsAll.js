@@ -133,7 +133,7 @@ export default function Reported_of_assets() {
   const [pageSize, setPageSize] = React.useState(10);
   const [progress, setProgress] = React.useState();
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [dialogComment, setDialogComment] = React.useState({ Code: '', BranchID: '', RoundID: '', UserID: '', comment: '' });
+  const [dialogComment, setDialogComment] = React.useState({ Code: '', BranchID: '', RoundID: '', UserID: '', comment: '', personID: '', depCode: '' });
 
   const handleSumbitComment = async () => {
     const body = dialogComment
@@ -161,6 +161,8 @@ export default function Reported_of_assets() {
       RoundID: dialogComment.RoundID,
       UserID: data.userid,
       comment: e.target.value,
+      personID: dialogComment.personID,
+      depCode: dialogComment.depCode,
     })
   };
 
@@ -172,6 +174,8 @@ export default function Reported_of_assets() {
       RoundID: params.row.RoundID,
       UserID: params.row.UserID,
       comment: params.row.comment,
+      personID: params.row.personID,
+      depCode: params.row.DepCode,
     });
   };
 

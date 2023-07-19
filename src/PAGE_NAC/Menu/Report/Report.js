@@ -208,7 +208,7 @@ export default function Report() {
     const RoundID = periodData;
     const BranchID = permissionData.length === 0 ? 901 : permissionData;
     const UserBranch = data.branchid;
-    
+
     if (periodData !== "" && permissionData !== "" && permissionData !== undefined && periodData !== undefined) {
       const response = await Reported({
         RoundID,
@@ -235,9 +235,9 @@ export default function Report() {
               localStorage.setItem('Allaseets', JSON.stringify((response2).concat(response3, response.data)));
               navigate("/AssetPage")
             } else {
-              const array1 = response2.filter((res) => res.DepCode === data.DepCode)
-              const array2 = response3.filter((res) => res.DepCode === data.DepCode)
-              const array3 = (response.data).filter((res) => res.DepCode === data.DepCode)
+              const array1 = response2.filter((res) => res.DepCodeMain === data.DepCode)
+              const array2 = response3.filter((res) => res.DepCodeMain === data.DepCode)
+              const array3 = (response.data).filter((res) => res.DepCodeMain === data.DepCode)
               localStorage.setItem('Allaseets', JSON.stringify((array1).concat(array2, array3)));
               navigate("/AssetPage")
             }

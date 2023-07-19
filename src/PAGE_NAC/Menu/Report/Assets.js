@@ -282,7 +282,7 @@ export default function Reported_of_assets() {
   const [valueAlert, setValueAlert] = React.useState(false);
   const [pageSize, setPageSize] = React.useState(10);
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [dialogComment, setDialogComment] = React.useState({ Code: '', BranchID: '', RoundID: '', UserID: '', comment: '' });
+  const [dialogComment, setDialogComment] = React.useState({ Code: '', BranchID: '', RoundID: '', UserID: '', comment: '', personID: '', depCode: '' });
 
   const handleSumbitComment = async () => {
     const body = dialogComment
@@ -310,6 +310,8 @@ export default function Reported_of_assets() {
       RoundID: dialogComment.RoundID,
       UserID: data.userid,
       comment: e.target.value,
+      personID: dialogComment.personID,
+      depCode: dialogComment.depCode,
     })
   };
 
@@ -321,6 +323,8 @@ export default function Reported_of_assets() {
       RoundID: params.row.RoundID,
       UserID: params.row.UserID,
       comment: params.row.comment,
+      personID: params.row.personID,
+      depCode: params.row.DepCodeMain,
     });
   };
 
@@ -378,10 +382,10 @@ export default function Reported_of_assets() {
       RoundID
     })
     if ('data' in response || 'data' in response2 || 'data' in response3) {
-      if ((reported_of_assets ? reported_of_assets[0].RoundID : null) === 901) {
-        const array1 = response2.filter((res) => res.DepCode === data.DepCode)
-        const array2 = response3.filter((res) => res.DepCode === data.DepCode)
-        const array3 = (response.data).filter((res) => res.DepCode === data.DepCode)
+      if ((reported_of_assets ? reported_of_assets[0].BranchID : null) === 901) {
+        const array1 = response2.filter((res) => res.DepCodeMain === data.DepCode)
+        const array2 = response3.filter((res) => res.DepCodeMain === data.DepCode)
+        const array3 = (response.data).filter((res) => res.DepCodeMain === data.DepCode)
         localStorage.setItem('Allaseets', JSON.stringify((array1).concat(array2, array3)));
         setReported_of_assets((array1).concat(array2, array3))
       } else {
