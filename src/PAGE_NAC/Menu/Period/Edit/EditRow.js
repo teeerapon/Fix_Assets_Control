@@ -77,10 +77,7 @@ export default function EditPeriod({ editFormData, handleEditClickCancel }) {
     });
     if (response.message !== 'ไม่สามารถแก้ไขได้ เนื่องจากมีการตรวจนับทรัพย์สิน') {
       if (response['data'] !== 'มีการเปิดช่วงเวลาทับกัน') {
-        swal("แจ้งเตือน", response.message, "success", {
-          buttons: false,
-          timer: 2000,
-        })
+        swal("แจ้งเตือน", response.message, "success", { buttons: false, timer: 2000 })
           .then((value) => {
             window.location.href = "/EditPeriod";
           });

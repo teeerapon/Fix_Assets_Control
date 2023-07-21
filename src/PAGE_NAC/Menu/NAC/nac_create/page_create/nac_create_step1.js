@@ -495,17 +495,11 @@ export default function Nac_Main() {
               localStorage.setItem('NacCode', JSON.stringify({ nac_code: responseDTL.data[0].nac_code, nac_status: 1 }));
               navigate('/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + responseDTL.data[0].nac_code)
             } else {
-              swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error", {
-                buttons: false,
-                timer: 2000,
-              })
+              swal("ล้มเหลว", 'สร้างเอกสารผิดพลาด', "error")
             }
           }
         } else {
-          swal("แจ้งเตือน", 'กรุณาลองใหม่ภายหลัง', "error", {
-            buttons: false,
-            timer: 2000,
-          })
+          swal("แจ้งเตือน", 'กรุณาลองใหม่ภายหลัง', "error")
         }
       }
     }

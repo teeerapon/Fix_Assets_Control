@@ -157,18 +157,12 @@ export default function History_of_assets() {
                   , image_2: res.data[0].ImagePath_2
                 })
               }
-              swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ ', "success", {
-                buttons: false,
-                timer: 2000,
-              })
+              swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ ', "success", { buttons: false, timer: 2000 })
             })
         })
 
     } else {
-      swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error")
     }
   }
 
@@ -202,19 +196,13 @@ export default function History_of_assets() {
                   , image_1: res.data[0].ImagePath
                   , image_2: res.data[0].ImagePath_2
                 })
-                swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", {
-                  buttons: false,
-                  timer: 2000,
-                })
+                swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", { buttons: false, timer: 2000 })
               }
             })
         })
 
     } else {
-      swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error")
     }
   }
 

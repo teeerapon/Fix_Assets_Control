@@ -5,35 +5,37 @@ import Typography from '@mui/material/Typography';
 import AnimatedPage from '../../../../AnimatedPage.jsx'
 import React from 'react';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
 import Axios from "axios"
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Chip from '@mui/material/Chip';
 import ArticleIcon from '@mui/icons-material/Article';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TextField from '@mui/material/TextField';
 import 'reactjs-popup/dist/index.css';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateAdapter from '@mui/lab/AdapterDateFns';
-import DatePicker from '@mui/lab/DatePicker';
-import DoDisturbOnIcon from '@mui/icons-material/DoDisturbOn';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import swal from 'sweetalert';
 import Alert from '@mui/material/Alert';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Paper from '@mui/material/Paper';
 import LinearProgress from '@mui/material/LinearProgress';
 import config from '../../../../config'
+import dayjs from 'dayjs';
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DateAdapter from '@mui/lab/AdapterDateFns';
+import DesktopDateTimePicker from '@mui/lab/DesktopDateTimePicker';
+import swal from 'sweetalert';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+var dateNow = (dayjs().utc().local().format()).split('+')[0]
 
 const ODD_OPACITY = 0.2;
 
@@ -154,15 +156,7 @@ async function DeletePeriodData(credentials) {
 
 export default function History_of_assets() {
 
-  // ใช้สำหรับสร้างเวลาปัจจุบัน
-  const d = new Date();
-  const year = (d.getFullYear()).toString();
-  const month = ((d.getMonth()) + 101).toString().slice(-2);
-  const date = ((d.getDate()) + 100).toString().slice(-2);
-  const hours = ((d.getHours()) + 100).toString().slice(-2);
-  const mins = ((d.getMinutes()) + 100).toString().slice(-2);
-  const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
-  const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
+
 
   const [dataBranchID_Main, setDataBranchID_Main] = React.useState([]);
   const data = JSON.parse(localStorage.getItem('data'));
@@ -268,7 +262,7 @@ export default function History_of_assets() {
               >
                 <CalendarMonthIcon />
                 <Typography variant='body2'>
-                  {!params.row.BeginDate ? '' : params.row.BeginDate.split('T')[0] || ''} {!params.row.BeginDate ? '' : '00:00' || ''}
+                  {params.row.BeginDate}
                 </Typography>
               </Stack>
               : null}
@@ -296,7 +290,7 @@ export default function History_of_assets() {
               >
                 <CalendarMonthIcon />
                 <Typography variant='body2'>
-                  {!params.row.EndDate ? '' : params.row.EndDate.split('T')[0] || ''} {!params.row.EndDate ? '' : '00:00' || ''}
+                  {params.row.EndDate.toLocaleString("sv-SE")}
                 </Typography>
               </Stack>
               : null}
@@ -313,8 +307,8 @@ export default function History_of_assets() {
       renderCell: (params) => {
         return (
           <React.Fragment>
-            <Typography variant='body2' style={{ 'color': datenow >= params.row.BeginDate && datenow <= params.row.EndDate ? 'green' : 'red' }}>
-              {datenow >= params.row.BeginDate && datenow <= params.row.EndDate ? 'อยู่ระหว่างเปิดใช้งาน' : 'ปิดการใช้งานแล้ว'}
+            <Typography variant='body2' style={{ 'color': dateNow >= params.row.BeginDate && dateNow <= params.row.EndDate ? 'green' : 'red' }}>
+              {dateNow >= params.row.BeginDate && dateNow <= params.row.EndDate ? 'อยู่ระหว่างเปิดใช้งาน' : 'ปิดการใช้งานแล้ว'}
             </Typography>
           </React.Fragment>
         );
@@ -388,10 +382,7 @@ export default function History_of_assets() {
     });
     if (response.message !== 'ไม่สามารถแก้ไขได้ เนื่องจากมีการตรวจนับทรัพย์สิน') {
       if (response['data'] !== 'มีการเปิดช่วงเวลาทับกัน') {
-        swal("แจ้งเตือน", response.message, "success", {
-          buttons: false,
-          timer: 2000,
-        })
+        swal("แจ้งเตือน", response.message, "success", { buttons: false, timer: 2000 })
           .then((value) => {
             window.location.href = "/EditPeriod";
           });
@@ -419,10 +410,7 @@ export default function History_of_assets() {
       BranchID,
     });
     if (response.message !== 'ไม่สามารถลบได้ เนื่องจากมีการตรวจนับทรัพย์สิน') {
-      swal("แจ้งเตือน", 'รอบตรวจนับทรัพย์สินถูกลบแล้ว', "success", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", 'รอบตรวจนับทรัพย์สินถูกลบแล้ว', "success", { buttons: false, timer: 2000 })
         .then((value) => {
           window.location.href = "/EditPeriod";
         });
@@ -438,7 +426,7 @@ export default function History_of_assets() {
   const handleChangeBeginDate = (newValue) => {
     const FromValues = {
       PeriodID: editFormData.PeriodID,
-      BeginDate: newValue,
+      BeginDate: newValue.toLocaleString("sv-SE"),
       EndDate: editFormData.EndDate,
       Description: editFormData.Description,
       BranchID: editFormData.BranchID,
@@ -451,7 +439,7 @@ export default function History_of_assets() {
     const FromValues = {
       PeriodID: editFormData.PeriodID,
       BeginDate: editFormData.BeginDate,
-      EndDate: newValue,
+      EndDate: newValue.toLocaleString("sv-SE"),
       Description: editFormData.Description,
       BranchID: editFormData.BranchID,
       Code: editFormData.Code,
@@ -493,7 +481,7 @@ export default function History_of_assets() {
               >
                 <Alert variant="outlined" severity="error">
                   <Typography variant="body" color='error' sx={{ mt: 5 }}>
-                    วันที่สิ้นสุด (2022-10-11 0.00 น.) ผลลัพธ์คือ (2022-10-10 24.00 น.)
+                    ข้อควรระวัง ไม่สามารถลงเวลาซ้ำกันได้
                   </Typography>
                 </Alert>
                 <StripedDataGrid
@@ -533,6 +521,14 @@ export default function History_of_assets() {
                   <TextField
                     id="standard-basic"
                     value={editFormData.Description}
+                    onChange={(e) => setEditFormData({
+                      PeriodID: editFormData.PeriodID,
+                      BeginDate: editFormData.BeginDate,
+                      EndDate: editFormData.EndDate,
+                      Description: e.target.value,
+                      BranchID: editFormData.BranchID,
+                      Code: editFormData.Code,
+                    })}
                     variant="standard"
                     sx={{ pb: 3 }}
                     fullWidth
@@ -540,10 +536,12 @@ export default function History_of_assets() {
                   <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid item xs={6}>
                       <LocalizationProvider dateAdapter={DateAdapter}>
-                        <DatePicker
+                        <DesktopDateTimePicker
                           value={editFormData.BeginDate}
-                          inputFormat="yyyy-MM-dd 00:00"
                           onChange={handleChangeBeginDate}
+                          timezone={dayjs.tz.guess()}
+                          inputFormat="yyyy-MM-dd HH:mm:ss"
+                          ampm={false}
                           renderInput={(params) =>
                             <TextField
                               fullWidth
@@ -557,10 +555,12 @@ export default function History_of_assets() {
                     </Grid>
                     <Grid item xs={6}>
                       <LocalizationProvider dateAdapter={DateAdapter}>
-                        <DatePicker
+                        <DesktopDateTimePicker
                           value={editFormData.EndDate}
-                          inputFormat="yyyy-MM-dd 00:00"
                           onChange={handleChangeEndDate}
+                          timezone={dayjs.tz.guess()}
+                          inputFormat="yyyy-MM-dd HH:mm:ss"
+                          ampm={false}
                           renderInput={(params) =>
                             <TextField
                               fullWidth

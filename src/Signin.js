@@ -132,10 +132,7 @@ export default function Signin() {
           }
         });
       } else {
-        swal("แจ้งเตือน", 'UserCode หรือ Password ไม่ถูกต้อง', "error", {
-          buttons: false,
-          timer: 2000,
-        });
+        swal("แจ้งเตือน", 'UserCode หรือ Password ไม่ถูกต้อง', "error");
       }
     }
   }

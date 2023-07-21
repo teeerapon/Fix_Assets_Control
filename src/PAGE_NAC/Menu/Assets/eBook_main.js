@@ -242,10 +242,7 @@ export default function History_of_assets() {
                 await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
                   .then(async (res) => {
                     if (res.data) {
-                      swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", {
-                        buttons: false,
-                        timer: 2000,
-                      }).then((value) => {
+                      swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", { buttons: false, timer: 2000 }).then((value) => {
                         dataHistory.forEach(function (x, index) {
                           if (x.Code === params.row.Code) {
                             const list = [...dataHistory]
@@ -259,10 +256,7 @@ export default function History_of_assets() {
               })
 
           } else {
-            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
-              buttons: false,
-              timer: 2000,
-            })
+            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error")
           }
         }
 
@@ -333,10 +327,7 @@ export default function History_of_assets() {
                 await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
                   .then(async (res) => {
                     if (res.data) {
-                      swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", {
-                        buttons: false,
-                        timer: 2000,
-                      }).then((value) => {
+                      swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", { buttons: false, timer: 2000 }).then((value) => {
                         dataHistory.forEach(function (x, index) {
                           if (x.Code === params.row.Code) {
                             const list = [...dataHistory]
@@ -350,10 +341,7 @@ export default function History_of_assets() {
               })
 
           } else {
-            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
-              buttons: false,
-              timer: 2000,
-            })
+            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error")
           }
         }
 

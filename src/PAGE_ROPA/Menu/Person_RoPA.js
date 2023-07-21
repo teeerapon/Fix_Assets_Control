@@ -710,10 +710,7 @@ export default function Permission_to_RoPA() {
     await Axios.post(config.http + '/addOwner', body, { headers })
       .then(response => {
         if (!response.data) {
-          swal("แจ้งเตือน", 'ไม่พบ user นี้ในระบบ', "error", {
-            buttons: false,
-            timer: 2000,
-          })
+          swal("แจ้งเตือน", 'ไม่พบ user นี้ในระบบ', "error")
         } else {
           setAllowner(response.data)
         }
@@ -734,10 +731,7 @@ export default function Permission_to_RoPA() {
     await Axios.post(config.http + '/addPermissionAccess', body, { headers })
       .then(response => {
         if (!response.data) {
-          swal("แจ้งเตือน", 'ไม่พบ user นี้ในระบบ', "error", {
-            buttons: false,
-            timer: 2000,
-          })
+          swal("แจ้งเตือน", 'ไม่พบ user นี้ในระบบ', "error")
         } else {
           setAllaccess(response.data)
         }

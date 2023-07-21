@@ -186,10 +186,7 @@ export default function Permission_NAC() {
               }
             })
         } else {
-          swal("แจ้งเตือน", 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง', "error", {
-            buttons: false,
-            timer: 2000,
-          })
+          swal("แจ้งเตือน", 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง', "error")
         }
       })
 
@@ -348,10 +345,7 @@ export default function Permission_NAC() {
       </ThemeProvider>
     );
   } else {
-    swal("แจ้งเตือน", 'ไม่มีสิทธิ์ในรายการนี้', "error", {
-      buttons: false,
-      timer: 2000,
-    }).then((value) => {
+    swal("แจ้งเตือน", 'ไม่มีสิทธิ์ในรายการนี้', "error").then((value) => {
       window.location.href = '/DATA_CENTER';
     })
   }

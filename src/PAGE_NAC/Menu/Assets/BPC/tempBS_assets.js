@@ -214,10 +214,7 @@ export default function History_of_assets() {
   const handleClickOpenDialog = (event, params) => {
 
     if (params.row.tab_status === 'ดำเนินการเสร็จสิ้น') {
-      swal("แจ้งเตือน", 'ไม่สามารถเปลี่ยนแปลงรายละเอียดได้ (ดำเนินการเสร็จสิ้นแล้ว)', "error", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", 'ไม่สามารถเปลี่ยนแปลงรายละเอียดได้ (ดำเนินการเสร็จสิ้นแล้ว)', "error")
     } else {
       setOpenDialog2(true);
       setDialogComment({
@@ -267,10 +264,7 @@ export default function History_of_assets() {
       }
     })
     setOpenLoadingDialog(false)
-    swal("แจ้งเตือน", 'ตรวจสอบรายการสำเร็จ', "success", {
-      buttons: false,
-      timer: 2000,
-    }).then((value) => {
+    swal("แจ้งเตือน", 'ตรวจสอบรายการสำเร็จ', "success", { buttons: false, timer: 2000 }).then((value) => {
       window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + keyID
     })
   }
@@ -278,10 +272,7 @@ export default function History_of_assets() {
   const submit_Vertify = async () => {
 
     if (!arraySubmitSendMail || (arraySubmitSendMail.length === dataHistory.length)) {
-      swal("แจ้งเตือน", `กรุณาเลือกอย่างน้อย 1 รายการเพื่อตรวจสอบ`, "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", `กรุณาเลือกอย่างน้อย 1 รายการเพื่อตรวจสอบ`, "warning")
     } else {
       if (arraySubmitSendMail.length === 0) {
         const body = {
@@ -328,10 +319,7 @@ export default function History_of_assets() {
         }
       }
       setOpenLoadingDialog(false)
-      swal("แจ้งเตือน", 'ตรวจสอบรายการสำเร็จ', "success", {
-        buttons: false,
-        timer: 2000,
-      }).then((value) => {
+      swal("แจ้งเตือน", 'ตรวจสอบรายการสำเร็จ', "success", { buttons: false, timer: 2000 }).then((value) => {
         window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + keyID
       })
     }
@@ -428,10 +416,7 @@ export default function History_of_assets() {
           };
 
           if (params.row.tab_status === 'ดำเนินการเสร็จสิ้น') {
-            swal("แจ้งเตือน", 'ไม่สามารถเปลี่ยนแปลงรายละเอียดได้ (ดำเนินการเสร็จสิ้นแล้ว)', "error", {
-              buttons: false,
-              timer: 2000,
-            })
+            swal("แจ้งเตือน", 'ไม่สามารถเปลี่ยนแปลงรายละเอียดได้ (ดำเนินการเสร็จสิ้นแล้ว)', "error")
           } else if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.').pop()) > -1) {
 
             const formData_2 = new FormData();
@@ -464,10 +449,7 @@ export default function History_of_assets() {
 
               })
           } else {
-            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
-              buttons: false,
-              timer: 2000,
-            })
+            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error")
           }
         }
 

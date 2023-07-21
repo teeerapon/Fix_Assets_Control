@@ -13,7 +13,6 @@ import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
 import Axios from "axios"
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
@@ -44,6 +43,7 @@ import config from '../../../config'
 import DialogContentText from '@mui/material/DialogContentText';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import swal from 'sweetalert';
 
 const ODD_OPACITY = 0.2;
 
@@ -291,7 +291,21 @@ export default function Reported_of_assets() {
       'Accept': 'application/json'
     };
     await Axios.put(config.http + '/updateReference', body, { headers })
-      .then((res) => {
+      .catch(function (error) {
+        if (error.response) {
+          setOpenDialog(false);
+          swal("แจ้งเตือน", `หมดเวลาแล้ว`, "error").then((res) => {
+            reported_of_assets.forEach(function (x, index) {
+              if (x.Code === dialogComment.Code) {
+                const list = [...reported_of_assets]
+                list[index]['comment'] = ''
+                setReported_of_assets(list)
+                setOpenDialog(false);
+              }
+            })
+          })
+        }
+      }).then((res) => {
         reported_of_assets.forEach(function (x, index) {
           if (x.Code === dialogComment.Code) {
             const list = [...reported_of_assets]

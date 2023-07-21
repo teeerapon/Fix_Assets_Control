@@ -216,18 +216,12 @@ export default function History_of_assets() {
             setProgressIcon((i / arraySubmitSendMail.length) * 100)
           }
           setOpenSendMail(false);
-          swal("แจ้งเตือน", 'ทำรายการสำเร็จ', "success", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
+          swal("แจ้งเตือน", 'ทำรายการสำเร็จ', "success", { buttons: false, timer: 2000 }).then((value) => {
             window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
           })
         });
     } if (!user_name && !user_Lastname) {
-      swal("แจ้งเตือน", 'กรุณากรอกชื่อและนามสกุล (ผู้ทำรายการ)', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", 'กรุณากรอกชื่อและนามสกุล (ผู้ทำรายการ)', "warning")
     }
 
   };
@@ -284,10 +278,7 @@ export default function History_of_assets() {
         setOpenXlsx(true)
         setNameExcel(f.name)
       } else {
-        swal("แจ้งเตือน", 'ไม่พบหัวข้อรหัสทรัพย์สิน (No !)', "error", {
-          buttons: false,
-          timer: 2000,
-        })
+        swal("แจ้งเตือน", 'ไม่พบหัวข้อรหัสทรัพย์สิน (No !)', "error")
       }
     };
     reader.readAsBinaryString(f)
@@ -342,10 +333,7 @@ export default function History_of_assets() {
                   setSerialNo(null)
                   setPrice(null)
                   setDetails(null)
-                  swal("แจ้งเตือน", response.data[0].res, "error", {
-                    buttons: false,
-                    timer: 2000,
-                  })
+                  swal("แจ้งเตือน", response.data[0].res, "error")
                 } else {
                   setProgressIcon((i / (dataFile.length - 1)) * 100)
                   if (((i / (dataFile.length - 1)) * 100) === 100) {
@@ -357,10 +345,7 @@ export default function History_of_assets() {
                     setSerialNo(null)
                     setPrice(null)
                     setDetails(null)
-                    swal("แจ้งเตือน", 'ทำรายการสำเร็จ', "success", {
-                      buttons: false,
-                      timer: 2000,
-                    }).then((value) => {
+                    swal("แจ้งเตือน", 'ทำรายการสำเร็จ', "success", { buttons: false, timer: 2000 }).then((value) => {
                       window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
                     })
                   }
@@ -369,15 +354,9 @@ export default function History_of_assets() {
           }
         })
     } else if (!user_name && !user_Lastname) {
-      swal("แจ้งเตือน", 'กรุณากรอกชื่อและนามสกุล (ผู้ทำรายการ)', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", 'กรุณากรอกชื่อและนามสกุล (ผู้ทำรายการ)', "warning")
     } else {
-      swal("แจ้งเตือน", 'ข้อมูล (Columns) ไม่ถูกต้อง กรุณาตรวจสอบ', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", 'ข้อมูล (Columns) ไม่ถูกต้อง กรุณาตรวจสอบ', "warning")
     }
   };
 
@@ -421,25 +400,13 @@ export default function History_of_assets() {
             'Accept': 'application/json'
           };
           if (!bac_type) {
-            swal("แจ้งเตือน", 'กรุณากรอกลำดับเลขที่', "error", {
-              buttons: false,
-              timer: 2000,
-            })
+            swal("แจ้งเตือน", 'กรุณากรอกลำดับเลขที่', "error")
           } else if (!name) {
-            swal("แจ้งเตือน", 'กรุณากรอกชื่อทรัพย์สินให้ถูกต้อง', "error", {
-              buttons: false,
-              timer: 2000,
-            })
+            swal("แจ้งเตือน", 'กรุณากรอกชื่อทรัพย์สินให้ถูกต้อง', "error")
           } else if (!branchID || branchID < 1) {
-            swal("แจ้งเตือน", 'กรุณากรอกสาขาให้ถูกต้อง', "error", {
-              buttons: false,
-              timer: 2000,
-            })
+            swal("แจ้งเตือน", 'กรุณากรอกสาขาให้ถูกต้อง', "error")
           } else if (!price) {
-            swal("แจ้งเตือน", 'กรุณากรอกราคาให้ถูกต้อง', "error", {
-              buttons: false,
-              timer: 2000,
-            })
+            swal("แจ้งเตือน", 'กรุณากรอกราคาให้ถูกต้อง', "error")
           } else {
             await Axios.post(config.http + '/FA_Control_New_Assets', body, { headers })
               .then(async (response) => {
@@ -451,10 +418,7 @@ export default function History_of_assets() {
                   setSerialNo(null)
                   setPrice(null)
                   setDetails(null)
-                  swal("แจ้งเตือน", 'ดำเนินการเสร็จสิ้น', "success", {
-                    buttons: false,
-                    timer: 2000,
-                  }).then((value) => {
+                  swal("แจ้งเตือน", 'ดำเนินการเสร็จสิ้น', "success", { buttons: false, timer: 2000 }).then((value) => {
                     window.location.href = '/FA_Control_BPC_SELECT_TEMP?keyID=' + resTAB.data[0].TAB
                   })
                 }
@@ -462,10 +426,7 @@ export default function History_of_assets() {
           }
         })
     } if (!user_name && !user_Lastname) {
-      swal("แจ้งเตือน", 'กรุณากรอกชื่อและนามสกุล (ผู้ทำรายการ)', "warning", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", 'กรุณากรอกชื่อและนามสกุล (ผู้ทำรายการ)', "warning")
     }
   };
 
@@ -603,10 +564,7 @@ export default function History_of_assets() {
 
               })
           } else {
-            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
-              buttons: false,
-              timer: 2000,
-            })
+            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error")
           }
         }
 
@@ -704,10 +662,7 @@ export default function History_of_assets() {
                 await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
                   .then(async (res) => {
                     if (res.data) {
-                      swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", {
-                        buttons: false,
-                        timer: 2000,
-                      }).then((value) => {
+                      swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", { buttons: false, timer: 2000 }).then((value) => {
                         dataHistory.forEach(function (x, index) {
                           if (x.Code === params.row.Code) {
                             const list = [...dataHistory]
@@ -721,10 +676,7 @@ export default function History_of_assets() {
               })
 
           } else {
-            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
-              buttons: false,
-              timer: 2000,
-            })
+            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error")
           }
         }
 
@@ -795,10 +747,7 @@ export default function History_of_assets() {
                 await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
                   .then(async (res) => {
                     if (res.data) {
-                      swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", {
-                        buttons: false,
-                        timer: 2000,
-                      }).then((value) => {
+                      swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", { buttons: false, timer: 2000 }).then((value) => {
                         dataHistory.forEach(function (x, index) {
                           if (x.Code === params.row.Code) {
                             const list = [...dataHistory]
@@ -811,10 +760,7 @@ export default function History_of_assets() {
                   })
               })
           } else {
-            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
-              buttons: false,
-              timer: 2000,
-            })
+            swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error")
           }
         }
 
@@ -894,10 +840,7 @@ export default function History_of_assets() {
           setNameImage2(image_2)
         })
     } else {
-      swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error")
     }
   }
 

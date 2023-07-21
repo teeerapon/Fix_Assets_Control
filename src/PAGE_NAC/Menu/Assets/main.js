@@ -237,10 +237,7 @@ export default function History_of_assets() {
         setOpenXlsx(true)
         setNameExcel(f.name)
       } else {
-        swal("แจ้งเตือน", 'ไม่พบหัวข้อรหัสทรัพย์สิน (Code !)', "error", {
-          buttons: false,
-          timer: 2000,
-        })
+        swal("แจ้งเตือน", 'ไม่พบหัวข้อรหัสทรัพย์สิน (Code !)', "error")
       }
     };
     reader.readAsBinaryString(f)
@@ -299,10 +296,7 @@ export default function History_of_assets() {
                   setPrice(null)
                   setDetails(null)
                   setCeate_Date(null)
-                  swal("แจ้งเตือน", response.data[0].res, "error", {
-                    buttons: false,
-                    timer: 2000,
-                  })
+                  swal("แจ้งเตือน", response.data[0].res, "error")
                 } else {
                   setArraySubmit((i / (dataFile.length - 1)) * 100);
                   if (i === (dataFile.length - 1)) {
@@ -310,10 +304,7 @@ export default function History_of_assets() {
                     Axios.post(config.http + '/FA_Control_import_dataXLSX_toAssets', body, { headers })
                       .then((response) => {
                         if (response.data[0].response === 'ทำรายการสำเร็จ') {
-                          swal("แจ้งเตือน", response.data[0].response, "success", {
-                            buttons: false,
-                            timer: 2000,
-                          }).then((value) => {
+                          swal("แจ้งเตือน", response.data[0].response, "success", { buttons: false, timer: 2000 }).then((value) => {
                             setOpenXlsx(false)
                             setOpen(false);
                             setCode(null)
@@ -326,16 +317,10 @@ export default function History_of_assets() {
                           })
                         } else if (response.data[0].response) {
                           setOpenXlsx(false)
-                          swal("แจ้งเตือน", response.data[0].response, "error", {
-                            buttons: false,
-                            timer: 2000,
-                          })
+                          swal("แจ้งเตือน", response.data[0].response, "error")
                         } else {
                           setOpenXlsx(false)
-                          swal("แจ้งเตือน", response.data, "error", {
-                            buttons: false,
-                            timer: 2000,
-                          })
+                          swal("แจ้งเตือน", response.data, "error")
                         }
                       })
                   }
@@ -344,10 +329,7 @@ export default function History_of_assets() {
           }
         })
     } else {
-      swal("แจ้งเตือน", 'ข้อมูล (Columns) ไม่ถูกต้อง กรุณาตรวจสอบ', "error", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", 'ข้อมูล (Columns) ไม่ถูกต้อง กรุณาตรวจสอบ', "error")
     }
   };
 
@@ -383,25 +365,13 @@ export default function History_of_assets() {
       'Accept': 'application/json'
     };
     if (!code) {
-      swal("แจ้งเตือน", 'กรุณากรอกรหัสทรัพย์สินให้ถูกต้อง', "error", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", 'กรุณากรอกรหัสทรัพย์สินให้ถูกต้อง', "error")
     } else if (!name) {
-      swal("แจ้งเตือน", 'กรุณากรอกชื่อทรัพย์สินให้ถูกต้อง', "error", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", 'กรุณากรอกชื่อทรัพย์สินให้ถูกต้อง', "error")
     } else if (!branchID || branchID < 1) {
-      swal("แจ้งเตือน", 'กรุณากรอกสาขาให้ถูกต้อง', "error", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", 'กรุณากรอกสาขาให้ถูกต้อง', "error")
     } else if (!price || price < 1) {
-      swal("แจ้งเตือน", 'กรุณากรอกราคาให้ถูกต้อง', "error", {
-        buttons: false,
-        timer: 2000,
-      })
+      swal("แจ้งเตือน", 'กรุณากรอกราคาให้ถูกต้อง', "error")
     } else {
       await Axios.post(config.http + '/FA_Control_New_Assets', body, { headers })
         .then(response => {
@@ -411,10 +381,7 @@ export default function History_of_assets() {
               'Authorization': 'application/json; charset=utf-8',
               'Accept': 'application/json'
             };
-            swal("แจ้งเตือน", `เพิ่มทรัพย์สินสำเร็จ`, "success", {
-              buttons: false,
-              timer: 2000,
-            }).then((value) => {
+            swal("แจ้งเตือน", `เพิ่มทรัพย์สินสำเร็จ`, "success", { buttons: false, timer: 2000 }).then((value) => {
               Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
                 .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 1)));
               setOpen(false);

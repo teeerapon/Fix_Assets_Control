@@ -10,11 +10,8 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateAdapter from '@mui/lab/AdapterDateFns';
 import swal from 'sweetalert';
 import Radio from '@mui/material/Radio';
-import DatePicker from '@mui/lab/DatePicker';
 import { Outlet, useNavigate } from "react-router";
 import '../../../../App.css'
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -29,6 +26,17 @@ import config from '../../../../config.js'
 import Autocomplete from '@mui/material/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import dayjs from 'dayjs';
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DateAdapter from '@mui/lab/AdapterDateFns';
+import de from 'date-fns/locale/de';
+import DesktopDateTimePicker from '@mui/lab/DesktopDateTimePicker';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+var dateNow = (dayjs().utc().local().format()).split('+')[0]
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -59,18 +67,11 @@ async function PeriodCreate(credentials) {
 
 export default function AddressForm() {
 
-  // ใช้สำหรับสร้างเวลาปัจจุบัน
-  const d = new Date();
-  const year = (d.getFullYear()).toString();
-  const month = ((d.getMonth()) + 101).toString().slice(-2);
-  const date = ((d.getDate()) + 100).toString().slice(-2);
-  const datenow = `${year}-${month}-${date}T00:00:00.000Z`;
-
   const data = JSON.parse(localStorage.getItem('data'));
   const navigate = useNavigate();
   const [showResults, setShowResults] = React.useState(false)
-  const [valueDateTime1, setValueDateTime1] = React.useState(datenow) //datenow
-  const [valueDateTime2, setValueDateTime2] = React.useState(datenow) //datenow
+  const [valueDateTime1, setValueDateTime1] = React.useState(dateNow) //dayjs()
+  const [valueDateTime2, setValueDateTime2] = React.useState(dateNow) //dayjs()
   const [valueDescription, setValueDescription] = React.useState()
   const [brachID1, setBrachID1] = React.useState()
   const [activeStep] = React.useState(0);
@@ -116,11 +117,11 @@ export default function AddressForm() {
   }
 
   const handleDateTime1 = (newValue) => {
-    setValueDateTime1(newValue);
+    setValueDateTime2(newValue.toLocaleString("sv-SE"));
   };
 
   const handleDateTime2 = (newValue) => {
-    setValueDateTime2(newValue);
+    setValueDateTime2(newValue.toLocaleString("sv-SE"));
   };
 
   const handleNext = async () => {
@@ -129,8 +130,8 @@ export default function AddressForm() {
 
     if (topicBranch === 0 && !topic && valueDescription) {
 
-      const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
-      const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+      const BeginDate = valueDateTime1
+      const EndDate = valueDateTime2
       const BranchID = 0
       const Description = `${valueDescription} (CO)`
       const usercode = data.UserCode
@@ -153,8 +154,8 @@ export default function AddressForm() {
 
     } else if (topicBranch === 1 && !topic && valueDescription) {
 
-      const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
-      const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+      const BeginDate = valueDateTime1
+      const EndDate = valueDateTime2
       const BranchID = branchName.map((res) => res.branchid).join(`, `)
       const Description = `${valueDescription}`
       const usercode = data.UserCode
@@ -177,8 +178,8 @@ export default function AddressForm() {
 
     } else if (!topicBranch && topic === 0 && valueDescription) {
 
-      const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
-      const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+      const BeginDate = valueDateTime1
+      const EndDate = valueDateTime2
       const BranchID = 901
       const Description = `${valueDescription} (HO)`
       const usercode = data.UserCode
@@ -201,8 +202,8 @@ export default function AddressForm() {
 
     } else if (!topicBranch && topic === 1 && valueDescription) {
 
-      const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
-      const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+      const BeginDate = valueDateTime1
+      const EndDate = valueDateTime2
       const BranchID = 901
       const Description = `${valueDescription}`
       const usercode = data.UserCode
@@ -227,8 +228,8 @@ export default function AddressForm() {
 
     } else if (!topicBranch && topic === 2 && valueDescription) {
 
-      const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
-      const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+      const BeginDate = valueDateTime1
+      const EndDate = valueDateTime2
       const BranchID = 901
       const Description = `${valueDescription}`
       const usercode = data.UserCode
@@ -253,8 +254,8 @@ export default function AddressForm() {
 
     } else if (!topicBranch && topic === 3 && valueDescription) {
 
-      const BeginDate = valueDateTime1 === datenow ? datenow : (valueDateTime1).toISOString().split('T')[0] + ' 7:00:00'
-      const EndDate = valueDateTime2 === datenow ? datenow : (valueDateTime2).toISOString().split('T')[0] + ' 7:00:00'
+      const BeginDate = valueDateTime1
+      const EndDate = valueDateTime2
       const BranchID = 901
       const Description = `${valueDescription}`
       const usercode = data.UserCode
@@ -353,15 +354,17 @@ export default function AddressForm() {
               <Stack spacing={3}>
                 <Alert variant="outlined" severity="error">
                   <Typography variant="body" color='error' >
-                    วันที่สิ้นสุด (2022-10-11 0.00 น.) ผลลัพธ์คือ (2022-10-10 24.00 น.)
+                    ข้อควรระวัง ไม่สามารถลงเวลาซ้ำกันได้
                   </Typography>
                 </Alert>
-                <LocalizationProvider dateAdapter={DateAdapter}>
-                  <DatePicker
+                <LocalizationProvider dateAdapter={DateAdapter} adapterLocale={de}>
+                  <DesktopDateTimePicker
                     label="วันที่และเวลาเริ่มต้น"
                     value={valueDateTime1}
                     onChange={handleDateTime1}
-                    inputFormat="yyyy-MM-dd 00:00"
+                    timezone={dayjs.tz.guess()}
+                    inputFormat="yyyy-MM-dd HH:mm:ss"
+                    ampm={false}
                     renderInput={(params) =>
                       <TextField
                         fullWidth
@@ -374,12 +377,14 @@ export default function AddressForm() {
             </Grid>
             <Grid item xs={12}>
               <Stack spacing={3}>
-                <LocalizationProvider dateAdapter={DateAdapter}>
-                  <DatePicker
+                <LocalizationProvider dateAdapter={DateAdapter} adapterLocale={de}>
+                  <DesktopDateTimePicker
                     label="วันที่และเวลาสิ้นสุด"
                     value={valueDateTime2}
                     onChange={handleDateTime2}
-                    inputFormat="yyyy-MM-dd 00:00"
+                    timezone={dayjs.tz.guess()}
+                    inputFormat="yyyy-MM-dd HH:mm:ss"
+                    ampm={false}
                     renderInput={(params) =>
                       <TextField
                         fullWidth

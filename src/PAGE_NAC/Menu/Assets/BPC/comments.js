@@ -147,10 +147,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
       setFileName(e.target.files[0].name);
       setPath(e.target.files[0].name)
     } else {
-      swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error", {
-        buttons: false,
-        timer: 2000,
-      }).then((value) => {
+      swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error").then((value) => {
         setFile(null)
         setFileName("")
         setDescription('')
@@ -211,10 +208,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
 
   const handleSubmitComment = async (e) => {
     if (!comment) {
-      swal("แจ้งเตือน", 'กรุณาเติมข้อความ', "error", {
-        buttons: false,
-        timer: 2000,
-      }).then((value) => {
+      swal("แจ้งเตือน", 'กรุณาเติมข้อความ', "error").then((value) => {
         navigate('/FA_Control_BPC_SELECT_TEMP?nac_code=' + nac_code)
       });
     } else {
@@ -233,10 +227,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
 
   const handleSubmitPath = async (e) => {
     if (!path || !description) {
-      swal("แจ้งเตือน", 'กรุณาเติมข้อความ', "error", {
-        buttons: false,
-        timer: 2000,
-      }).then((value) => {
+      swal("แจ้งเตือน", 'กรุณาเติมข้อความ', "error").then((value) => {
         navigate('/FA_Control_BPC_SELECT_TEMP?nac_code=' + nac_code)
       });
     } else {
@@ -284,10 +275,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
               }
             })
         } catch (ex) {
-          swal("แจ้งเตือน", 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง', "error", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
+          swal("แจ้งเตือน", 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง', "error").then((value) => {
             setFile(null)
             setFileName("")
             setDescription('')

@@ -136,10 +136,7 @@ export default function ReadOnly({ selectNAC, handleEditClick }) {
       nac_code,
     });
     if ('data' in response) {
-      swal("แจ้งเตือน", 'ทำการลบรายการ ' + response.data[0].nac_code + ' แล้ว', "success", {
-        buttons: false,
-        timer: 2000,
-      }).then((value) => {
+      swal("แจ้งเตือน", 'ทำการลบรายการ ' + response.data[0].nac_code + ' แล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
         window.location.href = "/NAC_ROW";
       });
     } else {

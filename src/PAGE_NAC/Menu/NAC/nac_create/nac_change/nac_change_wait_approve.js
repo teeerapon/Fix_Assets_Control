@@ -420,10 +420,7 @@ export default function Nac_Main_wait() {
       nac_code,
     });
     if ('data' in response) {
-      swal("แจ้งเตือน", 'ทำการลบรายการ ' + response.data[0].nac_code + ' แล้ว', "success", {
-        buttons: false,
-        timer: 2000,
-      }).then((value) => {
+      swal("แจ้งเตือน", 'ทำการลบรายการ ' + response.data[0].nac_code + ' แล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
         window.location.href = "/NAC_OPERATOR";
       });
     } else {
@@ -461,10 +458,7 @@ export default function Nac_Main_wait() {
       nac_code
     });
     if (responseHeaders.message === "ไม่พบข้อมูล") {
-      swal("แจ้งเตือน", 'ไม่พบรายการนี้แล้ว', "error", {
-        buttons: false,
-        timer: 2000,
-      }).then((value) => {
+      swal("แจ้งเตือน", 'ไม่พบรายการนี้แล้ว', "error").then((value) => {
         window.location.href = '/'
       });
     }
@@ -899,24 +893,15 @@ export default function Nac_Main_wait() {
             asset_id
           });
           if ('data' in responseDTL) {
-            swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", {
-              buttons: false,
-              timer: 2000,
-            }).then((value) => {
+            swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
               window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' + nac_code
             });
           } else {
-            swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error", {
-              buttons: false,
-              timer: 2000,
-            })
+            swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error")
           }
         }
       } else {
-        swal("แจ้งเตือน", 'กรุณาลองใหม่ภายหลัง', "error", {
-          buttons: false,
-          timer: 2000,
-        })
+        swal("แจ้งเตือน", 'กรุณาลองใหม่ภายหลัง', "error")
       }
     }
     //navigate("/NAC_CREATE_MAIN1/NAC_CREATE_MAIN1_STEP2")
@@ -975,25 +960,16 @@ export default function Nac_Main_wait() {
               nac_code
             })
             if ('data' in responseComment) {
-              swal("แจ้งเตือน", 'คุณได้ยืนยันรายการแล้ว', "success", {
-                buttons: false,
-                timer: 2000,
-              }).then((value) => {
+              swal("แจ้งเตือน", 'คุณได้ยืนยันรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
                 window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' + nac_code
               });
             } else {
-              swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
-                buttons: false,
-                timer: 2000,
-              }).then((value) => {
+              swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
                 window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' + nac_code
               });
             }
           } else {
-            swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
-              buttons: false,
-              timer: 2000,
-            }).then((value) => {
+            swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
               window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' + nac_code
             });
           }
@@ -1046,25 +1022,16 @@ export default function Nac_Main_wait() {
           nac_code
         })
         if ('data' in responseComment) {
-          swal("แจ้งเตือน", 'คุณตรวจสอบรายการแล้ว', "success", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
+          swal("แจ้งเตือน", 'คุณตรวจสอบรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
             window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
           });
         } else {
-          swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
+          swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
             window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
           });
         }
       } else {
-        swal("แจ้งเตือน", 'คุณไม่ได้รับอนุญาติให้ทำรายการนี้', "error", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
+        swal("แจ้งเตือน", 'คุณไม่ได้รับอนุญาติให้ทำรายการนี้', "error").then((value) => {
           window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
         });
       }
@@ -1106,25 +1073,16 @@ export default function Nac_Main_wait() {
           nac_code
         })
         if ('data' in responseComment) {
-          swal("แจ้งเตือน", 'คุณตรวจสอบรายการแล้ว', "success", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
+          swal("แจ้งเตือน", 'คุณตรวจสอบรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
             window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
           });
         } else {
-          swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
+          swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
             window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
           });
         }
       } else {
-        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
+        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
           window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
         });
       }
@@ -1169,17 +1127,11 @@ export default function Nac_Main_wait() {
         nac_code
       })
       if ('data' in responseComment) {
-        swal("แจ้งเตือน", 'คุณอนุมัติรายการแล้ว', "success", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
+        swal("แจ้งเตือน", 'คุณอนุมัติรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
           window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
         });
       } else {
-        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
+        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
           window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
         });
       }
@@ -1257,17 +1209,11 @@ export default function Nac_Main_wait() {
               })
             }
           }
-          swal("แจ้งเตือน", 'คุณได้ปิดรายการแล้ว', "success", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
+          swal("แจ้งเตือน", 'คุณได้ปิดรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
             window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' + nac_code
           });
         } else {
-          swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
-            buttons: false,
-            timer: 2000,
-          }).then((value) => {
+          swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
             window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' + nac_code
           });
         }
@@ -1288,10 +1234,7 @@ export default function Nac_Main_wait() {
         }
       }
     } else {
-      swal("แจ้งเตือน", 'สถานะการทำรายการผิด', "error", {
-        buttons: false,
-        timer: 2000,
-      }).then((value) => {
+      swal("แจ้งเตือน", 'สถานะการทำรายการผิด', "error").then((value) => {
         window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' + nac_code
       });
     }
@@ -1334,25 +1277,16 @@ export default function Nac_Main_wait() {
         comment
       })
       if ('data' in responseComment) {
-        swal("แจ้งเตือน", 'คุณได้ยกเลิกรายการแล้ว', "success", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
+        swal("แจ้งเตือน", 'คุณได้ยกเลิกรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
           window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' + nac_code
         });
       } else {
-        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
-          buttons: false,
-          timer: 2000,
-        }).then((value) => {
+        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
           window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' + nac_code
         });
       }
     } else {
-      swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error", {
-        buttons: false,
-        timer: 2000,
-      }).then((value) => {
+      swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
         window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' + nac_code
       });
     }

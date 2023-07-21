@@ -127,10 +127,7 @@ export default function Report() {
       setShowResult(false)
       setPermissionHO([])
     } else {
-      swal("แจ้งเตือน", "ถูกจำกัดสิทธิ์", "error", {
-        buttons: false,
-        timer: 2000,
-      }).then(() => {
+      swal("แจ้งเตือน", "ถูกจำกัดสิทธิ์", "error").then(() => {
         setTopicBranch(null);
         setShowResult(false)
         setPermissionHO(null)
@@ -161,12 +158,13 @@ export default function Report() {
     setPermissionHO(event.target.value);
     if (event.target.value !== undefined) {
       if (event.target.value === 1) {
-        const depCode = data.DepCode
+        const BranchID = 901
         const response_data = await getPeriods({
-          depCode
+          BranchID
         })
-        if (response_data.length !== 0) {
-          setPeriodData2(response_data);
+        console.log(response_data);
+        if (response_data.filter((res) => (res.DepCode === data.DepCode || !res.DepCode) && (!res.personID || res.personID === data.UserCode)).length !== 0) {
+          setPeriodData2(response_data.filter((res) => (res.DepCode === data.DepCode || !res.DepCode) && (!res.personID || res.personID === data.UserCode)));
           setShowResult(true)
         } else {
           setAlert(true)
@@ -174,13 +172,12 @@ export default function Report() {
           setShowResult(false)
         }
       } else {
-        const personID = data.UserCode
+        const BranchID = 901
         const response_data = await getPeriods({
-          personID
+          BranchID
         })
-        console.log(personID);
-        if (response_data.length !== 0) {
-          setPeriodData2(response_data);
+        if (response_data.filter((res) => (res.DepCode === data.DepCode || !res.DepCode) && res.personID === data.UserCode).length !== 0) {
+          setPeriodData2(response_data.filter((res) => (res.DepCode === data.DepCode || !res.DepCode) && res.personID === data.UserCode));
           setShowResult(true)
         } else {
           setAlert(true)
@@ -226,10 +223,7 @@ export default function Report() {
         RoundID
       })
       if ('data' in response || 'data' in response2 || 'data' in response3) {
-        swal("แจ้งเตือน", "ค้นหาข้อมูลเสร็จสิ้น", "success", {
-          buttons: false,
-          timer: 2000,
-        })
+        swal("แจ้งเตือน", "ค้นหาข้อมูลเสร็จสิ้น", "success", { buttons: false, timer: 2000 })
           .then((value) => {
             if (topicBranch === 0) {
               localStorage.setItem('Allaseets', JSON.stringify((response2).concat(response3, response.data)));
@@ -251,10 +245,7 @@ export default function Report() {
   }
 
   if (permission === 'ไม่พบสิทธิ์') {
-    swal("แจ้งเตือน", 'กรุณาติดต่อ Admin เพื่อขอสิทธิ์', "warning", {
-      buttons: false,
-      timer: 2000,
-    }).then((value) => {
+    swal("แจ้งเตือน", 'กรุณาติดต่อ Admin เพื่อขอสิทธิ์', "warning").then((value) => {
       window.location.href = "/NAC_MAIN";
     });
   } else {
