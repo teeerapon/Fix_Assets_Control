@@ -133,7 +133,7 @@ export default function AddressForm() {
       const BeginDate = valueDateTime1
       const EndDate = valueDateTime2
       const BranchID = 0
-      const Description = `${valueDescription} (CO)`
+      const Description = `${valueDescription}`
       const usercode = data.UserCode
       const response = await PeriodCreate({
         BeginDate,
@@ -181,7 +181,7 @@ export default function AddressForm() {
       const BeginDate = valueDateTime1
       const EndDate = valueDateTime2
       const BranchID = 901
-      const Description = `${valueDescription} (HO)`
+      const Description = `${valueDescription}`
       const usercode = data.UserCode
       const response = await PeriodCreate({
         BeginDate,
@@ -202,80 +202,86 @@ export default function AddressForm() {
 
     } else if (!topicBranch && topic === 1 && valueDescription) {
 
-      const BeginDate = valueDateTime1
-      const EndDate = valueDateTime2
-      const BranchID = 901
-      const Description = `${valueDescription}`
-      const usercode = data.UserCode
-      const personID = userGroupCenter.map((res) => res.UserCode).join(', ')
-      const response = await PeriodCreate({
-        BeginDate,
-        EndDate,
-        BranchID,
-        Description,
-        usercode,
-        personID,
-        keyID,
-      });
-      if (response.data[0]) {
-        swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${userGroupCenter.map((res) => res.UserCode).join(', ')} แล้ว`, "success", {
-          buttons: false,
-          timer: 1500,
-        }).then((value) => {
-          navigate('/EditPeriod')
+      for (let i = 0; i < userGroupCenter.length; i++) {
+        const BeginDate = valueDateTime1
+        const EndDate = valueDateTime2
+        const BranchID = 901
+        const Description = `${valueDescription} ${userGroupCenter[i].UserCode}`
+        const usercode = data.UserCode
+        const personID = userGroupCenter[i].UserCode
+        const response = await PeriodCreate({
+          BeginDate,
+          EndDate,
+          BranchID,
+          Description,
+          usercode,
+          personID,
+          keyID,
         });
+        if ((i + 1) === userGroupCenter.length) {
+          swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${userGroupCenter.map((res) => res.UserCode).join(', ')} แล้ว`, "success", {
+            buttons: false,
+            timer: 1500,
+          }).then((value) => {
+            navigate('/EditPeriod')
+          });
+        }
       }
 
     } else if (!topicBranch && topic === 2 && valueDescription) {
 
-      const BeginDate = valueDateTime1
-      const EndDate = valueDateTime2
-      const BranchID = 901
-      const Description = `${valueDescription}`
-      const usercode = data.UserCode
-      const depcode = PositionName.map((res) => res.depcode).join(', ')
-      const response = await PeriodCreate({
-        BeginDate,
-        EndDate,
-        BranchID,
-        Description,
-        usercode,
-        depcode,
-        keyID,
-      });
-      if (response.data[0]) {
-        swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${PositionName.map((res) => res.depcode).join(', ')} แล้ว`, "success", {
-          buttons: false,
-          timer: 1500,
-        }).then((value) => {
-          navigate('/EditPeriod')
+      for (let i = 0; i < PositionName.length; i++) {
+        const BeginDate = valueDateTime1
+        const EndDate = valueDateTime2
+        const BranchID = 901
+        const Description = `${valueDescription} ${PositionName[i].depcode}`
+        const usercode = data.UserCode
+        const depcode = PositionName[i].depcode
+        const response = await PeriodCreate({
+          BeginDate,
+          EndDate,
+          BranchID,
+          Description,
+          usercode,
+          depcode,
+          keyID,
         });
+        if ((i + 1) === PositionName.length) {
+          swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${PositionName.map((res) => res.depcode).join(', ')} แล้ว`, "success", {
+            buttons: false,
+            timer: 1500,
+          }).then((value) => {
+            navigate('/EditPeriod')
+          });
+        }
       }
 
     } else if (!topicBranch && topic === 3 && valueDescription) {
 
-      const BeginDate = valueDateTime1
-      const EndDate = valueDateTime2
-      const BranchID = 901
-      const Description = `${valueDescription}`
-      const usercode = data.UserCode
-      const personID = userGroup.map((res) => res.UserCode).join(', ')
-      const response = await PeriodCreate({
-        BeginDate,
-        EndDate,
-        BranchID,
-        Description,
-        usercode,
-        personID,
-        keyID,
-      });
-      if (response.data[0]) {
-        swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${userGroup.map((res) => res.UserCode).join(', ')} แล้ว`, "success", {
-          buttons: false,
-          timer: 1500,
-        }).then((value) => {
-          navigate('/EditPeriod')
+      for (let i = 0; i < userGroup.length; i++) {
+        const BeginDate = valueDateTime1
+        const EndDate = valueDateTime2
+        const BranchID = 901
+        const Description = `${valueDescription} ${userGroup[i].UserCode}`
+        const usercode = data.UserCode
+        const personID = userGroup[i].UserCode
+        const response = await PeriodCreate({
+          BeginDate,
+          EndDate,
+          BranchID,
+          Description,
+          usercode,
+          personID,
+          keyID,
         });
+        if ((i + 1) === userGroup.length) {
+          swal("แจ้งเตือน", `เปิดรอบตรวจนับสาขา ${userGroup.map((res) => res.UserCode).join(', ')} แล้ว`, "success", {
+            buttons: false,
+            timer: 1500,
+          }).then((value) => {
+            navigate('/EditPeriod')
+          });
+        }
       }
 
     } else {
