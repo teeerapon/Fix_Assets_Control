@@ -5,8 +5,6 @@ import Typography from '@mui/material/Typography';
 import AnimatedPage from '../../../../AnimatedPage.jsx';
 import React from 'react';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
@@ -25,18 +23,16 @@ import swal from 'sweetalert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArticleIcon from '@mui/icons-material/Article';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import ClearIcon from '@mui/icons-material/Clear';
 import LinearProgress from '@mui/material/LinearProgress';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
 import '../../../../App.css'
 import config from '../../../../config'
 
 const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(0.8),
-  paddingTop: theme.spacing(0.5),
-  paddingBottom: theme.spacing(0.5),
+  paddingTop: theme.spacing(1),
+  paddingBottom: theme.spacing(1),
   textAlign: 'start',
   color: '#ffffff',
 }));

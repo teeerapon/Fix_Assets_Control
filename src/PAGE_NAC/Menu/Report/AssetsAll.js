@@ -379,7 +379,7 @@ export default function Reported_of_assets() {
               width: '100%',
               textAlign: 'center',
               'backgroundColor': params.row.remarker === 'ตรวจนับแล้ว' ? '#008000' :
-                params.row.remarker === 'ยังไม่ได้ตรวจนับ' ? '#DC143C' : ' #FFA500'
+                  params.row.remarker === 'ยังไม่ได้ตรวจนับ' ? '#DC143C' : ' #FFA500'
             }}
           >
             {params.row.remarker}
