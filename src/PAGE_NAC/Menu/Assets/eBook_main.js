@@ -401,78 +401,74 @@ export default function History_of_assets() {
       });
   }, []);
 
-  if (checkUserWeb === 'null') {
-    window.location.href = '/NAC_MAIN';
-  } else {
-    return (
-      <React.Fragment>
-        <AppBar
-          position="absolute"
-          color="default"
-          elevation={0}
-          sx={{
-            position: 'relative',
-            borderBottom: (t) => `1px solid ${t.palette.divider}`,
-          }}
-        >
-          <Toolbar>
-            <AnimatedPage>
-              <Typography variant="h5" color="inherit" >
-                ทรัพย์สินทั้งหมด
-              </Typography>
-            </AnimatedPage>
-          </Toolbar>
-        </AppBar>
-        <AnimatedPage>
-          {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
-          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
-              <Box
+  return (
+    <React.Fragment>
+      <AppBar
+        position="absolute"
+        color="default"
+        elevation={0}
+        sx={{
+          position: 'relative',
+          borderBottom: (t) => `1px solid ${t.palette.divider}`,
+        }}
+      >
+        <Toolbar>
+          <AnimatedPage>
+            <Typography variant="h5" color="inherit" >
+              ทรัพย์สินทั้งหมด
+            </Typography>
+          </AnimatedPage>
+        </Toolbar>
+      </AppBar>
+      <AnimatedPage>
+        {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
+        <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+          <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
+            <Box
+              sx={{
+                height: 683,
+                width: '100%',
+              }}
+            >
+              <StripedDataGrid
                 sx={{
-                  height: 683,
-                  width: '100%',
+                  mt: 1,
+                  pl: 2,
+                  pr: 2,
+                  pt: 2,
+                  boxShadow: 1,
+                  [`& .${gridClasses.cell}`]: {
+                    py: 1,
+                  },
                 }}
-              >
-                <StripedDataGrid
-                  sx={{
-                    mt: 1,
-                    pl: 2,
-                    pr: 2,
-                    pt: 2,
-                    boxShadow: 1,
-                    [`& .${gridClasses.cell}`]: {
-                      py: 1,
-                    },
-                  }}
-                  components={{ Toolbar: GridToolbar }}
-                  componentsProps={{
-                    toolbar: {
-                      csvOptions: {
-                        utf8WithBom: true,
-                        fileName: `ทะเบียนทรัพย์สินอิเล็กทรอนิกทุกสาขา}`,
+                components={{ Toolbar: GridToolbar }}
+                componentsProps={{
+                  toolbar: {
+                    csvOptions: {
+                      utf8WithBom: true,
+                      fileName: `ทะเบียนทรัพย์สินอิเล็กทรอนิกทุกสาขา}`,
 
-                      }
                     }
-                  }}
-                  rows={dataHistory ?? []}
-                  columns={columns}
-                  getRowId={(dataHistory) => dataHistory.AssetID}
-                  pageSize={pageSize}
-                  onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                  pagination
-                  rowsPerPageOptions={[10, 20, 50, 100]}
-                  getRowHeight={() => 'auto'}
-                  // autoHeight
-                  disableColumnMenu
-                  disableSelectionOnClick
-                  {...other}
-                //checkboxSelection
-                />
-              </Box>
-            </Container>
-          </Box>
-        </AnimatedPage>
-      </React.Fragment>
-    );
-  }
+                  }
+                }}
+                rows={dataHistory ?? []}
+                columns={columns}
+                getRowId={(dataHistory) => dataHistory.AssetID}
+                pageSize={pageSize}
+                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                pagination
+                rowsPerPageOptions={[10, 20, 50, 100]}
+                getRowHeight={() => 'auto'}
+                // autoHeight
+                disableColumnMenu
+                disableSelectionOnClick
+                {...other}
+              //checkboxSelection
+              />
+            </Box>
+          </Container>
+        </Box>
+      </AnimatedPage>
+    </React.Fragment>
+  );
 }

@@ -263,47 +263,6 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     navigate('/')
   };
 
-  function PeriodEdit() {
-    navigate('/EditPeriod')
-  };
-
-  function Transection_List() {
-    navigate('/TransectionList')
-  };
-
-  function Account_BrnachAssets() {
-    navigate('/Account_BrnachAssets')
-  };
-
-  function REPORT() {
-    navigate('/Report')
-  };
-
-  function BSAssetsMain() {
-    navigate('/BSAssetsMain')
-  };
-
-  function BpcStatus() {
-    navigate('/BpcStatus')
-  }
-
-  function NAC_NAC() {
-    navigate('/NAC_CREATE_MAIN1')
-  };
-
-  function eBook_branch() {
-    navigate('/EBookBranch')
-  }
-
-  function NAC_SEALS() {
-    navigate('/NAC_SEALS_STEP1')
-  }
-
-  function DOC_NAC_ME() {
-    localStorage.removeItem("pagination");
-    navigate('/NAC_ROW')
-  }
-
   function Change_ASSETS() {
     setOpenListNAC(!openListNAC);
     if (!openListNAC === false) {
