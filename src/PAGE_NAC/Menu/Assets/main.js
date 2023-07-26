@@ -382,9 +382,18 @@ export default function History_of_assets() {
               'Accept': 'application/json'
             };
             swal("แจ้งเตือน", `เพิ่มทรัพย์สินสำเร็จ`, "success", { buttons: false, timer: 2000 }).then((value) => {
+              const bodyPermission = { Permission_TypeID: 1, userID: data.userid }
+              const permission = Axios.post(config.http + '/select_Permission_Menu_NAC', bodyPermission, { headers })
+                .then(response => response.data.data.map((res) => res.Permission_MenuID));
               Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
-                .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 1)));
-              setOpen(false);
+                .then(response => {
+                  if (permission.includes(5) === true) {
+                    setDataHistory(response.data.data.filter((res) => res.bac_status === 1))
+                  } else {
+                    setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
+                  }
+                  setOpen(false);
+                });
             })
           }
         });
@@ -502,8 +511,18 @@ export default function History_of_assets() {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
+
+    const bodyPermission = { Permission_TypeID: 1, userID: data.userid }
+    const permissionAssets = await Axios.post(config.http + '/select_Permission_Menu_NAC', bodyPermission, { headers })
+      .then(response => response.data.data.map((res) => res.Permission_MenuID));
     await Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
-      .then(response => setDataHistory(response.data.data.filter((res) => res.bac_status === 1)));
+      .then(response => {
+        if (permissionAssets.includes(5) === true) {
+          setDataHistory(response.data.data.filter((res) => res.bac_status === 1))
+        } else {
+          setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
+        }
+      });
   }, []);
 
   if (checkUserWeb === 'null') {
