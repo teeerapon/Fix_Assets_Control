@@ -2,7 +2,6 @@ import * as React from 'react';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useLocation } from "react-router";
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
@@ -30,15 +29,16 @@ import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
+import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
-import DomainAddIcon from '@mui/icons-material/DomainAdd';
+import FontDownloadIcon from '@mui/icons-material/FontDownload';
 import Axios from "axios"
 import '../../App.css'
 import config from '../../config'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { orange } from '@mui/material/colors';
 
 function stringAvatar(name) {
   return {
@@ -75,9 +75,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
   const [auth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const data = JSON.parse(localStorage.getItem('data'));
-  const checkUserWeb = localStorage.getItem('sucurity');
   const [openListNAC, setOpenListNAC] = React.useState(true);
-  const [openListPMS, setOpenListPMS] = React.useState(false);
   const [openList, setOpenList] = React.useState(false);
   const [openList2, setOpenList2] = React.useState(false);
   const [openList3, setOpenList3] = React.useState(false);
@@ -90,8 +88,25 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
   const create_nac = [
     {
       icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_CREATE_STEP1' ? null : 'none' }} />,
-      label: 'เพิ่มบัญชีทรัพย์สิน',
+      label:
+        <Stack direction="row" justifyContent="space-between" spacing={2}>
+          <Stack>เพิ่มบัญชีทรัพย์สิน</Stack>
+          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+        </Stack>
+      ,
       url: '/NAC_CREATE_STEP1',
+      permission: (permission_menuID ? permission_menuID.includes(1) : null) === true ? 1 : 0,
+      permission_branch: data.branchid === 901 ? 1 : 0
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_CHANGE_STEP1' ? null : 'none' }} />,
+      label:
+        <Stack direction="row" justifyContent="space-between" spacing={2}>
+          <Stack>เปลี่ยนแปลงรายละเอียด</Stack>
+          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+        </Stack>
+      ,
+      url: '/NAC_CHANGE_STEP1',
       permission: (permission_menuID ? permission_menuID.includes(1) : null) === true ? 1 : 0,
       permission_branch: data.branchid === 901 ? 1 : 0
     },
@@ -99,13 +114,6 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_CREATE_MAIN1' ? null : 'none' }} />,
       label: 'โยกย้ายทรัพย์สิน',
       url: '/NAC_CREATE_MAIN1'
-    },
-    {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_CHANGE_STEP1' ? null : 'none' }} />,
-      label: 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน',
-      url: '/NAC_CHANGE_STEP1',
-      permission: data.branchid === 901 ? 1 : 0,
-      permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
       icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_SEALS_STEP1' ? null : 'none' }} />,
@@ -123,30 +131,45 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const nac = [
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_ROW' ? null : 'none' }} />,
-      label: 'สถานะรายการ NAC',
-      url: '/NAC_ROW'
-    },
-    {
       icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_OPERATOR' ? null : 'none' }} />,
-      label: 'สถานะรายการ NAC ทั้งหมด',
+      label:
+        <Stack direction="row" justifyContent="space-between" spacing={2}>
+          <Stack>สถานะรายการ NAC</Stack>
+          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+        </Stack>
+      ,
       url: '/NAC_OPERATOR',
       permission: (permission_menuID ? permission_menuID.includes(2) : null) === true ? 1 : 0,
       permission_branch: data.branchid === 901 ? 1 : 0
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_ROW' ? null : 'none' }} />,
+      label: 'สถานะรายการ NAC',
+      url: '/NAC_ROW'
     },
   ]
 
   const period = [
     {
       icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/CreatePeriod' ? null : 'none' }} />,
-      label: 'เพิ่มรอบตรวจนับ',
+      label:
+        <Stack direction="row" justifyContent="space-between" spacing={2}>
+          <Stack>เพิ่มรอบตรวจนับ</Stack>
+          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+        </Stack>
+      ,
       url: '/CreatePeriod',
       permission: (permission_menuID ? permission_menuID.includes(3) : null) === true ? 1 : 0,
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
       icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/EditPeriod' ? null : 'none' }} />,
-      label: 'แก้ไขรอบตรวจนับ',
+      label:
+        <Stack direction="row" justifyContent="space-between" spacing={2}>
+          <Stack>แก้ไขรอบตรวจนับ</Stack>
+          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+        </Stack>
+      ,
       url: '/EditPeriod',
       permission: (permission_menuID ? permission_menuID.includes(4) : null) === true ? 1 : 0,
       permission_branch: data.branchid === 901 ? 1 : 0
@@ -155,6 +178,30 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const report = [
     {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/Reported_Assets_Counted' ? null : 'none' }} />,
+      label:
+        <Stack direction="row" justifyContent="space-between" spacing={2}>
+          <Stack>รายงานตรวจนับทรัพย์สิน</Stack>
+          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+        </Stack>
+      ,
+      url: '/Reported_Assets_Counted',
+      permission: (permission_menuID ? permission_menuID.includes(7) : null) === true ? 1 : 0,
+      permission_branch: data.branchid === 901 ? 1 : 0
+    },
+    {
+      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/History_of_Assets' ? null : 'none' }} />,
+      label:
+      <Stack direction="row" justifyContent="space-between" spacing={2}>
+        <Stack>ประวัติทรัพย์สิน NAC</Stack>
+        <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+      </Stack>
+    ,
+      url: '/History_of_Assets',
+      permission: (permission_menuID ? permission_menuID.includes(8) : null) === true ? 1 : 0,
+      permission_branch: data.branchid === 901 ? 1 : 0
+    },
+    {
       icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: (location.pathname === '/EBookMain' || location.pathname === '/EBookBranch') ? null : 'none' }} />,
       label: 'E-Book NAC',
       url: data.branchid === 901 ? '/EBookMain' : '/EBookBranch',
@@ -162,27 +209,13 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     },
     {
       icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: (location.pathname === '/FETCH_ASSETS' || location.pathname === '/Account_BrnachAssets') ? null : 'none' }} />,
-      label: 'ทะเบียนทรัพย์สินทั้งหมด',
+      label: 'ทะเบียนทรัพย์สิน',
       url: data.branchid === 901 ? '/FETCH_ASSETS' : '/Account_BrnachAssets',
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/Reported_Assets_Counted' ? null : 'none' }} />,
-      label: 'ตรวจนับทรัพย์สินทั้งหมด',
-      url: '/Reported_Assets_Counted',
-      permission: (permission_menuID ? permission_menuID.includes(7) : null) === true ? 1 : 0,
-      permission_branch: data.branchid === 901 ? 1 : 0
-    },
-    {
       icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/Report' ? null : 'none' }} />,
-      label: 'ตรวจนับทรัพย์สิน 1 สาขา',
+      label: 'รายงานตรวจนับทรัพย์สิน',
       url: '/Report'
-    },
-    {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/History_of_Assets' ? null : 'none' }} />,
-      label: 'ประวัติทรัพย์สินทำ NAC',
-      url: '/History_of_Assets',
-      permission: (permission_menuID ? permission_menuID.includes(8) : null) === true ? 1 : 0,
-      permission_branch: data.branchid === 901 ? 1 : 0
     },
   ]
 
@@ -466,7 +499,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
             <List>
               <ListItem component="div" disablePadding>
                 <ListItemButton
-                  // style={{ backgroundColor: openListNAC === true ? "rgba(255,255,255,0.05)" : null, }}
+                // style={{ backgroundColor: openListNAC === true ? "rgba(255,255,255,0.05)" : null, }}
                 >
                   <ListItemText
                     alignItems="flex-start"
@@ -507,7 +540,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
               <Collapse in={openList2} timeout="auto" unmountOnExit>
                 {open &&
                   create_nac.map((item) => {
-                    if (item.permission_branch === 0) {
+                    if (item.permission_branch === 0 || item.permission === 0) {
                       return null;
                     } else {
                       return (
@@ -555,7 +588,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
               <Collapse in={openList} timeout="auto" unmountOnExit>
                 {open &&
                   nac.map((item) => {
-                    if (item.permission_branch === 0) {
+                    if (item.permission_branch === 0 || item.permission === 0) {
                       return null;
                     } else {
                       return (
@@ -601,7 +634,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
               <Collapse in={openList3} timeout="auto" unmountOnExit>
                 {open &&
                   period.map((item) => {
-                    if (item.permission_branch === 0) {
+                    if (item.permission_branch === 0 || item.permission === 0) {
                       return null;
                     } else {
                       return (
@@ -649,7 +682,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
               <Collapse in={openList4} timeout="auto" unmountOnExit>
                 {open &&
                   report.map((item) => {
-                    if (item.permission_branch === 0) {
+                    if (item.permission_branch === 0 || item.permission === 0) {
                       return null;
                     } else {
                       return (
@@ -697,7 +730,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
               <Collapse in={openList5} timeout="auto" unmountOnExit>
                 {open &&
                   bpc.map((item) => {
-                    if (item.permission_branch === 0) {
+                    if (item.permission_branch === 0 || item.permission === 0) {
                       return null;
                     } else {
                       return (

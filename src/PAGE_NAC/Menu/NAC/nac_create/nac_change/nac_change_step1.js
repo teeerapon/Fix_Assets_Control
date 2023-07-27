@@ -543,9 +543,6 @@ export default function Nac_Main() {
     setAlert(false);
   };
 
-  if (checkUserWeb === 'null') {
-    window.location.href = '/NAC_MAIN';
-  } else {
     return (
       <React.Fragment>
         <Stack spacing={2} sx={{ width: '100%' }}>
@@ -1237,4 +1234,3 @@ export default function Nac_Main() {
       </React.Fragment >
     );
   }
-}

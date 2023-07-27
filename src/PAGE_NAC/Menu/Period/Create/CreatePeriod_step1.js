@@ -117,7 +117,7 @@ export default function AddressForm() {
   }
 
   const handleDateTime1 = (newValue) => {
-    setValueDateTime2(newValue.toLocaleString("sv-SE"));
+    setValueDateTime1(newValue.toLocaleString("sv-SE"));
   };
 
   const handleDateTime2 = (newValue) => {

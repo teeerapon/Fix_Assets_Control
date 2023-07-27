@@ -525,318 +525,314 @@ export default function History_of_assets() {
       });
   }, []);
 
-  if (checkUserWeb === 'null') {
-    window.location.href = '/NAC_MAIN';
-  } else {
-    return (
-      <React.Fragment>
-        <AppBar
-          position="absolute"
-          color="default"
-          elevation={0}
-          sx={{
-            position: 'relative',
-            borderBottom: (t) => `1px solid ${t.palette.divider}`,
-          }}
-        >
-          <Toolbar>
-            <AnimatedPage>
-              <Typography variant="h5" color="inherit" >
-                ทรัพย์สินทั้งหมด
-              </Typography>
-            </AnimatedPage>
-          </Toolbar>
-        </AppBar>
-        <AnimatedPage>
-          {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
-          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
-              <Grid
-                container
-                direction="row"
-                justifyContent="flex-end"
-                alignItems="center"
-                spacing={2}
-              >
-                <Grid item>
-                  <Button variant="contained" disabled={(permission_menuID ? permission_menuID.includes(6) : null) === true ? false : true} color='success' component="label">
-                    Upload XLSX
-                    <input hidden multiple type="file" onChange={fileSelected} />
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button variant="contained" color='success' disabled={(permission_menuID ? permission_menuID.includes(6) : null) === true ? false : true} onClick={handleClickOpen}>
-                    เพิ่มทรัพย์สิน
-                  </Button>
-                </Grid>
+  return (
+    <React.Fragment>
+      <AppBar
+        position="absolute"
+        color="default"
+        elevation={0}
+        sx={{
+          position: 'relative',
+          borderBottom: (t) => `1px solid ${t.palette.divider}`,
+        }}
+      >
+        <Toolbar>
+          <AnimatedPage>
+            <Typography variant="h5" color="inherit" >
+              ทรัพย์สินทั้งหมด
+            </Typography>
+          </AnimatedPage>
+        </Toolbar>
+      </AppBar>
+      <AnimatedPage>
+        {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
+        <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+          <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
+            <Grid
+              container
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="center"
+              spacing={2}
+            >
+              <Grid item>
+                <Button variant="contained" disabled={(permission_menuID ? permission_menuID.includes(6) : null) === true ? false : true} color='success' component="label">
+                  Upload XLSX
+                  <input hidden multiple type="file" onChange={fileSelected} />
+                </Button>
               </Grid>
-              <Box
+              <Grid item>
+                <Button variant="contained" color='success' disabled={(permission_menuID ? permission_menuID.includes(6) : null) === true ? false : true} onClick={handleClickOpen}>
+                  เพิ่มทรัพย์สิน
+                </Button>
+              </Grid>
+            </Grid>
+            <Box
+              sx={{
+                height: 683,
+                width: '100%',
+              }}
+            >
+              <StripedDataGrid
                 sx={{
-                  height: 683,
-                  width: '100%',
+                  mt: 1,
+                  pl: 2,
+                  pr: 2,
+                  pt: 2,
+                  boxShadow: 1,
+                  [`& .${gridClasses.cell}`]: {
+                    py: 1,
+                  },
                 }}
-              >
-                <StripedDataGrid
-                  sx={{
-                    mt: 1,
-                    pl: 2,
-                    pr: 2,
-                    pt: 2,
-                    boxShadow: 1,
-                    [`& .${gridClasses.cell}`]: {
-                      py: 1,
-                    },
-                  }}
-                  components={{ Toolbar: GridToolbar }}
-                  componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
-                  rows={dataHistory ?? []}
-                  columns={columns}
-                  getRowId={(dataHistory) => dataHistory.AssetID}
-                  pageSize={pageSize}
-                  onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                  pagination
-                  getRowHeight={() => 'auto'}
-                  rowsPerPageOptions={[10, 20, 50, 100]}
-                  autoHeight
-                  disableColumnMenu
-                  disableSelectionOnClick
-                  {...other}
-                //checkboxSelection
-                />
-              </Box>
-              <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-              >
-                <DialogTitle>
-                  <b>{"กรุณากรอกข้อมูลให้ครบถ้วน"}</b>
-                </DialogTitle>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    <Box component="form" noValidate sx={{ mt: 4, width: 300, }}>
-                      <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                          <TextField
-                            size="small"
-                            autoComplete="given-name"
-                            name="Code"
-                            value={code}
-                            onChange={(event) => handleChange_Code(event)}
-                            required
-                            fullWidth
-                            label="รหัสทรัพย์สิน"
-                            autoFocus
-                          />
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            size="small"
-                            autoComplete="given-name"
-                            name="Name"
-                            value={name}
-                            onChange={(event) => handleChange_Name(event)}
-                            required
-                            fullWidth
-                            label="ชื่อ"
-                            autoFocus
-                          />
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            size="small"
-                            autoComplete="given-name"
-                            name="branchID"
-                            value={branchID}
-                            onChange={(event) => handleChange_BranchID(event)}
-                            required
-                            fullWidth
-                            type='number'
-                            label="สาขา"
-                            autoFocus
-                          />
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            size="small"
-                            autoComplete="given-name"
-                            name="Asset_group"
-                            value={asset_group}
-                            onChange={(event) => setAsset_group(event.target.value)}
-                            required
-                            fullWidth
-                            label="Asset Group"
-                            autoFocus
-                          />
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            size="small"
-                            autoComplete="given-name"
-                            name="group_name"
-                            value={group_name}
-                            onChange={(event) => setGroup_name(event.target.value)}
-                            required
-                            fullWidth
-                            label="Group_name"
-                            autoFocus
-                          />
-                        </Grid>
-                        <Grid item xs={12}>
-                          <LocalizationProvider dateAdapter={DateAdapter}>
-                            <DatePicker
-                              label="วันที่ขึ้นทะเบียน"
-                              value={create_Date}
-                              onChange={handleChange_Ceate_Date}
-                              inputFormat="yyyy-MM-dd"
-                              renderInput={(params) =>
-                                <TextField
-                                  fullWidth
-                                  size="small"
-                                  autoComplete="family-name"
-                                  required
-                                  {...params} />}
-                            />
-                          </LocalizationProvider>
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            size="small"
-                            autoComplete="given-name"
-                            name="SerialNo"
-                            value={serialNo}
-                            onChange={(event) => handleChange_SerialNo(event)}
-                            fullWidth
-                            label="SerialNo"
-                            autoFocus
-                          />
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            size="small"
-                            autoComplete="given-name"
-                            name="Details"
-                            value={details}
-                            onChange={(event) => handleChange_Details(event)}
-                            fullWidth
-                            label="รายะลเอียดทรัพย์สิน"
-                            autoFocus
-                          />
-                        </Grid>
-                        <Grid item xs={12}>
-                          <TextField
-                            size="small"
-                            autoComplete="given-name"
-                            name="Price"
-                            value={price}
-                            onChange={(event) => handleChange_Price(event)}
-                            required
-                            fullWidth
-                            type='number'
-                            label="ราคาทุน"
-                            autoFocus
-                          />
-                        </Grid>
+                components={{ Toolbar: GridToolbar }}
+                componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
+                rows={dataHistory ?? []}
+                columns={columns}
+                getRowId={(dataHistory) => dataHistory.AssetID}
+                pageSize={pageSize}
+                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                pagination
+                getRowHeight={() => 'auto'}
+                rowsPerPageOptions={[10, 20, 50, 100]}
+                autoHeight
+                disableColumnMenu
+                disableSelectionOnClick
+                {...other}
+              //checkboxSelection
+              />
+            </Box>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle>
+                <b>{"กรุณากรอกข้อมูลให้ครบถ้วน"}</b>
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  <Box component="form" noValidate sx={{ mt: 4, width: 300, }}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <TextField
+                          size="small"
+                          autoComplete="given-name"
+                          name="Code"
+                          value={code}
+                          onChange={(event) => handleChange_Code(event)}
+                          required
+                          fullWidth
+                          label="รหัสทรัพย์สิน"
+                          autoFocus
+                        />
                       </Grid>
-                    </Box>
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleSubmit_Add} variant="contained">Submit</Button>
-                  <Button onClick={handleClose} autoFocus variant="contained" color="error">
-                    Cancel
-                  </Button>
-                </DialogActions>
-              </Dialog>
-              <Dialog
-                fullWidth
-                maxWidth='lg'
-                open={openXlsx}
-                onClose={handleCloseXlsx}
-              >
+                      <Grid item xs={12}>
+                        <TextField
+                          size="small"
+                          autoComplete="given-name"
+                          name="Name"
+                          value={name}
+                          onChange={(event) => handleChange_Name(event)}
+                          required
+                          fullWidth
+                          label="ชื่อ"
+                          autoFocus
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          size="small"
+                          autoComplete="given-name"
+                          name="branchID"
+                          value={branchID}
+                          onChange={(event) => handleChange_BranchID(event)}
+                          required
+                          fullWidth
+                          type='number'
+                          label="สาขา"
+                          autoFocus
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          size="small"
+                          autoComplete="given-name"
+                          name="Asset_group"
+                          value={asset_group}
+                          onChange={(event) => setAsset_group(event.target.value)}
+                          required
+                          fullWidth
+                          label="Asset Group"
+                          autoFocus
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          size="small"
+                          autoComplete="given-name"
+                          name="group_name"
+                          value={group_name}
+                          onChange={(event) => setGroup_name(event.target.value)}
+                          required
+                          fullWidth
+                          label="Group_name"
+                          autoFocus
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <LocalizationProvider dateAdapter={DateAdapter}>
+                          <DatePicker
+                            label="วันที่ขึ้นทะเบียน"
+                            value={create_Date}
+                            onChange={handleChange_Ceate_Date}
+                            inputFormat="yyyy-MM-dd"
+                            renderInput={(params) =>
+                              <TextField
+                                fullWidth
+                                size="small"
+                                autoComplete="family-name"
+                                required
+                                {...params} />}
+                          />
+                        </LocalizationProvider>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          size="small"
+                          autoComplete="given-name"
+                          name="SerialNo"
+                          value={serialNo}
+                          onChange={(event) => handleChange_SerialNo(event)}
+                          fullWidth
+                          label="SerialNo"
+                          autoFocus
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          size="small"
+                          autoComplete="given-name"
+                          name="Details"
+                          value={details}
+                          onChange={(event) => handleChange_Details(event)}
+                          fullWidth
+                          label="รายะลเอียดทรัพย์สิน"
+                          autoFocus
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          size="small"
+                          autoComplete="given-name"
+                          name="Price"
+                          value={price}
+                          onChange={(event) => handleChange_Price(event)}
+                          required
+                          fullWidth
+                          type='number'
+                          label="ราคาทุน"
+                          autoFocus
+                        />
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleSubmit_Add} variant="contained">Submit</Button>
+                <Button onClick={handleClose} autoFocus variant="contained" color="error">
+                  Cancel
+                </Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog
+              fullWidth
+              maxWidth='lg'
+              open={openXlsx}
+              onClose={handleCloseXlsx}
+            >
+              {
+                !arraySubmit ?
+                  <React.Fragment>
+                    <DialogTitle>
+                      ต้องการอัปโหลดไฟล์ {nameExcel} ไปที่ข้อมูลหลักใช่หรือไม่ ?
+                    </DialogTitle>
+                  </React.Fragment>
+                  :
+                  <React.Fragment>
+                    <DialogTitle>
+                      กำลังอัปโหลดข้อมูล กรุณาอย่าปิดหน้าจอนี้ !!
+                    </DialogTitle>
+                  </React.Fragment>
+              }
+              <DialogContent>
                 {
                   !arraySubmit ?
                     <React.Fragment>
-                      <DialogTitle>
-                        ต้องการอัปโหลดไฟล์ {nameExcel} ไปที่ข้อมูลหลักใช่หรือไม่ ?
-                      </DialogTitle>
+                      <StripedDataGrid
+                        sx={{
+                          mt: 1,
+                          pl: 2,
+                          pr: 2,
+                          pt: 2,
+                          boxShadow: 1,
+                          [`& .${gridClasses.cell}`]: {
+                            py: 1,
+                          },
+                        }}
+                        components={{ Toolbar: GridToolbar }}
+                        componentsProps={{
+                          toolbar: {
+                            csvOptions: {
+                              utf8WithBom: true,
+                              fileName: `ทะเบียนทรัพย์สินทั้งหมด`,
+
+                            }
+                          }
+                        }}
+                        rows={dataFile}
+                        columns={field}
+                        getRowId={(row) => row?.Code}
+                        pageSize={10}
+                        autoHeight
+                        disableColumnMenu
+                        disableSelectionOnClick
+                        {...other}
+                      />
                     </React.Fragment>
                     :
                     <React.Fragment>
-                      <DialogTitle>
-                        กำลังอัปโหลดข้อมูล กรุณาอย่าปิดหน้าจอนี้ !!
-                      </DialogTitle>
+                      <Box
+                        sx={{
+                          mt: 10,
+                          mb: 10,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <CircularProgressWithLabel value={arraySubmit} />
+                      </Box>
                     </React.Fragment>
                 }
-                <DialogContent>
-                  {
-                    !arraySubmit ?
-                      <React.Fragment>
-                        <StripedDataGrid
-                          sx={{
-                            mt: 1,
-                            pl: 2,
-                            pr: 2,
-                            pt: 2,
-                            boxShadow: 1,
-                            [`& .${gridClasses.cell}`]: {
-                              py: 1,
-                            },
-                          }}
-                          components={{ Toolbar: GridToolbar }}
-                          componentsProps={{
-                            toolbar: {
-                              csvOptions: {
-                                utf8WithBom: true,
-                                fileName: `ทะเบียนทรัพย์สินทั้งหมด`,
-
-                              }
-                            }
-                          }}
-                          rows={dataFile}
-                          columns={field}
-                          getRowId={(row) => row?.Code}
-                          pageSize={10}
-                          autoHeight
-                          disableColumnMenu
-                          disableSelectionOnClick
-                          {...other}
-                        />
-                      </React.Fragment>
-                      :
-                      <React.Fragment>
-                        <Box
-                          sx={{
-                            mt: 10,
-                            mb: 10,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <CircularProgressWithLabel value={arraySubmit} />
-                        </Box>
-                      </React.Fragment>
-                  }
-                </DialogContent>
-                {
-                  !arraySubmit ?
-                    <React.Fragment>
-                      <DialogActions>
-                        <Button onClick={handleSubmitXlsx} variant='contained'>Submit</Button>
-                        <Button onClick={handleCloseXlsx} variant='contained' color='error' autoFocus>
-                          Cancel
-                        </Button>
-                      </DialogActions>
-                    </React.Fragment>
-                    : null
-                }
-              </Dialog>
-            </Container>
-          </Box>
-        </AnimatedPage>
-      </React.Fragment>
-    );
-  }
+              </DialogContent>
+              {
+                !arraySubmit ?
+                  <React.Fragment>
+                    <DialogActions>
+                      <Button onClick={handleSubmitXlsx} variant='contained'>Submit</Button>
+                      <Button onClick={handleCloseXlsx} variant='contained' color='error' autoFocus>
+                        Cancel
+                      </Button>
+                    </DialogActions>
+                  </React.Fragment>
+                  : null
+              }
+            </Dialog>
+          </Container>
+        </Box>
+      </AnimatedPage>
+    </React.Fragment>
+  );
 }
