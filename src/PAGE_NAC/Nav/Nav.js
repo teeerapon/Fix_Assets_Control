@@ -192,11 +192,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     {
       icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/History_of_Assets' ? null : 'none' }} />,
       label:
-      <Stack direction="row" justifyContent="space-between" spacing={2}>
-        <Stack>ประวัติทรัพย์สิน NAC</Stack>
-        <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
-      </Stack>
-    ,
+        <Stack direction="row" justifyContent="space-between" spacing={2}>
+          <Stack>ประวัติทรัพย์สิน NAC</Stack>
+          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+        </Stack>
+      ,
       url: '/History_of_Assets',
       permission: (permission_menuID ? permission_menuID.includes(8) : null) === true ? 1 : 0,
       permission_branch: data.branchid === 901 ? 1 : 0
@@ -706,7 +706,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                     }
                   })}
               </Collapse>
-              {openListNAC === true && (permission_menuID ? permission_menuID.includes(13) : null) === true ?
+              {openListNAC === true && ((permission_menuID ? permission_menuID.includes(13) : null) || data.branchid !== 901) === true ?
                 <ListItem component="div" disablePadding>
                   <ListItemButton onClick={handleClickList5}>
                     <ListItemIcon>

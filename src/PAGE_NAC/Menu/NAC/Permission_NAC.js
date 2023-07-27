@@ -2,7 +2,7 @@ import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-import { useDemoData } from '@mui/x-data-grid-generator';
+import Grid from '@mui/material/Grid';
 import { DataGrid, gridClasses } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Axios from "axios"
@@ -13,6 +13,43 @@ import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import config from '../../../config'
 import swal from 'sweetalert';
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+
+
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -165,6 +202,11 @@ export default function Permission_NAC() {
   const [user, setUser] = React.useState([]);
   const [menuActive, setMenuActive] = React.useState([]);
   const [selectUser, setSelectUser] = React.useState();
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const setActive_User = async (event, params) => {
     const body = { admin: data.UserCode, UserCode: selectUser, menuid: params.row.menuid, id: event.target.id }
@@ -210,24 +252,6 @@ export default function Permission_NAC() {
   }, []);
 
   const columns_I = [
-    {
-      field: 'menuid',
-      headerName: 'ลำดับ',
-      headerClassName: 'super-app-theme--header',
-      minWidth: 100,
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      renderCell: (params) => {
-        return (
-          <React.Fragment>
-            <Typography variant="body1" gutterBottom>
-              {params.row.menuid}
-            </Typography>
-          </React.Fragment>
-        )
-      }
-    },
     {
       field: 'menu_name',
       headerName: 'ข้อความ',
@@ -312,34 +336,99 @@ export default function Permission_NAC() {
                 {...params}
               />}
           />
-          <Box
-            sx={{
-              height: 683,
-              width: '100%',
-              mb: 8
-            }}
-          >
-            <StripedDataGrid
-              sx={{
-                pl: 2,
-                pr: 2,
-                pt: 2,
-                boxShadow: 1,
-                [`& .${gridClasses.cell}`]: {
-                  py: 1,
-                },
-              }}
-              rows={menu}
-              columns={columns_I}
-              getRowId={(res) => res.menuid}
-              disableColumnMenu
-              autoHeight
-              density='compact'
-              pageSize={menu.length}
-              disableSelectionOnClick
-              {...other}
-            //checkboxSelection
-            />
+          <Box sx={{ flexGrow: 1 }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                <Tab label="ระบบอนุมัติ" {...a11yProps(0)} />
+                <Tab label="ระบบแสดงเมนูทรัพย์สิน NAC" {...a11yProps(1)} />
+                <Tab label="ระบบแสดงเมนูทรัพย์สินผู้ร่วม" {...a11yProps(2)} />
+              </Tabs>
+            </Box>
+            <CustomTabPanel value={value} index={0}>
+              <Box sx={{ width: '100%' }}>
+                <StripedDataGrid
+                  sx={{
+                    pl: 2,
+                    pr: 2,
+                    pt: 2,
+                    boxShadow: 1,
+                    [`& .${gridClasses.cell}`]: {
+                      py: 1,
+                    },
+                    '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': { py: '8px' },
+                    '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { py: '15px' },
+                    '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': { py: '22px' },
+                  }}
+                  rows={menu.filter((res) => res.menutypeid === 1)}
+                  columns={columns_I}
+                  getRowId={(res) => res.menuid}
+                  disableColumnMenu
+                  autoHeight
+                  // getRowHeight={() => 'auto'}
+                  density='compact'
+                  pageSize={menu.length}
+                  disableSelectionOnClick
+                  {...other}
+                //checkboxSelection
+                />
+              </Box>
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={1}>
+              <Box sx={{ width: '100%' }}>
+                <StripedDataGrid
+                  sx={{
+                    pl: 2,
+                    pr: 2,
+                    pt: 2,
+                    boxShadow: 1,
+                    [`& .${gridClasses.cell}`]: {
+                      py: 1,
+                    },
+                    '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': { py: '8px' },
+                    '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { py: '15px' },
+                    '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': { py: '22px' },
+                  }}
+                  rows={menu.filter((res) => res.menutypeid === 2)}
+                  columns={columns_I}
+                  getRowId={(res) => res.menuid}
+                  disableColumnMenu
+                  autoHeight
+                  density='compact'
+                  pageSize={menu.length}
+                  disableSelectionOnClick
+                  {...other}
+                //checkboxSelection
+                />
+              </Box>
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={2}>
+              <Box sx={{ width: '100%' }}>
+                <StripedDataGrid
+                  sx={{
+                    pl: 2,
+                    pr: 2,
+                    pt: 2,
+                    boxShadow: 1,
+                    [`& .${gridClasses.cell}`]: {
+                      py: 1,
+                    },
+                    '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': { py: '8px' },
+                    '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { py: '15px' },
+                    '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': { py: '22px' },
+                  }}
+                  rows={menu.filter((res) => res.menutypeid === 3)}
+                  columns={columns_I}
+                  getRowId={(res) => res.menuid}
+                  disableColumnMenu
+                  autoHeight
+                  density='compact'
+                  pageSize={menu.length}
+                  disableSelectionOnClick
+                  {...other}
+                //checkboxSelection
+                />
+              </Box>
+            </CustomTabPanel>
           </Box>
         </Container>
       </ThemeProvider>
