@@ -205,7 +205,6 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: (location.pathname === '/EBookMain' || location.pathname === '/EBookBranch') ? null : 'none' }} />,
       label: 'E-Book NAC',
       url: data.branchid === 901 ? '/EBookMain' : '/EBookBranch',
-      permission: (data.branchid !== 901 || ((permission_menuID ? permission_menuID.includes(5) : null) === true)) ? 1 : 0,
     },
     {
       icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: (location.pathname === '/FETCH_ASSETS' || location.pathname === '/Account_BrnachAssets') ? null : 'none' }} />,
