@@ -373,31 +373,31 @@ export default function Nac_Seals_Approve() {
   const result = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : elt.price;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a+b)
+    return parseFloat(a + b)
   })
-  
+
   const book_V = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.bookValue) || /^\d+$/.test(elt.bookValue)) ? parseFloat(elt.bookValue) : elt.bookValue;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a+b)
+    return parseFloat(a + b)
   })
 
   const price_seals = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.priceSeals) || /^\d+$/.test(elt.priceSeals)) ? parseFloat(elt.priceSeals) : elt.priceSeals;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a+b)
+    return parseFloat(a + b)
   })
 
   const profit_seals = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue) || /^\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue)) ? parseFloat((((elt.priceSeals * 100) / 107) - elt.bookValue)) : (((elt.priceSeals * 100) / 107) - elt.bookValue);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a+b)
+    return parseFloat(a + b)
   })
 
   const sum_vat = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test((elt.priceSeals * 100) / 107) || /^\d+$/.test((elt.priceSeals * 100) / 107)) ? parseFloat(((elt.priceSeals * 100) / 107)) : ((elt.priceSeals * 100) / 107);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a+b)
+    return parseFloat(a + b)
   })
 
 
@@ -965,7 +965,7 @@ export default function Nac_Seals_Approve() {
         if ('data' in responseDTL) {
           const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
           const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
-          const nacdtl_profit = !serviceList[i].priceSeals ? 0 - serviceList[i].bookValue : serviceList[i].priceSeals - serviceList[i].bookValue
+          const nacdtl_profit = serviceList[i].priceSeals - serviceList[i].bookValue
           const asset_id = responseDTL.data[i].nacdtl_id
           const nac_status = headers.nac_status
           await store_FA_control_updateDTL_seals({
@@ -979,11 +979,15 @@ export default function Nac_Seals_Approve() {
             asset_id,
             nacdtl_assetsCode
           });
-          swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
-          });
+          if ('data' in responseDTL && i + 1 === responseDTL.data.length) {
+            swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
+              window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code
+            });
+          }
         } else {
-          swal("ล้มเหลว", 'คำขออัปเดตรายการผิดพลาด', "error")
+          const alert_value = 'คำขออัปเดตรายการผิดพลาด'
+          setAlert(true);
+          setValueAlert(alert_value)
         }
       }
     } else {

@@ -378,31 +378,31 @@ export default function Nac_Seals_Approve() {
   const result = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : elt.price;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a+b)
+    return parseFloat(a + b)
   })
 
   const book_V = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.bookValue) || /^\d+$/.test(elt.bookValue)) ? parseFloat(elt.bookValue) : elt.bookValue;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a+b)
+    return parseFloat(a + b)
   })
 
   const price_seals = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.priceSeals) || /^\d+$/.test(elt.priceSeals)) ? parseFloat(elt.priceSeals) : elt.priceSeals;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a+b)
+    return parseFloat(a + b)
   })
 
   const profit_seals = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue) || /^\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue)) ? parseFloat((((elt.priceSeals * 100) / 107) - elt.bookValue)) : (((elt.priceSeals * 100) / 107) - elt.bookValue);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a+b)
+    return parseFloat(a + b)
   })
 
   const sum_vat = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test((elt.priceSeals * 100) / 107) || /^\d+$/.test((elt.priceSeals * 100) / 107)) ? parseFloat(((elt.priceSeals * 100) / 107)) : ((elt.priceSeals * 100) / 107);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a+b)
+    return parseFloat(a + b)
   })
 
   // สำหรับหาค่า Index ของ UserCode of Auto Complete
@@ -964,7 +964,7 @@ export default function Nac_Seals_Approve() {
     });
     if ('data' in response) {
       for (let i = 0; i < serviceList.length; i++) {
-        const dtl_id = serviceList[i].dtl_id
+        const dtl_id = serviceList[i].dtl_id === '' ? 0 : serviceList[i].dtl_id
         const nacdtl_row = i
         const nacdtl_assetsCode = serviceList[i].assetsCode
         const nacdtl_assetsName = serviceList[i].name
@@ -972,7 +972,7 @@ export default function Nac_Seals_Approve() {
         const nacdtl_assetsDtl = serviceList[i].dtl
         const nacdtl_assetsCount = serviceList[i].count
         const nacdtl_assetsPrice = serviceList[i].price
-        const asset_id = serviceList[i].asset_id
+        const asset_id = serviceList[i].asset_id === '' ? 0 : serviceList[i].asset_id
         const image_1 = serviceList[i].image_1
         const image_2 = null
         const responseDTL = await store_FA_control_update_DTL({
@@ -1007,15 +1007,17 @@ export default function Nac_Seals_Approve() {
             asset_id,
             nacdtl_assetsCode
           });
+          if ('data' in responseDTL && i + 1 === responseDTL.data.length) {
+            swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
+              window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code
+            });
+          }
         } else {
           const alert_value = 'คำขออัปเดตรายการผิดพลาด'
           setAlert(true);
           setValueAlert(alert_value)
         }
       }
-      swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-        window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code
-      });
     } else {
       const alert_value = 'กรุณาลองใหม่ภายหลัง'
       setAlert(true);
@@ -1499,10 +1501,10 @@ export default function Nac_Seals_Approve() {
               : selectNAC === 99 ? 'แนบเอกสาร ในรายการแล้ว'
                 : selectNAC === 13 ? 'ปิดรายการแล้ว' : selectNAC === 15 ? 'ตรวจสอบรายการแล้ว'
                   : 'ยืนยันเอกสารแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-              window.location.href = responseForUpdate.data[0].nac_type === 4 ? '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code :
-                (selectNAC === 12 && Real_Price < priceSeals) ? '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code + '-1' :
-                  '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code
-            });
+                    window.location.href = responseForUpdate.data[0].nac_type === 4 ? '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code :
+                      (selectNAC === 12 && Real_Price < priceSeals) ? '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code + '-1' :
+                        '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code
+                  });
           } else {
             swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
               window.location.href = responseForUpdate.data[0].nac_type === 4 ? '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code :
@@ -2075,7 +2077,7 @@ export default function Nac_Seals_Approve() {
                           <TableBody>
                             <StyledTableRow>
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                {(selectNAC === 1 && data.UserCode === headers.create_by) ? (
+                                {(selectNAC === 1) ? (
                                   <React.Fragment>
                                     <Autocomplete
                                       freeSolo
