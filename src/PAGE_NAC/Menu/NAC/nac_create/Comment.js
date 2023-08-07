@@ -348,7 +348,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
               <Paper>
                 <Card>
                   <CardHeader
-                    title='เอกสารแนบ'
+                    title={(<Typography className='font-399-main font-vsm font-md text-center'>เอกสารแนบ</Typography>)}
                     titleTypographyProps={{ align: 'center' }}
                     subheaderTypographyProps={{
                       align: 'center',
@@ -424,7 +424,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                       onClick={handleClickOpenDialog}
                       startIcon={<ChatIcon style={{ 'color': 'white' }} />}
                     >
-                      <Typography variant='h6' style={{ 'color': 'white' }}>แนบลิ้งเอกสาร</Typography>
+                      <Typography className='font-399-main font-vsm font-md text-center' style={{ 'color': 'white' }}>แนบลิ้งเอกสาร</Typography>
                     </Button>
                   </CardActions>
                 </Card>
@@ -439,7 +439,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
               <Paper>
                 <Card>
                   <CardHeader
-                    title='ช่องแสดงความคิดเห็น'
+                    title={(<Typography className='font-399-main font-vsm font-md text-center'>ช่องแสดงความคิดเห็น</Typography>)}
                     titleTypographyProps={{ align: 'center' }}
                     subheaderTypographyProps={{
                       align: 'center',
@@ -468,8 +468,8 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                               <Avatar {...stringAvatar(res.userid)} />
                             </ListItemAvatar>
                             <ListItemText
-                              primary={<Typography variant="subtitle2" style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : null }}>{`${res.userid} (${(res.create_date).split('T')[0]}  ${(res.create_date).split('T')[1].split('.')[0].split(':')[0]}:${(res.create_date).split('T')[1].split('.')[0].split(':')[1]})`}</Typography>}
-                              secondary={<Typography variant="body2" style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : 'rgb(92,92,92)' }}>{res.comment}</Typography>}
+                              primary={<Typography className='font-399-seconds font-vsm-vsm font-md-sm' style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : null }}>{`${res.userid} (${(res.create_date).split('T')[0]}  ${(res.create_date).split('T')[1].split('.')[0].split(':')[0]}:${(res.create_date).split('T')[1].split('.')[0].split(':')[1]})`}</Typography>}
+                              secondary={<Typography className='font-399-seconds font-vsm-vsm font-md-sm' style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : 'rgb(92,92,92)' }}>{res.comment}</Typography>}
                             />
                           </ListItem>
                         </CardContent>
@@ -501,7 +501,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                       onClick={handleSubmitComment}
                       startIcon={<ChatIcon style={{ 'color': !comment ? 'rgb(200,200,200)' : 'white' }} />}
                     >
-                      <Typography variant='h6' style={{ 'color': !comment ? 'rgb(200,200,200)' : 'white' }}>แสดงความคิดเห็น</Typography>
+                      <Typography className='font-399-main font-vsm font-md text-center' style={{ 'color': !comment ? 'rgb(200,200,200)' : 'white' }}>แสดงความคิดเห็น</Typography>
                     </Button>
                   </CardActions>
                 </Card>

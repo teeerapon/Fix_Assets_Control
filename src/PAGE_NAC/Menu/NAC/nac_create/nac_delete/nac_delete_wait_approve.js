@@ -4,7 +4,6 @@ import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
@@ -17,10 +16,8 @@ import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import TableBody from '@mui/material/TableBody';
-import FormGroup from '@mui/material/FormGroup';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
-import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
@@ -28,246 +25,91 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import DatePicker from '@mui/lab/DatePicker';
+import { Outlet, useNavigate } from "react-router";
 import Box from '@mui/material/Box';
 import Axios from "axios"
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import Autocomplete from '@mui/material/Autocomplete';
 import swal from 'sweetalert';
-import { Outlet, useNavigate } from "react-router";
-import CommentNAC from '../Comment'
+import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
+import logoPure from '../../../../../image/Picture1.png'
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import '../../../../../App.css'
+import config from '../../../../../config'
+import dayjs from 'dayjs';
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import CircularProgress from '@mui/material/CircularProgress';
+import Tooltip from '@mui/material/Tooltip';
+import FilePresentIcon from '@mui/icons-material/FilePresent';
+import ClearIcon from '@mui/icons-material/Clear';
+import PropTypes from 'prop-types';
+import { NumericFormat } from 'react-number-format';
+import Card from '@mui/material/Card';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import CircularProgress from '@mui/material/CircularProgress';
-import SystemUpdateAltRoundedIcon from '@mui/icons-material/SystemUpdateAltRounded';
-import DoubleArrowRoundedIcon from '@mui/icons-material/DoubleArrowRounded';
-import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import ReplyAllRoundedIcon from '@mui/icons-material/ReplyAllRounded';
-import CloudDownloadRoundedIcon from '@mui/icons-material/CloudDownloadRounded';
-import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
-import logoPure from '../../../../../image/Picture1.png'
-import SummarizeIcon from '@mui/icons-material/Summarize';
-import Card from '@mui/material/Card';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
 import DialogContentText from '@mui/material/DialogContentText';
-import Tooltip from '@mui/material/Tooltip';
-import FilePresentIcon from '@mui/icons-material/FilePresent';
-import ClearIcon from '@mui/icons-material/Clear';
-import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
-import { CSVLink } from 'react-csv'
-import '../../../../../App.css'
-import config from '../../../../../config.js'
+import CommentNAC from '../Comment'
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'ptec@pure © '}
-      <Link color="inherit">
-        Create NAC
-      </Link>{' '}
-      {new Date().getFullYear()}
-    </Typography>
-  );
-}
 const theme = createTheme();
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.action.selected,
     color: theme.palette.common.black,
+    padding: 0,
+    border: '1px solid',
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+    backgroundColor: theme.palette.action.white,
+    color: theme.palette.common.black,
+    padding: 0,
+    border: '1px solid',
   },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.white,
+    color: theme.palette.common.black,
+    padding: 0,
+    border: '1px solid',
   },
-  // hide last border
 }));
 
-async function store_FA_control_select_dtl(credentials) {
-  return fetch(config.http + '/store_FA_control_select_dtl', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
+const NumericFormatCustom = React.forwardRef(function NumericFormatCustom(
+  props,
+  ref,
+) {
+  const { onChange, ...other } = props;
 
-async function store_FA_control_select_headers(credentials) {
-  return fetch(config.http + '/store_FA_control_select_headers', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-async function SelectDTL_Control(credentials) {
-  return fetch(config.http + '/SelectDTL_Control', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-async function SelectAssetsControl(credentials) {
-  return fetch(config.http + '/AssetsAll_Control', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-async function AutoDeapartMent(credentials) {
-  return fetch(config.http + '/AutoDeapartMent', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-const filterOptions = createFilterOptions({
-  stringify: (option) => option.Code,
+  return (
+    <NumericFormat
+      {...other}
+      getInputRef={ref}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      valueIsNumericString
+      decimalScale={3}
+    />
+  );
 });
 
-const filterOptions2 = createFilterOptions({
-  stringify: (option) => option.UserCode,
-});
-
-async function store_FA_control_update_DTLandHeaders(credentials) {
-  return fetch(config.http + '/store_FA_control_update_DTLandHeaders', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-async function store_FA_control_update_DTL(credentials) {
-  return fetch(config.http + '/store_FA_control_update_DTL', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-async function store_FA_control_execDocID(credentials) {
-  return fetch(config.http + '/store_FA_control_execDocID', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-async function store_FA_control_updateStatus(credentials) {
-  return fetch(config.http + '/store_FA_control_updateStatus', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-// async function store_FA_control_seals_update(credentials) {
-//   return fetch(config.http + '/store_FA_control_seals_update', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json; charset=utf-8',
-//       'Accept': 'application/json'
-//     },
-//     body: JSON.stringify(credentials)
-//   })
-//     .then(data => data.json())
-// }
-
-async function store_FA_control_updateDTL_seals(credentials) {
-  return fetch(config.http + '/store_FA_control_updateDTL_seals', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
+NumericFormatCustom.propTypes = {
+  name: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
 
 async function store_FA_control_comment(credentials) {
   return fetch(config.http + '/store_FA_control_comment', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-async function store_FA_control_CheckAssetCode_Process(credentials) {
-  return fetch(config.http + '/store_FA_control_CheckAssetCode_Process', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-async function stroe_FA_control_DTL_ConfirmSuccess(credentials) {
-  return fetch(config.http + '/stroe_FA_control_DTL_ConfirmSuccess', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-async function store_FA_control_upadate_table(credentials) {
-  return fetch(config.http + '/store_FA_control_upadate_table', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -290,154 +132,325 @@ async function store_FA_SendMail(credentials) {
     .then(data => data.json())
 }
 
-async function store_FA_control_drop_NAC(credentials) {
-  return fetch(config.http + '/store_FA_control_drop_NAC', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
 
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
-export default function Nac_Seals_Approve() {
+export default function Nac_Main() {
 
   // ใช้สำหรับสร้างเวลาปัจจุบัน
-  const d = new Date();
-  const year = (d.getFullYear()).toString();
-  const month = ((d.getMonth()) + 101).toString().slice(-2);
-  const date = ((d.getDate()) + 100).toString().slice(-2);
-  const hours = ((d.getHours()) + 100).toString().slice(-2);
-  const mins = ((d.getMinutes()) + 100).toString().slice(-2);
-  const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
-  const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
-  const [permission_menuID, setPermission_menuID] = React.useState();
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+  var dateNow = (dayjs().utc().local().format()).split('+')[0]
 
+  //dialog
+  const [openDialogReply, setOpenDialogReply] = React.useState(false);
+  const [commentReply, setCommentReply] = React.useState();
+  const [drop_NAC_byDes, setDrop_NAC_byDes] = React.useState(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [description, setDescription] = React.useState();
+
+  // routes
   const data = JSON.parse(localStorage.getItem('data'));
-  const [nameSource, setNmaeSource] = React.useState();
+  const permission_MenuID = JSON.parse(localStorage.getItem('permission_MenuID'));
+  const navigate = useNavigate();
+  const queryString = window.location.search;
+  const nac_code = queryString.split('?')[1]
+
+  //const
+  const [users, setUsers] = React.useState([]);
+  const [dataAssets, setDataAssets] = React.useState([]);
+  const [sourceName, setSourceName] = React.useState();
+  const [sourceLastName, setSourceLastName] = React.useState();
+  const [desName, setDesName] = React.useState();
+  const [desLastName, setDesLastName] = React.useState();
   const [TooltipImage_1, setTooltipImage_1] = React.useState();
+  const [approveData, setApproveData] = React.useState();
+
+  const [sendHeader, setSendHeader] = React.useState([{
+    usercode: data.UserCode,
+    worktype: 4,
+    create_by: null,
+    nac_code: null,
+    nac_status: null,
+    nac_type: null,
+    source_date: null,
+    status_name: null,
+    //ผู้อนุมัติ
+    verify_by_userid: null,
+    verify_date: null,
+    source_approve: null,
+    source_approve_date: null,
+    account_aprrove_id: null,
+    finance_aprrove_id: null,
+    // ผู้รับ
+    source_department: null,
+    source_BU: null,
+    source: null,
+    nameSource: `${sourceName} ${sourceLastName}`,
+    sourceDate: dateNow,
+    source_description: null,
+    // ผู้รับ
+    des_Department: null,
+    des_BU: null,
+    des_delivery: null,
+    nameDes: `${desName} ${desLastName}`,
+    des_deliveryDate: null,
+    des_Description: null,
+
+    sumPrice: null,
+    real_price: null,
+    realPrice_Date: null,
+
+  }]);
+
+  const [serviceList, setServiceList] = React.useState([{
+    dtl_id: null,
+    assetsCode: null,
+    serialNo: null,
+    name: null,
+    date_asset: null,
+    price: null,
+    bookValue: null,
+    priceSeals: 0,
+    profit: null,
+    asset_id: null,
+    image_1: null,
+  }]);
+
+  const result = serviceList.map(function (elt) {
+    return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ?
+      parseFloat(elt.price) : parseFloat(elt.price);
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+  const book_V = serviceList.map(function (elt) {
+    return (/^\d+\.\d+$/.test(elt.bookValue) || /^\d+$/.test(elt.bookValue)) ?
+      parseFloat(elt.bookValue) : parseFloat(elt.bookValue);
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+
+  const price_seals = serviceList.map(function (elt) {
+    return (/^\d+\.\d+$/.test(elt.priceSeals) || /^\d+$/.test(elt.priceSeals)) ?
+      parseFloat(elt.priceSeals) : parseFloat(elt.priceSeals);
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+
+  const profit_seals = serviceList.map(function (elt) {
+    return (/^\d+\.\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue) || /^\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue)) ?
+      parseFloat(((elt.priceSeals * 100) / 107) - elt.bookValue) : parseFloat(((elt.priceSeals * 100) / 107) - elt.bookValue);
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+
+  const sum_vat = serviceList.map(function (elt) {
+    return (/^\d+\.\d+$/.test((elt.priceSeals * 100) / 107) || /^\d+$/.test((elt.priceSeals * 100) / 107)) ?
+      parseFloat((elt.priceSeals * 100) / 107) : parseFloat((elt.priceSeals * 100) / 107);
+  }).reduce(function (a, b) { // sum all resulting numbers
+    return a + b
+  })
+
 
   React.useEffect(async () => {
-    // POST request using axios with set headers
-    const body = { Permission_TypeID: 1, userID: data.userid }
+
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    await Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers })
-      .then(response => {
-        setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
-      });
-  }, []);
 
-  const navigate = useNavigate();
-  const [serviceList, setServiceList] = React.useState([{ dtl_id: "", assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "", image_1: "" }]);
-  const dataDepID = data.depid
-  const [users_pureDep, setUsers_pureDep] = React.useState([]);
-  const queryString = window.location.search;
-  const nac_code = queryString.split('?')[1]
-  const [nac_status, setNac_status] = React.useState();
-  const [selectNAC, setSelectNAC] = React.useState();
-  const [headers, setHeaders] = React.useState([]);
-  const [openDialog, setOpenDialog] = React.useState(false);
-  const [openDialogReply, setOpenDialogReply] = React.useState(false);
-  const [commentReply, setCommentReply] = React.useState();
-  const [UserForAssetsControl, setUserForAssetsControl] = React.useState([]);
-  const [AllAssetsControl, setAllAssetsControl] = React.useState([]);
-  const [alert, setAlert] = React.useState(false);
-  const [valueAlert, setValueAlert] = React.useState(false);
-  const [exportToExcel, setExportToExcel] = React.useState([]);
+    // แสดง users ทั้งหมด
+    await Axios.get(config.http + '/getsUserForAssetsControl', { headers })
+      .then((res) => {
+        setUsers(res.data.data)
+      })
 
-  const [ExamineApprove, setExamineApprove] = React.useState([]);
-  const [ExecApprove, setExecApprove] = React.useState([]);
-  const [CheckApprove, setCheckApprove] = React.useState([]);
-  const [CheckExamineApprove, setCheckExamineApprove] = React.useState([]);
-  //const [CheckExamineApproveDes, setCheckExamineApproveDes] = React.useState([]);
-  //const [ExamineApproveDes, setExamineApproveDes] = React.useState([]);
-  const [checked, setChecked] = React.useState([{ assets_code: "", statusCheck: "", asset_id: "" }]);
-  const [description, setDescription] = React.useState();
-  const checkUserWeb = localStorage.getItem('sucurity');
-  const [valuesVisibility, setValuesVisibility] = React.useState({
-    text: serviceList[0].price,
-    showText: data.branchid === 901 ? true : false,
-  });
+    // รหัสทรัพย์สินทั้งหมด
+    await Axios.post(config.http + '/AssetsAll_Control', { BranchID: data.branchid }, { headers })
+      .then((res) => {
+        setDataAssets(res.data.data)
+      })
 
-  const [drop_NAC_byDes, setDrop_NAC_byDes] = React.useState(false);
+    // กำหนด Headers
+    await Axios.post(config.http + '/store_FA_control_select_headers', { nac_code: nac_code }, { headers })
+      .then((res) => {
 
-  const result = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : elt.price;
-  }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a + b)
-  })
+        const listHeader = [...sendHeader]
+        listHeader[0]['source'] = res.data.data[0].source_userid
+        listHeader[0]['source_department'] = res.data.data[0].source_dep_owner
+        listHeader[0]['source_BU'] = res.data.data[0].source_bu_owner
+        listHeader[0]['sumPrice'] = res.data.data[0].sum_price
+        listHeader[0]['nameSource'] = res.data.data[0].source_name
+        listHeader[0]['sourceDate'] = res.data.data[0].source_date
+        listHeader[0]['source_description'] = res.data.data[0].source_remark
+        listHeader[0]['create_by'] = res.data.data[0].create_by
+        listHeader[0]['verify_by_userid'] = res.data.data[0].verify_by_userid
+        listHeader[0]['verify_date'] = res.data.data[0].verify_date
+        listHeader[0]['source_approve'] = res.data.data[0].source_approve_userid
+        listHeader[0]['source_approve_date'] = res.data.data[0].source_approve_date
+        listHeader[0]['account_aprrove_id'] = res.data.data[0].account_aprrove_id
+        listHeader[0]['finance_aprrove_id'] = res.data.data[0].finance_aprrove_id
+        listHeader[0]['nac_code'] = res.data.data[0].nac_code
+        listHeader[0]['nac_status'] = res.data.data[0].nac_status
+        listHeader[0]['nac_type'] = res.data.data[0].nac_type
+        listHeader[0]['source_date'] = res.data.data[0].source_date
+        listHeader[0]['real_price'] = res.data.data[0].real_price
+        listHeader[0]['realPrice_Date'] = res.data.data[0].realPrice_Date
+        listHeader[0]['status_name'] = res.data.data[0].status_name
+        setSendHeader(listHeader)
+        setSourceName(res.data.data[0].source_name.split(' ')[0] ?? null)
+        setSourceLastName(res.data.data[0].source_name.split(' ')[1] ?? null)
+        // setDesName(res.data.data[0].des_name.split(' ')[0] ?? null)
+        // setDesLastName(res.data.data[0].des_name.split(' ')[1] ?? null)
+      })
 
-  const book_V = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.bookValue) || /^\d+$/.test(elt.bookValue)) ? parseFloat(elt.bookValue) : elt.bookValue;
-  }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a + b)
-  })
+    // กำหนด DTL
+    await Axios.post(config.http + '/store_FA_control_select_dtl', { nac_code: nac_code }, { headers })
+      .then((res) => {
 
-  const price_seals = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(elt.priceSeals) || /^\d+$/.test(elt.priceSeals)) ? parseFloat(elt.priceSeals) : elt.priceSeals;
-  }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a + b)
-  })
+        setServiceList(res.data.data.map((resData) => {
+          return {
+            dtl_id: resData.nacdtl_id
+            , assetsCode: resData.nacdtl_assetsCode
+            , serialNo: resData.nacdtl_assetsSeria
+            , name: resData.nacdtl_assetsName
+            , price: resData.nacdtl_assetsPrice
+            , asset_id: resData.nacdtl_id
+            , bookValue: resData.nacdtl_bookV === 0 ? null : resData.nacdtl_bookV
+            , priceSeals: resData.nacdtl_PriceSeals
+            , profit: resData.nacdtl_profit
+            , date_asset: resData.nacdtl_date_asset
+            , image_1: resData.nacdtl_image_1 ?? null
+            , image_2: resData.nacdtl_image_2 ?? null
+          };
+        }))
+      })
 
-  const profit_seals = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue) || /^\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue)) ? parseFloat((((elt.priceSeals * 100) / 107) - elt.bookValue)) : (((elt.priceSeals * 100) / 107) - elt.bookValue);
-  }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a + b)
-  })
+    // ผู้้อนุมัติ + ผู้ตรวจสอบ
+    await Axios.post(config.http + '/store_FA_control_execDocID', { user_source: sendHeader[0].source, nac_code: nac_code, }, { headers })
+      .then((res) => {
+        setApproveData(res.data.data);
+      })
+  }, [])
 
-  const sum_vat = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test((elt.priceSeals * 100) / 107) || /^\d+$/.test((elt.priceSeals * 100) / 107)) ? parseFloat(((elt.priceSeals * 100) / 107)) : ((elt.priceSeals * 100) / 107);
-  }).reduce(function (a, b) { // sum all resulting numbers
-    return parseFloat(a + b)
-  })
+  const handleService_Source = (e) => {
 
+    if (!e.target.innerText) {
+      const listHeader = [...sendHeader]
+      listHeader[0]['source'] = null
+      listHeader[0]['source_department'] = null
+      listHeader[0]['source_BU'] = null
+      setSendHeader(listHeader)
+    } else {
+      const listHeader = [...sendHeader]
+      listHeader[0]['source'] = e.target.innerText
+      listHeader[0]['source_department'] = users.filter((res) => res.UserCode === e.target.innerText)[0].DepCode
+      listHeader[0]['source_BU'] = users.filter((res) => res.UserCode === e.target.innerText)[0].BranchID === 901 ? `Center` : `Oil`
+      setSendHeader(listHeader)
+    }
 
-  // สำหรับหาค่า Index ของ UserCode of Auto Complete
-  let resultIndex = []
-  for (let i = 0; i < UserForAssetsControl.length; i++) {
-    resultIndex[i] = UserForAssetsControl[i].UserCode;
   }
-  resultIndex = [resultIndex]
 
-  // สำหรับหาค่า Index ของ AssetsCode of Auto Complete
-  let resultIndexAssets = []
-  for (let i = 0; i < AllAssetsControl.length; i++) {
-    resultIndexAssets[i] = AllAssetsControl[i].Code;
+  const handleSendDate = (newValue) => {
+    const listHeader = [...sendHeader]
+    listHeader[0]['sourceDate'] = newValue.toLocaleString("sv-SE")
+    setSendHeader(listHeader)
+  };
+
+  const handleService_SourceDescription = (e) => {
+    const listHeader = [...sendHeader]
+    listHeader[0]['source_description'] = e.target.value
+    setSendHeader(listHeader)
   }
-  resultIndexAssets = [resultIndexAssets]
 
-  // ส่วนของผู้รับ
-  const [des_department, setDes_Department] = React.useState();
-  const [des_BU, setDes_BU] = React.useState();
-  const [des_delivery, setDes_delivery] = React.useState();
-  const [des_deliveryDate, setDes_deliveryDate] = React.useState();
-  const [des_deliveryApprove, setDes_deliveryApprove] = React.useState('');
-  const [des_deliveryApproveDate, setDes_deliveryApproveDate] = React.useState();
-  const [des_description, setDes_Description] = React.useState();
+  const handleService_RealPrice = (e) => {
+    const listHeader = [...sendHeader]
+    listHeader[0]['real_price'] = e.target.value
+    setSendHeader(listHeader)
+  }
 
-  // ส่วนของผู้ส่ง
-  const [source_department, setSource_Department] = React.useState();
-  const [source_BU, setSource_BU] = React.useState();
-  const [source, setSource] = React.useState();
-  const [sourceDate, setSourceDate] = React.useState();
-  const [sourceApprove, setSource_Approve] = React.useState('');
-  const [sourceDateApproveDate, setSource_DateApproveDate] = React.useState();
-  const [source_description, setSource_Description] = React.useState();
+  const handleService_RealPriceDate = (newValue) => {
+    const listHeader = [...sendHeader]
+    listHeader[0]['realPrice_Date'] = newValue.toLocaleString("sv-SE")
+    setSendHeader(listHeader)
+  }
 
-  // ส่วนของผู้อนุมัตื
-  const [bossApprove, setBossApprove] = React.useState('');
-  const [bossApproveDate, setBossApproveDate] = React.useState();
-  const [verify, setVerifyApprove] = React.useState('');
-  const [verifyApproveDate, setVerifyApproveDate] = React.useState();
+  const handleServiceAdd = () => {
+    setServiceList([...serviceList, {
+      dtl_id: null,
+      assetsCode: null,
+      serialNo: null,
+      name: null,
+      date_asset: null,
+      price: null,
+      bookValue: null,
+      priceSeals: 0,
+      profit: null,
+      asset_id: null,
+      image_1: null,
+      image_2: null
+    }]);
+  };
+
+  const handleServiceRemove = (index) => {
+    const list = [...serviceList];
+    list.splice(index, 1);
+    setServiceList(list);
+  };
+
+  const handleServiceChange = (e, index) => {
+
+    const { name, value } = e.target;
+    const list = [...serviceList];
+    list[index][name] = value;
+    list[index]['dtl_id'] = -1;
+    setServiceList(list);
+  };
+
+  const handleServiceChangeHeader = async (e, index) => {
+    const nacdtl_assetsCode = { nacdtl_assetsCode: e.target.innerText }
+    const Code = { Code: e.target.innerText }
+    const list = [...serviceList];
+
+    if (e.target.innerText) {
+      await Axios.post(config.http + '/store_FA_control_CheckAssetCode_Process', nacdtl_assetsCode, config.headers)
+        .then(async (res) => {
+          if (res.data.data[0].checkProcess === 'false') {
+            swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "error")
+          } else {
+            await Axios.post(config.http + '/SelectDTL_Control', Code, config.headers)
+              .then((response) => {
+                if (response.data.data.length > 0) {
+                  list[index]['assetsCode'] = e.target.innerText
+                  list[index]['name'] = response.data.data[0].Name
+                  list[index]['dtl'] = response.data.data[0].Details
+                  list[index]['count'] = 1
+                  list[index]['serialNo'] = response.data.data[0].SerialNo
+                  list[index]['price'] = response.data.data[0].Price
+                  list[index]['date_asset'] = response.data.data[0].CreateDate
+                  setServiceList(list);
+                }
+              })
+          }
+        })
+    } else {
+      const list = [...serviceList];
+      list[index]['assetsCode'] = null
+      list[index]['name'] = null
+      list[index]['dtl'] = null
+      list[index]['count'] = null
+      list[index]['serialNo'] = null
+      list[index]['price'] = null
+      list[index]['bookValue'] = null
+      list[index]['priceSeals'] = null
+      list[index]['profit'] = null
+      list[index]['date_asset'] = null
+      setServiceList(list);
+    }
+  };
+
+  const Export_PDF_DATA_NAC = () => {
+    window.location.href = 'http://ptecdba:10250/OPS/reports/nac_sale.aspx?nac_code=' + sendHeader[0].nac_code
+  }
 
   const handleUploadFile_1 = async (e, index) => {
     e.preventDefault();
@@ -456,38 +469,24 @@ export default function Nac_Seals_Approve() {
       await Axios.post(config.http + "/check_files_NewNAC", formData_1, { headers })
         .then(async (res) => {
           const list = [...serviceList];
-          list[index]['image_1'] = 'http://vpnptec.dyndns.org:33080/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
+          list[index]['image_1'] = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
           setTooltipImage_1(e.target.files[0].name)
           setServiceList(list)
-
-          const usercode = data.UserCode
-          const dtl_id = list[index].dtl_id
-          const nacdtl_row = index
-          const nacdtl_assetsCode = list[index].assetsCode
-          const nacdtl_assetsName = list[index].name
-          const nacdtl_assetsSeria = list[index].serialNo
-          const nacdtl_assetsDtl = list[index].dtl
-          const nacdtl_assetsCount = list[index].count
-          const nacdtl_assetsPrice = list[index].price
-          const asset_id = list[index].asset_id
-          const image_1 = list[index].image_1
-          const image_2 = null
-          await store_FA_control_update_DTL({
-            dtl_id,
-            usercode,
-            nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
-            nacdtl_row,
-            nacdtl_assetsCode,
-            nacdtl_assetsName,
-            nacdtl_assetsSeria,
-            nacdtl_assetsDtl,
-            nacdtl_assetsCount,
-            nacdtl_assetsPrice,
-            asset_id,
-            image_1,
-            image_2
-          });
-
+          const req = {
+            usercode: data.UserCode,
+            dtl_id: list[index].dtl_id,
+            nacdtl_row: index,
+            nacdtl_assetsCode: list[index].assetsCode,
+            nacdtl_assetsName: list[index].name,
+            nacdtl_assetsSeria: list[index].serialNo,
+            nacdtl_assetsDtl: list[index].dtl,
+            nacdtl_assetsCount: list[index].count,
+            nacdtl_assetsPrice: list[index].price,
+            asset_id: list[index].asset_id,
+            image_1: list[index].image_1,
+            image_2: null,
+          }
+          await Axios.post(config.http + "/store_FA_control_update_DTL", req, config.headers)
         });
 
     } else {
@@ -503,228 +502,461 @@ export default function Nac_Seals_Approve() {
     setServiceList(list)
     setTooltipImage_1(null)
 
-    const usercode = data.UserCode
-    const dtl_id = list[index].dtl_id
-    const nacdtl_row = index
-    const nacdtl_assetsCode = list[index].assetsCode
-    const nacdtl_assetsName = list[index].name
-    const nacdtl_assetsSeria = list[index].serialNo
-    const nacdtl_assetsDtl = list[index].dtl
-    const nacdtl_assetsCount = list[index].count
-    const nacdtl_assetsPrice = list[index].price
-    const asset_id = list[index].asset_id
-    const image_1 = list[index].image_1
-    const image_2 = null
-    await store_FA_control_update_DTL({
-      dtl_id,
-      usercode,
-      nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
-      nacdtl_row,
-      nacdtl_assetsCode,
-      nacdtl_assetsName,
-      nacdtl_assetsSeria,
-      nacdtl_assetsDtl,
-      nacdtl_assetsCount,
-      nacdtl_assetsPrice,
-      asset_id,
-      image_1,
-      image_2
-    });
+    const req = {
+      usercode: data.UserCode,
+      dtl_id: list[index].dtl_id,
+      nacdtl_row: index,
+      nacdtl_assetsCode: list[index].assetsCode,
+      nacdtl_assetsName: list[index].name,
+      nacdtl_assetsSeria: list[index].serialNo,
+      nacdtl_assetsDtl: list[index].dtl,
+      nacdtl_assetsCount: list[index].count,
+      nacdtl_assetsPrice: list[index].price,
+      asset_id: list[index].asset_id,
+      image_1: list[index]['image_1'],
+      image_2: null,
+    }
+    await Axios.post(config.http + "/store_FA_control_update_DTL", req, config.headers)
   }
 
+  const handleUpdateNAC = async () => {
+    await Axios.post(config.http + "/store_FA_control_update_DTLandHeaders", sendHeader[0], config.headers)
+      .then(async (res) => {
+        if (res.data.data) {
+          for (let i = 0; i < serviceList.length; i++) {
+            const reqII = {
+              dtl_id: !serviceList[i].dtl_id ? 0 : serviceList[i].dtl_id,
+              usercode: data.UserCode,
+              nac_code: nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
+              nacdtl_row: i,
+              nacdtl_assetsCode: serviceList[i].assetsCode,
+              nacdtl_assetsName: serviceList[i].name,
+              nacdtl_assetsSeria: serviceList[i].serialNo,
+              nacdtl_assetsPrice: serviceList[i].price,
+              asset_id: !serviceList[i].asset_id ? 0 : serviceList[i].asset_id,
+              image_1: serviceList[i].image_1,
+              image_2: null,
+            }
+            await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
+              .then(async (resII) => {
+                if (resII.data.data) {
+                  const detail_reqII = {
+                    usercode: data.UserCode,
+                    nac_code: res.data.data[0].nac_code,
+                    nac_type: sendHeader[0].worktype,
+                    nacdtl_bookV: serviceList[i].bookValue,
+                    nacdtl_PriceSeals: serviceList[i].priceSeals,
+                    nacdtl_profit: serviceList[i].profit,
+                    asset_id: resII.data.data[0].nacdtl_id,
+                    nac_status: 1,
+                    nacdtl_assetsCode: serviceList[i].assetsCode
+                  }
+                  await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
+                    .then((resIII) => {
+                      if (resIII.data.data && i + 1 === serviceList.length) {
+                        swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
+                          window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
+                        });
+                      }
+                    })
+                }
+              })
+          }
+        }
+      })
+  }
 
-  const handleOpen_drop_NAC_byDes = () => {
-    setDrop_NAC_byDes(true);
+  const handleSubmit_To_BookValue = async () => {
+    if (!sendHeader[0].source || !sourceName || !sourceLastName) {
+      swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
+    } else if ((serviceList.filter((res) => !res.assetsCode)[0]) !== undefined) {
+      swal("แจ้งเตือน", 'กรุณาระบุข้อมูลทรัพย์สินให้ครบ', "error")
+    } else if ((serviceList.filter((res) => !res.image_1)[0]) !== undefined) {
+      swal("แจ้งเตือน", 'กรุณาใส่รูปภาพทรัพย์สิน', "error")
+    }
+    else {
+      // รอใส่เงือนไข
+      const reqUpdateStatus = {
+        usercode: data.UserCode,
+        nac_code: nac_code,
+        nac_status: 11,
+        nac_type: sendHeader[0].nac_type,
+        source: sendHeader[0].source,
+        sourceDate: sendHeader[0].sourceDate,
+        des_delivery: sendHeader[0].des_delivery,
+        des_deliveryDate: sendHeader[0].des_deliveryDate,
+        des_approve: sendHeader[0].des_approve,
+        des_approve_date: sendHeader[0].des_approve_date,
+        real_price: sendHeader[0].real_price,
+        realPrice_Date: sendHeader[0].realPrice_Date,
+        verify_by: sendHeader[0].verify_by,
+        verify_date: sendHeader[0].verify_date,
+        source_approve: sendHeader[0].source_approve,
+        source_approve_date: sendHeader[0].source_approve_date,
+      }
+      await Axios.post(config.http + '/store_FA_control_updateStatus', reqUpdateStatus, config.headers)
+        .then(async (res) => {
+          if (res.data.data) {
+            for (let i = 0; i < serviceList.length; i++) {
+              const reqII = {
+                dtl_id: !serviceList[i].dtl_id ? 0 : serviceList[i].dtl_id,
+                usercode: data.UserCode,
+                nac_code: nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
+                nacdtl_row: i,
+                nacdtl_assetsCode: serviceList[i].assetsCode,
+                nacdtl_assetsName: serviceList[i].name,
+                nacdtl_assetsSeria: serviceList[i].serialNo,
+                nacdtl_assetsPrice: serviceList[i].price,
+                asset_id: !serviceList[i].asset_id ? 0 : serviceList[i].asset_id,
+                image_1: serviceList[i].image_1,
+                image_2: null,
+              }
+              await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
+                .then(async (resII) => {
+                  if (resII.data.data) {
+                    const detail_reqII = {
+                      usercode: data.UserCode,
+                      nac_code: res.data.data[0].nac_code,
+                      nac_type: sendHeader[0].worktype,
+                      nacdtl_bookV: serviceList[i].bookValue,
+                      nacdtl_PriceSeals: serviceList[i].priceSeals,
+                      nacdtl_profit: serviceList[i].profit,
+                      asset_id: resII.data.data[0].nacdtl_id,
+                      nac_status: 1,
+                      nacdtl_assetsCode: serviceList[i].assetsCode
+                    }
+                    await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
+                      .then(async (resIII) => {
+                        if (resIII.data.data && i + 1 === serviceList.length) {
+                          await store_FA_SendMail({
+                            nac_code
+                          })
+                          await store_FA_control_comment({
+                            nac_code,
+                            usercode: data.UserCode,
+                            comment: 'ยืนยันรายการแล้ว',
+                          })
+                          swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
+                            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
+                          });
+                        }
+                      })
+                  }
+                })
+            }
+          }
+        })
+    }
+  };
+
+  const handleSubmit_To_Verify = async () => {
+    if (!sendHeader[0].source || !sourceName || !sourceLastName) {
+      swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
+    } else if ((serviceList.filter((res) => !res.assetsCode)[0]) !== undefined) {
+      swal("แจ้งเตือน", 'กรุณาระบุข้อมูลทรัพย์สินให้ครบ', "error")
+    } else if ((serviceList.filter((res) => !res.bookValue)[0]) !== undefined) {
+      swal("แจ้งเตือน", 'กรุณาระบุ Book Value', "error")
+    } else if (approveData.filter((res) => res.workflowlevel === 0 && data.UserCode === res.approverid)[0] || permission_MenuID.indexOf(9) > -1) {
+      // รอใส่เงือนไข
+      const reqUpdateStatus = {
+        usercode: data.UserCode,
+        nac_code: nac_code,
+        nac_status: approveData.filter((res) => res.limitamount < sendHeader[0].sumPrice)[0] ? 2 : 3,
+        nac_type: sendHeader[0].nac_type,
+        source: sendHeader[0].source,
+        sourceDate: sendHeader[0].sourceDate,
+        des_delivery: sendHeader[0].des_delivery,
+        des_deliveryDate: sendHeader[0].des_deliveryDate,
+        des_approve: sendHeader[0].des_approve,
+        des_approve_date: sendHeader[0].des_approve_date,
+        real_price: sendHeader[0].real_price,
+        realPrice_Date: sendHeader[0].realPrice_Date,
+        verify_by: sendHeader[0].verify_by,
+        verify_date: sendHeader[0].verify_date,
+        source_approve: sendHeader[0].source_approve,
+        source_approve_date: sendHeader[0].source_approve_date,
+      }
+      await Axios.post(config.http + '/store_FA_control_updateStatus', reqUpdateStatus, config.headers)
+        .then(async (res) => {
+          if (res.data.data) {
+            for (let i = 0; i < serviceList.length; i++) {
+              const reqII = {
+                dtl_id: !serviceList[i].dtl_id ? 0 : serviceList[i].dtl_id,
+                usercode: data.UserCode,
+                nac_code: nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
+                nacdtl_row: i,
+                nacdtl_assetsCode: serviceList[i].assetsCode,
+                nacdtl_assetsName: serviceList[i].name,
+                nacdtl_assetsSeria: serviceList[i].serialNo,
+                nacdtl_assetsPrice: serviceList[i].price,
+                asset_id: !serviceList[i].asset_id ? 0 : serviceList[i].asset_id,
+                image_1: serviceList[i].image_1,
+                image_2: null,
+              }
+              await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
+                .then(async (resII) => {
+                  if (resII.data.data) {
+                    const detail_reqII = {
+                      usercode: data.UserCode,
+                      nac_code: res.data.data[0].nac_code,
+                      nac_type: sendHeader[0].worktype,
+                      nacdtl_bookV: serviceList[i].bookValue,
+                      nacdtl_PriceSeals: serviceList[i].priceSeals,
+                      nacdtl_profit: serviceList[i].profit,
+                      asset_id: resII.data.data[0].nacdtl_id,
+                      nac_status: 1,
+                      nacdtl_assetsCode: serviceList[i].assetsCode
+                    }
+                    await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
+                      .then(async (resIII) => {
+                        if (resIII.data.data && i + 1 === serviceList.length) {
+                          await store_FA_SendMail({
+                            nac_code
+                          })
+                          await store_FA_control_comment({
+                            nac_code,
+                            usercode: data.UserCode,
+                            comment: 'กรอก Book Value เรียบร้อยแล้ว',
+                          })
+                          swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
+                            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
+                          });
+                        }
+                      })
+                  }
+                })
+            }
+          }
+        })
+    } else {
+      swal("แจ้งเตือน", `ถูกจำกัดสิทธิ์`, "error")
+    }
+  }
+
+  const handleSubmit_To_Approve = async () => {
+    if (!sendHeader[0].source || !sourceName || !sourceLastName) {
+      swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
+    } else if ((serviceList.filter((res) => !res.assetsCode)[0]) !== undefined) {
+      swal("แจ้งเตือน", 'กรุณาระบุข้อมูลทรัพย์สินให้ครบ', "error")
+    } else if (approveData.filter((res) => res.approverid === data.UserCode && res.status === 1)[0]) {
+      swal("แจ้งเตือน", `${data.UserCode} ทำรายการไปแล้ว`, "error")
+    } else if (approveData.filter((res) => res.approverid === data.UserCode && res.status === 0)[0] || permission_MenuID.indexOf(10) > -1) {
+      // รอใส่เงือนไข
+      const reqUpdateStatus = {
+        usercode: data.UserCode,
+        nac_code: nac_code,
+        nac_status: 3,
+        nac_type: sendHeader[0].nac_type,
+        source: sendHeader[0].source,
+        sourceDate: sendHeader[0].sourceDate,
+        des_delivery: sendHeader[0].des_delivery,
+        des_deliveryDate: sendHeader[0].des_deliveryDate,
+        des_approve: sendHeader[0].des_approve,
+        des_approve_date: sendHeader[0].des_approve_date,
+        real_price: sendHeader[0].real_price,
+        realPrice_Date: sendHeader[0].realPrice_Date,
+        verify_by: data.UserCode,
+        verify_date: dateNow,
+        source_approve: sendHeader[0].source_approve,
+        source_approve_date: sendHeader[0].source_approve_date,
+      }
+      await Axios.post(config.http + '/store_FA_control_updateStatus', reqUpdateStatus, config.headers)
+        .then(async (res) => {
+          if (res.data.data) {
+            for (let i = 0; i < serviceList.length; i++) {
+              const reqII = {
+                dtl_id: !serviceList[i].dtl_id ? 0 : serviceList[i].dtl_id,
+                usercode: data.UserCode,
+                nac_code: nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
+                nacdtl_row: i,
+                nacdtl_assetsCode: serviceList[i].assetsCode,
+                nacdtl_assetsName: serviceList[i].name,
+                nacdtl_assetsSeria: serviceList[i].serialNo,
+                nacdtl_assetsPrice: serviceList[i].price,
+                asset_id: !serviceList[i].asset_id ? 0 : serviceList[i].asset_id,
+                image_1: serviceList[i].image_1,
+                image_2: null,
+              }
+              await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
+                .then(async (resII) => {
+                  if (resII.data.data) {
+                    const detail_reqII = {
+                      usercode: data.UserCode,
+                      nac_code: res.data.data[0].nac_code,
+                      nac_type: sendHeader[0].worktype,
+                      nacdtl_bookV: serviceList[i].bookValue,
+                      nacdtl_PriceSeals: serviceList[i].priceSeals,
+                      nacdtl_profit: serviceList[i].profit,
+                      asset_id: resII.data.data[0].nacdtl_id,
+                      nac_status: 1,
+                      nacdtl_assetsCode: serviceList[i].assetsCode
+                    }
+                    await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
+                      .then(async (resIII) => {
+                        if (resIII.data.data && i + 1 === serviceList.length) {
+                          await store_FA_SendMail({
+                            nac_code
+                          })
+                          await store_FA_control_comment({
+                            nac_code,
+                            usercode: data.UserCode,
+                            comment: 'ตรวจสอบรายการ',
+                          })
+                          swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
+                            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
+                          });
+                        }
+                      })
+                  }
+                })
+            }
+          }
+        })
+    } else {
+      swal("แจ้งเตือน", `ถูกจำกัดสิทธิ์`, "error")
+    }
+  }
+
+  const handleSubmit_Form = async () => {
+
+    if ((sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode && res.limitamount >= price_seals)[0]) || permission_MenuID.indexOf(10) <= -1) {
+      swal("แจ้งเตือน", `ถูกจำกัดสิทธิ์`, "error")
+    } else if (sendHeader[0].nac_status === 12 && !sendHeader[0].real_price) {
+      swal("แจ้งเตือน", `กรุณาระบุ (ราคาขายจริง/วันที่ได้รับเงิน)`, "error")
+    } else {
+      const reqUpdateStatus = {
+        usercode: data.UserCode,
+        nac_code: nac_code,
+        nac_status: sendHeader[0].nac_status === 3 ? 5 : 6,
+        nac_type: sendHeader[0].nac_type,
+        source: sendHeader[0].source,
+        sourceDate: sendHeader[0].sourceDate,
+        des_delivery: sendHeader[0].des_delivery,
+        des_deliveryDate: sendHeader[0].des_deliveryDate,
+        des_approve: sendHeader[0].des_approve,
+        des_approve_date: sendHeader[0].des_approve_date,
+        real_price: sendHeader[0].real_price,
+        realPrice_Date: sendHeader[0].nac_status === 12 ? dateNow : sendHeader[0].realPrice_Date,
+        verify_by: data.UserCode,
+        verify_date: dateNow,
+        source_approve: sendHeader[0].nac_status === 3 ? data.UserCode : sendHeader[0].source_approve,
+        source_approve_date: sendHeader[0].nac_status === 3 ? dateNow : sendHeader[0].source_approve_date,
+      }
+      await Axios.post(config.http + '/store_FA_control_updateStatus', reqUpdateStatus, config.headers)
+        .then(async (res) => {
+          console.log(res.data.data);
+          if (res.data) {
+            await store_FA_SendMail({
+              nac_code
+            })
+            await store_FA_control_comment({
+              nac_code,
+              usercode: data.UserCode,
+              comment: (sendHeader[0].nac_status === 3 && !sendHeader[0].real_price) ? 'อนุมัติรายการ' :
+                (sendHeader[0].nac_status === 3 && sendHeader[0].real_price) ? 'อนุมัติรายการ' :
+                  sendHeader[0].nac_status === 5 ? 'ปิดรายการ' : null,
+            })
+            if (res.data.data[0].nac_status === 6) {
+              for (var i = 0; i < serviceList.length; i++) {
+                await Axios.post(config.http + '/store_FA_control_upadate_table', {
+                  nac_code,
+                  usercode: data.UserCode,
+                  nacdtl_assetsCode: serviceList[i].assetsCode,
+                  asset_id: serviceList[i].asset_id,
+                  nac_type: sendHeader[0].nac_type,
+                  nac_status: res.data.data[0].nac_status,
+                }, config.headers).then((res) => {
+                  if (i + 1 === serviceList.length) {
+                    swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
+                      window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + res.data.data[0].nac_code
+                    });
+                  }
+                })
+              }
+            } else {
+              swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
+                window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + res.data.data[0].nac_code
+              });
+            }
+          }
+        })
+    }
+  }
+
+  const handleReply = async () => {
+    const reqUpdateStatus = {
+      usercode: data.UserCode,
+      nac_code: nac_code,
+      nac_status: 1,
+      nac_type: sendHeader[0].nac_type,
+      source: sendHeader[0].source,
+      sourceDate: sendHeader[0].sourceDate,
+      des_delivery: sendHeader[0].des_delivery,
+      des_deliveryDate: sendHeader[0].des_deliveryDate,
+      des_approve: sendHeader[0].des_approve,
+      des_approve_date: sendHeader[0].des_approve_date,
+      real_price: sendHeader[0].real_price,
+      realPrice_Date: sendHeader[0].realPrice_Date,
+      verify_by: sendHeader[0].verify_by,
+      verify_date: sendHeader[0].verify_date,
+      source_approve: sendHeader[0].source_approve,
+      source_approve_date: sendHeader[0].source_approve_date,
+    }
+    await Axios.post(config.http + '/store_FA_control_updateStatus', reqUpdateStatus, config.headers)
+      .then(async (res) => {
+        if (res.data) {
+          await store_FA_SendMail({
+            nac_code
+          })
+          await store_FA_control_comment({
+            nac_code,
+            usercode: data.UserCode,
+            comment: `ตีกลับรายการ "${commentReply}"`,
+          })
+          swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
+            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + res.data.data[0].nac_code
+          });
+        }
+      })
+  }
+
+  const handleChangeCommentReply = (event) => {
+    event.preventDefault();
+    setCommentReply(event.target.value)
+  }
+
+  const handleCloseDialogReply = () => {
+    setOpenDialogReply(false);
+  };
+
+  const handleOpenDialogReply = () => {
+    setOpenDialogReply(true);
   };
 
   const handleClose_drop_NAC_byDes = () => {
     setDrop_NAC_byDes(false);
   };
 
-  //ยกเลิกรายการ
-  const drop_NAC = async () => {
-    const usercode = data.UserCode
-    const response = await store_FA_control_drop_NAC({
-      usercode,
-      nac_code,
-    });
-    if ('data' in response) {
-      swal("แจ้งเตือน", 'ทำการลบรายการ ' + response.data[0].nac_code + ' แล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-        window.location.href = "/NAC_OPERATOR";
-      });
-    } else {
-      swal("แจ้งเตือน", 'ไม่สามารถลบ ' + response.data[0].nac_code + ' ได้', "error")
-    }
-  }
-
-  const fetchUserForAssetsControl = async () => {
-    const { data } = await Axios.get(
-      config.http + "/getsUserForAssetsControl"
-    );
-    const UserForAssetsControl = data;
-    const users_pure = []
-    for (let i = 0; i < UserForAssetsControl.data.length; i++) {
-      if (UserForAssetsControl.data[i].DepID === dataDepID) {
-        users_pure[i] = UserForAssetsControl.data[i]
-      }
-    }
-    setUsers_pureDep(users_pure)
-    setUserForAssetsControl(UserForAssetsControl.data);
+  const handleOpen_drop_NAC_byDes = () => {
+    setDrop_NAC_byDes(true);
   };
 
-  const fetchSelectDTL_Headers = async () => {
-
-    // AutoComplete ของ AssetsCode
-    const BranchID = data.branchid;
-    const response = await SelectAssetsControl({
-      BranchID
-    });
-    setAllAssetsControl(response.data);
-
-    // เรียก Headers มาแสดง
-    const responseHeaders = await store_FA_control_select_headers({
-      nac_code
-    });
-    if (responseHeaders.message === "ไม่พบข้อมูล") {
-      swal("แจ้งเตือน", 'ไม่พบรายการนี้แล้ว', "error").then((value) => {
-        window.location.href = '/'
-      });
-    }
-    else {
-      setSelectNAC(parseInt(responseHeaders.data[0].nac_status))
-      setNac_status(parseInt(responseHeaders.data[0].nac_status))
-      setHeaders(responseHeaders.data[0])
-      setSource_Department(responseHeaders.data[0].source_dep_owner)
-      setSource_BU(responseHeaders.data[0].source_bu_owner)
-      setSource(responseHeaders.data[0].source_userid)
-      setNmaeSource(responseHeaders.data[0].source_name)
-      setSourceDate(responseHeaders.data[0].source_date)
-      setSource_Description(responseHeaders.data[0].source_remark)
-      setSource_Approve(responseHeaders.data[0].source_approve_userid)
-      setSource_DateApproveDate(responseHeaders.data[0].source_approve_date)
-
-      setDes_Department(responseHeaders.data[0].des_dep_owner)
-      setDes_BU(responseHeaders.data[0].des_bu_owner)
-      setDes_delivery(responseHeaders.data[0].des_userid)
-      setDes_deliveryDate(responseHeaders.data[0].des_date)
-      setDes_Description(responseHeaders.data[0].des_remark)
-      setDes_deliveryApprove(responseHeaders.data[0].des_approve_userid)
-      setDes_deliveryApproveDate(responseHeaders.data[0].des_approve_date)
-
-      setBossApprove(responseHeaders.data[0].source_approve_userid)
-      setBossApproveDate(responseHeaders.data[0].source_approve_date)
-      setVerifyApprove(responseHeaders.data[0].verify_by_userid)
-      setVerifyApproveDate(responseHeaders.data[0].verify_date)
-    }
-
-    // เรียก Detail มาแสดง
-    const responseDTL = await store_FA_control_select_dtl({
-      nac_code
-    });
-    const responseDTLs = responseDTL.data
-    setServiceList(responseDTLs.map((res) => {
-      return {
-        dtl_id: res.nacdtl_id
-        , assetsCode: res.nacdtl_assetsCode
-        , serialNo: res.nacdtl_assetsSeria
-        , name: res.nacdtl_assetsName
-        , price: res.nacdtl_assetsPrice
-        , asset_id: res.nacdtl_id
-        , bookValue: !res.nacdtl_bookV ? '' : res.nacdtl_bookV
-        , priceSeals: !res.nacdtl_PriceSeals ? '' : res.nacdtl_PriceSeals
-        , profit: !res.nacdtl_profit ? '' : res.nacdtl_profit
-        , date_asset: res.nacdtl_date_asset
-        , image_1: !res.nacdtl_image_1 ? '' : res.nacdtl_image_1
-      };
-    }));
-
-    setExportToExcel(responseDTLs.map((res) => {
-      return {
-        Code: res.nacdtl_assetsCode
-        , serialNo: res.nacdtl_assetsSeria
-        , name: res.nacdtl_assetsName.replace(`"`, `''`)
-        , price: res.nacdtl_assetsPrice
-        , bookValue: !res.nacdtl_bookV ? '' : res.nacdtl_bookV
-        , priceSeals: 0
-        , Price_Before_VAT: !res.nacdtl_PriceSeals ? '' : res.nacdtl_PriceSeals - (res.nacdtl_PriceSeals * (7 / 100))
-        , profit: (res.nacdtl_PriceSeals - (res.nacdtl_PriceSeals * (7 / 100)) - res.nacdtl_bookV)
-      };
-    }));
-
-    setChecked(responseDTLs.map((res) => {
-      return {
-        assets_code: res.nacdtl_assetsCode
-        , statusCheck: (!res.success_id || res.success_id === 0) ? 0 : res.success_id
-        , asset_id: res.nacdtl_id
-      };
-    }))
-
-    //เรียก Approve มาแสดง
-    const user_source = responseHeaders.data[0].source_userid;
-    const responseExecDocID = await store_FA_control_execDocID({
-      user_source,
+  const drop_NAC = async () => {
+    await Axios.post(config.http + '/store_FA_control_drop_NAC', {
+      usercode: data.UserCode,
       nac_code,
-    });
-    // ผู้ตรวจสอบ
-    const ExamineApprove = []
-    const ExamineApproveDes = []
-    const ExecApprove = []
-    const CheckApprove = []
-    const CheckExamineApprove = []
-    const CheckExamineApproveDes = []
-    const price_approve = responseHeaders.data[0].sum_price;
-
-    for (let i = 0; i < (responseExecDocID.data.length); i++) {
-      if (responseExecDocID.data[i].limitamount >= price_approve && responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 5) {
-        ExecApprove[i] = {
-          approverid: responseExecDocID.data[i].workflowlevel === 0 ? 'AM: ' + responseExecDocID.data[i].approverid :
-
-            responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
-              responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
-                responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
+    }, config.headers)
+      .then((res) => {
+        if ('data' in res) {
+          swal("แจ้งเตือน", 'ทำการลบรายการ ' + nac_code + ' แล้ว', "success", { buttons: false, timer: 2000 })
+            .then((value) => {
+              window.location.href = "/NAC_OPERATOR";
+            });
+        } else {
+          swal("แจ้งเตือน", 'ไม่สามารถลบ ' + nac_code + ' ได้', "error")
         }
-        CheckApprove[i] = responseExecDocID.data[i].approverid
-      }
-
-      if (responseExecDocID.data[i].limitamount < price_approve && responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 5) {
-        ExamineApprove[i] = {
-          approverid: responseExecDocID.data[i].workflowlevel === 0 ? 'AM: ' + responseExecDocID.data[i].approverid :
-
-            responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
-              responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
-                responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
-        }
-        CheckExamineApprove[i] = responseExecDocID.data[i].approverid
-      } else if (responseExecDocID.data[i].workflowlevel > 4) {
-        ExamineApproveDes[i] = {
-          approverid: responseExecDocID.data[i].workflowlevel === 0 ? 'AM: ' + responseExecDocID.data[i].approverid :
-            responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
-              responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
-                responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
-        }
-        CheckExamineApproveDes[i] = responseExecDocID.data[i].approverid
-      }
-    }
-    setCheckExamineApprove(CheckExamineApprove)
-    setExamineApprove(ExamineApprove)
-    //setExamineApproveDes(ExamineApproveDes)
-    //setCheckExamineApproveDes(CheckExamineApproveDes)
-    setExecApprove(ExecApprove)
-    setCheckApprove(CheckApprove)
+      })
   }
-
-  const Export_PDF_DATA_NAC = () => {
-    window.location.href = 'http://ptecdba:10250/OPS/reports/nac_sale.aspx?nac_code=' + headers.nac_code
-  }
-
-
-  React.useEffect(() => {
-    fetchUserForAssetsControl();
-    fetchSelectDTL_Headers();
-    // 👇️ disable the rule for a single line
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleClickOpenDialog = () => {
     setOpenDialog(true);
@@ -734,833 +966,7 @@ export default function Nac_Seals_Approve() {
     setOpenDialog(false);
   };
 
-  const handleClickOpenDialogReply = () => {
-    setOpenDialogReply(true);
-  };
-
-  const handleCloseDialogReply = () => {
-    setOpenDialogReply(false);
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
-  const handleClickShowPassword = () => {
-    if (data.branchid !== 901) {
-      setValuesVisibility(false);
-    } else {
-      setValuesVisibility({ ...valuesVisibility, showText: !valuesVisibility.showText });
-    }
-  };
-
-  const handleServiceAdd = () => {
-    setServiceList([...serviceList, { dtl_id: 0, assetsCode: "", serialNo: "", name: "", date_asset: "", price: "", bookValue: "", priceSeals: "", profit: "", asset_id: "", image_1: "" }]);
-  };
-
-  const handleServiceRemove = (index) => {
-    const list = [...serviceList];
-    list.splice(index, 1);
-    setServiceList(list);
-  };
-
-  const handleServiceChange = (e, index) => {
-    const { name, value } = e.target;
-    const list = [...serviceList];
-    list[index][name] = value;
-    list[index]['dtl_id'] = -1;
-    setServiceList(list);
-  };
-
-  const handleServiceChangeHeader = async (e, index) => {
-    const { name, value } = e.target;
-    const assetsCodeSelect = e.target.innerText
-    const nacdtl_assetsCode = e.target.innerText
-    const responseCheckAssetCode_Process = await store_FA_control_CheckAssetCode_Process({
-      nacdtl_assetsCode
-    });
-    if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
-      const alert_value = 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC'
-      setAlert(true);
-      setValueAlert(alert_value)
-      const list = [...serviceList];
-      list[index]['assetsCode'] = ''
-      list[index]['name'] = ''
-      list[index]['dtl'] = ''
-      list[index]['count'] = ''
-      list[index]['serialNo'] = ''
-      list[index]['price'] = ''
-      list[index]['bookValue'] = ''
-      list[index]['priceSeals'] = ''
-      list[index]['profit'] = ''
-      list[index]['date_asset'] = ''
-      setServiceList(list);
-    } else {
-      const list = [...serviceList];
-      list[index][name] = value;
-      list[index]['assetsCode'] = assetsCodeSelect;
-      if ((list[index]['assetsCode'] === null) || (list[index]['assetsCode'] === undefined)) {
-        list[index]['name'] = ''
-        list[index]['dtl'] = ''
-        list[index]['count'] = ''
-        list[index]['serialNo'] = ''
-        list[index]['price'] = ''
-        list[index]['bookValue'] = ''
-        list[index]['priceSeals'] = ''
-        list[index]['profit'] = ''
-        list[index]['date_asset'] = ""
-        setServiceList(list);
-      } else {
-        const Code = list[index]['assetsCode'];
-        const response = await SelectDTL_Control({
-          Code
-        });
-        if (response['data'].length !== 0) {
-          list[index]['name'] = response['data'][0].Name
-          list[index]['dtl'] = response['data'][0].Details
-          list[index]['count'] = 1
-          list[index]['serialNo'] = response['data'][0].SerialNo
-          list[index]['price'] = response['data'][0].Price
-          list[index]['bookValue'] = ''
-          list[index]['priceSeals'] = ''
-          list[index]['profit'] = list[index]['priceSeals'] - list[index]['bookValue']
-          list[index]['date_asset'] = response['data'][0].CreateDate
-          setServiceList(list);
-        }
-      }
-    }
-  };
-
-  function handleGoNAC() {
-    if (localStorage.getItem('pagination')) {
-      navigate('/NAC_OPERATOR')
-    } else {
-      navigate('/NAC_ROW')
-    }
-  }
-
-  //Source
-  const handleChangeSource_Department = (event) => {
-    event.preventDefault();
-    setSource_Department(event.target.value);
-  };
-
-  const handleChangeSource_BU = (event) => {
-    event.preventDefault();
-    setSource_BU(event.target.value);
-  };
-
-  const handleChangeSource_delivery2 = (event) => {
-    event.preventDefault();
-    setSource(event.target.value);
-  };
-
-  const handleChangeSource_deliveryDate = (newValue) => {
-    setSourceDate(newValue);
-  };
-
-  const handleChangeSource_Description = (event) => {
-    event.preventDefault();
-    setSource_Description(event.target.value);
-  };
-
-  const handleAutoSource_DeapartMent = async (e, index) => {
-    const UserCode = e.target.innerText
-    const response = await AutoDeapartMent({
-      UserCode
-    });
-    setSource(UserCode)
-    if (!UserCode) {
-      setSource_Department('')
-      setSource_BU('')
-      setNmaeSource('')
-    } else {
-      if (response.data[0].BranchID !== 901) {
-        setSource_Department(response.data[0].DepCode)
-        setSource_BU('Oil')
-      } else {
-        setSource_Department(response.data[0].DepCode)
-        setSource_BU('Center')
-      }
-    }
-  };
-
-  const handleChangeSource_Name = (event) => {
-    event.preventDefault();
-    setNmaeSource(event.target.value);
-  };
-
-  //Des
-  const handleChangeDes_Department = (event) => {
-    event.preventDefault();
-    setDes_Department(event.target.value);
-  };
-
-  const handleDes_ChangeBU = (event) => {
-    event.preventDefault();
-    setDes_BU(event.target.value);
-
-  };
-
-  const handleChangeDes_delivery2 = (event) => {
-    event.preventDefault();
-    setDes_delivery(event.target.value);
-
-  };
-
-  // Update Document
-  const handleSave = async () => {
-    const usercode = data.UserCode
-    const nac_status = headers.nac_status
-    const sumPrice = result
-    const nac_type = headers.nac_type
-    const nameDes = null
-    const response = await store_FA_control_update_DTLandHeaders({
-      usercode,
-      nac_code,
-      nac_status,
-      sumPrice,
-      nac_type,
-      des_department,
-      des_BU,
-      des_delivery,
-      nameDes,
-      des_deliveryDate,
-      des_description,
-      source_department,
-      source_BU,
-      source,
-      nameSource,
-      sourceDate,
-      source_description,
-    });
-    if ('data' in response) {
-      for (let i = 0; i < serviceList.length; i++) {
-        const dtl_id = serviceList[i].dtl_id
-        const nacdtl_row = i
-        const nacdtl_assetsCode = serviceList[i].assetsCode
-        const nacdtl_assetsName = serviceList[i].name
-        const nacdtl_assetsSeria = serviceList[i].serialNo
-        const nacdtl_assetsDtl = serviceList[i].dtl
-        const nacdtl_assetsCount = serviceList[i].count
-        const nacdtl_assetsPrice = serviceList[i].price
-        const asset_id = serviceList[i].asset_id
-        const image_1 = serviceList[i].image_1
-        const image_2 = null
-        const responseDTL = await store_FA_control_update_DTL({
-          dtl_id,
-          usercode,
-          nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
-          nacdtl_row,
-          nacdtl_assetsCode,
-          nacdtl_assetsName,
-          nacdtl_assetsSeria,
-          nacdtl_assetsDtl,
-          nacdtl_assetsCount,
-          nacdtl_assetsPrice,
-          asset_id,
-          image_1,
-          image_2
-        });
-        if ('data' in responseDTL) {
-          const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
-          const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
-          const nacdtl_profit = serviceList[i].priceSeals - serviceList[i].bookValue
-          const asset_id = responseDTL.data[i].nacdtl_id
-          const nac_status = headers.nac_status
-          await store_FA_control_updateDTL_seals({
-            usercode,
-            nac_code,
-            nac_status,
-            nac_type,
-            nacdtl_bookV,
-            nacdtl_PriceSeals,
-            nacdtl_profit,
-            asset_id,
-            nacdtl_assetsCode
-          });
-          if ('data' in responseDTL && i + 1 === responseDTL.data.length) {
-            swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-              window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code
-            });
-          }
-        } else {
-          const alert_value = 'คำขออัปเดตรายการผิดพลาด'
-          setAlert(true);
-          setValueAlert(alert_value)
-        }
-      }
-    } else {
-      swal("แจ้งเตือน", 'กรุณาลองใหม่ภายหลัง', "error")
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (!source || !source_department || !source_BU || !sourceDate || !nameSource) {
-      const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' :
-        !nameSource ? 'กรุณาลงชื่อผู้ส่งมอบ' : 'กรุณากรอกวันที่ของผู้ส่ง'
-      setAlert(true);
-      setValueAlert(alert_value)
-    } else {
-      if (!serviceList[0].assetsCode || (serviceList.map((res) => res.image_1)).includes('') === true) {
-        const alert_value = 'กรุณากรอกข้อมูลทรัพย์สินให้ครบถ้วน'
-        setAlert(true);
-        setValueAlert(alert_value)
-      } else {
-        if (result !== headers.sum_price || headers.source_userid !== source || headers.des_userid !== des_delivery) {
-          const alert_value = 'ข้อมูลมีการเปลี่ยนแปลง กรุณากดบันทึกรายการก่อนยืนยัน'
-          setAlert(true);
-          setValueAlert(alert_value)
-        } else {
-          if (data.UserCode === headers.create_by || CheckExamineApprove.includes(data.UserCode) === true || CheckApprove.includes(data.UserCode) === true || (permission_menuID ? permission_menuID.includes(10) : null) === true || (permission_menuID ? permission_menuID.includes(9) : null) === true) {
-            const usercode = data.UserCode
-            const nac_status = (selectNAC === 11) ? 10 : 11
-            const source_approve = sourceApprove
-            const source_approve_date = sourceDateApproveDate
-            const des_approve = des_deliveryApprove
-            const des_approve_date = des_deliveryApproveDate
-            const verify_by = bossApprove
-            const verify_date = bossApproveDate
-            const nac_type = headers.nac_type
-            if (selectNAC === 11) {
-              const checkBookValue_is_null = []
-              for (let i = 0; i < serviceList.length; i++) {
-                checkBookValue_is_null[i] = serviceList[i].bookValue
-              }
-              if (checkBookValue_is_null.includes('') !== true) {
-                const responseForUpdate = await store_FA_control_updateStatus({
-                  usercode,
-                  nac_code,
-                  nac_status,
-                  nac_type,
-                  source,
-                  sourceDate,
-                  des_delivery,
-                  des_deliveryDate,
-                  source_approve,
-                  source_approve_date,
-                  des_approve,
-                  des_approve_date,
-                  verify_by,
-                  verify_date,
-                });
-                for (let i = 0; i < serviceList.length; i++) {
-                  const dtl_id = serviceList[i].dtl_id
-                  const nacdtl_row = i
-                  const nacdtl_assetsCode = serviceList[i].assetsCode
-                  const nacdtl_assetsName = serviceList[i].name
-                  const nacdtl_assetsSeria = serviceList[i].serialNo
-                  const nacdtl_assetsDtl = serviceList[i].dtl
-                  const nacdtl_assetsCount = serviceList[i].count
-                  const nacdtl_assetsPrice = serviceList[i].price
-                  const asset_id = serviceList[i].asset_id
-                  const image_1 = serviceList[i].image_1
-                  const image_2 = null
-                  const responseDTL = await store_FA_control_update_DTL({
-                    dtl_id,
-                    usercode,
-                    nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
-                    nacdtl_row,
-                    nacdtl_assetsCode,
-                    nacdtl_assetsName,
-                    nacdtl_assetsSeria,
-                    nacdtl_assetsDtl,
-                    nacdtl_assetsCount,
-                    nacdtl_assetsPrice,
-                    asset_id,
-                    image_1,
-                    image_2
-                  });
-                  if ('data' in responseDTL) {
-                    const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
-                    const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
-                    const nacdtl_profit = !serviceList[i].priceSeals ? 0 - serviceList[i].bookValue : serviceList[i].priceSeals - serviceList[i].bookValue
-                    const asset_id = responseDTL.data[i].nacdtl_id
-                    const nac_status = (selectNAC === 11) ? 10 : 11
-                    await store_FA_control_updateDTL_seals({
-                      usercode,
-                      nac_code,
-                      nac_status,
-                      nac_type,
-                      nacdtl_bookV,
-                      nacdtl_PriceSeals,
-                      nacdtl_profit,
-                      asset_id,
-                      nacdtl_assetsCode
-                    });
-                  }
-                }
-                const comment = 'กรอก Book Value ในรายการแล้ว'
-                const responseComment = await store_FA_control_comment({
-                  nac_code,
-                  usercode,
-                  comment
-                })
-                await store_FA_SendMail({
-                  nac_code
-                })
-                if ('data' in responseComment) {
-                  swal("แจ้งเตือน", 'คุณกรอก Book Value ในรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                    window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
-                  });
-                } else {
-                  swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
-                    window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
-                  });
-                }
-              } else {
-                const alert_value = 'กรุณากรอก Book Value ของทรัพย์สินให้ครบถ้วน'
-                setAlert(true);
-                setValueAlert(alert_value)
-              }
-            } else {
-              const responseForUpdate = await store_FA_control_updateStatus({
-                usercode,
-                nac_code,
-                nac_status,
-                nac_type,
-                source,
-                sourceDate,
-                des_delivery,
-                des_deliveryDate,
-                source_approve,
-                source_approve_date,
-                des_approve,
-                des_approve_date,
-                verify_by,
-                verify_date,
-              });
-              for (let i = 0; i < serviceList.length; i++) {
-                const dtl_id = serviceList[i].dtl_id
-                const nacdtl_row = i
-                const nacdtl_assetsCode = serviceList[i].assetsCode
-                const nacdtl_assetsName = serviceList[i].name
-                const nacdtl_assetsSeria = serviceList[i].serialNo
-                const nacdtl_assetsDtl = serviceList[i].dtl
-                const nacdtl_assetsCount = serviceList[i].count
-                const nacdtl_assetsPrice = serviceList[i].price
-                const asset_id = serviceList[i].asset_id
-                const image_1 = serviceList[i].image_1
-                const image_2 = null
-                const responseDTL = await store_FA_control_update_DTL({
-                  dtl_id,
-                  usercode,
-                  nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
-                  nacdtl_row,
-                  nacdtl_assetsCode,
-                  nacdtl_assetsName,
-                  nacdtl_assetsSeria,
-                  nacdtl_assetsDtl,
-                  nacdtl_assetsCount,
-                  nacdtl_assetsPrice,
-                  asset_id,
-                  image_1,
-                  image_2
-                });
-                if ('data' in responseDTL) {
-                  const nacdtl_bookV = !serviceList[i].bookValue ? undefined : serviceList[i].bookValue
-                  const nacdtl_PriceSeals = !serviceList[i].priceSeals ? undefined : serviceList[i].priceSeals
-                  const nacdtl_profit = !serviceList[i].priceSeals ? 0 - serviceList[i].bookValue : serviceList[i].priceSeals - serviceList[i].bookValue
-                  const asset_id = responseDTL.data[i].nacdtl_id
-                  const nac_status = (selectNAC === 11) ? 10 : 11
-                  await store_FA_control_updateDTL_seals({
-                    usercode,
-                    nac_code,
-                    nac_status,
-                    nac_type,
-                    nacdtl_bookV,
-                    nacdtl_PriceSeals,
-                    nacdtl_profit,
-                    asset_id,
-                    nacdtl_assetsCode
-                  });
-                  const comment = 'ยืนยันรายการแล้ว'
-                  const responseComment = await store_FA_control_comment({
-                    nac_code,
-                    usercode,
-                    comment
-                  })
-                  await store_FA_SendMail({
-                    nac_code
-                  })
-                  if ('data' in responseComment) {
-                    swal("แจ้งเตือน", 'คุณยืนยันรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                      window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
-                    });
-                  } else {
-                    swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
-                      window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
-                    });
-                  }
-                }
-              }
-            }
-          } else {
-            swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
-              window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
-            });
-          }
-        }
-      }
-    }
-  };
-
-  // ExamineApprove
-  const handleExamineApprove = async () => {
-    if (verify === data.UserCode) {
-      const alert_value = 'คุณได้ตรวจสอบรายการนี้ไปแล้ว'
-      setAlert(true);
-      setValueAlert(alert_value)
-    }
-    else if (CheckExamineApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false && ExamineApprove.filter(function (el) { return (el != null && el.status === 0) }).length > 1) {
-      const usercode = data.UserCode
-      const nac_status = 2
-      const source_approve = sourceApprove
-      const source_approve_date = sourceDateApproveDate
-      const des_approve = des_deliveryApprove
-      const des_approve_date = des_deliveryApproveDate
-      const verify_by = data.UserCode
-      const verify_date = datenow
-      const nac_type = headers.nac_type
-      const responseForUpdate = await store_FA_control_updateStatus({
-        usercode,
-        nac_code,
-        nac_status,
-        nac_type,
-        source,
-        sourceDate,
-        des_delivery,
-        des_deliveryDate,
-        source_approve,
-        source_approve_date,
-        des_approve,
-        des_approve_date,
-        verify_by,
-        verify_date,
-      });
-      if ('data' in responseForUpdate) {
-        const comment = 'ตรวจสอบรายการแล้ว'
-        const responseComment = await store_FA_control_comment({
-          nac_code,
-          usercode,
-          comment
-        })
-        await store_FA_SendMail({
-          nac_code
-        })
-        if ('data' in responseComment) {
-          swal("แจ้งเตือน", 'คุณตรวจสอบรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-          });
-        } else {
-          swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-          });
-        }
-      } else {
-        swal("แจ้งเตือน", 'คุณไม่ได้รับอนุญาติให้ทำรายการนี้', "error").then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-        });
-      }
-    }
-    else if ((CheckExamineApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false && ExamineApprove.filter(function (el) { return (el != null && el.status === 0) }).length === 1) || (permission_menuID ? permission_menuID.includes(10) : null) === true) {
-      const usercode = data.UserCode
-      const nac_status = 3
-      const source_approve = sourceApprove
-      const source_approve_date = sourceDateApproveDate
-      const des_approve = des_deliveryApprove
-      const des_approve_date = des_deliveryApproveDate
-      const verify_by = data.UserCode
-      const verify_date = datenow
-      const nac_type = headers.nac_type
-      const responseForUpdate = await store_FA_control_updateStatus({
-        usercode,
-        nac_code,
-        nac_status,
-        nac_type,
-        source,
-        sourceDate,
-        des_delivery,
-        des_deliveryDate,
-        source_approve,
-        source_approve_date,
-        des_approve,
-        des_approve_date,
-        verify_by,
-        verify_date,
-      });
-      if ('data' in responseForUpdate) {
-        const comment = 'ตรวจสอบรายการแล้ว'
-        const responseComment = await store_FA_control_comment({
-          nac_code,
-          usercode,
-          comment
-        })
-        await store_FA_SendMail({
-          nac_code
-        })
-        if ('data' in responseComment) {
-          swal("แจ้งเตือน", 'คุณตรวจสอบรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-          });
-        } else {
-          swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-          });
-        }
-      } else {
-        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-        });
-      }
-    }
-  };
-
-  // ExecApprove
-  const handleExecApprove = async () => {
-    if (CheckApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true) {
-      const usercode = data.UserCode
-      const nac_status = 5
-      const source_approve = data.UserCode
-      const source_approve_date = datenow
-      const des_approve = des_deliveryApprove
-      const des_approve_date = des_deliveryApproveDate
-      const verify_by = headers.verify_by_userid
-      const verify_date = headers.verify_date
-      const nac_type = headers.nac_type
-      const responseForUpdate = await store_FA_control_updateStatus({
-        usercode,
-        nac_code,
-        nac_status,
-        nac_type,
-        source,
-        sourceDate,
-        des_delivery,
-        des_deliveryDate,
-        source_approve,
-        source_approve_date,
-        des_approve,
-        des_approve_date,
-        verify_by,
-        verify_date,
-      });
-      const comment = 'อนุมัติรายการแล้ว'
-      const responseComment = await store_FA_control_comment({
-        nac_code,
-        usercode,
-        comment
-      })
-      await store_FA_SendMail({
-        nac_code
-      })
-      if ('data' in responseComment) {
-        swal("แจ้งเตือน", 'คุณอนุมัติรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-        });
-      } else {
-        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-        });
-      }
-    }
-  };
-
-  //
-  const handleSubmitComplete = async () => {
-    if (selectNAC === 4 || selectNAC === 5 || selectNAC === 12 || selectNAC === 13) {
-      const usercode = data.UserCode
-      const nac_status = selectNAC === 4 ? 5 : selectNAC === 12 ? 13 : 6
-      const source_approve = headers.source_approve_userid
-      const source_approve_date = headers.source_approve_date
-      const des_delivery = headers.des_userid
-      const des_deliveryDate = selectNAC === 4 ? datenow : headers.des_date
-      const verify_by = headers.verify_by_userid
-      const verify_date = headers.verify_date
-      const nac_type = headers.nac_type
-      const des_approve = null
-      const des_approve_date = null
-      const responseForUpdate = await store_FA_control_updateStatus({
-        usercode,
-        nac_code,
-        nac_status,
-        nac_type,
-        source,
-        sourceDate,
-        des_delivery,
-        des_deliveryDate,
-        source_approve,
-        source_approve_date,
-        des_approve,
-        des_approve_date,
-        verify_by,
-        verify_date,
-      });
-      if ('data' in responseForUpdate) {
-        const comment = selectNAC === 4 ? 'ตรวจรับเอกสารแล้ว' : 'ปิดรายการแล้ว'
-        const responseComment = await store_FA_control_comment({
-          nac_code,
-          usercode,
-          comment
-        })
-        await store_FA_SendMail({
-          nac_code
-        })
-        if ('data' in responseComment) {
-          if (nac_status === 5) {
-            for (let i = 0; i < checked.length; i++) {
-              const usercode = data.UserCode
-              const nacdtl_assetsCode = checked[i].assets_code
-              const asset_id = checked[i].asset_id
-              const statusCheck = checked[i].statusCheck
-              await stroe_FA_control_DTL_ConfirmSuccess({
-                nac_code,
-                usercode,
-                nacdtl_assetsCode,
-                asset_id,
-                statusCheck,
-              })
-            }
-          }
-          else if (nac_status === 6) {
-            for (let i = 0; i < serviceList.length; i++) {
-              const usercode = data.UserCode
-              const nacdtl_assetsCode = serviceList[i].assetsCode
-              const asset_id = serviceList[i].asset_id
-              await store_FA_control_upadate_table({
-                nac_code,
-                usercode,
-                nacdtl_assetsCode,
-                asset_id,
-                nac_type,
-                nac_status,
-              })
-            }
-          }
-          swal("แจ้งเตือน", 'คุณได้ปิดรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
-          });
-        } else {
-          swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
-            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
-          });
-        }
-      }
-    } else {
-      swal("แจ้งเตือน", 'สถานะการทำรายการผิด', "error").then((value) => {
-        window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
-      });
-    }
-  };
-
-  // CancelApprove
-  const CancelApprove = async () => {
-    const usercode = data.UserCode
-    const nac_status = 0
-    const source_approve =
-      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true)) ? verify : data.UserCode
-    const source_approve_date =
-      (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true)) ? verifyApproveDate : datenow
-    const des_approve = des_deliveryApprove
-    const des_approve_date = des_deliveryApproveDate
-    const verify_by = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true)) ? data.UserCode : bossApprove
-    const verify_date = (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true)) ? datenow : bossApproveDate
-    const nac_type = headers.nac_type
-    const responseForUpdate = await store_FA_control_updateStatus({
-      usercode,
-      nac_code,
-      nac_status,
-      nac_type,
-      source,
-      sourceDate,
-      des_delivery,
-      des_deliveryDate,
-      source_approve,
-      source_approve_date,
-      des_approve,
-      des_approve_date,
-      verify_by,
-      verify_date,
-    });
-    if ('data' in responseForUpdate) {
-      const comment = 'ยกเลิกรายการแล้ว'
-      const responseComment = await store_FA_control_comment({
-        nac_code,
-        usercode,
-        comment
-      })
-      if ('data' in responseComment) {
-        swal("แจ้งเตือน", 'คุณได้ยกเลิกรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
-        });
-      } else {
-        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
-          window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
-        });
-      }
-    } else {
-      swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
-        window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
-      });
-    }
-  };
-
-  const handleChangeCommentReply = (event) => {
-    event.preventDefault();
-    setCommentReply(event.target.value)
-  }
-
-  const handleReply = async () => {
-    const usercode = data.UserCode
-    const nac_status = 7
-    const source_approve = sourceApprove
-    const source_approve_date = sourceDateApproveDate
-    const des_approve = des_deliveryApprove
-    const des_approve_date = des_deliveryApproveDate
-    const verify_by = bossApprove
-    const verify_date = bossApproveDate
-    const nac_type = headers.nac_type
-    const responseForUpdate = await store_FA_control_updateStatus({
-      usercode,
-      nac_code,
-      nac_status,
-      nac_type,
-      source,
-      sourceDate,
-      des_delivery,
-      des_deliveryDate,
-      source_approve,
-      source_approve_date,
-      des_approve,
-      des_approve_date,
-      verify_by,
-      verify_date
-    });
-    if ('data' in responseForUpdate) {
-      const comment = 'ตีกลับรายการเนื่องจาก "' + commentReply + '"'
-      const responseComment = await store_FA_control_comment({
-        nac_code,
-        usercode,
-        comment
-      })
-      if ('data' in responseComment) {
-        await store_FA_SendMail({
-          nac_code
-        })
-        setOpenDialogReply(false);
-        window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
-      }
-    }
-  }
-
-  const handleCloseAlert = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setAlert(false);
-  };
-
-  if (serviceList[0].assetsCode === '') {
+  if (!sendHeader[0].nac_code) {
     return (
       <React.Fragment>
         <Box
@@ -1580,16 +986,9 @@ export default function Nac_Seals_Approve() {
         </Box>
       </React.Fragment>
     );
-  } else if (headers.nac_type === '4' || headers.nac_type === 4) {
+  } else if (sendHeader[0].nac_type === '4' || sendHeader[0].nac_type === 4) {
     return (
       <React.Fragment>
-        <Stack spacing={2} sx={{ width: '100%' }}>
-          <Snackbar open={alert} autoHideDuration={4500} onClose={handleCloseAlert}>
-            <Alert onClose={handleCloseAlert} severity="warning" sx={{ width: '100%' }}>
-              {valueAlert}
-            </Alert>
-          </Snackbar>
-        </Stack>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <AppBar
@@ -1606,15 +1005,15 @@ export default function Nac_Seals_Approve() {
                 <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                   <Box gridColumn="span 10">
                     <AnimatedPage>
-                      <Typography variant="h5" color="inherit" sx={{ pt: 1 }}>
+                      <Typography className='font-399-main font-vsm font-md' color="inherit" sx={{ pt: 1 }}>
                         การเปลี่ยนแปลงทรัพย์สินถาวร
                       </Typography>
                     </AnimatedPage>
                   </Box>
                   <Box gridColumn="span 0">
                     <AnimatedPage>
-                      <IconButton sx={{ color: 'rgb(0,0,0)' }} component="label" size="large" onClick={handleGoNAC}>
-                        <SummarizeIcon />
+                      <IconButton sx={{ color: 'rgb(0,0,0)' }} onClick={() => navigate('/NAC_ROW')}>
+                        <SummarizeIcon className='font-399-main font-vsm font-md text-center' />
                       </IconButton>
                     </AnimatedPage>
                   </Box>
@@ -1624,35 +1023,54 @@ export default function Nac_Seals_Approve() {
           </AppBar>
           <AnimatedPage>
             <Container component="main" maxWidth="lg" sx={{ mb: 12 }}>
-              <Paper variant="outlined" sx={{ p: { xs: 1, md: 2 }, mt: 4 }}>
-                <Table aria-label="customized table" style={{ width: '100%' }}>
-                  {/* <Grid container>
-                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ขารับ : {
-                      ExamineApproveDes.map((Approve) => (
-                        <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'black' }}>
-                          &nbsp;({Approve.approverid})
+              <Paper variant="outlined" sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 3 } }}>
+                {sendHeader[0].nac_code && approveData ? (
+                  <React.Fragment>
+                    <Table>
+                      <Stack
+                        direction="row"
+                        alignItems="flex-start"
+                        spacing={1}
+                      >
+                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                          ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ :
                         </Typography>
-                      ))}
-                  </Grid>
-                  <hr /> */}
-                  <Grid container>
-                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ขาส่ง : {
-                      ExecApprove.map((Approve) => (
-                        <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'black' }}>
-                          &nbsp;({Approve.approverid})
+                        {approveData.filter((res) => res.limitamount >= sendHeader[0].sumPrice).map((resMap) => (
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm' style={{ 'color': resMap.status === 1 ? 'blue' : 'black' }}>
+                            {
+                              resMap.workflowlevel === 1 ? `(AM ${resMap.approverid})` :
+                                resMap.workflowlevel === 2 ? `(SM ${resMap.approverid})` :
+                                  resMap.workflowlevel === 3 ? `(DM ${resMap.approverid})` :
+                                    resMap.workflowlevel === 4 ? `(FM ${resMap.approverid})` :
+                                      resMap.workflowlevel === 5 ? `(MD ${resMap.approverid})`
+                                        : null}
+                          </Typography>
+                        ))}
+                      </Stack>
+                      <hr />
+                      <Stack
+                        direction="row"
+                        alignItems="flex-start"
+                        spacing={1}
+                      >
+                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                          ผู้มีสิทธิตรวจสอบเอกสารฉบับนี้ :
                         </Typography>
-                      ))}
-                  </Grid>
-                  <hr />
-                  <Grid container>
-                    ผู้มีสิทธิตรวจสอบเอกสารฉบับนี้ : {
-                      ExamineApprove.map((Approve) => (
-                        <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'red' }}>
-                          &nbsp;({Approve.approverid})
-                        </Typography>
-                      ))}
-                  </Grid>
-                </Table>
+                        {approveData.filter((res) => res.limitamount < sendHeader[0].sumPrice).map((resMap) => (
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm' style={{ 'color': resMap.status === 1 ? 'blue' : 'black' }}>
+                            {
+                              resMap.workflowlevel === 1 ? `(AM ${resMap.approverid})` :
+                                resMap.workflowlevel === 2 ? `(SM ${resMap.approverid})` :
+                                  resMap.workflowlevel === 3 ? `(DM ${resMap.approverid})` :
+                                    resMap.workflowlevel === 4 ? `(FM ${resMap.approverid})` :
+                                      resMap.workflowlevel === 5 ? `(MD ${resMap.approverid})`
+                                        : null}
+                          </Typography>
+                        ))}
+                      </Stack>
+                    </Table>
+                  </React.Fragment>
+                ) : null}
               </Paper>
               <Box
                 sx={{
@@ -1666,880 +1084,924 @@ export default function Nac_Seals_Approve() {
                     borderTopLeftRadius: '100%',
                     borderBottomLeftRadius: '0%',
                     'maxWidth': 'fit-content',
-                    'backgroundColor': headers.nac_status === 1 ?
-                      '#1E90FF' : headers.nac_status === 2 ?
-                        '#6495ED' : headers.nac_status === 3 ?
-                          '#FF69B4' : headers.nac_status === 4 ?
-                            '#00CED1' : headers.nac_status === 5 ?
-                              '#6A5ACD' : headers.nac_status === 6 ?
-                                '#008000' : headers.nac_status === 7 ?
-                                  '#FFA500' : headers.nac_status === 8 ?
-                                    '#F0E68C' : headers.nac_status === 11 ?
-                                      '#F4A460' : headers.nac_status === 12 ?
-                                        '#DDA0DD' : headers.nac_status === 13 ?
-                                          '#6A5ACD' : headers.nac_status === 14 ?
-                                            '#708090' : headers.nac_status === 15 ?
+                    'backgroundColor': sendHeader[0].nac_status === 1 ?
+                      '#1E90FF' : sendHeader[0].nac_status === 2 ?
+                        '#6495ED' : sendHeader[0].nac_status === 3 ?
+                          '#FF69B4' : sendHeader[0].nac_status === 4 ?
+                            '#00CED1' : sendHeader[0].nac_status === 5 ?
+                              '#6A5ACD' : sendHeader[0].nac_status === 6 ?
+                                '#008000' : sendHeader[0].nac_status === 7 ?
+                                  '#FFA500' : sendHeader[0].nac_status === 8 ?
+                                    '#F0E68C' : sendHeader[0].nac_status === 11 ?
+                                      '#F4A460' : sendHeader[0].nac_status === 12 ?
+                                        '#DDA0DD' : sendHeader[0].nac_status === 13 ?
+                                          '#6A5ACD' : sendHeader[0].nac_status === 14 ?
+                                            '#708090' : sendHeader[0].nac_status === 15 ?
                                               '#6A5ACD' : '#DC143C'
                   }}
-                  sx={{ p: 1, pt: 2, pl: 10, pr: 3, mb: 0, mt: 4, color: 'RGB(255,255,255)' }}
+                  sx={{ p: 1, pt: 2, pl: 10, pr: 3, mb: 0, color: 'RGB(255,255,255)' }}
+                  className='font-399-seconds font-vsm-vsm font-md-sm'
                 >
-                  {headers.status_name}
+                  {sendHeader[0].status_name}
                 </Card>
               </Box>
               <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 } }}>
-                <Grid container sx={{ pb: 1 }}>
-                  <Grid xs={2}>
-                    <Box sx={{ flexGrow: 1, justifyContent: 'start' }}>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Grid item xs={2}>
+                    <Box className='logo-399-sm logo-sm logo-md'>
                       <img style={{ maxWidth: '100%' }} src={logoPure} loading="lazy" />
                     </Box>
                   </Grid>
-                  <Grid xs={8}>
-                    <Typography component="h1" variant="h4" align="center" className='font-sm font-md'>
-                      <b>PURE THAI ENERGY CO.,LTD.</b>
-                    </Typography>
-                    <Typography sx={{ mb: 1 }} component="h1" variant="h6" align="center" className='pt-2 font-vsm font-vmd'>
-                      เปลี่ยนแปลงรายการทรัพย์สินถาวร (Notice of Asset Change - NAC)
-                    </Typography>
+                  <Grid item xs={8}>
+                    <Stack
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Typography className='font-399-main font-vsm font-md'>
+                        <b>PURE THAI ENERGY CO.,LTD.</b>
+                      </Typography>
+                      <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                        เปลี่ยนแปลงรายการทรัพย์สินถาวร (Notice of Asset Change - NAC)
+                      </Typography>
+                    </Stack>
                   </Grid>
-                  <Grid xs={2}>
-                    <TableContainer component={Paper}>
-                      <Table aria-label="customized table" style={{ width: '100%' }}>
-                        <TableBody>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                            <Typography align='center' color="inherit" >
-                              {nac_code}
-                            </Typography>
-                          </StyledTableCell>
-                        </TableBody>
-                        <TableBody>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                            <Typography align='center' color="inherit" >
-                              {!headers.create_date ? '' : (headers.create_date).split('T')[0]}
-                            </Typography>
-                          </StyledTableCell>
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
+                  <Grid item xs={2}>
+                    <Typography sx={{ p: 2, border: '1px dashed grey' }} className='font-399-seconds font-vsm-vsm font-md-sm text-center'>
+                      <b>{sendHeader[0].nac_code}</b>
+                    </Typography>
                   </Grid>
                 </Grid>
-                <React.Fragment>
+                <Box sx={{ pt: 3 }} className='logo-399-sm logo-sm logo-md'>
                   <Stack
                     direction="row"
                     justifyContent="space-between"
                     alignItems="flex-start"
                     spacing={2}
-                    sx={{ pt: 2 }}
+                    sx={{ p: 1 }}
                   >
-                    <Typography sx={{ pb: 1, pt: 1 }} color='error'>
-                      * กรุณากรอกข้อมูลสำหรับตัดจากบัญชีทรัพย์สิน
+                    <Typography className='font-399-seconds font-vsm-vsm font-md-sm' color='error'>
+                      * กรุณากรอกข้อมูลสำหรับตัดบัญชีทรัพย์สิน
                     </Typography>
-                    <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="flex-start"
-                      spacing={2}
+                    <Button
+                      onClick={Export_PDF_DATA_NAC}
+                      variant='contained'
+                      color='warning'
+                      size='small'
                     >
-                      <Button
-                        onClick={Export_PDF_DATA_NAC}
-                        variant='contained'
-                        color='warning'
-                        size='small'
-                      >
+                      <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
                         Dowload Report
-                      </Button>
-                      {/* <CSVLink
-                        data={exportToExcel}
-                        className='btn btn-success btn-sm'
-                        target="_blank"
-                        filename={`${headers.nac_code}.csv`}
-                      >
-                        Dowload CSV
-                      </CSVLink> */}
-                    </Stack>
+                      </Typography>
+                    </Button>
                   </Stack>
-                  <TableContainer component={Paper}>
-                    <Table aria-label="customized table">
-                      <TableHead>
-                        <TableRow>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ส่งมอบ</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับมอบ</StyledTableCell>
-                        </TableRow>
-                      </TableHead>
-                      <React.Fragment>
-                        <TableBody>
-                          <StyledTableRow>
-                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                              <FormGroup>
-                                <center>
-                                  <Typography variant='h4' color='black'>
-                                    ตัดจากบัญชีทรัพย์สิน
-                                  </Typography>
-                                </center>
-                              </FormGroup>
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                              <React.Fragment>
-                                <Grid container>
-                                  <Grid xs={6}>
-                                    <Typography align='center' color="inherit" >
-                                      Department
-                                    </Typography>
-                                  </Grid>
-                                  <Grid xs={6}>
-                                    <Typography align='center' color="inherit" >
-                                      BU
-                                    </Typography>
-                                  </Grid>
-                                </Grid>
-                                <Stack
-                                  direction="row"
-                                  divider={<Divider orientation="vertical" flexItem />}
-                                  spacing={1}
-                                  sx={{ pt: 1, pb: 1 }}
-                                >
-                                  <TextField
-                                    required
-                                    fullWidth
-                                    disabled
-                                    name='source_department'
-                                    onChange={handleChangeSource_Department}
-                                    value={source_department}
-                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
-                                    variant="standard"
-                                  />
-                                  <TextField
-                                    required
-                                    fullWidth
-                                    disabled
-                                    onChange={handleChangeSource_BU}
-                                    name='source_BU'
-                                    value={source_BU}
-                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
-                                    variant="standard"
-                                  />
-                                </Stack>
-                                {data.branchid === 901 ? (
-                                  <React.Fragment>
-                                    <Autocomplete
-                                      freeSolo
-                                      name='source'
-                                      id='source'
-                                      size="small"
-                                      disabled={data.branchid === 901 && (selectNAC === 1 || selectNAC === 7) ? false : true}
-                                      options={users_pureDep}
-                                      getOptionLabel={(option) => option.UserCode}
-                                      filterOptions={filterOptions2}
-                                      value={!source ? '' : UserForAssetsControl[resultIndex[0].indexOf(source)]}
-                                      onChange={handleAutoSource_DeapartMent}
-                                      renderInput={(params) => (
-                                        <React.Fragment>
-                                          <TextField
-                                            {...params}
-                                            variant="standard"
-                                            label='ผู้ส่งมอบ'
-                                            error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
-                                            fullWidth
-                                            autoComplete="family-name"
-                                            sx={{ pt: 1 }}
-                                          />
-                                        </React.Fragment>
-                                      )}
-                                    />
-                                    <TextField
-                                      variant="standard"
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
-                                      //disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
-                                      onChange={handleChangeSource_Name}
-                                      value={nameSource}
-                                      InputProps={{
-                                        startAdornment: (
-                                          <InputAdornment position="start">
-                                            <Typography color="black">
-                                              ลงชื่อผู้ส่งมอบ :
-                                            </Typography>
-                                          </InputAdornment>
-                                        ),
-                                      }}
-                                      sx={{ pt: 1 }}
-                                    />
-                                  </React.Fragment>
-                                ) : (
-                                  <React.Fragment>
-                                    <TextField
-                                      required
-                                      fullWidth
-                                      name='source'
-                                      id='source'
-                                      label='ผู้ส่งมอบ'
-                                      error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
-                                      value={source}
-                                      sx={{ pt: 1 }}
-                                      variant="standard"
-                                    />
-                                    <TextField
-                                      variant="standard"
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
-                                      //disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
-                                      onChange={handleChangeSource_Name}
-                                      value={nameSource}
-                                      InputProps={{
-                                        startAdornment: (
-                                          <InputAdornment position="start">
-                                            <Typography color="black">
-                                              ลงชื่อผู้ส่งมอบ :
-                                            </Typography>
-                                          </InputAdornment>
-                                        ),
-                                      }}
-                                      sx={{ pt: 1 }}
-                                    />
-                                  </React.Fragment>
-                                )}
-                                <LocalizationProvider dateAdapter={DateAdapter}>
-                                  <DatePicker
-                                    inputFormat="yyyy-MM-dd"
-                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                    onChange={handleChangeSource_deliveryDate}
-                                    name='sourceDate'
-                                    value={sourceDate}
-                                    InputProps={{
-                                      startAdornment: (
-                                        <InputAdornment position="start">
-                                          <Typography color="black">
-                                            วันที่ยืนยันรายการ :
-                                          </Typography>
-                                        </InputAdornment>
-                                      ),
-                                    }}
-                                    renderInput={(params) =>
-                                      <TextField
-                                        required
-                                        fullWidth
-                                        autoComplete="family-name"
-                                        sx={{ pt: 1 }}
-                                        variant="standard"
-                                        {...params} />}
-                                  />
-                                </LocalizationProvider>
+                </Box>
+                <TableContainer component={Paper}>
+                  <Table size="small">
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell align="center" style={{ width: '30%' }}>
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                            ประเภทการเปลี่ยนแปลง
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                            หน่วยงานที่ส่งมอบ
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ width: '35%' }}>
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                            หน่วยงานที่รับมอบ
+                          </Typography>
+                        </StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      <StyledTableRow>
+                        <StyledTableCell align="center">
+                          <Typography className='font-399-main font-vsm font-md'>
+                            ตัดบัญชีทรัพย์สิน
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Stack
+                            direction="row"
+                            justifyContent="space-evenly"
+                            alignItems="flex-start"
+                            spacing={2}
+                            sx={{ p: 2 }}
+                          >
+                            <Stack>
+                              <Typography className='font-399-seconds font-vsm-vsm font-md-sm' color="inherit" >
+                                Department
+                              </Typography>
+                              <TextField
+                                required
+                                fullWidth
+                                name='source'
+                                sx={{
+                                  "& .MuiInputBase-input.Mui-disabled": {
+                                    WebkitTextFillColor: "#000000",
+                                  },
+                                }}
+                                disabled
+                                value={!sendHeader[0].source_department ? '' : sendHeader[0].source_department}
+                                InputProps={{
+                                  classes: {
+                                    input: 'font-399-seconds font-vsm-vsm font-md-sm text-center pt-2',
+                                  },
+                                }}
+                                variant="standard"
+                              />
+                            </Stack>
+                            <Stack>
+                              <Typography className='font-399-seconds font-vsm-vsm font-md-sm' color="inherit" >
+                                BU
+                              </Typography>
+                              <TextField
+                                required
+                                fullWidth
+                                disabled
+                                sx={{
+                                  "& .MuiInputBase-input.Mui-disabled": {
+                                    WebkitTextFillColor: "#000000",
+                                  },
+                                }}
+                                value={!sendHeader[0].source_BU ? '' : sendHeader[0].source_BU}
+                                name='source'
+                                InputProps={{
+                                  classes: {
+                                    input: 'font-399-seconds font-vsm-vsm font-md-sm text-center pt-2',
+                                  },
+                                }}
+                                variant="standard"
+                              />
+                            </Stack>
+                          </Stack>
+                          <Box sx={{ p: 2 }}>
+                            <Autocomplete
+                              freeSolo
+                              name='source'
+                              size="small"
+                              value={sendHeader[0].source}
+                              disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
+                              sx={{
+                                "& .MuiInputBase-input.Mui-disabled": {
+                                  WebkitTextFillColor: "#000000",
+                                },
+                              }}
+                              options={users.filter((res) => res.DepID === data.depid).map((option) => option.UserCode)}
+                              onChange={handleService_Source}
+                              renderInput={(params) => (
                                 <TextField
-                                  required
-                                  fullWidth
-                                  onChange={handleChangeSource_Description}
-                                  value={source_description}
-                                  name='source_description'
-                                  sx={{ pt: 1 }}
+                                  {...params}
+                                  variant="standard"
                                   InputProps={{
+                                    ...params.InputProps,
+                                    classes: {
+                                      input: 'font-399-seconds font-vsm-vsm font-md-sm',
+                                    },
                                     startAdornment: (
                                       <InputAdornment position="start">
-                                        <Typography color="black">
-                                          หมายเหตุ :
+                                        <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                          ผู้ส่งมอบ :
                                         </Typography>
                                       </InputAdornment>
                                     ),
                                   }}
-                                  variant="standard"
                                 />
-                              </React.Fragment>
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                              <FormGroup>
-                                <center>
-                                  <Typography variant='h4' color='#AAAAAA'>
-                                    none
-                                  </Typography>
-                                </center>
-                              </FormGroup>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        </TableBody>
-                      </React.Fragment>
-                    </Table>
-                    <Table aria-label="customized table" style={{ width: 1100 }}>
-                      <TableHead>
-                        <TableRow style={{ width: '100%' }}>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 180 }} >รหัสทรัพย์สิน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 150 }} >Serial No.</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 180 }} >ชื่อ</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 115 }} >วันที่ขึ้นทะเบียน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >
-                            ต้นทุน
-                            {/* <Stack direction="row" alignItems="center" spacing={1}>
-                              <Typography sx={{ pl: 0.5 }}>
-                                ต้นทุน
-                              </Typography>
-                              <IconButton
-                                sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                              >
-                                {valuesVisibility.showText ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
-                              </IconButton>
-                            </Stack> */}
-                          </StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >BV</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >ราคาขาย</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: 100 }} >กำไร/ขาดทุน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >รูปภาพ</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
-                            <IconButton
-                              size="large"
-                              color='primary'
-                              disabled={(selectNAC === 1) ? false : true}
-                              onClick={handleServiceAdd}
+                              )}
+                            />
+                            <Stack
+                              direction="row"
+                              justifyContent="space-evenly"
+                              alignItems="flex-start"
+                              spacing={1}
                             >
-                              <AddBoxIcon />
-                            </IconButton>
-                          </StyledTableCell>
-                        </TableRow>
-                      </TableHead>
-                      {serviceList.map((singleService, index) => (
-                        <React.Fragment>
-                          <TableBody>
-                            <StyledTableRow>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                {(selectNAC === 1 && data.UserCode === headers.create_by) ? (
-                                  <React.Fragment>
-                                    <Autocomplete
-                                      freeSolo
-                                      key={index}
-                                      disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                      name='assetsCode'
-                                      id='assetsCode'
-                                      sx={{
-                                        "& .MuiAutocomplete-input, & .MuiInputLabel-root": {
-                                          fontSize: 14
-                                        }
-                                      }}
-                                      ListboxProps={{
-                                        sx: { fontSize: 12 }
-                                      }}
-                                      options={AllAssetsControl}
-                                      getOptionLabel={(option) => option.Code || ''}
-                                      filterOptions={filterOptions}
-                                      onChange={(e) => handleServiceChangeHeader(e, index)}
-                                      value={!singleService.assetsCode ? singleService.assetsCode : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
-                                      renderInput={(params) => (
-                                        <TextField
-                                          {...params}
-                                          variant="standard"
-                                          name='assetsCode'
-                                          id='assetsCode'
-                                          key={index}
-                                          value={singleService.assetsCode}
-                                        //onChange={(e) => handleServiceChange(e, index)}
-                                        />
-                                      )}
-                                    />
-                                  </React.Fragment>
-                                ) : (
-                                  <React.Fragment>
-                                    <TextField
-                                      key={index}
-                                      fullWidth
-                                      disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                      variant="standard"
-                                      name='assetsCode'
-                                      id='assetsCode'
-                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                      onChange={(e) => handleServiceChange(e, index)}
-                                      value={singleService.assetsCode}
-                                    />
-                                  </React.Fragment>
-                                )}
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              <Stack>
                                 <TextField
-                                  key={index}
-                                  fullWidth
-                                  disabled
-                                  name="serialNo"
-                                  id="serialNo"
                                   variant="standard"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                  onChange={(e) => handleServiceChange(e, index)}
-                                  value={singleService.serialNo}
+                                  fullWidth
+                                  value={sourceName}
+                                  disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
+                                  sx={{
+                                    "& .MuiInputBase-input.Mui-disabled": {
+                                      WebkitTextFillColor: "#000000",
+                                    },
+                                    pt: 1
+                                  }}
+                                  onChange={(e) => {
+                                    const listHeader = [...sendHeader]
+                                    listHeader[0].nameSource = `${e.target.value} ${sourceLastName}`
+                                    setSendHeader(listHeader)
+                                    setSourceName(e.target.value)
+                                  }}
+                                  InputProps={{
+                                    classes: {
+                                      input: 'font-399-seconds font-vsm-vsm font-md-sm',
+                                    },
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                          ชื่อจริง :
+                                        </Typography>
+                                      </InputAdornment>
+                                    ),
+                                  }}
                                 />
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              </Stack>
+                              <Stack>
                                 <TextField
-                                  key={index}
-                                  fullWidth
-                                  disabled
-                                  name="name"
-                                  id="name"
                                   variant="standard"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                  onChange={(e) => handleServiceChange(e, index)}
-                                  value={singleService.name}
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
                                   fullWidth
-                                  key={index}
-                                  disabled
-                                  name="date_asset"
-                                  id="date_asset"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  value={!singleService.date_asset ? singleService.date_asset : singleService.date_asset.split('T')[0]}
-                                  variant="standard"
+                                  value={sourceLastName}
+                                  disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
+                                  sx={{
+                                    "& .MuiInputBase-input.Mui-disabled": {
+                                      WebkitTextFillColor: "#000000",
+                                    },
+                                    pt: 1
+                                  }}
+                                  onChange={(e) => {
+                                    const listHeader = [...sendHeader]
+                                    listHeader[0].nameSource = `${sourceName} ${e.target.value}`
+                                    setSendHeader(listHeader)
+                                    setSourceLastName(e.target.value)
+                                  }}
+                                  InputProps={{
+                                    classes: {
+                                      input: 'font-399-seconds font-vsm-vsm font-md-sm',
+                                    },
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                          นามสกุล :
+                                        </Typography>
+                                      </InputAdornment>
+                                    ),
+                                  }}
                                 />
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  key={index}
-                                  fullWidth
-                                  disabled
-                                  name="price"
-                                  id="price"
-                                  onChange={(e) => handleServiceChange(e, index)}
-                                  type={valuesVisibility.showText ? "text" : "password"}
-                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  variant="standard"
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  key={index}
-                                  fullWidth
-                                  disabled={(selectNAC === 11 && ((permission_menuID ? permission_menuID.includes(10) : null) === true || checkUserWeb === 'User_BV' || checkUserWeb === 'operatorI')) ? false : true}
-                                  name="bookValue"
-                                  id="bookValue"
-                                  variant="standard"
-                                  type={valuesVisibility.showText ? "text" : "password"}
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  onChange={(e) => handleServiceChange(e, index)}
-                                  value={!singleService.bookValue ? singleService.bookValue : (singleService.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  key={index}
-                                  fullWidth
-                                  disabled
-                                  name="priceSeals"
-                                  id="priceSeals"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  variant="standard"
-                                  onChange={(e) => handleServiceChange(e, index)}
-                                  value={!singleService.priceSeals ? 0 : (singleService.priceSeals).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  key={index}
-                                  fullWidth
-                                  disabled
-                                  name="profit"
-                                  id="profit"
-                                  variant="standard"
-                                  type={valuesVisibility.showText ? "text" : "password"}
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  onChange={(e) => handleServiceChange(e, index)}
-                                  value={!singleService.bookValue ? '' : (0 - singleService.bookValue).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                {singleService.image_1 === '' ?
-                                  <React.Fragment>
-                                    <Stack direction="row" spacing={1}>
-                                      <Tooltip title="Image 1">
-                                        <IconButton color='error' aria-label="upload picture" component="label">
-                                          <input hidden type="file" name='file' accept='image/*' onChange={(e) => handleUploadFile_1(e, index)} />
-                                          <FilePresentIcon sx={{ fontSize: 20 }} />
-                                        </IconButton>
-                                      </Tooltip>
-                                    </Stack>
-                                  </React.Fragment> :
-                                  <React.Fragment>
-                                    <Stack direction="row" spacing={1}>
-                                      <Tooltip title={TooltipImage_1 ? TooltipImage_1 : singleService.image_1}>
-                                        <IconButton onClick={() => window.open(singleService.image_1, "_blank")} aria-label="upload picture" component="label">
-                                          <FilePresentIcon sx={{ fontSize: 20 }} />
-                                        </IconButton>
-                                      </Tooltip>
-                                      <Tooltip title='delete image 1'>
-                                        <IconButton component="label">
-                                          <ClearIcon onClick={(e) => handleCancelUploadFile_1(e, index)} sx={{ fontSize: 20 }} />
-                                        </IconButton>
-                                      </Tooltip>
-                                    </Stack>
-                                  </React.Fragment>
-                                }
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                {serviceList.length !== 0 && (
-                                  <IconButton
-                                    size="large"
-                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                    aria-label="delete"
-                                    color="error"
-                                    onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
-                                  >
-                                    <DeleteIcon fontSize="inherit" />
-                                  </IconButton>
-                                )}
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          </TableBody>
-                        </React.Fragment>
-                      ))}
-                      <StyledTableRow>
-                        <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'border-right': 0 }}>
-                          <Typography>
-                            รวม
+                              </Stack>
+                            </Stack>
+                            <LocalizationProvider dateAdapter={DateAdapter}>
+                              <DatePicker
+                                inputFormat="yyyy-MM-dd"
+                                name='source_Date'
+                                value={sendHeader[0].sourceDate}
+                                disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
+                                sx={{
+                                  "& .MuiInputBase-input.Mui-disabled": {
+                                    WebkitTextFillColor: "#000000",
+                                  },
+                                  pt: 1
+                                }}
+                                onChange={handleSendDate}
+                                InputProps={{
+                                  classes: {
+                                    input: 'font-399-seconds font-vsm-vsm font-md-sm',
+                                  },
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                        วันที่ส่งมอบ :
+                                      </Typography>
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                renderInput={(params) =>
+                                  <TextField
+                                    required
+                                    fullWidth
+                                    autoComplete="family-name"
+                                    variant="standard"
+                                    {...params} />}
+                              />
+                            </LocalizationProvider>
+                            <TextField
+                              required
+                              fullWidth
+                              name='source_description'
+                              value={sendHeader[0].source_description}
+                              disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
+                              sx={{
+                                "& .MuiInputBase-input.Mui-disabled": {
+                                  WebkitTextFillColor: "#000000",
+                                },
+                                pt: 1
+                              }}
+                              onChange={handleService_SourceDescription}
+                              InputProps={{
+                                classes: {
+                                  input: 'font-399-seconds font-vsm-vsm font-md-sm',
+                                },
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                      หมายเหตุ :
+                                    </Typography>
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="standard"
+                            />
+                          </Box>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Typography className='font-399-main font-vsm font-md'>
+                            NONE
                           </Typography>
                         </StyledTableCell>
-                        <StyledTableCell align="start" style={{ border: `none` }}>
-                        </StyledTableCell>
-                        <StyledTableCell align="start" style={{ border: `none` }}>
-                        </StyledTableCell>
-                        <StyledTableCell align="start" style={{ border: `none` }}>
-                        </StyledTableCell>
-                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                          <TextField
-                            required
-                            fullWidth
-                            disabled
-                            type={valuesVisibility.showText ? "text" : "password"}
-                            value={result === 0 ? '' : result.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
-                            inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
-                            variant="standard"
-                          />
-                        </StyledTableCell>
-                        <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                          <TextField
-                            required
-                            fullWidth
-                            disabled
-                            type={valuesVisibility.showText ? "text" : "password"}
-                            value={book_V === 0 ? '' : book_V.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
-                            inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
-                            variant="standard"
-                          />
-                        </StyledTableCell>
-                        <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                          <TextField
-                            required
-                            fullWidth
-                            disabled
-                            //type={valuesVisibility.showText ? "text" : "password"}
-                            value={result === 0 ? '' : 0}
-                            inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
-                            variant="standard"
-                          />
-                        </StyledTableCell>
-                        <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                          <TextField
-                            required
-                            fullWidth
-                            disabled
-                            type={valuesVisibility.showText ? "text" : "password"}
-                            value={(book_V === 0 || !book_V) ? '' : (0 - book_V).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
-                            inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
-                            variant="standard"
-                          />
-                        </StyledTableCell>
-                        <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                        </StyledTableCell>
-                        <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                        </StyledTableCell>
                       </StyledTableRow>
-                    </Table>
-                    <Table aria-label="customized table" style={{ width: 1100 }}>
-                      <TableHead>
+                    </TableBody>
+                  </Table>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell align="center">
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                            รหัสทรัพย์สิน
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                            Serial No.
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                            ชื่อทรัพย์สิน
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ width: '12%' }}>
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                            วันที่ขึ้นทะเบียน
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ width: '8%' }}>
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                            ต้นทุน
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ width: '8%' }}>
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                            Book value
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ width: '8%' }}>
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                            ขาย
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ width: '8%' }}>
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                            Excluding vat
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ width: '8%' }}>
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                            กำไร/ขาดทุน
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ width: '8%' }}>
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                            รูปภาพ
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ width: '5%' }}>
+                          <IconButton
+                            size="large"
+                            color='primary'
+                            onClick={handleServiceAdd}
+                          >
+                            <AddBoxIcon />
+                          </IconButton>
+                        </StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                    {serviceList.map((res, index) => (
+                      <TableBody>
                         <StyledTableRow>
-                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
+                          <StyledTableCell align="center" style={{ width: '18%' }}>
+                            <Autocomplete
+                              freeSolo
+                              name="assetsCode"
+                              sx={{
+                                "& .MuiInputBase-input.Mui-disabled": {
+                                  WebkitTextFillColor: "#000000",
+                                },
+                                p: 1,
+                              }}
+                              key={index}
+                              disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
+                              value={res.assetsCode}
+                              options={dataAssets.map((option) => option.Code)}
+                              onChange={(e) => handleServiceChangeHeader(e, index)}
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  variant="standard"
+                                  InputProps={{
+                                    ...params.InputProps,
+                                    disableUnderline: (permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true,
+                                    classes: {
+                                      input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                                    },
+                                  }}
+                                />
+                              )}
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
                             <TextField
-                              required
                               fullWidth
+                              sx={{
+                                "& .MuiInputBase-input.Mui-disabled": {
+                                  WebkitTextFillColor: "#000000",
+                                },
+                                p: 1,
+                              }}
+                              key={index}
+                              name="serialNo"
                               disabled
-                              sx={{ pt: 1 }}
+                              multiline
                               InputProps={{
-                                startAdornment: (
-                                  <React.Fragment>
-                                    <Stack direction="row"
-                                      justifyContent="space-evenly"
-                                      alignItems="center"
-                                      spacing={0}>
-                                      <InputAdornment position="start">
-                                        <Typography color="black" >
-                                          ผู้จัดทำ :
-                                        </Typography>
-                                      </InputAdornment>
-                                      <InputAdornment position="start">
-                                        <Typography color="black" >
-                                          {!headers.create_by ? '' : '[' + headers.create_by + ']'}
-                                        </Typography>
-                                      </InputAdornment>
-                                      <InputAdornment position="start">
-                                        <Typography color="black" >
-                                          {!headers.create_date ? '' : (headers.create_date).split('T')[0]}
-                                        </Typography>
-                                      </InputAdornment>
-                                    </Stack>
-                                  </React.Fragment>
-                                ),
+                                disableUnderline: true,
+                                classes: {
+                                  input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                                },
                               }}
+                              value={res.serialNo ?? ''}
                               variant="standard"
                             />
                           </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                          <StyledTableCell align="center">
                             <TextField
-                              required
                               fullWidth
-                              disabled={(selectNAC === 2 && CheckExamineApprove.includes(data.UserCode) !== false) ? false : true}
-                              name='sourceApprove'
-                              sx={{ pt: 1 }}
-                              InputProps={{
-                                startAdornment: (
-                                  <React.Fragment>
-                                    <Stack direction="row"
-                                      justifyContent="space-evenly"
-                                      alignItems="center"
-                                      spacing={0}>
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          ผู้ตรวจสอบ :
-                                        </Typography>
-                                      </InputAdornment>
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          {!verify ? '' : '[' + verify + ']'}
-                                        </Typography>
-                                      </InputAdornment>
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          {!verifyApproveDate ? '' : (verifyApproveDate).split('T')[0]}
-                                        </Typography>
-                                      </InputAdornment>
-                                    </Stack>
-                                  </React.Fragment>
-                                ),
-                              }}
-                              variant="standard"
-                            />
-                          </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }}>
-                            <TextField
-                              required
-                              fullWidth
-                              disabled={(selectNAC === 3 && CheckApprove.includes(data.UserCode) !== false) ? false : true}
-                              sx={{ pt: 1 }}
-                              InputProps={{
-                                startAdornment: (
-                                  <React.Fragment>
-                                    <Stack direction="row"
-                                      justifyContent="space-evenly"
-                                      alignItems="center"
-                                      spacing={0}>
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          ผู้อนุมัติ :
-                                        </Typography>
-                                      </InputAdornment>
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          {!bossApprove ? '' : '[' + bossApprove + ']'}
-                                        </Typography>
-                                      </InputAdornment>
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          {!bossApproveDate ? '' : (bossApproveDate).split('T')[0]}
-                                        </Typography>
-                                      </InputAdornment>
-                                    </Stack>
-                                  </React.Fragment>
-                                ),
-                              }}
-                              variant="standard"
-                            />
-                          </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
-                            <TextField
-                              required
-                              fullWidth
+                              key={index}
+                              name="name"
+                              multiline
                               disabled
-                              sx={{ pt: 1 }}
-                              InputProps={{
-                                startAdornment: (
-                                  <React.Fragment>
-                                    <Stack direction="row"
-                                      justifyContent="space-evenly"
-                                      alignItems="center"
-                                      spacing={0}>
-                                      <InputAdornment position="start">
-                                        <Typography color="black" >
-                                          บัญชี :
-                                        </Typography>
-                                      </InputAdornment>
-                                      <InputAdornment position="start">
-                                        <Typography color="black" >
-                                          {!headers.account_aprrove_id ? '' : '[' + headers.account_aprrove_id + ']'}
-                                        </Typography>
-                                      </InputAdornment>
-                                    </Stack>
-                                  </React.Fragment>
-                                ),
+                              sx={{
+                                "& .MuiInputBase-input.Mui-disabled": {
+                                  WebkitTextFillColor: "#000000",
+                                },
+                                p: 1,
                               }}
+                              InputProps={{
+                                disableUnderline: true,
+                                classes: {
+                                  input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                                },
+                              }}
+                              value={res.name ?? ''}
                               variant="standard"
                             />
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <TextField
+                              fullWidth
+                              sx={{
+                                "& .MuiInputBase-input.Mui-disabled": {
+                                  WebkitTextFillColor: "#000000",
+                                },
+                                p: 1,
+                              }}
+                              key={index}
+                              name="date_asset"
+                              disabled
+                              InputProps={{
+                                disableUnderline: true,
+                                classes: {
+                                  input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                                },
+                              }}
+                              value={!res.date_asset ? '' : res.date_asset.split('T')[0]}
+                              variant="standard"
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <TextField
+                              fullWidth
+                              sx={{
+                                "& .MuiInputBase-input.Mui-disabled": {
+                                  WebkitTextFillColor: "#000000",
+                                },
+                                p: 1,
+                              }}
+                              key={index}
+                              name="price"
+                              disabled
+                              type={data.branchid === 901 ? "text" : "password"}
+                              InputProps={{
+                                disableUnderline: true,
+                                inputComponent: NumericFormatCustom,
+                                classes: {
+                                  input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                                },
+                              }}
+                              value={res.price ?? ''}
+                              variant="standard"
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <TextField
+                              fullWidth
+                              sx={{
+                                "& .MuiInputBase-input.Mui-disabled": {
+                                  WebkitTextFillColor: "#000000",
+                                },
+                                p: 1,
+                              }}
+                              key={index}
+                              name="bookValue"
+                              disabled={(permission_MenuID.indexOf(9) > -1 && sendHeader[0].nac_status === 11) ? false : true}
+                              type={data.branchid === 901 ? "text" : "password"}
+                              onChange={(e) => handleServiceChange(e, index)}
+                              InputProps={{
+                                disableUnderline: (permission_MenuID.indexOf(9) > -1 && sendHeader[0].nac_status === 11) ? false : true,
+                                inputComponent: NumericFormatCustom,
+                                classes: {
+                                  input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                                },
+                              }}
+                              value={res.bookValue ?? ''}
+                              variant="standard"
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <TextField
+                              fullWidth
+                              sx={{
+                                "& .MuiInputBase-input.Mui-disabled": {
+                                  WebkitTextFillColor: "#000000",
+                                },
+                                p: 1,
+                              }}
+                              key={index}
+                              name="priceSeals"
+                              disabled
+                              InputProps={{
+                                disableUnderline: true,
+                                inputComponent: NumericFormatCustom,
+                                classes: {
+                                  input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                                },
+                              }}
+                              value={!res.assetsCode ? '' : !res.priceSeals ? 0 : res.priceSeals}
+                              variant="standard"
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <TextField
+                              fullWidth
+                              sx={{
+                                "& .MuiInputBase-input.Mui-disabled": {
+                                  WebkitTextFillColor: "#000000",
+                                },
+                                p: 1,
+                              }}
+                              key={index}
+                              name="excluding_vat"
+                              disabled
+                              InputProps={{
+                                disableUnderline: true,
+                                inputComponent: NumericFormatCustom,
+                                classes: {
+                                  input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                                },
+                              }}
+                              value={!res.assetsCode ? '' : (res.priceSeals * 100) / 107}
+                              variant="standard"
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <TextField
+                              fullWidth
+                              sx={{
+                                "& .MuiInputBase-input.Mui-disabled": {
+                                  WebkitTextFillColor: "#000000",
+                                },
+                                p: 1,
+                              }}
+                              key={index}
+                              name="profit"
+                              disabled
+                              type={data.branchid === 901 ? "text" : "password"}
+                              InputProps={{
+                                disableUnderline: true,
+                                inputComponent: NumericFormatCustom,
+                                classes: {
+                                  input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                                },
+                              }}
+                              value={!res.assetsCode ? '' : !profit_seals ? 0 : (((res.priceSeals * 100) / 107) - res.bookValue)}
+                              variant="standard"
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {res.image_1 === '' || !res.image_1 ?
+                              <React.Fragment>
+                                <Tooltip title="Image 1">
+                                  <IconButton disabled={res.assetsCode ? false : true} color='error' aria-label="upload picture" component="label">
+                                    <input hidden type="file" name='file' accept='image/*' onChange={(e) => handleUploadFile_1(e, index)} />
+                                    <FilePresentIcon sx={{ fontSize: 20 }} />
+                                  </IconButton>
+                                </Tooltip>
+                              </React.Fragment> :
+                              <React.Fragment>
+                                <Stack direction="row" spacing={1}>
+                                  <Tooltip title={TooltipImage_1 ? TooltipImage_1 : res.image_1}>
+                                    <IconButton onClick={() => window.open(res.image_1, "_blank")} aria-label="upload picture" component="label">
+                                      <FilePresentIcon sx={{ fontSize: 20 }} />
+                                    </IconButton>
+                                  </Tooltip>
+                                  <Tooltip title='delete image 1'>
+                                    <IconButton component="label">
+                                      <ClearIcon onClick={(e) => handleCancelUploadFile_1(e, index)} sx={{ fontSize: 20 }} />
+                                    </IconButton>
+                                  </Tooltip>
+                                </Stack>
+                              </React.Fragment>
+                            }
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {serviceList.length !== 0 && (
+                              <IconButton
+                                size="large"
+                                disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
+                                aria-label="delete"
+                                color="error"
+                                onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
+                              >
+                                <DeleteIcon fontSize="inherit" />
+                              </IconButton>
+                            )}
                           </StyledTableCell>
                         </StyledTableRow>
-                      </TableHead>
-                    </Table>
-                    <Table aria-label="customized table" style={{ width: 1100 }}>
-                      <TableBody>
+                      </TableBody>
+                    ))}
+                    <TableBody>
+                      <StyledTableRow>
+                        <StyledTableCell align="start" colSpan={4}>
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                            รวมทั้งหมด
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" >
+                          <TextField
+                            fullWidth
+                            sx={{
+                              "& .MuiInputBase-input.Mui-disabled": {
+                                WebkitTextFillColor: "#000000",
+                              },
+                              p: 1,
+                            }}
+                            disabled
+                            type={data.branchid === 901 ? "text" : "password"}
+                            InputProps={{
+                              disableUnderline: true,
+                              inputComponent: NumericFormatCustom,
+                              classes: {
+                                input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                              },
+                            }}
+                            value={!result ? '' : result}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="center" >
+                          <TextField
+                            fullWidth
+                            sx={{
+                              "& .MuiInputBase-input.Mui-disabled": {
+                                WebkitTextFillColor: "#000000",
+                              },
+                              p: 1,
+                            }}
+                            disabled
+                            type={data.branchid === 901 ? "text" : "password"}
+                            InputProps={{
+                              disableUnderline: true,
+                              inputComponent: NumericFormatCustom,
+                              classes: {
+                                input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                              },
+                            }}
+                            value={!book_V ? '' : book_V}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="center" >
+                          <TextField
+                            fullWidth
+                            sx={{
+                              "& .MuiInputBase-input.Mui-disabled": {
+                                WebkitTextFillColor: "#000000",
+                              },
+                              p: 1,
+                            }}
+                            disabled
+                            InputProps={{
+                              disableUnderline: true,
+                              inputComponent: NumericFormatCustom,
+                              classes: {
+                                input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                              },
+                            }}
+                            value={serviceList[0].assetsCode ? 0 : ''}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="center" >
+                          <TextField
+                            fullWidth
+                            sx={{
+                              "& .MuiInputBase-input.Mui-disabled": {
+                                WebkitTextFillColor: "#000000",
+                              },
+                              p: 1,
+                            }}
+                            disabled
+                            InputProps={{
+                              disableUnderline: true,
+                              inputComponent: NumericFormatCustom,
+                              classes: {
+                                input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                              },
+                            }}
+                            value={serviceList[0].assetsCode ? 0 : ''}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="center" colSpan={1}>
+                          <TextField
+                            fullWidth
+                            sx={{
+                              "& .MuiInputBase-input.Mui-disabled": {
+                                WebkitTextFillColor: "#000000",
+                              },
+                              p: 1,
+                            }}
+                            disabled
+                            type={data.branchid === 901 ? "text" : "password"}
+                            InputProps={{
+                              disableUnderline: true,
+                              inputComponent: NumericFormatCustom,
+                              classes: {
+                                input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                              },
+                            }}
+                            value={!profit_seals ? 0 : profit_seals}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    </TableBody>
+                  </Table>
+                  <Table>
+                    <TableHead>
+                      <StyledTableRow>
+                        <StyledTableCell align="center">
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                            ผู้ทำรายการ : [{sendHeader[0].create_by}] {sendHeader[0].source_date.split('T')[0]}
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                            ผู้ตรวจสอบ : {sendHeader[0].verify_by_userid ? `[${sendHeader[0].verify_by_userid}]` : '-'} {sendHeader[0].verify_date ? sendHeader[0].verify_date.split('T')[0] : ''}
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                            ผู้อนุมัติ : {sendHeader[0].source_approve ? `[${sendHeader[0].source_approve}]` : '-'} {sendHeader[0].source_approve_date ? sendHeader[0].source_approve_date.split('T')[0] : ''}
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                            บัญชีตรวจสอบ : {sendHeader[0].account_aprrove_id ? `[${sendHeader[0].account_aprrove_id}]` : '-'}
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                            การเงินตรวจสอบ : {sendHeader[0].finance_aprrove_id ? `[${sendHeader[0].finance_aprrove_id}]` : '-'}
+                          </Typography>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    </TableHead>
+                  </Table>
+                  <Table>
+                    <TableBody>
+                      <TableCell align="center">
                         <Stack
                           direction="row"
                           justifyContent="center"
-                          alignItems="center"
-                          spacing={3}
+                          alignItems="flex-start"
+                          spacing={2}
+                          sx={{ p: 2 }}
                         >
-                          {((selectNAC === 1 || selectNAC === 7) && data.UserCode === headers.create_by) || (selectNAC === 11 && ((permission_menuID ? permission_menuID.includes(10) : null) === true)) || (selectNAC === 11 && (permission_menuID ? permission_menuID.includes(9) : null) === true) ? (
-                            <React.Fragment>
+                          {sendHeader[0].nac_status !== 6 ? (
+                            <Stack>
                               <Button
                                 variant="contained"
-                                onClick={handleSave}
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                startIcon={<SystemUpdateAltRoundedIcon />}
-                                style={{ 'backgroundColor': 'orange' }}>
-                                อัปเดต
+                                onClick={handleUpdateNAC}
+                                color="warning"
+                                className='font-399-seconds font-vsm-vsm font-md-sm'
+                                sx={{ p: 2 }}
+                              >
+                                Update
                               </Button>
+                            </Stack>
+                          ) : null}
+                          {sendHeader[0].nac_status === 2 ||
+                            sendHeader[0].nac_status === 3 ||
+                            sendHeader[0].nac_status === 5 ||
+                            sendHeader[0].nac_status === 11 ? (
+                            <Stack>
                               <Button
                                 variant="contained"
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                endIcon={<DoubleArrowRoundedIcon />}
-                                disabled={
-                                  ((selectNAC === 1 || selectNAC === 7) && data.UserCode === headers.create_by) ||
-                                    (selectNAC === 11 && ((permission_menuID ? permission_menuID.includes(10) : null) === true)) ||
-                                    (selectNAC === 11 && (permission_menuID ? permission_menuID.includes(9) : null) === true) ? false :
-                                    ExamineApprove.length === 0 ? false : true}
-                                onClick={handleSubmit
-                                }>
-                                <React.Fragment>
-                                  ยืนยันรายการ
-                                </React.Fragment>
+                                color="secondary"
+                                onClick={handleOpenDialogReply}
+                                className='font-399-seconds font-vsm-vsm font-md-sm'
+                                sx={{ p: 2 }}
+                              >
+                                Reply
                               </Button>
-                            </React.Fragment>
-                          ) : ((selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) || (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true)))) ? (
-                            <React.Fragment>
+                            </Stack>
+                          )
+                            : null}
+                          {sendHeader[0].nac_status === 1 ? (
+                            <Stack>
                               <Button
                                 variant="contained"
-                                onClick={handleClickOpenDialogReply}
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                style={{ 'backgroundColor': 'orange' }}
-                                startIcon={<ReplyAllRoundedIcon />}
-                                disabled={
-                                  (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
-                                    (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
-                                      true
-                                }>
-                                ตีกลับเอกสาร
+                                onClick={handleSubmit_To_BookValue}
+                                className='font-399-seconds font-vsm-vsm font-md-sm'
+                                sx={{ p: 2 }}
+                              >
+                                Submit
                               </Button>
+                            </Stack>
+                          ) : sendHeader[0].nac_status === 11 ? (
+                            <Stack>
                               <Button
                                 variant="contained"
-                                color='error'
-                                disabled={(selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false
-                                  : (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
-                                    true
-                                }
-                                onClick={CancelApprove}
-                                startIcon={<ClearRoundedIcon />}
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}>
-                                ไม่อนุมัติ
+                                onClick={handleSubmit_To_Verify}
+                                className='font-399-seconds font-vsm-vsm font-md-sm'
+                                sx={{ p: 2 }}
+                              >
+                                Submit
                               </Button>
+                            </Stack>
+                          ) : sendHeader[0].nac_status === 2 ? (
+                            <Stack>
                               <Button
                                 variant="contained"
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                color={selectNAC === 2 ? 'success' :
-                                  selectNAC === 3 ? 'success' :
-                                    'primary'}
-                                onClick={selectNAC === 2 ? handleExamineApprove : handleExecApprove}
-                                startIcon={selectNAC === 3 ? <CheckRoundedIcon /> : <VisibilityRoundedIcon />}
-                                disabled={
-                                  (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
-                                    (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
-                                      true
-                                }>
-                                <React.Fragment>
-                                  {selectNAC === 2 ? 'ตรวจสอบ' : 'อนุมัติ'}
-                                </React.Fragment>
+                                onClick={handleSubmit_To_Approve}
+                                color="success"
+                                className='font-399-seconds font-vsm-vsm font-md-sm'
+                                sx={{ p: 2 }}
+                              >
+                                Submit
                               </Button>
-                            </React.Fragment>
-                          ) : ((selectNAC === 4) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) && (!headers.des_date)) ? (
-                            <React.Fragment>
+                            </Stack>
+                          ) : sendHeader[0].nac_status === 3 ||
+                            sendHeader[0].nac_status === 5 ? (
+                            <Stack>
                               <Button
                                 variant="contained"
-                                style={{ 'backgroundColor': 'orange' }}
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) && (!headers.des_date)) ? false : true}
-                              //</Grid>onClick={handleSubmitComplete}>
-                              >ไม่รับเอกสาร
+                                color={sendHeader[0].nac_status === 3 ? "success" : "primary"}
+                                onClick={handleSubmit_Form}
+                                className='font-399-seconds font-vsm-vsm font-md-sm'
+                                sx={{ p: 2 }}
+                              >
+                                Submit
                               </Button>
+                            </Stack>
+                          )
+                            : null}
+                          {sendHeader[0].nac_status === 2 ||
+                            sendHeader[0].nac_status === 3 ? (
+                            <Stack>
                               <Button
                                 variant="contained"
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) && (!headers.des_date)) ? false : true}
-                                onClick={handleSubmitComplete}>
-                                ตรวจรับเอกสาร
+                                color="error"
+                                onClick={handleOpen_drop_NAC_byDes}
+                                className='font-399-seconds font-vsm-vsm font-md-sm'
+                                sx={{ p: 2 }}
+                              >
+                                Cancel
                               </Button>
-                            </React.Fragment>
-                          ) : (selectNAC === 5) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined)) ? (
-                            <React.Fragment>
-                              <Button
-                                variant="contained"
-                                color='error'
-                                startIcon={<ClearRoundedIcon />}
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                onClick={handleOpen_drop_NAC_byDes}>
-                                ยกเลิกรายการ
-                              </Button>
-                              <Button
-                                variant="contained"
-                                startIcon={<CloudDownloadRoundedIcon />}
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                disabled={(selectNAC === 5) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined)) ? false : true}
-                                onClick={handleSubmitComplete}>
-                                ปิดรายการ
-                              </Button>
-                            </React.Fragment>
-                          ) : (selectNAC === 12 || selectNAC === 13) && ((headers.create_by === data.UserCode) || ((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true)) ? (
-                            <React.Fragment>
-                              <Button
-                                variant="contained"
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 200 }}
-                                disabled={(selectNAC === 12 || selectNAC === 13) && ((headers.create_by === data.UserCode) || ((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true)) ? false : true}
-                                onClick={handleSubmitComplete}>
-                                ส่งรายงานไปยังผู้เกี่ยวข้อง
-                              </Button>
-                            </React.Fragment>
-                          ) : (
-                            <React.Fragment>
-                              <Button
-                                variant="contained"
-                                onClick={handleSave}
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                style={{ 'backgroundColor': 'orange' }}
-                                startIcon={<SystemUpdateAltRoundedIcon />}
-                                disabled={(data.UserCode === headers.create_by || ((permission_menuID ? permission_menuID.includes(9) : null) === true)) ? false : true}>
-                                อัปเดต
-                              </Button>
-                            </React.Fragment>
-                          )}
+                            </Stack>
+                          )
+                            : null}
                         </Stack>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </React.Fragment>
+                      </TableCell>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </Paper>
               <CommentNAC
                 handleClickOpenDialog={handleClickOpenDialog}
@@ -2547,12 +2009,11 @@ export default function Nac_Seals_Approve() {
                 handleCloseDialog={handleCloseDialog}
                 data={data}
                 nac_code={nac_code}
-                headers={headers}
+                headers={sendHeader}
                 description={description}
                 setDescription={setDescription}
                 setOpenDialog={setOpenDialog}
               />
-
             </Container>
             <Dialog open={openDialogReply} onClose={handleCloseDialogReply} >
               <DialogTitle>กรุณาระบุข้อความ/เหตุผล ที่ตีกลับเอกสาร</DialogTitle>
@@ -2583,7 +2044,7 @@ export default function Nac_Seals_Approve() {
               </DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  คุณต้องการที่จะยกเลิกรายการ {headers.nac_code} ใช่หรือไม่
+                  คุณต้องการที่จะยกเลิกรายการ {nac_code} ใช่หรือไม่
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
@@ -2594,17 +2055,9 @@ export default function Nac_Seals_Approve() {
               </DialogActions>
             </Dialog>
           </AnimatedPage>
-          <Outlet />
         </ThemeProvider>
+        <Outlet />
       </React.Fragment >
     );
-  } else {
-    return (
-      <div className="container">
-        <center>
-          <h1 className="pt-5">404 Not Found</h1>
-        </center>
-      </div>
-    )
   }
 }
