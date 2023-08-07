@@ -343,9 +343,11 @@ export default function Nac_Main() {
       swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
     } else if ((serviceList.filter((res) => !res.assetsCode)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาระบุข้อมูลทรัพย์สินให้ครบ', "error")
-    } else if ((serviceList.filter((res) => !res.priceSeals)[0]) !== undefined) {
-      swal("แจ้งเตือน", 'กรุณาระบุราคาขาย', "error")
-    } else {
+    } 
+    // else if ((serviceList.filter((res) => !res.priceSeals)[0]) !== undefined) {
+    //   swal("แจ้งเตือน", 'กรุณาระบุราคาขาย', "error")
+    // } 
+    else {
       const sendReq = sendHeader[0]
       await Axios.post(config.http + '/store_FA_control_create_doc', sendReq, config.headers)
         .then(async (res) => {

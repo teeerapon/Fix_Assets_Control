@@ -571,9 +571,10 @@ export default function Nac_Main() {
       swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
     } else if ((serviceList.filter((res) => !res.assetsCode)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาระบุข้อมูลทรัพย์สินให้ครบ', "error")
-    } else if ((serviceList.filter((res) => !res.priceSeals)[0]) !== undefined) {
-      swal("แจ้งเตือน", 'กรุณาระบุราคาขาย', "error")
-    }
+    } 
+    // else if ((serviceList.filter((res) => !res.priceSeals)[0]) !== undefined) {
+    //   swal("แจ้งเตือน", 'กรุณาระบุราคาขาย', "error")
+    // }
     else if ((serviceList.filter((res) => !res.image_1)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาใส่รูปภาพทรัพย์สิน', "error")
     }
@@ -657,9 +658,11 @@ export default function Nac_Main() {
       swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
     } else if ((serviceList.filter((res) => !res.assetsCode)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาระบุข้อมูลทรัพย์สินให้ครบ', "error")
-    } else if ((serviceList.filter((res) => !res.priceSeals)[0]) !== undefined) {
-      swal("แจ้งเตือน", 'กรุณาระบุราคาขาย', "error")
-    } else if ((serviceList.filter((res) => !res.bookValue)[0]) !== undefined) {
+    } 
+    // else if ((serviceList.filter((res) => !res.priceSeals)[0]) !== undefined) {
+    //   swal("แจ้งเตือน", 'กรุณาระบุราคาขาย', "error")
+    // } 
+    else if ((serviceList.filter((res) => !res.bookValue)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาระบุ Book Value', "error")
     } else if (approveData.filter((res) => res.workflowlevel === 0 && data.UserCode === res.approverid)[0] || permission_MenuID.indexOf(9) > -1) {
       // รอใส่เงือนไข
@@ -743,9 +746,11 @@ export default function Nac_Main() {
       swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
     } else if ((serviceList.filter((res) => !res.assetsCode)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาระบุข้อมูลทรัพย์สินให้ครบ', "error")
-    } else if ((serviceList.filter((res) => !res.priceSeals)[0]) !== undefined) {
-      swal("แจ้งเตือน", 'กรุณาระบุราคาขาย', "error")
-    } else if (approveData.filter((res) => res.approverid === data.UserCode && res.status === 1)[0]) {
+    } 
+    // else if ((serviceList.filter((res) => !res.priceSeals)[0]) !== undefined) {
+    //   swal("แจ้งเตือน", 'กรุณาระบุราคาขาย', "error")
+    // } 
+    else if (approveData.filter((res) => res.approverid === data.UserCode && res.status === 1)[0]) {
       swal("แจ้งเตือน", `${data.UserCode} ทำรายการไปแล้ว`, "error")
     } else if (approveData.filter((res) => res.approverid === data.UserCode && res.status === 0)[0] || permission_MenuID.indexOf(10) > -1) {
       // รอใส่เงือนไข
@@ -1701,7 +1706,7 @@ export default function Nac_Main() {
                                   input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
                                 },
                               }}
-                              value={(res.priceSeals === 0 || !res.priceSeals) ? '' : ((res.priceSeals * 100) / 107)}
+                              value={res.excluding_vat}
                               variant="standard"
                             />
                           </StyledTableCell>
