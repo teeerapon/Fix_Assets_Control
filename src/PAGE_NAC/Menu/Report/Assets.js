@@ -893,94 +893,82 @@ export default function Reported_of_assets() {
       <AnimatedPage>
         <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
           <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
-            <TableContainer >
-              <Table aria-label="customized table" style={{ width: '100%' }}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="flex-start"
-                  spacing={2}
-                  sx={{ mb: 2, mt: 2 }}
+            <Grid
+              container
+              direction="row"
+              justifyContent="space-evenly"
+              alignItems="center"
+              spacing={2}
+            >
+              <Grid item xs>
+                <Card
+                  style={{
+                    'flex': 1,
+                    'border-radius': '10px',
+                  }}
                 >
-                  <Card
-
-                    style={{
-                      'cursor': 'pointer',
-                      'flex': 1,
-                      'margin': '0px 20px',
-                      'padding': '15px',
-                      'border-radius': '10px',
-                    }}
-                  >
-                    <CardContent>
-                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom className='hide-sm font-md-sm'>
-                        รวมทรัพย์สินที่ตรวจนับแล้ว
-                      </Typography>
-                      <Typography variant="h5" component="div" style={{ color: 'green' }} className='font-vsm font-md-sm'>
-                        <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'ตรวจนับแล้ว') }).length} รายการ</b>
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                  <Card
-
-                    style={{
-                      'cursor': 'pointer',
-                      'flex': 1,
-                      'margin': '0px 20px',
-                      'padding': '15px',
-                      'border-radius': '10px',
-                    }}
-                  >
-                    <CardContent>
-                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom className='hide-sm font-md-sm'>
-                        รวมทรัพย์สินที่คงเหลือ
-                      </Typography>
-                      <Typography variant="h5" component="div" style={{ color: 'red' }} className='font-vsm font-md-sm'>
-                        <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'ยังไม่ได้ตรวจนับ') }).length} รายการ</b>
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                  <Card
-
-                    style={{
-                      'cursor': 'pointer',
-                      'flex': 1,
-                      'margin': '0px 20px',
-                      'padding': '15px',
-                      'border-radius': '10px',
-                    }}
-                  >
-                    <CardContent>
-                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom className='hide-sm font-md-sm'>
-                        ทรัพย์สินสาขาอื่น ๆ
-                      </Typography>
-                      <Typography variant="h5" component="div" style={{ color: 'orange' }} className='font-vsm font-md-sm'>
-                        <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'นับแล้ว ต่างสาขา') }).length} รายการ</b>
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                  <Card
-
-                    style={{
-                      'cursor': 'pointer',
-                      'flex': 1,
-                      'margin': '0px 20px',
-                      'padding': '15px',
-                      'border-radius': '10px',
-                    }}
-                  >
-                    <CardContent>
-                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom className='hide-sm font-md-sm'>
-                        ทรัพย์สินทั้งหมด
-                      </Typography>
-                      <Typography variant="h5" component="div" style={{ color: 'blue' }} className='font-vsm font-md-sm'>
-                        <b>{reported_of_assets.length} รายการ</b>
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Stack>
-              </Table>
-            </TableContainer>
+                  <CardContent>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom className='hide-sm font-md-sm'>
+                      รวมทรัพย์สินที่ตรวจนับแล้ว
+                    </Typography>
+                    <Typography variant="h5" component="div" style={{ color: 'green' }} className='font-vsm font-md-sm'>
+                      <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'ตรวจนับแล้ว') }).length} รายการ</b>
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs>
+                <Card
+                  style={{
+                    'flex': 1,
+                    'border-radius': '10px',
+                  }}
+                >
+                  <CardContent>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom className='hide-sm font-md-sm'>
+                      รวมทรัพย์สินที่คงเหลือ
+                    </Typography>
+                    <Typography variant="h5" component="div" style={{ color: 'red' }} className='font-vsm font-md-sm'>
+                      <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'ยังไม่ได้ตรวจนับ') }).length} รายการ</b>
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs>
+                <Card
+                  style={{
+                    'flex': 1,
+                    'border-radius': '10px',
+                  }}
+                >
+                  <CardContent>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom className='hide-sm font-md-sm'>
+                      ทรัพย์สินสาขาอื่น ๆ
+                    </Typography>
+                    <Typography variant="h5" component="div" style={{ color: 'orange' }} className='font-vsm font-md-sm'>
+                      <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'นับแล้ว ต่างสาขา') }).length} รายการ</b>
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs>
+                <Card
+                  style={{
+                    'flex': 1,
+                    'border-radius': '10px',
+                  }}
+                >
+                  <CardContent>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom className='hide-sm font-md-sm'>
+                      ทรัพย์สินทั้งหมด
+                    </Typography>
+                    <Typography variant="h5" component="div" style={{ color: 'blue' }} className='font-vsm font-md-sm'>
+                      <b>{reported_of_assets.length} รายการ</b>
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
             <Stack
               direction="row"
               justifyContent="flex-end"

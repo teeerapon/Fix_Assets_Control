@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import swal from 'sweetalert';
 import { useLocation } from 'react-router';
+import Axios from "axios"
 
 import config from './config';
 
@@ -114,7 +115,18 @@ export default function Signin() {
         swal("แจ้งเตือน", 'คุณได้เข้าสู่กระบบแล้ว', "success", {
           buttons: false,
           timer: 1500,
-        }).then((value) => {
+        }).then(async (value) => {
+
+          const body = { Permission_TypeID: 1, userID: response['data'][0].userid }
+          const headers = {
+            'Authorization': 'application/json; charset=utf-8',
+            'Accept': 'application/json'
+          };
+          await Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers })
+            .then(response => {
+              localStorage.setItem('permission_MenuID', JSON.stringify(response.data.data.map((res) => res.Permission_MenuID)));
+            });
+
           if (URL_LINK.pathname !== '/') {
             localStorage.setItem('sucurity', resChackUserWeb['data'][0]['approverid']);
             localStorage.setItem('token', response['token']);

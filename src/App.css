@@ -32,44 +32,84 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
-@media only screen and (max-width: 530px) {
+
+@media only screen and (max-width: 449px) {
   .hide-sm {
     display: none;
   }
+
+  .font-399-main {
+    font-size: 0.7rem !important;
+  }
+
+  .font-399-seconds {
+    font-size: 0.35rem !important;
+  }
+
+  .logo-399-sm {
+    height: 20;
+    width: 60;
+  }
+
+  .front-399-table-sm {
+    font-size: 0.35rem !important;
+  }
+}
+
+@media only screen and (max-width: 720px) and (min-width: 450px) {
+
+  .hide-sm {
+    display: none;
+  }
+
   .font-sm {
     font-size: 1rem !important;
   }
+
   .font-sm-bold {
     font-size: 1.3rem !important;
     font-weight: bold;
   }
+
   .font-vsm {
     font-size: .8rem !important;
   }
+
   .font-vsm-sm {
     font-size: .6rem !important;
   }
+
   .font-vsm-vsm {
     font-size: .5rem !important;
   }
+
+  .logo-sm {
+    height: 50;
+    width: 100;
+  }
 }
 
-@media only screen and (max-width: 768px) and (min-width: 531px) {
-  .hide-md {
-    display: none;
-  }
+@media only screen and (min-width: 721px) {
   .font-md {
     font-size: 1.5rem !important;
   }
+
   .font-md-sm {
     font-size: .8rem !important;
   }
+
   .font-vmd {
     font-size: 1.2rem !important;
+  }
+
+  .logo-md {
+    height: 50;
+    width: 100;
   }
 }

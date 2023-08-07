@@ -98,18 +98,18 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       permission: (permission_menuID ? permission_menuID.includes(1) : null) === true ? 1 : 0,
       permission_branch: data.branchid === 901 ? 1 : 0
     },
-    {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_CHANGE_STEP1' ? null : 'none' }} />,
-      label:
-        <Stack direction="row" justifyContent="space-between" spacing={2}>
-          <Stack>เปลี่ยนแปลงรายละเอียด</Stack>
-          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
-        </Stack>
-      ,
-      url: '/NAC_CHANGE_STEP1',
-      permission: (permission_menuID ? permission_menuID.includes(1) : null) === true ? 1 : 0,
-      permission_branch: data.branchid === 901 ? 1 : 0
-    },
+    // {
+    //   icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_CHANGE_STEP1' ? null : 'none' }} />,
+    //   label:
+    //     <Stack direction="row" justifyContent="space-between" spacing={2}>
+    //       <Stack>เปลี่ยนแปลงรายละเอียด</Stack>
+    //       <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+    //     </Stack>
+    //   ,
+    //   url: '/NAC_CHANGE_STEP1',
+    //   permission: (permission_menuID ? permission_menuID.includes(1) : null) === true ? 1 : 0,
+    //   permission_branch: data.branchid === 901 ? 1 : 0
+    // },
     {
       icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_CREATE_MAIN1' ? null : 'none' }} />,
       label: 'โยกย้ายทรัพย์สิน',
@@ -326,6 +326,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
         localStorage.removeItem("filterModel_user");
         localStorage.removeItem("filterNAC");
         localStorage.removeItem("filterNAC_user");
+        localStorage.removeItem("permission_MenuID");
         navigate('/')
       });
   };
@@ -365,7 +366,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
               </IconButton>
               <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
                 <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
-                  <div size="small" aria-label="account of current user" aria-controls="menu-appbar">
+                  <div size="small" aria-label="account of current user" aria-controls="menu-appbar" className='hide-sm'>
                     <Typography
                       style={{ color: '#ea0c80' }}
                       variant="h5"
