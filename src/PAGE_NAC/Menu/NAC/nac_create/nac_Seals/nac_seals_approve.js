@@ -211,6 +211,7 @@ export default function Nac_Main() {
     price: null,
     bookValue: null,
     priceSeals: null,
+    excluding_vat: null,
     profit: null,
     asset_id: null,
     image_1: null,
@@ -316,8 +317,9 @@ export default function Nac_Main() {
             , price: resData.nacdtl_assetsPrice
             , asset_id: resData.nacdtl_id
             , bookValue: resData.nacdtl_bookV === 0 ? null : resData.nacdtl_bookV
-            , priceSeals: resData.nacdtl_PriceSeals
-            , profit: resData.nacdtl_profit
+            , priceSeals: resData.nacdtl_PriceSeals ?? 0
+            , excluding_vat: resData.nacdtl_PriceSeals ? (resData.nacdtl_PriceSeals * 100) / 107 : null
+            , profit: ((resData.nacdtl_PriceSeals ? (resData.nacdtl_PriceSeals * 100) / 107 : null) ?? 0) - resData.nacdtl_bookV
             , date_asset: resData.nacdtl_date_asset
             , image_1: resData.nacdtl_image_1 ?? null
             , image_2: resData.nacdtl_image_2 ?? null
@@ -403,6 +405,10 @@ export default function Nac_Main() {
     const list = [...serviceList];
     list[index][name] = value;
     list[index]['dtl_id'] = -1;
+    if (list[index]['assetsCode'] && list[index]['priceSeals']) {
+      list[index]['excluding_vat'] = list[index]['priceSeals'] ? (list[index]['priceSeals'] * 100) / 107 : null
+      list[index]['profit'] = ((list[index]['priceSeals'] ? (list[index]['priceSeals'] * 100) / 107 : null) ?? 0) - list[index]['bookValue']
+    }
     setServiceList(list);
   };
 
@@ -571,7 +577,7 @@ export default function Nac_Main() {
       swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
     } else if ((serviceList.filter((res) => !res.assetsCode)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาระบุข้อมูลทรัพย์สินให้ครบ', "error")
-    } 
+    }
     // else if ((serviceList.filter((res) => !res.priceSeals)[0]) !== undefined) {
     //   swal("แจ้งเตือน", 'กรุณาระบุราคาขาย', "error")
     // }
@@ -658,7 +664,7 @@ export default function Nac_Main() {
       swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
     } else if ((serviceList.filter((res) => !res.assetsCode)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาระบุข้อมูลทรัพย์สินให้ครบ', "error")
-    } 
+    }
     // else if ((serviceList.filter((res) => !res.priceSeals)[0]) !== undefined) {
     //   swal("แจ้งเตือน", 'กรุณาระบุราคาขาย', "error")
     // } 
@@ -746,7 +752,7 @@ export default function Nac_Main() {
       swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
     } else if ((serviceList.filter((res) => !res.assetsCode)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาระบุข้อมูลทรัพย์สินให้ครบ', "error")
-    } 
+    }
     // else if ((serviceList.filter((res) => !res.priceSeals)[0]) !== undefined) {
     //   swal("แจ้งเตือน", 'กรุณาระบุราคาขาย', "error")
     // } 
@@ -1649,11 +1655,11 @@ export default function Nac_Main() {
                               }}
                               key={index}
                               name="bookValue"
-                              disabled={(permission_MenuID.indexOf(9) > -1 && sendHeader[0].nac_status === 11) ? false : true}
+                              disabled={(permission_MenuID.indexOf(9) > -1 && sendHeader[0].nac_status === 11) || permission_MenuID.indexOf(16) > -1 ? false : true}
                               type={data.branchid === 901 ? "text" : "password"}
                               onChange={(e) => handleServiceChange(e, index)}
                               InputProps={{
-                                disableUnderline: (permission_MenuID.indexOf(9) > -1 && sendHeader[0].nac_status === 11) ? false : true,
+                                disableUnderline: (permission_MenuID.indexOf(9) > -1 && sendHeader[0].nac_status === 11) || permission_MenuID.indexOf(16) > -1 ? false : true,
                                 inputComponent: NumericFormatCustom,
                                 classes: {
                                   input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
@@ -1674,10 +1680,10 @@ export default function Nac_Main() {
                               }}
                               key={index}
                               name="priceSeals"
-                              disabled={sendHeader[0].nac_status === 1 ? false : true}
+                              disabled={sendHeader[0].nac_status === 1 || permission_MenuID.indexOf(16) > -1 ? false : true}
                               onChange={(e) => handleServiceChange(e, index)}
                               InputProps={{
-                                disableUnderline: sendHeader[0].nac_status === 1 ? false : true,
+                                disableUnderline: sendHeader[0].nac_status === 1 || permission_MenuID.indexOf(16) > -1 ? false : true,
                                 inputComponent: NumericFormatCustom,
                                 classes: {
                                   input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
@@ -1730,7 +1736,7 @@ export default function Nac_Main() {
                                   input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
                                 },
                               }}
-                              value={(res.priceSeals === 0 || !res.priceSeals) ? '' : (((res.priceSeals * 100) / 107) - res.bookValue)}
+                              value={res.profit}
                               variant="standard"
                             />
                           </StyledTableCell>
