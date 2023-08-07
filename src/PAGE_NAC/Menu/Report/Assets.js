@@ -955,7 +955,7 @@ export default function Reported_of_assets() {
                         ทรัพย์สินสาขาอื่น ๆ
                       </Typography>
                       <Typography variant="h5" component="div" style={{ color: 'orange' }} className='font-vsm font-md-sm'>
-                        <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'นับแล้ว ต่างสาขา') }).length} รายการ</b>
+                        <b>{reported_of_assets.filter(function (el) { return (el.remarker === 'ต่างสาขา') }).length} รายการ</b>
                       </Typography>
                     </CardContent>
                   </Card>
