@@ -1103,11 +1103,6 @@ export default function Nac_Main() {
                           บัญชีตรวจสอบ : -
                         </Typography>
                       </StyledTableCell>
-                      <StyledTableCell align="center">
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
-                          การเงินตรวจสอบ : -
-                        </Typography>
-                      </StyledTableCell>
                     </StyledTableRow>
                   </TableHead>
                 </Table>

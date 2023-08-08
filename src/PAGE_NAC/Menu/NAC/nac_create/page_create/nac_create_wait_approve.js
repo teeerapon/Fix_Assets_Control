@@ -2086,11 +2086,6 @@ export default function Nac_Main() {
                             บัญชีตรวจสอบ : {sendHeader[0].account_aprrove_id ? `[${sendHeader[0].account_aprrove_id}]` : '-'}
                           </Typography>
                         </StyledTableCell>
-                        <StyledTableCell align="center">
-                          <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
-                            การเงินตรวจสอบ : {sendHeader[0].finance_aprrove_id ? `[${sendHeader[0].finance_aprrove_id}]` : '-'}
-                          </Typography>
-                        </StyledTableCell>
                       </StyledTableRow>
                     </TableHead>
                   </Table>
@@ -2168,7 +2163,8 @@ export default function Nac_Main() {
                             </Stack>
                           ) : sendHeader[0].nac_status === 3 ||
                             sendHeader[0].nac_status === 4 ||
-                            sendHeader[0].nac_status === 14 ? (
+                            sendHeader[0].nac_status === 14 ||
+                            sendHeader[0].nac_status === 5 ? (
                             <Stack>
                               <Button
                                 variant="contained"
