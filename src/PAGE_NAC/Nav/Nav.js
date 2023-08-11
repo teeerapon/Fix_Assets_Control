@@ -84,14 +84,15 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
   const navigate = useNavigate();
   const [permission_menuID, setPermission_menuID] = React.useState();
   const [permission_menu, setPermission_menu] = React.useState();
+  const [dimensions, setDimensions] = React.useState(getCurrentDimension());
 
   const create_nac = [
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_CREATE_STEP1' ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/NAC_CREATE_STEP1' ? null : 'none' }} />,
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>เพิ่มบัญชีทรัพย์สิน</Stack>
-          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon className='scaled-logo-Header' sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/NAC_CREATE_STEP1',
@@ -111,17 +112,17 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     //   permission_branch: data.branchid === 901 ? 1 : 0
     // },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_CREATE_MAIN1' ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/NAC_CREATE_MAIN1' ? null : 'none' }} />,
       label: 'โยกย้ายทรัพย์สิน',
       url: '/NAC_CREATE_MAIN1'
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_SEALS_STEP1' ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/NAC_SEALS_STEP1' ? null : 'none' }} />,
       label: 'ขายทรัพย์สิน',
       url: '/NAC_SEALS_STEP1'
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_DELETE_STEP1' ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/NAC_DELETE_STEP1' ? null : 'none' }} />,
       label: 'ตัดบัญชีทรัพย์สิน',
       url: '/NAC_DELETE_STEP1',
       permission: data.branchid === 901 ? 1 : 0,
@@ -131,11 +132,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const nac = [
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_OPERATOR' ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/NAC_OPERATOR' ? null : 'none' }} />,
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>สถานะรายการ NAC</Stack>
-          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon className='scaled-logo-Header' sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/NAC_OPERATOR',
@@ -143,7 +144,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_ROW' ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/NAC_ROW' ? null : 'none' }} />,
       label: 'สถานะรายการ NAC',
       url: '/NAC_ROW'
     },
@@ -151,11 +152,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const period = [
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/CreatePeriod' ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/CreatePeriod' ? null : 'none' }} />,
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>เพิ่มรอบตรวจนับ</Stack>
-          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon className='scaled-logo-Header' sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/CreatePeriod',
@@ -163,11 +164,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/EditPeriod' ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/EditPeriod' ? null : 'none' }} />,
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>แก้ไขรอบตรวจนับ</Stack>
-          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon className='scaled-logo-Header' sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/EditPeriod',
@@ -178,11 +179,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const report = [
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/Reported_Assets_Counted' ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/Reported_Assets_Counted' ? null : 'none' }} />,
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>รายงานตรวจนับทรัพย์สิน</Stack>
-          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon className='scaled-logo-Header' sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/Reported_Assets_Counted',
@@ -190,11 +191,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/History_of_Assets' ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/History_of_Assets' ? null : 'none' }} />,
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>ประวัติทรัพย์สิน NAC</Stack>
-          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon className='scaled-logo-Header' sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/History_of_Assets',
@@ -202,17 +203,17 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: (location.pathname === '/EBookMain' || location.pathname === '/EBookBranch') ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: (location.pathname === '/EBookMain' || location.pathname === '/EBookBranch') ? null : 'none' }} />,
       label: 'E-Book NAC',
       url: data.branchid === 901 ? '/EBookMain' : '/EBookBranch',
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: (location.pathname === '/FETCH_ASSETS' || location.pathname === '/Account_BrnachAssets') ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: (location.pathname === '/FETCH_ASSETS' || location.pathname === '/Account_BrnachAssets') ? null : 'none' }} />,
       label: 'ทะเบียนทรัพย์สิน',
       url: data.branchid === 901 ? '/FETCH_ASSETS' : '/Account_BrnachAssets',
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/Report' ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/Report' ? null : 'none' }} />,
       label: 'รายงานตรวจนับทรัพย์สิน',
       url: '/Report'
     },
@@ -220,34 +221,52 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const bpc = [
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/BSAssetsMain' ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/BSAssetsMain' ? null : 'none' }} />,
       label: 'E-Book BPC',
       url: '/BSAssetsMain'
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/BpcStatus' ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/BpcStatus' ? null : 'none' }} />,
       label: 'สถานะรายการทรัพย์สินผู้ร่วม',
       url: '/BpcStatus'
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/TransectionList' ? null : 'none' }} />,
+      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/TransectionList' ? null : 'none' }} />,
       label: 'ประวัติทรัพย์สินผู้ร่วม',
       url: '/TransectionList'
     },
   ]
 
-  React.useEffect(() => {
-    // POST request using axios with set headers
+  function getCurrentDimension() {
+    return {
+      width: window.innerWidth,
+      height: window.innerHeight
+    }
+  }
+
+  React.useEffect(async () => {
+    // POST request using axios with set header
+
     const body = { Permission_TypeID: 1, userID: data.userid }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers })
+    await Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers })
       .then(response => {
         setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
         setPermission_menu(response.data.data)
       });
+
+    const updateDimension = () => {
+      setDimensions(getCurrentDimension())
+    }
+    window.addEventListener('resize', updateDimension);
+
+
+    return (() => {
+      window.removeEventListener('resize', updateDimension);
+    })
   }, []);
 
 
@@ -350,10 +369,10 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   return (
     <>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', width: dimensions.width }}>
         <CssBaseline />
         <ThemeProvider theme={darkTheme}>
-          <AppBar position="static" open={open} >
+          <AppBar position="static" open={open}>
             <Toolbar>
               <IconButton
                 color="inherit"
@@ -362,24 +381,24 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                 edge="start"
                 sx={{ mr: 2, ...(open && { display: 'none' }) }}
               >
-                <MenuIcon />
+                <MenuIcon className='scaled-logo-Header' />
               </IconButton>
               <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
                 <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
-                  <div size="small" aria-label="account of current user" aria-controls="menu-appbar" className='hide-sm'>
+                  <div size="small" aria-label="account of current user" aria-controls="menu-appbar">
                     <Typography
                       style={{ color: '#ea0c80' }}
                       variant="h5"
                       component="React.Fragment"
+                      className='scaled-480px-Header'
                       sx={{
                         flexGrow: 1,
                         fontFamily: 'monospace',
                         fontWeight: 700,
-                        letterSpacing: '.5rem',
+                        letterSpacing: '.3em',
                         color: 'inherit',
                         textDecoration: 'none',
                       }}
-                      className={classes.root}
                     >
                       <b>DATA</b>
                     </Typography>
@@ -387,25 +406,24 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                       style={{ color: '#07519e' }}
                       variant="h5"
                       component="React.Fragment"
-
+                      className='scaled-480px-Header'
                       sx={{
                         flexGrow: 1,
                         fontFamily: 'monospace',
                         fontWeight: 700,
-                        letterSpacing: '.5rem',
+                        letterSpacing: '.3em',
                         color: 'inherit',
                         textDecoration: 'none',
                       }}
-                      className={classes.root}
                     >
-                      CENTER
+                      <b>CENTER</b>
                     </Typography>
                   </div>
                 </Button>
               </Box>
-              <div size="large" aria-label="account of current user" aria-controls="menu-appbar" className='hide-sm'>
-                <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1, pr: 2 }} className={classes.root} >
-                  {data.name}
+              <div size="large" aria-label="account of current user" aria-controls="menu-appbar" >
+                <Typography variant="h6" component="React.Fragment" sx={{ flexGrow: 1, pr: 2 }} className='scaled-480px-Header' >
+                  <b>{data.name}</b>
                 </Typography>
               </div>
               {auth && (
@@ -434,8 +452,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                         onClick={handleMenu}
                         color="inherit"
                       >
-
-                        <Avatar sx={{ width: 18, height: 18 }}{...stringAvatar(data.UserCode)} />
+                        <Avatar className='scaled-logo-TableContent scaled-480px-TableContent' sx={{ width: 18, height: 18 }}{...stringAvatar(data.UserCode)} />
                       </IconButton>
                       <Menu
                         sx={{ mt: '45px' }}
@@ -454,14 +471,14 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                         onClose={handleClose}
                       >
                         <MenuItem disabled={data.DepCode === '101ITO' ? false : true} onClick={() => navigate(`/Permission_NAC`)}>
-                          <ListItemIcon>
-                            <ManageAccountsIcon fontSize="small" />
+                          <ListItemIcon sx={{ minWidth: '15% !important' }}>
+                            <ManageAccountsIcon />
                           </ListItemIcon>
                           <ListItemText>Permission</ListItemText>
                         </MenuItem>
                         <MenuItem onClick={handleLogout}>
-                          <ListItemIcon>
-                            <LogoutIcon fontSize="small" />
+                          <ListItemIcon sx={{ minWidth: '15% !important' }}>
+                            <LogoutIcon />
                           </ListItemIcon>
                           <ListItemText>Log Out</ListItemText>
                         </MenuItem>
@@ -504,12 +521,8 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                   <ListItemText
                     alignItems="flex-start"
                     onClick={Change_ASSETS}
-                    primary="ASSETS"
+                    primary={<Typography className='scaled-480px-TableContent'>ASSETS</Typography>}
                     primaryTypographyProps={{
-                      fontSize: 14,
-                      fontWeight: 'medium',
-                      lineHeight: '20px',
-                      // color: (openList || openList2 || openList3 || openList4 || openList5 || openListNAC) === true ? "#6366f1" : "#ffff",
                       mb: '2px',
                     }}
                     sx={{ my: 0 }}
@@ -519,21 +532,17 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
               {openListNAC &&
                 <ListItem component="div" disablePadding>
                   <ListItemButton onClick={handleClickList2}>
-                    <ListItemIcon>
-                      <LibraryAddIcon fontSize="small" style={{ color: openList2 ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
+                    <ListItemIcon sx={{ minWidth: '15% !important' }}>
+                      <LibraryAddIcon className='scaled-logo-Header' style={{ color: openList2 ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
                     </ListItemIcon>
                     <ListItemText
-                      primary="NAC CREATE"
+                      primary={<Typography className='scaled-480px-TableContent'>NAC CREATE</Typography>}
                       primaryTypographyProps={{
-                        fontSize: 13,
-                        fontWeight: 'medium',
-                        lineHeight: '25px',
                         color: openList2 ? "#ffff" : "rgba(255, 255, 255, 0.7)",
                       }}
                       sx={{ my: 0 }}
-                    >
-                    </ListItemText>
-                    {openList2 ? <ExpandLess style={{ color: "#ffff", }} /> : <ExpandMore style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
+                    />
+                    {openList2 ? <ExpandLess className='scaled-480px-TableContent' style={{ color: "#ffff", }} /> : <ExpandMore className='scaled-480px-TableContent' style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
                   </ListItemButton>
                 </ListItem>
               }
@@ -550,13 +559,13 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
                         >
                           <ListItemIcon
-                            sx={{ color: 'inherit' }}
+                            sx={{ color: 'inherit', minWidth: '15% !important' }}
                             style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
                           >
                             {item.icon}
                           </ListItemIcon>
                           <ListItemText
-                            primary={item.label}
+                            primary={<Typography className='scaled-480px-TableContent'>{item.label}</Typography>}
                             style={{ color: location.pathname === item.url ? "#fff" : "rgba(255, 255, 255, 0.7)" }}
                             primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
                           />
@@ -568,11 +577,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
               {openListNAC &&
                 <ListItem component="div" disablePadding>
                   <ListItemButton onClick={handleClickList}>
-                    <ListItemIcon>
-                      <SubjectIcon fontSize="small" style={{ color: openList ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
+                    <ListItemIcon sx={{ minWidth: '15% !important' }}>
+                      <SubjectIcon className='scaled-logo-Header' style={{ color: openList ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
                     </ListItemIcon>
                     <ListItemText
-                      primary="NAC STATUS"
+                      primary={<Typography className='scaled-480px-TableContent'>NAC STATUS</Typography>}
                       primaryTypographyProps={{
                         fontSize: 13,
                         fontWeight: 'medium',
@@ -581,7 +590,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                       }}
                       sx={{ my: 0 }}
                     />
-                    {openList ? <ExpandLess style={{ color: "#ffff", }} /> : <ExpandMore style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
+                    {openList ? <ExpandLess className='scaled-480px-TableContent' style={{ color: "#ffff", }} /> : <ExpandMore className='scaled-480px-TableContent' style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
                   </ListItemButton>
                 </ListItem>
               }
@@ -598,13 +607,13 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
                         >
                           <ListItemIcon
-                            sx={{ color: 'inherit' }}
+                            sx={{ color: 'inherit', minWidth: '15% !important' }}
                             style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
                           >
                             {item.icon}
                           </ListItemIcon>
                           <ListItemText
-                            primary={item.label}
+                            primary={<Typography className='scaled-480px-TableContent'>{item.label}</Typography>}
                             style={{ color: location.pathname === item.url ? "#fff" : "rgba(255, 255, 255, 0.7)" }}
                             primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
                           />
@@ -616,9 +625,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
               {(permission_menuID ? permission_menuID.includes(3 || 4) : null) === true && openListNAC === true ?
                 <ListItem disablePadding>
                   <ListItemButton onClick={handleClickList3}>
-                    <ListItemIcon><AccessAlarmIcon fontSize="small" style={{ color: openList3 ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} /></ListItemIcon>
+                    <ListItemIcon sx={{ minWidth: '15% !important' }}>
+                      <AccessAlarmIcon className='scaled-logo-Header' style={{ color: openList3 ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
+                    </ListItemIcon>
                     <ListItemText
-                      primary="NAC PERIOD"
+                      primary={<Typography className='scaled-480px-TableContent'>NAC PERIOD</Typography>}
                       primaryTypographyProps={{
                         fontSize: 13,
                         fontWeight: 'medium',
@@ -627,7 +638,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                       }}
                       sx={{ my: 0 }}
                     />
-                    {openList3 ? <ExpandLess style={{ color: "#ffff", }} /> : <ExpandMore style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
+                    {openList3 ? <ExpandLess className='scaled-480px-TableContent' style={{ color: "#ffff", }} /> : <ExpandMore className='scaled-480px-TableContent' style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
                   </ListItemButton>
                 </ListItem>
                 : null}
@@ -644,13 +655,13 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
                         >
                           <ListItemIcon
-                            sx={{ color: 'inherit' }}
+                            sx={{ color: 'inherit', minWidth: '15% !important' }}
                             style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
                           >
                             {item.icon}
                           </ListItemIcon>
                           <ListItemText
-                            primary={item.label}
+                            primary={<Typography className='scaled-480px-TableContent'>{item.label}</Typography>}
                             style={{ color: location.pathname === item.url ? "#fff" : "rgba(255, 255, 255, 0.7)" }}
                             primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
                           />
@@ -662,11 +673,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
               {openListNAC &&
                 <ListItem component="div" disablePadding>
                   <ListItemButton onClick={handleClickList4}>
-                    <ListItemIcon>
-                      <FormatShapesIcon fontSize="small" style={{ color: openList4 ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
+                    <ListItemIcon sx={{ minWidth: '15% !important' }}>
+                      <FormatShapesIcon className='scaled-logo-Header' style={{ color: openList4 ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
                     </ListItemIcon>
                     <ListItemText
-                      primary="ASSETS REPORT"
+                      primary={<Typography className='scaled-480px-TableContent'>ASSETS REPORT</Typography>}
                       primaryTypographyProps={{
                         fontSize: 13,
                         fontWeight: 'medium',
@@ -675,7 +686,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                       }}
                       sx={{ my: 0 }}
                     />
-                    {openList4 ? <ExpandLess style={{ color: "#ffff", }} /> : <ExpandMore style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
+                    {openList4 ? <ExpandLess className='scaled-480px-TableContent' style={{ color: "#ffff", }} /> : <ExpandMore className='scaled-480px-TableContent' style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
                   </ListItemButton>
                 </ListItem>
               }
@@ -692,13 +703,13 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
                         >
                           <ListItemIcon
-                            sx={{ color: 'inherit' }}
+                            sx={{ color: 'inherit', minWidth: '15% !important' }}
                             style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
                           >
                             {item.icon}
                           </ListItemIcon>
                           <ListItemText
-                            primary={item.label}
+                            primary={<Typography className='scaled-480px-TableContent'>{item.label}</Typography>}
                             style={{ color: location.pathname === item.url ? "#fff" : "rgba(255, 255, 255, 0.7)" }}
                             primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
                           />
@@ -710,11 +721,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
               {openListNAC === true && ((permission_menuID ? permission_menuID.includes(13) : null) || data.branchid !== 901) === true ?
                 <ListItem component="div" disablePadding>
                   <ListItemButton onClick={handleClickList5}>
-                    <ListItemIcon>
-                      <ConnectWithoutContactIcon fontSize="small" style={{ color: openList5 ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
+                    <ListItemIcon sx={{ minWidth: '15% !important' }}>
+                      <ConnectWithoutContactIcon className='scaled-logo-Header' style={{ color: openList5 ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
                     </ListItemIcon>
                     <ListItemText
-                      primary="BPC"
+                      primary={<Typography className='scaled-480px-TableContent'>BPC</Typography>}
                       primaryTypographyProps={{
                         fontSize: 13,
                         fontWeight: 'medium',
@@ -723,7 +734,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                       }}
                       sx={{ my: 0 }}
                     />
-                    {openList5 ? <ExpandLess style={{ color: "#ffff", }} /> : <ExpandMore style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
+                    {openList5 ? <ExpandLess className='scaled-480px-TableContent' style={{ color: "#ffff", }} /> : <ExpandMore className='scaled-480px-TableContent' style={{ color: "rgba(255, 255, 255, 0.7)", }} />}
                   </ListItemButton>
                 </ListItem>
                 : null}
@@ -740,13 +751,13 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                           sx={{ py: 0, minHeight: 36, color: 'rgba(255,255,255,.8)' }}
                         >
                           <ListItemIcon
-                            sx={{ color: 'inherit' }}
+                            sx={{ color: 'inherit', minWidth: '15% !important' }}
                             style={{ color: location.pathname === item.url ? "#6366f1" : "rgba(255, 255, 255, 0.7)" }}
                           >
                             {item.icon}
                           </ListItemIcon>
                           <ListItemText
-                            primary={item.label}
+                            primary={<Typography className='scaled-480px-TableContent'>{item.label}</Typography>}
                             style={{ color: location.pathname === item.url ? "#fff" : "rgba(255, 255, 255, 0.7)" }}
                             primaryTypographyProps={{ fontSize: 12, fontWeight: 'small' }}
                           />

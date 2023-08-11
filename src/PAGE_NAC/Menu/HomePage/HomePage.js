@@ -23,7 +23,7 @@ export default function MenuAppBar() {
       >
         <Toolbar>
           <AnimatedPage>
-            <Typography variant="h5" color="inherit"  className='font-sm'>
+            <Typography variant="h5" color="inherit"  className='scaled-480px-Header'>
               หน้าแรกระบบควบคุมและเปลี่ยนแปลงทรัพย์สิน
             </Typography>
           </AnimatedPage>
@@ -41,14 +41,14 @@ export default function MenuAppBar() {
           <Container component="main" sx={{ mt: 8, mb: 0 }} maxWidth="md">
             <center>
               <img style={{ maxWidth: '50%' }} src={logoPure} loading="lazy" />
-              <Typography sx={{ mt: 2 }} variant="h3" component="h2" gutterBottom className='font-sm font-md'>
+              <Typography sx={{ mt: 2 }} variant="h3" component="h2" gutterBottom className='scaled-logo-Header'>
                 <b> {'(PURE THAI ENERGY CO.,LTD)'} </b>
               </Typography>
             </center>
           </Container>
           <Container component="main" sx={{ mt: 0, mb: 2 }} maxWidth="sm">
             <center>
-              <Typography variant="h5" component="h2" gutterBottom className='font-vsm'>
+              <Typography variant="h5" component="h2" gutterBottom className='scaled-logo-Header-second'>
                 {'ยินดีต้อนรับสู่เว็บไซต์ เพียวพลังงานไทย จำกัด'}
                 {'ที่ใช้สำหรับการจัดการเปลี่ยนแปลงและควบคุมทรัพย์สิน'}
               </Typography>

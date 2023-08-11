@@ -56,7 +56,17 @@ import PERSON_ROPA from './PAGE_ROPA/Menu/Person_RoPA';
 // Permission_NAC
 import Permission_NAC from './PAGE_NAC/Menu/NAC/Permission_NAC';
 
-const drawerWidth = 256;
+function getCurrentDimension() {
+  if (window.innerWidth > 769) {
+    return (window.innerWidth / 100) * 20;
+  } else if (window.innerWidth > 481 && window.innerWidth <= 768) {
+    return (window.innerWidth / 100) * 25;
+  } else {
+    return (window.innerWidth / 100) * 30;
+  }
+}
+
+const drawerWidth = getCurrentDimension();
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -73,8 +83,9 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
+
       }),
-      marginLeft: `+${drawerWidth}px`,
+      // marginLeft: `+${drawerWidth}px`,
     }),
   }),
 );
@@ -89,8 +100,8 @@ const AppBar = styled(MuiAppBar, {
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
+    width: `calc(100% - ${drawerWidth})`,
+    marginLeft: `${drawerWidth}`,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,

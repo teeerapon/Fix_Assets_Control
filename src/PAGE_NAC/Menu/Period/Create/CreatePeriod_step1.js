@@ -325,10 +325,10 @@ export default function AddressForm() {
     return (
       <React.Fragment>
         <center>
-          <Typography component="h1" variant="h4" align="center" class="font-sm">
+          <Typography component="h1" variant="h5" align="center">
             <b>PURE THAI ENERGY CO.,LTD.</b>
           </Typography>
-          <Typography component="h1" variant="h6" align="center" className='pt-2 font-vsm'>
+          <Typography component="h1" variant="h6" align="center">
             ขั้นตอนการกรอกข้อมูล
           </Typography>
           <Stepper activeStep={activeStep} sx={{ pt: 5, pb: 5 }} className="col-md-10">
@@ -340,10 +340,10 @@ export default function AddressForm() {
           </Stepper>
         </center>
         <React.Fragment>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="body1" gutterBottom>
             *กรุณากรอกข้อมูลให้ครบถ้วน
           </Typography>
-          <Grid container spacing={3} className='pt-2'>
+          <Grid container spacing={3} className='pt-5'>
             <Grid item xs={12}>
               <TextField
                 required

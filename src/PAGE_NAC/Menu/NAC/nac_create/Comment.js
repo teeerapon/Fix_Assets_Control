@@ -29,6 +29,7 @@ import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
+import List from '@mui/material/List';
 import Avatar from '@mui/material/Avatar';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -37,25 +38,6 @@ import ClearIcon from '@mui/icons-material/Clear';
 import Axios from "axios"
 import DialogContentText from '@mui/material/DialogContentText';
 import config from '../../../../config'
-
-const theme = createTheme();
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.action.selected,
-    color: theme.palette.common.black,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.white,
-  },
-  // hide last border
-}));
 
 async function store_FA_control_comment(credentials) {
   return fetch(config.http + '/store_FA_control_comment', {
@@ -179,7 +161,6 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
     return {
       sx: {
         bgcolor: stringToColor(name),
-        fontSize: `12px`
       },
       children: (name.includes('PTEC')) === true ? `${name.split('C')[1]}` : `${name}`,
     };
@@ -348,7 +329,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
               <Paper>
                 <Card>
                   <CardHeader
-                    title={(<Typography className='font-399-main font-vsm font-md text-center'>เอกสารแนบ</Typography>)}
+                    title={(<Typography className='scaled-480px-TableHeader text-center'>เอกสารแนบ</Typography>)}
                     titleTypographyProps={{ align: 'center' }}
                     subheaderTypographyProps={{
                       align: 'center',
@@ -378,12 +359,12 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                                     <React.Fragment>
                                       <Tooltip title={res.linkpath}>
                                         <IconButton onClick={() => window.open(res.linkpath, "_blank")} edge="end" aria-label="comments">
-                                          <FilePresentIcon />
+                                          <FilePresentIcon className='scaled-480px-TableContent' />
                                         </IconButton>
                                       </Tooltip>
                                       <Tooltip title='delete path'>
                                         <IconButton onClick={handleClickOpen} id={res.linkpath_id} name={res.description} edge="end" aria-label="comments">
-                                          <ClearIcon />
+                                          <ClearIcon className='scaled-480px-TableContent' />
                                         </IconButton>
                                       </Tooltip>
                                     </React.Fragment>
@@ -392,7 +373,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                                       <React.Fragment>
                                         <Tooltip title={res.linkpath}>
                                           <IconButton onClick={() => window.open(res.linkpath, "_blank")} edge="end" aria-label="comments">
-                                            <FilePresentIcon />
+                                            <FilePresentIcon className='scaled-480px-TableContent' />
                                           </IconButton>
                                         </Tooltip>
                                       </React.Fragment>
@@ -403,8 +384,8 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                                   <Avatar {...stringAvatar(res.userid)} />
                                 </ListItemAvatar>
                                 <ListItemText
-                                  primary={<Typography variant="subtitle2" >{res.userid}</Typography>}
-                                  secondary={<Typography variant="body2" style={{ color: 'rgb(92,92,92)' }}>{res.description.includes('/') === true ? res.description.split('/')[res.description.split('/').length - 1] : res.description}</Typography>}
+                                  primary={<Typography className='scaled-480px-TableContent' >{res.userid}</Typography>}
+                                  secondary={<Typography className='scaled-480px-TableContent' style={{ color: 'rgb(92,92,92)' }}>{res.description.includes('/') === true ? res.description.split('/')[res.description.split('/').length - 1] : res.description}</Typography>}
                                 />
                               </ListItem>
                             </Stack>
@@ -424,7 +405,7 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                       onClick={handleClickOpenDialog}
                       startIcon={<ChatIcon style={{ 'color': 'white' }} />}
                     >
-                      <Typography className='font-399-main font-vsm font-md text-center' style={{ 'color': 'white' }}>แนบลิ้งเอกสาร</Typography>
+                      <Typography className='scaled-480px-TableHeader text-center' style={{ 'color': 'white' }}>แนบลิ้งเอกสาร</Typography>
                     </Button>
                   </CardActions>
                 </Card>
@@ -439,40 +420,55 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
               <Paper>
                 <Card>
                   <CardHeader
-                    title={(<Typography className='font-399-main font-vsm font-md text-center'>ช่องแสดงความคิดเห็น</Typography>)}
+                    title={(<Typography className='scaled-480px-TableHeader text-center'>ช่องแสดงความคิดเห็น</Typography>)}
                     titleTypographyProps={{ align: 'center' }}
                     subheaderTypographyProps={{
                       align: 'center',
                     }}
                     sx={{
-                      backgroundColor: (theme) => theme.palette.grey[200]
+                      backgroundColor: (theme) => theme.palette.grey[200],
+                      mb: 1
                     }}
                   />
-                  <Grid sx={{ pb: 1 }}></Grid>
                   {commentFetch.map((res, index) => (
                     <React.Fragment>
-                      <Stack direction="row" justifyContent={(res.userid === data.UserCode) ? 'flex-end' : 'flex-start'}>
-                        <CardContent
-                          cols={3}
-                          sx={{ pl: 1, pr: 1, p: 0, m: 1 }}
+                      <Stack
+                        direction="row"
+                        justifyContent={(res.userid === data.UserCode) ? 'flex-end' : 'flex-start'}
+                        sx={{ m: 1 }}
+                      >
+                        <List
+                          dense
                           style={{
                             'backgroundColor': (res.userid === data.UserCode) ? 'rgba(0, 120, 255,1)' : 'rgb(232, 232, 232)',
                             borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20,
-                            paddingBottom: 0, maxWidth: '48%',
                           }}
                         >
                           <ListItem
                             key={index}
+                            alignItems="flex-start"
                           >
                             <ListItemAvatar>
-                              <Avatar {...stringAvatar(res.userid)} />
+                              <Avatar className='scaled-480px-TableContent scaled-logo-TableContent'{...stringAvatar(res.userid)} />
                             </ListItemAvatar>
                             <ListItemText
-                              primary={<Typography className='font-399-seconds font-vsm-vsm font-md-sm' style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : null }}>{`${res.userid} (${(res.create_date).split('T')[0]}  ${(res.create_date).split('T')[1].split('.')[0].split(':')[0]}:${(res.create_date).split('T')[1].split('.')[0].split(':')[1]})`}</Typography>}
-                              secondary={<Typography className='font-399-seconds font-vsm-vsm font-md-sm' style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : 'rgb(92,92,92)' }}>{res.comment}</Typography>}
+                              primary={
+                                <React.Fragment>
+                                  <Typography
+                                    className='scaled-480px-TableContent '
+                                    style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : null }}>{`${res.userid} (${(res.create_date).split('T')[0]}  ${(res.create_date).split('T')[1].split('.')[0].split(':')[0]}:${(res.create_date).split('T')[1].split('.')[0].split(':')[1]})`}</Typography>
+                                </React.Fragment>
+                              }
+                              secondary={
+                                <React.Fragment>
+                                  <Typography
+                                    className='scaled-480px-TableContent'
+                                    style={{ color: (res.userid === data.UserCode) ? 'rgb(255,255,255)' : 'rgb(92,92,92)' }}>{res.comment}</Typography>
+                                </React.Fragment>
+                              }
                             />
                           </ListItem>
-                        </CardContent>
+                        </List>
                       </Stack>
                     </React.Fragment>
                   ))}
@@ -499,9 +495,9 @@ export default function OutlinedCard({ handleClickOpenDialog, openDialog, handle
                       style={{ 'backgroundColor': !comment ? 'rgb(240, 240, 240)' : 'rgb(0, 120, 255)' }}
                       disabled={!comment ? true : false}
                       onClick={handleSubmitComment}
-                      startIcon={<ChatIcon style={{ 'color': !comment ? 'rgb(200,200,200)' : 'white' }} />}
+                      startIcon={<ChatIcon className='scaled-480px-TableContent' style={{ 'color': !comment ? 'rgb(200,200,200)' : 'white' }} />}
                     >
-                      <Typography className='font-399-main font-vsm font-md text-center' style={{ 'color': !comment ? 'rgb(200,200,200)' : 'white' }}>แสดงความคิดเห็น</Typography>
+                      <Typography className='scaled-480px-TableHeader text-center' style={{ 'color': !comment ? 'rgb(200,200,200)' : 'white' }}>แสดงความคิดเห็น</Typography>
                     </Button>
                   </CardActions>
                 </Card>

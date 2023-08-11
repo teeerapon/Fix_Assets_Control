@@ -40,7 +40,7 @@ export default function Checkout() {
         >
           <Toolbar>
             <AnimatedPage>
-              <Typography variant="h5" color="inherit" >
+              <Typography variant="h5" className="scaled-logo-Header" color="inherit" >
                 เพิ่มรอบตรวจนับ
               </Typography>
             </AnimatedPage>

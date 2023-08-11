@@ -629,19 +629,13 @@ export default function History_of_assets() {
       },
     },
     {
-      field: 'nac_status',
+      field: 'vertify_book_value',
       headerName: 'ผู้ตรวจสอบ/อนุมัติ',
       headerClassName: 'super-app-theme--header',
       align: 'center',
       headerAlign: 'center',
       minWidth: 130,
       flex: 1,
-      valueGetter: (params) =>
-        `${(params.row.nac_status === 2 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.vertify + '' :
-          (params.row.nac_status === 3 && params.row.name !== 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' && params.row.name !== 'เพิ่มบัญชีทรัพย์สินถาวร') ? '' + params.row.approved + '' :
-            ((params.row.nac_status === 2) && (params.row.name === 'เปลี่ยนแปลงรายละเอียดทรัพย์สิน' || params.row.name === 'เพิ่มบัญชีทรัพย์สินถาวร')) ? '' + !params.row.vertify ? params.row.approved : params.row.vertify + '' :
-              (params.row.nac_status === 13) ? 'การเงิน' : (params.row.nac_status === 5 || params.row.nac_status === 15) ? 'บัญชี' : (params.row.nac_status === 11) ? 'RSS' : ''
-        }`,
     },
     {
       field: 'action',
@@ -698,7 +692,7 @@ export default function History_of_assets() {
       >
         <Toolbar>
           <AnimatedPage>
-            <Typography variant="h5" color="inherit" >
+            <Typography variant="h5" className="scaled-logo-Header" color="inherit" >
               สถานะรายการ NAC
             </Typography>
           </AnimatedPage>

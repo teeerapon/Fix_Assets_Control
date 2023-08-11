@@ -39,6 +39,7 @@ import dayjs from 'dayjs';
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import PropTypes from 'prop-types';
+import AppbarNAC from '../Appbar.js'
 import { NumericFormat } from 'react-number-format';
 
 
@@ -360,36 +361,10 @@ export default function Nac_Main() {
     <React.Fragment>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <AppBar
-          position="absolute"
-          color="default"
-          elevation={0}
-          sx={{
-            position: 'relative',
-            borderBottom: (t) => `1px solid ${t.palette.divider}`,
-          }}
-        >
-          <Toolbar>
-            <Box sx={{ width: 1 }}>
-              <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
-                <Box gridColumn="span 10">
-                  <AnimatedPage>
-                    <Typography className='font-399-main font-vsm font-md' color="inherit" sx={{ pt: 1 }}>
-                      การเปลี่ยนแปลงทรัพย์สินถาวร
-                    </Typography>
-                  </AnimatedPage>
-                </Box>
-                <Box gridColumn="span 0">
-                  <AnimatedPage>
-                    <IconButton sx={{ color: 'rgb(0,0,0)' }} component="label" size="large" onClick={() => navigate('/NAC_ROW')}>
-                      <SummarizeIcon />
-                    </IconButton>
-                  </AnimatedPage>
-                </Box>
-              </Box>
-            </Box>
-          </Toolbar>
-        </AppBar>
+        <AppbarNAC
+          nac_type={sendHeader[0].nac_type}
+          sendHeader={sendHeader}
+        />
         <AnimatedPage>
           <Container component="main" maxWidth="lg" sx={{ mb: 12 }}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -409,10 +384,10 @@ export default function Nac_Main() {
                     justifyContent="center"
                     alignItems="center"
                   >
-                    <Typography className='font-399-main font-vsm font-md'>
+                    <Typography className='scaled-480px-Header'>
                       <b>PURE THAI ENERGY CO.,LTD.</b>
                     </Typography>
-                    <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                    <Typography className='scaled-480px-Header-Content text-center'>
                       เปลี่ยนแปลงรายการทรัพย์สินถาวร (Notice of Asset Change - NAC)
                     </Typography>
                   </Stack>
@@ -422,8 +397,8 @@ export default function Nac_Main() {
                 </Grid>
               </Grid>
               <Box sx={{ pt: 3 }} className='logo-399-sm logo-sm logo-md'>
-                <Typography className='font-399-seconds font-vsm-vsm font-md-sm' color='error'>
-                  * กรุณากรอกข้อมูลสำหรับเพิ่มบัญชีทรัพย์สิน
+                <Typography className='scaled-480px-Header-Content' color='error'>
+                  * กรุณากรอกข้อมูลสำหรับโยกย้ายทรัพย์สิน
                 </Typography>
               </Box>
               <TableContainer component={Paper}>
@@ -431,17 +406,17 @@ export default function Nac_Main() {
                   <TableHead>
                     <TableRow>
                       <StyledTableCell align="center" style={{ width: '30%' }}>
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
                           ประเภทการเปลี่ยนแปลง
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
                           หน่วยงานที่ส่งมอบ
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
                           หน่วยงานที่รับมอบ
                         </Typography>
                       </StyledTableCell>
@@ -450,8 +425,8 @@ export default function Nac_Main() {
                   <TableBody>
                     <StyledTableRow>
                       <StyledTableCell align="center">
-                        <Typography className='font-399-main font-vsm font-md'>
-                          เพิ่มบัญชีทรัพย์สิน
+                        <Typography className='scaled-480px-Header'>
+                          โยกย้ายทรัพย์สิน
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
@@ -463,7 +438,7 @@ export default function Nac_Main() {
                           sx={{ p: 2 }}
                         >
                           <Stack>
-                            <Typography className='font-399-seconds font-vsm-vsm font-md-sm' color="inherit" >
+                            <Typography className='scaled-480px-TableContent' color="inherit" >
                               Department
                             </Typography>
                             <TextField
@@ -479,14 +454,14 @@ export default function Nac_Main() {
                               value={!sendHeader[0].source_Department ? '' : sendHeader[0].source_Department}
                               InputProps={{
                                 classes: {
-                                  input: 'font-399-seconds font-vsm-vsm font-md-sm text-center pt-2',
+                                  input: 'scaled-480px-TableContent text-center pt-2',
                                 },
                               }}
                               variant="standard"
                             />
                           </Stack>
                           <Stack>
-                            <Typography className='font-399-seconds font-vsm-vsm font-md-sm' color="inherit" >
+                            <Typography className='scaled-480px-TableContent' color="inherit" >
                               BU
                             </Typography>
                             <TextField
@@ -502,7 +477,7 @@ export default function Nac_Main() {
                               name='source'
                               InputProps={{
                                 classes: {
-                                  input: 'font-399-seconds font-vsm-vsm font-md-sm text-center pt-2',
+                                  input: 'scaled-480px-TableContent text-center pt-2',
                                 },
                               }}
                               variant="standard"
@@ -514,6 +489,12 @@ export default function Nac_Main() {
                             freeSolo
                             name='source'
                             size="small"
+                            classes={{
+                              input: 'scaled-480px-TableContent',
+                              option: 'scaled-480px-TableContent',
+
+                            }}
+                            disableClearable={true}
                             value={sendHeader[0].source}
                             options={users.filter((res) => res.DepID === data.depid).map((option) => option.UserCode)}
                             onChange={handleService_Source}
@@ -523,12 +504,9 @@ export default function Nac_Main() {
                                 variant="standard"
                                 InputProps={{
                                   ...params.InputProps,
-                                  classes: {
-                                    input: 'font-399-seconds font-vsm-vsm font-md-sm',
-                                  },
                                   startAdornment: (
                                     <InputAdornment position="start">
-                                      <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                      <Typography color="black" className='scaled-480px-TableContent'>
                                         ผู้ส่งมอบ :
                                       </Typography>
                                     </InputAdornment>
@@ -556,11 +534,11 @@ export default function Nac_Main() {
                                 }}
                                 InputProps={{
                                   classes: {
-                                    input: 'font-399-seconds font-vsm-vsm font-md-sm',
+                                    input: 'scaled-480px-TableContent',
                                   },
                                   startAdornment: (
                                     <InputAdornment position="start">
-                                      <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                      <Typography color="black" className='scaled-480px-TableContent'>
                                         ชื่อจริง :
                                       </Typography>
                                     </InputAdornment>
@@ -582,11 +560,11 @@ export default function Nac_Main() {
                                 }}
                                 InputProps={{
                                   classes: {
-                                    input: 'font-399-seconds font-vsm-vsm font-md-sm',
+                                    input: 'scaled-480px-TableContent',
                                   },
                                   startAdornment: (
                                     <InputAdornment position="start">
-                                      <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                      <Typography color="black" className='scaled-480px-TableContent'>
                                         นามสกุล :
                                       </Typography>
                                     </InputAdornment>
@@ -604,11 +582,11 @@ export default function Nac_Main() {
                               onChange={handleSendDate}
                               InputProps={{
                                 classes: {
-                                  input: 'font-399-seconds font-vsm-vsm font-md-sm',
+                                  input: 'scaled-480px-TableContent',
                                 },
                                 startAdornment: (
                                   <InputAdornment position="start">
-                                    <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                    <Typography color="black" className='scaled-480px-TableContent'>
                                       วันที่ส่งมอบ :
                                     </Typography>
                                   </InputAdornment>
@@ -633,11 +611,11 @@ export default function Nac_Main() {
                             sx={{ pt: 1 }}
                             InputProps={{
                               classes: {
-                                input: 'font-399-seconds font-vsm-vsm font-md-sm',
+                                input: 'scaled-480px-TableContent',
                               },
                               startAdornment: (
                                 <InputAdornment position="start">
-                                  <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                  <Typography color="black" className='scaled-480px-TableContent'>
                                     หมายเหตุ :
                                   </Typography>
                                 </InputAdornment>
@@ -656,14 +634,14 @@ export default function Nac_Main() {
                           sx={{ p: 2 }}
                         >
                           <Stack>
-                            <Typography className='font-399-seconds font-vsm-vsm font-md-sm' color="inherit" >
+                            <Typography className='scaled-480px-TableContent' color="inherit" >
                               Department
                             </Typography>
                             <TextField
                               required
                               fullWidth
                               value={sendHeader[0].des_Department ? sendHeader[0].des_Department : ''}
-                              name='des_Department'
+                              name='des_dep'
                               disabled
                               sx={{
                                 "& .MuiInputBase-input.Mui-disabled": {
@@ -672,14 +650,14 @@ export default function Nac_Main() {
                               }}
                               InputProps={{
                                 classes: {
-                                  input: 'font-399-seconds font-vsm-vsm font-md-sm text-center pt-2',
+                                  input: 'scaled-480px-TableContent text-center pt-2',
                                 },
                               }}
                               variant="standard"
                             />
                           </Stack>
                           <Stack>
-                            <Typography className='font-399-seconds font-vsm-vsm font-md-sm' color="inherit" >
+                            <Typography className='scaled-480px-TableContent' color="inherit" >
                               BU
                             </Typography>
                             <TextField
@@ -692,10 +670,10 @@ export default function Nac_Main() {
                                 },
                               }}
                               value={sendHeader[0].des_BU ? sendHeader[0].des_BU : ''}
-                              name='des_BU'
+                              name='des_bu'
                               InputProps={{
                                 classes: {
-                                  input: 'font-399-seconds font-vsm-vsm font-md-sm text-center pt-2 spinner-border-sm',
+                                  input: 'scaled-480px-TableContent text-center pt-2 spinner-border-sm',
                                 },
                               }}
                               variant="standard"
@@ -705,9 +683,15 @@ export default function Nac_Main() {
                         <Box sx={{ p: 2 }}>
                           <Autocomplete
                             freeSolo
-                            name='des_delivery'
+                            name='des_userid'
                             size="small"
                             value={sendHeader[0].des_delivery}
+                            classes={{
+                              input: 'scaled-480px-TableContent',
+                              option: 'scaled-480px-TableContent',
+
+                            }}
+                            disableClearable={true}
                             options={users.map((option) => option.UserCode)}
                             onChange={handleService_Des}
                             renderInput={(params) => (
@@ -716,12 +700,9 @@ export default function Nac_Main() {
                                 variant="standard"
                                 InputProps={{
                                   ...params.InputProps,
-                                  classes: {
-                                    input: 'font-399-seconds font-vsm-vsm font-md-sm',
-                                  },
                                   startAdornment: (
                                     <InputAdornment position="start">
-                                      <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                      <Typography color="black" className='scaled-480px-TableContent'>
                                         ผู้รับมอบ :
                                       </Typography>
                                     </InputAdornment>
@@ -749,11 +730,11 @@ export default function Nac_Main() {
                                 }}
                                 InputProps={{
                                   classes: {
-                                    input: 'font-399-seconds font-vsm-vsm font-md-sm',
+                                    input: 'scaled-480px-TableContent',
                                   },
                                   startAdornment: (
                                     <InputAdornment position="start">
-                                      <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                      <Typography color="black" className='scaled-480px-TableContent'>
                                         ชื่อจริง :
                                       </Typography>
                                     </InputAdornment>
@@ -775,11 +756,11 @@ export default function Nac_Main() {
                                 }}
                                 InputProps={{
                                   classes: {
-                                    input: 'font-399-seconds font-vsm-vsm font-md-sm',
+                                    input: 'scaled-480px-TableContent',
                                   },
                                   startAdornment: (
                                     <InputAdornment position="start">
-                                      <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                      <Typography color="black" className='scaled-480px-TableContent'>
                                         นามสกุล :
                                       </Typography>
                                     </InputAdornment>
@@ -792,17 +773,17 @@ export default function Nac_Main() {
                           <LocalizationProvider dateAdapter={DateAdapter}>
                             <DatePicker
                               inputFormat="yyyy-MM-dd"
-                              name='des_deliveryDate'
+                              name='Des_Date'
                               disabled
                               onChange={handleService_DesDate}
                               value={sendHeader[0].des_deliveryDate}
                               InputProps={{
                                 classes: {
-                                  input: 'font-399-seconds font-vsm-vsm font-md-sm',
+                                  input: 'scaled-480px-TableContent',
                                 },
                                 startAdornment: (
                                   <InputAdornment position="start">
-                                    <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                    <Typography color="black" className='scaled-480px-TableContent'>
                                       วันที่รับมอบ :
                                     </Typography>
                                   </InputAdornment>
@@ -821,17 +802,17 @@ export default function Nac_Main() {
                           <TextField
                             required
                             fullWidth
-                            name='des_Description'
+                            name='Des_description'
                             value={sendHeader[0].des_Description}
                             onChange={handleService_DesDescription}
                             sx={{ pt: 1 }}
                             InputProps={{
                               classes: {
-                                input: 'font-399-seconds font-vsm-vsm font-md-sm',
+                                input: 'scaled-480px-TableContent',
                               },
                               startAdornment: (
                                 <InputAdornment position="start">
-                                  <Typography color="black" className='font-399-seconds font-vsm-vsm font-md-sm'>
+                                  <Typography color="black" className='scaled-480px-TableContent'>
                                     หมายเหตุ :
                                   </Typography>
                                 </InputAdornment>
@@ -848,42 +829,41 @@ export default function Nac_Main() {
                   <TableHead>
                     <TableRow>
                       <StyledTableCell align="center">
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                        <Typography className='scaled-480px-TableHeader'>
                           รหัสทรัพย์สิน
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                        <Typography className='scaled-480px-TableHeader'>
                           Serial No.
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                        <Typography className='scaled-480px-TableHeader'>
                           ชื่อทรัพย์สิน
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center" style={{ width: '18%' }}>
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                        <Typography className='scaled-480px-TableHeader'>
                           วันที่ขึ้นทะเบียน
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                        <Typography className='scaled-480px-TableHeader'>
                           สถานะทรัพย์สิน
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center" style={{ width: '12%' }}>
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm'>
+                        <Typography className='scaled-480px-TableHeader'>
                           ต้นทุน
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center" style={{ width: '5%' }}>
                         <IconButton
-                          size="large"
                           color='primary'
                           onClick={handleServiceAdd}
                         >
-                          <AddBoxIcon />
+                          <AddBoxIcon className='scaled-480px-TableHeader'/>
                         </IconButton>
                       </StyledTableCell>
                     </TableRow>
@@ -902,6 +882,12 @@ export default function Nac_Main() {
                               p: 1,
                             }}
                             key={index}
+                            classes={{
+                              input: 'scaled-480px-TableContent text-center',
+                              option: 'scaled-480px-TableContent',
+
+                            }}
+                            disableClearable={true}
                             value={res.assetsCode}
                             options={dataAssets.map((option) => option.Code)}
                             onChange={(e) => handleServiceChangeHeader(e, index)}
@@ -911,9 +897,6 @@ export default function Nac_Main() {
                                 variant="standard"
                                 InputProps={{
                                   ...params.InputProps,
-                                  classes: {
-                                    input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
-                                  },
                                 }}
                               />
                             )}
@@ -935,7 +918,7 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               classes: {
-                                input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                                input: 'scaled-480px-TableContent text-center',
                               },
                             }}
                             value={res.serialNo ?? ''}
@@ -958,7 +941,7 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               classes: {
-                                input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                                input: 'scaled-480px-TableContent text-center',
                               },
                             }}
                             value={res.name ?? ''}
@@ -980,7 +963,7 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               classes: {
-                                input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                                input: 'scaled-480px-TableContent text-center',
                               },
                             }}
                             value={!res.date_asset ? '' : res.date_asset.split('T')[0]}
@@ -1002,7 +985,7 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               classes: {
-                                input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                                input: 'scaled-480px-TableContent text-center',
                               },
                             }}
                             value={res.dtl ?? ''}
@@ -1026,7 +1009,7 @@ export default function Nac_Main() {
                               disableUnderline: true,
                               inputComponent: NumericFormatCustom,
                               classes: {
-                                input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                                input: 'scaled-480px-TableContent text-center',
                               },
                             }}
                             value={res.price ?? ''}
@@ -1041,7 +1024,7 @@ export default function Nac_Main() {
                               color="error"
                               onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
                             >
-                              <DeleteIcon fontSize="inherit" />
+                              <DeleteIcon fontSize="inherit" className='scaled-480px-TableHeader' />
                             </IconButton>
                           )}
                         </StyledTableCell>
@@ -1051,12 +1034,12 @@ export default function Nac_Main() {
                   <TableBody>
                     <StyledTableRow>
                       <StyledTableCell align="start" colSpan={5}>
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableContent' sx={{ p: 1 }}>
                           รวมทั้งหมด
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center" >
-                      <TextField
+                        <TextField
                           fullWidth
                           sx={{
                             "& .MuiInputBase-input.Mui-disabled": {
@@ -1070,7 +1053,7 @@ export default function Nac_Main() {
                             disableUnderline: true,
                             inputComponent: NumericFormatCustom,
                             classes: {
-                              input: 'font-399-seconds font-vsm-vsm font-md-sm text-center',
+                              input: 'scaled-480px-TableContent text-center',
                             },
                           }}
                           value={!result ? '' : result}
@@ -1084,22 +1067,22 @@ export default function Nac_Main() {
                   <TableHead>
                     <StyledTableRow>
                       <StyledTableCell align="center">
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
                           ผู้ทำรายการ : [{data.UserCode}] {dateNow.split('T')[0]}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
                           ผู้ตรวจสอบ : -
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
                           ผู้อนุมัติ : -
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='font-399-seconds font-vsm-vsm font-md-sm' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
                           บัญชีตรวจสอบ : -
                         </Typography>
                       </StyledTableCell>
@@ -1112,9 +1095,9 @@ export default function Nac_Main() {
                       <Button
                         variant="contained"
                         onClick={handleSubmit}
-                        className='font-399-seconds font-vsm-vsm font-md-sm'
-                        endIcon={<BorderColorRoundedIcon className='font-399-seconds font-vsm-vsm font-md-sm' />}
-                        sx={{ p: 2 }}
+                        className='scaled-480px-TableContent'
+                        endIcon={<BorderColorRoundedIcon className='scaled-480px-TableContent' />}
+                        sx={{ p: 1, m: 1 }}
                       >
                         Submit
                       </Button>
