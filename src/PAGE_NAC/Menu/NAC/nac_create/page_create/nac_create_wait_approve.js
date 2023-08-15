@@ -1035,7 +1035,7 @@ export default function Nac_Main() {
             approveData={approveData}
           />
           <AnimatedPage>
-            <Container component="main" maxWidth="lg" sx={{ mb: 12 }}>
+            <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth  }}>
               <Box
                 sx={{
                   display: 'flex',

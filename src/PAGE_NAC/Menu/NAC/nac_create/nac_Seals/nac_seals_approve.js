@@ -155,7 +155,6 @@ export default function Nac_Main() {
   const navigate = useNavigate();
   const queryString = window.location.search;
   const nac_code = queryString.split('?')[1]
-  const [dimensions, setDimensions] = React.useState(getCurrentDimension());
 
   //const
   const [users, setUsers] = React.useState([]);
@@ -254,13 +253,6 @@ export default function Nac_Main() {
     return a + b
   })
 
-  function getCurrentDimension() {
-    return {
-      width: window.innerWidth,
-      height: window.innerHeight
-    }
-  }
-
 
   React.useEffect(async () => {
 
@@ -342,17 +334,6 @@ export default function Nac_Main() {
       .then((res) => {
         setApproveData(res.data.data);
       })
-
-    const updateDimension = () => {
-      setDimensions(getCurrentDimension())
-    }
-    window.addEventListener('resize', updateDimension);
-
-
-    return (() => {
-      window.removeEventListener('resize', updateDimension);
-    })
-
   }, [])
 
   const handleService_Source = (e) => {
@@ -1062,7 +1043,7 @@ export default function Nac_Main() {
             approveData={approveData}
           />
           <AnimatedPage>
-            <Container component="main" maxWidth="lg" sx={{ mb: 12, width: dimensions.width }}>
+            <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth  }}>
               <Box
                 sx={{
                   display: 'flex',

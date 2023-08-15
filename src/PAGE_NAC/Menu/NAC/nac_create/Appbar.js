@@ -22,29 +22,6 @@ export default function Nac_Main({ nac_code, nac_type, approveData, sendHeader }
   const data = JSON.parse(localStorage.getItem('data'));
   const navigate = useNavigate();
   const queryString = window.location.search;
-  const [dimensions, setDimensions] = React.useState(getCurrentDimension());
-
-  function getCurrentDimension() {
-    return {
-      width: window.innerWidth,
-      height: window.innerHeight
-    }
-  }
-
-
-  React.useEffect(async () => {
-
-    const updateDimension = () => {
-      setDimensions(getCurrentDimension())
-    }
-    window.addEventListener('resize', updateDimension);
-
-
-    return (() => {
-      window.removeEventListener('resize', updateDimension);
-    })
-
-  }, [])
 
   return (
     <React.Fragment>
@@ -57,7 +34,7 @@ export default function Nac_Main({ nac_code, nac_type, approveData, sendHeader }
           sx={{
             position: 'relative',
             borderBottom: (t) => `1px solid ${t.palette.divider}`,
-            width: dimensions.width
+            minWidth: window.innerWidth
           }}
         >
           <Toolbar>
@@ -84,7 +61,7 @@ export default function Nac_Main({ nac_code, nac_type, approveData, sendHeader }
             </Box>
           </Toolbar>
         </AppBar>
-        <Container component="main" maxWidth="lg" sx={{ mb: 5, width: dimensions.width }}>
+        <Container component="main" maxWidth="lg" sx={{ mb: 5, minWidth: window.innerWidth }}>
           <Paper variant="outlined" sx={{ mt: 4, p: { xs: 2, md: 3 } }}>
             {nac_code && approveData ? (
               <React.Fragment>

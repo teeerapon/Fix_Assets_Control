@@ -165,7 +165,6 @@ export default function Nac_Main() {
   const [desLastName, setDesLastName] = React.useState();
   const [TooltipImage_1, setTooltipImage_1] = React.useState();
   const [approveData, setApproveData] = React.useState();
-  const [dimensions, setDimensions] = React.useState(getCurrentDimension());
   const [counter, setCounter] = React.useState(5);
 
 
@@ -254,15 +253,6 @@ export default function Nac_Main() {
     return a + b
   })
 
-  function getCurrentDimension() {
-    return {
-      width: window.innerWidth,
-      height: window.innerHeight
-    }
-  }
-
-
-
   React.useEffect(async () => {
 
     const headers = {
@@ -343,15 +333,6 @@ export default function Nac_Main() {
         setApproveData(res.data.data);
       })
 
-    const updateDimension = () => {
-      setDimensions(getCurrentDimension())
-    }
-    window.addEventListener('resize', updateDimension);
-
-
-    return (() => {
-      window.removeEventListener('resize', updateDimension);
-    })
   }, [])
 
   const handleService_Source = (e) => {
@@ -1030,7 +1011,7 @@ export default function Nac_Main() {
             approveData={approveData}
           />
           <AnimatedPage>
-            <Container component="main" maxWidth="lg" sx={{ mb: 12, width: dimensions.width }}>
+            <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth  }}>
               <Box
                 sx={{
                   display: 'flex',

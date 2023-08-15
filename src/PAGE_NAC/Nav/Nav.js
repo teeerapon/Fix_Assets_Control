@@ -84,7 +84,6 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
   const navigate = useNavigate();
   const [permission_menuID, setPermission_menuID] = React.useState();
   const [permission_menu, setPermission_menu] = React.useState();
-  const [dimensions, setDimensions] = React.useState(getCurrentDimension());
 
   const create_nac = [
     {
@@ -237,13 +236,6 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
     },
   ]
 
-  function getCurrentDimension() {
-    return {
-      width: window.innerWidth,
-      height: window.innerHeight
-    }
-  }
-
   React.useEffect(async () => {
     // POST request using axios with set header
 
@@ -257,16 +249,6 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
         setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
         setPermission_menu(response.data.data)
       });
-
-    const updateDimension = () => {
-      setDimensions(getCurrentDimension())
-    }
-    window.addEventListener('resize', updateDimension);
-
-
-    return (() => {
-      window.removeEventListener('resize', updateDimension);
-    })
   }, []);
 
 
@@ -369,7 +351,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   return (
     <>
-      <Box sx={{ display: 'flex', width: dimensions.width }}>
+      <Box sx={{ display: 'flex', minWidth: window.innerWidth }}>
         <CssBaseline />
         <ThemeProvider theme={darkTheme}>
           <AppBar position="static" open={open}>
