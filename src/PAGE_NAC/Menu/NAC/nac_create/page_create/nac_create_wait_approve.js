@@ -166,6 +166,7 @@ export default function Nac_Main() {
   const [TooltipImage_1, setTooltipImage_1] = React.useState();
   const [TooltipImage_2, setTooltipImage_2] = React.useState();
   const [approveData, setApproveData] = React.useState();
+  const [counter, setCounter] = React.useState(5);
 
   const [sendHeader, setSendHeader] = React.useState([{
     usercode: data.UserCode,
@@ -285,10 +286,10 @@ export default function Nac_Main() {
         listHeader[0]['realPrice_Date'] = res.data.data[0].realPrice_Date
         listHeader[0]['status_name'] = res.data.data[0].status_name
         setSendHeader(listHeader)
-        setSourceName(res.data.data[0].source_name.split(' ')[0] ?? null)
-        setSourceLastName(res.data.data[0].source_name.split(' ')[1] ?? null)
-        setDesName(res.data.data[0].des_name.split(' ')[0] ?? null)
-        setDesLastName(res.data.data[0].des_name.split(' ')[1] ?? null)
+        setSourceName(res.data.data[0].source_name ? res.data.data[0].source_name.split(' ')[0] : null)
+        setSourceLastName(res.data.data[0].source_name ? res.data.data[0].source_name.split(' ')[1] : null)
+        setDesName(res.data.data[0].des_name ? res.data.data[0].des_name.split(' ')[0] : null)
+        setDesLastName(res.data.data[0].des_name ? res.data.data[0].des_name.split(' ')[1] : null)
       })
 
     // กำหนด DTL
@@ -993,7 +994,16 @@ export default function Nac_Main() {
     }
   };
 
-  if (!sendHeader[0].nac_code) {
+  var timeleft = 5;
+  var downloadTimer = setInterval(function () {
+    if (timeleft <= 0) {
+      clearInterval(downloadTimer);
+    }
+    setCounter(timeleft)
+    timeleft -= 1;
+  }, 1000);
+
+  if (!sendHeader[0].nac_code && counter > 0) {
     return (
       <React.Fragment>
         <Box
@@ -2109,5 +2119,10 @@ export default function Nac_Main() {
         <Outlet />
       </React.Fragment >
     );
+  }else{
+    swal("แจ้งเตือน", '404 NOT FOUND THIS PAGE', "warning")
+    .then(()=>{
+      window.location.href = `/NAC_MAIN`;
+    })
   }
 }

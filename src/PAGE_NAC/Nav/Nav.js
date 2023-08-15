@@ -92,7 +92,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>เพิ่มบัญชีทรัพย์สิน</Stack>
-          <Stack><FontDownloadIcon className='scaled-logo-Header' sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon className='scaled-logo-navbar' sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/NAC_CREATE_STEP1',
@@ -136,7 +136,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>สถานะรายการ NAC</Stack>
-          <Stack><FontDownloadIcon className='scaled-logo-Header' sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon className='scaled-logo-navbar' sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/NAC_OPERATOR',
@@ -156,7 +156,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>เพิ่มรอบตรวจนับ</Stack>
-          <Stack><FontDownloadIcon className='scaled-logo-Header' sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon className='scaled-logo-navbar' sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/CreatePeriod',
@@ -168,7 +168,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>แก้ไขรอบตรวจนับ</Stack>
-          <Stack><FontDownloadIcon className='scaled-logo-Header' sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon className='scaled-logo-navbar' sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/EditPeriod',
@@ -183,7 +183,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>รายงานตรวจนับทรัพย์สิน</Stack>
-          <Stack><FontDownloadIcon className='scaled-logo-Header' sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon className='scaled-logo-navbar' sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/Reported_Assets_Counted',
@@ -195,7 +195,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>ประวัติทรัพย์สิน NAC</Stack>
-          <Stack><FontDownloadIcon className='scaled-logo-Header' sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon className='scaled-logo-navbar' sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/History_of_Assets',
@@ -381,7 +381,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                 edge="start"
                 sx={{ mr: 2, ...(open && { display: 'none' }) }}
               >
-                <MenuIcon className='scaled-logo-Header' />
+                <MenuIcon className='scaled-logo-Header-listMenu' />
               </IconButton>
               <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
                 <Button onClick={HomePage} sx={{ my: 2, color: 'white', display: 'block' }}>
@@ -509,7 +509,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
           >
             <DrawerHeader>
               <IconButton onClick={handleDrawerClose}>
-                {theme.direction === 'ltr' ? <CloseIcon fontSize="small" style={{ color: "rgba(255, 255, 255, 0.7)", }} /> : <CloseIcon />}
+                {theme.direction === 'ltr' ? <CloseIcon className='scaled-logo-Header' style={{ color: "rgba(255, 255, 255, 0.7)", }} /> : <CloseIcon className='scaled-logo-Header' />}
               </IconButton>
             </DrawerHeader>
             <Divider />

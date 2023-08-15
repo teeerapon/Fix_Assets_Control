@@ -46,8 +46,13 @@
   display: contents !important;
 }
 
+.scaled-logo-Header-listMenu {
+  font-size: 2vi !important;
+  font-weight: 500 !important;
+}
+
 .scaled-logo-Header {
-  font-size: 1.5vi !important;
+  font-size: 1vi !important;
   font-weight: 500 !important;
 }
 
@@ -82,6 +87,6 @@
 }
 
 .scaled-logo-navbar {
-  font-size: 0.8vi !important;
+  font-size: 1vi !important;
   font-weight: 500 !important;
 }
