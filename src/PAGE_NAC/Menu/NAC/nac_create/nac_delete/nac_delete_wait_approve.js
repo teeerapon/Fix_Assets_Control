@@ -1011,7 +1011,7 @@ export default function Nac_Main() {
             approveData={approveData}
           />
           <AnimatedPage>
-            <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth  }}>
+            <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth*0.8 }}>
               <Box
                 sx={{
                   display: 'flex',
@@ -1088,7 +1088,7 @@ export default function Nac_Main() {
                     justifyContent="space-between"
                     alignItems="flex-start"
                     spacing={2}
-                    sx={{ p: 1 }}
+                    
                   >
                     <Typography className='scaled-480px-Header-Content' color='error'>
                       * กรุณากรอกข้อมูลสำหรับตัดบัญชีทรัพย์สิน
@@ -1110,17 +1110,17 @@ export default function Nac_Main() {
                     <TableHead>
                       <TableRow>
                         <StyledTableCell align="center" style={{ width: '30%' }}>
-                          <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                          <Typography className='scaled-480px-TableHeader' >
                             ประเภทการเปลี่ยนแปลง
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                          <Typography className='scaled-480px-TableHeader' >
                             หน่วยงานที่ส่งมอบ
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell align="center" style={{ width: '35%' }}>
-                          <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                          <Typography className='scaled-480px-TableHeader' >
                             หน่วยงานที่รับมอบ
                           </Typography>
                         </StyledTableCell>
@@ -1139,7 +1139,7 @@ export default function Nac_Main() {
                             justifyContent="space-evenly"
                             alignItems="flex-start"
                             spacing={2}
-                            sx={{ p: 2 }}
+                            
                           >
                             <Stack>
                               <Typography className='scaled-480px-TableContent' color="inherit" >
@@ -1158,7 +1158,7 @@ export default function Nac_Main() {
                                 value={!sendHeader[0].source_department ? '' : sendHeader[0].source_department}
                                 InputProps={{
                                   classes: {
-                                    input: 'scaled-480px-TableContent text-center pt-2',
+                                    input: 'scaled-480px-TableContent text-center ',
                                   },
                                 }}
                                 variant="standard"
@@ -1181,14 +1181,14 @@ export default function Nac_Main() {
                                 name='source'
                                 InputProps={{
                                   classes: {
-                                    input: 'scaled-480px-TableContent text-center pt-2',
+                                    input: 'scaled-480px-TableContent text-center ',
                                   },
                                 }}
                                 variant="standard"
                               />
                             </Stack>
                           </Stack>
-                          <Box sx={{ p: 2 }}>
+                          <Box >
                             <Autocomplete
                               freeSolo
                               name='source'
@@ -1407,7 +1407,7 @@ export default function Nac_Main() {
                         </StyledTableCell>
                         <StyledTableCell align="center">
                           <Typography className='scaled-480px-TableHeader'>
-                            Excluding vat
+                            Ex. Vat
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell align="center">
@@ -1698,7 +1698,7 @@ export default function Nac_Main() {
                     <TableBody>
                       <StyledTableRow>
                         <StyledTableCell align="start" colSpan={4}>
-                          <Typography className='scaled-480px-TableContent' sx={{ p: 1 }}>
+                          <Typography className='scaled-480px-TableContent' >
                             รวมทั้งหมด
                           </Typography>
                         </StyledTableCell>
@@ -1817,27 +1817,27 @@ export default function Nac_Main() {
                     <TableHead>
                       <StyledTableRow>
                         <StyledTableCell align="center">
-                          <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                          <Typography className='scaled-480px-TableHeader' >
                             ผู้ทำรายการ : [{sendHeader[0].create_by}] {sendHeader[0].source_date.split('T')[0]}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                          <Typography className='scaled-480px-TableHeader' >
                             ผู้ตรวจสอบ : {sendHeader[0].verify_by_userid ? `[${sendHeader[0].verify_by_userid}]` : '-'} {sendHeader[0].verify_date ? sendHeader[0].verify_date.split('T')[0] : ''}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                          <Typography className='scaled-480px-TableHeader' >
                             ผู้อนุมัติ : {sendHeader[0].source_approve ? `[${sendHeader[0].source_approve}]` : '-'} {sendHeader[0].source_approve_date ? sendHeader[0].source_approve_date.split('T')[0] : ''}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                          <Typography className='scaled-480px-TableHeader' >
                             บัญชีตรวจสอบ : {sendHeader[0].account_aprrove_id ? `[${sendHeader[0].account_aprrove_id}]` : '-'}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                          <Typography className='scaled-480px-TableHeader' >
                             การเงินตรวจสอบ : {sendHeader[0].finance_aprrove_id ? `[${sendHeader[0].finance_aprrove_id}]` : '-'}
                           </Typography>
                         </StyledTableCell>
@@ -1852,7 +1852,7 @@ export default function Nac_Main() {
                           justifyContent="center"
                           alignItems="flex-start"
                           spacing={2}
-                          sx={{ p: 2 }}
+                          
                         >
                           {sendHeader[0].nac_status !== 6 ? (
                             <Stack>
@@ -1861,7 +1861,7 @@ export default function Nac_Main() {
                                 onClick={handleUpdateNAC}
                                 color="warning"
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: 2 }}
+                                
                               >
                                 Update
                               </Button>
@@ -1877,7 +1877,7 @@ export default function Nac_Main() {
                                 color="secondary"
                                 onClick={handleOpenDialogReply}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: 2 }}
+                                
                               >
                                 Reply
                               </Button>
@@ -1890,7 +1890,7 @@ export default function Nac_Main() {
                                 variant="contained"
                                 onClick={handleSubmit_To_BookValue}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: 2 }}
+                                
                               >
                                 Submit
                               </Button>
@@ -1901,7 +1901,7 @@ export default function Nac_Main() {
                                 variant="contained"
                                 onClick={handleSubmit_To_Verify}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: 2 }}
+                                
                               >
                                 Submit
                               </Button>
@@ -1913,9 +1913,9 @@ export default function Nac_Main() {
                                 onClick={handleSubmit_To_Approve}
                                 color="success"
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: 2 }}
+                                
                               >
-                                Submit
+                                Accept
                               </Button>
                             </Stack>
                           ) : sendHeader[0].nac_status === 3 ||
@@ -1926,9 +1926,9 @@ export default function Nac_Main() {
                                 color={sendHeader[0].nac_status === 3 ? "success" : "primary"}
                                 onClick={handleSubmit_Form}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: 2 }}
+                                
                               >
-                                Submit
+                                Accept
                               </Button>
                             </Stack>
                           )
@@ -1941,7 +1941,7 @@ export default function Nac_Main() {
                                 color="error"
                                 onClick={handleOpen_drop_NAC_byDes}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: 2 }}
+                                
                               >
                                 Cancel
                               </Button>

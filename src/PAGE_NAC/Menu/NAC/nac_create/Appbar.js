@@ -61,7 +61,7 @@ export default function Nac_Main({ nac_code, nac_type, approveData, sendHeader }
             </Box>
           </Toolbar>
         </AppBar>
-        <Container component="main" maxWidth="lg" sx={{ mb: 5, minWidth: window.innerWidth }}>
+        <Container component="main" maxWidth="lg" sx={{ mb: 5, minWidth: window.innerWidth*0.8 }}>
           <Paper variant="outlined" sx={{ mt: 4, p: { xs: 2, md: 3 } }}>
             {nac_code && approveData ? (
               <React.Fragment>

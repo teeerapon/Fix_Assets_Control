@@ -369,7 +369,7 @@ export default function Nac_Main() {
           sendHeader={sendHeader}
         />
         <AnimatedPage>
-          <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth  }}>
+          <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth * 0.8 }}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
               <Grid
                 container
@@ -409,17 +409,17 @@ export default function Nac_Main() {
                   <TableHead>
                     <TableRow>
                       <StyledTableCell align="center" style={{ width: '30%' }}>
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           ประเภทการเปลี่ยนแปลง
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           หน่วยงานที่ส่งมอบ
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center" style={{ width: '35%' }}>
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           หน่วยงานที่รับมอบ
                         </Typography>
                       </StyledTableCell>
@@ -438,7 +438,7 @@ export default function Nac_Main() {
                           justifyContent="space-evenly"
                           alignItems="flex-start"
                           spacing={2}
-                          sx={{ p: 2 }}
+                          
                         >
                           <Stack>
                             <Typography className='scaled-480px-TableContent' color="inherit" >
@@ -457,7 +457,7 @@ export default function Nac_Main() {
                               value={!sendHeader[0].source_Department ? '' : sendHeader[0].source_Department}
                               InputProps={{
                                 classes: {
-                                  input: 'scaled-480px-TableContent text-center pt-2',
+                                  input: 'scaled-480px-TableContent text-center ',
                                 },
                               }}
                               variant="standard"
@@ -480,14 +480,14 @@ export default function Nac_Main() {
                               name='source'
                               InputProps={{
                                 classes: {
-                                  input: 'scaled-480px-TableContent text-center pt-2',
+                                  input: 'scaled-480px-TableContent text-center ',
                                 },
                               }}
                               variant="standard"
                             />
                           </Stack>
                         </Stack>
-                        <Box sx={{ p: 2 }}>
+                        <Box>
                           <Autocomplete
                             freeSolo
                             name='source'
@@ -547,7 +547,6 @@ export default function Nac_Main() {
                                     </InputAdornment>
                                   ),
                                 }}
-                                sx={{ pt: 1 }}
                               />
                             </Stack>
                             <Stack>
@@ -573,7 +572,6 @@ export default function Nac_Main() {
                                     </InputAdornment>
                                   ),
                                 }}
-                                sx={{ pt: 1 }}
                               />
                             </Stack>
                           </Stack>
@@ -600,7 +598,6 @@ export default function Nac_Main() {
                                   required
                                   fullWidth
                                   autoComplete="family-name"
-                                  sx={{ pt: 1 }}
                                   variant="standard"
                                   {...params} />}
                             />
@@ -611,7 +608,6 @@ export default function Nac_Main() {
                             name='source_Description'
                             value={sendHeader[0].source_Description}
                             onChange={handleService_SourceDescription}
-                            sx={{ pt: 1 }}
                             InputProps={{
                               classes: {
                                 input: 'scaled-480px-TableContent',
@@ -676,7 +672,7 @@ export default function Nac_Main() {
                       </StyledTableCell>
                       <StyledTableCell align="center" style={{ width: '8%' }}>
                         <Typography className='scaled-480px-TableHeader'>
-                          Excluding vat
+                          Ex. Vat
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center" style={{ width: '8%' }}>
@@ -706,7 +702,6 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
                             }}
                             classes={{
                               input: 'scaled-480px-TableContent text-center',
@@ -736,7 +731,6 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
                             }}
                             key={index}
                             name="serialNo"
@@ -763,7 +757,6 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
                             }}
                             InputProps={{
                               disableUnderline: true,
@@ -782,7 +775,6 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
                             }}
                             key={index}
                             name="date_asset"
@@ -804,7 +796,6 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
                             }}
                             key={index}
                             name="price"
@@ -828,7 +819,6 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
                             }}
                             key={index}
                             name="bookValue"
@@ -852,7 +842,6 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
                             }}
                             key={index}
                             name="priceSeals"
@@ -874,7 +863,6 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
                             }}
                             key={index}
                             name="excluding_vat"
@@ -897,7 +885,6 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
                             }}
                             key={index}
                             name="profit"
@@ -931,8 +918,8 @@ export default function Nac_Main() {
                   ))}
                   <TableBody>
                     <StyledTableRow>
-                      <StyledTableCell align="start" colSpan={4}>
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                      <StyledTableCell align="start" colSpan={4} >
+                        <Typography className='scaled-480px-TableHeader'>
                           รวมทั้งหมด
                         </Typography>
                       </StyledTableCell>
@@ -943,7 +930,6 @@ export default function Nac_Main() {
                             "& .MuiInputBase-input.Mui-disabled": {
                               WebkitTextFillColor: "#000000",
                             },
-                            p: 1,
                           }}
                           disabled
                           type={data.branchid === 901 ? "text" : "password"}
@@ -965,7 +951,6 @@ export default function Nac_Main() {
                             "& .MuiInputBase-input.Mui-disabled": {
                               WebkitTextFillColor: "#000000",
                             },
-                            p: 1,
                           }}
                           disabled
                           type={data.branchid === 901 ? "text" : "password"}
@@ -987,7 +972,6 @@ export default function Nac_Main() {
                             "& .MuiInputBase-input.Mui-disabled": {
                               WebkitTextFillColor: "#000000",
                             },
-                            p: 1,
                           }}
                           disabled
                           InputProps={{
@@ -1008,7 +992,6 @@ export default function Nac_Main() {
                             "& .MuiInputBase-input.Mui-disabled": {
                               WebkitTextFillColor: "#000000",
                             },
-                            p: 1,
                           }}
                           disabled
                           InputProps={{
@@ -1029,7 +1012,6 @@ export default function Nac_Main() {
                             "& .MuiInputBase-input.Mui-disabled": {
                               WebkitTextFillColor: "#000000",
                             },
-                            p: 1,
                           }}
                           disabled
                           type={data.branchid === 901 ? "text" : "password"}
@@ -1051,27 +1033,27 @@ export default function Nac_Main() {
                   <TableHead>
                     <StyledTableRow>
                       <StyledTableCell align="center">
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           ผู้ทำรายการ : [{data.UserCode}] {dateNow.split('T')[0]}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           ผู้ตรวจสอบ : -
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           ผู้อนุมัติ : -
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           บัญชีตรวจสอบ : -
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           การเงินตรวจสอบ : -
                         </Typography>
                       </StyledTableCell>

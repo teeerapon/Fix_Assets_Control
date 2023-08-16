@@ -366,7 +366,7 @@ export default function Nac_Main() {
           sendHeader={sendHeader}
         />
         <AnimatedPage>
-          <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth  }}>
+          <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth*0.8  }}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
               <Grid
                 container
@@ -406,17 +406,17 @@ export default function Nac_Main() {
                   <TableHead>
                     <TableRow>
                       <StyledTableCell align="center" style={{ width: '30%' }}>
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           ประเภทการเปลี่ยนแปลง
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           หน่วยงานที่ส่งมอบ
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           หน่วยงานที่รับมอบ
                         </Typography>
                       </StyledTableCell>
@@ -435,7 +435,7 @@ export default function Nac_Main() {
                           justifyContent="space-evenly"
                           alignItems="flex-start"
                           spacing={2}
-                          sx={{ p: 2 }}
+                          
                         >
                           <Stack>
                             <Typography className='scaled-480px-TableContent' color="inherit" >
@@ -454,7 +454,7 @@ export default function Nac_Main() {
                               value={!sendHeader[0].source_Department ? '' : sendHeader[0].source_Department}
                               InputProps={{
                                 classes: {
-                                  input: 'scaled-480px-TableContent text-center pt-2',
+                                  input: 'scaled-480px-TableContent text-center ',
                                 },
                               }}
                               variant="standard"
@@ -477,14 +477,14 @@ export default function Nac_Main() {
                               name='source'
                               InputProps={{
                                 classes: {
-                                  input: 'scaled-480px-TableContent text-center pt-2',
+                                  input: 'scaled-480px-TableContent text-center ',
                                 },
                               }}
                               variant="standard"
                             />
                           </Stack>
                         </Stack>
-                        <Box sx={{ p: 2 }}>
+                        <Box >
                           <Autocomplete
                             freeSolo
                             name='source'
@@ -631,7 +631,7 @@ export default function Nac_Main() {
                           justifyContent="space-evenly"
                           alignItems="flex-start"
                           spacing={2}
-                          sx={{ p: 2 }}
+                          
                         >
                           <Stack>
                             <Typography className='scaled-480px-TableContent' color="inherit" >
@@ -650,7 +650,7 @@ export default function Nac_Main() {
                               }}
                               InputProps={{
                                 classes: {
-                                  input: 'scaled-480px-TableContent text-center pt-2',
+                                  input: 'scaled-480px-TableContent text-center ',
                                 },
                               }}
                               variant="standard"
@@ -673,14 +673,14 @@ export default function Nac_Main() {
                               name='des_bu'
                               InputProps={{
                                 classes: {
-                                  input: 'scaled-480px-TableContent text-center pt-2 spinner-border-sm',
+                                  input: 'scaled-480px-TableContent text-center  spinner-border-sm',
                                 },
                               }}
                               variant="standard"
                             />
                           </Stack>
                         </Stack>
-                        <Box sx={{ p: 2 }}>
+                        <Box >
                           <Autocomplete
                             freeSolo
                             name='des_userid'
@@ -1034,7 +1034,7 @@ export default function Nac_Main() {
                   <TableBody>
                     <StyledTableRow>
                       <StyledTableCell align="start" colSpan={5}>
-                        <Typography className='scaled-480px-TableContent' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableContent' >
                           รวมทั้งหมด
                         </Typography>
                       </StyledTableCell>
@@ -1067,22 +1067,22 @@ export default function Nac_Main() {
                   <TableHead>
                     <StyledTableRow>
                       <StyledTableCell align="center">
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           ผู้ทำรายการ : [{data.UserCode}] {dateNow.split('T')[0]}
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           ผู้ตรวจสอบ : -
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           ผู้อนุมัติ : -
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <Typography className='scaled-480px-TableHeader' sx={{ p: 1 }}>
+                        <Typography className='scaled-480px-TableHeader' >
                           บัญชีตรวจสอบ : -
                         </Typography>
                       </StyledTableCell>
