@@ -269,6 +269,9 @@ export default function Nac_Main() {
     // รหัสทรัพย์สินทั้งหมด
     await Axios.post(config.http + '/AssetsAll_Control', { BranchID: data.branchid }, { headers })
       .then((res) => {
+        if (data.branchid === 901 && data.DepCode !== '101ITO') {
+          setDataAssets(res.data.data.filter((datain) => datain.Position === data.DepCode))
+        }
         setDataAssets(res.data.data)
       })
 
@@ -412,9 +415,15 @@ export default function Nac_Main() {
   const handleServiceChangeHeader = async (e, index) => {
     const nacdtl_assetsCode = { nacdtl_assetsCode: e.target.innerText }
     const Code = { Code: e.target.innerText }
-    const list = [...serviceList];
 
-    if (e.target.innerText) {
+    if (serviceList.filter((res) => res.assetsCode === e.target.innerText)[0] !== undefined) {
+      swal("แจ้งเตือน", 'มีทรัพย์สินนี้ในรายการแล้ว', "error")
+        .then(() => {
+          const list = [...serviceList];
+          list[index]['assetsCode'] = ''
+          setServiceList(list);
+        })
+    } else if (e.target.innerText && serviceList.filter((res) => res.assetsCode === e.target.innerText)[0] === undefined) {
       await Axios.post(config.http + '/store_FA_control_CheckAssetCode_Process', nacdtl_assetsCode, config.headers)
         .then(async (res) => {
           if (res.data.data[0].checkProcess === 'false') {
@@ -423,7 +432,8 @@ export default function Nac_Main() {
             await Axios.post(config.http + '/SelectDTL_Control', Code, config.headers)
               .then((response) => {
                 if (response.data.data.length > 0) {
-                  list[index]['assetsCode'] = e.target.innerText
+                  const list = [...serviceList];
+                  list[index]['assetsCode'] = response.data.data[0].Code
                   list[index]['name'] = response.data.data[0].Name
                   list[index]['dtl'] = response.data.data[0].Details
                   list[index]['count'] = 1
@@ -1039,7 +1049,7 @@ export default function Nac_Main() {
                                             '#708090' : sendHeader[0].nac_status === 15 ?
                                               '#6A5ACD' : '#DC143C'
                   }}
-                  sx={{ p: 1, pt: 2, pl: 10, pr: 3, mb: 0, color: 'RGB(255,255,255)' }}
+                  sx={{ p: '0.45em !important', pt: 2, pl: 10, pr: 3, mb: 0, color: 'RGB(255,255,255)' }}
                   className='scaled-480px-Header'
                 >
                   {sendHeader[0].status_name}
@@ -1076,7 +1086,7 @@ export default function Nac_Main() {
                       justifyContent="center"
                       alignItems="center"
                     >
-                      <Typography sx={{ p: 1, border: '1px dashed grey' }} className='scaled-480px-Header'>
+                      <Typography sx={{ p: '0.45em !important', border: '1px dashed grey' }} className='scaled-480px-Header'>
                         <b>{sendHeader[0].nac_code}</b>
                       </Typography>
                     </Stack>
@@ -1139,7 +1149,7 @@ export default function Nac_Main() {
                             justifyContent="space-evenly"
                             alignItems="flex-start"
                             spacing={2}
-                            
+                            sx={{ p: '0.45em !important', mb: '0.8em !important' }}
                           >
                             <Stack>
                               <Typography className='scaled-480px-TableContent' color="inherit" >
@@ -1188,7 +1198,7 @@ export default function Nac_Main() {
                               />
                             </Stack>
                           </Stack>
-                          <Box >
+                          <Box sx={{ p: '0.45em !important', mb: '0.8em !important' }}>
                             <Autocomplete
                               freeSolo
                               name='source'
@@ -1298,7 +1308,7 @@ export default function Nac_Main() {
                             </Stack>
                             <LocalizationProvider dateAdapter={DateAdapter}>
                               <DatePicker
-                                inputFormat="yyyy-MM-dd"
+                                // inputFormat="yyyy-MM-dd"
                                 name='source_Date'
                                 value={sendHeader[0].sourceDate}
                                 disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
@@ -1441,7 +1451,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               classes={{
                                 input: 'scaled-480px-TableContent text-center',
@@ -1473,7 +1483,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               key={index}
                               name="serialNo"
@@ -1500,7 +1510,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               InputProps={{
                                 disableUnderline: true,
@@ -1519,7 +1529,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               key={index}
                               name="date_asset"
@@ -1541,7 +1551,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               key={index}
                               name="price"
@@ -1565,7 +1575,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               key={index}
                               name="bookValue"
@@ -1590,7 +1600,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               key={index}
                               name="priceSeals"
@@ -1613,7 +1623,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               key={index}
                               name="excluding_vat"
@@ -1636,7 +1646,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               key={index}
                               name="profit"
@@ -1709,7 +1719,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
+                              p: '0.45em !important',
                             }}
                             disabled
                             type={data.branchid === 901 ? "text" : "password"}
@@ -1731,7 +1741,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
+                              p: '0.45em !important',
                             }}
                             disabled
                             type={data.branchid === 901 ? "text" : "password"}
@@ -1753,7 +1763,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
+                              p: '0.45em !important',
                             }}
                             disabled
                             InputProps={{
@@ -1774,7 +1784,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
+                              p: '0.45em !important',
                             }}
                             disabled
                             InputProps={{
@@ -1795,7 +1805,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
+                              p: '0.45em !important',
                             }}
                             disabled
                             type={data.branchid === 901 ? "text" : "password"}

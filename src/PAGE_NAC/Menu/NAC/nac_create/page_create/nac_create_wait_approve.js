@@ -251,6 +251,9 @@ export default function Nac_Main() {
     // รหัสทรัพย์สินทั้งหมด
     await Axios.post(config.http + '/AssetsAll_Control', { BranchID: data.branchid }, { headers })
       .then((res) => {
+        if (data.branchid === 901 && data.DepCode !== '101ITO') {
+          setDataAssets(res.data.data.filter((datain) => datain.Position === data.DepCode))
+        }
         setDataAssets(res.data.data)
       })
 
@@ -427,7 +430,7 @@ export default function Nac_Main() {
             await Axios.post(config.http + '/SelectDTL_Control', Code, config.headers)
               .then((response) => {
                 if (response.data.data.length > 0) {
-                  list[index]['assetsCode'] = e.target.innerText
+                  list[index]['assetsCode'] = response.data.data[0].Code
                   list[index]['name'] = response.data.data[0].Name
                   list[index]['dtl'] = response.data.data[0].Details
                   list[index]['count'] = 1
@@ -1063,7 +1066,7 @@ export default function Nac_Main() {
                                             '#708090' : sendHeader[0].nac_status === 15 ?
                                               '#6A5ACD' : '#DC143C'
                   }}
-                  sx={{ p: 1, pt: 2, pl: 10, pr: 3, mb: 0, color: 'RGB(255,255,255)' }}
+                  sx={{ p: '0.45em !important', pt: 2, pl: 10, pr: 3, mb: 0, color: 'RGB(255,255,255)' }}
                   className='scaled-480px-Header'
                 >
                   {sendHeader[0].status_name}
@@ -1157,7 +1160,7 @@ export default function Nac_Main() {
                             justifyContent="space-evenly"
                             alignItems="flex-start"
                             spacing={2}
-                            
+                            sx={{ p: '0.45em !important', mb: '0.8em !important' }}
                           >
                             <Stack>
                               <Typography className='scaled-480px-TableContent' color="inherit" >
@@ -1206,7 +1209,7 @@ export default function Nac_Main() {
                               />
                             </Stack>
                           </Stack>
-                          <Box >
+                          <Box sx={{ p: '0.45em !important', mb: '0.8em !important' }}>
                             <Autocomplete
                               freeSolo
                               name='source'
@@ -1316,7 +1319,7 @@ export default function Nac_Main() {
                             </Stack>
                             <LocalizationProvider dateAdapter={DateAdapter}>
                               <DatePicker
-                                inputFormat="yyyy-MM-dd"
+                                // inputFormat="yyyy-MM-dd"
                                 name='source_Date'
                                 value={sendHeader[0].sourceDate}
                                 onChange={handleSendDate}
@@ -1383,7 +1386,7 @@ export default function Nac_Main() {
                             justifyContent="space-evenly"
                             alignItems="flex-start"
                             spacing={2}
-                            
+                            sx={{ p: '0.45em !important', mb: '0.8em !important' }}
                           >
                             <Stack>
                               <Typography className='scaled-480px-TableContent' color="inherit" >
@@ -1432,7 +1435,7 @@ export default function Nac_Main() {
                               />
                             </Stack>
                           </Stack>
-                          <Box >
+                          <Box sx={{ p: '0.45em !important', mb: '0.8em !important' }}>
                             <Autocomplete
                               freeSolo
                               name='des_delivery'
@@ -1542,7 +1545,7 @@ export default function Nac_Main() {
                             </Stack>
                             <LocalizationProvider dateAdapter={DateAdapter}>
                               <DatePicker
-                                inputFormat="yyyy-MM-dd"
+                                // inputFormat="yyyy-MM-dd"
                                 name='des_deliveryDate'
                                 onChange={handleService_DesDate}
                                 value={sendHeader[0].des_deliveryDate}
@@ -1675,7 +1678,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               classes={{
                                 input: 'scaled-480px-TableContent text-center',
@@ -1707,7 +1710,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               key={index}
                               name="serialNo"
@@ -1734,7 +1737,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               InputProps={{
                                 disableUnderline: true,
@@ -1753,7 +1756,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               key={index}
                               name="date_asset"
@@ -1775,7 +1778,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               key={index}
                               name="nacdtl_assetsDtl"
@@ -1797,7 +1800,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: 1,
+                                p: '0.45em !important',
                               }}
                               key={index}
                               name="price"
@@ -1909,7 +1912,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
+                              p: '0.45em !important',
                             }}
                             disabled
                             type={data.branchid === 901 ? "text" : "password"}
@@ -1970,7 +1973,7 @@ export default function Nac_Main() {
                                 onClick={handleUpdateNAC}
                                 color="warning"
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: 1, m: 1 }}
+                                sx={{ p: '0.45em !important', m: 1 }}
                               >
                                 Update
                               </Button>
@@ -1984,7 +1987,7 @@ export default function Nac_Main() {
                                 color="secondary"
                                 onClick={handleOpenDialogReply}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: 1, m: 1 }}
+                                sx={{ p: '0.45em !important', m: 1 }}
                               >
                                 Reply
                               </Button>
@@ -1997,7 +2000,7 @@ export default function Nac_Main() {
                                 variant="contained"
                                 onClick={handleSubmit_To_Des}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: 1, m: 1 }}
+                                sx={{ p: '0.45em !important', m: 1 }}
                               >
                                 Submit
                               </Button>
@@ -2008,7 +2011,7 @@ export default function Nac_Main() {
                                 variant="contained"
                                 onClick={handleSubmit_To_Des}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: 1, m: 1 }}
+                                sx={{ p: '0.45em !important', m: 1 }}
                               >
                                 Submit
                               </Button>
@@ -2020,7 +2023,7 @@ export default function Nac_Main() {
                                 onClick={handleSubmit_To_Approve}
                                 color="success"
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: 1, m: 1 }}
+                                sx={{ p: '0.45em !important', m: 1 }}
                               >
                                 Accept
                               </Button>
@@ -2035,7 +2038,7 @@ export default function Nac_Main() {
                                 color={sendHeader[0].nac_status === 3 ? "success" : "primary"}
                                 onClick={handleSubmit_Form}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: 1, m: 1 }}
+                                sx={{ p: '0.45em !important', m: 1 }}
                               >
                                 {sendHeader[0].nac_status === 4 ? `Submit` : `Accept`}
                               </Button>
@@ -2050,7 +2053,7 @@ export default function Nac_Main() {
                                 color="error"
                                 onClick={handleOpen_drop_NAC_byDes}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: 1, m: 1 }}
+                                sx={{ p: '0.45em !important', m: 1 }}
                               >
                                 Cancel
                               </Button>

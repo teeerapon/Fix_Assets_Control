@@ -175,6 +175,9 @@ export default function Nac_Main() {
     // รหัสทรัพย์สินทั้งหมด
     await Axios.post(config.http + '/AssetsAll_Control', { BranchID: data.branchid }, { headers })
       .then((res) => {
+        if (data.branchid === 901 && data.DepCode !== '101ITO') {
+          setDataAssets(res.data.data.filter((datain) => datain.Position === data.DepCode))
+        }
         setDataAssets(res.data.data)
       })
 
@@ -264,7 +267,6 @@ export default function Nac_Main() {
   const handleServiceChangeHeader = async (e, index) => {
     const nacdtl_assetsCode = { nacdtl_assetsCode: e.target.innerText }
     const Code = { Code: e.target.innerText }
-    const list = [...serviceList];
 
     if (e.target.innerText) {
       await Axios.post(config.http + '/store_FA_control_CheckAssetCode_Process', nacdtl_assetsCode, config.headers)
@@ -275,7 +277,8 @@ export default function Nac_Main() {
             await Axios.post(config.http + '/SelectDTL_Control', Code, config.headers)
               .then((response) => {
                 if (response.data.data.length > 0) {
-                  list[index]['assetsCode'] = e.target.innerText
+                  const list = [...serviceList];
+                  list[index]['assetsCode'] = response.data.data[0].Code
                   list[index]['name'] = response.data.data[0].Name
                   list[index]['dtl'] = response.data.data[0].Details
                   list[index]['count'] = 1
@@ -435,7 +438,7 @@ export default function Nac_Main() {
                           justifyContent="space-evenly"
                           alignItems="flex-start"
                           spacing={2}
-                          
+                          sx={{ p: '0.45em !important', mb: '0.8em !important' }}
                         >
                           <Stack>
                             <Typography className='scaled-480px-TableContent' color="inherit" >
@@ -484,7 +487,7 @@ export default function Nac_Main() {
                             />
                           </Stack>
                         </Stack>
-                        <Box >
+                        <Box sx={{ p: '0.45em !important', mb: '0.8em !important' }}>
                           <Autocomplete
                             freeSolo
                             name='source'
@@ -576,7 +579,7 @@ export default function Nac_Main() {
                           </Stack>
                           <LocalizationProvider dateAdapter={DateAdapter}>
                             <DatePicker
-                              inputFormat="yyyy-MM-dd"
+                              // inputFormat="yyyy-MM-dd"
                               name='source_Date'
                               value={sendHeader[0].sourceDate}
                               onChange={handleSendDate}
@@ -631,7 +634,7 @@ export default function Nac_Main() {
                           justifyContent="space-evenly"
                           alignItems="flex-start"
                           spacing={2}
-                          
+                          sx={{ p: '0.45em !important', mb: '0.8em !important' }}
                         >
                           <Stack>
                             <Typography className='scaled-480px-TableContent' color="inherit" >
@@ -680,7 +683,7 @@ export default function Nac_Main() {
                             />
                           </Stack>
                         </Stack>
-                        <Box >
+                        <Box sx={{ p: '0.45em !important', mb: '0.8em !important' }}>
                           <Autocomplete
                             freeSolo
                             name='des_userid'
@@ -772,7 +775,7 @@ export default function Nac_Main() {
                           </Stack>
                           <LocalizationProvider dateAdapter={DateAdapter}>
                             <DatePicker
-                              inputFormat="yyyy-MM-dd"
+                              // inputFormat="yyyy-MM-dd"
                               name='Des_Date'
                               disabled
                               onChange={handleService_DesDate}
@@ -879,7 +882,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
+                              p: '0.45em !important',
                             }}
                             key={index}
                             classes={{
@@ -909,7 +912,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
+                              p: '0.45em !important',
                             }}
                             key={index}
                             name="serialNo"
@@ -936,7 +939,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
+                              p: '0.45em !important',
                             }}
                             InputProps={{
                               disableUnderline: true,
@@ -955,7 +958,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
+                              p: '0.45em !important',
                             }}
                             key={index}
                             name="date_asset"
@@ -977,7 +980,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
+                              p: '0.45em !important',
                             }}
                             key={index}
                             name="dtl"
@@ -999,7 +1002,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: 1,
+                              p: '0.45em !important',
                             }}
                             key={index}
                             name="price"
@@ -1045,7 +1048,7 @@ export default function Nac_Main() {
                             "& .MuiInputBase-input.Mui-disabled": {
                               WebkitTextFillColor: "#000000",
                             },
-                            p: 1,
+                            p: '0.45em !important',
                           }}
                           disabled
                           type={data.branchid === 901 ? "text" : "password"}
@@ -1097,7 +1100,7 @@ export default function Nac_Main() {
                         onClick={handleSubmit}
                         className='scaled-480px-TableContent'
                         endIcon={<BorderColorRoundedIcon className='scaled-480px-TableContent' />}
-                        sx={{ p: 1, m: 1 }}
+                        sx={{ p: '0.45em !important', m: 1 }}
                       >
                         Submit
                       </Button>

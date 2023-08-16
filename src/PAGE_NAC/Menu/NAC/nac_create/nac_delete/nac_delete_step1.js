@@ -202,6 +202,9 @@ export default function Nac_Main() {
     // รหัสทรัพย์สินทั้งหมด
     await Axios.post(config.http + '/AssetsAll_Control', { BranchID: data.branchid }, { headers })
       .then((res) => {
+        if (data.branchid === 901 && data.DepCode !== '101ITO') {
+          setDataAssets(res.data.data.filter((datain) => datain.Position === data.DepCode))
+        }
         setDataAssets(res.data.data)
       })
 
@@ -269,9 +272,15 @@ export default function Nac_Main() {
   const handleServiceChangeHeader = async (e, index) => {
     const nacdtl_assetsCode = { nacdtl_assetsCode: e.target.innerText }
     const Code = { Code: e.target.innerText }
-    const list = [...serviceList];
 
-    if (e.target.innerText) {
+    if (serviceList.filter((res) => res.assetsCode === e.target.innerText)[0] !== undefined) {
+      swal("แจ้งเตือน", 'มีทรัพย์สินนี้ในรายการแล้ว', "error")
+        .then(() => {
+          const list = [...serviceList];
+          list[index]['assetsCode'] = ''
+          setServiceList(list);
+        })
+    } else if (e.target.innerText && serviceList.filter((res) => res.assetsCode === e.target.innerText)[0] === undefined) {
       await Axios.post(config.http + '/store_FA_control_CheckAssetCode_Process', nacdtl_assetsCode, config.headers)
         .then(async (res) => {
           if (res.data.data[0].checkProcess === 'false') {
@@ -280,14 +289,13 @@ export default function Nac_Main() {
             await Axios.post(config.http + '/SelectDTL_Control', Code, config.headers)
               .then((response) => {
                 if (response.data.data.length > 0) {
-                  list[index]['assetsCode'] = e.target.innerText
+                  const list = [...serviceList];
+                  list[index]['assetsCode'] = response.data.data[0].Code
                   list[index]['name'] = response.data.data[0].Name
                   list[index]['dtl'] = response.data.data[0].Details
                   list[index]['count'] = 1
                   list[index]['serialNo'] = response.data.data[0].SerialNo
                   list[index]['price'] = response.data.data[0].Price
-                  list[index]['priceSeals'] = 0
-                  list[index]['profit'] = 0
                   list[index]['date_asset'] = response.data.data[0].CreateDate
                   setServiceList(list);
                 }
@@ -438,7 +446,7 @@ export default function Nac_Main() {
                           justifyContent="space-evenly"
                           alignItems="flex-start"
                           spacing={2}
-                          
+                          sx={{ p: '0.45em !important', mb: '0.8em !important' }}
                         >
                           <Stack>
                             <Typography className='scaled-480px-TableContent' color="inherit" >
@@ -487,7 +495,7 @@ export default function Nac_Main() {
                             />
                           </Stack>
                         </Stack>
-                        <Box>
+                        <Box sx={{ p: '0.45em !important', mb: '0.8em !important' }}>
                           <Autocomplete
                             freeSolo
                             name='source'
@@ -577,7 +585,7 @@ export default function Nac_Main() {
                           </Stack>
                           <LocalizationProvider dateAdapter={DateAdapter}>
                             <DatePicker
-                              inputFormat="yyyy-MM-dd"
+                              // inputFormat="yyyy-MM-dd"
                               name='source_Date'
                               value={sendHeader[0].sourceDate}
                               onChange={handleSendDate}
@@ -1068,7 +1076,7 @@ export default function Nac_Main() {
                         onClick={handleSubmit}
                         className='scaled-480px-TableHeader'
                         endIcon={<BorderColorRoundedIcon className='scaled-480px-TableHeader' />}
-                        sx={{ p: 1, m: 1 }}
+                        sx={{ p: '0.45em !important', m: 1 }}
                       >
                         Submit
                       </Button>
