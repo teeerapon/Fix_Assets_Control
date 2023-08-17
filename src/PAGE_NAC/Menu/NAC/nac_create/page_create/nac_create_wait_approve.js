@@ -166,6 +166,7 @@ export default function Nac_Main() {
   const [TooltipImage_1, setTooltipImage_1] = React.useState();
   const [TooltipImage_2, setTooltipImage_2] = React.useState();
   const [approveData, setApproveData] = React.useState();
+  const [counter, setCounter] = React.useState(0);
 
   const [sendHeader, setSendHeader] = React.useState([{
     usercode: data.UserCode,
@@ -996,7 +997,13 @@ export default function Nac_Main() {
     }
   };
 
-  if (!sendHeader[0].nac_code && nac_code) {
+  React.useEffect(() => {
+    window.setTimeout(() => {
+      setCounter(10);
+    }, 2000)
+  }, []);
+
+  if ((!sendHeader[0].nac_code && nac_code && counter < 10) || (nac_code && counter < 10)) {
     return (
       <React.Fragment>
         <Box
@@ -1064,7 +1071,7 @@ export default function Nac_Main() {
                   </Typography>
                 </Card>
               </Box>
-              <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 } }}>
+              <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 }, overflow: 'hidden' }}>
                 <Grid
                   container
                   direction="row"
@@ -1118,7 +1125,7 @@ export default function Nac_Main() {
                     </Button>
                   </Stack>
                 </Box>
-                <TableContainer component={Paper}>
+                <TableContainer>
                   <Table size="small">
                     <TableHead>
                       <TableRow>

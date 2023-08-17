@@ -370,7 +370,7 @@ export default function Nac_Main() {
         />
         <AnimatedPage>
           <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth*0.8  }}>
-            <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+            <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 }, overflow: 'hidden' }}>
               <Grid
                 container
                 direction="row"
@@ -404,7 +404,7 @@ export default function Nac_Main() {
                   * กรุณากรอกข้อมูลสำหรับเพิ่มบัญชีทรัพย์สิน
                 </Typography>
               </Box>
-              <TableContainer component={Paper}>
+              <TableContainer>
                 <Table size="small">
                   <TableHead>
                     <TableRow>
