@@ -59,13 +59,14 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.action.selected,
     color: theme.palette.common.black,
-    padding: 0,
+    padding: '1svw !important',
     border: '1px solid',
   },
   [`&.${tableCellClasses.body}`]: {
     backgroundColor: theme.palette.action.white,
     color: theme.palette.common.black,
-    padding: 0,
+    padding: '0px 10px 0px 10px',
+    overflow: 'hidden',
     border: '1px solid',
   },
 }));
@@ -992,7 +993,7 @@ export default function Nac_Main() {
                                             '#708090' : sendHeader[0].nac_status === 15 ?
                                               '#6A5ACD' : '#DC143C'
                   }}
-                  sx={{ p: '0.45em !important', pt: 2, pl: 10, pr: 3, mb: 0, color: 'RGB(255,255,255)' }}
+                  sx={{ pt: 2, pl: 10, pr: 3, mb: 0, color: 'RGB(255,255,255)' }}
                   className='scaled-480px-Header'
                 >
                   <Typography align="center" className='scaled-480px-TableContent' sx={{ ml: 5, mt: 1 }}>
@@ -1088,7 +1089,7 @@ export default function Nac_Main() {
                             justifyContent="space-evenly"
                             alignItems="flex-start"
                             spacing={2}
-                            sx={{ p: '0.45em !important', mb: '0.8em !important' }}
+                            sx={{ mb: '0.8em !important', pt: 2 }}
                           >
                             <Stack>
                               <Typography className='scaled-480px-TableContent' color="inherit" >
@@ -1137,7 +1138,7 @@ export default function Nac_Main() {
                               />
                             </Stack>
                           </Stack>
-                          <Box sx={{ p: '0.45em !important', mb: '0.8em !important' }}>
+                          <Box sx={{ mb: '0.8em !important' }}>
                             <Autocomplete
                               freeSolo
                               name='source'
@@ -1314,7 +1315,7 @@ export default function Nac_Main() {
                             justifyContent="space-evenly"
                             alignItems="flex-start"
                             spacing={2}
-                            sx={{ p: '0.45em !important', mb: '0.8em !important' }}
+                            sx={{ mb: '0.8em !important', pt: 2 }}
                           >
                             <Stack>
                               <Typography className='scaled-480px-TableContent' color="inherit" >
@@ -1363,7 +1364,7 @@ export default function Nac_Main() {
                               />
                             </Stack>
                           </Stack>
-                          <Box sx={{ p: '0.45em !important', mb: '0.8em !important' }}>
+                          <Box sx={{ mb: '0.8em !important' }}>
                             <Autocomplete
                               freeSolo
                               name='des_delivery'
@@ -1540,22 +1541,22 @@ export default function Nac_Main() {
                   <Table>
                     <TableHead>
                       <TableRow>
-                        <StyledTableCell align="center">
+                        <StyledTableCell align="center" sx={{ width: "15%", }}>
                           <Typography className='scaled-480px-TableHeader'>
                             รหัสทรัพย์สิน
                           </Typography>
                         </StyledTableCell>
-                        <StyledTableCell align="center">
+                        <StyledTableCell align="center" sx={{ width: "10%", }}>
                           <Typography className='scaled-480px-TableHeader'>
                             Serial No.
                           </Typography>
                         </StyledTableCell>
-                        <StyledTableCell align="center">
+                        <StyledTableCell align="center" sx={{ width: "15%", }}>
                           <Typography className='scaled-480px-TableHeader'>
                             ชื่อทรัพย์สิน
                           </Typography>
                         </StyledTableCell>
-                        <StyledTableCell align="center" style={{ width: '12%' }}>
+                        <StyledTableCell align="center" sx={{ width: "10%", }}>
                           <Typography className='scaled-480px-TableHeader'>
                             วันที่ขึ้นทะเบียน
                           </Typography>
@@ -1606,7 +1607,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: '0.45em !important',
+
                               }}
                               classes={{
                                 input: 'scaled-480px-TableContent text-center',
@@ -1638,7 +1639,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: '0.45em !important',
+
                               }}
                               key={index}
                               name="serialNo"
@@ -1665,7 +1666,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: '0.45em !important',
+
                               }}
                               InputProps={{
                                 disableUnderline: true,
@@ -1684,7 +1685,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: '0.45em !important',
+
                               }}
                               key={index}
                               name="date_asset"
@@ -1706,7 +1707,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: '0.45em !important',
+
                               }}
                               key={index}
                               name="nacdtl_assetsDtl"
@@ -1728,7 +1729,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                p: '0.45em !important',
+
                               }}
                               key={index}
                               name="price"
@@ -1815,7 +1816,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              p: '0.45em !important',
+
                             }}
                             disabled
                             type={data.branchid === 901 ? "text" : "password"}
@@ -1876,7 +1877,7 @@ export default function Nac_Main() {
                                 onClick={handleUpdateNAC}
                                 color="warning"
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: '0.45em !important', m: 1 }}
+                                sx={{ m: 1 }}
                               >
                                 Update
                               </Button>
@@ -1890,7 +1891,7 @@ export default function Nac_Main() {
                                 color="secondary"
                                 onClick={handleOpenDialogReply}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: '0.45em !important', m: 1 }}
+                                sx={{ m: 1 }}
                               >
                                 Reply
                               </Button>
@@ -1903,7 +1904,7 @@ export default function Nac_Main() {
                                 variant="contained"
                                 onClick={handleSubmit_To_Verify}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: '0.45em !important', m: 1 }}
+                                sx={{ m: 1 }}
                               >
                                 Submit
                               </Button>
@@ -1914,7 +1915,7 @@ export default function Nac_Main() {
                                 variant="contained"
                                 onClick={handleSubmit_To_Verify}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: '0.45em !important', m: 1 }}
+                                sx={{ m: 1 }}
                               >
                                 Submit
                               </Button>
@@ -1926,7 +1927,7 @@ export default function Nac_Main() {
                                 onClick={handleSubmit_To_Approve}
                                 color="success"
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: '0.45em !important', m: 1 }}
+                                sx={{ m: 1 }}
                               >
                                 Accept
                               </Button>
@@ -1941,7 +1942,7 @@ export default function Nac_Main() {
                                 color={sendHeader[0].nac_status === 3 ? "success" : "primary"}
                                 onClick={handleSubmit_Form}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: '0.45em !important', m: 1 }}
+                                sx={{ m: 1 }}
                               >
                                 {sendHeader[0].nac_status === 4 ? `Submit` : `Accept`}
                               </Button>
@@ -1956,7 +1957,7 @@ export default function Nac_Main() {
                                 color="error"
                                 onClick={handleOpen_drop_NAC_byDes}
                                 className='scaled-480px-TableHeader'
-                                sx={{ p: '0.45em !important', m: 1 }}
+                                sx={{ m: 1 }}
                               >
                                 Cancel
                               </Button>
