@@ -867,14 +867,14 @@ export default function Nac_Main() {
                 }, config.headers).then((res) => {
                   if (i + 1 === serviceList.length) {
                     swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                      window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + res.data.data[0].nac_code
+                      window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + res.data.data[0].nac_code ?? nac_code
                     });
                   }
                 })
               }
             } else {
               swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + res.data.data[0].nac_code
+                window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + res.data.data[0].nac_code ?? nac_code
               });
             }
           }

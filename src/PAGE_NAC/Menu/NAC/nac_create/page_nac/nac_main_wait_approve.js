@@ -1041,7 +1041,7 @@ export default function Nac_Main() {
 
                   >
                     <Typography className='scaled-480px-Header-Content' color='error'>
-                      * กรุณากรอกข้อมูลสำหรับเพิ่มบัญชีทรัพย์สิน
+                      * กรุณากรอกข้อมูลสำหรับโยกย้ายทรัพย์สิน
                     </Typography>
                     <Button
                       onClick={Export_PDF_DATA_NAC}
@@ -1080,7 +1080,7 @@ export default function Nac_Main() {
                       <StyledTableRow>
                         <StyledTableCell align="center">
                           <Typography className='scaled-480px-Header'>
-                            เพิ่มบัญชีทรัพย์สิน
+                            โยกย้ายทรัพย์สิน
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell align="center">
@@ -1472,12 +1472,48 @@ export default function Nac_Main() {
                                 />
                               </Stack>
                             </Stack>
-                            <LocalizationProvider dateAdapter={DateAdapter}>
-                              <DatePicker
-                                // inputFormat="yyyy-MM-dd"
-                                name='des_deliveryDate'
-                                onChange={handleService_DesDate}
-                                value={sendHeader[0].des_deliveryDate}
+                            <Stack>
+                              <LocalizationProvider dateAdapter={DateAdapter}>
+                                <DatePicker
+                                  // inputFormat="yyyy-MM-dd"
+                                  name='des_deliveryDate'
+                                  onChange={handleService_DesDate}
+                                  value={sendHeader[0].des_deliveryDate}
+                                  disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
+                                  sx={{
+                                    "& .MuiInputBase-input.Mui-disabled": {
+                                      WebkitTextFillColor: "#000000",
+                                    },
+                                    pt: 1
+                                  }}
+                                  InputProps={{
+                                    classes: {
+                                      input: 'scaled-480px-TableContent',
+                                    },
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <Typography color="black" className='scaled-480px-TableHeader'>
+                                          วันที่รับมอบ :
+                                        </Typography>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  renderInput={(params) =>
+                                    <TextField
+                                      required
+                                      fullWidth
+                                      autoComplete="family-name"
+                                      variant="standard"
+                                      {...params} />}
+                                />
+                              </LocalizationProvider>
+                            </Stack>
+                            <Stack>
+                              <TextField
+                                required
+                                fullWidth
+                                name='des_description'
+                                value={sendHeader[0].des_description}
                                 disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
                                 sx={{
                                   "& .MuiInputBase-input.Mui-disabled": {
@@ -1485,6 +1521,7 @@ export default function Nac_Main() {
                                   },
                                   pt: 1
                                 }}
+                                onChange={handleService_DesDescription}
                                 InputProps={{
                                   classes: {
                                     input: 'scaled-480px-TableContent',
@@ -1492,47 +1529,14 @@ export default function Nac_Main() {
                                   startAdornment: (
                                     <InputAdornment position="start">
                                       <Typography color="black" className='scaled-480px-TableHeader'>
-                                        วันที่รับมอบ :
+                                        หมายเหตุ :
                                       </Typography>
                                     </InputAdornment>
                                   ),
                                 }}
-                                renderInput={(params) =>
-                                  <TextField
-                                    required
-                                    fullWidth
-                                    autoComplete="family-name"
-                                    variant="standard"
-                                    {...params} />}
+                                variant="standard"
                               />
-                            </LocalizationProvider>
-                            <TextField
-                              required
-                              fullWidth
-                              name='des_description'
-                              value={sendHeader[0].des_description}
-                              disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
-                              sx={{
-                                "& .MuiInputBase-input.Mui-disabled": {
-                                  WebkitTextFillColor: "#000000",
-                                },
-                                pt: 1
-                              }}
-                              onChange={handleService_DesDescription}
-                              InputProps={{
-                                classes: {
-                                  input: 'scaled-480px-TableContent',
-                                },
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <Typography color="black" className='scaled-480px-TableHeader'>
-                                      หมายเหตุ :
-                                    </Typography>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              variant="standard"
-                            />
+                            </Stack>
                           </Box>
                         </StyledTableCell>
                       </StyledTableRow>

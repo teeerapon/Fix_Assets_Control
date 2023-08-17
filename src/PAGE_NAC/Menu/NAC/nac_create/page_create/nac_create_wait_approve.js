@@ -59,7 +59,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.action.selected,
     color: theme.palette.common.black,
-     padding: '1svw !important',
+    padding: '1svw !important',
     border: '1px solid',
   },
   [`&.${tableCellClasses.body}`]: {
@@ -1036,7 +1036,7 @@ export default function Nac_Main() {
             approveData={approveData}
           />
           <AnimatedPage>
-            <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth*0.8  }}>
+            <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth * 0.8 }}>
               <Box
                 sx={{
                   display: 'flex',
@@ -1064,10 +1064,10 @@ export default function Nac_Main() {
                                             '#708090' : sendHeader[0].nac_status === 15 ?
                                               '#6A5ACD' : '#DC143C'
                   }}
-                  sx={{  pt: 2, pl: 10, pr: 3, mb: 0, color: 'RGB(255,255,255)' }}
+                  sx={{ pt: 2, pl: 10, pr: 3, mb: 0, color: 'RGB(255,255,255)' }}
                   className='scaled-480px-Header'
                 >
-                                    <Typography align="center" className='scaled-480px-TableContent' sx={{ ml: 5, mt: 1 }}>
+                  <Typography align="center" className='scaled-480px-TableContent' sx={{ ml: 5, mt: 1 }}>
                     {sendHeader[0].status_name}
                   </Typography>
                 </Card>
@@ -1109,7 +1109,7 @@ export default function Nac_Main() {
                     justifyContent="space-between"
                     alignItems="flex-start"
                     spacing={2}
-                    
+
                   >
                     <Typography className='scaled-480px-Header-Content' color='error'>
                       * กรุณากรอกข้อมูลสำหรับเพิ่มบัญชีทรัพย์สิน
@@ -1128,25 +1128,25 @@ export default function Nac_Main() {
                 </Box>
                 <TableContainer>
                   <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <StyledTableCell align="center" style={{ width: '30%' }}>
-                        <Typography className='scaled-480px-TableHeader' >
-                          ประเภทการเปลี่ยนแปลง
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        <Typography className='scaled-480px-TableHeader' >
-                          หน่วยงานที่ส่งมอบ
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell align="center" style={{ width: '35%' }}>
-                        <Typography className='scaled-480px-TableHeader' >
-                          หน่วยงานที่รับมอบ
-                        </Typography>
-                      </StyledTableCell>
-                    </TableRow>
-                  </TableHead>
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell align="center" style={{ width: '30%' }}>
+                          <Typography className='scaled-480px-TableHeader' >
+                            ประเภทการเปลี่ยนแปลง
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Typography className='scaled-480px-TableHeader' >
+                            หน่วยงานที่ส่งมอบ
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ width: '35%' }}>
+                          <Typography className='scaled-480px-TableHeader' >
+                            หน่วยงานที่รับมอบ
+                          </Typography>
+                        </StyledTableCell>
+                      </TableRow>
+                    </TableHead>
                     <TableBody>
                       <StyledTableRow>
                         <StyledTableCell align="center">
@@ -1209,7 +1209,7 @@ export default function Nac_Main() {
                               />
                             </Stack>
                           </Stack>
-                          <Box sx={{  mb: '0.8em !important' }}>
+                          <Box sx={{ mb: '0.8em !important' }}>
                             <Autocomplete
                               freeSolo
                               name='source'
@@ -1435,7 +1435,7 @@ export default function Nac_Main() {
                               />
                             </Stack>
                           </Stack>
-                          <Box sx={{  mb: '0.8em !important' }}>
+                          <Box sx={{ mb: '0.8em !important' }}>
                             <Autocomplete
                               freeSolo
                               name='des_delivery'
@@ -1543,12 +1543,48 @@ export default function Nac_Main() {
                                 />
                               </Stack>
                             </Stack>
-                            <LocalizationProvider dateAdapter={DateAdapter}>
-                              <DatePicker
-                                // inputFormat="yyyy-MM-dd"
-                                name='des_deliveryDate'
-                                onChange={handleService_DesDate}
-                                value={sendHeader[0].des_deliveryDate}
+                            <Stack>
+                              <LocalizationProvider dateAdapter={DateAdapter}>
+                                <DatePicker
+                                  // inputFormat="yyyy-MM-dd"
+                                  name='des_deliveryDate'
+                                  onChange={handleService_DesDate}
+                                  value={sendHeader[0].des_deliveryDate}
+                                  disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
+                                  sx={{
+                                    "& .MuiInputBase-input.Mui-disabled": {
+                                      WebkitTextFillColor: "#000000",
+                                    },
+                                    pt: 1
+                                  }}
+                                  InputProps={{
+                                    classes: {
+                                      input: 'scaled-480px-TableContent',
+                                    },
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <Typography color="black" className='scaled-480px-TableHeader'>
+                                          วันที่รับมอบ :
+                                        </Typography>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  renderInput={(params) =>
+                                    <TextField
+                                      required
+                                      fullWidth
+                                      autoComplete="family-name"
+                                      variant="standard"
+                                      {...params} />}
+                                />
+                              </LocalizationProvider>
+                            </Stack>
+                            <Stack>
+                              <TextField
+                                required
+                                fullWidth
+                                name='des_description'
+                                value={sendHeader[0].des_description}
                                 disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
                                 sx={{
                                   "& .MuiInputBase-input.Mui-disabled": {
@@ -1556,6 +1592,7 @@ export default function Nac_Main() {
                                   },
                                   pt: 1
                                 }}
+                                onChange={handleService_DesDescription}
                                 InputProps={{
                                   classes: {
                                     input: 'scaled-480px-TableContent',
@@ -1563,54 +1600,21 @@ export default function Nac_Main() {
                                   startAdornment: (
                                     <InputAdornment position="start">
                                       <Typography color="black" className='scaled-480px-TableHeader'>
-                                        วันที่รับมอบ :
+                                        หมายเหตุ :
                                       </Typography>
                                     </InputAdornment>
                                   ),
                                 }}
-                                renderInput={(params) =>
-                                  <TextField
-                                    required
-                                    fullWidth
-                                    autoComplete="family-name"
-                                    variant="standard"
-                                    {...params} />}
+                                variant="standard"
                               />
-                            </LocalizationProvider>
-                            <TextField
-                              required
-                              fullWidth
-                              name='des_description'
-                              value={sendHeader[0].des_description}
-                              disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
-                              sx={{
-                                "& .MuiInputBase-input.Mui-disabled": {
-                                  WebkitTextFillColor: "#000000",
-                                },
-                                pt: 1
-                              }}
-                              onChange={handleService_DesDescription}
-                              InputProps={{
-                                classes: {
-                                  input: 'scaled-480px-TableContent',
-                                },
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <Typography color="black" className='scaled-480px-TableHeader'>
-                                      หมายเหตุ :
-                                    </Typography>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              variant="standard"
-                            />
+                            </Stack>
                           </Box>
                         </StyledTableCell>
                       </StyledTableRow>
                     </TableBody>
                   </Table>
                   <Table>
-                  <TableHead>
+                    <TableHead>
                       <TableRow>
                         <StyledTableCell align="center" sx={{ width: "15%", }}>
                           <Typography className='scaled-480px-TableHeader'>
@@ -1678,7 +1682,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                
+
                               }}
                               classes={{
                                 input: 'scaled-480px-TableContent text-center',
@@ -1710,7 +1714,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                
+
                               }}
                               key={index}
                               name="serialNo"
@@ -1737,7 +1741,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                
+
                               }}
                               InputProps={{
                                 disableUnderline: true,
@@ -1756,7 +1760,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                
+
                               }}
                               key={index}
                               name="date_asset"
@@ -1778,7 +1782,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                
+
                               }}
                               key={index}
                               name="nacdtl_assetsDtl"
@@ -1800,7 +1804,7 @@ export default function Nac_Main() {
                                 "& .MuiInputBase-input.Mui-disabled": {
                                   WebkitTextFillColor: "#000000",
                                 },
-                                
+
                               }}
                               key={index}
                               name="price"
@@ -1912,7 +1916,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-                              
+
                             }}
                             disabled
                             type={data.branchid === 901 ? "text" : "password"}
@@ -1973,7 +1977,7 @@ export default function Nac_Main() {
                                 onClick={handleUpdateNAC}
                                 color="warning"
                                 className='scaled-480px-TableHeader'
-                                sx={{  m: 1 }}
+                                sx={{ m: 1 }}
                               >
                                 Update
                               </Button>
@@ -1987,7 +1991,7 @@ export default function Nac_Main() {
                                 color="secondary"
                                 onClick={handleOpenDialogReply}
                                 className='scaled-480px-TableHeader'
-                                sx={{  m: 1 }}
+                                sx={{ m: 1 }}
                               >
                                 Reply
                               </Button>
@@ -2000,7 +2004,7 @@ export default function Nac_Main() {
                                 variant="contained"
                                 onClick={handleSubmit_To_Des}
                                 className='scaled-480px-TableHeader'
-                                sx={{  m: 1 }}
+                                sx={{ m: 1 }}
                               >
                                 Submit
                               </Button>
@@ -2011,7 +2015,7 @@ export default function Nac_Main() {
                                 variant="contained"
                                 onClick={handleSubmit_To_Des}
                                 className='scaled-480px-TableHeader'
-                                sx={{  m: 1 }}
+                                sx={{ m: 1 }}
                               >
                                 Submit
                               </Button>
@@ -2023,7 +2027,7 @@ export default function Nac_Main() {
                                 onClick={handleSubmit_To_Approve}
                                 color="success"
                                 className='scaled-480px-TableHeader'
-                                sx={{  m: 1 }}
+                                sx={{ m: 1 }}
                               >
                                 Accept
                               </Button>
@@ -2038,7 +2042,7 @@ export default function Nac_Main() {
                                 color={sendHeader[0].nac_status === 3 ? "success" : "primary"}
                                 onClick={handleSubmit_Form}
                                 className='scaled-480px-TableHeader'
-                                sx={{  m: 1 }}
+                                sx={{ m: 1 }}
                               >
                                 {sendHeader[0].nac_status === 4 ? `Submit` : `Accept`}
                               </Button>
@@ -2053,7 +2057,7 @@ export default function Nac_Main() {
                                 color="error"
                                 onClick={handleOpen_drop_NAC_byDes}
                                 className='scaled-480px-TableHeader'
-                                sx={{  m: 1 }}
+                                sx={{ m: 1 }}
                               >
                                 Cancel
                               </Button>
@@ -2122,10 +2126,10 @@ export default function Nac_Main() {
         <Outlet />
       </React.Fragment >
     );
-  }else{
+  } else {
     swal("แจ้งเตือน", '404 NOT FOUND THIS PAGE', "warning")
-    .then(()=>{
-      window.location.href = `/NAC_MAIN`;
-    })
+      .then(() => {
+        window.location.href = `/NAC_MAIN`;
+      })
   }
 }

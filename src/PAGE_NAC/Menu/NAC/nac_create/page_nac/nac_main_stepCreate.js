@@ -430,7 +430,7 @@ export default function Nac_Main() {
                     <StyledTableRow>
                       <StyledTableCell align="center">
                         <Typography className='scaled-480px-Header'>
-                          เพิ่มบัญชีทรัพย์สิน
+                          โยกย้ายทรัพย์สิน
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell align="center">
