@@ -165,7 +165,6 @@ export default function Nac_Main() {
   const [desLastName, setDesLastName] = React.useState();
   const [TooltipImage_1, setTooltipImage_1] = React.useState();
   const [approveData, setApproveData] = React.useState();
-  const [counter, setCounter] = React.useState(5);
 
   const [sendHeader, setSendHeader] = React.useState([{
     usercode: data.UserCode,
@@ -1011,16 +1010,7 @@ export default function Nac_Main() {
     setOpenDialog(false);
   };
 
-  var timeleft = 5;
-  var downloadTimer = setInterval(function () {
-    if (timeleft <= 0) {
-      clearInterval(downloadTimer);
-    }
-    setCounter(timeleft)
-    timeleft -= 1;
-  }, 1000);
-
-  if (!sendHeader[0].nac_code && counter > 0) {
+  if (!sendHeader[0].nac_code && nac_code) {
     return (
       <React.Fragment>
         <Box
@@ -1083,7 +1073,9 @@ export default function Nac_Main() {
                   sx={{ p: '0.45em !important', pt: 2, pl: 10, pr: 3, mb: 0, color: 'RGB(255,255,255)' }}
                   className='scaled-480px-Header'
                 >
-                  {sendHeader[0].status_name}
+                  <Typography align="center" className='scaled-480px-TableContent' sx={{ ml: 5, mt: 1 }}>
+                    {sendHeader[0].status_name}
+                  </Typography>
                 </Card>
               </Box>
               <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 } }}>
@@ -1466,7 +1458,7 @@ export default function Nac_Main() {
                             color='primary'
                             onClick={handleServiceAdd}
                           >
-                            <AddBoxIcon className='scaled-480px-TableHeader' />
+                            <AddBoxIcon className='scaled-icon-table' />
                           </IconButton>
                         </StyledTableCell>
                       </TableRow>
@@ -1701,7 +1693,7 @@ export default function Nac_Main() {
                                 <Tooltip title="Image 1">
                                   <IconButton disabled={res.assetsCode ? false : true} color='error' aria-label="upload picture" component="label">
                                     <input hidden type="file" name='file' accept='image/*' onChange={(e) => handleUploadFile_1(e, index)} />
-                                    <FilePresentIcon className='scaled-480px-TableContent' />
+                                    <FilePresentIcon className='scaled-icon-table' />
                                   </IconButton>
                                 </Tooltip>
                               </React.Fragment> :
@@ -1709,12 +1701,12 @@ export default function Nac_Main() {
                                 <Stack direction="row" spacing={0}>
                                   <Tooltip title={TooltipImage_1 ? TooltipImage_1 : res.image_1}>
                                     <IconButton onClick={() => window.open(res.image_1, "_blank")} aria-label="upload picture" component="label">
-                                      <FilePresentIcon className='scaled-480px-TableContent' />
+                                      <FilePresentIcon className='scaled-icon-table' />
                                     </IconButton>
                                   </Tooltip>
                                   <Tooltip title='delete image 1'>
                                     <IconButton component="label">
-                                      <ClearIcon onClick={(e) => handleCancelUploadFile_1(e, index)} className='scaled-480px-TableContent' />
+                                      <ClearIcon onClick={(e) => handleCancelUploadFile_1(e, index)} className='scaled-icon-table' />
                                     </IconButton>
                                   </Tooltip>
                                 </Stack>
@@ -1729,7 +1721,7 @@ export default function Nac_Main() {
                                 color="error"
                                 onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
                               >
-                                <DeleteIcon fontSize="inherit" className='scaled-480px-TableHeader' />
+                                <DeleteIcon fontSize="inherit" className='scaled-icon-table' />
                               </IconButton>
                             )}
                           </StyledTableCell>

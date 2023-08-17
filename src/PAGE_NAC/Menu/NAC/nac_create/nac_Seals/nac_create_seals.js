@@ -704,7 +704,7 @@ export default function Nac_Main() {
                           color='primary'
                           onClick={handleServiceAdd}
                         >
-                          <AddBoxIcon className='scaled-480px-TableHeader' />
+                          <AddBoxIcon className='scaled-icon-table' />
                         </IconButton>
                       </StyledTableCell>
                     </TableRow>
@@ -936,7 +936,7 @@ export default function Nac_Main() {
                               color="error"
                               onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
                             >
-                              <DeleteIcon fontSize="inherit" className='scaled-480px-TableHeader' />
+                              <DeleteIcon fontSize="inherit" className='scaled-icon-table' />
                             </IconButton>
                           )}
                         </StyledTableCell>

@@ -165,8 +165,6 @@ export default function Nac_Main() {
   const [desLastName, setDesLastName] = React.useState();
   const [TooltipImage_1, setTooltipImage_1] = React.useState();
   const [approveData, setApproveData] = React.useState();
-  const [counter, setCounter] = React.useState(5);
-
 
   const [sendHeader, setSendHeader] = React.useState([{
     usercode: data.UserCode,
@@ -368,18 +366,6 @@ export default function Nac_Main() {
     setSendHeader(listHeader)
   }
 
-  const handleService_RealPrice = (e) => {
-    const listHeader = [...sendHeader]
-    listHeader[0]['real_price'] = e.target.value
-    setSendHeader(listHeader)
-  }
-
-  const handleService_RealPriceDate = (newValue) => {
-    const listHeader = [...sendHeader]
-    listHeader[0]['realPrice_Date'] = newValue.toLocaleString("sv-SE")
-    setSendHeader(listHeader)
-  }
-
   const handleServiceAdd = () => {
     setServiceList([...serviceList, {
       dtl_id: null,
@@ -416,7 +402,11 @@ export default function Nac_Main() {
     const nacdtl_assetsCode = { nacdtl_assetsCode: e.target.innerText }
     const Code = { Code: e.target.innerText }
 
-    if (serviceList.filter((res) => res.assetsCode === e.target.innerText)[0] !== undefined) {
+    const checkProcess = await Axios.post(config.http + '/store_FA_control_CheckAssetCode_Process', nacdtl_assetsCode, config.headers)
+
+    if (checkProcess.data.data[0].checkProcess === 'false') {
+      swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "error")
+    } else if (serviceList.filter((res) => res.assetsCode === e.target.innerText)[0] !== undefined) {
       swal("แจ้งเตือน", 'มีทรัพย์สินนี้ในรายการแล้ว', "error")
         .then(() => {
           const list = [...serviceList];
@@ -424,25 +414,18 @@ export default function Nac_Main() {
           setServiceList(list);
         })
     } else if (e.target.innerText && serviceList.filter((res) => res.assetsCode === e.target.innerText)[0] === undefined) {
-      await Axios.post(config.http + '/store_FA_control_CheckAssetCode_Process', nacdtl_assetsCode, config.headers)
-        .then(async (res) => {
-          if (res.data.data[0].checkProcess === 'false') {
-            swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "error")
-          } else {
-            await Axios.post(config.http + '/SelectDTL_Control', Code, config.headers)
-              .then((response) => {
-                if (response.data.data.length > 0) {
-                  const list = [...serviceList];
-                  list[index]['assetsCode'] = response.data.data[0].Code
-                  list[index]['name'] = response.data.data[0].Name
-                  list[index]['dtl'] = response.data.data[0].Details
-                  list[index]['count'] = 1
-                  list[index]['serialNo'] = response.data.data[0].SerialNo
-                  list[index]['price'] = response.data.data[0].Price
-                  list[index]['date_asset'] = response.data.data[0].CreateDate
-                  setServiceList(list);
-                }
-              })
+      await Axios.post(config.http + '/SelectDTL_Control', Code, config.headers)
+        .then((response) => {
+          if (response.data.data.length > 0) {
+            const list = [...serviceList];
+            list[index]['assetsCode'] = response.data.data[0].Code
+            list[index]['name'] = response.data.data[0].Name
+            list[index]['dtl'] = response.data.data[0].Details
+            list[index]['count'] = 1
+            list[index]['serialNo'] = response.data.data[0].SerialNo
+            list[index]['price'] = response.data.data[0].Price
+            list[index]['date_asset'] = response.data.data[0].CreateDate
+            setServiceList(list);
           }
         })
     } else {
@@ -979,17 +962,7 @@ export default function Nac_Main() {
     setOpenDialog(false);
   };
 
-
-  var timeleft = 5;
-  var downloadTimer = setInterval(function () {
-    if (timeleft <= 0) {
-      clearInterval(downloadTimer);
-    }
-    setCounter(timeleft)
-    timeleft -= 1;
-  }, 1000);
-
-  if (!sendHeader[0].nac_code && counter > 0) {
+  if (!sendHeader[0].nac_code && nac_code) {
     return (
       <React.Fragment>
         <Box
@@ -1021,7 +994,7 @@ export default function Nac_Main() {
             approveData={approveData}
           />
           <AnimatedPage>
-            <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth*0.8 }}>
+            <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth * 0.8 }}>
               <Box
                 sx={{
                   display: 'flex',
@@ -1050,9 +1023,10 @@ export default function Nac_Main() {
                                               '#6A5ACD' : '#DC143C'
                   }}
                   sx={{ p: '0.45em !important', pt: 2, pl: 10, pr: 3, mb: 0, color: 'RGB(255,255,255)' }}
-                  className='scaled-480px-Header'
                 >
-                  {sendHeader[0].status_name}
+                  <Typography align="center" className='scaled-480px-TableContent' sx={{ ml: 5, mt: 1 }}>
+                    {sendHeader[0].status_name}
+                  </Typography>
                 </Card>
               </Box>
               <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 } }}>
@@ -1098,7 +1072,7 @@ export default function Nac_Main() {
                     justifyContent="space-between"
                     alignItems="flex-start"
                     spacing={2}
-                    
+
                   >
                     <Typography className='scaled-480px-Header-Content' color='error'>
                       * กรุณากรอกข้อมูลสำหรับตัดบัญชีทรัพย์สิน
@@ -1435,7 +1409,7 @@ export default function Nac_Main() {
                             color='primary'
                             onClick={handleServiceAdd}
                           >
-                            <AddBoxIcon className='scaled-480px-TableHeader' />
+                            <AddBoxIcon className='scaled-icon-table' />
                           </IconButton>
                         </StyledTableCell>
                       </TableRow>
@@ -1669,7 +1643,7 @@ export default function Nac_Main() {
                                 <Tooltip title="Image 1">
                                   <IconButton disabled={res.assetsCode ? false : true} color='error' aria-label="upload picture" component="label">
                                     <input hidden type="file" name='file' accept='image/*' onChange={(e) => handleUploadFile_1(e, index)} />
-                                    <FilePresentIcon className='scaled-480px-TableHeader' />
+                                    <FilePresentIcon className='scaled-icon-table' />
                                   </IconButton>
                                 </Tooltip>
                               </React.Fragment> :
@@ -1677,12 +1651,12 @@ export default function Nac_Main() {
                                 <Stack direction="row" spacing={1}>
                                   <Tooltip title={TooltipImage_1 ? TooltipImage_1 : res.image_1}>
                                     <IconButton onClick={() => window.open(res.image_1, "_blank")} aria-label="upload picture" component="label">
-                                      <FilePresentIcon className='scaled-480px-TableHeader' />
+                                      <FilePresentIcon className='scaled-icon-table' />
                                     </IconButton>
                                   </Tooltip>
                                   <Tooltip title='delete image 1'>
                                     <IconButton component="label">
-                                      <ClearIcon onClick={(e) => handleCancelUploadFile_1(e, index)} className='scaled-480px-TableHeader' />
+                                      <ClearIcon onClick={(e) => handleCancelUploadFile_1(e, index)} className='scaled-icon-table' />
                                     </IconButton>
                                   </Tooltip>
                                 </Stack>
@@ -1698,7 +1672,7 @@ export default function Nac_Main() {
                                 color="error"
                                 onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
                               >
-                                <DeleteIcon fontSize="inherit" className='scaled-480px-TableHeader' />
+                                <DeleteIcon fontSize="inherit" className='scaled-icon-table' />
                               </IconButton>
                             )}
                           </StyledTableCell>
@@ -1862,7 +1836,7 @@ export default function Nac_Main() {
                           justifyContent="center"
                           alignItems="flex-start"
                           spacing={2}
-                          
+
                         >
                           {sendHeader[0].nac_status !== 6 ? (
                             <Stack>
@@ -1871,7 +1845,7 @@ export default function Nac_Main() {
                                 onClick={handleUpdateNAC}
                                 color="warning"
                                 className='scaled-480px-TableHeader'
-                                
+
                               >
                                 Update
                               </Button>
@@ -1887,7 +1861,7 @@ export default function Nac_Main() {
                                 color="secondary"
                                 onClick={handleOpenDialogReply}
                                 className='scaled-480px-TableHeader'
-                                
+
                               >
                                 Reply
                               </Button>
@@ -1900,7 +1874,7 @@ export default function Nac_Main() {
                                 variant="contained"
                                 onClick={handleSubmit_To_BookValue}
                                 className='scaled-480px-TableHeader'
-                                
+
                               >
                                 Submit
                               </Button>
@@ -1911,7 +1885,7 @@ export default function Nac_Main() {
                                 variant="contained"
                                 onClick={handleSubmit_To_Verify}
                                 className='scaled-480px-TableHeader'
-                                
+
                               >
                                 Submit
                               </Button>
@@ -1923,7 +1897,7 @@ export default function Nac_Main() {
                                 onClick={handleSubmit_To_Approve}
                                 color="success"
                                 className='scaled-480px-TableHeader'
-                                
+
                               >
                                 Accept
                               </Button>
@@ -1936,7 +1910,7 @@ export default function Nac_Main() {
                                 color={sendHeader[0].nac_status === 3 ? "success" : "primary"}
                                 onClick={handleSubmit_Form}
                                 className='scaled-480px-TableHeader'
-                                
+
                               >
                                 Accept
                               </Button>
@@ -1951,7 +1925,7 @@ export default function Nac_Main() {
                                 color="error"
                                 onClick={handleOpen_drop_NAC_byDes}
                                 className='scaled-480px-TableHeader'
-                                
+
                               >
                                 Cancel
                               </Button>
