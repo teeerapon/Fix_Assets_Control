@@ -783,7 +783,9 @@ export default function Reported_of_assets() {
             if (x.RowID === params.row.RowID) {
               const list = [...reported_of_assets]
               list[index]['Reference'] = event.target.value
-              list[index]['remarker'] = event.target.value === 'none' ? 'ยังไม่ได้ตรวจนับ' : 'ตรวจนับแล้ว'
+              list[index]['remarker'] = event.target.value === 'none' ? 'ยังไม่ได้ตรวจนับ' :
+                list[index]['remarker'] = event.target.value !== 'none' && data.UserCode === params.row.OwnerID ? 'ตรวจนับแล้ว' :
+                  'ต่างสาขา'
               setReported_of_assets(list)
             }
           })
