@@ -595,45 +595,52 @@ export default function Nac_Main() {
   }
 
   const handleUpdateNAC = async () => {
-
-    await Axios.post(config.http + "/store_FA_control_update_DTLandHeaders", sendHeader[0], config.headers)
-      .then(async (res) => {
-        if (res.data.data) {
-          for (let i = 0; i < serviceList.length; i++) {
-            const reqII = {
-              dtl_id: !serviceList[i].dtl_id ? 0 : serviceList[i].dtl_id,
-              usercode: data.UserCode,
-              nac_code: nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
-              nacdtl_row: i,
-              nacdtl_assetsCode: serviceList[i].assetsCode,
-              nacdtl_assetsName: serviceList[i].name,
-              nacdtl_assetsSeria: serviceList[i].serialNo,
-              nacdtl_assetsPrice: serviceList[i].price,
-              asset_id: !serviceList[i].asset_id ? 0 : serviceList[i].asset_id,
-              nacdtl_assetsDtl: serviceList[i].nacdtl_assetsDtl,
-              nacdtl_assetsCount: serviceList[i].nacdtl_assetsCount,
-              image_1: serviceList[i].image_1,
-              image_2: serviceList[i].image_2,
-            }
-
-            await Axios.post(config.http + '/stroe_FA_control_DTL_ConfirmSuccess', {
-              nac_code,
-              usercode: data.UserCode,
-              nacdtl_assetsCode: serviceList[i].assetsCode,
-              asset_id: serviceList[i].asset_id,
-              statusCheck: serviceList[i].statusCheck,
-            }, config.headers)
-
-            await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
-              .then(async (resII) => {
-                if (resII.data.data && i + 1 === serviceList.length) {
-                  swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                    window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + nac_code
-                  });
+    await Axios.post(config.http + '/store_FA_control_updateStatus', sendHeader[0], config.headers)
+      .then(async () => {
+        await Axios.post(config.http + "/store_FA_control_update_DTLandHeaders", sendHeader[0], config.headers)
+          .then(async (res) => {
+            if (res.data.data) {
+              for (let i = 0; i < serviceList.length; i++) {
+                const reqII = {
+                  dtl_id: !serviceList[i].dtl_id ? 0 : serviceList[i].dtl_id,
+                  usercode: data.UserCode,
+                  nac_code: nac_code, // ได้จาก Response ของ Store_FA_control_create_doc
+                  nacdtl_row: i,
+                  nacdtl_assetsCode: serviceList[i].assetsCode,
+                  nacdtl_assetsName: serviceList[i].name,
+                  nacdtl_assetsSeria: serviceList[i].serialNo,
+                  nacdtl_assetsPrice: serviceList[i].price,
+                  asset_id: !serviceList[i].asset_id ? 0 : serviceList[i].asset_id,
+                  image_1: serviceList[i].image_1,
+                  image_2: null,
                 }
-              })
-          }
-        }
+                await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
+                  .then(async (resII) => {
+                    if (resII.data.data) {
+                      const detail_reqII = {
+                        usercode: data.UserCode,
+                        nac_code: res.data.data[0].nac_code,
+                        nac_type: sendHeader[0].worktype,
+                        nacdtl_bookV: serviceList[i].bookValue,
+                        nacdtl_PriceSeals: serviceList[i].priceSeals,
+                        nacdtl_profit: serviceList[i].profit,
+                        asset_id: resII.data.data[0].nacdtl_id,
+                        nac_status: 1,
+                        nacdtl_assetsCode: serviceList[i].assetsCode
+                      }
+                      await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
+                        .then((resIII) => {
+                          if (resIII.data.data && i + 1 === serviceList.length) {
+                            swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
+                              window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code
+                            });
+                          }
+                        })
+                    }
+                  })
+              }
+            }
+          })
       })
   }
 
