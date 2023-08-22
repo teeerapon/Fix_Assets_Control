@@ -777,7 +777,10 @@ export default function Nac_Main() {
 
     if ((sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode && res.limitamount >= sendHeader[0].sumPrice)[0]) || permission_MenuID.indexOf(10) <= -1) {
       swal("แจ้งเตือน", `ถูกจำกัดสิทธิ์`, "error")
-    } if ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14) && serviceList.filter((res) => res.statusCheck === 0 || !res.image_1 || !res.image_2)[0]) {
+    } if ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14)
+      && serviceList.filter((res) => res.statusCheck === 0
+        // || !res.image_1 || !res.image_2
+      )[0]) {
       swal("แจ้งเตือน", `เลือก (ตรวจสอบ/รูปภาพ) ทรัพย์สิน`, "error")
     } else {
       const reqUpdateStatus = {

@@ -144,20 +144,6 @@ export default function Reported_of_assets() {
     };
     await Axios.put(config.http + '/updateReference', body, { headers })
       .catch(function (error) {
-        if (error.response) {
-          setOpenDialog(false);
-          swal("แจ้งเตือน", `หมดเวลาแล้ว`, "error").then((res) => {
-            reported_of_assets.forEach(function (x, index) {
-              if (x.Code === dialogComment.Code) {
-                const list = [...reported_of_assets]
-                list[index]['comment'] = ''
-                setReported_of_assets(list)
-                setOpenDialog(false);
-              }
-            })
-          })
-        }
-      }).then((res) => {
         reported_of_assets.forEach(function (x, index) {
           if (x.Code === dialogComment.Code) {
             const list = [...reported_of_assets]
@@ -166,6 +152,28 @@ export default function Reported_of_assets() {
             setOpenDialog(false);
           }
         })
+      //   if (error.response) {
+      //     setOpenDialog(false);
+      //     swal("แจ้งเตือน", `หมดเวลาแล้ว`, "error").then((res) => {
+      //       reported_of_assets.forEach(function (x, index) {
+      //         if (x.Code === dialogComment.Code) {
+      //           const list = [...reported_of_assets]
+      //           list[index]['comment'] = ''
+      //           setReported_of_assets(list)
+      //           setOpenDialog(false);
+      //         }
+      //       })
+      //     })
+      //   }
+      // }).then((res) => {
+      //   reported_of_assets.forEach(function (x, index) {
+      //     if (x.Code === dialogComment.Code) {
+      //       const list = [...reported_of_assets]
+      //       list[index]['comment'] = dialogComment.comment
+      //       setReported_of_assets(list)
+      //       setOpenDialog(false);
+      //     }
+      //   })
       })
   };
 

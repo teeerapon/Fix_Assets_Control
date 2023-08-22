@@ -591,9 +591,9 @@ export default function Nac_Main() {
     } else if ((serviceList.filter((res) => res.priceSeals === null)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาระบุราคาขาย', "error")
     }
-    else if ((serviceList.filter((res) => !res.image_1)[0]) !== undefined) {
-      swal("แจ้งเตือน", 'กรุณาใส่รูปภาพทรัพย์สิน', "error")
-    }
+    // else if ((serviceList.filter((res) => !res.image_1)[0]) !== undefined) {
+    //   swal("แจ้งเตือน", 'กรุณาใส่รูปภาพทรัพย์สิน', "error")
+    // }
     else {
       // รอใส่เงือนไข
       const reqUpdateStatus = {
