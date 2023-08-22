@@ -50,7 +50,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.action.selected,
     color: theme.palette.common.black,
-     padding: '1svw !important',
+    padding: '1svw !important',
     border: '1px solid',
   },
   [`&.${tableCellClasses.body}`]: {
@@ -364,8 +364,10 @@ export default function Nac_Main() {
                     }
                     await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                       .then((resIII) => {
-                        localStorage.setItem('NacCode', JSON.stringify({ nac_code: resIII.data.data[0].nac_code, nac_status: 1 }));
-                        navigate('/NAC_ROW/NAC_SEALS_APPROVE?' + resIII.data.data[0].nac_code)
+                        if (i + 1 === serviceList.length) {
+                          localStorage.setItem('NacCode', JSON.stringify({ nac_code: res.data.data[0].nac_code, nac_status: 1 }));
+                          navigate('/NAC_ROW/NAC_SEALS_APPROVE?' + res.data.data[0].nac_code)
+                        }
                       })
                   }
                 })
@@ -421,7 +423,7 @@ export default function Nac_Main() {
               </Box>
               <TableContainer>
                 <Table size="small">
-                <TableHead>
+                  <TableHead>
                     <TableRow>
                       <StyledTableCell align="center" style={{ width: '30%' }}>
                         <Typography className='scaled-480px-TableHeader' >

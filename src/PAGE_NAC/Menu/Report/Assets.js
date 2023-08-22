@@ -1214,97 +1214,103 @@ export default function Reported_of_assets() {
                                         </Typography>
                                       </Grid>
                                     </Grid>
-                                    <Stack
-                                      direction="row"
-                                      spacing={1}
-                                      divider={<Divider orientation="vertical" flexItem />}
-                                      sx={{ pt: 1, pb: 1 }}
-                                    >
+                                    <Grid item xs={12}>
+                                      <Stack
+                                        direction="row"
+                                        spacing={1}
+                                        divider={<Divider orientation="vertical" flexItem />}
+                                        sx={{ pt: 1, pb: 1 }}
+                                      >
+                                        <TextField
+                                          required
+                                          fullWidth
+                                          disabled
+                                          align="center"
+                                          name='des_Department'
+                                          variant="standard"
+                                          value={des_Department}
+                                          inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
+                                          onChange={handleChangeDes_Department}
+                                        />
+                                        <TextField
+                                          required
+                                          align='center'
+                                          name='des_BU'
+                                          fullWidth
+                                          disabled
+                                          variant="standard"
+                                          value={des_BU}
+                                          inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
+                                          onChange={handleDes_ChangeBU}
+                                        />
+                                      </Stack>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                      <Autocomplete
+                                        freeSolo
+                                        name='des_delivery'
+                                        id='delivery'
+                                        options={UserForAssetsControl}
+                                        getOptionLabel={(option) => option.UserCode}
+                                        filterOptions={filterOptions2}
+                                        //value={des_delivery[resultIndex[0].indexOf(des_delivery)]}
+                                        onChange={handleAutoDes_DeapartMent}
+                                        renderInput={(params) => (
+                                          <React.Fragment>
+                                            <TextField
+                                              fullWidth
+                                              autoComplete="family-name"
+                                              onChange={handleChangeDes_delivery2}
+                                              value={des_delivery}
+                                              sx={{ pt: 1 }}
+                                              variant="standard"
+                                              label='ผู้รับมอบ'
+                                              error={valueAlert === 'กรุณากรอกข้อมูลผู้รับ' ? true : false}
+                                              {...params}
+                                            />
+                                          </React.Fragment>
+                                        )}
+                                      />
+                                      <TextField
+                                        variant="standard"
+                                        fullWidth
+                                        autoComplete="family-name"
+                                        inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                        onChange={handleChangeDes_Name}
+                                        value={nameDes}
+                                        error={valueAlert === 'กรุณาลงชื่อผู้รับมอบ' ? true : false}
+                                        InputProps={{
+                                          startAdornment: (
+                                            <InputAdornment position="start">
+                                              <Typography color="black">
+                                                ลงชื่อผู้รับมอบ :
+                                              </Typography>
+                                            </InputAdornment>
+                                          ),
+                                        }}
+                                        sx={{ pt: 1 }}
+                                      />
+                                    </Grid>
+                                    <Grid item xs={12}>
                                       <TextField
                                         required
                                         fullWidth
                                         disabled
-                                        align="center"
-                                        name='des_Department'
+                                        value='none'
+                                        name='des_Description'
+                                        sx={{ pt: 1 }}
+                                        InputProps={{
+                                          startAdornment: (
+                                            <InputAdornment position="start">
+                                              <Typography color="black" className='font-vsm-sm'>
+                                                หมายเหตุ :
+                                              </Typography>
+                                            </InputAdornment>
+                                          ),
+                                        }}
                                         variant="standard"
-                                        value={des_Department}
-                                        inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
-                                        onChange={handleChangeDes_Department}
                                       />
-                                      <TextField
-                                        required
-                                        align='center'
-                                        name='des_BU'
-                                        fullWidth
-                                        disabled
-                                        variant="standard"
-                                        value={des_BU}
-                                        inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
-                                        onChange={handleDes_ChangeBU}
-                                      />
-                                    </Stack>
-                                    <Autocomplete
-                                      freeSolo
-                                      name='des_delivery'
-                                      id='delivery'
-                                      options={UserForAssetsControl}
-                                      getOptionLabel={(option) => option.UserCode}
-                                      filterOptions={filterOptions2}
-                                      //value={des_delivery[resultIndex[0].indexOf(des_delivery)]}
-                                      onChange={handleAutoDes_DeapartMent}
-                                      renderInput={(params) => (
-                                        <React.Fragment>
-                                          <TextField
-                                            fullWidth
-                                            autoComplete="family-name"
-                                            onChange={handleChangeDes_delivery2}
-                                            value={des_delivery}
-                                            sx={{ pt: 1 }}
-                                            variant="standard"
-                                            label='ผู้รับมอบ'
-                                            error={valueAlert === 'กรุณากรอกข้อมูลผู้รับ' ? true : false}
-                                            {...params}
-                                          />
-                                        </React.Fragment>
-                                      )}
-                                    />
-                                    <TextField
-                                      variant="standard"
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
-                                      onChange={handleChangeDes_Name}
-                                      value={nameDes}
-                                      error={valueAlert === 'กรุณาลงชื่อผู้รับมอบ' ? true : false}
-                                      InputProps={{
-                                        startAdornment: (
-                                          <InputAdornment position="start">
-                                            <Typography color="black">
-                                              ลงชื่อผู้รับมอบ :
-                                            </Typography>
-                                          </InputAdornment>
-                                        ),
-                                      }}
-                                      sx={{ pt: 1 }}
-                                    />
-                                    <TextField
-                                      required
-                                      fullWidth
-                                      disabled
-                                      value='none'
-                                      name='des_Description'
-                                      sx={{ pt: 1 }}
-                                      InputProps={{
-                                        startAdornment: (
-                                          <InputAdornment position="start">
-                                            <Typography color="black" className='font-vsm-sm'>
-                                              หมายเหตุ :
-                                            </Typography>
-                                          </InputAdornment>
-                                        ),
-                                      }}
-                                      variant="standard"
-                                    />
+                                    </Grid>
                                   </React.Fragment>
                                 </StyledTableCell>
                               </StyledTableRow>
