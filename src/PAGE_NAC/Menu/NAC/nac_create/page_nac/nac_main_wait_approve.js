@@ -580,7 +580,7 @@ export default function Nac_Main() {
       swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
     } else if ((serviceList.filter((res) => !res.assetsCode)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาระบุข้อมูลทรัพย์สินให้ครบ', "error")
-    } else if (approveData.filter((res) => res.workflowlevel === 0 && data.UserCode === res.approverid)[0] || permission_MenuID.indexOf(9) > -1) {
+    } else {
       // รอใส่เงือนไข
       const reqUpdateStatus = {
         usercode: data.UserCode,
@@ -636,8 +636,6 @@ export default function Nac_Main() {
             }
           }
         })
-    } else {
-      swal("แจ้งเตือน", `ถูกจำกัดสิทธิ์`, "error")
     }
   }
 
