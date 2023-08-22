@@ -364,9 +364,9 @@ export default function Nac_Main() {
                     }
                     await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                       .then((resIII) => {
-                        if (i + 1 === serviceList.length) {
-                          localStorage.setItem('NacCode', JSON.stringify({ nac_code: res.data.data[0].nac_code, nac_status: 1 }));
-                          navigate('/NAC_ROW/NAC_SEALS_APPROVE?' + res.data.data[0].nac_code)
+                        if (resIII.data.data[0].count_row === serviceList.length) {
+                          localStorage.setItem('NacCode', JSON.stringify({ nac_code: resIII.data.data[0].nac_code, nac_status: 1 }));
+                          navigate('/NAC_ROW/NAC_SEALS_APPROVE?' + resIII.data.data[0].nac_code)
                         }
                       })
                   }

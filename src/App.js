@@ -145,7 +145,7 @@ function App() {
     setOpen(false);
   };
 
-  if (!token || !date_login || ((datenow - date_login) > 30000) === true) {
+  if (!token || !date_login || ((datenow - date_login) > 120000) === true) {
     localStorage.removeItem("token");
     localStorage.removeItem("data");
     localStorage.removeItem("permission");

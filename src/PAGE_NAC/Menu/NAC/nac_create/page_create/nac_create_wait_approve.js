@@ -630,9 +630,9 @@ export default function Nac_Main() {
                       }
                       await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                         .then((resIII) => {
-                          if (resIII.data.data && i + 1 === serviceList.length) {
+                          if (resII.data.data[0].count_row === serviceList.length) {
                             swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                              window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code
+                              window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + resII.data.data[0].nac_code
                             });
                           }
                         })
@@ -690,7 +690,7 @@ export default function Nac_Main() {
               }
               await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
                 .then(async (resII) => {
-                  if (resII.data.data && i + 1 === serviceList.length) {
+                  if (resII.data.data[0].count_row === serviceList.length) {
                     await store_FA_SendMail({
                       nac_code
                     })
@@ -700,7 +700,7 @@ export default function Nac_Main() {
                       comment: 'ยืนยันรายการ',
                     })
                     swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                      window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + data.data[0].nac_code ?? nac_code
+                      window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + resII.data.data[0].nac_code ?? nac_code
                     });
                   }
                 })
@@ -758,7 +758,7 @@ export default function Nac_Main() {
               }
               await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
                 .then(async (resII) => {
-                  if (resII.data.data && i + 1 === serviceList.length) {
+                  if (resII.data.data[0].count_row === serviceList.length) {
                     await store_FA_SendMail({
                       nac_code
                     })
@@ -768,7 +768,7 @@ export default function Nac_Main() {
                       comment: 'ตรวจสอบรายการ',
                     })
                     swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                      window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + data.data[0].nac_code ?? nac_code
+                      window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + resII.data.data[0].nac_code ?? nac_code
                     });
                   }
                 })
@@ -898,9 +898,9 @@ export default function Nac_Main() {
 
                 await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
                   .then(async (resII) => {
-                    if (resII.data.data && i + 1 === serviceList.length) {
+                    if (resII.data.data[0].count_row === serviceList.length) {
                       swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                        window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + data.data[0].nac_code ?? nac_code
+                        window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + resII.data.data[0].nac_code ?? nac_code
                       });
                     }
                   })

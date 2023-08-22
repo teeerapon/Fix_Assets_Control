@@ -49,7 +49,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.action.selected,
     color: theme.palette.common.black,
-     padding: '1svw !important',
+    padding: '1svw !important',
     border: '1px solid',
   },
   [`&.${tableCellClasses.body}`]: {
@@ -358,8 +358,10 @@ export default function Nac_Main() {
                     }
                     await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                       .then((resIII) => {
-                        localStorage.setItem('NacCode', JSON.stringify({ nac_code: resIII.data.data[0].nac_code, nac_status: 1 }));
-                        navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + resIII.data.data[0].nac_code)
+                        if (resIII.data.data[0].count_row === serviceList.length) {
+                          localStorage.setItem('NacCode', JSON.stringify({ nac_code: resIII.data.data[0].nac_code, nac_status: 1 }));
+                          navigate('/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + resIII.data.data[0].nac_code)
+                        }
                       })
                   }
                 })
