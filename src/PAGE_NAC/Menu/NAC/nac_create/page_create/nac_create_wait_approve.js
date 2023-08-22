@@ -1101,7 +1101,7 @@ export default function Nac_Main() {
                     </Stack>
                   </Grid>
                   <Grid item xs={2}>
-                    <Typography sx={{ p: 2, border: '1px dashed grey' }} className='scaled-480px-Header'>
+                    <Typography sx={{ p: 2, border: '1px dashed grey' }} className='scaled-480px-Header text-center'>
                       <b>{sendHeader[0].nac_code}</b>
                     </Typography>
                   </Grid>
@@ -1726,7 +1726,7 @@ export default function Nac_Main() {
                               InputProps={{
                                 disableUnderline: true,
                                 classes: {
-                                  input: 'scaled-480px-TableContent text-center',
+                                  input: 'scaled-480px-TableContent text-left',
                                 },
                               }}
                               value={res.serialNo ?? ''}
@@ -1749,7 +1749,7 @@ export default function Nac_Main() {
                               InputProps={{
                                 disableUnderline: true,
                                 classes: {
-                                  input: 'scaled-480px-TableContent text-center',
+                                  input: 'scaled-480px-TableContent text-left',
                                 },
                               }}
                               value={res.name ?? ''}
@@ -1919,7 +1919,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-
+                              py: '0.45em'
                             }}
                             disabled
                             type={data.branchid === 901 ? "text" : "password"}

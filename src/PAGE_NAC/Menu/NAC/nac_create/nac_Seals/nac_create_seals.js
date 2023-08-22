@@ -760,7 +760,7 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               classes: {
-                                input: 'scaled-480px-TableContent text-center',
+                                input: 'scaled-480px-TableContent text-left',
                               },
                             }}
                             value={res.serialNo ?? ''}
@@ -783,7 +783,7 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               classes: {
-                                input: 'scaled-480px-TableContent text-center',
+                                input: 'scaled-480px-TableContent text-left',
                               },
                             }}
                             value={res.name ?? ''}
@@ -958,7 +958,7 @@ export default function Nac_Main() {
                             "& .MuiInputBase-input.Mui-disabled": {
                               WebkitTextFillColor: "#000000",
                             },
-
+                            py: '0.45em'
                           }}
                           disabled
                           type={data.branchid === 901 ? "text" : "password"}
@@ -980,7 +980,7 @@ export default function Nac_Main() {
                             "& .MuiInputBase-input.Mui-disabled": {
                               WebkitTextFillColor: "#000000",
                             },
-
+                            py: '0.45em'
                           }}
                           disabled
                           type={data.branchid === 901 ? "text" : "password"}
@@ -1002,7 +1002,7 @@ export default function Nac_Main() {
                             "& .MuiInputBase-input.Mui-disabled": {
                               WebkitTextFillColor: "#000000",
                             },
-
+                            py: '0.45em'
                           }}
                           disabled
                           InputProps={{
@@ -1023,7 +1023,7 @@ export default function Nac_Main() {
                             "& .MuiInputBase-input.Mui-disabled": {
                               WebkitTextFillColor: "#000000",
                             },
-
+                            py: '0.45em'
                           }}
                           disabled
                           InputProps={{
@@ -1044,7 +1044,7 @@ export default function Nac_Main() {
                             "& .MuiInputBase-input.Mui-disabled": {
                               WebkitTextFillColor: "#000000",
                             },
-
+                            py: '0.45em'
                           }}
                           disabled
                           type={data.branchid === 901 ? "text" : "password"}

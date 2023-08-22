@@ -627,7 +627,7 @@ export default function History_of_assets() {
       },
     },
     {
-      field: 'vertify_book_value',
+      field: 'userid_approver',
       headerName: 'ผู้ตรวจสอบ/อนุมัติ',
       headerClassName: 'super-app-theme--header',
       align: 'center',

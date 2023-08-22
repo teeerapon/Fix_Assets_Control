@@ -570,7 +570,7 @@ export default function Nac_Main() {
       swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
     } else if ((serviceList.filter((res) => !res.assetsCode)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาระบุข้อมูลทรัพย์สินให้ครบ', "error")
-    } 
+    }
     // else if ((serviceList.filter((res) => !res.image_1)[0]) !== undefined) {
     //   swal("แจ้งเตือน", 'กรุณาใส่รูปภาพทรัพย์สิน', "error")
     // }
@@ -1066,14 +1066,9 @@ export default function Nac_Main() {
                     </Stack>
                   </Grid>
                   <Grid item xs={2}>
-                    <Stack
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <Typography sx={{ p: '0.45em !important', border: '1px dashed grey' }} className='scaled-480px-Header'>
-                        <b>{sendHeader[0].nac_code}</b>
-                      </Typography>
-                    </Stack>
+                    <Typography sx={{ p: 2, border: '1px dashed grey' }} className='scaled-480px-Header text-center'>
+                      <b>{sendHeader[0].nac_code}</b>
+                    </Typography>
                   </Grid>
                 </Grid>
                 <Box sx={{ pt: 3 }}>
@@ -1101,25 +1096,25 @@ export default function Nac_Main() {
                 </Box>
                 <TableContainer>
                   <Table>
-                  <TableHead>
-                    <TableRow>
-                      <StyledTableCell align="center" style={{ width: '30%' }}>
-                        <Typography className='scaled-480px-TableHeader' >
-                          ประเภทการเปลี่ยนแปลง
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        <Typography className='scaled-480px-TableHeader' >
-                          หน่วยงานที่ส่งมอบ
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell align="center" style={{ width: '35%' }}>
-                        <Typography className='scaled-480px-TableHeader' >
-                          หน่วยงานที่รับมอบ
-                        </Typography>
-                      </StyledTableCell>
-                    </TableRow>
-                  </TableHead>
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell align="center" style={{ width: '30%' }}>
+                          <Typography className='scaled-480px-TableHeader' >
+                            ประเภทการเปลี่ยนแปลง
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <Typography className='scaled-480px-TableHeader' >
+                            หน่วยงานที่ส่งมอบ
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ width: '35%' }}>
+                          <Typography className='scaled-480px-TableHeader' >
+                            หน่วยงานที่รับมอบ
+                          </Typography>
+                        </StyledTableCell>
+                      </TableRow>
+                    </TableHead>
                     <TableBody>
                       <StyledTableRow>
                         <StyledTableCell align="center">
@@ -1362,7 +1357,7 @@ export default function Nac_Main() {
                     </TableBody>
                   </Table>
                   <Table>
-                  <TableHead>
+                    <TableHead>
                       <TableRow>
                         <StyledTableCell align="center" sx={{ width: "15%", }}>
                           <Typography className='scaled-480px-TableHeader'>
@@ -1474,7 +1469,7 @@ export default function Nac_Main() {
                               InputProps={{
                                 disableUnderline: true,
                                 classes: {
-                                  input: 'scaled-480px-TableContent text-center',
+                                  input: 'scaled-480px-TableContent text-left',
                                 },
                               }}
                               value={res.serialNo ?? ''}
@@ -1496,7 +1491,7 @@ export default function Nac_Main() {
                               InputProps={{
                                 disableUnderline: true,
                                 classes: {
-                                  input: 'scaled-480px-TableContent text-center',
+                                  input: 'scaled-480px-TableContent text-left',
                                 },
                               }}
                               value={res.name ?? ''}
@@ -1776,6 +1771,7 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
+                              py: '0.45em'
                             }}
                             disabled
                             type={data.branchid === 901 ? "text" : "password"}
