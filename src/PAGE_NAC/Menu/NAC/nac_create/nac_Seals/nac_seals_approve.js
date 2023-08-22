@@ -918,7 +918,7 @@ export default function Nac_Main() {
               if (sendHeader[0].nac_status === 12 && sendHeader[0].real_price === '0') {
                 swal("แจ้งเตือน", 'เนื่องจากราคาขายคือ 0 จึงทำให้ประเภทการเปลี่ยนแปลงเปลี่ยนเป็น ตัดบัญชีทรัพย์สิน', "warning").then((value) => {
                   swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                    window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + res.data.data[0].nac_code ?? nac_code
+                    window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + res.data.data[0].nac_code ?? nac_code
                   });
                 });
               } else {

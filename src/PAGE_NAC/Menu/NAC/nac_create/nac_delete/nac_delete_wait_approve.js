@@ -556,7 +556,7 @@ export default function Nac_Main() {
                         .then((resIII) => {
                           if (resIII.data.data && i + 1 === serviceList.length) {
                             swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                              window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + nac_code
+                              window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + res.data.data[0].nac_code
                             });
                           }
                         })
@@ -640,7 +640,7 @@ export default function Nac_Main() {
                             comment: 'ยืนยันรายการแล้ว',
                           })
                           swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
+                            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + res.data.data[0].nac_code
                           });
                         }
                       })
@@ -722,7 +722,7 @@ export default function Nac_Main() {
                             comment: 'กรอก Book Value เรียบร้อยแล้ว',
                           })
                           swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
+                            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + res.data.data[0].nac_code
                           });
                         }
                       })
@@ -806,7 +806,7 @@ export default function Nac_Main() {
                             comment: 'ตรวจสอบรายการ',
                           })
                           swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + nac_code
+                            window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + res.data.data[0].nac_code
                           });
                         }
                       })

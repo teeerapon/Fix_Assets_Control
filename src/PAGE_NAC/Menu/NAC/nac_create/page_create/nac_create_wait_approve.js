@@ -700,7 +700,7 @@ export default function Nac_Main() {
                       comment: 'ยืนยันรายการ',
                     })
                     swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                      window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + nac_code
+                      window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + data.data[0].nac_code ?? nac_code
                     });
                   }
                 })
@@ -768,7 +768,7 @@ export default function Nac_Main() {
                       comment: 'ตรวจสอบรายการ',
                     })
                     swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                      window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + nac_code
+                      window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + data.data[0].nac_code ?? nac_code
                     });
                   }
                 })
@@ -865,7 +865,7 @@ export default function Nac_Main() {
 
                     if (resII.data.data && i + 1 === serviceList.length) {
                       swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                        window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + nac_code
+                        window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + data.data[0].nac_code ?? nac_code
                       });
                     }
                   })
@@ -900,7 +900,7 @@ export default function Nac_Main() {
                   .then(async (resII) => {
                     if (resII.data.data && i + 1 === serviceList.length) {
                       swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                        window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + nac_code
+                        window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + data.data[0].nac_code ?? nac_code
                       });
                     }
                   })
