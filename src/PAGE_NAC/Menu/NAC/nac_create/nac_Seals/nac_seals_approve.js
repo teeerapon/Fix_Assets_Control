@@ -572,7 +572,7 @@ export default function Nac_Main() {
                       }
                       await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                         .then((resIII) => {
-                          if (resIII.data.data[0].count_row === serviceList.length && i+1 === serviceList.length) {
+                          if (i+1 === serviceList.length) {
                             swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
                               window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + resIII.data.data[0].nac_code
                             });
@@ -650,7 +650,7 @@ export default function Nac_Main() {
                     }
                     await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                       .then(async (resIII) => {
-                        if (resIII.data.data[0].count_row === serviceList.length && i+1 === serviceList.length) {
+                        if (i+1 === serviceList.length) {
                           await store_FA_SendMail({
                             nac_code
                           })
@@ -735,7 +735,7 @@ export default function Nac_Main() {
                     }
                     await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                       .then(async (resIII) => {
-                        if (resIII.data.data[0].count_row === serviceList.length && i+1 === serviceList.length) {
+                        if (i+1 === serviceList.length) {
                           await store_FA_SendMail({
                             nac_code
                           })
@@ -822,7 +822,7 @@ export default function Nac_Main() {
                     }
                     await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                       .then(async (resIII) => {
-                        if (resIII.data.data[0].count_row === serviceList.length && i+1 === serviceList.length) {
+                        if (i+1 === serviceList.length) {
                           await store_FA_SendMail({
                             nac_code
                           })
@@ -891,7 +891,7 @@ export default function Nac_Main() {
               usercode: (sendHeader[0].nac_status === 12 && sendHeader[0].real_price < price_seals && price_seals === '0') ? 'SYSTEM' : data.UserCode,
               comment: (sendHeader[0].nac_status === 3 && !sendHeader[0].real_price) ? 'อนุมัติรายการ' :
                 (sendHeader[0].nac_status === 3 && sendHeader[0].real_price) ? 'อนุมัติรายการ' :
-                  (sendHeader[0].nac_status === 12 && sendHeader[0].real_price >= price_seals) ? 'กรอกราคาที่ขายได้เรียบร้อย' :
+                  (sendHeader[0].nac_status === 12 && sendHeader[0].real_price >= price_seals) ? `กรอกราคาที่ขายได้เรียบร้อย ${sendHeader[0].real_price} บาท` :
                     (sendHeader[0].nac_status === 12 && sendHeader[0].real_price < price_seals && price_seals !== '0') ? 'กรอกราคาที่ขายได้เรียบร้อย' :
                       (sendHeader[0].nac_status === 12 && sendHeader[0].real_price < price_seals && price_seals === '0') ? 'เนื่องจากราคาขายคือ 0 จึงทำให้ประเภทการเปลี่ยนแปลงเปลี่ยนเป็น ตัดบัญชีทรัพย์สิน' :
                         sendHeader[0].nac_status === 15 ? 'บัญชีตรวจสอบรายการ' :
@@ -1867,10 +1867,10 @@ export default function Nac_Main() {
                                 },
                                 py: '0.45em'
                               }}
-                              disabled={sendHeader[0].nac_status === 12 ? false : true}
+                              disabled={permission_MenuID.indexOf(16) > -1 ||  sendHeader[0].nac_status === 12 ? false : true}
                               value={sendHeader[0].real_price}
                               InputProps={{
-                                disableUnderline: sendHeader[0].nac_status === 12 ? false : true,
+                                disableUnderline:  permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 12 ? false : true,
                                 inputComponent: NumericFormatCustom,
                                 classes: {
                                   input: 'scaled-480px-TableContent text-center',

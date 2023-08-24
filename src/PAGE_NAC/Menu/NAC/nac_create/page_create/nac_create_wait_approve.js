@@ -630,9 +630,9 @@ export default function Nac_Main() {
                       }
                       await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                         .then((resIII) => {
-                          if (resII.data.data[0].count_row === serviceList.length) {
+                          if (i + 1 === serviceList.length) {
                             swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                              window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + resII.data.data[0].nac_code
+                              window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + resIII.data.data[0].nac_code
                             });
                           }
                         })
