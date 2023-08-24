@@ -872,7 +872,7 @@ export default function Nac_Main() {
           })
           setOpenDialogReply(false);
           swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + res.data.data[0].nac_code ?? nac_code
+            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + nac_code
           });
         }
       })

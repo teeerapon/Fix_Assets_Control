@@ -572,7 +572,7 @@ export default function Nac_Main() {
                       }
                       await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                         .then((resIII) => {
-                          if (i+1 === serviceList.length) {
+                          if (i + 1 === serviceList.length) {
                             swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
                               window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + resIII.data.data[0].nac_code
                             });
@@ -650,7 +650,7 @@ export default function Nac_Main() {
                     }
                     await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                       .then(async (resIII) => {
-                        if (i+1 === serviceList.length) {
+                        if (i + 1 === serviceList.length) {
                           await store_FA_SendMail({
                             nac_code
                           })
@@ -735,7 +735,7 @@ export default function Nac_Main() {
                     }
                     await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                       .then(async (resIII) => {
-                        if (i+1 === serviceList.length) {
+                        if (i + 1 === serviceList.length) {
                           await store_FA_SendMail({
                             nac_code
                           })
@@ -822,7 +822,7 @@ export default function Nac_Main() {
                     }
                     await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                       .then(async (resIII) => {
-                        if (i+1 === serviceList.length) {
+                        if (i + 1 === serviceList.length) {
                           await store_FA_SendMail({
                             nac_code
                           })
@@ -909,7 +909,7 @@ export default function Nac_Main() {
                 }, config.headers).then((res) => {
                   if (i + 1 === serviceList.length) {
                     swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                      window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + res.data.data[0].nac_code ?? nac_code
+                      window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + res.data.data[0].nac_code ? res.data.data[0].nac_code : nac_code
                     });
                   }
                 })
@@ -918,12 +918,12 @@ export default function Nac_Main() {
               if (sendHeader[0].nac_status === 12 && sendHeader[0].real_price === '0') {
                 swal("แจ้งเตือน", 'เนื่องจากราคาขายคือ 0 จึงทำให้ประเภทการเปลี่ยนแปลงเปลี่ยนเป็น ตัดบัญชีทรัพย์สิน', "warning").then((value) => {
                   swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                    window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + res.data.data[0].nac_code ?? nac_code
+                    window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + res.data.data[0].nac_code ? res.data.data[0].nac_code : nac_code
                   });
                 });
               } else {
                 swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                  window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + res.data.data[0].nac_code ?? nac_code
+                  window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + res.data.data[0].nac_code ? res.data.data[0].nac_code : nac_code
                 });
               }
             }
@@ -1867,10 +1867,10 @@ export default function Nac_Main() {
                                 },
                                 py: '0.45em'
                               }}
-                              disabled={permission_MenuID.indexOf(16) > -1 ||  sendHeader[0].nac_status === 12 ? false : true}
+                              disabled={permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 12 ? false : true}
                               value={sendHeader[0].real_price}
                               InputProps={{
-                                disableUnderline:  permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 12 ? false : true,
+                                disableUnderline: permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 12 ? false : true,
                                 inputComponent: NumericFormatCustom,
                                 classes: {
                                   input: 'scaled-480px-TableContent text-center',
