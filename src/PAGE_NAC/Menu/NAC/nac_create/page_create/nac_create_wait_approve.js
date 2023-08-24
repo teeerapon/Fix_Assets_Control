@@ -789,6 +789,8 @@ export default function Nac_Main() {
         // || !res.image_1 || !res.image_2
       )[0]) {
       swal("แจ้งเตือน", `เลือก (ตรวจสอบ/รูปภาพ) ทรัพย์สิน`, "error")
+    } else if (!sendHeader[0].des_delivery || !desName || !desLastName) {
+      swal("แจ้งเตือน", 'กรุณาระบุ (ผู้รับมอบ/ชื่อ-นามสกุล ผู้รับมอบ)', "error")
     } else {
       const reqUpdateStatus = {
         usercode: data.UserCode,
