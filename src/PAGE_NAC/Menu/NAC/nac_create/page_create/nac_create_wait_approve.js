@@ -796,8 +796,10 @@ export default function Nac_Main() {
         usercode: data.UserCode,
         nac_code: nac_code,
         nac_status: sendHeader[0].nac_status === 3 ? 4 :
-          ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14) && serviceList.filter((res) => res.statusCheck === 0)[0]) ? 14 :
-            ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14) && serviceList.filter((res) => res.statusCheck === 0)[0]) ? 5 : 6,
+          ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14)
+            && serviceList.filter((res) => res.statusCheck === 0)[0] && serviceList.filter((res) => res.statusCheck === 1)[0]) ? 14 :
+            ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14)
+              && serviceList.filter((res) => res.statusCheck === 1)[0] && !serviceList.filter((res) => res.statusCheck === 0)[0]) ? 5 : 6,
         nac_type: sendHeader[0].nac_type,
         source: sendHeader[0].source,
         sourceDate: sendHeader[0].sourceDate,
