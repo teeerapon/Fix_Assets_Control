@@ -162,8 +162,8 @@ export default function Nac_Main() {
   const [dataAssets, setDataAssets] = React.useState([]);
   const [sourceName, setSourceName] = React.useState();
   const [sourceLastName, setSourceLastName] = React.useState();
-  const [desName, setDesName] = React.useState();
-  const [desLastName, setDesLastName] = React.useState();
+  const [desName, setDesName] = React.useState('');
+  const [desLastName, setDesLastName] = React.useState('');
   const [TooltipImage_1, setTooltipImage_1] = React.useState();
   const [TooltipImage_2, setTooltipImage_2] = React.useState();
   const [approveData, setApproveData] = React.useState();
@@ -690,7 +690,7 @@ export default function Nac_Main() {
               }
               await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
                 .then(async (resII) => {
-                  if (resII.data.data[0].count_row === serviceList.length) {
+                  if (i + 1 === serviceList.length) {
                     await store_FA_SendMail({
                       nac_code
                     })
@@ -758,7 +758,7 @@ export default function Nac_Main() {
               }
               await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
                 .then(async (resII) => {
-                  if (resII.data.data[0].count_row === serviceList.length) {
+                  if (i + 1 === serviceList.length) {
                     await store_FA_SendMail({
                       nac_code
                     })
@@ -809,8 +809,6 @@ export default function Nac_Main() {
         des_approve_date: sendHeader[0].des_approve_date,
         real_price: sendHeader[0].real_price,
         realPrice_Date: sendHeader[0].nac_status === 12 ? dateNow : sendHeader[0].realPrice_Date,
-        verify_by: data.UserCode,
-        verify_date: dateNow,
         source_approve: sendHeader[0].nac_status === 3 ? data.UserCode : sendHeader[0].source_approve,
         source_approve_date: sendHeader[0].nac_status === 3 ? dateNow : sendHeader[0].source_approve_date,
       }
@@ -902,7 +900,7 @@ export default function Nac_Main() {
 
                 await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
                   .then(async (resII) => {
-                    if (resII.data.data[0].count_row === serviceList.length) {
+                    if (i + 1 === serviceList.length) {
                       swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
                         window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + resII.data.data[0].nac_code ?? nac_code
                       });

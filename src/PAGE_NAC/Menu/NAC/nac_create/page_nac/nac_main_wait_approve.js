@@ -162,8 +162,8 @@ export default function Nac_Main() {
   const [dataAssets, setDataAssets] = React.useState([]);
   const [sourceName, setSourceName] = React.useState();
   const [sourceLastName, setSourceLastName] = React.useState();
-  const [desName, setDesName] = React.useState();
-  const [desLastName, setDesLastName] = React.useState();
+  const [desName, setDesName] = React.useState('');
+  const [desLastName, setDesLastName] = React.useState('');
   const [TooltipImage_1, setTooltipImage_1] = React.useState();
   const [approveData, setApproveData] = React.useState();
   const [counter, setCounter] = React.useState(0);
@@ -619,7 +619,7 @@ export default function Nac_Main() {
               }
               await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
                 .then(async (resII) => {
-                  if (resII.data.data[0].count_row === serviceList.length) {
+                  if (i + 1 === serviceList.length) {
                     await store_FA_SendMail({
                       nac_code
                     })
@@ -685,7 +685,7 @@ export default function Nac_Main() {
               }
               await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
                 .then(async (resII) => {
-                  if (resII.data.data[0].count_row === serviceList.length) {
+                  if (i + 1 === serviceList.length) {
                     await store_FA_SendMail({
                       nac_code
                     })
@@ -716,15 +716,15 @@ export default function Nac_Main() {
         // || !res.image_1
       )[0]) {
       swal("แจ้งเตือน", `เลือก (ตรวจสอบ/รูปภาพ) ทรัพย์สิน`, "error")
-    } else if (!sendHeader[0].des_delivery || !desName || !desLastName) {
+    } else if ((!sendHeader[0].des_delivery || !desName || !desLastName) && sendHeader[0].nac_status !== 3) {
       swal("แจ้งเตือน", 'กรุณาระบุ (ผู้รับมอบ/ชื่อ-นามสกุล ผู้รับมอบ)', "error")
     } else {
       const reqUpdateStatus = {
         usercode: data.UserCode,
         nac_code: nac_code,
         nac_status: sendHeader[0].nac_status === 3 ? 4 :
-          ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14) 
-          && serviceList.filter((res) => res.statusCheck === 0)[0] && serviceList.filter((res) => res.statusCheck === 1)[0]) ? 14 :
+          ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14)
+            && serviceList.filter((res) => res.statusCheck === 0)[0] && serviceList.filter((res) => res.statusCheck === 1)[0]) ? 14 :
             ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14)
               && serviceList.filter((res) => res.statusCheck === 1)[0] && !serviceList.filter((res) => res.statusCheck === 0)[0]) ? 5 : 6,
         nac_type: sendHeader[0].nac_type,
@@ -794,7 +794,7 @@ export default function Nac_Main() {
                       nac_status: res.data.data[0].nac_status,
                     }, config.headers)
 
-                    if (resII.data.data[0].count_row === serviceList.length) {
+                    if (i + 1 === serviceList.length) {
                       swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
                         window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + resII.data.data[0].nac_code
                       });
@@ -829,7 +829,7 @@ export default function Nac_Main() {
 
                 await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
                   .then(async (resII) => {
-                    if (resII.data.data[0].count_row === serviceList.length) {
+                    if (i + 1 === serviceList.length) {
                       swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
                         window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + resII.data.data[0].nac_code
                       });

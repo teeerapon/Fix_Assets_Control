@@ -116,8 +116,8 @@ export default function Nac_Main() {
   const [dataAssets, setDataAssets] = React.useState([]);
   const [sourceName, setSourceName] = React.useState();
   const [sourceLastName, setSourceLastName] = React.useState();
-  const [desName, setDesName] = React.useState();
-  const [desLastName, setDesLastName] = React.useState();
+  const [desName, setDesName] = React.useState('');
+  const [desLastName, setDesLastName] = React.useState('');
 
   const [sendHeader, setSendHeader] = React.useState([{
     usercode: data.UserCode,
