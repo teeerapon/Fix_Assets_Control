@@ -860,7 +860,6 @@ export default function Nac_Main() {
         nac_status:
           (sendHeader[0].nac_status === 3 && !sendHeader[0].real_price) ? 12 :
             (sendHeader[0].nac_status === 3 && sendHeader[0].real_price) ? 15 :
-              sendHeader[0].nac_status === 4 ? 5 :
                 (sendHeader[0].nac_status === 12 && sendHeader[0].real_price >= price_seals) ? 15 :
                   (sendHeader[0].nac_status === 12 && sendHeader[0].real_price < price_seals) ? 99 :
                     sendHeader[0].nac_status === 15 ? 13 :
