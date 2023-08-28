@@ -1982,7 +1982,9 @@ export default function Nac_Main() {
                           useFlexGap
                           flexWrap="wrap"
                         >
-                          {sendHeader[0].nac_status !== 6 ? (
+                          {(sendHeader[0].nac_status === 1 ||
+                            permission_MenuID.indexOf(16) >= 0
+                          ) ? (
                             <Stack>
                               <Button
                                 variant="contained"
@@ -1995,8 +1997,9 @@ export default function Nac_Main() {
                               </Button>
                             </Stack>
                           ) : null}
-                          {sendHeader[0].nac_status === 2 ||
-                            sendHeader[0].nac_status === 3 ? (
+                          {(sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
+                            (sendHeader[0].nac_status === 2 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
+                            (permission_MenuID.indexOf(10) >= 0) ? (
                             <Stack>
                               <Button
                                 variant="contained"
@@ -2021,7 +2024,8 @@ export default function Nac_Main() {
                                 Submit
                               </Button>
                             </Stack>
-                          ) : sendHeader[0].nac_status === 11 ? (
+                          ) : (sendHeader[0].nac_status === 11 && permission_MenuID.indexOf(11) >= 0 ||
+                            permission_MenuID.indexOf(10) >= 0) ? (
                             <Stack>
                               <Button
                                 variant="contained"
@@ -2032,7 +2036,8 @@ export default function Nac_Main() {
                                 Submit
                               </Button>
                             </Stack>
-                          ) : sendHeader[0].nac_status === 2 ? (
+                          ) : (sendHeader[0].nac_status === 2 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
+                            (permission_MenuID.indexOf(10) >= 0) ? (
                             <Stack>
                               <Button
                                 variant="contained"
@@ -2044,10 +2049,11 @@ export default function Nac_Main() {
                                 Accept
                               </Button>
                             </Stack>
-                          ) : sendHeader[0].nac_status === 3 ||
-                            sendHeader[0].nac_status === 4 ||
-                            sendHeader[0].nac_status === 14 ||
-                            sendHeader[0].nac_status === 5 ? (
+                          ) : (sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
+                            (sendHeader[0].nac_status === 4 && sendHeader[0].des_delivery === data.UserCode) ||
+                            (sendHeader[0].nac_status === 14 && sendHeader[0].des_delivery === data.UserCode) ||
+                            (sendHeader[0].nac_status === 5 && permission_MenuID.indexOf(11) >= 0) ||
+                            (permission_MenuID.indexOf(10) >= 0) ? (
                             <Stack>
                               <Button
                                 variant="contained"
@@ -2061,8 +2067,9 @@ export default function Nac_Main() {
                             </Stack>
                           )
                             : null}
-                          {sendHeader[0].nac_status === 2 ||
-                            sendHeader[0].nac_status === 3 ? (
+                          {(sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
+                            (sendHeader[0].nac_status === 2 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
+                            (permission_MenuID.indexOf(10) >= 0) ? (
                             <Stack>
                               <Button
                                 variant="contained"

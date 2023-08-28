@@ -554,7 +554,7 @@ export default function Nac_Main() {
                       }
                       await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                         .then((resIII) => {
-                          if (i+1 === serviceList.length) {
+                          if (i + 1 === serviceList.length) {
                             swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
                               window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + resIII.data.data[0].nac_code
                             });
@@ -630,7 +630,7 @@ export default function Nac_Main() {
                     }
                     await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                       .then(async (resIII) => {
-                        if (i+1 === serviceList.length) {
+                        if (i + 1 === serviceList.length) {
                           await store_FA_SendMail({
                             nac_code
                           })
@@ -712,7 +712,7 @@ export default function Nac_Main() {
                     }
                     await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                       .then(async (resIII) => {
-                        if (i+1 === serviceList.length) {
+                        if (i + 1 === serviceList.length) {
                           await store_FA_SendMail({
                             nac_code
                           })
@@ -796,7 +796,7 @@ export default function Nac_Main() {
                     }
                     await Axios.post(config.http + '/store_FA_control_updateDTL_seals', detail_reqII, config.headers)
                       .then(async (resIII) => {
-                        if (i+1 === serviceList.length) {
+                        if (i + 1 === serviceList.length) {
                           await store_FA_SendMail({
                             nac_code
                           })
@@ -840,8 +840,8 @@ export default function Nac_Main() {
         des_approve_date: sendHeader[0].des_approve_date,
         real_price: sendHeader[0].real_price,
         realPrice_Date: sendHeader[0].nac_status === 12 ? dateNow : sendHeader[0].realPrice_Date,
-        verify_by: data.UserCode,
-        verify_date: dateNow,
+        verify_by: sendHeader[0].verify_by_userid,
+        verify_date: sendHeader[0].verify_date,
         source_approve: sendHeader[0].nac_status === 3 ? data.UserCode : sendHeader[0].source_approve,
         source_approve_date: sendHeader[0].nac_status === 3 ? dateNow : sendHeader[0].source_approve_date,
       }
@@ -1833,7 +1833,9 @@ export default function Nac_Main() {
                           spacing={2}
 
                         >
-                          {sendHeader[0].nac_status !== 6 ? (
+                          {(sendHeader[0].nac_status === 1 ||
+                            permission_MenuID.indexOf(16) >= 0
+                          ) ? (
                             <Stack>
                               <Button
                                 variant="contained"
@@ -1846,23 +1848,25 @@ export default function Nac_Main() {
                               </Button>
                             </Stack>
                           ) : null}
-                          {sendHeader[0].nac_status === 2 ||
-                            sendHeader[0].nac_status === 3 ||
-                            sendHeader[0].nac_status === 5 ||
-                            sendHeader[0].nac_status === 11 ? (
-                            <Stack>
-                              <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={handleOpenDialogReply}
-                                className='scaled-480px-TableHeader'
+                          {
+                            (sendHeader[0].nac_status === 2 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
+                              (sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
+                              (sendHeader[0].nac_status === 5 && permission_MenuID.indexOf(11) >= 0) ||
+                              (sendHeader[0].nac_status === 11 && permission_MenuID.indexOf(11) >= 0) ||
+                              (permission_MenuID.indexOf(10) >= 0) ? (
+                              <Stack>
+                                <Button
+                                  variant="contained"
+                                  color="secondary"
+                                  onClick={handleOpenDialogReply}
+                                  className='scaled-480px-TableHeader'
 
-                              >
-                                Reply
-                              </Button>
-                            </Stack>
-                          )
-                            : null}
+                                >
+                                  Reply
+                                </Button>
+                              </Stack>
+                            )
+                              : null}
                           {sendHeader[0].nac_status === 1 ? (
                             <Stack>
                               <Button
@@ -1874,7 +1878,8 @@ export default function Nac_Main() {
                                 Submit
                               </Button>
                             </Stack>
-                          ) : sendHeader[0].nac_status === 11 ? (
+                          ) : (sendHeader[0].nac_status === 11 && permission_MenuID.indexOf(11) >= 0) ||
+                            (permission_MenuID.indexOf(10) >= 0) ? (
                             <Stack>
                               <Button
                                 variant="contained"
@@ -1885,7 +1890,8 @@ export default function Nac_Main() {
                                 Submit
                               </Button>
                             </Stack>
-                          ) : sendHeader[0].nac_status === 2 ? (
+                          ) : (sendHeader[0].nac_status === 2 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
+                            (permission_MenuID.indexOf(10) >= 0) ? (
                             <Stack>
                               <Button
                                 variant="contained"
@@ -1897,8 +1903,9 @@ export default function Nac_Main() {
                                 Accept
                               </Button>
                             </Stack>
-                          ) : sendHeader[0].nac_status === 3 ||
-                            sendHeader[0].nac_status === 5 ? (
+                          ) : (sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
+                            (sendHeader[0].nac_status === 5 && permission_MenuID.indexOf(11) >= 0) ||
+                            (permission_MenuID.indexOf(10) >= 0) ? (
                             <Stack>
                               <Button
                                 variant="contained"
@@ -1912,8 +1919,9 @@ export default function Nac_Main() {
                             </Stack>
                           )
                             : null}
-                          {sendHeader[0].nac_status === 2 ||
-                            sendHeader[0].nac_status === 3 ? (
+                          {(sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
+                            (sendHeader[0].nac_status === 2 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
+                            (permission_MenuID.indexOf(10) >= 0) ? (
                             <Stack>
                               <Button
                                 variant="contained"
