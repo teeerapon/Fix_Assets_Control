@@ -682,7 +682,7 @@ export default function Nac_Main() {
     }
     else if ((serviceList.filter((res) => !res.bookValue)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาระบุ Book Value', "error")
-    } else if (approveData.filter((res) => res.workflowlevel === 0 && data.UserCode === res.approverid)[0] || permission_MenuID.indexOf(9) > -1) {
+    } else if (approveData.filter((res) => res.workflowlevel !== 0 && data.UserCode === res.approverid)[0] || permission_MenuID.indexOf(9) > -1) {
       // รอใส่เงือนไข
       const reqUpdateStatus = {
         usercode: data.UserCode,
