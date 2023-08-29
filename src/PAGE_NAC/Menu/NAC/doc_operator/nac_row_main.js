@@ -26,8 +26,14 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LinearProgress from '@mui/material/LinearProgress';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
 import '../../../../App.css'
 import config from '../../../../config'
+
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
 
 const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(0.8),
@@ -494,30 +500,34 @@ export default function History_of_assets() {
   }
 
   const columns = [
-    { field: 'nac_code', headerName: 'เลขที่เอกสาร', headerClassName: 'super-app-theme--header', minWidth: 130, flex: 1 },
+    {
+      field: 'nac_code',
+      headerName: 'เลขที่เอกสาร',
+      headerClassName: 'super-app-theme--header',
+      minWidth: 130,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            <Stack direction="row" spacing={2}>
+              <Stack>
+                {params.row.nac_code}
+              </Stack>
+              <Stack>
+                {
+                  params.row.source_approve_userid || params.row.verify_by_userid || params.row.nac_status === 3 ?
+                    <CheckCircleIcon fontSize="small" color={params.row.source_approve_userid ? "success" : "primary"} />
+                    : params.row.nac_status === 2 ?
+                      <ErrorIcon fontSize="small" color="warning" />
+                      : null
+                }
+              </Stack>
+            </Stack>
+          </React.Fragment>
+        )
+      }
+    },
     { field: 'name', headerName: 'หัวข้อรายการ', headerClassName: 'super-app-theme--header', minWidth: 170, flex: 1 },
-    // {
-    //   field: 'create_by',
-    //   headerName: 'ผู้ทำรายการ',
-    //   headerClassName: 'super-app-theme--header',
-    //   width: 120,
-    //   headerAlign: 'center',
-    //   align: 'center',
-    //   renderCell: (params) => {
-    //     return (
-    //       <React.Fragment>
-    //         <Grid container spacing={1}>
-    //           <Grid item xs={4}>
-    //             <AccountBoxIcon />
-    //           </Grid>
-    //           <Grid item xs={8}>
-    //             {params.row.create_by}
-    //           </Grid>
-    //         </Grid>
-    //       </React.Fragment>
-    //     )
-    //   }
-    // },
     {
       field: 'create_date',
       headerName: 'วันที่สร้างเอกสาร',
@@ -636,6 +646,16 @@ export default function History_of_assets() {
       headerAlign: 'center',
       minWidth: 130,
       flex: 1,
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            {
+              (params.row.nac_status === 4 || params.row.nac_status === 14) ?
+                params.row.des_userid : (params.row.nac_status === 12) ? params.row.source_userid : params.row.userid_approver
+            }
+          </React.Fragment>
+        )
+      }
     },
     {
       field: 'action',
@@ -708,67 +728,103 @@ export default function History_of_assets() {
                 width: '100%',
               }}
             >
-              <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  size='small'
-                  sx={{ flexGrow: 1, padding: 1 }}
-                  value={filterNAC.nac_code}
-                  onChange={(e) => filteringNAC_Code(e)}
-                  options={selectNAC ? selectNAC.map((res) => res.nac_code) : []}
-                  renderInput={(params) => <TextField label="เลขที่ NAC" {...params} />}
-                />
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  size='small'
-                  sx={{ flexGrow: 1, padding: 1 }}
-                  value={filterNAC.name}
-                  onChange={(e) => filteringNAC_Headers(e)}
-                  options={nacHeaders}
-                  renderInput={(params) => <TextField label="หัวข้อรายการ" {...params} />}
-                />
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  size='small'
-                  sx={{ flexGrow: 1, padding: 1 }}
-                  value={filterNAC.source_userid}
-                  onChange={(e) => filteringNAC_Source_userid(e)}
-                  options={
-                    selectNAC ? selectNAC.map((res) => res.source_userid).filter(x => !!x)
-                      .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
-                  }
-                  renderInput={(params) => <TextField label="ผู้ส่งมอบ" {...params} />}
-                />
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  size='small'
-                  sx={{ flexGrow: 1, padding: 1 }}
-                  value={filterNAC.des_userid}
-                  onChange={(e) => filteringNAC_Des_userid(e)}
-                  options={
-                    selectNAC ? selectNAC.map((res) => res.des_userid).filter(x => !!x)
-                      .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
-                  }
-                  renderInput={(params) => <TextField label="ผู้รับมอบ" {...params} />}
-                />
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  size='small'
-                  sx={{ flexGrow: 1, padding: 1 }}
-                  value={filterNAC.status_name}
-                  onChange={(e) => filteringNAC_statusName(e)}
-                  options={nacStatusName.reduce((x, y) => x.includes(y) ? x : [...x, y], [])}
-                  renderInput={(params) => <TextField label="สถานะ" {...params} />}
-                />
-              </Stack>
+              <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="flex-start"
+                spacing={{ xs: 1, sm: 2 }}
+              >
+                <Grid item xs>
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    size='small'
+                    sx={{ flexGrow: 1, padding: 1 }}
+                    value={filterNAC.nac_code}
+                    onChange={(e) => filteringNAC_Code(e)}
+                    options={selectNAC ? selectNAC.map((res) => res.nac_code) : []}
+                    renderInput={(params) => <TextField label="เลขที่ NAC" {...params} />}
+                  />
+                </Grid>
+                <Grid item xs>
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    size='small'
+                    sx={{ flexGrow: 1, padding: 1 }}
+                    value={filterNAC.name}
+                    onChange={(e) => filteringNAC_Headers(e)}
+                    options={nacHeaders}
+                    renderInput={(params) => <TextField label="หัวข้อรายการ" {...params} />}
+                  />
+                </Grid>
+                <Grid item xs>
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    size='small'
+                    sx={{ flexGrow: 1, padding: 1 }}
+                    value={filterNAC.source_userid}
+                    onChange={(e) => filteringNAC_Source_userid(e)}
+                    options={
+                      selectNAC ? selectNAC.map((res) => res.source_userid).filter(x => !!x)
+                        .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
+                    }
+                    renderInput={(params) => <TextField label="ผู้ส่งมอบ" {...params} />}
+                  />
+                </Grid>
+                <Grid item xs>
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    size='small'
+                    sx={{ flexGrow: 1, padding: 1 }}
+                    value={filterNAC.des_userid}
+                    onChange={(e) => filteringNAC_Des_userid(e)}
+                    options={
+                      selectNAC ? selectNAC.map((res) => res.des_userid).filter(x => !!x)
+                        .reduce((x, y) => x.includes(y) ? x : [...x, y], []) : []
+                    }
+                    renderInput={(params) => <TextField label="ผู้รับมอบ" {...params} />}
+                  />
+                </Grid>
+                <Grid item xs>
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    size='small'
+                    sx={{ flexGrow: 1, padding: 1 }}
+                    value={filterNAC.status_name}
+                    onChange={(e) => filteringNAC_statusName(e)}
+                    options={nacStatusName.reduce((x, y) => x.includes(y) ? x : [...x, y], [])}
+                    renderInput={(params) => <TextField label="สถานะ" {...params} />}
+                  />
+                </Grid>
+              </Grid>
+              <Box
+                sx={{
+                  p: 1,
+                  maxWidth: 500,
+                  flexGrow: 1,
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+                }}
+              >
+                <Stack direction="row" spacing={2}>
+                  <Typography sx={{ mb: 0.5 }} color="text.secondary">
+                    <ErrorIcon fontSize="small" color="warning" />รอตรวจสอบ
+                  </Typography>
+                  <Typography sx={{ mb: 0.5 }} color="text.secondary">
+                    <CheckCircleIcon fontSize="small" color="primary" />ผ่านการตรวจสอบแล้ว
+                  </Typography>
+                  <Typography sx={{ mb: 0.5 }} color="text.secondary">
+                    <CheckCircleIcon fontSize="small" color="success" />ผ่านการอุนมัติแล้ว
+                  </Typography>
+                </Stack>
+              </Box>
               <StripedDataGrid
                 sx={{
-                  mt: 3,
                   pl: 2,
                   pr: 2,
                   pt: 2,
@@ -837,7 +893,7 @@ export default function History_of_assets() {
             </Dialog>
           </Container>
         </Box>
-      </AnimatedPage>
-    </React.Fragment>
+      </AnimatedPage >
+    </React.Fragment >
   );
 }
