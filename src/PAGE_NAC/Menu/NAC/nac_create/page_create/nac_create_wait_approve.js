@@ -1997,7 +1997,8 @@ export default function Nac_Main() {
                               </Button>
                             </Stack>
                           ) : null}
-                          {((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14) && permission_MenuID.indexOf(10) >= 0) ? (
+                          {((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14 || sendHeader[0].nac_status === 5)
+                            && permission_MenuID.indexOf(10) >= 0) ? (
                             <Stack>
                               <Button
                                 variant="contained"

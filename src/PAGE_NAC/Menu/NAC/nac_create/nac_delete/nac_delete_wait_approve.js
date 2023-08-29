@@ -1852,8 +1852,9 @@ export default function Nac_Main() {
                             (sendHeader[0].nac_status === 2 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
                               (sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
                               (sendHeader[0].nac_status === 5 && permission_MenuID.indexOf(11) >= 0) ||
+                              (sendHeader[0].nac_status === 15 && permission_MenuID.indexOf(11) >= 0) ||
                               (sendHeader[0].nac_status === 11 && permission_MenuID.indexOf(11) >= 0) ||
-                              ((sendHeader[0].nac_status === 2 || sendHeader[0].nac_status === 3 || sendHeader[0].nac_status === 5 || sendHeader[0].nac_status === 11)
+                              ((sendHeader[0].nac_status === 2 || sendHeader[0].nac_status === 3 || sendHeader[0].nac_status === 15 || sendHeader[0].nac_status === 11|| sendHeader[0].nac_status === 5)
                                 && permission_MenuID.indexOf(10) >= 0) ? (
                               <Stack>
                                 <Button
