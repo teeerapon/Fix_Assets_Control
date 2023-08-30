@@ -869,7 +869,7 @@ export default function Nac_Main() {
                   if (i + 1 === serviceList.length) {
                     swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
                       const pathLink = res.data.data[0].nac_code ? res.data.data[0].nac_code : nac_code
-                      window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + pathLink
+                      window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + pathLink
                     });
                   }
                 })
@@ -885,7 +885,7 @@ export default function Nac_Main() {
               } else {
                 swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
                   const pathLink = res.data.data[0].nac_code ? res.data.data[0].nac_code : nac_code
-                  window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + pathLink
+                  window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + pathLink
                 });
               }
             }

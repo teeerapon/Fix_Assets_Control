@@ -904,7 +904,7 @@ export default function Nac_Main() {
                 })
               }
             } else {
-              if (sendHeader[0].nac_status === 12 && sendHeader[0].real_price === '0') {
+              if (sendHeader[0].nac_status === 12 && (sendHeader[0].real_price === '0' || sendHeader[0].real_price === 0)) {
                 swal("แจ้งเตือน", 'เนื่องจากราคาขายคือ 0 จึงทำให้ประเภทการเปลี่ยนแปลงเปลี่ยนเป็น ตัดบัญชีทรัพย์สิน', "warning").then((value) => {
                   swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
                     const pathLink = res.data.data[0].nac_code ? res.data.data[0].nac_code : nac_code
@@ -1692,7 +1692,7 @@ export default function Nac_Main() {
                                   input: 'scaled-480px-TableContent text-center',
                                 },
                               }}
-                              value={res.bookValue === null ? '' : res.bookValue}
+                              value={res.bookValue ?? ''}
                               variant="standard"
                             />
                           </StyledTableCell>
