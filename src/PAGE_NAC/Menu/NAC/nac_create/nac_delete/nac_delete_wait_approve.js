@@ -826,7 +826,7 @@ export default function Nac_Main() {
 
   const handleSubmit_Form = async () => {
 
-    if (sendHeader[0].nac_status === 12 && sendHeader[0].real_price !== null) {
+    if (sendHeader[0].nac_status === 12 && sendHeader[0].real_price === null) {
       swal("แจ้งเตือน", `กรุณาระบุ (ราคาขายจริง/วันที่ได้รับเงิน)`, "error")
     } else if ((sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode && res.limitamount >= price_seals)[0])
       || (sendHeader[0].nac_status === 3 && permission_MenuID.indexOf(10) > -1)) {
