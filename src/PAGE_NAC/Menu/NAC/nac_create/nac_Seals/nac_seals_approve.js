@@ -850,21 +850,15 @@ export default function Nac_Main() {
     }
   }
 
-  const handleSubmit_Form = async () => {
-    if (sendHeader[0].nac_status === 12 && sendHeader[0].real_price === null) {
-      swal("แจ้งเตือน", `กรุณาระบุ (ราคาขายจริง/วันที่ได้รับเงิน)`, "error")
-    } else if ((sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode && res.limitamount >= sendHeader[0].sumPrice)[0])
+  const handle_approve_forms = async () => {
+    if ((sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode && res.limitamount >= sendHeader[0].sumPrice)[0])
       || (sendHeader[0].nac_status === 3 && permission_MenuID.indexOf(10) > -1)) {
       const reqUpdateStatus = {
         usercode: data.UserCode,
         nac_code: nac_code,
         nac_status:
           (sendHeader[0].nac_status === 3 && !sendHeader[0].real_price) ? 12 :
-            (sendHeader[0].nac_status === 3 && sendHeader[0].real_price) ? 15 :
-              (sendHeader[0].nac_status === 12 && sendHeader[0].real_price >= price_seals) ? 15 :
-                (sendHeader[0].nac_status === 12 && sendHeader[0].real_price < price_seals) ? 99 :
-                  sendHeader[0].nac_status === 15 ? 13 :
-                    sendHeader[0].nac_status === 13 ? 6 : null,
+            (sendHeader[0].nac_status === 3 && sendHeader[0].real_price) ? 15 : null,
         nac_type: sendHeader[0].nac_type,
         source: sendHeader[0].source,
         sourceDate: sendHeader[0].sourceDate,
@@ -873,11 +867,11 @@ export default function Nac_Main() {
         des_approve: sendHeader[0].des_approve,
         des_approve_date: sendHeader[0].des_approve_date,
         real_price: sendHeader[0].real_price,
-        realPrice_Date: sendHeader[0].nac_status === 12 ? dateNow : sendHeader[0].realPrice_Date,
+        realPrice_Date: sendHeader[0].realPrice_Date,
         verify_by: sendHeader[0].verify_by_userid,
         verify_date: sendHeader[0].verify_date,
-        source_approve: sendHeader[0].nac_status === 3 ? data.UserCode : sendHeader[0].source_approve,
-        source_approve_date: sendHeader[0].nac_status === 3 ? dateNow : sendHeader[0].source_approve_date,
+        source_approve: data.UserCode,
+        source_approve_date: dateNow
       }
       await Axios.post(config.http + '/store_FA_control_updateStatus', reqUpdateStatus, config.headers)
         .then(async (res) => {
@@ -887,14 +881,9 @@ export default function Nac_Main() {
             })
             await store_FA_control_comment({
               nac_code,
-              usercode: (sendHeader[0].nac_status === 12 && sendHeader[0].real_price < price_seals && price_seals === '0') ? 'SYSTEM' : data.UserCode,
+              usercode: data.UserCode,
               comment: (sendHeader[0].nac_status === 3 && !sendHeader[0].real_price) ? 'อนุมัติรายการ' :
-                (sendHeader[0].nac_status === 3 && sendHeader[0].real_price) ? 'อนุมัติรายการ' :
-                  (sendHeader[0].nac_status === 12 && sendHeader[0].real_price >= price_seals) ? `กรอกราคาที่ขายได้เรียบร้อย ${sendHeader[0].real_price} บาท` :
-                    (sendHeader[0].nac_status === 12 && sendHeader[0].real_price < price_seals && price_seals !== '0') ? 'กรอกราคาที่ขายได้เรียบร้อย' :
-                      (sendHeader[0].nac_status === 12 && sendHeader[0].real_price < price_seals && price_seals === '0') ? 'เนื่องจากราคาขายคือ 0 จึงทำให้ประเภทการเปลี่ยนแปลงเปลี่ยนเป็น ตัดบัญชีทรัพย์สิน' :
-                        sendHeader[0].nac_status === 15 ? 'บัญชีตรวจสอบรายการ' :
-                          sendHeader[0].nac_status === 13 ? 'ปิดรายการ' : null,
+                (sendHeader[0].nac_status === 3 && sendHeader[0].real_price) ? 'อนุมัติรายการ' : null,
             })
             if (res.data.data[0].nac_status === 6) {
               for (var i = 0; i < serviceList.length; i++) {
@@ -933,6 +922,86 @@ export default function Nac_Main() {
         })
     } else {
       swal("แจ้งเตือน", `ถูกจำกัดสิทธิ์`, "error")
+    }
+  }
+
+  const handleSubmit_Form = async () => {
+
+    if (sendHeader[0].nac_status === 12 && sendHeader[0].real_price === null) {
+      swal("แจ้งเตือน", `กรุณาระบุ (ราคาขายจริง/วันที่ได้รับเงิน)`, "error")
+    } else {
+      const reqUpdateStatus = {
+        usercode: data.UserCode,
+        nac_code: nac_code,
+        nac_status:
+          (sendHeader[0].nac_status === 12 && ((sendHeader[0].real_price < price_seals) || (sendHeader[0].real_price === 0 && price_seals === 0))) ? 99 :
+            (sendHeader[0].nac_status === 12 && sendHeader[0].real_price >= price_seals) ? 15 :
+              sendHeader[0].nac_status === 15 ? 13 :
+                sendHeader[0].nac_status === 13 ? 6 : null,
+        nac_type: sendHeader[0].nac_type,
+        source: sendHeader[0].source,
+        sourceDate: sendHeader[0].sourceDate,
+        des_delivery: sendHeader[0].des_delivery,
+        des_deliveryDate: sendHeader[0].des_deliveryDate,
+        des_approve: sendHeader[0].des_approve,
+        des_approve_date: sendHeader[0].des_approve_date,
+        real_price: sendHeader[0].real_price,
+        realPrice_Date: sendHeader[0].nac_status === 12 ? dateNow : sendHeader[0].realPrice_Date,
+        verify_by: sendHeader[0].verify_by_userid,
+        verify_date: sendHeader[0].verify_date,
+        source_approve: sendHeader[0].source_approve,
+        source_approve_date: sendHeader[0].source_approve_date,
+      }
+      await Axios.post(config.http + '/store_FA_control_updateStatus', reqUpdateStatus, config.headers)
+        .then(async (res) => {
+          if (res.data) {
+            await store_FA_SendMail({
+              nac_code
+            })
+            await store_FA_control_comment({
+              nac_code,
+              usercode: (sendHeader[0].nac_status === 12 && sendHeader[0].real_price < price_seals && price_seals === '0') ? 'SYSTEM' : data.UserCode,
+              comment: (sendHeader[0].nac_status === 12 && sendHeader[0].real_price >= price_seals) ? `กรอกราคาที่ขายได้เรียบร้อย ${sendHeader[0].real_price} บาท` :
+                (sendHeader[0].nac_status === 12 && sendHeader[0].real_price < price_seals && price_seals !== '0') ? 'กรอกราคาที่ขายได้เรียบร้อย' :
+                  (sendHeader[0].nac_status === 12 && sendHeader[0].real_price < price_seals && price_seals === '0') ? 'เนื่องจากราคาขายคือ 0 จึงทำให้ประเภทการเปลี่ยนแปลงเปลี่ยนเป็น ตัดบัญชีทรัพย์สิน' :
+                    sendHeader[0].nac_status === 15 ? 'บัญชีตรวจสอบรายการ' :
+                      sendHeader[0].nac_status === 13 ? 'ปิดรายการ' : null,
+            })
+            if (res.data.data[0].nac_status === 6) {
+              for (var i = 0; i < serviceList.length; i++) {
+                await Axios.post(config.http + '/store_FA_control_upadate_table', {
+                  nac_code,
+                  usercode: data.UserCode,
+                  nacdtl_assetsCode: serviceList[i].assetsCode,
+                  asset_id: serviceList[i].asset_id,
+                  nac_type: sendHeader[0].nac_type,
+                  nac_status: res.data.data[0].nac_status,
+                }, config.headers).then((res) => {
+                  if (i + 1 === serviceList.length) {
+                    swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
+                      const pathLink = res.data.data[0].nac_code ? res.data.data[0].nac_code : nac_code
+                      window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + pathLink
+                    });
+                  }
+                })
+              }
+            } else {
+              if (sendHeader[0].nac_status === 12 && (sendHeader[0].real_price === '0' || sendHeader[0].real_price === 0)) {
+                swal("แจ้งเตือน", 'เนื่องจากราคาขายคือ 0 จึงทำให้ประเภทการเปลี่ยนแปลงเปลี่ยนเป็น ตัดบัญชีทรัพย์สิน', "warning").then((value) => {
+                  swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
+                    const pathLink = res.data.data[0].nac_code ? res.data.data[0].nac_code : nac_code
+                    window.location.href = '/NAC_ROW/NAC_DELETE_WAIT_APPROVE?' + pathLink
+                  });
+                });
+              } else {
+                swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
+                  const pathLink = res.data.data[0].nac_code ? res.data.data[0].nac_code : nac_code
+                  window.location.href = '/NAC_ROW/NAC_SEALS_APPROVE?' + pathLink
+                });
+              }
+            }
+          }
+        })
     }
   }
 
@@ -2063,7 +2132,7 @@ export default function Nac_Main() {
                                   <Button
                                     variant="contained"
                                     color={sendHeader[0].nac_status === 3 ? "success" : "primary"}
-                                    onClick={handleSubmit_Form}
+                                    onClick={sendHeader[0].nac_status === 3 ? handle_approve_forms : handleSubmit_Form}
                                     className='scaled-480px-TableHeader'
                                     sx={{ m: 1 }}
                                   >
