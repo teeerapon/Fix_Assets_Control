@@ -559,7 +559,7 @@ export default function Nac_Main() {
             nacdtl_assetsPrice: list[index].price,
             asset_id: list[index].asset_id,
             image_1: list[index].image_1,
-            image_2: list[index]['image_2'],
+            image_2: list[index].image_2,
           }
           await Axios.post(config.http + "/store_FA_control_update_DTL", req, config.headers)
         });
@@ -589,7 +589,7 @@ export default function Nac_Main() {
       nacdtl_assetsPrice: list[index].price,
       asset_id: list[index].asset_id,
       image_1: list[index].image_1,
-      image_2: list[index]['image_2'],
+      image_2: list[index].image_2,
     }
     await Axios.post(config.http + "/store_FA_control_update_DTL", req, config.headers)
   }
@@ -612,7 +612,7 @@ export default function Nac_Main() {
                   nacdtl_assetsPrice: serviceList[i].price,
                   asset_id: !serviceList[i].asset_id ? 0 : serviceList[i].asset_id,
                   image_1: serviceList[i].image_1,
-                  image_2: null,
+                  image_2: serviceList[i].image_2,
                 }
                 await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
                   .then(async (resII) => {
@@ -782,7 +782,7 @@ export default function Nac_Main() {
 
   const handleSubmit_Form = async () => {
 
-    if ((sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode && res.limitamount >= sendHeader[0].sumPrice)[0]) || permission_MenuID.indexOf(10) <= -1) {
+    if ((sendHeader[0].nac_status === 3 && !approveData.filter((res) => res.approverid === data.UserCode && res.limitamount >= sendHeader[0].sumPrice)[0])) {
       swal("แจ้งเตือน", `ถูกจำกัดสิทธิ์`, "error")
     } if ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14)
       && serviceList.filter((res) => res.statusCheck === 0
