@@ -632,7 +632,8 @@ export default function Nac_Main() {
                         .then((resIII) => {
                           if (i + 1 === serviceList.length) {
                             swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                              window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + resIII.data.data[0].nac_code
+                              const pathLink = resIII.data.data[0].nac_code ? resIII.data.data[0].nac_code : nac_code
+                              window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + pathLink
                             });
                           }
                         })
@@ -700,7 +701,8 @@ export default function Nac_Main() {
                       comment: 'ยืนยันรายการ',
                     })
                     swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                      window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + resII.data.data[0].nac_code ?? nac_code
+                      const pathLink = resII.data.data[0].nac_code ? resII.data.data[0].nac_code : nac_code
+                      window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + pathLink
                     });
                   }
                 })
@@ -768,7 +770,8 @@ export default function Nac_Main() {
                       comment: 'ตรวจสอบรายการ',
                     })
                     swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                      window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + resII.data.data[0].nac_code ?? nac_code
+                      const pathLink = resII.data.data[0].nac_code ? resII.data.data[0].nac_code : nac_code
+                      window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + pathLink
                     });
                   }
                 })
@@ -867,7 +870,8 @@ export default function Nac_Main() {
 
                     if (resII.data.data && i + 1 === serviceList.length) {
                       swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                        window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + data.data[0].nac_code ?? nac_code
+                        const pathLink = resII.data.data[0].nac_code ? resII.data.data[0].nac_code : nac_code
+                        window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + pathLink
                       });
                     }
                   })
@@ -902,7 +906,8 @@ export default function Nac_Main() {
                   .then(async (resII) => {
                     if (i + 1 === serviceList.length) {
                       swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                        window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + resII.data.data[0].nac_code ?? nac_code
+                        const pathLink = resII.data.data[0].nac_code ? resII.data.data[0].nac_code : nac_code
+                        window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + pathLink
                       });
                     }
                   })
@@ -945,7 +950,8 @@ export default function Nac_Main() {
           })
           setOpenDialogReply(false);
           swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + res.data.data[0].nac_code
+            const pathLink = res.data.data[0].nac_code ? res.data.data[0].nac_code : nac_code
+            window.location.href = '/NAC_ROW/NAC_CREATE_NEW_WAIT_APPROVE?' + pathLink
           });
         }
       })

@@ -563,7 +563,8 @@ export default function Nac_Main() {
                         .then((resIII) => {
                           if (i + 1 === serviceList.length) {
                             swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                              window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + resIII.data.data[0].nac_code
+                              const pathLink = resIII.data.data[0].nac_code ? resIII.data.data[0].nac_code : nac_code
+                              window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + pathLink
                             });
                           }
                         })
@@ -629,7 +630,8 @@ export default function Nac_Main() {
                       comment: 'ยืนยันรายการ',
                     })
                     swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                      window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + resII.data.data[0].nac_code
+                      const pathLink = resII.data.data[0].nac_code ? resII.data.data[0].nac_code : nac_code
+                      window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + pathLink
                     });
                   }
                 })
@@ -695,7 +697,8 @@ export default function Nac_Main() {
                       comment: 'ตรวจสอบรายการ',
                     })
                     swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                      window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + resII.data.data[0].nac_code
+                      const pathLink = resII.data.data[0].nac_code ? resII.data.data[0].nac_code : nac_code
+                      window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + pathLink
                     });
                   }
                 })
@@ -795,7 +798,8 @@ export default function Nac_Main() {
 
                     if (i + 1 === serviceList.length) {
                       swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                        window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + resII.data.data[0].nac_code
+                        const pathLink = resII.data.data[0].nac_code ? resII.data.data[0].nac_code : nac_code
+                        window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + pathLink
                       });
                     }
                   })
@@ -830,7 +834,8 @@ export default function Nac_Main() {
                   .then(async (resII) => {
                     if (i + 1 === serviceList.length) {
                       swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-                        window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + resII.data.data[0].nac_code
+                        const pathLink = resII.data.data[0].nac_code ? resII.data.data[0].nac_code : nac_code
+                        window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + pathLink
                       });
                     }
                   })
@@ -873,7 +878,8 @@ export default function Nac_Main() {
           })
           setOpenDialogReply(false);
           swal("แจ้งเตือน", 'อัปเดตรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + nac_code
+            const pathLink = res.data.data[0].nac_code ? res.data.data[0].nac_code : nac_code
+            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE?' + pathLink
           });
         }
       })
@@ -1902,8 +1908,8 @@ export default function Nac_Main() {
                           ) : null}
                           {(sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
                             (sendHeader[0].nac_status === 2 && approveData.filter((res) => res.approverid === data.UserCode)[0]) ||
-                            ((sendHeader[0].nac_status === 3 || sendHeader[0].nac_status === 2 || sendHeader[0].nac_status === 5) 
-                            && permission_MenuID.indexOf(10) >= 0) ? (
+                            ((sendHeader[0].nac_status === 3 || sendHeader[0].nac_status === 2 || sendHeader[0].nac_status === 5)
+                              && permission_MenuID.indexOf(10) >= 0) ? (
                             <Stack>
                               <Button
                                 variant="contained"
