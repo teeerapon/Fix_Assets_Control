@@ -784,17 +784,15 @@ export default function Nac_Main() {
   }
 
   const handleSubmit_Form = async () => {
-
-    if ((sendHeader[0].nac_status === 3 && !approveData.filter((res) => res.approverid === data.UserCode && res.limitamount >= sendHeader[0].sumPrice)[0])) {
-      swal("แจ้งเตือน", `ถูกจำกัดสิทธิ์`, "error")
-    } if ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14)
-      && serviceList.filter((res) => res.statusCheck === 0
-        // || !res.image_1 || !res.image_2
-      )[0]) {
-      swal("แจ้งเตือน", `เลือก (ตรวจสอบ/รูปภาพ) ทรัพย์สิน`, "error")
-    } else if (!sendHeader[0].des_delivery || !desName || !desLastName) {
-      swal("แจ้งเตือน", 'กรุณาระบุ (ผู้รับมอบ/ชื่อ-นามสกุล ผู้รับมอบ)', "error")
-    } else {
+    if ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14)
+    && serviceList.filter((res) => res.statusCheck === 0
+      // || !res.image_1 || !res.image_2
+    )[0]) {
+    swal("แจ้งเตือน", `เลือก (ตรวจสอบ/รูปภาพ) ทรัพย์สิน`, "error")
+  } else if (!sendHeader[0].des_delivery || !desName || !desLastName) {
+    swal("แจ้งเตือน", 'กรุณาระบุ (ผู้รับมอบ/ชื่อ-นามสกุล ผู้รับมอบ)', "error")
+  } else if ((sendHeader[0].nac_status === 3 && approveData.filter((res) => res.approverid === data.UserCode && res.limitamount >= sendHeader[0].sumPrice)[0])
+      || (sendHeader[0].nac_status === 3 && permission_MenuID.indexOf(10) > -1)) {
       const reqUpdateStatus = {
         usercode: data.UserCode,
         nac_code: nac_code,
@@ -915,6 +913,8 @@ export default function Nac_Main() {
             }
           }
         })
+    }else {
+      swal("แจ้งเตือน", `ถูกจำกัดสิทธิ์`, "error")
     }
   }
 
