@@ -2095,8 +2095,7 @@ export default function Nac_Main() {
                                 Submit
                               </Button>
                             </Stack>
-                          ) : (sendHeader[0].nac_status === 11 && permission_MenuID.indexOf(11) >= 0) ||
-                            (sendHeader[0].nac_status === 11 && permission_MenuID.indexOf(10) >= 0) ? (
+                          ) : (sendHeader[0].nac_status === 11 && permission_MenuID.indexOf(9) >= 0) ? (
                             <Stack>
                               <Button
                                 variant="contained"
