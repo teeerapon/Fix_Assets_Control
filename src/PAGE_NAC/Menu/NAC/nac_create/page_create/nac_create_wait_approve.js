@@ -614,6 +614,15 @@ export default function Nac_Main() {
                   image_1: serviceList[i].image_1,
                   image_2: serviceList[i].image_2,
                 }
+
+                await Axios.post(config.http + '/stroe_FA_control_DTL_ConfirmSuccess', {
+                  nac_code,
+                  usercode: data.UserCode,
+                  nacdtl_assetsCode: serviceList[i].assetsCode,
+                  asset_id: serviceList[i].asset_id,
+                  statusCheck: serviceList[i].statusCheck,
+                }, config.headers)
+
                 await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
                   .then(async (resII) => {
                     if (resII.data.data) {
@@ -902,27 +911,27 @@ export default function Nac_Main() {
             }
           }
         })
-    }else {
+    } else {
       swal("แจ้งเตือน", `ถูกจำกัดสิทธิ์`, "error")
     }
   }
 
   const handleSubmit_Form = async () => {
     if ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14)
-    && serviceList.filter((res) => res.statusCheck === 0
-      // || !res.image_1 || !res.image_2
-    )[0]) {
-    swal("แจ้งเตือน", `เลือก (ตรวจสอบ/รูปภาพ) ทรัพย์สิน`, "error")
-  } else if (!sendHeader[0].des_delivery || !desName || !desLastName) {
-    swal("แจ้งเตือน", 'กรุณาระบุ (ผู้รับมอบ/ชื่อ-นามสกุล ผู้รับมอบ)', "error")
-  } else {
+      && serviceList.filter((res) => res.statusCheck === 0
+        // || !res.image_1 || !res.image_2
+      )[0]) {
+      swal("แจ้งเตือน", `เลือก (ตรวจสอบ/รูปภาพ) ทรัพย์สิน`, "error")
+    } else if (!sendHeader[0].des_delivery || !desName || !desLastName) {
+      swal("แจ้งเตือน", 'กรุณาระบุ (ผู้รับมอบ/ชื่อ-นามสกุล ผู้รับมอบ)', "error")
+    } else {
       const reqUpdateStatus = {
         usercode: data.UserCode,
         nac_code: nac_code,
         nac_status: ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14)
-            && serviceList.filter((res) => res.statusCheck === 0)[0] && serviceList.filter((res) => res.statusCheck === 1)[0]) ? 14 :
-            ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14)
-              && serviceList.filter((res) => res.statusCheck === 1)[0] && !serviceList.filter((res) => res.statusCheck === 0)[0]) ? 5 : 6,
+          && serviceList.filter((res) => res.statusCheck === 0)[0] && serviceList.filter((res) => res.statusCheck === 1)[0]) ? 14 :
+          ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14)
+            && serviceList.filter((res) => res.statusCheck === 1)[0] && !serviceList.filter((res) => res.statusCheck === 0)[0]) ? 5 : 6,
         nac_type: sendHeader[0].nac_type,
         source: sendHeader[0].source,
         sourceDate: sendHeader[0].sourceDate,

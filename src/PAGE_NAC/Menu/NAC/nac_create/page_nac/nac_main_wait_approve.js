@@ -545,6 +545,15 @@ export default function Nac_Main() {
                   image_1: serviceList[i].image_1,
                   image_2: null,
                 }
+
+                await Axios.post(config.http + '/stroe_FA_control_DTL_ConfirmSuccess', {
+                  nac_code,
+                  usercode: data.UserCode,
+                  nacdtl_assetsCode: serviceList[i].assetsCode,
+                  asset_id: serviceList[i].asset_id,
+                  statusCheck: serviceList[i].statusCheck,
+                }, config.headers)
+
                 await Axios.post(config.http + '/store_FA_control_update_DTL', reqII, config.headers)
                   .then(async (resII) => {
                     if (resII.data.data) {
