@@ -1630,7 +1630,9 @@ export default function Nac_Main() {
                                   variant="standard"
                                   fullWidthdesName
                                   value={desName}
-                                  disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
+                                  disabled={(permission_MenuID.indexOf(16) > -1 ||
+                                    sendHeader[0].nac_status === 4 ||
+                                    sendHeader[0].nac_status === 14) ? false : true}
                                   sx={{
                                     "& .MuiInputBase-input.Mui-disabled": {
                                       WebkitTextFillColor: "#000000",
@@ -1662,7 +1664,9 @@ export default function Nac_Main() {
                                   variant="standard"
                                   fullWidth
                                   value={desLastName}
-                                  disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
+                                  disabled={(permission_MenuID.indexOf(16) > -1 ||
+                                    sendHeader[0].nac_status === 4 ||
+                                    sendHeader[0].nac_status === 14) ? false : true}
                                   sx={{
                                     "& .MuiInputBase-input.Mui-disabled": {
                                       WebkitTextFillColor: "#000000",
