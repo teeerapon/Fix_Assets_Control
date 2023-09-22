@@ -382,7 +382,7 @@ export default function Nac_Main() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppbarNAC
-          nac_type={sendHeader[0].nac_type}
+          nac_type={sendHeader[0].worktype}
           sendHeader={sendHeader}
         />
         <AnimatedPage>

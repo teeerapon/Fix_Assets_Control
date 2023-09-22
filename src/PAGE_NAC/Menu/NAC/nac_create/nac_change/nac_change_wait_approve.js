@@ -61,6 +61,7 @@ import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { CSVLink } from 'react-csv'
 import '../../../../../App.css'
 import config from '../../../../../config.js'
+import AppbarNAC from '../Appbar.js'
 
 function Copyright() {
   return (
@@ -79,17 +80,25 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.action.selected,
     color: theme.palette.common.black,
+    padding: '1svw !important',
+    border: '1px solid',
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+    backgroundColor: theme.palette.action.white,
+    color: theme.palette.common.black,
+    padding: '0px 10px 10px 10px',
+    overflow: 'hidden',
+    border: '1px solid',
   },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.white,
+    color: theme.palette.common.black,
+    padding: 0,
+    border: '1px solid',
   },
-  // hide last border
 }));
 
 async function store_FA_control_select_dtl(credentials) {
@@ -402,6 +411,43 @@ export default function Nac_Main_wait() {
   const [bossApproveDate, setBossApproveDate] = React.useState();
   const [verify, setVerifyApprove] = React.useState('');
   const [verifyApproveDate, setVerifyApproveDate] = React.useState();
+  const [approveData, setApproveData] = React.useState();
+  const [sendHeader, setSendHeader] = React.useState([{
+    usercode: data.UserCode,
+    worktype: 4,
+    create_by: null,
+    nac_code: null,
+    nac_status: null,
+    nac_type: null,
+    source_date: null,
+    status_name: null,
+    //ผู้อนุมัติ
+    verify_by_userid: null,
+    verify_date: null,
+    source_approve: null,
+    source_approve_date: null,
+    account_aprrove_id: null,
+    finance_aprrove_id: null,
+    // ผู้รับ
+    source_department: null,
+    source_BU: null,
+    source: null,
+    nameSource: null,
+    sourceDate: null,
+    source_description: null,
+    // ผู้รับ
+    des_Department: null,
+    des_BU: null,
+    des_delivery: null,
+    nameDes: null,
+    des_deliveryDate: null,
+    des_Description: null,
+
+    sumPrice: null,
+    real_price: null,
+    realPrice_Date: null,
+
+  }]);
 
 
   const handleOpen_drop_NAC_byDes = () => {
@@ -487,6 +533,31 @@ export default function Nac_Main_wait() {
       setBossApproveDate(responseHeaders.data[0].source_approve_date)
       setVerifyApprove(responseHeaders.data[0].verify_by_userid)
       setVerifyApproveDate(responseHeaders.data[0].verify_date)
+
+      const listHeader = [...sendHeader]
+      listHeader[0]['source'] = responseHeaders.data[0].source_userid
+      listHeader[0]['source_department'] = responseHeaders.data[0].source_dep_owner
+      listHeader[0]['source_BU'] = responseHeaders.data[0].source_bu_owner
+      listHeader[0]['sumPrice'] = responseHeaders.data[0].sum_price
+      listHeader[0]['nameSource'] = responseHeaders.data[0].source_name
+      listHeader[0]['sourceDate'] = responseHeaders.data[0].source_date
+      listHeader[0]['source_description'] = responseHeaders.data[0].source_remark
+      listHeader[0]['create_by'] = responseHeaders.data[0].create_by
+      listHeader[0]['verify_by_userid'] = responseHeaders.data[0].verify_by_userid
+      listHeader[0]['verify_date'] = responseHeaders.data[0].verify_date
+      listHeader[0]['source_approve'] = responseHeaders.data[0].source_approve_userid
+      listHeader[0]['source_approve_date'] = responseHeaders.data[0].source_approve_date
+      listHeader[0]['account_aprrove_id'] = responseHeaders.data[0].account_aprrove_id
+      listHeader[0]['finance_aprrove_id'] = responseHeaders.data[0].finance_aprrove_id
+      listHeader[0]['nac_code'] = responseHeaders.data[0].nac_code
+      listHeader[0]['nac_status'] = responseHeaders.data[0].nac_status
+      listHeader[0]['nac_type'] = responseHeaders.data[0].nac_type
+      listHeader[0]['source_date'] = responseHeaders.data[0].source_date
+      listHeader[0]['real_price'] = responseHeaders.data[0].real_price
+      listHeader[0]['realPrice_Date'] = responseHeaders.data[0].realPrice_Date
+      listHeader[0]['status_name'] = responseHeaders.data[0].status_name
+      setSendHeader(listHeader)
+
     }
 
     // เรียก Detail มาแสดง
@@ -625,6 +696,7 @@ export default function Nac_Main_wait() {
     //setExamineApproveDes(ExamineApproveDes)
     setExecApprove(ExecApprove)
     setCheckApprove(CheckApprove)
+    setApproveData(responseExecDocID.data);
   }
 
   const Export_PDF_DATA_NAC = () => {
@@ -766,14 +838,6 @@ export default function Nac_Main_wait() {
     }
   };
 
-  function handleGoNAC() {
-    if (localStorage.getItem('pagination')) {
-      navigate('/NAC_OPERATOR')
-    } else {
-      navigate('/NAC_ROW')
-    }
-  }
-
   //Source
   const handleChangeSource_Department = (event) => {
     event.preventDefault();
@@ -783,11 +847,6 @@ export default function Nac_Main_wait() {
   const handleChangeSource_BU = (event) => {
     event.preventDefault();
     setSource_BU(event.target.value);
-  };
-
-  const handleChangeSource_delivery2 = (event) => {
-    event.preventDefault();
-    setSource(event.target.value);
   };
 
   const handleChangeSource_deliveryDate = (newValue) => {
@@ -823,18 +882,6 @@ export default function Nac_Main_wait() {
   const handleChangeSource_Name = (event) => {
     event.preventDefault();
     setNmaeSource(event.target.value);
-  };
-
-  //Des
-  const handleChangeDes_Department = (event) => {
-    event.preventDefault();
-    setDes_Department(event.target.value);
-  };
-
-  const handleDes_ChangeBU = (event) => {
-    event.preventDefault();
-    setDes_BU(event.target.value);
-
   };
 
   // Update Document||
@@ -1101,7 +1148,7 @@ export default function Nac_Main_wait() {
       const verify_by = headers.verify_by_userid
       const verify_date = headers.verify_date
       const nac_type = headers.nac_type
-      const responseForUpdate = await store_FA_control_updateStatus({
+      await store_FA_control_updateStatus({
         usercode,
         nac_code,
         nac_status,
@@ -1380,63 +1427,14 @@ export default function Nac_Main_wait() {
         </Stack>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <AppBar
-            position="absolute"
-            color="default"
-            elevation={0}
-            sx={{
-              position: 'relative',
-              borderBottom: (t) => `1px solid ${t.palette.divider}`,
-            }}
-          >
-            <Toolbar>
-              <Box sx={{ width: 1 }}>
-                <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
-                  <Box gridColumn="span 10">
-                    <AnimatedPage>
-                      <Typography variant="h5" color="inherit" sx={{ pt: 1 }}>
-                        การเปลี่ยนแปลงทรัพย์สินถาวร
-                      </Typography>
-                    </AnimatedPage>
-                  </Box>
-                  <Box gridColumn="span 0">
-                    <AnimatedPage>
-                      <IconButton sx={{ color: 'rgb(0,0,0)' }} component="label" size="large" onClick={handleGoNAC}>
-                        <SummarizeIcon />
-                      </IconButton>
-                    </AnimatedPage>
-                  </Box>
-                </Box>
-              </Box>
-            </Toolbar>
-          </AppBar>
+          <AppbarNAC
+            nac_code={nac_code}
+            nac_type={headers.nac_type}
+            sendHeader={sendHeader}
+            approveData={approveData}
+          />
           <AnimatedPage>
             <Container component="main" maxWidth="lg" sx={{ mb: 12 }}>
-              <Paper variant="outlined" sx={{ p: { xs: 1, md: 2 }, mt: 4 }}>
-                <Table aria-label="customized table" style={{ width: '100%' }}>
-                  {/* <Grid container>
-                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ขารับ : {
-                      ExamineApproveDes.map((Approve) => (
-                        <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'black' }}>
-                          &nbsp;({Approve.approverid})
-                        </Typography>
-                      ))}
-                  </Grid>
-                  <hr /> */}
-                  <Grid container>
-                    ผู้มีสิทธิอนุมัติเอกสารฉบับนี้ขาส่ง : none
-                  </Grid>
-                  <hr />
-                  <Grid container>
-                    ผู้มีสิทธิตรวจสอบเอกสารฉบับนี้ : {
-                      ExamineApprove.map((Approve) => (
-                        <Typography style={{ 'color': Approve.status === 1 ? 'blue' : 'red' }}>
-                          &nbsp;({Approve.approverid})
-                        </Typography>
-                      ))}
-                  </Grid>
-                </Table>
-              </Paper>
               <Box
                 sx={{
                   display: 'flex',

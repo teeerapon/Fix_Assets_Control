@@ -46,7 +46,8 @@ export default function Nac_Main({ nac_code, nac_type, approveData, sendHeader }
                       {nac_type === 1 ? `เพิ่มบัญชีทรัพย์สิน` :
                         nac_type === 2 ? `โยกย้ายทรัพย์สิน` :
                           nac_type === 3 ? `เปลี่ยนแปลงรายละเอียดทรัพย์สิน` :
-                            nac_type === 4 ? `ตัดบัญชีทรัพย์สิน` : `ขายบัญชีทรัพย์สิน`} {nac_code}
+                            nac_type === 4 ? `ตัดบัญชีทรัพย์สิน` :
+                              nac_type === 5 ? `ขายบัญชีทรัพย์สิน` : ''} {nac_code}
                     </Typography>
                   </AnimatedPage>
                 </Box>
@@ -61,7 +62,7 @@ export default function Nac_Main({ nac_code, nac_type, approveData, sendHeader }
             </Box>
           </Toolbar>
         </AppBar>
-        <Container component="main" maxWidth="lg" sx={{ mb: 5, minWidth: window.innerWidth*0.8 }}>
+        <Container component="main" maxWidth="lg" sx={{ mb: 5, minWidth: window.innerWidth * 0.8 }}>
           <Paper variant="outlined" sx={{ mt: 4, p: { xs: 2, md: 3 } }}>
             {nac_code && approveData ? (
               <React.Fragment>

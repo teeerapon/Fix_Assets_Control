@@ -45,35 +45,33 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import '../../../../../App.css'
 import config from '../../../../../config'
+import AppbarNAC from '../Appbar.js'
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'ptec@pure © '}
-      <Link color="inherit">
-        Create NAC
-      </Link>{' '}
-      {new Date().getFullYear()}
-    </Typography>
-  );
-}
 const theme = createTheme();
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.action.selected,
     color: theme.palette.common.black,
+    padding: '1svw !important',
+    border: '1px solid',
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+    backgroundColor: theme.palette.action.white,
+    color: theme.palette.common.black,
+    padding: '0px 10px 10px 10px',
+    overflow: 'hidden',
+    border: '1px solid',
   },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.white,
+    color: theme.palette.common.black,
+    padding: 0,
+    border: '1px solid',
   },
-  // hide last border
 }));
 
 const filterOptions = createFilterOptions({
@@ -358,10 +356,6 @@ export default function Nac_Main() {
     }
   };
 
-  function handleGoNAC() {
-    navigate('/NAC_ROW')
-  }
-
   //Source
 
   const handleChangeSource_Department = (event) => {
@@ -380,11 +374,6 @@ export default function Nac_Main() {
     } else {
       setSource_BU(event.target.value);
     }
-  };
-
-  const handleChangeSource_delivery2 = (event) => {
-    event.preventDefault();
-    setSource(event.target.value);
   };
 
   const handleChangeSource_deliveryDate = (newValue) => {
@@ -420,42 +409,6 @@ export default function Nac_Main() {
   const handleChangeSource_Name = (event) => {
     event.preventDefault();
     setNmaeSource(event.target.value);
-  };
-
-  //Des
-  const handleChangeDes_Department = (event) => {
-    event.preventDefault();
-    setDes_Department(event.target.value);
-  };
-
-  const handleDes_ChangeBU = (event) => {
-    event.preventDefault();
-    setDes_BU(event.target.value);
-  };
-
-  const handleChangeDes_Description = (event) => {
-    event.preventDefault();
-    setDes_Description(event.target.value);
-  };
-
-  const handleAutoDes_DeapartMent = async (e, index) => {
-    const UserCode = e.target.innerText
-    const response = await AutoDeapartMent({
-      UserCode
-    });
-    setDes_delivery(UserCode)
-    if (!UserCode) {
-      setDes_Department('')
-      setDes_BU('')
-    } else {
-      if (response.data[0].BranchID !== 901) {
-        setDes_Department(response.data[0].DepCode)
-        setDes_BU('Oil')
-      } else {
-        setDes_Department(response.data[0].DepCode)
-        setDes_BU('Center')
-      }
-    }
   };
 
   const handleNext = async () => {
@@ -543,445 +496,415 @@ export default function Nac_Main() {
     setAlert(false);
   };
 
-    return (
-      <React.Fragment>
-        <Stack spacing={2} sx={{ width: '100%' }}>
-          <Snackbar open={alert} autoHideDuration={4500} onClose={handleCloseAlert}>
-            <Alert onClose={handleCloseAlert} severity="warning" sx={{ width: '100%' }}>
-              {valueAlert}
-            </Alert>
-          </Snackbar>
-        </Stack>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <AppBar
-            position="absolute"
-            color="default"
-            elevation={0}
-            sx={{
-              position: 'relative',
-              borderBottom: (t) => `1px solid ${t.palette.divider}`,
-            }}
-          >
-            <Toolbar>
-              <Box sx={{ width: 1 }}>
-                <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
-                  <Box gridColumn="span 10">
-                    <AnimatedPage>
-                      <Typography variant="h5" color="inherit" sx={{ pt: 1 }}>
-                        การเปลี่ยนแปลงทรัพย์สินถาวร
-                      </Typography>
-                    </AnimatedPage>
+  return (
+    <React.Fragment>
+      <Stack spacing={2} sx={{ width: '100%' }}>
+        <Snackbar open={alert} autoHideDuration={4500} onClose={handleCloseAlert}>
+          <Alert onClose={handleCloseAlert} severity="warning" sx={{ width: '100%' }}>
+            {valueAlert}
+          </Alert>
+        </Snackbar>
+      </Stack>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AppbarNAC
+          nac_type={nac_type}
+        />
+        <AnimatedPage>
+          <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth * 0.8 }}>
+            <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 }, overflow: 'hidden' }}>
+              <Grid
+                container
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Grid item xs={2}>
+                  <Box className='logo-399-sm logo-sm logo-md'>
+                    <img style={{ maxWidth: '100%' }} src={logoPure} loading="lazy" />
                   </Box>
-                  <Box gridColumn="span 0">
-                    <AnimatedPage>
-                      <IconButton sx={{ color: 'rgb(0,0,0)' }} component="label" size="large" onClick={handleGoNAC}>
-                        <SummarizeIcon />
-                      </IconButton>
-                    </AnimatedPage>
-                  </Box>
-                </Box>
-              </Box>
-            </Toolbar>
-          </AppBar>
-          <AnimatedPage>
-            <Container component="main" maxWidth="lg" sx={{ mb: 12 }}>
-              <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                <Grid container sx={{ pb: 1 }}>
-                  <Grid xs={2}>
-                    <Box sx={{ flexGrow: 1, justifyContent: 'start' }}>
-                      <img style={{ maxWidth: '100%' }} src={logoPure} loading="lazy" />
-                    </Box>
-                  </Grid>
-                  <Grid xs={8}>
-                    <Typography component="h1" variant="h4" align="center" className='font-sm font-md'>
+                </Grid>
+                <Grid item xs={8}>
+                  <Stack
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Typography className='scaled-480px-Header'>
                       <b>PURE THAI ENERGY CO.,LTD.</b>
                     </Typography>
-                    <Typography sx={{ mb: 1 }} component="h1" variant="h6" align="center" className='pt-2 font-vsm font-vmd'>
+                    <Typography className='scaled-480px-Header-Content text-center'>
                       เปลี่ยนแปลงรายการทรัพย์สินถาวร (Notice of Asset Change - NAC)
                     </Typography>
-                  </Grid>
-                  <Grid xs={2}>
-                    <TableContainer component={Paper}>
-                      <Table aria-label="customized table" style={{ width: '100%' }}>
-                        <TableBody>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
-                            <TextField
-                              required
-                              fullWidth
-                              disabled
-                              name='nac_id'
-                              sx={{ pt: 1 }}
-                              variant="standard"
-                            />
-                          </StyledTableCell>
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Grid>
+                  </Stack>
                 </Grid>
-                <React.Fragment>
-                  <Typography sx={{ pb: 1, pt: 1 }} color='error'>
-                    * กรุณากรอกข้อมูลสำหรับเปลี่ยนแปลงรายละเอียดทรัพย์สิน
-                  </Typography>
-                  <TableContainer component={Paper}>
-                    <Table aria-label="customized table" style={{ width: 1100 }}>
-                      <TableHead>
-                        <TableRow>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ส่งมอบ</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับมอบ</StyledTableCell>
-                        </TableRow>
-                      </TableHead>
-                      <React.Fragment>
-                        <TableBody>
-                          <StyledTableRow>
-                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                              <FormGroup>
-                                <center>
-                                  <Typography variant='h4' color='primary'>
-                                    เปลี่ยนแปลงรายละเอียดทรัพย์สิน
+                <Grid item xs={2}>
+                  <Box sx={{ p: 2, border: '1px dashed grey' }} className='logo-399-sm logo-sm logo-md' />
+                </Grid>
+              </Grid>
+              <Box sx={{ pt: 3 }} className='logo-399-sm logo-sm logo-md'>
+                <Typography className='scaled-480px-Header-Content' color='error'>
+                  * กรุณากรอกข้อมูลสำหรับเปลี่ยนแปลงรายละเอียดทรัพย์สิน
+                </Typography>
+              </Box>
+              <React.Fragment>
+                <TableContainer component={Paper}>
+                  <Table aria-label="customized table" style={{ width: 1100 }}>
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ส่งมอบ</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับมอบ</StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                    <React.Fragment>
+                      <TableBody>
+                        <StyledTableRow>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                            <FormGroup>
+                              <center>
+                                <Typography variant='h4' color='primary'>
+                                  เปลี่ยนแปลงรายละเอียดทรัพย์สิน
+                                </Typography>
+                              </center>
+                            </FormGroup>
+                          </StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                            <React.Fragment>
+                              <Grid container>
+                                <Grid xs={6}>
+                                  <Typography align='center' color="inherit" >
+                                    Department
                                   </Typography>
-                                </center>
-                              </FormGroup>
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                              <React.Fragment>
-                                <Grid container>
-                                  <Grid xs={6}>
-                                    <Typography align='center' color="inherit" >
-                                      Department
-                                    </Typography>
-                                  </Grid>
-                                  <Grid xs={6}>
-                                    <Typography align='center' color="inherit" >
-                                      BU
-                                    </Typography>
-                                  </Grid>
                                 </Grid>
-                                <Stack
-                                  direction="row"
-                                  divider={<Divider orientation="vertical" flexItem />}
-                                  spacing={1}
-                                  sx={{ pt: 1, pb: 1 }}
-                                >
-                                  <TextField
-                                    required
-                                    fullWidth
-                                    name='source_Department'
-                                    onChange={handleChangeSource_Department}
-                                    value={source_Department}
-                                    disabled
-                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
-                                    variant="standard"
+                                <Grid xs={6}>
+                                  <Typography align='center' color="inherit" >
+                                    BU
+                                  </Typography>
+                                </Grid>
+                              </Grid>
+                              <Stack
+                                direction="row"
+                                divider={<Divider orientation="vertical" flexItem />}
+                                spacing={1}
+                                sx={{ pt: 1, pb: 1 }}
+                              >
+                                <TextField
+                                  required
+                                  fullWidth
+                                  name='source_Department'
+                                  onChange={handleChangeSource_Department}
+                                  value={source_Department}
+                                  disabled
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
+                                  variant="standard"
+                                />
+                                <TextField
+                                  required
+                                  fullWidth
+                                  disabled
+                                  onChange={handleChangeSource_BU}
+                                  name='source_Department'
+                                  value={source_BU}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
+                                  variant="standard"
+                                />
+                              </Stack>
+                              {data.branchid === 901 ? (
+                                <React.Fragment>
+                                  <Autocomplete
+                                    freeSolo
+                                    name='source'
+                                    id='source'
+                                    options={users_pureDep}
+                                    getOptionLabel={(option) => option.UserCode}
+                                    filterOptions={filterOptions2}
+                                    onChange={handleAutoSource_DeapartMent}
+                                    value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
+                                    renderInput={(params) => (
+                                      <React.Fragment>
+                                        <TextField
+                                          {...params}
+                                          variant="standard"
+                                          label='ผู้ส่งมอบ'
+                                          fullWidth
+                                          error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
+                                          autoComplete="family-name"
+                                          sx={{ pt: 1 }}
+                                        />
+                                      </React.Fragment>
+                                    )}
                                   />
                                   <TextField
-                                    required
-                                    fullWidth
-                                    disabled
-                                    onChange={handleChangeSource_BU}
-                                    name='source_Department'
-                                    value={source_BU}
-                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
                                     variant="standard"
-                                  />
-                                </Stack>
-                                {data.branchid === 901 ? (
-                                  <React.Fragment>
-                                    <Autocomplete
-                                      freeSolo
-                                      name='source'
-                                      id='source'
-                                      options={users_pureDep}
-                                      getOptionLabel={(option) => option.UserCode}
-                                      filterOptions={filterOptions2}
-                                      onChange={handleAutoSource_DeapartMent}
-                                      value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
-                                      renderInput={(params) => (
-                                        <React.Fragment>
-                                          <TextField
-                                            {...params}
-                                            variant="standard"
-                                            label='ผู้ส่งมอบ'
-                                            fullWidth
-                                            error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
-                                            autoComplete="family-name"
-                                            sx={{ pt: 1 }}
-                                          />
-                                        </React.Fragment>
-                                      )}
-                                    />
-                                    <TextField
-                                      variant="standard"
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
-                                      onChange={handleChangeSource_Name}
-                                      value={nameSource}
-                                      error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
-                                      InputProps={{
-                                        startAdornment: (
-                                          <InputAdornment position="start">
-                                            <Typography color="black">
-                                              ลงชื่อผู้ส่งมอบ :
-                                            </Typography>
-                                          </InputAdornment>
-                                        ),
-                                      }}
-                                      sx={{ pt: 1 }}
-                                    />
-                                  </React.Fragment>
-                                ) : (
-                                  <React.Fragment>
-                                    <TextField
-                                      required
-                                      fullWidth
-                                      name='source'
-                                      id='source'
-                                      label='ผู้ส่งมอบ'
-                                      value={source}
-                                      sx={{ pt: 1 }}
-                                      variant="standard"
-                                    />
-                                    <TextField
-                                      variant="standard"
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
-                                      onChange={handleChangeSource_Name}
-                                      value={nameSource}
-                                      InputProps={{
-                                        startAdornment: (
-                                          <InputAdornment position="start">
-                                            <Typography color="black">
-                                              ลงชื่อผู้ส่งมอบ :
-                                            </Typography>
-                                          </InputAdornment>
-                                        ),
-                                      }}
-                                      sx={{ pt: 1 }}
-                                    />
-                                  </React.Fragment>
-                                )}
-                                <LocalizationProvider dateAdapter={DateAdapter}>
-                                  <DatePicker
-                                    inputFormat="yyyy-MM-dd"
-                                    onChange={handleChangeSource_deliveryDate}
-                                    name='source_Date'
-                                    value={!sourceDate ? setSourceDate(datenow) : sourceDate}
+                                    fullWidth
+                                    autoComplete="family-name"
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                    onChange={handleChangeSource_Name}
+                                    value={nameSource}
+                                    error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                     InputProps={{
                                       startAdornment: (
                                         <InputAdornment position="start">
                                           <Typography color="black">
-                                            วันที่ยืนยัน :
+                                            ลงชื่อผู้ส่งมอบ :
                                           </Typography>
                                         </InputAdornment>
                                       ),
                                     }}
-                                    renderInput={(params) =>
-                                      <TextField
-                                        required
-                                        fullWidth
-                                        autoComplete="family-name"
-                                        sx={{ pt: 1 }}
-                                        variant="standard"
-                                        {...params} />}
+                                    sx={{ pt: 1 }}
                                   />
-                                </LocalizationProvider>
-                                <TextField
-                                  required
-                                  fullWidth
-                                  onChange={handleChangeSource_Description}
-                                  value={source_Description}
-                                  name='source_Description'
-                                  sx={{ pt: 1 }}
+                                </React.Fragment>
+                              ) : (
+                                <React.Fragment>
+                                  <TextField
+                                    required
+                                    fullWidth
+                                    name='source'
+                                    id='source'
+                                    label='ผู้ส่งมอบ'
+                                    value={source}
+                                    sx={{ pt: 1 }}
+                                    variant="standard"
+                                  />
+                                  <TextField
+                                    variant="standard"
+                                    fullWidth
+                                    autoComplete="family-name"
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                    onChange={handleChangeSource_Name}
+                                    value={nameSource}
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          <Typography color="black">
+                                            ลงชื่อผู้ส่งมอบ :
+                                          </Typography>
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    sx={{ pt: 1 }}
+                                  />
+                                </React.Fragment>
+                              )}
+                              <LocalizationProvider dateAdapter={DateAdapter}>
+                                <DatePicker
+                                  inputFormat="yyyy-MM-dd"
+                                  onChange={handleChangeSource_deliveryDate}
+                                  name='source_Date'
+                                  value={!sourceDate ? setSourceDate(datenow) : sourceDate}
                                   InputProps={{
                                     startAdornment: (
                                       <InputAdornment position="start">
                                         <Typography color="black">
-                                          หมายเหตุ :
+                                          วันที่ยืนยัน :
                                         </Typography>
                                       </InputAdornment>
                                     ),
                                   }}
-                                  variant="standard"
+                                  renderInput={(params) =>
+                                    <TextField
+                                      required
+                                      fullWidth
+                                      autoComplete="family-name"
+                                      sx={{ pt: 1 }}
+                                      variant="standard"
+                                      {...params} />}
                                 />
-                              </React.Fragment>
+                              </LocalizationProvider>
+                              <TextField
+                                required
+                                fullWidth
+                                onChange={handleChangeSource_Description}
+                                value={source_Description}
+                                name='source_Description'
+                                sx={{ pt: 1 }}
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      <Typography color="black">
+                                        หมายเหตุ :
+                                      </Typography>
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                variant="standard"
+                              />
+                            </React.Fragment>
+                          </StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                            <React.Fragment>
+                              <FormGroup>
+                                <center>
+                                  <Typography variant='h4' color='#AAAAAA'>
+                                    none
+                                  </Typography>
+                                </center>
+                              </FormGroup>
+                            </React.Fragment>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      </TableBody>
+                    </React.Fragment>
+                  </Table>
+                  <Table aria-label="customized table" style={{ width: 1100 }}>
+                    <TableHead>
+                      <TableRow style={{ width: '100%' }}>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >Serial No.</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >สถานะทรัพย์สิน</StyledTableCell>
+                        {/* <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell> */}
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >
+                          <Stack direction="row" alignItems="center" spacing={1}>
+                            <Typography>
+                              ต้นทุน
+                            </Typography>
+                            <IconButton
+                              sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                            >
+                              {valuesVisibility.showText ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
+                            </IconButton>
+                          </Stack>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
+                          <IconButton
+                            size="large"
+                            color='primary'
+                            onClick={handleServiceAdd}
+                          >
+                            <AddBoxIcon />
+                          </IconButton>
+                        </StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                    {serviceList.map((singleService, index) => (
+                      <React.Fragment>
+                        <TableBody>
+                          <StyledTableRow>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              <Autocomplete
+                                freeSolo
+                                sx={{
+                                  "& .MuiAutocomplete-input, & .MuiInputLabel-root": {
+                                    fontSize: 14
+                                  }
+                                }}
+                                key={index}
+                                name='assetsCode'
+                                id='assetsCode'
+                                ListboxProps={{
+                                  sx: { fontSize: 12 }
+                                }}
+                                options={AllAssetsControl}
+                                getOptionLabel={(option) => option.Code}
+                                filterOptions={filterOptions}
+                                onChange={(e) => handleServiceChangeHeader(e, index)}
+                                value={singleService.service}
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    variant="standard"
+                                    key={index}
+                                    name='assetsCode'
+                                    id='assetsCode'
+                                    //onChange={(e) => handleServiceChange(e, index)}
+                                    value={singleService.assetsCode}
+                                  />
+                                )}
+                              />
                             </StyledTableCell>
                             <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                              <React.Fragment>
-                                <FormGroup>
-                                  <center>
-                                    <Typography variant='h4' color='#AAAAAA'>
-                                      none
-                                    </Typography>
-                                  </center>
-                                </FormGroup>
-                              </React.Fragment>
+                              <TextField
+                                fullWidth
+                                key={index}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
+                                disabled
+                                value={serviceList_Main[index].serialNo}
+                                variant="standard"
+                              />
+                              <TextField
+                                fullWidth
+                                key={index}
+                                name="serialNo"
+                                id="serialNo"
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
+                                onChange={(e) => handleServiceChange(e, index)}
+                                value={singleService.serialNo}
+                                variant="standard"
+                              />
                             </StyledTableCell>
-                          </StyledTableRow>
-                        </TableBody>
-                      </React.Fragment>
-                    </Table>
-                    <Table aria-label="customized table" style={{ width: 1100 }}>
-                      <TableHead>
-                        <TableRow style={{ width: '100%' }}>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >Serial No.</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >ชื่อ</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >วันที่ขึ้นทะเบียน</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '15%' }} >สถานะทรัพย์สิน</StyledTableCell>
-                          {/* <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >จำนวน</StyledTableCell> */}
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '10%' }} >
-                            <Stack direction="row" alignItems="center" spacing={1}>
-                              <Typography>
-                                ต้นทุน
-                              </Typography>
-                              <IconButton
-                                sx={{ backgroundColor: (theme) => theme.palette.grey[200] }}
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
+                                fullWidth
+                                key={index}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', fontSize: 14 } }}
+                                disabled
+                                value={serviceList_Main[index].name}
+                                variant="standard"
+                              />
+                              <TextField
+                                fullWidth
+                                key={index}
+                                name="name"
+                                id="name"
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
+                                onChange={(e) => handleServiceChange(e, index)}
+                                value={singleService.name}
+                                variant="standard"
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
+                                fullWidth
+                                key={index}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
+                                disabled
+                                value={!serviceList_Main[index].date_asset ? serviceList_Main[index].date_asset : serviceList_Main[index].date_asset.split('T')[0]}
+                                variant="standard"
+                              />
+                              <TextField
+                                fullWidth
+                                key={index}
+                                name="date_asset"
+                                id="date_asset"
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
+                                value={!singleService.date_asset ? singleService.date_asset : singleService.date_asset.split('T')[0]}
+                                variant="standard"
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              <FormControl
+                                variant="standard"
+                                fullWidth
+                                size="small"
                               >
-                                {valuesVisibility.showText ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
-                              </IconButton>
-                            </Stack>
-                          </StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }} >
-                            <IconButton
-                              size="large"
-                              color='primary'
-                              onClick={handleServiceAdd}
-                            >
-                              <AddBoxIcon />
-                            </IconButton>
-                          </StyledTableCell>
-                        </TableRow>
-                      </TableHead>
-                      {serviceList.map((singleService, index) => (
-                        <React.Fragment>
-                          <TableBody>
-                            <StyledTableRow>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <Autocomplete
-                                  freeSolo
-                                  sx={{
-                                    "& .MuiAutocomplete-input, & .MuiInputLabel-root": {
-                                      fontSize: 14
-                                    }
-                                  }}
-                                  key={index}
-                                  name='assetsCode'
-                                  id='assetsCode'
-                                  ListboxProps={{
-                                    sx: { fontSize: 12 }
-                                  }}
-                                  options={AllAssetsControl}
-                                  getOptionLabel={(option) => option.Code}
-                                  filterOptions={filterOptions}
-                                  onChange={(e) => handleServiceChangeHeader(e, index)}
-                                  value={singleService.service}
-                                  renderInput={(params) => (
-                                    <TextField
-                                      {...params}
-                                      variant="standard"
-                                      key={index}
-                                      name='assetsCode'
-                                      id='assetsCode'
-                                      //onChange={(e) => handleServiceChange(e, index)}
-                                      value={singleService.assetsCode}
-                                    />
-                                  )}
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
-                                  fullWidth
                                   key={index}
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
-                                  disabled
-                                  value={serviceList_Main[index].serialNo}
-                                  variant="standard"
-                                />
-                                <TextField
                                   fullWidth
-                                  key={index}
-                                  name="serialNo"
-                                  id="serialNo"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  onChange={(e) => handleServiceChange(e, index)}
-                                  value={singleService.serialNo}
-                                  variant="standard"
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  fullWidth
-                                  key={index}
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', fontSize: 14 } }}
                                   disabled
-                                  value={serviceList_Main[index].name}
+                                  value={serviceList_Main[index].dtl}
                                   variant="standard"
                                 />
-                                <TextField
-                                  fullWidth
+                                <Select
                                   key={index}
-                                  name="name"
-                                  id="name"
+                                  name="dtl"
+                                  id="dtl"
                                   inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
+                                  value={serviceList[index].dtl}
                                   onChange={(e) => handleServiceChange(e, index)}
-                                  value={singleService.name}
-                                  variant="standard"
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  fullWidth
-                                  key={index}
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
-                                  disabled
-                                  value={!serviceList_Main[index].date_asset ? serviceList_Main[index].date_asset : serviceList_Main[index].date_asset.split('T')[0]}
-                                  variant="standard"
-                                />
-                                <TextField
-                                  fullWidth
-                                  key={index}
-                                  name="date_asset"
-                                  id="date_asset"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  value={!singleService.date_asset ? singleService.date_asset : singleService.date_asset.split('T')[0]}
-                                  variant="standard"
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <FormControl
-                                  variant="standard"
-                                  fullWidth
-                                  size="small"
                                 >
-                                  <TextField
-                                    key={index}
-                                    fullWidth
-                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', fontSize: 14 } }}
-                                    disabled
-                                    value={serviceList_Main[index].dtl}
-                                    variant="standard"
-                                  />
-                                  <Select
-                                    key={index}
-                                    name="dtl"
-                                    id="dtl"
-                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                    value={serviceList[index].dtl}
-                                    onChange={(e) => handleServiceChange(e, index)}
-                                  >
-                                    {/* <MenuItem value={'สภาพดี'}>สภาพดี</MenuItem>
+                                  {/* <MenuItem value={'สภาพดี'}>สภาพดี</MenuItem>
                                   <MenuItem value={'ชำรุดรอซ่อม'}>ชำรุดรอซ่อม</MenuItem>
                                   <MenuItem value={'รอตัดชำรุด'}>รอตัดชำรุด</MenuItem> */}
-                                    <MenuItem value={'ชำรุด'}>ชำรุด</MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </StyledTableCell>
-                              {/* <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                                  <MenuItem value={'ชำรุด'}>ชำรุด</MenuItem>
+                                </Select>
+                              </FormControl>
+                            </StyledTableCell>
+                            {/* <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   fullWidth
                                   key={index}
@@ -994,243 +917,243 @@ export default function Nac_Main() {
                                   variant="standard"
                                 />
                               </StyledTableCell> */}
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  fullWidth
-                                  key={index}
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
-                                  disabled
-                                  value={!serviceList_Main[index].price ? serviceList_Main[index].price : (serviceList_Main[index].price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
-                                  variant="standard"
-                                />
-                                <TextField
-                                  fullWidth
-                                  key={index}
-                                  name="price"
-                                  id="price"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  type={valuesVisibility.showText ? "text" : "password"}
-                                  // onChange={(e) => handleServiceChange(e, index)}
-                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
-                                  variant="standard"
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                {serviceList.length !== 0 && (
-                                  <IconButton
-                                    size="large"
-                                    aria-label="delete"
-                                    color="error"
-                                    onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
-                                  >
-                                    <DeleteIcon fontSize="inherit" />
-                                  </IconButton>
-                                )}
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          </TableBody>
-                        </React.Fragment>
-                      ))}
-                    </Table>
-                    <Table aria-label="customized table" style={{ width: 1100 }}>
-                      <TableBody>
-                        <StyledTableRow>
-                          <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '55%' }}>
-                            <Typography>
-                              รวม
-                            </Typography>
-                          </StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '45%' }}>
-                            <TextField
-                              required
-                              fullWidth
-                              disabled
-                              type={valuesVisibility.showText ? "text" : "password"}
-                              value={result === 0 ? '' : result.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
-                              inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="start">
-                                    <Typography color="black">
-                                      บาท
-                                    </Typography>
-                                  </InputAdornment>
-                                ),
-                              }}
-                              variant="standard"
-                            />
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      </TableBody>
-                    </Table>
-                    <Table aria-label="customized table" style={{ width: 1100 }}>
-                      <TableHead>
-                        <StyledTableRow>
-                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
-                            <TextField
-                              required
-                              fullWidth
-                              disabled
-                              sx={{ pt: 1 }}
-                              InputProps={{
-                                startAdornment: (
-                                  <React.Fragment>
-                                    <Stack direction="row"
-                                      justifyContent="space-evenly"
-                                      alignItems="center"
-                                      spacing={0}>
-                                      <InputAdornment position="start">
-                                        <Typography color="black" >
-                                          ผู้จัดทำ :
-                                        </Typography>
-                                      </InputAdornment>
-                                      <InputAdornment position="start">
-                                        <Typography color="black" >
-                                          [{data.UserCode}]
-                                        </Typography>
-                                      </InputAdornment>
-                                      <InputAdornment position="start">
-                                        <Typography color="black" >
-                                          {datenow.split('T')[0]}
-                                        </Typography>
-                                      </InputAdornment>
-                                    </Stack>
-                                  </React.Fragment>
-                                ),
-                              }}
-                              variant="standard"
-                            />
-                          </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }}>
-                            <TextField
-                              required
-                              fullWidth
-                              disabled
-                              name='sourceApprove'
-                              sx={{ pt: 1 }}
-                              InputProps={{
-                                startAdornment: (
-                                  <React.Fragment>
-                                    <Stack direction="row"
-                                      justifyContent="space-evenly"
-                                      alignItems="center"
-                                      spacing={0}>
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          ผู้ตรวจสอบ :
-                                        </Typography>
-                                      </InputAdornment>
-                                      <InputAdornment position="start">
-                                        <Typography style={{ 'color': 'black' }}>
-                                          none
-                                        </Typography>
-                                      </InputAdornment>
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
+                                fullWidth
+                                key={index}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
+                                disabled
+                                value={!serviceList_Main[index].price ? serviceList_Main[index].price : (serviceList_Main[index].price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
+                                variant="standard"
+                              />
+                              <TextField
+                                fullWidth
+                                key={index}
+                                name="price"
+                                id="price"
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
+                                type={valuesVisibility.showText ? "text" : "password"}
+                                // onChange={(e) => handleServiceChange(e, index)}
+                                value={!singleService.price ? singleService.price : (singleService.price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
+                                variant="standard"
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              {serviceList.length !== 0 && (
+                                <IconButton
+                                  size="large"
+                                  aria-label="delete"
+                                  color="error"
+                                  onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
+                                >
+                                  <DeleteIcon fontSize="inherit" />
+                                </IconButton>
+                              )}
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        </TableBody>
+                      </React.Fragment>
+                    ))}
+                  </Table>
+                  <Table aria-label="customized table" style={{ width: 1100 }}>
+                    <TableBody>
+                      <StyledTableRow>
+                        <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '55%' }}>
+                          <Typography>
+                            รวม
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '45%' }}>
+                          <TextField
+                            required
+                            fullWidth
+                            disabled
+                            type={valuesVisibility.showText ? "text" : "password"}
+                            value={result === 0 ? '' : result.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
+                            inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
+                            InputProps={{
+                              endAdornment: (
+                                <InputAdornment position="start">
+                                  <Typography color="black">
+                                    บาท
+                                  </Typography>
+                                </InputAdornment>
+                              ),
+                            }}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    </TableBody>
+                  </Table>
+                  <Table aria-label="customized table" style={{ width: 1100 }}>
+                    <TableHead>
+                      <StyledTableRow>
+                        <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
+                          <TextField
+                            required
+                            fullWidth
+                            disabled
+                            sx={{ pt: 1 }}
+                            InputProps={{
+                              startAdornment: (
+                                <React.Fragment>
+                                  <Stack direction="row"
+                                    justifyContent="space-evenly"
+                                    alignItems="center"
+                                    spacing={0}>
+                                    <InputAdornment position="start">
+                                      <Typography color="black" >
+                                        ผู้จัดทำ :
+                                      </Typography>
+                                    </InputAdornment>
+                                    <InputAdornment position="start">
+                                      <Typography color="black" >
+                                        [{data.UserCode}]
+                                      </Typography>
+                                    </InputAdornment>
+                                    <InputAdornment position="start">
+                                      <Typography color="black" >
+                                        {datenow.split('T')[0]}
+                                      </Typography>
+                                    </InputAdornment>
+                                  </Stack>
+                                </React.Fragment>
+                              ),
+                            }}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                          <TextField
+                            required
+                            fullWidth
+                            disabled
+                            name='sourceApprove'
+                            sx={{ pt: 1 }}
+                            InputProps={{
+                              startAdornment: (
+                                <React.Fragment>
+                                  <Stack direction="row"
+                                    justifyContent="space-evenly"
+                                    alignItems="center"
+                                    spacing={0}>
+                                    <InputAdornment position="start">
+                                      <Typography color="black">
+                                        ผู้ตรวจสอบ :
+                                      </Typography>
+                                    </InputAdornment>
+                                    <InputAdornment position="start">
+                                      <Typography style={{ 'color': 'black' }}>
+                                        none
+                                      </Typography>
+                                    </InputAdornment>
+                                    <InputAdornment position="start">
+                                      <Typography color="black">
 
-                                        </Typography>
-                                      </InputAdornment>
-                                    </Stack>
-                                  </React.Fragment>
-                                ),
-                              }}
-                              variant="standard"
-                            />
-                          </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }}>
-                            <TextField
-                              required
-                              fullWidth
-                              disabled
-                              sx={{ pt: 1 }}
-                              InputProps={{
-                                startAdornment: (
-                                  <React.Fragment>
-                                    <Stack direction="row"
-                                      justifyContent="space-evenly"
-                                      alignItems="center"
-                                      spacing={0}>
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          ผู้อนุมัติ :
-                                        </Typography>
-                                      </InputAdornment>
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
-                                          none
-                                        </Typography>
-                                      </InputAdornment>
-                                      <InputAdornment position="start">
-                                        <Typography color="black">
+                                      </Typography>
+                                    </InputAdornment>
+                                  </Stack>
+                                </React.Fragment>
+                              ),
+                            }}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }}>
+                          <TextField
+                            required
+                            fullWidth
+                            disabled
+                            sx={{ pt: 1 }}
+                            InputProps={{
+                              startAdornment: (
+                                <React.Fragment>
+                                  <Stack direction="row"
+                                    justifyContent="space-evenly"
+                                    alignItems="center"
+                                    spacing={0}>
+                                    <InputAdornment position="start">
+                                      <Typography color="black">
+                                        ผู้อนุมัติ :
+                                      </Typography>
+                                    </InputAdornment>
+                                    <InputAdornment position="start">
+                                      <Typography color="black">
+                                        none
+                                      </Typography>
+                                    </InputAdornment>
+                                    <InputAdornment position="start">
+                                      <Typography color="black">
 
-                                        </Typography>
-                                      </InputAdornment>
-                                    </Stack>
-                                  </React.Fragment>
-                                ),
-                              }}
-                              variant="standard"
-                            />
-                          </StyledTableCell>
-                          <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
-                            <TextField
-                              required
-                              fullWidth
-                              disabled
-                              sx={{ pt: 1 }}
-                              InputProps={{
-                                startAdornment: (
-                                  <React.Fragment>
-                                    <Stack direction="row"
-                                      justifyContent="space-evenly"
-                                      alignItems="center"
-                                      spacing={0}>
-                                      <InputAdornment position="start">
-                                        <Typography color="black" >
-                                          บัญชี :
-                                        </Typography>
-                                      </InputAdornment>
-                                      <InputAdornment position="start">
-                                        <Typography color="black" >
-                                          none
-                                        </Typography>
-                                      </InputAdornment>
-                                    </Stack>
-                                  </React.Fragment>
-                                ),
-                              }}
-                              variant="standard"
-                            />
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      </TableHead>
-                    </Table>
-                    <Table aria-label="customized table" style={{ width: 1100 }}>
-                      <TableBody>
-                        <Stack
-                          direction="row"
-                          justifyContent="center"
-                          alignItems="center"
-                          spacing={3}
+                                      </Typography>
+                                    </InputAdornment>
+                                  </Stack>
+                                </React.Fragment>
+                              ),
+                            }}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
+                          <TextField
+                            required
+                            fullWidth
+                            disabled
+                            sx={{ pt: 1 }}
+                            InputProps={{
+                              startAdornment: (
+                                <React.Fragment>
+                                  <Stack direction="row"
+                                    justifyContent="space-evenly"
+                                    alignItems="center"
+                                    spacing={0}>
+                                    <InputAdornment position="start">
+                                      <Typography color="black" >
+                                        บัญชี :
+                                      </Typography>
+                                    </InputAdornment>
+                                    <InputAdornment position="start">
+                                      <Typography color="black" >
+                                        none
+                                      </Typography>
+                                    </InputAdornment>
+                                  </Stack>
+                                </React.Fragment>
+                              ),
+                            }}
+                            variant="standard"
+                          />
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    </TableHead>
+                  </Table>
+                  <Table aria-label="customized table" style={{ width: 1100 }}>
+                    <TableBody>
+                      <Stack
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        spacing={3}
+                      >
+                        <Button
+                          variant="contained"
+                          onClick={handleNext}
+                          endIcon={<BorderColorRoundedIcon />}
+                          sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 2 } }}
                         >
-                          <Button
-                            variant="contained"
-                            onClick={handleNext}
-                            endIcon={<BorderColorRoundedIcon />}
-                            sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 2 } }}
-                          >
-                            สร้างเอกสาร
-                          </Button>
-                        </Stack>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </React.Fragment>
-              </Paper>
-            </Container>
-          </AnimatedPage>
-        </ThemeProvider>
-        <Outlet />
-      </React.Fragment >
-    );
-  }
+                          สร้างเอกสาร
+                        </Button>
+                      </Stack>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </React.Fragment>
+            </Paper>
+          </Container>
+        </AnimatedPage>
+      </ThemeProvider>
+      <Outlet />
+    </React.Fragment >
+  );
+}
