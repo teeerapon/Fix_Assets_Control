@@ -548,7 +548,7 @@ export default function Nac_Main() {
               </Box>
               <React.Fragment>
                 <TableContainer component={Paper}>
-                  <Table aria-label="customized table" style={{ width: 1100 }}>
+                  <Table aria-label="customized table">
                     <TableHead>
                       <TableRow>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
@@ -746,7 +746,7 @@ export default function Nac_Main() {
                       </TableBody>
                     </React.Fragment>
                   </Table>
-                  <Table aria-label="customized table" style={{ width: 1100 }}>
+                  <Table>
                     <TableHead>
                       <TableRow style={{ width: '100%' }}>
                         <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
@@ -955,7 +955,7 @@ export default function Nac_Main() {
                       </React.Fragment>
                     ))}
                   </Table>
-                  <Table aria-label="customized table" style={{ width: 1100 }}>
+                  <Table aria-label="customized table" >
                     <TableBody>
                       <StyledTableRow>
                         <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '55%' }}>
@@ -986,7 +986,7 @@ export default function Nac_Main() {
                       </StyledTableRow>
                     </TableBody>
                   </Table>
-                  <Table aria-label="customized table" style={{ width: 1100 }}>
+                  <Table aria-label="customized table" >
                     <TableHead>
                       <StyledTableRow>
                         <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
@@ -1128,7 +1128,7 @@ export default function Nac_Main() {
                       </StyledTableRow>
                     </TableHead>
                   </Table>
-                  <Table aria-label="customized table" style={{ width: 1100 }}>
+                  <Table aria-label="customized table" >
                     <TableBody>
                       <Stack
                         direction="row"

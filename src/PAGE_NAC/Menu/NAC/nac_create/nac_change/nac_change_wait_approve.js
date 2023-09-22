@@ -1434,7 +1434,7 @@ export default function Nac_Main_wait() {
             approveData={approveData}
           />
           <AnimatedPage>
-            <Container component="main" maxWidth="lg" sx={{ mb: 12 }}>
+            <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth * 0.8 }}>
               <Box
                 sx={{
                   display: 'flex',
@@ -1467,7 +1467,7 @@ export default function Nac_Main_wait() {
                   {headers.status_name}
                 </Card>
               </Box>
-              <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 } }}>
+              <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 }, overflow: 'hidden' }}>
                 <Grid container sx={{ pb: 1 }}>
                   <Grid xs={2}>
                     <Box sx={{ flexGrow: 1, justifyContent: 'start' }}>
@@ -1743,7 +1743,7 @@ export default function Nac_Main_wait() {
                         </TableBody>
                       </React.Fragment>
                     </Table>
-                    <Table aria-label="customized table" style={{ width: 1100 }}>
+                    <Table aria-label="customized table" >
                       <TableHead>
                         <TableRow style={{ width: '100%' }}>
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '20%' }} >รหัสทรัพย์สิน</StyledTableCell>
@@ -1979,7 +1979,7 @@ export default function Nac_Main_wait() {
                         </React.Fragment>
                       ))}
                     </Table>
-                    <Table aria-label="customized table" style={{ width: 1100 }}>
+                    <Table aria-label="customized table" >
                       <TableBody>
                         <StyledTableRow>
                           <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '55%' }}>
@@ -2010,7 +2010,7 @@ export default function Nac_Main_wait() {
                         </StyledTableRow>
                       </TableBody>
                     </Table>
-                    <Table aria-label="customized table" style={{ width: 1100 }}>
+                    <Table aria-label="customized table" >
                       <TableHead>
                         <StyledTableRow>
                           <StyledTableCell align="left" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '25%' }} >
@@ -2152,7 +2152,7 @@ export default function Nac_Main_wait() {
                         </StyledTableRow>
                       </TableHead>
                     </Table>
-                    <Table aria-label="customized table" style={{ width: 1100 }}>
+                    <Table aria-label="customized table" >
                       <TableBody>
                         <Stack
                           direction="row"
