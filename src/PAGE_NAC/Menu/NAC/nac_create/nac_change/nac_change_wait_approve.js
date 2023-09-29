@@ -671,22 +671,22 @@ export default function Nac_Main_wait() {
     for (let i = 0; i < (responseExecDocID.data.length); i++) {
       if (responseExecDocID.data[i].limitamount === null && responseExecDocID.data[i].workflowlevel < 5) {
         ExecApprove[i] = {
-          approverid: responseExecDocID.data[i].workflowlevel === 0 ? 'AM: ' + responseExecDocID.data[i].approverid :
+          approverid: responseExecDocID.data[i].workflowlevel === 1 ? 'AM: ' + responseExecDocID.data[i].approverid :
 
-            responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
-              responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
-                responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
+            responseExecDocID.data[i].workflowlevel === 2 ? 'SM: ' + responseExecDocID.data[i].approverid :
+              responseExecDocID.data[i].workflowlevel === 3 ? 'DM: ' + responseExecDocID.data[i].approverid :
+                responseExecDocID.data[i].workflowlevel === 4 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
         }
         CheckApprove[i] = responseExecDocID.data[i].approverid
       }
 
       if (responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 3) {
         ExamineApprove[i] = {
-          approverid: responseExecDocID.data[i].workflowlevel === 0 ? 'AM: ' + responseExecDocID.data[i].approverid :
+          approverid: responseExecDocID.data[i].workflowlevel === 1 ? 'AM: ' + responseExecDocID.data[i].approverid :
 
-            responseExecDocID.data[i].workflowlevel === 1 ? 'SM: ' + responseExecDocID.data[i].approverid :
-              responseExecDocID.data[i].workflowlevel === 2 ? 'DM: ' + responseExecDocID.data[i].approverid :
-                responseExecDocID.data[i].workflowlevel === 3 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
+            responseExecDocID.data[i].workflowlevel === 2 ? 'SM: ' + responseExecDocID.data[i].approverid :
+              responseExecDocID.data[i].workflowlevel === 3 ? 'DM: ' + responseExecDocID.data[i].approverid :
+                responseExecDocID.data[i].workflowlevel === 4 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
         }
         CheckExamineApprove[i] = responseExecDocID.data[i].approverid
       }
@@ -1085,7 +1085,7 @@ export default function Nac_Main_wait() {
     }
     else if ((CheckExamineApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false && ExamineApprove.filter(function (el) { return (el != null && el.status === 0) }).length === 1) || (permission_menuID ? permission_menuID.includes(10) : null) === true) {
       const usercode = data.UserCode
-      const nac_status = 5
+      const nac_status = 3
       const source_approve = sourceApprove
       const source_approve_date = sourceDateApproveDate
       const des_approve = des_deliveryApprove
