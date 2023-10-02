@@ -669,7 +669,7 @@ export default function Nac_Main_wait() {
     const CheckExamineApprove = []
 
     for (let i = 0; i < (responseExecDocID.data.length); i++) {
-      if (responseExecDocID.data[i].limitamount === null && responseExecDocID.data[i].workflowlevel < 5) {
+      if (responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel > 2) {
         ExecApprove[i] = {
           approverid: responseExecDocID.data[i].workflowlevel === 1 ? 'AM: ' + responseExecDocID.data[i].approverid :
 
@@ -1027,73 +1027,19 @@ export default function Nac_Main_wait() {
 
   // ExamineApprove
   const handleExamineApprove = async () => {
-    if (verify === data.UserCode) {
-      const alert_value = 'คุณได้ตรวจสอบรายการนี้ไปแล้ว'
-      setAlert(true);
-      setValueAlert(alert_value)
-    }
-    else if (CheckExamineApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false && ExamineApprove.filter(function (el) { return (el != null && el.status === 0) }).length > 1) {
-      const usercode = data.UserCode
-      const nac_status = 2
-      const source_approve = sourceApprove
-      const source_approve_date = sourceDateApproveDate
-      const des_approve = des_deliveryApprove
-      const des_approve_date = des_deliveryApproveDate
-      const verify_by = data.UserCode
-      const verify_date = datenow
-      const nac_type = headers.nac_type
-      const responseForUpdate = await store_FA_control_updateStatus({
-        usercode,
-        nac_code,
-        nac_status,
-        nac_type,
-        source,
-        sourceDate,
-        des_delivery,
-        des_deliveryDate,
-        source_approve,
-        source_approve_date,
-        des_approve,
-        des_approve_date,
-        verify_by,
-        verify_date,
-      });
-      if ('data' in responseForUpdate) {
-        const comment = 'ตรวจสอบรายการแล้ว'
-        const responseComment = await store_FA_control_comment({
-          nac_code,
-          usercode,
-          comment
-        })
-        await store_FA_SendMail({
-          nac_code
-        })
-        if ('data' in responseComment) {
-          swal("แจ้งเตือน", 'คุณตรวจสอบรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-          });
-        } else {
-          swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-          });
-        }
-      } else {
-        swal("แจ้งเตือน", 'คุณไม่ได้รับอนุญาติให้ทำรายการนี้', "error").then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-        });
-      }
-    }
-    else if ((CheckExamineApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false && ExamineApprove.filter(function (el) { return (el != null && el.status === 0) }).length === 1) || (permission_menuID ? permission_menuID.includes(10) : null) === true) {
+    if (CheckExamineApprove.filter((res) => res === data.UserCode)[0] || (permission_menuID ? permission_menuID.includes(10) : null) !== true) {
+      swal("แจ้งเตือน", 'ถูกจำกัดสิทธิ์', "error")
+    } else {
       const usercode = data.UserCode
       const nac_status = 3
-      const source_approve = sourceApprove
-      const source_approve_date = sourceDateApproveDate
+      const source_approve = data.UserCode
+      const source_approve_date = datenow
       const des_approve = des_deliveryApprove
       const des_approve_date = des_deliveryApproveDate
-      const verify_by = data.UserCode
-      const verify_date = datenow
+      const verify_by = headers.verify_by_userid
+      const verify_date = headers.verify_date
       const nac_type = headers.nac_type
-      const responseForUpdate = await store_FA_control_updateStatus({
+      await store_FA_control_updateStatus({
         usercode,
         nac_code,
         nac_status,
@@ -1109,36 +1055,30 @@ export default function Nac_Main_wait() {
         verify_by,
         verify_date,
       });
-      if ('data' in responseForUpdate) {
-        const comment = 'ตรวจสอบรายการแล้ว'
-        const responseComment = await store_FA_control_comment({
-          nac_code,
-          usercode,
-          comment
-        })
-        await store_FA_SendMail({
-          nac_code
-        })
-        if ('data' in responseComment) {
-          swal("แจ้งเตือน", 'คุณตรวจสอบรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-          });
-        } else {
-          swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
-            window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-          });
-        }
-      } else {
-        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
+      const comment = 'อนุมัติรายการแล้ว'
+      const responseComment = await store_FA_control_comment({
+        nac_code,
+        usercode,
+        comment
+      })
+      await store_FA_SendMail({
+        nac_code
+      })
+      if ('data' in responseComment) {
+        swal("แจ้งเตือน", 'คุณอนุมัติรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
           window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
         });
+      } else {
+        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error")
       }
     }
   };
 
   // ExecApprove
   const handleExecApprove = async () => {
-    if (CheckApprove.filter(function (el) { return (el != null) }).includes(data.UserCode) !== false || (permission_menuID ? permission_menuID.includes(10) : null) === true) {
+    if (CheckApprove.filter((res) => res === data.UserCode)[0] || (permission_menuID ? permission_menuID.includes(10) : null) !== true) {
+      swal("แจ้งเตือน", 'ถูกจำกัดสิทธิ์', "error")
+    } else {
       const usercode = data.UserCode
       const nac_status = 5
       const source_approve = data.UserCode
@@ -1178,9 +1118,7 @@ export default function Nac_Main_wait() {
           window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
         });
       } else {
-        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error").then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
-        });
+        swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error")
       }
     }
   };
@@ -2169,7 +2107,7 @@ export default function Nac_Main_wait() {
                                 style={{ 'backgroundColor': 'orange' }}
                                 startIcon={<SystemUpdateAltRoundedIcon />}
                                 disabled={(data.UserCode === headers.create_by || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) ? false : true}>
-                                อัปเดต
+                                Update
                               </Button>
                               <Button
                                 variant="contained"
@@ -2180,7 +2118,7 @@ export default function Nac_Main_wait() {
                                     ExamineApprove.length === 0 ? false : true}
                                 onClick={handleSubmit}>
                                 <React.Fragment>
-                                  ยืนยันรายการ
+                                  Submit
                                 </React.Fragment>
                               </Button>
                             </React.Fragment>
@@ -2197,7 +2135,7 @@ export default function Nac_Main_wait() {
                                     (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
                                       true
                                 }>
-                                ตีกลับเอกสาร
+                                Reply
                               </Button>
                               <Button
                                 variant="contained"
@@ -2209,7 +2147,7 @@ export default function Nac_Main_wait() {
                                 onClick={CancelApprove}
                                 startIcon={<ClearRoundedIcon />}
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}>
-                                ไม่อนุมัติ
+                                Cancel
                               </Button>
                               <Button
                                 variant="contained"
@@ -2219,13 +2157,9 @@ export default function Nac_Main_wait() {
                                     'primary'}
                                 onClick={selectNAC === 2 ? handleExamineApprove : handleExecApprove}
                                 startIcon={selectNAC === 3 ? <CheckRoundedIcon /> : <VisibilityRoundedIcon />}
-                                disabled={
-                                  (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
-                                    (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
-                                      true
-                                }>
+                                >
                                 <React.Fragment>
-                                  {selectNAC === 2 ? 'ตรวจสอบ' : 'อนุมัติ'}
+                                  Accept
                                 </React.Fragment>
                               </Button>
                             </React.Fragment>
@@ -2237,14 +2171,14 @@ export default function Nac_Main_wait() {
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) && (!headers.des_date)) ? false : true}
                               //</Grid>onClick={handleSubmitComplete}>
-                              >ไม่รับเอกสาร
+                              >Cancel
                               </Button>
                               <Button
                                 variant="contained"
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) && (!headers.des_date)) ? false : true}
                                 onClick={handleSubmitComplete}>
-                                ตรวจรับเอกสาร
+                                Accept
                               </Button>
                             </React.Fragment>
                           ) : (selectNAC === 5) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined)) ? (
@@ -2255,7 +2189,7 @@ export default function Nac_Main_wait() {
                                 startIcon={<ClearRoundedIcon />}
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 onClick={handleOpen_drop_NAC_byDes}>
-                                ยกเลิกรายการ
+                                Cancel
                               </Button>
                               <Button
                                 variant="contained"
@@ -2263,7 +2197,7 @@ export default function Nac_Main_wait() {
                                 sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 disabled={(selectNAC === 5) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined)) ? false : true}
                                 onClick={handleSubmitComplete}>
-                                ปิดรายการ
+                                Accept
                               </Button>
                             </React.Fragment>
                           ) : (
@@ -2275,7 +2209,7 @@ export default function Nac_Main_wait() {
                                 style={{ 'backgroundColor': 'orange' }}
                                 startIcon={<SystemUpdateAltRoundedIcon />}
                                 disabled={(data.UserCode === headers.create_by || ((permission_menuID ? permission_menuID.includes(9) : null) === true)) ? false : true}>
-                                อัปเดต
+                                Update
                               </Button>
                             </React.Fragment>
                           )}
