@@ -993,10 +993,10 @@ export default function Nac_Main() {
       des_approve_date: sendHeader[0].des_approve_date,
       real_price: sendHeader[0].real_price,
       realPrice_Date: sendHeader[0].realPrice_Date,
-      verify_by: sendHeader[0].verify_by,
-      verify_date: sendHeader[0].verify_date,
-      source_approve: sendHeader[0].source_approve,
-      source_approve_date: sendHeader[0].source_approve_date,
+      verify_by: null,
+      verify_date: null,
+      source_approve: null,
+      source_approve_date: null,
     }
     await Axios.post(config.http + '/store_FA_control_updateStatus', reqUpdateStatus, config.headers)
       .then(async (res) => {

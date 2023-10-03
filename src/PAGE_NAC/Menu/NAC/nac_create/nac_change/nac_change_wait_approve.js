@@ -1285,12 +1285,12 @@ export default function Nac_Main_wait() {
   const handleReply = async () => {
     const usercode = data.UserCode
     const nac_status = 7
-    const source_approve = sourceApprove
-    const source_approve_date = sourceDateApproveDate
-    const des_approve = des_deliveryApprove
-    const des_approve_date = des_deliveryApproveDate
-    const verify_by = bossApprove
-    const verify_date = bossApproveDate
+    const source_approve = null
+    const source_approve_date = null
+    const des_approve = null
+    const des_approve_date = null
+    const verify_by = null
+    const verify_date = null
     const nac_type = headers.nac_type
     const responseForUpdate = await store_FA_control_updateStatus({
       usercode,
