@@ -173,6 +173,8 @@ export default function History_of_assets() {
   const [arraySubmit, setArraySubmit] = React.useState()
   const [asset_group, setAsset_group] = React.useState()
   const [group_name, setGroup_name] = React.useState()
+  const [ownerCode, setOwnerCode] = React.useState()
+  const [position, setPosition] = React.useState()
 
   React.useEffect(async () => {
     // POST request using axios with set headers
@@ -354,6 +356,8 @@ export default function History_of_assets() {
       Name: name,
       Asset_group: asset_group,
       Group_name: group_name,
+      OwnerCode: ownerCode,
+      Position: position,
       BranchID: branchID,
       Details: details,
       SerialNo: serialNo,
@@ -480,28 +484,6 @@ export default function History_of_assets() {
         )
       }
     },
-    // {
-    //   field: 'ImagePath',
-    //   headerName: 'Images',
-    //   headerClassName: 'super-app-theme--header',
-    //   minWidth: 50,
-    //   headerAlign: 'center',
-    //   align: 'center',
-    //   flex: 1,
-    //   renderCell: (params) => {
-    //     return (
-    //       <React.Fragment>
-    //         <IconButton color="primary" onClick={(event) => handleClickOpenImage(event, params)} component="label">
-    //           <Badge
-    //             badgeContent={(params.row.ImagePath && params.row.ImagePath_2) ? 2 : (params.row.ImagePath || params.row.ImagePath_2) ? 1 : 0}
-    //             color="primary">
-    //             <ImageIcon color="action" />
-    //           </Badge>
-    //         </IconButton>
-    //       </React.Fragment>
-    //     )
-    //   }
-    // },
   ];
 
   React.useEffect(async () => {
@@ -677,6 +659,32 @@ export default function History_of_assets() {
                           required
                           fullWidth
                           label="Group_name"
+                          autoFocus
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          size="small"
+                          autoComplete="OwerCode"
+                          name="OwerCode"
+                          value={ownerCode}
+                          onChange={(event) => setOwnerCode(event.target.value)}
+                          required
+                          fullWidth
+                          label="OwerCode"
+                          autoFocus
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          size="small"
+                          autoComplete="Position"
+                          name="Position"
+                          value={position}
+                          onChange={(event) => setPosition(event.target.value)}
+                          required
+                          fullWidth
+                          label="Position"
                           autoFocus
                         />
                       </Grid>
