@@ -341,12 +341,6 @@ export default function History_of_assets() {
 
   const handleClose = () => {
     setOpen(false);
-    setCode(null)
-    setName(null)
-    setSerialNo(null)
-    setPrice(null)
-    setDetails(null)
-    setCeate_Date(null)
   };
 
   const handleSubmit_Add = async () => {
