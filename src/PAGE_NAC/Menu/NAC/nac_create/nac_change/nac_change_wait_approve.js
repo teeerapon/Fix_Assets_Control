@@ -1027,7 +1027,7 @@ export default function Nac_Main_wait() {
 
   // ExamineApprove
   const handleExamineApprove = async () => {
-    if (CheckExamineApprove.filter((res) => res === data.UserCode)[0] || (permission_menuID ? permission_menuID.includes(10) : null) !== true) {
+    if (CheckExamineApprove.filter((res) => res !== data.UserCode)[0] || (permission_menuID ? permission_menuID.includes(10) : null) !== true) {
       swal("แจ้งเตือน", 'ถูกจำกัดสิทธิ์', "error")
     } else {
       const usercode = data.UserCode
@@ -1076,7 +1076,7 @@ export default function Nac_Main_wait() {
 
   // ExecApprove
   const handleExecApprove = async () => {
-    if (CheckApprove.filter((res) => res === data.UserCode)[0] || (permission_menuID ? permission_menuID.includes(10) : null) !== true) {
+    if (CheckApprove.filter((res) => res !== data.UserCode)[0] || (permission_menuID ? permission_menuID.includes(10) : null) !== true) {
       swal("แจ้งเตือน", 'ถูกจำกัดสิทธิ์', "error")
     } else {
       const usercode = data.UserCode
