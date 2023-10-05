@@ -1027,9 +1027,7 @@ export default function Nac_Main_wait() {
 
   // ExamineApprove
   const handleExamineApprove = async () => {
-    if (CheckExamineApprove.filter((res) => res !== data.UserCode)[0] || (permission_menuID ? permission_menuID.includes(10) : null) !== true) {
-      swal("แจ้งเตือน", 'ถูกจำกัดสิทธิ์', "error")
-    } else {
+    if (CheckExamineApprove.filter((res) => res === data.UserCode)[0] || (permission_menuID ? permission_menuID.includes(10) : null) === true) {
       const usercode = data.UserCode
       const nac_status = 3
       const source_approve = data.UserCode
@@ -1071,14 +1069,14 @@ export default function Nac_Main_wait() {
       } else {
         swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error")
       }
+    } else {
+      swal("แจ้งเตือน", 'ถูกจำกัดสิทธิ์', "error")
     }
   };
 
   // ExecApprove
   const handleExecApprove = async () => {
-    if (CheckApprove.filter((res) => res !== data.UserCode)[0] || (permission_menuID ? permission_menuID.includes(10) : null) !== true) {
-      swal("แจ้งเตือน", 'ถูกจำกัดสิทธิ์', "error")
-    } else {
+    if (CheckApprove.filter((res) => res === data.UserCode)[0] || (permission_menuID ? permission_menuID.includes(10) : null) === true) {
       const usercode = data.UserCode
       const nac_status = 5
       const source_approve = data.UserCode
@@ -1120,6 +1118,8 @@ export default function Nac_Main_wait() {
       } else {
         swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error")
       }
+    } else {
+      swal("แจ้งเตือน", 'ถูกจำกัดสิทธิ์', "error")
     }
   };
 
@@ -2157,7 +2157,7 @@ export default function Nac_Main_wait() {
                                     'primary'}
                                 onClick={selectNAC === 2 ? handleExamineApprove : handleExecApprove}
                                 startIcon={selectNAC === 3 ? <CheckRoundedIcon /> : <VisibilityRoundedIcon />}
-                                >
+                              >
                                 <React.Fragment>
                                   Accept
                                 </React.Fragment>
