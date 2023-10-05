@@ -1064,7 +1064,7 @@ export default function Nac_Main_wait() {
       })
       if ('data' in responseComment) {
         swal("แจ้งเตือน", 'คุณอนุมัติรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
+          window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' + nac_code
         });
       } else {
         swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error")
@@ -1113,7 +1113,7 @@ export default function Nac_Main_wait() {
       })
       if ('data' in responseComment) {
         swal("แจ้งเตือน", 'คุณอนุมัติรายการแล้ว', "success", { buttons: false, timer: 2000 }).then((value) => {
-          window.location.href = '/NAC_ROW/NAC_CREATE_WAIT_APPROVE/' + nac_code
+          window.location.href = '/NAC_ROW/NAC_CHANGE_WAIT_APPROVE?' + nac_code
         });
       } else {
         swal("แจ้งเตือน", 'เกิดข้อพิดพลาด', "error")
