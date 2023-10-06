@@ -2022,7 +2022,7 @@ export default function Nac_Main() {
                                     <React.Fragment>
                                       <Stack direction="row" spacing={1}>
                                         <Tooltip title={TooltipImage_2 ? TooltipImage_2 : res.image_2}>
-                                          <IconButton onClick={() => window.open(res.image_1, "_blank")} aria-label="upload picture" component="label">
+                                          <IconButton onClick={() => window.open(res.image_2, "_blank")} aria-label="upload picture" component="label">
                                             <FilePresentIcon className='scaled-icon-table' />
                                           </IconButton>
                                         </Tooltip>
