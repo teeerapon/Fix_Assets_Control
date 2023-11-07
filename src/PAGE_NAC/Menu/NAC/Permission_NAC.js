@@ -342,6 +342,7 @@ export default function Permission_NAC() {
                 <Tab label="ระบบอนุมัติ" {...a11yProps(0)} />
                 <Tab label="ระบบแสดงเมนูทรัพย์สิน NAC" {...a11yProps(1)} />
                 <Tab label="ระบบแสดงเมนูทรัพย์สินผู้ร่วม" {...a11yProps(2)} />
+                <Tab label="ระบบ Smart Project" {...a11yProps(3)} />
               </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
@@ -417,6 +418,34 @@ export default function Permission_NAC() {
                     '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': { py: '22px' },
                   }}
                   rows={menu.filter((res) => res.menutypeid === 3)}
+                  columns={columns_I}
+                  getRowId={(res) => res.menuid}
+                  disableColumnMenu
+                  autoHeight
+                  density='compact'
+                  pageSize={menu.length}
+                  disableSelectionOnClick
+                  {...other}
+                //checkboxSelection
+                />
+              </Box>
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={3}>
+              <Box sx={{ width: '100%' }}>
+                <StripedDataGrid
+                  sx={{
+                    pl: 2,
+                    pr: 2,
+                    pt: 2,
+                    boxShadow: 1,
+                    [`& .${gridClasses.cell}`]: {
+                      py: 1,
+                    },
+                    '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': { py: '8px' },
+                    '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { py: '15px' },
+                    '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': { py: '22px' },
+                  }}
+                  rows={menu.filter((res) => res.menutypeid === 4)}
                   columns={columns_I}
                   getRowId={(res) => res.menuid}
                   disableColumnMenu
