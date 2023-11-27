@@ -259,6 +259,7 @@ export default function Nac_Main() {
     // กำหนด Headers
     await Axios.post(config.http + '/store_FA_control_select_headers', { nac_code: nac_code }, { headers })
       .then((res) => {
+        console.log(res.data.data[0]);
         const listHeader = [...sendHeader]
         listHeader[0]['source'] = res.data.data[0].source_userid
         listHeader[0]['source_department'] = res.data.data[0].source_dep_owner

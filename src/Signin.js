@@ -126,14 +126,13 @@ export default function Signin() {
             .then(response => {
               localStorage.setItem('permission_MenuID', JSON.stringify(response.data.data.map((res) => res.Permission_MenuID)));
             });
-
           if (URL_LINK.pathname !== '/') {
             localStorage.setItem('sucurity', resChackUserWeb['data'][0]['approverid']);
             localStorage.setItem('token', response['token']);
             localStorage.setItem('data', JSON.stringify(response['data'][0]));
             localStorage.setItem('date_login', datenow);
             localStorage.setItem('permission', JSON.stringify(responseForPermission['data']));
-            window.location.href = URL_LINK.pathname;
+            window.location.href = `${URL_LINK.pathname}${URL_LINK.search}`;
           } else {
             localStorage.setItem('sucurity', resChackUserWeb['data'][0]['approverid']);
             localStorage.setItem('token', response['token']);
