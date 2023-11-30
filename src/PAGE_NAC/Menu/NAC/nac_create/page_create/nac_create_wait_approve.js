@@ -258,6 +258,32 @@ export default function Nac_Main() {
         setDataAssets(res.data.data)
       })
 
+    // กำหนด DTL
+    await Axios.post(config.http + '/store_FA_control_select_dtl', { nac_code: nac_code }, { headers })
+      .then((res) => {
+        setServiceList(res.data.data.map((resData) => {
+          return {
+            dtl_id: resData.nacdtl_id
+            , assetsCode: resData.nacdtl_assetsCode
+            , serialNo: resData.nacdtl_assetsSeria
+            , name: resData.nacdtl_assetsName
+            , price: resData.nacdtl_assetsPrice
+            , asset_id: resData.nacdtl_id
+            , nacdtl_assetsDtl: resData.nacdtl_assetsDtl
+            , date_asset: resData.nacdtl_date_asset
+            , image_1: resData.nacdtl_image_1 ?? null
+            , image_2: resData.nacdtl_image_2 ?? null
+            , statusCheck: (!resData.success_id || resData.success_id === 0) ? 0 : resData.success_id
+          };
+        }))
+      })
+
+    // ผู้้อนุมัติ + ผู้ตรวจสอบ
+    await Axios.post(config.http + '/store_FA_control_execDocID', { user_source: sendHeader[0].source, nac_code: nac_code, }, { headers })
+      .then((res) => {
+        setApproveData(res.data.data);
+      })
+
     // กำหนด Headers
     await Axios.post(config.http + '/store_FA_control_select_headers', { nac_code: nac_code }, { headers })
       .then((res) => {
@@ -294,32 +320,6 @@ export default function Nac_Main() {
         setSourceLastName(res.data.data[0].source_name ? res.data.data[0].source_name.split(' ')[1] : null)
         setDesName(res.data.data[0].des_name ? res.data.data[0].des_name.split(' ')[0] : null)
         setDesLastName(res.data.data[0].des_name ? res.data.data[0].des_name.split(' ')[1] : null)
-      })
-
-    // กำหนด DTL
-    await Axios.post(config.http + '/store_FA_control_select_dtl', { nac_code: nac_code }, { headers })
-      .then((res) => {
-        setServiceList(res.data.data.map((resData) => {
-          return {
-            dtl_id: resData.nacdtl_id
-            , assetsCode: resData.nacdtl_assetsCode
-            , serialNo: resData.nacdtl_assetsSeria
-            , name: resData.nacdtl_assetsName
-            , price: resData.nacdtl_assetsPrice
-            , asset_id: resData.nacdtl_id
-            , nacdtl_assetsDtl: resData.nacdtl_assetsDtl
-            , date_asset: resData.nacdtl_date_asset
-            , image_1: resData.nacdtl_image_1 ?? null
-            , image_2: resData.nacdtl_image_2 ?? null
-            , statusCheck: (!resData.success_id || resData.success_id === 0) ? 0 : resData.success_id
-          };
-        }))
-      })
-
-    // ผู้้อนุมัติ + ผู้ตรวจสอบ
-    await Axios.post(config.http + '/store_FA_control_execDocID', { user_source: sendHeader[0].source, nac_code: nac_code, }, { headers })
-      .then((res) => {
-        setApproveData(res.data.data);
       })
   }, [])
 
