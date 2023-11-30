@@ -386,7 +386,7 @@ export default function Nac_Main() {
           sendHeader={sendHeader}
         />
         <AnimatedPage>
-          <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth * 0.8 }}>
+          <Container component="main" maxWidth="lg">
             <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 }, overflow: 'hidden' }}>
               <Grid
                 container
