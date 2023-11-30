@@ -87,11 +87,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const create_nac = [
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/NAC_CREATE_STEP1' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/NAC_CREATE_STEP1' ? null : 'none' }} />,
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>เพิ่มบัญชีทรัพย์สิน</Stack>
-          <Stack><FontDownloadIcon className='scaled-logo-navbar' sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/NAC_CREATE_STEP1',
@@ -99,11 +99,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
-      icon: <CircleIcon sx={{ fontSize: 8, mr: 1, display: location.pathname === '/NAC_CHANGE_STEP1' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/NAC_CHANGE_STEP1' ? null : 'none' }} />,
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>เปลี่ยนแปลงรายละเอียด</Stack>
-          <Stack><FontDownloadIcon sx={{ fontSize: 14, color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/NAC_CHANGE_STEP1',
@@ -111,17 +111,17 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/NAC_CREATE_MAIN1' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/NAC_CREATE_MAIN1' ? null : 'none' }} />,
       label: 'โยกย้ายทรัพย์สิน',
       url: '/NAC_CREATE_MAIN1'
     },
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/NAC_SEALS_STEP1' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/NAC_SEALS_STEP1' ? null : 'none' }} />,
       label: 'ขายทรัพย์สิน',
       url: '/NAC_SEALS_STEP1'
     },
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/NAC_DELETE_STEP1' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/NAC_DELETE_STEP1' ? null : 'none' }} />,
       label: 'ตัดบัญชีทรัพย์สิน',
       url: '/NAC_DELETE_STEP1',
       permission: data.branchid === 901 ? 1 : 0,
@@ -131,11 +131,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const nac = [
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/NAC_OPERATOR' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/NAC_OPERATOR' ? null : 'none' }} />,
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>สถานะรายการ NAC</Stack>
-          <Stack><FontDownloadIcon className='scaled-logo-navbar' sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/NAC_OPERATOR',
@@ -143,7 +143,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/NAC_ROW' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/NAC_ROW' ? null : 'none' }} />,
       label: 'สถานะรายการ NAC',
       url: '/NAC_ROW'
     },
@@ -151,11 +151,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const period = [
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/CreatePeriod' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/CreatePeriod' ? null : 'none' }} />,
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>เพิ่มรอบตรวจนับ</Stack>
-          <Stack><FontDownloadIcon className='scaled-logo-navbar' sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/CreatePeriod',
@@ -163,11 +163,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/EditPeriod' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/EditPeriod' ? null : 'none' }} />,
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>แก้ไขรอบตรวจนับ</Stack>
-          <Stack><FontDownloadIcon className='scaled-logo-navbar' sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/EditPeriod',
@@ -178,11 +178,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const report = [
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/Reported_Assets_Counted' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/Reported_Assets_Counted' ? null : 'none' }} />,
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>รายงานตรวจนับทรัพย์สิน</Stack>
-          <Stack><FontDownloadIcon className='scaled-logo-navbar' sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/Reported_Assets_Counted',
@@ -190,11 +190,11 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/History_of_Assets' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/History_of_Assets' ? null : 'none' }} />,
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>ประวัติทรัพย์สิน NAC</Stack>
-          <Stack><FontDownloadIcon className='scaled-logo-navbar' sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon sx={{ color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/History_of_Assets',
@@ -202,17 +202,17 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       permission_branch: data.branchid === 901 ? 1 : 0
     },
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: (location.pathname === '/EBookMain' || location.pathname === '/EBookBranch') ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: (location.pathname === '/EBookMain' || location.pathname === '/EBookBranch') ? null : 'none' }} />,
       label: 'E-Book NAC',
       url: data.branchid === 901 ? '/EBookMain' : '/EBookBranch',
     },
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: (location.pathname === '/FETCH_ASSETS' || location.pathname === '/Account_BrnachAssets') ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: (location.pathname === '/FETCH_ASSETS' || location.pathname === '/Account_BrnachAssets') ? null : 'none' }} />,
       label: 'ทะเบียนทรัพย์สิน',
       url: data.branchid === 901 ? '/FETCH_ASSETS' : '/Account_BrnachAssets',
     },
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/Report' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/Report' ? null : 'none' }} />,
       label: 'รายงานตรวจนับทรัพย์สิน',
       url: '/Report'
     },
@@ -220,17 +220,17 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
 
   const bpc = [
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/BSAssetsMain' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/BSAssetsMain' ? null : 'none' }} />,
       label: 'E-Book BPC',
       url: '/BSAssetsMain'
     },
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/BpcStatus' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/BpcStatus' ? null : 'none' }} />,
       label: 'สถานะรายการทรัพย์สินผู้ร่วม',
       url: '/BpcStatus'
     },
     {
-      icon: <CircleIcon className='scaled-logo-navbar' sx={{ mr: 1, display: location.pathname === '/TransectionList' ? null : 'none' }} />,
+      icon: <CircleIcon sx={{ fontSize: '0.8rem !important', mr: 1, display: location.pathname === '/TransectionList' ? null : 'none' }} />,
       label: 'ประวัติทรัพย์สินผู้ร่วม',
       url: '/TransectionList'
     },
@@ -515,7 +515,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
                 <ListItem component="div" disablePadding>
                   <ListItemButton onClick={handleClickList2}>
                     <ListItemIcon sx={{ minWidth: '15% !important' }}>
-                      <LibraryAddIcon className='scaled-logo-Header' style={{ color: openList2 ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
+                      <LibraryAddIcon style={{ color: openList2 ? "#6366f1" : "rgba(255, 255, 255, 0.7)", }} />
                     </ListItemIcon>
                     <ListItemText
                       primary={<Typography className='scaled-480px-TableContent'>NAC CREATE</Typography>}

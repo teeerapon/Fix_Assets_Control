@@ -1,3 +1,5 @@
+/* eslint-disable no-loop-func */
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
@@ -156,39 +158,37 @@ export default function Nac_Main() {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ?
       parseFloat(elt.price) : parseFloat(elt.price);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return (a ? a : 0) + (b ? b : 0)
   })
   const book_V = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.bookValue) || /^\d+$/.test(elt.bookValue)) ?
       parseFloat(elt.bookValue) : parseFloat(elt.bookValue);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return (a ? a : 0) + (b ? b : 0)
   })
 
   const price_seals = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.priceSeals) || /^\d+$/.test(elt.priceSeals)) ?
       parseFloat(elt.priceSeals) : parseFloat(elt.priceSeals);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return (a ? a : 0) + (b ? b : 0)
   })
 
   const profit_seals = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue) || /^\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue)) ?
-      parseFloat(((elt.priceSeals * 100) / 107) - elt.bookValue) : parseFloat(((elt.priceSeals * 100) / 107) - elt.bookValue);
+    return (/^\d+\.\d+$/.test(((elt.priceSeals * 100) / 107) - (elt.bookValue ? elt.bookValue : 0)) || /^\d+$/.test(((elt.priceSeals * 100) / 107) - (elt.bookValue ? elt.bookValue : 0))) ?
+      parseFloat(((elt.priceSeals * 100) / 107) - (elt.bookValue ? elt.bookValue : 0)) : parseFloat(((elt.priceSeals * 100) / 107) - (elt.bookValue ? elt.bookValue : 0));
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return (a ? a : 0) + (b ? b : 0)
   })
 
   const sum_vat = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test((elt.priceSeals * 100) / 107) || /^\d+$/.test((elt.priceSeals * 100) / 107)) ?
       parseFloat((elt.priceSeals * 100) / 107) : parseFloat((elt.priceSeals * 100) / 107);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return (a ? a : 0) + (b ? b : 0)
   })
 
-
-  React.useEffect(async () => {
-
+  const listAPI = async () => {
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
@@ -208,7 +208,13 @@ export default function Nac_Main() {
         }
         setDataAssets(res.data.data)
       })
+  }
 
+
+  React.useEffect(() => {
+    if (dataAssets.length < 10) {
+      listAPI()
+    }
   }, [])
 
   const handleService_Source = (e) => {
@@ -270,7 +276,7 @@ export default function Nac_Main() {
     setServiceList(list);
   };
 
-  const handleServiceChangeHeader = async (e, index) => {
+  const handleServiceChangeHeader = async (e, newValue, reason, index) => {
     const nacdtl_assetsCode = { nacdtl_assetsCode: e.target.innerText }
     const Code = { Code: e.target.innerText }
 
@@ -281,40 +287,40 @@ export default function Nac_Main() {
           list[index]['assetsCode'] = ''
           setServiceList(list);
         })
-    } else if (e.target.innerText && serviceList.filter((res) => res.assetsCode === e.target.innerText)[0] === undefined) {
+    } else if (newValue && (reason !== 'clear')) {
       await Axios.post(config.http + '/store_FA_control_CheckAssetCode_Process', nacdtl_assetsCode, config.headers)
         .then(async (res) => {
           if (res.data.data[0].checkProcess === 'false') {
             swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "error")
           } else {
-            await Axios.post(config.http + '/SelectDTL_Control', Code, config.headers)
-              .then((response) => {
-                if (response.data.data.length > 0) {
-                  const list = [...serviceList];
-                  list[index]['assetsCode'] = response.data.data[0].Code
-                  list[index]['name'] = response.data.data[0].Name
-                  list[index]['dtl'] = response.data.data[0].Details
-                  list[index]['count'] = 1
-                  list[index]['serialNo'] = response.data.data[0].SerialNo
-                  list[index]['price'] = response.data.data[0].Price
-                  list[index]['date_asset'] = response.data.data[0].CreateDate
-                  setServiceList(list);
-                }
-              })
+            const list = [...serviceList];
+            list[index]['assetsCode'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Code
+            list[index]['name'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Name
+            list[index]['dtl'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Details
+            list[index]['count'] = 1
+            list[index]['serialNo'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].SerialNo
+            list[index]['price'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Price
+            list[index]['priceSeals'] = 0
+            list[index]['profit'] = 0
+            list[index]['date_asset'] = dayjs(dataAssets.filter((res) => res.Code === e.target.innerText)[0].CreateDate).format('YYYY-MM-DD')
+            list[index]['BranchID'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].BranchID
+            list[index]['OwnerCode'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].OwnerCode
+            setServiceList(list);
           }
         })
     } else {
       const list = [...serviceList];
-      list[index]['assetsCode'] = null
-      list[index]['name'] = null
-      list[index]['dtl'] = null
-      list[index]['count'] = null
-      list[index]['serialNo'] = null
-      list[index]['price'] = null
-      list[index]['bookValue'] = null
-      list[index]['priceSeals'] = null
-      list[index]['profit'] = null
-      list[index]['date_asset'] = null
+      list[index]['name'] = ''
+      list[index]['dtl'] = ''
+      list[index]['count'] = ''
+      list[index]['serialNo'] = ''
+      list[index]['price'] = ''
+      list[index]['bookValue'] = ''
+      list[index]['priceSeals'] =
+        list[index]['profit'] = ''
+      list[index]['date_asset'] = ''
+      list[index]['BranchID'] = ''
+      list[index]['OwnerCode'] = ''
       setServiceList(list);
     }
   };
@@ -416,11 +422,11 @@ export default function Nac_Main() {
                 </Typography>
               </Box>
               <TableContainer>
-                <Table size="small">
+                <Table size="small" sx={{ minWidth: 1000 }}>
                   <TableHead>
                     <TableRow>
                       <StyledTableCell align="center" style={{ width: '30%' }}>
-                        <Typography className='scaled-480px-TableHeader' >
+                        <Typography className='scaled-480px-TableHeader'>
                           ประเภทการเปลี่ยนแปลง
                         </Typography>
                       </StyledTableCell>
@@ -439,7 +445,7 @@ export default function Nac_Main() {
                   <TableBody>
                     <StyledTableRow>
                       <StyledTableCell align="center">
-                        <Typography className='scaled-480px-Header'>
+                        <Typography className='scaled-480px-Header' sx={{ fontWeight: 'bold !important', fontSize: '1.5rem !important' }}>
                           ตัดบัญชีทรัพยืสิน
                         </Typography>
                       </StyledTableCell>
@@ -508,10 +514,19 @@ export default function Nac_Main() {
                               option: 'scaled-480px-TableContent',
 
                             }}
-                            disableClearable={true}
                             value={sendHeader[0].source}
                             options={users.filter((res) => res.DepID === data.depid).map((option) => option.UserCode)}
-                            onChange={handleService_Source}
+                            onChange={(e, newValue, reason) => {
+                              if (!newValue || reason === 'clear') {
+                                const listHeader = [...sendHeader]
+                                listHeader[0]['source'] = null
+                                listHeader[0]['source_Department'] = null
+                                listHeader[0]['source_BU'] = null
+                                setSendHeader(listHeader)
+                              } else {
+                                handleService_Source(e, newValue, reason)
+                              }
+                            }}
                             renderInput={(params) => (
                               <TextField
                                 {...params}
@@ -643,7 +658,7 @@ export default function Nac_Main() {
                     </StyledTableRow>
                   </TableBody>
                 </Table>
-                <Table>
+                <Table size="small" sx={{ minWidth: 1000 }}>
                   <TableHead>
                     <TableRow>
                       <StyledTableCell align="center" sx={{ width: "15%", }}>
@@ -714,15 +729,14 @@ export default function Nac_Main() {
                               },
                             }}
                             classes={{
-                              input: 'scaled-480px-TableContent text-center',
+                              input: 'scaled-480px-TableContent',
                               option: 'scaled-480px-TableContent',
 
                             }}
-                            disableClearable={true}
                             key={index}
                             value={res.assetsCode}
                             options={dataAssets.map((option) => option.Code)}
-                            onChange={(e) => handleServiceChangeHeader(e, index)}
+                            onChange={(e, newValue, reason) => handleServiceChangeHeader(e, newValue, reason, index)}
                             renderInput={(params) => (
                               <TextField
                                 {...params}
@@ -791,9 +805,6 @@ export default function Nac_Main() {
                             disabled
                             InputProps={{
                               disableUnderline: true,
-                              classes: {
-                                input: 'scaled-480px-TableContent text-center',
-                              },
                             }}
                             value={!res.date_asset ? '' : res.date_asset.split('T')[0]}
                             variant="standard"
@@ -814,10 +825,8 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               inputComponent: NumericFormatCustom,
-                              classes: {
-                                input: 'scaled-480px-TableContent text-center',
-                              },
                             }}
+                            inputProps={{ min: 0, style: { textAlign: 'right' } }}
                             value={res.price ?? ''}
                             variant="standard"
                           />
@@ -837,10 +846,8 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               inputComponent: NumericFormatCustom,
-                              classes: {
-                                input: 'scaled-480px-TableContent text-center',
-                              },
                             }}
+                            inputProps={{ min: 0, style: { textAlign: 'right' } }}
                             value={res.bookValue ?? ''}
                             variant="standard"
                           />
@@ -856,12 +863,12 @@ export default function Nac_Main() {
                             key={index}
                             name="priceSeals"
                             onChange={(e) => handleServiceChange(e, index)}
+                            disabled
                             InputProps={{
+                              disableUnderline: true,
                               inputComponent: NumericFormatCustom,
-                              classes: {
-                                input: 'scaled-480px-TableContent text-center',
-                              },
                             }}
+                            inputProps={{ min: 0, style: { textAlign: 'right' } }}
                             value={res.priceSeals ?? ''}
                             variant="standard"
                           />
@@ -880,11 +887,9 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               inputComponent: NumericFormatCustom,
-                              classes: {
-                                input: 'scaled-480px-TableContent text-center',
-                              },
                             }}
-                            value={(res.priceSeals === 0 || !res.priceSeals) ? '' : ((res.priceSeals * 100) / 107)}
+                            inputProps={{ min: 0, style: { textAlign: 'right' } }}
+                            value={(((res.priceSeals ? res.priceSeals : 0) * 100) / 107)}
                             variant="standard"
                           />
                         </StyledTableCell>
@@ -903,11 +908,9 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               inputComponent: NumericFormatCustom,
-                              classes: {
-                                input: 'scaled-480px-TableContent text-center',
-                              },
                             }}
-                            value={(res.priceSeals === 0 || !res.priceSeals) ? '' : (((res.priceSeals * 100) / 107) - res.bookValue)}
+                            inputProps={{ min: 0, style: { textAlign: 'right' } }}
+                            value={(((res.priceSeals ? res.priceSeals : 0) * 100) / 107) - (res.bookValue ? res.bookValue : 0)}
                             variant="standard"
                           />
                         </StyledTableCell>
@@ -947,11 +950,9 @@ export default function Nac_Main() {
                           InputProps={{
                             disableUnderline: true,
                             inputComponent: NumericFormatCustom,
-                            classes: {
-                              input: 'scaled-480px-TableHeader text-center',
-                            },
                           }}
-                          value={!result ? '' : result}
+                          inputProps={{ min: 0, style: { textAlign: 'right' } }}
+                          value={result ? result : ''}
                           variant="standard"
                         />
                       </StyledTableCell>
@@ -969,11 +970,9 @@ export default function Nac_Main() {
                           InputProps={{
                             disableUnderline: true,
                             inputComponent: NumericFormatCustom,
-                            classes: {
-                              input: 'scaled-480px-TableHeader text-center',
-                            },
                           }}
-                          value={!book_V ? '' : book_V}
+                          inputProps={{ min: 0, style: { textAlign: 'right' } }}
+                          value={book_V ? book_V : ''}
                           variant="standard"
                         />
                       </StyledTableCell>
@@ -990,11 +989,9 @@ export default function Nac_Main() {
                           InputProps={{
                             disableUnderline: true,
                             inputComponent: NumericFormatCustom,
-                            classes: {
-                              input: 'scaled-480px-TableHeader text-center',
-                            },
                           }}
-                          value={!price_seals ? '' : price_seals}
+                          inputProps={{ min: 0, style: { textAlign: 'right' } }}
+                          value={price_seals ? price_seals : ''}
                           variant="standard"
                         />
                       </StyledTableCell>
@@ -1011,11 +1008,9 @@ export default function Nac_Main() {
                           InputProps={{
                             disableUnderline: true,
                             inputComponent: NumericFormatCustom,
-                            classes: {
-                              input: 'scaled-480px-TableHeader text-center',
-                            },
                           }}
-                          value={!sum_vat ? '' : sum_vat}
+                          inputProps={{ min: 0, style: { textAlign: 'right' } }}
+                          value={sum_vat ? sum_vat : ''}
                           variant="standard"
                         />
                       </StyledTableCell>
@@ -1032,18 +1027,16 @@ export default function Nac_Main() {
                           InputProps={{
                             disableUnderline: true,
                             inputComponent: NumericFormatCustom,
-                            classes: {
-                              input: 'scaled-480px-TableHeader text-center',
-                            },
                           }}
-                          value={!profit_seals ? '' : profit_seals}
+                          inputProps={{ min: 0, style: { textAlign: 'right' } }}
+                          value={profit_seals ? profit_seals : ''}
                           variant="standard"
                         />
                       </StyledTableCell>
                     </StyledTableRow>
                   </TableBody>
                 </Table>
-                <Table>
+                <Table size="small" sx={{ minWidth: 1000 }}>
                   <TableHead>
                     <StyledTableRow>
                       <StyledTableCell align="center">
@@ -1074,7 +1067,7 @@ export default function Nac_Main() {
                     </StyledTableRow>
                   </TableHead>
                 </Table>
-                <Table>
+                <Table size="small" sx={{ minWidth: 1000 }}>
                   <TableBody>
                     <TableCell align="center">
                       <Button

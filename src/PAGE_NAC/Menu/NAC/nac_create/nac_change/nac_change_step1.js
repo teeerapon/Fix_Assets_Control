@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
@@ -176,7 +177,7 @@ export default function Nac_Main() {
   const result = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return ((a ? a : 0) + (b ? b : 0))
   })
   const navigate = useNavigate();
   const checkUserWeb = localStorage.getItem('sucurity');
@@ -191,11 +192,6 @@ export default function Nac_Main() {
     showText: data.branchid === 901 ? true : false,
   });
   const nac_type = 3;
-
-
-  // const handleClickShowPassword = () => {
-  //   setValuesVisibility({ ...valuesVisibility, showText: !valuesVisibility.showText });
-  // };
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
@@ -214,8 +210,6 @@ export default function Nac_Main() {
   const [des_BU, setDes_BU] = React.useState();
   const [des_delivery, setDes_delivery] = React.useState();
   const [des_deliveryDate] = React.useState();
-  // const [des_deliveryApprove, setDes_deliveryApprove] = React.useState('SSP');
-  // const [des_deliveryApproveDate, setDes_deliveryApproveDate] = React.useState(datenow);
   const [des_Description, setDes_Description] = React.useState();
 
   // ส่วนของผู้ส่ง
@@ -223,8 +217,6 @@ export default function Nac_Main() {
   const [source_BU, setSource_BU] = React.useState(data.branchid === 901 ? null : 'Oil');
   const [source, setSource] = React.useState(data.branchid === 901 ? null : data.UserCode);
   const [sourceDate, setSourceDate] = React.useState();
-  // const [sourceApprove, setSource_Approve] = React.useState();
-  // const [sourceDateApproveDate, setSource_DateApproveDate] = React.useState();
   const [source_Description, setSource_Description] = React.useState();
 
   const fetchUserForAssetsControl = async () => {
@@ -251,11 +243,10 @@ export default function Nac_Main() {
   };
 
   React.useEffect(() => {
-    fetchAssetsControl();
-    fetchUserForAssetsControl();
-    // 👇️ disable the rule for a single line
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (AllAssetsControl.length < 10) {
+      fetchAssetsControl();
+      fetchUserForAssetsControl();
+    }
   }, []);
 
   const handleServiceAdd = () => {
@@ -332,26 +323,23 @@ export default function Nac_Main() {
         list_main[index]['date_asset'] = ''
         setServiceList_Main(list_main)
       } else {
-        const Code = list[index]['assetsCode'];
-        const response = await SelectDTL_Control({
-          Code
-        });
-        if (response['data'].length !== 0) {
-          list[index]['name'] = response['data'][0].Name
-          list[index]['dtl'] = response['data'][0].Details
-          list[index]['count'] = 1
-          list[index]['serialNo'] = response['data'][0].SerialNo
-          list[index]['price'] = response['data'][0].Price
-          list[index]['date_asset'] = response['data'][0].CreateDate
-          setServiceList(list);
+        list[index]['assetsCode'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Code
+        list[index]['name'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Name
+        list[index]['dtl'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Details
+        list[index]['count'] = 1
+        list[index]['serialNo'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].SerialNo
+        list[index]['price'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Price
+        list[index]['priceSeals'] = 0
+        list[index]['profit'] = 0
+        list[index]['date_asset'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].CreateDate
+        setServiceList(list);
 
-          list_main[index]['name'] = response['data'][0].Name
-          list_main[index]['dtl'] = response['data'][0].Details
-          list_main[index]['serialNo'] = response['data'][0].SerialNo
-          list_main[index]['price'] = response['data'][0].Price
-          list_main[index]['date_asset'] = response['data'][0].CreateDate
-          setServiceList_Main(list_main)
-        }
+        list_main[index]['name'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Name
+        list_main[index]['dtl'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Details
+        list_main[index]['serialNo'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].SerialNo
+        list_main[index]['price'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Price
+        list_main[index]['date_asset'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].CreateDate
+        setServiceList_Main(list_main)
       }
     }
   };
@@ -562,7 +550,7 @@ export default function Nac_Main() {
                           <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                             <FormGroup>
                               <center>
-                                <Typography variant='h4' color='primary'>
+                                <Typography variant='h4' color='primary' sx={{ fontWeight: 'bold !important', fontSize: '1.5rem !important' }}>
                                   เปลี่ยนแปลงรายละเอียดทรัพย์สิน
                                 </Typography>
                               </center>
@@ -1128,23 +1116,19 @@ export default function Nac_Main() {
                       </StyledTableRow>
                     </TableHead>
                   </Table>
-                  <Table aria-label="customized table" >
+                  <Table>
                     <TableBody>
-                      <Stack
-                        direction="row"
-                        justifyContent="center"
-                        alignItems="center"
-                        spacing={3}
-                      >
+                      <TableCell align="center">
                         <Button
                           variant="contained"
                           onClick={handleNext}
-                          endIcon={<BorderColorRoundedIcon />}
-                          sx={{ my: { xs: 3, md: 4 }, p: { xs: 2, md: 2 } }}
+                          className='scaled-480px-TableHeader'
+                          endIcon={<BorderColorRoundedIcon className='scaled-480px-TableHeader' />}
+                          sx={{ m: 1 }}
                         >
-                          สร้างเอกสาร
+                          Submit
                         </Button>
-                      </Stack>
+                      </TableCell>
                     </TableBody>
                   </Table>
                 </TableContainer>

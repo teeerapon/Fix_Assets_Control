@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
@@ -224,120 +225,35 @@ export default function Nac_Main() {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ?
       parseFloat(elt.price) : parseFloat(elt.price);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return (a ? a : 0) + (b ? b : 0)
   })
   const book_V = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.bookValue) || /^\d+$/.test(elt.bookValue)) ?
       parseFloat(elt.bookValue) : parseFloat(elt.bookValue);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return (a ? a : 0) + (b ? b : 0)
   })
 
   const price_seals = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.priceSeals) || /^\d+$/.test(elt.priceSeals)) ?
       parseFloat(elt.priceSeals) : parseFloat(elt.priceSeals);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return (a ? a : 0) + (b ? b : 0)
   })
 
   const profit_seals = serviceList.map(function (elt) {
-    return (/^\d+\.\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue) || /^\d+$/.test(((elt.priceSeals * 100) / 107) - elt.bookValue)) ?
-      parseFloat(((elt.priceSeals * 100) / 107) - elt.bookValue) : parseFloat(((elt.priceSeals * 100) / 107) - elt.bookValue);
+    return (/^\d+\.\d+$/.test(((elt.priceSeals * 100) / 107) - (elt.bookValue ? elt.bookValue : 0)) || /^\d+$/.test(((elt.priceSeals * 100) / 107) - (elt.bookValue ? elt.bookValue : 0))) ?
+      parseFloat(((elt.priceSeals * 100) / 107) - (elt.bookValue ? elt.bookValue : 0)) : parseFloat(((elt.priceSeals * 100) / 107) - (elt.bookValue ? elt.bookValue : 0));
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return (a ? a : 0) + (b ? b : 0)
   })
 
   const sum_vat = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test((elt.priceSeals * 100) / 107) || /^\d+$/.test((elt.priceSeals * 100) / 107)) ?
       parseFloat((elt.priceSeals * 100) / 107) : parseFloat((elt.priceSeals * 100) / 107);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return (a ? a : 0) + (b ? b : 0)
   })
-
-  React.useEffect(async () => {
-
-    const headers = {
-      'Authorization': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    };
-
-    // แสดง users ทั้งหมด
-    await Axios.get(config.http + '/getsUserForAssetsControl', { headers })
-      .then((res) => {
-        setUsers(res.data.data)
-      })
-
-    // รหัสทรัพย์สินทั้งหมด
-    await Axios.post(config.http + '/AssetsAll_Control', { BranchID: data.branchid }, { headers })
-      .then((res) => {
-        if (data.branchid === 901 && data.DepCode !== '101ITO') {
-          setDataAssets(res.data.data.filter((datain) => datain.Position === data.DepCode))
-        }
-        setDataAssets(res.data.data)
-      })
-
-    // กำหนด DTL
-    await Axios.post(config.http + '/store_FA_control_select_dtl', { nac_code: nac_code }, { headers })
-      .then((res) => {
-
-        setServiceList(res.data.data.map((resData) => {
-          return {
-            dtl_id: resData.nacdtl_id
-            , assetsCode: resData.nacdtl_assetsCode
-            , serialNo: resData.nacdtl_assetsSeria
-            , name: resData.nacdtl_assetsName
-            , price: resData.nacdtl_assetsPrice
-            , asset_id: resData.nacdtl_id
-            , bookValue: resData.nacdtl_bookV === 0 ? null : resData.nacdtl_bookV
-            , priceSeals: resData.nacdtl_PriceSeals
-            , profit: resData.nacdtl_profit
-            , date_asset: resData.nacdtl_date_asset
-            , image_1: resData.nacdtl_image_1 ?? null
-            , image_2: resData.nacdtl_image_2 ?? null
-          };
-        }))
-      })
-
-    // ผู้้อนุมัติ + ผู้ตรวจสอบ
-    await Axios.post(config.http + '/store_FA_control_execDocID', { user_source: sendHeader[0].source, nac_code: nac_code, }, { headers })
-      .then((res) => {
-        setApproveData(res.data.data);
-      })
-
-    // กำหนด Headers
-    await Axios.post(config.http + '/store_FA_control_select_headers', { nac_code: nac_code }, { headers })
-      .then((res) => {
-
-        const listHeader = [...sendHeader]
-        listHeader[0]['source'] = res.data.data[0].source_userid
-        listHeader[0]['source_department'] = res.data.data[0].source_dep_owner
-        listHeader[0]['source_BU'] = res.data.data[0].source_bu_owner
-        listHeader[0]['sumPrice'] = res.data.data[0].sum_price
-        listHeader[0]['nameSource'] = res.data.data[0].source_name
-        listHeader[0]['sourceDate'] = res.data.data[0].source_date
-        listHeader[0]['source_description'] = res.data.data[0].source_remark
-        listHeader[0]['create_by'] = res.data.data[0].create_by
-        listHeader[0]['verify_by_userid'] = res.data.data[0].verify_by_userid
-        listHeader[0]['verify_date'] = res.data.data[0].verify_date
-        listHeader[0]['source_approve'] = res.data.data[0].source_approve_userid
-        listHeader[0]['source_approve_date'] = res.data.data[0].source_approve_date
-        listHeader[0]['account_aprrove_id'] = res.data.data[0].account_aprrove_id
-        listHeader[0]['finance_aprrove_id'] = res.data.data[0].finance_aprrove_id
-        listHeader[0]['nac_code'] = res.data.data[0].nac_code
-        listHeader[0]['nac_status'] = res.data.data[0].nac_status
-        listHeader[0]['nac_type'] = res.data.data[0].nac_type
-        listHeader[0]['source_date'] = res.data.data[0].source_date
-        listHeader[0]['real_price'] = res.data.data[0].real_price
-        listHeader[0]['realPrice_Date'] = res.data.data[0].realPrice_Date
-        listHeader[0]['status_name'] = res.data.data[0].status_name
-        setSendHeader(listHeader)
-        setSourceName(res.data.data[0].source_name ? res.data.data[0].source_name.split(' ')[0] : null)
-        setSourceLastName(res.data.data[0].source_name ? res.data.data[0].source_name.split(' ')[1] : null)
-        setDesName(res.data.data[0].des_name ? res.data.data[0].des_name.split(' ')[0] : null)
-        setDesLastName(res.data.data[0].des_name ? res.data.data[0].des_name.split(' ')[1] : null)
-      })
-
-  }, [])
 
   const handleService_Source = (e) => {
 
@@ -401,48 +317,50 @@ export default function Nac_Main() {
     setServiceList(list);
   };
 
-  const handleServiceChangeHeader = async (e, index) => {
+  const handleServiceChangeHeader = async (e, newValue, reason, index) => {
     const nacdtl_assetsCode = { nacdtl_assetsCode: e.target.innerText }
-    const Code = { Code: e.target.innerText }
 
-    const checkProcess = await Axios.post(config.http + '/store_FA_control_CheckAssetCode_Process', nacdtl_assetsCode, config.headers)
-
-    if (checkProcess.data.data[0].checkProcess === 'false') {
-      swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "error")
-    } else if (serviceList.filter((res) => res.assetsCode === e.target.innerText)[0] !== undefined) {
+    if (serviceList.filter((res) => res.assetsCode === e.target.innerText)[0] !== undefined) {
       swal("แจ้งเตือน", 'มีทรัพย์สินนี้ในรายการแล้ว', "error")
         .then(() => {
           const list = [...serviceList];
           list[index]['assetsCode'] = ''
           setServiceList(list);
         })
-    } else if (e.target.innerText && serviceList.filter((res) => res.assetsCode === e.target.innerText)[0] === undefined) {
-      await Axios.post(config.http + '/SelectDTL_Control', Code, config.headers)
-        .then((response) => {
-          if (response.data.data.length > 0) {
+    } else if (newValue && (reason !== 'clear')) {
+      await Axios.post(config.http + '/store_FA_control_CheckAssetCode_Process', nacdtl_assetsCode, config.headers)
+        .then(async (res) => {
+          if (res.data.data[0].checkProcess === 'false') {
+            swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "error")
+          } else {
             const list = [...serviceList];
-            list[index]['assetsCode'] = response.data.data[0].Code
-            list[index]['name'] = response.data.data[0].Name
-            list[index]['dtl'] = response.data.data[0].Details
+            list[index]['assetsCode'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Code
+            list[index]['name'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Name
+            list[index]['dtl'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Details
             list[index]['count'] = 1
-            list[index]['serialNo'] = response.data.data[0].SerialNo
-            list[index]['price'] = response.data.data[0].Price
-            list[index]['date_asset'] = response.data.data[0].CreateDate
+            list[index]['serialNo'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].SerialNo
+            list[index]['price'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Price
+            list[index]['priceSeals'] = 0
+            list[index]['profit'] = 0
+            list[index]['date_asset'] = dayjs(dataAssets.filter((res) => res.Code === e.target.innerText)[0].CreateDate).format('YYYY-MM-DD')
+            list[index]['BranchID'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].BranchID
+            list[index]['OwnerCode'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].OwnerCode
             setServiceList(list);
           }
         })
     } else {
       const list = [...serviceList];
-      list[index]['assetsCode'] = null
-      list[index]['name'] = null
-      list[index]['dtl'] = null
-      list[index]['count'] = null
-      list[index]['serialNo'] = null
-      list[index]['price'] = null
-      list[index]['bookValue'] = null
-      list[index]['priceSeals'] = null
-      list[index]['profit'] = null
-      list[index]['date_asset'] = null
+      list[index]['name'] = ''
+      list[index]['dtl'] = ''
+      list[index]['count'] = ''
+      list[index]['serialNo'] = ''
+      list[index]['price'] = ''
+      list[index]['bookValue'] = ''
+      list[index]['priceSeals'] =
+        list[index]['profit'] = ''
+      list[index]['date_asset'] = ''
+      list[index]['BranchID'] = ''
+      list[index]['OwnerCode'] = ''
       setServiceList(list);
     }
   };
@@ -1039,10 +957,94 @@ export default function Nac_Main() {
     setOpenDialog(false);
   };
 
+  const listAPI = async () => {
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    // แสดง users ทั้งหมด
+    await Axios.get(config.http + '/getsUserForAssetsControl', { headers })
+      .then((res) => {
+        setUsers(res.data.data)
+      })
+
+    // รหัสทรัพย์สินทั้งหมด
+    await Axios.post(config.http + '/AssetsAll_Control', { BranchID: data.branchid }, { headers })
+      .then((res) => {
+        if (data.branchid === 901 && data.DepCode !== '101ITO') {
+          setDataAssets(res.data.data.filter((datain) => datain.Position === data.DepCode))
+        }
+        setDataAssets(res.data.data)
+      })
+
+    // กำหนด DTL
+    await Axios.post(config.http + '/store_FA_control_select_dtl', { nac_code: nac_code }, { headers })
+      .then((res) => {
+
+        setServiceList(res.data.data.map((resData) => {
+          return {
+            dtl_id: resData.nacdtl_id
+            , assetsCode: resData.nacdtl_assetsCode
+            , serialNo: resData.nacdtl_assetsSeria
+            , name: resData.nacdtl_assetsName
+            , price: resData.nacdtl_assetsPrice
+            , asset_id: resData.nacdtl_id
+            , bookValue: resData.nacdtl_bookV === 0 ? null : resData.nacdtl_bookV
+            , priceSeals: resData.nacdtl_PriceSeals
+            , profit: resData.nacdtl_profit
+            , date_asset: resData.nacdtl_date_asset
+            , image_1: resData.nacdtl_image_1 ?? null
+            , image_2: resData.nacdtl_image_2 ?? null
+          };
+        }))
+      })
+
+    // ผู้้อนุมัติ + ผู้ตรวจสอบ
+    await Axios.post(config.http + '/store_FA_control_execDocID', { user_source: sendHeader[0].source, nac_code: nac_code, }, { headers })
+      .then((res) => {
+        setApproveData(res.data.data);
+      })
+
+    // กำหนด Headers
+    await Axios.post(config.http + '/store_FA_control_select_headers', { nac_code: nac_code }, { headers })
+      .then((res) => {
+
+        const listHeader = [...sendHeader]
+        listHeader[0]['source'] = res.data.data[0].source_userid
+        listHeader[0]['source_department'] = res.data.data[0].source_dep_owner
+        listHeader[0]['source_BU'] = res.data.data[0].source_bu_owner
+        listHeader[0]['sumPrice'] = res.data.data[0].sum_price
+        listHeader[0]['nameSource'] = res.data.data[0].source_name
+        listHeader[0]['sourceDate'] = res.data.data[0].source_date
+        listHeader[0]['source_description'] = res.data.data[0].source_remark
+        listHeader[0]['create_by'] = res.data.data[0].create_by
+        listHeader[0]['verify_by_userid'] = res.data.data[0].verify_by_userid
+        listHeader[0]['verify_date'] = res.data.data[0].verify_date
+        listHeader[0]['source_approve'] = res.data.data[0].source_approve_userid
+        listHeader[0]['source_approve_date'] = res.data.data[0].source_approve_date
+        listHeader[0]['account_aprrove_id'] = res.data.data[0].account_aprrove_id
+        listHeader[0]['finance_aprrove_id'] = res.data.data[0].finance_aprrove_id
+        listHeader[0]['nac_code'] = res.data.data[0].nac_code
+        listHeader[0]['nac_status'] = res.data.data[0].nac_status
+        listHeader[0]['nac_type'] = res.data.data[0].nac_type
+        listHeader[0]['source_date'] = res.data.data[0].source_date
+        listHeader[0]['real_price'] = res.data.data[0].real_price
+        listHeader[0]['realPrice_Date'] = res.data.data[0].realPrice_Date
+        listHeader[0]['status_name'] = res.data.data[0].status_name
+        setSendHeader(listHeader)
+        setCounter(res.data.data[0].source_name ? 10 : 11);
+        setSourceName(res.data.data[0].source_name ? res.data.data[0].source_name.split(' ')[0] : null)
+        setSourceLastName(res.data.data[0].source_name ? res.data.data[0].source_name.split(' ')[1] : null)
+        setDesName(res.data.data[0].des_name ? res.data.data[0].des_name.split(' ')[0] : null)
+        setDesLastName(res.data.data[0].des_name ? res.data.data[0].des_name.split(' ')[1] : null)
+      })
+  }
+
   React.useEffect(() => {
-    window.setTimeout(() => {
-      setCounter(10);
-    }, 2000)
+    if (dataAssets.length < 10) {
+      listAPI();
+    }
   }, []);
 
   if ((!sendHeader[0].nac_code && nac_code && counter < 10) || (nac_code && counter < 10)) {
@@ -1056,12 +1058,22 @@ export default function Nac_Main() {
             alignItems: 'center',
           }}
         >
-          <Stack direction="row" spacing={3}>
-            <CircularProgress disableShrink color="inherit" />
-            <Typography variant="h4" color="inherit" >
-              Loading...
-            </Typography>
-          </Stack>
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+          >
+            <Grid item>
+              <CircularProgress disableShrink color="inherit" />
+            </Grid>
+            <Grid item>
+              <Typography sx={{ fontSize: '2rem !important', fontWeight: 'bold' }} color="inherit" >
+                Loading...
+              </Typography>
+            </Grid>
+          </Grid>
         </Box>
       </React.Fragment>
     );
@@ -1168,7 +1180,7 @@ export default function Nac_Main() {
                   </Stack>
                 </Box>
                 <TableContainer>
-                  <Table>
+                  <Table size="small" sx={{ minWidth: 1000 }}>
                     <TableHead>
                       <TableRow>
                         <StyledTableCell align="center" style={{ width: '30%' }}>
@@ -1191,7 +1203,7 @@ export default function Nac_Main() {
                     <TableBody>
                       <StyledTableRow>
                         <StyledTableCell align="center">
-                          <Typography className='scaled-480px-Header'>
+                          <Typography className='scaled-480px-Header' sx={{ fontWeight: 'bold !important', fontSize: '1.5rem !important' }}>
                             ตัดบัญชีทรัพย์สิน
                           </Typography>
                         </StyledTableCell>
@@ -1267,9 +1279,18 @@ export default function Nac_Main() {
                                 option: 'scaled-480px-TableContent',
 
                               }}
-                              disableClearable={true}
                               options={users.filter((res) => res.DepID === data.depid).map((option) => option.UserCode)}
-                              onChange={handleService_Source}
+                              onChange={(e, newValue, reason) => {
+                                if (!newValue || reason === 'clear') {
+                                  const listHeader = [...sendHeader]
+                                  listHeader[0]['source'] = null
+                                  listHeader[0]['source_Department'] = null
+                                  listHeader[0]['source_BU'] = null
+                                  setSendHeader(listHeader)
+                                } else {
+                                  handleService_Source(e, newValue, reason)
+                                }
+                              }}
                               renderInput={(params) => (
                                 <TextField
                                   {...params}
@@ -1429,7 +1450,7 @@ export default function Nac_Main() {
                       </StyledTableRow>
                     </TableBody>
                   </Table>
-                  <Table>
+                  <Table size="small" sx={{ minWidth: 1000 }}>
                     <TableHead>
                       <TableRow>
                         <StyledTableCell align="center" sx={{ width: "15%", }}>
@@ -1505,16 +1526,15 @@ export default function Nac_Main() {
                                 },
                               }}
                               classes={{
-                                input: 'scaled-480px-TableContent text-center',
+                                input: 'scaled-480px-TableContent',
                                 option: 'scaled-480px-TableContent',
 
                               }}
-                              disableClearable={true}
                               key={index}
                               disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
                               value={res.assetsCode}
                               options={dataAssets.map((option) => option.Code)}
-                              onChange={(e) => handleServiceChangeHeader(e, index)}
+                              onChange={(e, newValue, reason) => handleServiceChangeHeader(e, newValue, reason, index)}
                               renderInput={(params) => (
                                 <TextField
                                   {...params}
@@ -1584,9 +1604,6 @@ export default function Nac_Main() {
                               disabled
                               InputProps={{
                                 disableUnderline: true,
-                                classes: {
-                                  input: 'scaled-480px-TableContent text-center',
-                                },
                               }}
                               value={!res.date_asset ? '' : res.date_asset.split('T')[0]}
                               variant="standard"
@@ -1607,10 +1624,8 @@ export default function Nac_Main() {
                               InputProps={{
                                 disableUnderline: true,
                                 inputComponent: NumericFormatCustom,
-                                classes: {
-                                  input: 'scaled-480px-TableContent text-center',
-                                },
                               }}
+                              inputProps={{ min: 0, style: { textAlign: 'right' } }}
                               value={res.price ?? ''}
                               variant="standard"
                             />
@@ -1631,10 +1646,8 @@ export default function Nac_Main() {
                               InputProps={{
                                 disableUnderline: (permission_MenuID.indexOf(9) > -1 && sendHeader[0].nac_status === 11) ? false : true,
                                 inputComponent: NumericFormatCustom,
-                                classes: {
-                                  input: 'scaled-480px-TableContent text-center',
-                                },
                               }}
+                              inputProps={{ min: 0, style: { textAlign: 'right' } }}
                               value={res.bookValue ?? ''}
                               variant="standard"
                             />
@@ -1653,10 +1666,8 @@ export default function Nac_Main() {
                               InputProps={{
                                 disableUnderline: true,
                                 inputComponent: NumericFormatCustom,
-                                classes: {
-                                  input: 'scaled-480px-TableContent text-center',
-                                },
                               }}
+                              inputProps={{ min: 0, style: { textAlign: 'right' } }}
                               value={!res.assetsCode ? '' : !res.priceSeals ? 0 : res.priceSeals}
                               variant="standard"
                             />
@@ -1675,10 +1686,8 @@ export default function Nac_Main() {
                               InputProps={{
                                 disableUnderline: true,
                                 inputComponent: NumericFormatCustom,
-                                classes: {
-                                  input: 'scaled-480px-TableContent text-center',
-                                },
                               }}
+                              inputProps={{ min: 0, style: { textAlign: 'right' } }}
                               value={!res.assetsCode ? '' : (res.priceSeals * 100) / 107}
                               variant="standard"
                             />
@@ -1698,10 +1707,8 @@ export default function Nac_Main() {
                               InputProps={{
                                 disableUnderline: true,
                                 inputComponent: NumericFormatCustom,
-                                classes: {
-                                  input: 'scaled-480px-TableContent text-center',
-                                },
                               }}
+                              inputProps={{ min: 0, style: { textAlign: 'right' } }}
                               value={!res.assetsCode ? '' : !profit_seals ? 0 : (((res.priceSeals * 100) / 107) - res.bookValue)}
                               variant="standard"
                             />
@@ -1768,10 +1775,8 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               inputComponent: NumericFormatCustom,
-                              classes: {
-                                input: 'scaled-480px-TableContent text-center',
-                              },
                             }}
+                            inputProps={{ min: 0, style: { textAlign: 'right' } }}
                             value={!result ? '' : result}
                             variant="standard"
                           />
@@ -1789,10 +1794,8 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               inputComponent: NumericFormatCustom,
-                              classes: {
-                                input: 'scaled-480px-TableContent text-center',
-                              },
                             }}
+                            inputProps={{ min: 0, style: { textAlign: 'right' } }}
                             value={!book_V ? '' : book_V}
                             variant="standard"
                           />
@@ -1809,10 +1812,8 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               inputComponent: NumericFormatCustom,
-                              classes: {
-                                input: 'scaled-480px-TableContent text-center',
-                              },
                             }}
+                            inputProps={{ min: 0, style: { textAlign: 'right' } }}
                             value={serviceList[0].assetsCode ? 0 : ''}
                             variant="standard"
                           />
@@ -1829,10 +1830,8 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               inputComponent: NumericFormatCustom,
-                              classes: {
-                                input: 'scaled-480px-TableContent text-center',
-                              },
                             }}
+                            inputProps={{ min: 0, style: { textAlign: 'right' } }}
                             value={serviceList[0].assetsCode ? 0 : ''}
                             variant="standard"
                           />
@@ -1851,10 +1850,8 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               inputComponent: NumericFormatCustom,
-                              classes: {
-                                input: 'scaled-480px-TableContent text-center',
-                              },
                             }}
+                            inputProps={{ min: 0, style: { textAlign: 'right' } }}
                             value={!profit_seals ? 0 : profit_seals}
                             variant="standard"
                           />
@@ -1862,7 +1859,7 @@ export default function Nac_Main() {
                       </StyledTableRow>
                     </TableBody>
                   </Table>
-                  <Table>
+                  <Table size="small" sx={{ minWidth: 1000 }}>
                     <TableHead>
                       <StyledTableRow>
                         <StyledTableCell align="center">
@@ -1893,7 +1890,7 @@ export default function Nac_Main() {
                       </StyledTableRow>
                     </TableHead>
                   </Table>
-                  <Table>
+                  <Table size="small" sx={{ minWidth: 1000 }}>
                     <TableBody>
                       <TableCell align="center">
                         <Stack

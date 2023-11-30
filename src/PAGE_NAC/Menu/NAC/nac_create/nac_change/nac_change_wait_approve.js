@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
@@ -338,7 +339,7 @@ export default function Nac_Main_wait() {
   const sum_price = serviceList.map(function (elt) {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ? parseFloat(elt.price) : 0;
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return ((a ? a : 0) + (b ? b : 0))
   })
 
   const [exportToExcel, setExportToExcel] = React.useState([]);
@@ -534,6 +535,144 @@ export default function Nac_Main_wait() {
       setVerifyApprove(responseHeaders.data[0].verify_by_userid)
       setVerifyApproveDate(responseHeaders.data[0].verify_date)
 
+      // เรียก Detail มาแสดง
+      const responseDTL_draff = await store_FA_control_select_dtl_Draff({
+        nac_code
+      })
+
+      const responseDTLs_draff = responseDTL_draff.data
+      let listPoST_draff = []
+      for (let i = 0; i < responseDTLs_draff.length; i++) {
+        listPoST_draff[i] = {
+          dtl_id: responseDTLs_draff[i].AssetID,
+          assetsCode: responseDTLs_draff[i].Code,
+          serialNo: responseDTLs_draff[i].SerialNo,
+          name: responseDTLs_draff[i].Name,
+          dtl: responseDTLs_draff[i].Details,
+          price: responseDTLs_draff[i].Price,
+          date_asset: responseDTLs_draff[i].CreateDate,
+        }
+      }
+      setServiceList_Main(listPoST_draff.map((res) => {
+        return {
+          dtl_id: res.asset_id,
+          assetsCode: res.assetsCode,
+          serialNo: res.serialNo,
+          name: res.name,
+          dtl: res.dtl,
+          count: res.count,
+          price: res.price,
+          date_asset: res.date_asset,
+          asset_id: res.asset_id,
+        };
+      }));
+
+      const responseDTL = await store_FA_control_select_dtl({
+        nac_code
+      });
+
+      const responseDTLs = responseDTL.data
+      const DataCodeDTL = []
+      const responesCode = []
+      for (let i = 0; i < responseDTLs.length; i++) {
+        const Code = responseDTLs[i].nacdtl_assetsCode
+        DataCodeDTL[i] = await SelectDTL_Control({
+          Code
+        })
+        if ('data' in DataCodeDTL[i]) {
+          responesCode[i] = DataCodeDTL[i].data[0]
+        }
+      }
+      let listPoST = []
+      for (let i = 0; i < responesCode.length; i++) {
+        listPoST[i] = {
+          dtl_id: responseDTLs[i].nacdtl_id,
+          assetsCode: responseDTLs[i].nacdtl_assetsCode,
+          serialNo: responseDTLs[i].nacdtl_assetsSeria,
+          name: responseDTLs[i].nacdtl_assetsName,
+          dtl: responseDTLs[i].nacdtl_assetsDtl,
+          count: responseDTLs[i].nacdtl_assetsCount,
+          price: responseDTLs[i].nacdtl_assetsPrice,
+          date_asset: responseDTLs[i].nacdtl_date_asset,
+          asset_id: responseDTLs[i].nacdtl_id,
+        }
+      }
+
+      setChecked(responseDTLs.map((res) => {
+        return {
+          assets_code: res.nacdtl_assetsCode
+          , statusCheck: (!res.success_id || res.success_id === 0) ? 0 : res.success_id
+          , asset_id: res.nacdtl_id
+        };
+      }))
+
+      setServiceList(listPoST.map((res) => {
+        return {
+          dtl_id: res.dtl_id,
+          assetsCode: res.assetsCode,
+          serialNo: res.serialNo,
+          name: res.name,
+          dtl: res.dtl,
+          count: res.count,
+          price: res.price,
+          date_asset: res.date_asset,
+          asset_id: res.asset_id,
+        };
+      }));
+
+      setExportToExcel(listPoST.map((res) => {
+        return {
+          Code: res.assetsCode,
+          serialNo: res.serialNo,
+          name: res.name.replace(`"`, `''`),
+          dtl: res.dtl,
+          price: res.price,
+        };
+      }));
+
+      //เรียก Approve มาแสดง
+      const user_source = responseHeaders.data[0].source_userid;
+      const responseExecDocID = await store_FA_control_execDocID({
+        user_source,
+        nac_code,
+      });
+      // ผู้ตรวจสอบ
+      const ExamineApprove = []
+      //const ExamineApproveDes = []
+      const ExecApprove = []
+      const CheckApprove = []
+      const CheckExamineApprove = []
+
+      for (let i = 0; i < (responseExecDocID.data.length); i++) {
+        if (responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel > 2) {
+          ExecApprove[i] = {
+            approverid: responseExecDocID.data[i].workflowlevel === 1 ? 'AM: ' + responseExecDocID.data[i].approverid :
+
+              responseExecDocID.data[i].workflowlevel === 2 ? 'SM: ' + responseExecDocID.data[i].approverid :
+                responseExecDocID.data[i].workflowlevel === 3 ? 'DM: ' + responseExecDocID.data[i].approverid :
+                  responseExecDocID.data[i].workflowlevel === 4 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
+          }
+          CheckApprove[i] = responseExecDocID.data[i].approverid
+        }
+
+        if (responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 3) {
+          ExamineApprove[i] = {
+            approverid: responseExecDocID.data[i].workflowlevel === 1 ? 'AM: ' + responseExecDocID.data[i].approverid :
+
+              responseExecDocID.data[i].workflowlevel === 2 ? 'SM: ' + responseExecDocID.data[i].approverid :
+                responseExecDocID.data[i].workflowlevel === 3 ? 'DM: ' + responseExecDocID.data[i].approverid :
+                  responseExecDocID.data[i].workflowlevel === 4 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
+          }
+          CheckExamineApprove[i] = responseExecDocID.data[i].approverid
+        }
+      }
+      setCheckExamineApprove(CheckExamineApprove)
+      setExamineApprove(ExamineApprove)
+      //setExamineApproveDes(ExamineApproveDes)
+      setExecApprove(ExecApprove)
+      setCheckApprove(CheckApprove)
+      setApproveData(responseExecDocID.data);
+
       const listHeader = [...sendHeader]
       listHeader[0]['source'] = responseHeaders.data[0].source_userid
       listHeader[0]['source_department'] = responseHeaders.data[0].source_dep_owner
@@ -559,144 +698,6 @@ export default function Nac_Main_wait() {
       setSendHeader(listHeader)
 
     }
-
-    // เรียก Detail มาแสดง
-    const responseDTL_draff = await store_FA_control_select_dtl_Draff({
-      nac_code
-    })
-
-    const responseDTLs_draff = responseDTL_draff.data
-    let listPoST_draff = []
-    for (let i = 0; i < responseDTLs_draff.length; i++) {
-      listPoST_draff[i] = {
-        dtl_id: responseDTLs_draff[i].AssetID,
-        assetsCode: responseDTLs_draff[i].Code,
-        serialNo: responseDTLs_draff[i].SerialNo,
-        name: responseDTLs_draff[i].Name,
-        dtl: responseDTLs_draff[i].Details,
-        price: responseDTLs_draff[i].Price,
-        date_asset: responseDTLs_draff[i].CreateDate,
-      }
-    }
-    setServiceList_Main(listPoST_draff.map((res) => {
-      return {
-        dtl_id: res.asset_id,
-        assetsCode: res.assetsCode,
-        serialNo: res.serialNo,
-        name: res.name,
-        dtl: res.dtl,
-        count: res.count,
-        price: res.price,
-        date_asset: res.date_asset,
-        asset_id: res.asset_id,
-      };
-    }));
-
-    const responseDTL = await store_FA_control_select_dtl({
-      nac_code
-    });
-
-    const responseDTLs = responseDTL.data
-    const DataCodeDTL = []
-    const responesCode = []
-    for (let i = 0; i < responseDTLs.length; i++) {
-      const Code = responseDTLs[i].nacdtl_assetsCode
-      DataCodeDTL[i] = await SelectDTL_Control({
-        Code
-      })
-      if ('data' in DataCodeDTL[i]) {
-        responesCode[i] = DataCodeDTL[i].data[0]
-      }
-    }
-    let listPoST = []
-    for (let i = 0; i < responesCode.length; i++) {
-      listPoST[i] = {
-        dtl_id: responseDTLs[i].nacdtl_id,
-        assetsCode: responseDTLs[i].nacdtl_assetsCode,
-        serialNo: responseDTLs[i].nacdtl_assetsSeria,
-        name: responseDTLs[i].nacdtl_assetsName,
-        dtl: responseDTLs[i].nacdtl_assetsDtl,
-        count: responseDTLs[i].nacdtl_assetsCount,
-        price: responseDTLs[i].nacdtl_assetsPrice,
-        date_asset: responseDTLs[i].nacdtl_date_asset,
-        asset_id: responseDTLs[i].nacdtl_id,
-      }
-    }
-
-    setChecked(responseDTLs.map((res) => {
-      return {
-        assets_code: res.nacdtl_assetsCode
-        , statusCheck: (!res.success_id || res.success_id === 0) ? 0 : res.success_id
-        , asset_id: res.nacdtl_id
-      };
-    }))
-
-    setServiceList(listPoST.map((res) => {
-      return {
-        dtl_id: res.dtl_id,
-        assetsCode: res.assetsCode,
-        serialNo: res.serialNo,
-        name: res.name,
-        dtl: res.dtl,
-        count: res.count,
-        price: res.price,
-        date_asset: res.date_asset,
-        asset_id: res.asset_id,
-      };
-    }));
-
-    setExportToExcel(listPoST.map((res) => {
-      return {
-        Code: res.assetsCode,
-        serialNo: res.serialNo,
-        name: res.name.replace(`"`, `''`),
-        dtl: res.dtl,
-        price: res.price,
-      };
-    }));
-
-    //เรียก Approve มาแสดง
-    const user_source = responseHeaders.data[0].source_userid;
-    const responseExecDocID = await store_FA_control_execDocID({
-      user_source,
-      nac_code,
-    });
-    // ผู้ตรวจสอบ
-    const ExamineApprove = []
-    //const ExamineApproveDes = []
-    const ExecApprove = []
-    const CheckApprove = []
-    const CheckExamineApprove = []
-
-    for (let i = 0; i < (responseExecDocID.data.length); i++) {
-      if (responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel > 2) {
-        ExecApprove[i] = {
-          approverid: responseExecDocID.data[i].workflowlevel === 1 ? 'AM: ' + responseExecDocID.data[i].approverid :
-
-            responseExecDocID.data[i].workflowlevel === 2 ? 'SM: ' + responseExecDocID.data[i].approverid :
-              responseExecDocID.data[i].workflowlevel === 3 ? 'DM: ' + responseExecDocID.data[i].approverid :
-                responseExecDocID.data[i].workflowlevel === 4 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
-        }
-        CheckApprove[i] = responseExecDocID.data[i].approverid
-      }
-
-      if (responseExecDocID.data[i].limitamount !== null && responseExecDocID.data[i].workflowlevel < 3) {
-        ExamineApprove[i] = {
-          approverid: responseExecDocID.data[i].workflowlevel === 1 ? 'AM: ' + responseExecDocID.data[i].approverid :
-
-            responseExecDocID.data[i].workflowlevel === 2 ? 'SM: ' + responseExecDocID.data[i].approverid :
-              responseExecDocID.data[i].workflowlevel === 3 ? 'DM: ' + responseExecDocID.data[i].approverid :
-                responseExecDocID.data[i].workflowlevel === 4 ? 'FM: ' + responseExecDocID.data[i].approverid : 'MD: ' + responseExecDocID.data[i].approverid, status: responseExecDocID.data[i].status
-        }
-        CheckExamineApprove[i] = responseExecDocID.data[i].approverid
-      }
-    }
-    setCheckExamineApprove(CheckExamineApprove)
-    setExamineApprove(ExamineApprove)
-    //setExamineApproveDes(ExamineApproveDes)
-    setExecApprove(ExecApprove)
-    setCheckApprove(CheckApprove)
-    setApproveData(responseExecDocID.data);
   }
 
   const Export_PDF_DATA_NAC = () => {
@@ -705,11 +706,10 @@ export default function Nac_Main_wait() {
 
 
   React.useEffect(() => {
-    fetchUserForAssetsControl();
-    fetchSelectDTL_Headers();
-    // 👇️ disable the rule for a single line
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (AllAssetsControl.length < 10) {
+      fetchUserForAssetsControl();
+      fetchSelectDTL_Headers();
+    }
   }, []);
 
   const handleClickOpenDialog = () => {
@@ -791,13 +791,14 @@ export default function Nac_Main_wait() {
       list_main[index]['serialNo'] = ''
       list_main[index]['price'] = ''
       list_main[index]['date_asset'] = ''
-      setServiceList_Main(list_main)
+      setServiceList_Main(list_main);
     } else {
       const list = [...serviceList];
       const list_main = [...serviceList_Main];
       list[index][name] = value;
       list[index]['assetsCode'] = assetsCodeSelect;
-      if ((list[index]['assetsCode'] === null) || (list[index]['assetsCode'] === undefined)) {
+      if (list[index]['assetsCode'] === null || list[index]['assetsCode'] === undefined) {
+        list[index]['assetsCode'] = ''
         list[index]['name'] = ''
         list[index]['dtl'] = ''
         list[index]['count'] = ''
@@ -814,26 +815,23 @@ export default function Nac_Main_wait() {
         list_main[index]['date_asset'] = ''
         setServiceList_Main(list_main)
       } else {
-        const Code = list[index]['assetsCode'];
-        const response = await SelectDTL_Control({
-          Code
-        });
-        if (response['data'].length !== 0) {
-          list[index]['name'] = response['data'][0].Name
-          list[index]['dtl'] = response['data'][0].Details
-          list[index]['count'] = 1
-          list[index]['serialNo'] = response['data'][0].SerialNo
-          list[index]['price'] = response['data'][0].Price
-          list[index]['date_asset'] = response['data'][0].CreateDate
-          setServiceList(list);
+        list[index]['assetsCode'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Code
+        list[index]['name'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Name
+        list[index]['dtl'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Details
+        list[index]['count'] = 1
+        list[index]['serialNo'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].SerialNo
+        list[index]['price'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Price
+        list[index]['priceSeals'] = 0
+        list[index]['profit'] = 0
+        list[index]['date_asset'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].CreateDate
+        setServiceList(list);
 
-          list_main[index]['name'] = response['data'][0].Name
-          list_main[index]['dtl'] = response['data'][0].Details
-          list_main[index]['serialNo'] = response['data'][0].SerialNo
-          list_main[index]['price'] = response['data'][0].Price
-          list_main[index]['date_asset'] = response['data'][0].CreateDate
-          setServiceList_Main(list_main)
-        }
+        list_main[index]['name'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Name
+        list_main[index]['dtl'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Details
+        list_main[index]['serialNo'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].SerialNo
+        list_main[index]['price'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Price
+        list_main[index]['date_asset'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].CreateDate
+        setServiceList_Main(list_main)
       }
     }
   };
@@ -1344,12 +1342,22 @@ export default function Nac_Main_wait() {
             alignItems: 'center',
           }}
         >
-          <Stack direction="row" spacing={3}>
-            <CircularProgress disableShrink color="inherit" />
-            <Typography variant="h4" color="inherit" >
-              Loading...
-            </Typography>
-          </Stack>
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+          >
+            <Grid item>
+              <CircularProgress disableShrink color="inherit" />
+            </Grid>
+            <Grid item>
+              <Typography sx={{ fontSize: '2rem !important', fontWeight: 'bold' }} color="inherit" >
+                Loading...
+              </Typography>
+            </Grid>
+          </Grid>
         </Box>
       </React.Fragment>
     );
@@ -1863,25 +1871,11 @@ export default function Nac_Main_wait() {
                                   </Select>
                                 </FormControl>
                               </StyledTableCell>
-                              {/* <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  key={index}
-                                  fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  name="count"
-                                  id="count"
-                                  type='number'
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14, min: 1 } }}
-                                  variant="standard"
-                                  //onChange={(e) => handleServiceChange(e, index)}
-                                  value={singleService.count}
-                                />
-                              </StyledTableCell> */}
                               <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                                 <TextField
                                   fullWidth
                                   key={index}
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'right', fontSize: 14 } }}
                                   disabled
                                   value={!serviceList_Main[index].price ? serviceList_Main[index].price : (serviceList_Main[index].price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
                                   variant="standard"
@@ -1892,7 +1886,7 @@ export default function Nac_Main_wait() {
                                   fullWidth
                                   name="price"
                                   id="price"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'right', fontSize: 14 } }}
                                   onChange={(e) => handleServiceChange(e, index)}
                                   type={valuesVisibility.showText ? "text" : "password"}
                                   value={!singleService.price ? singleService.price : (singleService.price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
@@ -2103,16 +2097,16 @@ export default function Nac_Main_wait() {
                               <Button
                                 variant="contained"
                                 onClick={handleSave}
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                className='scaled-480px-TableHeader'
+                                sx={{ m: 1 }}
                                 style={{ 'backgroundColor': 'orange' }}
-                                startIcon={<SystemUpdateAltRoundedIcon />}
                                 disabled={(data.UserCode === headers.create_by || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) ? false : true}>
                                 Update
                               </Button>
                               <Button
                                 variant="contained"
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
-                                endIcon={<DoubleArrowRoundedIcon />}
+                                className='scaled-480px-TableHeader'
+                                sx={{ m: 1 }}
                                 disabled={
                                   (data.UserCode === headers.create_by || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) ? false :
                                     ExamineApprove.length === 0 ? false : true}
@@ -2127,9 +2121,9 @@ export default function Nac_Main_wait() {
                               <Button
                                 variant="contained"
                                 onClick={handleClickOpenDialogReply}
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 style={{ 'backgroundColor': 'orange' }}
-                                startIcon={<ReplyAllRoundedIcon />}
+                                className='scaled-480px-TableHeader'
+                                sx={{ m: 1 }}
                                 disabled={
                                   (selectNAC === 3 && (CheckApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
                                     (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
@@ -2145,13 +2139,15 @@ export default function Nac_Main_wait() {
                                     true
                                 }
                                 onClick={CancelApprove}
-                                startIcon={<ClearRoundedIcon />}
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}>
+                                className='scaled-480px-TableHeader'
+                                sx={{ m: 1 }}
+                              >
                                 Cancel
                               </Button>
                               <Button
                                 variant="contained"
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                className='scaled-480px-TableHeader'
+                                sx={{ m: 1 }}
                                 color={selectNAC === 2 ? 'success' :
                                   selectNAC === 3 ? 'success' :
                                     'primary'}
@@ -2168,14 +2164,16 @@ export default function Nac_Main_wait() {
                               <Button
                                 variant="contained"
                                 style={{ 'backgroundColor': 'orange' }}
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                className='scaled-480px-TableHeader'
+                                sx={{ m: 1 }}
                                 disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) && (!headers.des_date)) ? false : true}
                               //</Grid>onClick={handleSubmitComplete}>
                               >Cancel
                               </Button>
                               <Button
                                 variant="contained"
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                className='scaled-480px-TableHeader'
+                                sx={{ m: 1 }}
                                 disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) && (!headers.des_date)) ? false : true}
                                 onClick={handleSubmitComplete}>
                                 Accept
@@ -2186,15 +2184,15 @@ export default function Nac_Main_wait() {
                               <Button
                                 variant="contained"
                                 color='error'
-                                startIcon={<ClearRoundedIcon />}
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                className='scaled-480px-TableHeader'
+                                sx={{ m: 1 }}
                                 onClick={handleOpen_drop_NAC_byDes}>
                                 Cancel
                               </Button>
                               <Button
                                 variant="contained"
-                                startIcon={<CloudDownloadRoundedIcon />}
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
+                                className='scaled-480px-TableHeader'
+                                sx={{ m: 1 }}
                                 disabled={(selectNAC === 5) && (((permission_menuID ? (permission_menuID.includes(10) || permission_menuID.includes(11) || permission_menuID.includes(12)) : null) === true && headers.des_date !== undefined)) ? false : true}
                                 onClick={handleSubmitComplete}>
                                 Accept
@@ -2205,9 +2203,9 @@ export default function Nac_Main_wait() {
                               <Button
                                 variant="contained"
                                 onClick={handleSave}
-                                sx={{ my: { xs: 3, md: 4 }, p: 2, width: 150 }}
                                 style={{ 'backgroundColor': 'orange' }}
-                                startIcon={<SystemUpdateAltRoundedIcon />}
+                                className='scaled-480px-TableHeader'
+                                sx={{ m: 1 }}
                                 disabled={(data.UserCode === headers.create_by || ((permission_menuID ? permission_menuID.includes(9) : null) === true)) ? false : true}>
                                 Update
                               </Button>

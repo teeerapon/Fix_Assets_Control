@@ -2,6 +2,10 @@
   font-family: 'Roboto';
 }
 
+iframe#webpack-dev-server-client-overlay {
+  display: none !important
+}
+
 tr td:last-child {
   width: 1% !important;
   white-space: nowrap !important;
@@ -47,56 +51,16 @@ tr td:last-child {
   }
 }
 
-.scaled-480px {
-  display: contents !important;
+@media only screen and (max-width: 420px) {
+  * {
+    font-family: Roboto, sans-serif !important;
+    font-size: 0.8rem !important;
+  }
 }
 
-.scaled-logo-Header-listMenu {
-  font-size: 2svw !important;
-  font-weight: 500 !important;
-}
-
-.scaled-logo-Header {
-  font-size: 1svw !important;
-  font-weight: 500 !important;
-}
-
-.scaled-logo-Header-second {
-  font-size: 1svw !important;
-  font-weight: 500 !important;
-}
-
-.scaled-480px-Header {
-  font-size: 1.2svw !important;
-  font-weight: 500 !important;
-}
-
-.scaled-480px-Header-Content {
-  font-size: 1svw !important;
-  font-weight: 400 !important;
-}
-
-.scaled-480px-TableHeader {
-  font-size: 1svw !important;
-  font-weight: 500 !important;
-}
-
-.scaled-480px-TableContent {
-  font-size: 1svw !important;
-  font-weight: 400 !important;
-}
-
-.scaled-logo-TableContent {
-  width: 3svw !important;
-  height: 3svw !important;
-}
-
-.scaled-logo-navbar {
-  font-size: 1svw !important;
-  font-weight: 500 !important;
-}
-
-.scaled-icon-table {
-  font-size: 1.5svw !important;
-  font-weight: 400 !important;
+@media only screen and (min-width: 421px) {
+  * {
+    font-family: Roboto, sans-serif !important;
+    font-size: 0.95rem !important;
+  }
 }

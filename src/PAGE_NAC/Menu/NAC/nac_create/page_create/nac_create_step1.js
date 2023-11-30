@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
@@ -156,33 +157,8 @@ export default function Nac_Main() {
     return (/^\d+\.\d+$/.test(elt.price) || /^\d+$/.test(elt.price)) ?
       parseFloat(elt.price) : parseFloat(elt.price);
   }).reduce(function (a, b) { // sum all resulting numbers
-    return a + b
+    return (a ? a : 0) + (b ? b : 0)
   })
-
-
-  React.useEffect(async () => {
-
-    const headers = {
-      'Authorization': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    };
-
-    // แสดง users ทั้งหมด
-    await Axios.get(config.http + '/getsUserForAssetsControl', { headers })
-      .then((res) => {
-        setUsers(res.data.data)
-      })
-
-    // รหัสทรัพย์สินทั้งหมด
-    await Axios.post(config.http + '/AssetsAll_Control', { BranchID: data.branchid }, { headers })
-      .then((res) => {
-        if (data.branchid === 901 && data.DepCode !== '101ITO') {
-          setDataAssets(res.data.data.filter((datain) => datain.Position === data.DepCode))
-        }
-        setDataAssets(res.data.data)
-      })
-
-  }, [])
 
   const handleService_Source = (e) => {
 
@@ -265,46 +241,50 @@ export default function Nac_Main() {
     setServiceList(list);
   };
 
-  const handleServiceChangeHeader = async (e, index) => {
+  const handleServiceChangeHeader = async (e, newValue, reason, index) => {
     const nacdtl_assetsCode = { nacdtl_assetsCode: e.target.innerText }
-    const Code = { Code: e.target.innerText }
 
-    if (e.target.innerText) {
+    if (serviceList.filter((res) => res.assetsCode === e.target.innerText)[0] !== undefined) {
+      swal("แจ้งเตือน", 'มีทรัพย์สินนี้ในรายการแล้ว', "error")
+        .then(() => {
+          const list = [...serviceList];
+          list[index]['assetsCode'] = ''
+          setServiceList(list);
+        })
+    } else if (newValue && (reason !== 'clear')) {
       await Axios.post(config.http + '/store_FA_control_CheckAssetCode_Process', nacdtl_assetsCode, config.headers)
         .then(async (res) => {
           if (res.data.data[0].checkProcess === 'false') {
             swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "error")
           } else {
-            await Axios.post(config.http + '/SelectDTL_Control', Code, config.headers)
-              .then((response) => {
-                if (response.data.data.length > 0) {
-                  const list = [...serviceList];
-                  list[index]['assetsCode'] = response.data.data[0].Code
-                  list[index]['name'] = response.data.data[0].Name
-                  list[index]['dtl'] = response.data.data[0].Details
-                  list[index]['count'] = 1
-                  list[index]['serialNo'] = response.data.data[0].SerialNo
-                  list[index]['price'] = response.data.data[0].Price
-                  list[index]['priceSeals'] = 0
-                  list[index]['profit'] = 0
-                  list[index]['date_asset'] = response.data.data[0].CreateDate
-                  setServiceList(list);
-                }
-              })
+            const list = [...serviceList];
+            list[index]['assetsCode'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Code
+            list[index]['name'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Name
+            list[index]['dtl'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Details
+            list[index]['count'] = 1
+            list[index]['serialNo'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].SerialNo
+            list[index]['price'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Price
+            list[index]['priceSeals'] = 0
+            list[index]['profit'] = 0
+            list[index]['date_asset'] = dayjs(dataAssets.filter((res) => res.Code === e.target.innerText)[0].CreateDate).format('YYYY-MM-DD')
+            list[index]['BranchID'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].BranchID
+            list[index]['OwnerCode'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].OwnerCode
+            setServiceList(list);
           }
         })
     } else {
       const list = [...serviceList];
-      list[index]['assetsCode'] = null
-      list[index]['name'] = null
-      list[index]['dtl'] = null
-      list[index]['count'] = null
-      list[index]['serialNo'] = null
-      list[index]['price'] = null
-      list[index]['bookValue'] = null
-      list[index]['priceSeals'] = null
-      list[index]['profit'] = null
-      list[index]['date_asset'] = null
+      list[index]['name'] = ''
+      list[index]['dtl'] = ''
+      list[index]['count'] = ''
+      list[index]['serialNo'] = ''
+      list[index]['price'] = ''
+      list[index]['bookValue'] = ''
+      list[index]['priceSeals'] =
+        list[index]['profit'] = ''
+      list[index]['date_asset'] = ''
+      list[index]['BranchID'] = ''
+      list[index]['OwnerCode'] = ''
       setServiceList(list);
     }
   };
@@ -363,6 +343,35 @@ export default function Nac_Main() {
     }
   };
 
+  const listAPI = async () => {
+    const headers = {
+      'Authorization': 'application/json; charset=utf-8',
+      'Accept': 'application/json'
+    };
+
+    // แสดง users ทั้งหมด
+    await Axios.get(config.http + '/getsUserForAssetsControl', { headers })
+      .then((res) => {
+        setUsers(res.data.data)
+      })
+
+    // รหัสทรัพย์สินทั้งหมด
+    await Axios.post(config.http + '/AssetsAll_Control', { BranchID: data.branchid }, { headers })
+      .then((res) => {
+        if (data.branchid === 901 && data.DepCode !== '101ITO') {
+          setDataAssets(res.data.data.filter((datain) => datain.Position === data.DepCode))
+        }
+        setDataAssets(res.data.data)
+      })
+  }
+
+
+  React.useEffect(() => {
+    if (dataAssets.length < 10) {
+      listAPI()
+    }
+  }, [])
+
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
@@ -372,7 +381,7 @@ export default function Nac_Main() {
           sendHeader={sendHeader}
         />
         <AnimatedPage>
-          <Container component="main" maxWidth="lg" sx={{ mb: 12, minWidth: window.innerWidth * 0.8 }}>
+          <Container component="main" maxWidth="lg" >
             <Paper variant="outlined" sx={{ p: { xs: 2, md: 3 }, overflow: 'hidden' }}>
               <Grid
                 container
@@ -408,7 +417,7 @@ export default function Nac_Main() {
                 </Typography>
               </Box>
               <TableContainer>
-                <Table size="small">
+                <Table size="small" sx={{ minWidth: 1000 }}>
                   <TableHead>
                     <TableRow>
                       <StyledTableCell align="center" style={{ width: '30%' }}>
@@ -431,7 +440,7 @@ export default function Nac_Main() {
                   <TableBody>
                     <StyledTableRow>
                       <StyledTableCell align="center">
-                        <Typography className='scaled-480px-Header'>
+                        <Typography className='scaled-480px-Header' sx={{ fontWeight: 'bold !important', fontSize: '1.5rem !important' }}>
                           เพิ่มบัญชีทรัพย์สิน
                         </Typography>
                       </StyledTableCell>
@@ -500,10 +509,19 @@ export default function Nac_Main() {
                               option: 'scaled-480px-TableContent',
 
                             }}
-                            disableClearable={true}
                             value={sendHeader[0].source}
                             options={users.filter((res) => res.DepID === data.depid).map((option) => option.UserCode)}
-                            onChange={handleService_Source}
+                            onChange={(e, newValue, reason) => {
+                              if (!newValue || reason === 'clear') {
+                                const listHeader = [...sendHeader]
+                                listHeader[0]['source'] = null
+                                listHeader[0]['source_Department'] = null
+                                listHeader[0]['source_BU'] = null
+                                setSendHeader(listHeader)
+                              } else {
+                                handleService_Source(e, newValue, reason)
+                              }
+                            }}
                             renderInput={(params) => (
                               <TextField
                                 {...params}
@@ -691,15 +709,24 @@ export default function Nac_Main() {
                             freeSolo
                             name='des_userid'
                             size="small"
-                            value={sendHeader[0].des_delivery}
                             classes={{
                               input: 'scaled-480px-TableContent',
                               option: 'scaled-480px-TableContent',
 
                             }}
-                            disableClearable={true}
+                            value={sendHeader[0].des_delivery}
                             options={users.map((option) => option.UserCode)}
-                            onChange={handleService_Des}
+                            onChange={(e, newValue, reason) => {
+                              if (!newValue || reason === 'clear') {
+                                const listHeader = [...sendHeader]
+                                listHeader[0]['des_delivery'] = null
+                                listHeader[0]['des_Department'] = null
+                                listHeader[0]['des_BU'] = null
+                                setSendHeader(listHeader)
+                              } else {
+                                handleService_Des(e, newValue, reason)
+                              }
+                            }}
                             renderInput={(params) => (
                               <TextField
                                 {...params}
@@ -835,7 +862,7 @@ export default function Nac_Main() {
                     </StyledTableRow>
                   </TableBody>
                 </Table>
-                <Table>
+                <Table size="small" sx={{ minWidth: 1000 }}>
                   <TableHead>
                     <TableRow>
                       <StyledTableCell align="center" sx={{ width: "15%", }}>
@@ -889,18 +916,16 @@ export default function Nac_Main() {
                               "& .MuiInputBase-input.Mui-disabled": {
                                 WebkitTextFillColor: "#000000",
                               },
-
                             }}
-                            key={index}
                             classes={{
-                              input: 'scaled-480px-TableContent text-center',
+                              input: 'scaled-480px-TableContent',
                               option: 'scaled-480px-TableContent',
 
                             }}
-                            disableClearable={true}
+                            key={index}
                             value={res.assetsCode}
                             options={dataAssets.map((option) => option.Code)}
-                            onChange={(e) => handleServiceChangeHeader(e, index)}
+                            onChange={(e, newValue, reason) => handleServiceChangeHeader(e, newValue, reason, index)}
                             renderInput={(params) => (
                               <TextField
                                 {...params}
@@ -972,9 +997,6 @@ export default function Nac_Main() {
                             disabled
                             InputProps={{
                               disableUnderline: true,
-                              classes: {
-                                input: 'scaled-480px-TableContent text-center',
-                              },
                             }}
                             value={!res.date_asset ? '' : res.date_asset.split('T')[0]}
                             variant="standard"
@@ -994,9 +1016,6 @@ export default function Nac_Main() {
                             disabled
                             InputProps={{
                               disableUnderline: true,
-                              classes: {
-                                input: 'scaled-480px-TableContent text-center',
-                              },
                             }}
                             value={res.dtl ?? ''}
                             variant="standard"
@@ -1018,10 +1037,8 @@ export default function Nac_Main() {
                             InputProps={{
                               disableUnderline: true,
                               inputComponent: NumericFormatCustom,
-                              classes: {
-                                input: 'scaled-480px-TableContent text-center',
-                              },
                             }}
+                            inputProps={{ min: 0, style: { textAlign: 'right' } }}
                             value={res.price ?? ''}
                             variant="standard"
                           />
@@ -1062,10 +1079,8 @@ export default function Nac_Main() {
                           InputProps={{
                             disableUnderline: true,
                             inputComponent: NumericFormatCustom,
-                            classes: {
-                              input: 'scaled-480px-TableContent text-center',
-                            },
                           }}
+                          inputProps={{ min: 0, style: { textAlign: 'right' } }}
                           value={!result ? '' : result}
                           variant="standard"
                         />
@@ -1073,7 +1088,7 @@ export default function Nac_Main() {
                     </StyledTableRow>
                   </TableBody>
                 </Table>
-                <Table>
+                <Table size="small" sx={{ minWidth: 1000 }}>
                   <TableHead>
                     <StyledTableRow>
                       <StyledTableCell align="center">
@@ -1099,7 +1114,7 @@ export default function Nac_Main() {
                     </StyledTableRow>
                   </TableHead>
                 </Table>
-                <Table>
+                <Table size="small" sx={{ minWidth: 1000 }}>
                   <TableBody>
                     <TableCell align="center">
                       <Button
