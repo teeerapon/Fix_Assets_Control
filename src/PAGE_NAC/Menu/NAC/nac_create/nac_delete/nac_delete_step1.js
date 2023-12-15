@@ -327,7 +327,7 @@ export default function Nac_Main() {
 
   const handleSubmit = async () => {
     if (!sendHeader[0].source || !sourceName || !sourceLastName) {
-      swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
+      swal("แจ้งเตือน", !sendHeader[0].source ? 'กรุณาระบุ (ผู้ส่งมอบ)' : !sourceName ? 'กรุณาระบุ (ชื่อผู้ส่งมอบ)' : 'กรุณาระบุ (นามสกุล)', "error")
     } else if ((serviceList.filter((res) => !res.assetsCode)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาระบุข้อมูลทรัพย์สินให้ครบ', "error")
     } else {
