@@ -833,10 +833,13 @@ export default function Nac_Main() {
   const handleSubmit_Form = async () => {
     if ((sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 14)
       && serviceList.filter((res) => res.statusCheck === 0
-        // || !res.image_1 || !res.image_2
+        || !res.image_1 || !res.image_2
       )[0]) {
       swal("แจ้งเตือน", `เลือก (ตรวจสอบ/รูปภาพ) ทรัพย์สิน`, "error")
-    } else if (!sendHeader[0].des_delivery || !desName || !desLastName) {
+    } else if (
+      (!sendHeader[0].des_delivery || !desName || !desLastName)
+      && (sendHeader[0].nac_status === 4 || sendHeader[0].nac_status === 8 || sendHeader[0].nac_status === 14)
+    ) {
       swal("แจ้งเตือน", 'กรุณาระบุ (ผู้รับมอบ/ชื่อ-นามสกุล ผู้รับมอบ)', "error")
     } else {
       const reqUpdateStatus = {

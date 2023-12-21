@@ -492,10 +492,9 @@ export default function Nac_Main() {
       swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
     } else if ((serviceList.filter((res) => !res.assetsCode)[0]) !== undefined) {
       swal("แจ้งเตือน", 'กรุณาระบุข้อมูลทรัพย์สินให้ครบ', "error")
+    } else if ((serviceList.filter((res) => !res.image_1)[0]) !== undefined) {
+      swal("แจ้งเตือน", 'กรุณาใส่รูปภาพทรัพย์สิน', "error")
     }
-    // else if ((serviceList.filter((res) => !res.image_1)[0]) !== undefined) {
-    //   swal("แจ้งเตือน", 'กรุณาใส่รูปภาพทรัพย์สิน', "error")
-    // }
     else {
       // รอใส่เงือนไข
       const reqUpdateStatus = {
