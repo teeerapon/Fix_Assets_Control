@@ -87,7 +87,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     backgroundColor: theme.palette.action.white,
     color: theme.palette.common.black,
-    padding: '0px 10px 10px 10px',
+    padding: '0px 10px 0px 10px',
     overflow: 'hidden',
     border: '1px solid',
   },
@@ -763,10 +763,11 @@ export default function Nac_Main_wait() {
     setServiceList(list);
   };
 
-  const handleServiceChangeHeader = async (e, index) => {
+  const handleServiceChangeHeader = async (e, newValue, reason, index) => {
+    newValue = newValue.Code;
     const { name, value } = e.target;
-    const assetsCodeSelect = e.target.innerText
-    const nacdtl_assetsCode = e.target.innerText
+    const assetsCodeSelect = newValue
+    const nacdtl_assetsCode = newValue
     const responseCheckAssetCode_Process = await store_FA_control_CheckAssetCode_Process({
       nacdtl_assetsCode
     });
@@ -856,8 +857,8 @@ export default function Nac_Main_wait() {
     setSource_Description(event.target.value);
   };
 
-  const handleAutoSource_DeapartMent = async (e, index) => {
-    const UserCode = e.target.innerText
+  const handleAutoSource_DeapartMent = async (e, newValue, reason) => {
+    const UserCode = newValue
     const response = await AutoDeapartMent({
       UserCode
     });
@@ -1499,7 +1500,7 @@ export default function Nac_Main_wait() {
                             <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <FormGroup>
                                 <center>
-                                  <Typography variant='h4' color='primary'>
+                                  <Typography variant='h4' color='primary' sx={{ fontWeight: 'bold !important', fontSize: '1.5rem !important' }}>
                                     เปลี่ยนแปลงรายละเอียดทรัพย์สิน
                                   </Typography>
                                 </center>
@@ -1559,7 +1560,7 @@ export default function Nac_Main_wait() {
                                       getOptionLabel={(option) => option.UserCode}
                                       filterOptions={filterOptions2}
                                       value={!source ? '' : UserForAssetsControl[resultIndex[0].indexOf(source)]}
-                                      onChange={handleAutoSource_DeapartMent}
+                                      onChange={(e, newValue, reason) => handleAutoSource_DeapartMent(e, newValue, reason)}
                                       renderInput={(params) => (
                                         <React.Fragment>
                                           <TextField
@@ -1750,7 +1751,7 @@ export default function Nac_Main_wait() {
                                       options={AllAssetsControl}
                                       getOptionLabel={(option) => option.Code || ''}
                                       filterOptions={filterOptions}
-                                      onChange={(e) => handleServiceChangeHeader(e, index)}
+                                      onChange={(e, newValue, reason) => handleServiceChangeHeader(e, newValue, reason, index)}
                                       value={!singleService.assetsCode ? singleService.assetsCode : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
                                       renderInput={(params) => (
                                         <TextField

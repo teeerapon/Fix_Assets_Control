@@ -60,7 +60,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     backgroundColor: theme.palette.action.white,
     color: theme.palette.common.black,
-    padding: '0px 10px 10px 10px',
+    padding: '0px 10px 0px 10px',
     overflow: 'hidden',
     border: '1px solid',
   },
@@ -271,12 +271,11 @@ export default function Nac_Main() {
     setServiceList(list);
   };
 
-  const handleServiceChangeHeader = async (e, index) => {
+  const handleServiceChangeHeader = async (e, newValue, reason, index) => {
+    newValue = newValue.Code;
     const { name, value } = e.target;
-    const assetsCodeSelect = e.target.innerText
-    const nacdtl_assetsCode = e.target.innerText
     const responseCheckAssetCode_Process = await store_FA_control_CheckAssetCode_Process({
-      nacdtl_assetsCode
+      newValue
     });
     if (responseCheckAssetCode_Process.data[0].checkProcess === 'false') {
       const alert_value = 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ'
@@ -304,7 +303,7 @@ export default function Nac_Main() {
       const list = [...serviceList];
       const list_main = [...serviceList_Main];
       list[index][name] = value;
-      list[index]['assetsCode'] = assetsCodeSelect;
+      list[index]['assetsCode'] = newValue;
       if (list[index]['assetsCode'] === null || list[index]['assetsCode'] === undefined) {
         list[index]['assetsCode'] = ''
         list[index]['name'] = ''
@@ -323,22 +322,22 @@ export default function Nac_Main() {
         list_main[index]['date_asset'] = ''
         setServiceList_Main(list_main)
       } else {
-        list[index]['assetsCode'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Code
-        list[index]['name'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Name
-        list[index]['dtl'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Details
+        list[index]['assetsCode'] = AllAssetsControl.filter((res) => res.Code === newValue)[0].Code
+        list[index]['name'] = AllAssetsControl.filter((res) => res.Code === newValue)[0].Name
+        list[index]['dtl'] = AllAssetsControl.filter((res) => res.Code === newValue)[0].Details
         list[index]['count'] = 1
-        list[index]['serialNo'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].SerialNo
-        list[index]['price'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Price
+        list[index]['serialNo'] = AllAssetsControl.filter((res) => res.Code === newValue)[0].SerialNo
+        list[index]['price'] = AllAssetsControl.filter((res) => res.Code === newValue)[0].Price
         list[index]['priceSeals'] = 0
         list[index]['profit'] = 0
-        list[index]['date_asset'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].CreateDate
+        list[index]['date_asset'] = AllAssetsControl.filter((res) => res.Code === newValue)[0].CreateDate
         setServiceList(list);
 
-        list_main[index]['name'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Name
-        list_main[index]['dtl'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Details
-        list_main[index]['serialNo'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].SerialNo
-        list_main[index]['price'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].Price
-        list_main[index]['date_asset'] = AllAssetsControl.filter((res) => res.Code === assetsCodeSelect)[0].CreateDate
+        list_main[index]['name'] = AllAssetsControl.filter((res) => res.Code === newValue)[0].Name
+        list_main[index]['dtl'] = AllAssetsControl.filter((res) => res.Code === newValue)[0].Details
+        list_main[index]['serialNo'] = AllAssetsControl.filter((res) => res.Code === newValue)[0].SerialNo
+        list_main[index]['price'] = AllAssetsControl.filter((res) => res.Code === newValue)[0].Price
+        list_main[index]['date_asset'] = AllAssetsControl.filter((res) => res.Code === newValue)[0].CreateDate
         setServiceList_Main(list_main)
       }
     }
@@ -373,8 +372,8 @@ export default function Nac_Main() {
     setSource_Description(event.target.value);
   };
 
-  const handleAutoSource_DeapartMent = async (e, index) => {
-    const UserCode = e.target.innerText
+  const newValue = async (e, index) => {
+    const UserCode = newValue
     const response = await AutoDeapartMent({
       UserCode
     });
@@ -607,7 +606,7 @@ export default function Nac_Main() {
                                     options={users_pureDep}
                                     getOptionLabel={(option) => option.UserCode}
                                     filterOptions={filterOptions2}
-                                    onChange={handleAutoSource_DeapartMent}
+                                    onChange={newValue}
                                     value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
                                     renderInput={(params) => (
                                       <React.Fragment>
@@ -791,7 +790,7 @@ export default function Nac_Main() {
                                 options={AllAssetsControl}
                                 getOptionLabel={(option) => option.Code}
                                 filterOptions={filterOptions}
-                                onChange={(e) => handleServiceChangeHeader(e, index)}
+                                onChange={(e, newValue, reason) => handleServiceChangeHeader(e, newValue, reason, index)}
                                 value={singleService.service}
                                 renderInput={(params) => (
                                   <TextField

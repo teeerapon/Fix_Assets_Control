@@ -217,9 +217,9 @@ export default function Nac_Main() {
     }
   }, [])
 
-  const handleService_Source = (e) => {
+  const handleService_Source = (e, newValue, reason) => {
 
-    if (!e.target.innerText) {
+    if (reason === 'clear') {
       const listHeader = [...sendHeader]
       listHeader[0]['source'] = null
       listHeader[0]['source_Department'] = null
@@ -227,9 +227,9 @@ export default function Nac_Main() {
       setSendHeader(listHeader)
     } else {
       const listHeader = [...sendHeader]
-      listHeader[0]['source'] = e.target.innerText
-      listHeader[0]['source_Department'] = users.filter((res) => res.UserCode === e.target.innerText)[0].DepCode
-      listHeader[0]['source_BU'] = users.filter((res) => res.UserCode === e.target.innerText)[0].BranchID === 901 ? `Center` : `Oil`
+      listHeader[0]['source'] = newValue
+      listHeader[0]['source_Department'] = users.filter((res) => res.UserCode === newValue)[0].DepCode
+      listHeader[0]['source_BU'] = users.filter((res) => res.UserCode === newValue)[0].BranchID === 901 ? `Center` : `Oil`
       setSendHeader(listHeader)
     }
 
@@ -277,10 +277,10 @@ export default function Nac_Main() {
   };
 
   const handleServiceChangeHeader = async (e, newValue, reason, index) => {
-    const nacdtl_assetsCode = { nacdtl_assetsCode: e.target.innerText }
-    const Code = { Code: e.target.innerText }
+    const nacdtl_assetsCode = { nacdtl_assetsCode: newValue }
+    const Code = { Code: newValue }
 
-    if (serviceList.filter((res) => res.assetsCode === e.target.innerText)[0] !== undefined) {
+    if (serviceList.filter((res) => res.assetsCode === newValue)[0] !== undefined) {
       swal("แจ้งเตือน", 'มีทรัพย์สินนี้ในรายการแล้ว', "error")
         .then(() => {
           const list = [...serviceList];
@@ -294,17 +294,17 @@ export default function Nac_Main() {
             swal("แจ้งเตือน", 'ทรัพย์สินนี้กำลังอยู่ในระหว่างการทำรายการ NAC', "error")
           } else {
             const list = [...serviceList];
-            list[index]['assetsCode'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Code
-            list[index]['name'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Name
-            list[index]['dtl'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Details
+            list[index]['assetsCode'] = dataAssets.filter((res) => res.Code === newValue)[0].Code
+            list[index]['name'] = dataAssets.filter((res) => res.Code === newValue)[0].Name
+            list[index]['dtl'] = dataAssets.filter((res) => res.Code === newValue)[0].Details
             list[index]['count'] = 1
-            list[index]['serialNo'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].SerialNo
-            list[index]['price'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].Price
+            list[index]['serialNo'] = dataAssets.filter((res) => res.Code === newValue)[0].SerialNo
+            list[index]['price'] = dataAssets.filter((res) => res.Code === newValue)[0].Price
             list[index]['priceSeals'] = 0
             list[index]['profit'] = 0
-            list[index]['date_asset'] = dayjs(dataAssets.filter((res) => res.Code === e.target.innerText)[0].CreateDate).format('YYYY-MM-DD')
-            list[index]['BranchID'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].BranchID
-            list[index]['OwnerCode'] = dataAssets.filter((res) => res.Code === e.target.innerText)[0].OwnerCode
+            list[index]['date_asset'] = dayjs(dataAssets.filter((res) => res.Code === newValue)[0].CreateDate).format('YYYY-MM-DD')
+            list[index]['BranchID'] = dataAssets.filter((res) => res.Code === newValue)[0].BranchID
+            list[index]['OwnerCode'] = dataAssets.filter((res) => res.Code === newValue)[0].OwnerCode
             setServiceList(list);
           }
         })

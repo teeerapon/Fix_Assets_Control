@@ -414,7 +414,7 @@ export default function History_of_assets() {
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
               <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
                 <Autocomplete
-autoHighlight
+                  autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'
@@ -428,7 +428,7 @@ autoHighlight
                   renderInput={(params) => <TextField label="รหัสทรัพย์สิน" {...params} />}
                 />
                 <Autocomplete
-autoHighlight
+                  autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'
@@ -442,7 +442,7 @@ autoHighlight
                   renderInput={(params) => <TextField label="ชื่อหัวข้อ" {...params} />}
                 />
                 <Autocomplete
-autoHighlight
+                  autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'
@@ -456,7 +456,7 @@ autoHighlight
                   renderInput={(params) => <TextField label="ผู้อนุมัติรายการ" {...params} />}
                 />
                 <Autocomplete
-autoHighlight
+                  autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'
@@ -470,7 +470,7 @@ autoHighlight
                   renderInput={(params) => <TextField label="วันที่ปิดรายการ" {...params} />}
                 />
                 <Autocomplete
-autoHighlight
+                  autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'

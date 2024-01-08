@@ -737,7 +737,7 @@ export default function History_of_assets() {
               >
                 <Grid item xs>
                   <Autocomplete
-autoHighlight
+                    autoHighlight
                     disablePortal
                     id="combo-box-demo"
                     size='small'
@@ -750,7 +750,7 @@ autoHighlight
                 </Grid>
                 <Grid item xs>
                   <Autocomplete
-autoHighlight
+                    autoHighlight
                     disablePortal
                     id="combo-box-demo"
                     size='small'
@@ -763,7 +763,7 @@ autoHighlight
                 </Grid>
                 <Grid item xs>
                   <Autocomplete
-autoHighlight
+                    autoHighlight
                     disablePortal
                     id="combo-box-demo"
                     size='small'
@@ -779,7 +779,7 @@ autoHighlight
                 </Grid>
                 <Grid item xs>
                   <Autocomplete
-autoHighlight
+                    autoHighlight
                     disablePortal
                     id="combo-box-demo"
                     size='small'
@@ -795,7 +795,7 @@ autoHighlight
                 </Grid>
                 <Grid item xs>
                   <Autocomplete
-autoHighlight
+                    autoHighlight
                     disablePortal
                     id="combo-box-demo"
                     size='small'
