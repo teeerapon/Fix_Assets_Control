@@ -1549,6 +1549,7 @@ export default function Nac_Main_wait() {
                                 {data.branchid === 901 ? (
                                   <React.Fragment>
                                     <Autocomplete
+                                      autoHighlight
                                       freeSolo
                                       name='source'
                                       id='source'
@@ -1732,6 +1733,7 @@ export default function Nac_Main_wait() {
                                 {(selectNAC === 1 && data.UserCode === headers.create_by) ? (
                                   <React.Fragment>
                                     <Autocomplete
+                                      autoHighlight
                                       freeSolo
                                       key={index}
                                       disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}

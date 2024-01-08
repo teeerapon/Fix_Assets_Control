@@ -600,6 +600,7 @@ export default function Nac_Main() {
                               {data.branchid === 901 ? (
                                 <React.Fragment>
                                   <Autocomplete
+                                    autoHighlight
                                     freeSolo
                                     name='source'
                                     id='source'
@@ -774,6 +775,7 @@ export default function Nac_Main() {
                           <StyledTableRow>
                             <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
                               <Autocomplete
+                                autoHighlight
                                 freeSolo
                                 sx={{
                                   "& .MuiAutocomplete-input, & .MuiInputLabel-root": {

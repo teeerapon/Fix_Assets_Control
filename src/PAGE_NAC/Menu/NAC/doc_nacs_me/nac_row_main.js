@@ -754,6 +754,7 @@ export default function History_of_assets() {
               >
                 <Grid item xs>
                   <Autocomplete
+autoHighlight
                     disablePortal
                     id="combo-box-demo"
                     size='small'
@@ -766,6 +767,7 @@ export default function History_of_assets() {
                 </Grid>
                 <Grid item xs>
                   <Autocomplete
+autoHighlight
                     disablePortal
                     id="combo-box-demo"
                     size='small'
@@ -778,6 +780,7 @@ export default function History_of_assets() {
                 </Grid>
                 <Grid item xs>
                   <Autocomplete
+autoHighlight
                     disablePortal
                     id="combo-box-demo"
                     size='small'
@@ -793,6 +796,7 @@ export default function History_of_assets() {
                 </Grid>
                 <Grid item xs>
                   <Autocomplete
+autoHighlight
                     disablePortal
                     id="combo-box-demo"
                     size='small'
@@ -808,6 +812,7 @@ export default function History_of_assets() {
                 </Grid>
                 <Grid item xs>
                   <Autocomplete
+autoHighlight
                     disablePortal
                     id="combo-box-demo"
                     size='small'

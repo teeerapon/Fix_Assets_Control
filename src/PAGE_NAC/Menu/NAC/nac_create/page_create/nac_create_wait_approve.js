@@ -1375,6 +1375,7 @@ export default function Nac_Main() {
                           </Stack>
                           <Box sx={{ mb: '0.8em !important' }}>
                             <Autocomplete
+autoHighlight
                               freeSolo
                               name='source'
                               size="small"
@@ -1610,6 +1611,7 @@ export default function Nac_Main() {
                           </Stack>
                           <Box sx={{ mb: '0.8em !important' }}>
                             <Autocomplete
+autoHighlight
                               freeSolo
                               name='des_delivery'
                               size="small"
@@ -1862,6 +1864,7 @@ export default function Nac_Main() {
                         <StyledTableRow>
                           <StyledTableCell align="center" style={{ width: '18%' }}>
                             <Autocomplete
+autoHighlight
                               freeSolo
                               name="assetsCode"
                               sx={{

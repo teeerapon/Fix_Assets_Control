@@ -473,6 +473,7 @@ export default function History_of_assets() {
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
               <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
                 <Autocomplete
+autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   // fullWidth
@@ -487,6 +488,7 @@ export default function History_of_assets() {
                   renderInput={(params) => <TextField label="เลขที่อ้างอิง" {...params} />}
                 />
                 <Autocomplete
+autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'
@@ -501,6 +503,7 @@ export default function History_of_assets() {
                   renderInput={(params) => <TextField label="วันที่-เวลาที่ทำรายการ" {...params} />}
                 />
                 <Autocomplete
+autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'
@@ -515,6 +518,7 @@ export default function History_of_assets() {
                   renderInput={(params) => <TextField label="สถานะการทำรายการ" {...params} />}
                 />
                 <Autocomplete
+autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'
@@ -529,6 +533,7 @@ export default function History_of_assets() {
                   renderInput={(params) => <TextField label="ผู้ทำรายการ" {...params} />}
                 />
                 <Autocomplete
+autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'

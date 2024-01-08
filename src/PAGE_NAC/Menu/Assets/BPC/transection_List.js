@@ -547,6 +547,7 @@ export default function History_of_assets() {
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
               <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
                 <Autocomplete
+autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   sx={{ flexGrow: 1, padding: 1 }}
@@ -560,6 +561,7 @@ export default function History_of_assets() {
                   renderInput={(params) => <TextField label="รหัสทรัพย์สิน" {...params} />}
                 />
                 <Autocomplete
+autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'
@@ -573,6 +575,7 @@ export default function History_of_assets() {
                   renderInput={(params) => <TextField label="ชื่อทรัพย์สิน" {...params} />}
                 />
                 <Autocomplete
+autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'
@@ -586,6 +589,7 @@ export default function History_of_assets() {
                   renderInput={(params) => <TextField label="Position" {...params} />}
                 />
                 <Autocomplete
+autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'
@@ -601,6 +605,7 @@ export default function History_of_assets() {
               </Stack>
               <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
                 <Autocomplete
+autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'
@@ -614,6 +619,7 @@ export default function History_of_assets() {
                   renderInput={(params) => <TextField label="วันที่-เวลา" {...params} />}
                 />
                 <Autocomplete
+autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'
@@ -627,6 +633,7 @@ export default function History_of_assets() {
                   renderInput={(params) => <TextField label="เลขที่อ้างอิง" {...params} />}
                 />
                 <Autocomplete
+autoHighlight
                   disablePortal
                   id="combo-box-demo"
                   size='small'

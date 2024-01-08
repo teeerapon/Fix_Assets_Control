@@ -1104,6 +1104,7 @@ export default function Reported_of_assets() {
                                     {data.branchid === 901 ? (
                                       <React.Fragment>
                                         <Autocomplete
+                                          autoHighlight
                                           freeSolo
                                           name='source'
                                           id='source'
@@ -1247,6 +1248,7 @@ export default function Reported_of_assets() {
                                     </Grid>
                                     <Grid item xs={12}>
                                       <Autocomplete
+                                        autoHighlight
                                         freeSolo
                                         name='des_delivery'
                                         id='delivery'
@@ -1378,6 +1380,7 @@ export default function Reported_of_assets() {
                                     {data.branchid === 901 ? (
                                       <React.Fragment>
                                         <Autocomplete
+                                          autoHighlight
                                           freeSolo
                                           name='source'
                                           id='source'

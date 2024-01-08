@@ -736,6 +736,7 @@ const EnhancedTableToolbar = (props) => {
                                       {data.branchid === 901 ? (
                                         <React.Fragment>
                                           <Autocomplete
+autoHighlight
                                             freeSolo
                                             name='source'
                                             id='source'
@@ -835,6 +836,7 @@ const EnhancedTableToolbar = (props) => {
                                         />
                                       </Stack>
                                       <Autocomplete
+autoHighlight
                                         freeSolo
                                         name='des_delivery'
                                         id='delivery'
@@ -940,6 +942,7 @@ const EnhancedTableToolbar = (props) => {
                                       {data.branchid === 901 ? (
                                         <React.Fragment>
                                           <Autocomplete
+autoHighlight
                                             freeSolo
                                             name='source'
                                             id='source'
