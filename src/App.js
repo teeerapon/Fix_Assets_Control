@@ -56,16 +56,6 @@ import PERSON_ROPA from './PAGE_ROPA/Menu/Person_RoPA';
 // Permission_NAC
 import Permission_NAC from './PAGE_NAC/Menu/NAC/Permission_NAC';
 
-function getCurrentDimension() {
-  if (window.innerWidth > 769) {
-    return (window.innerWidth / 100) * 20;
-  } else if (window.innerWidth > 481 && window.innerWidth <= 768) {
-    return (window.innerWidth / 100) * 35;
-  } else {
-    return (window.innerWidth / 100) * 45;
-  }
-}
-
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     flexGrow: 1,
@@ -119,7 +109,13 @@ function App() {
       height: window.innerHeight,
     });
     if (dimensions.width !== window.innerWidth) {
-      setDrawerWidth(getCurrentDimension());
+      if (window.innerWidth > 769) {
+        setDrawerWidth((window.innerWidth / 100) * 20);
+      } else if (window.innerWidth > 481 && window.innerWidth <= 768) {
+        setDrawerWidth((window.innerWidth / 100) * 35);
+      } else {
+        setDrawerWidth((window.innerWidth / 100) * 45);
+      }
     }
   }
 
@@ -133,6 +129,13 @@ function App() {
 
   React.useEffect(() => {
     window.addEventListener("resize", handleResize, false);
+    if (window.innerWidth > 769) {
+      setDrawerWidth((window.innerWidth / 100) * 20);
+    } else if (window.innerWidth > 481 && window.innerWidth <= 768) {
+      setDrawerWidth((window.innerWidth / 100) * 35);
+    } else {
+      setDrawerWidth((window.innerWidth / 100) * 45);
+    }
   }, [])
 
 
