@@ -60,13 +60,11 @@ function getCurrentDimension() {
   if (window.innerWidth > 769) {
     return (window.innerWidth / 100) * 20;
   } else if (window.innerWidth > 481 && window.innerWidth <= 768) {
-    return (window.innerWidth / 100) * 25;
+    return (window.innerWidth / 100) * 35;
   } else {
-    return (window.innerWidth / 100) * 30;
+    return (window.innerWidth / 100) * 45;
   }
 }
-
-const drawerWidth = getCurrentDimension();
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -91,34 +89,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 );
 
 
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-  transition: theme.transitions.create(['margin', 'width'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth})`,
-    marginLeft: `${drawerWidth}`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
-}));
-
-
 function App() {
 
   const date_login = localStorage.getItem('date_login') ?? undefined;
@@ -136,6 +106,22 @@ function App() {
   const checkUserWeb = localStorage.getItem('sucurity');
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [drawerWidth, setDrawerWidth] = React.useState();
+
+  const [dimensions, setDimensions] = React.useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  const handleResize = () => {
+    setDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+    if (dimensions.width !== window.innerWidth) {
+      setDrawerWidth(getCurrentDimension());
+    }
+  }
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -144,6 +130,37 @@ function App() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  React.useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+  }, [])
+
+
+  const AppBar = styled(MuiAppBar, {
+    shouldForwardProp: (prop) => prop !== 'open',
+  })(({ theme, open }) => ({
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    ...(open && {
+      width: `calc(100% - ${drawerWidth})`,
+      marginLeft: `${drawerWidth}`,
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    }),
+  }));
+
+  const DrawerHeader = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+  }));
 
   if (!token || !date_login || ((datenow - date_login) > 120000) === true) {
     localStorage.removeItem("token");
