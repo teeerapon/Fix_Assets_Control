@@ -78,11 +78,11 @@ export default function Nac_Main({ nac_code, nac_type, approveData, sendHeader }
                     {approveData.filter((res) => res.limitamount >= sendHeader[0].sumPrice && sendHeader[0].nac_type !== 1).map((resMap) => (
                       <Typography className='scaled-480px-Header' style={{ 'color': resMap.status === 1 ? 'blue' : 'black' }}>
                         {
-                          resMap.workflowlevel === 1 ? `(${resMap.approverid})` :
-                            resMap.workflowlevel === 2 ? `(${resMap.approverid})` :
-                              resMap.workflowlevel === 3 ? `(${resMap.approverid})` :
-                                resMap.workflowlevel === 4 ? `(${resMap.approverid})` :
-                                  resMap.workflowlevel === 5 ? `(${resMap.approverid})`
+                          resMap.workflowlevel === 1 ? `(AM: ${resMap.approverid})` :
+                            resMap.workflowlevel === 2 ? `(SM: ${resMap.approverid})` :
+                              resMap.workflowlevel === 3 ? `(DM: ${resMap.approverid})` :
+                                resMap.workflowlevel === 4 ? `(FM: ${resMap.approverid})` :
+                                  resMap.workflowlevel === 5 ? `(MD: ${resMap.approverid})`
                                     : null}
                       </Typography>
                     ))}
@@ -99,12 +99,13 @@ export default function Nac_Main({ nac_code, nac_type, approveData, sendHeader }
                     {approveData.filter((res) => res.limitamount < sendHeader[0].sumPrice && sendHeader[0].nac_type !== 1).map((resMap) => (
                       <Typography className='scaled-480px-Header' style={{ 'color': resMap.status === 1 ? 'blue' : 'black' }}>
                         {
-                          resMap.workflowlevel === 1 ? `(${resMap.approverid})` :
-                            resMap.workflowlevel === 2 ? `(${resMap.approverid})` :
-                              resMap.workflowlevel === 3 ? `(${resMap.approverid})` :
-                                resMap.workflowlevel === 4 ? `(${resMap.approverid})` :
-                                  resMap.workflowlevel === 5 ? `(${resMap.approverid})`
-                                    : null}
+                          resMap.workflowlevel === 0 ? `(ตรวจสอบ BV: ${resMap.approverid})` :
+                            resMap.workflowlevel === 1 ? `(AM: ${resMap.approverid})` :
+                              resMap.workflowlevel === 2 ? `(SM: ${resMap.approverid})` :
+                                resMap.workflowlevel === 3 ? `(DM: ${resMap.approverid})` :
+                                  resMap.workflowlevel === 4 ? `(FM: ${resMap.approverid})` :
+                                    resMap.workflowlevel === 5 ? `(MD: ${resMap.approverid})`
+                                      : null}
                       </Typography>
                     ))}
                   </Stack>

@@ -91,7 +91,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>เพิ่มบัญชีทรัพย์สิน</Stack>
-          <Stack><FontDownloadIcon sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon sx={{ fontSize: '0.75rem !important', color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/NAC_CREATE_STEP1',
@@ -103,7 +103,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>เปลี่ยนแปลงรายละเอียด</Stack>
-          <Stack><FontDownloadIcon sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon sx={{ fontSize: '0.75rem !important', color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/NAC_CHANGE_STEP1',
@@ -135,7 +135,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>สถานะรายการ NAC</Stack>
-          <Stack><FontDownloadIcon sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon sx={{ fontSize: '0.75rem !important', color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/NAC_OPERATOR',
@@ -155,7 +155,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>เพิ่มรอบตรวจนับ</Stack>
-          <Stack><FontDownloadIcon sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon sx={{ fontSize: '0.75rem !important', color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/CreatePeriod',
@@ -167,7 +167,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>แก้ไขรอบตรวจนับ</Stack>
-          <Stack><FontDownloadIcon sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon sx={{ fontSize: '0.75rem !important', color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/EditPeriod',
@@ -182,7 +182,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>รายงานตรวจนับทรัพย์สิน</Stack>
-          <Stack><FontDownloadIcon sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon sx={{ fontSize: '0.75rem !important', color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/Reported_Assets_Counted',
@@ -194,7 +194,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       label:
         <Stack direction="row" justifyContent="space-between" spacing={2}>
           <Stack>ประวัติทรัพย์สิน NAC</Stack>
-          <Stack><FontDownloadIcon sx={{ color: orange[500] }} /></Stack>
+          <Stack><FontDownloadIcon sx={{ fontSize: '0.75rem !important', color: orange[500] }} /></Stack>
         </Stack>
       ,
       url: '/History_of_Assets',
@@ -313,21 +313,7 @@ export default function Account_BrnachAssets({ drawerWidth, AppBar, DrawerHeader
       timer: 1500,
     })
       .then((value) => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("data");
-        localStorage.removeItem("permission");
-        localStorage.removeItem("Allaseets");
-        localStorage.removeItem("aseetsCounted");
-        localStorage.removeItem("assetsWrong");
-        localStorage.removeItem("DataCreatePeriod");
-        localStorage.removeItem("NacCode");
-        localStorage.removeItem("pagination");
-        localStorage.removeItem("pagination_user");
-        localStorage.removeItem("filterModel");
-        localStorage.removeItem("filterModel_user");
-        localStorage.removeItem("filterNAC");
-        localStorage.removeItem("filterNAC_user");
-        localStorage.removeItem("permission_MenuID");
+        localStorage.clear();
         navigate('/')
       });
   };
