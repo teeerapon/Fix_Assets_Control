@@ -507,7 +507,7 @@ export default function Nac_Main() {
       const reqUpdateStatus = {
         usercode: data.UserCode,
         nac_code: nac_code,
-        nac_status: approveData.filter((res) => res.limitamount < sendHeader[0].sumPrice)[0] ? 2 : 3,
+        nac_status: (approveData.filter((res) => res.limitamount < sendHeader[0].sumPrice).length > 1) ? 2 : 3,
         nac_type: sendHeader[0].nac_type,
         source: sendHeader[0].source,
         sourceDate: sendHeader[0].sourceDate,
@@ -1045,7 +1045,6 @@ export default function Nac_Main() {
     // กำหนด Headers
     await Axios.post(config.http + '/store_FA_control_select_headers', { nac_code: nac_code }, { headers })
       .then((res) => {
-        console.log(res.data.data[0]);
         const listHeader = [...sendHeader]
         listHeader[0]['source'] = res.data.data[0].source_userid
         listHeader[0]['source_department'] = res.data.data[0].source_dep_owner
