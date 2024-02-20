@@ -197,7 +197,7 @@ export default function Nac_Main() {
     des_Department: null,
     des_BU: null,
     des_delivery: null,
-    nameDes: `${desName} ${desLastName}`,
+    desName: `${desName} ${desLastName}`,
     des_deliveryDate: null,
     des_Description: null,
 
@@ -256,19 +256,25 @@ export default function Nac_Main() {
   })
 
   const handleService_Source = (e, newValue, reason) => {
-
-    if (reason === 'clear') {
+    if (reason === 'clear' || !newValue) {
       const listHeader = [...sendHeader]
       listHeader[0]['source'] = null
-      listHeader[0]['source_department'] = null
+      listHeader[0]['nameSource'] = null
+      listHeader[0]['source_Department'] = null
       listHeader[0]['source_BU'] = null
       setSendHeader(listHeader)
+      setSourceName(null)
+      setSourceLastName(null)
     } else {
       const listHeader = [...sendHeader]
       listHeader[0]['source'] = newValue
-      listHeader[0]['source_department'] = users.filter((res) => res.UserCode === newValue)[0].DepCode
+      listHeader[0]['nameSource'] = `${users.filter((res) => res.UserCode === newValue)[0].fristName} ${users.filter((res) => res.UserCode === newValue)[0].lastName}`
+      listHeader[0]['source_Department'] = users.filter((res) => res.UserCode === newValue)[0].DepCode
       listHeader[0]['source_BU'] = users.filter((res) => res.UserCode === newValue)[0].BranchID === 901 ? `Center` : `Oil`
       setSendHeader(listHeader)
+      setSourceName(users.filter((res) => res.UserCode === newValue)[0].fristName)
+      setSourceLastName(users.filter((res) => res.UserCode === newValue)[0].lastName)
+
     }
 
   }
@@ -1279,17 +1285,7 @@ export default function Nac_Main() {
 
                               }}
                               options={users.filter((res) => res.DepID === data.depid).map((option) => option.UserCode)}
-                              onChange={(e, newValue, reason) => {
-                                if (!newValue || reason === 'clear') {
-                                  const listHeader = [...sendHeader]
-                                  listHeader[0]['source'] = null
-                                  listHeader[0]['source_Department'] = null
-                                  listHeader[0]['source_BU'] = null
-                                  setSendHeader(listHeader)
-                                } else {
-                                  handleService_Source(e, newValue, reason)
-                                }
-                              }}
+                              onChange={(e, newValue, reason) => handleService_Source(e, newValue, reason)}
                               renderInput={(params) => (
                                 <TextField
                                   {...params}
@@ -1317,7 +1313,7 @@ export default function Nac_Main() {
                                 <TextField
                                   variant="standard"
                                   fullWidth
-                                  value={sourceName}
+                                  value={sourceName ?? ''}
                                   disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
                                   sx={{
                                     "& .MuiInputBase-input.Mui-disabled": {
@@ -1349,7 +1345,7 @@ export default function Nac_Main() {
                                 <TextField
                                   variant="standard"
                                   fullWidth
-                                  value={sourceLastName}
+                                  value={sourceLastName ?? ''}
                                   disabled={(permission_MenuID.indexOf(16) > -1 || sendHeader[0].nac_status === 1) ? false : true}
                                   sx={{
                                     "& .MuiInputBase-input.Mui-disabled": {
