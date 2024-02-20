@@ -706,7 +706,7 @@ export default function History_of_assets() {
                 onClick={(event) => {
                   if (
                     ((checkUserWeb === 'admin' && params.row.nac_status === 17 || checkUserWeb === 'admin' && params.row.nac_status === 6) && params.row.source_approve_userid) ||
-                    ((data.UserCode !== params.row.create_by) && params.row.source_approve_userid)
+                    ((data.UserCode === params.row.create_by) && params.row.source_approve_userid) || ((data.UserCode !== params.row.create_by) && params.row.source_approve_userid)
                   ) {
                     swal('แจ้งเตือน', 'ไม่สามารถลบรายการนี้ได้', 'warning')
                   } else {
