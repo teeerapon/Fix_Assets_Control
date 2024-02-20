@@ -667,33 +667,37 @@ export default function History_of_assets() {
       align: 'center',
       renderCell: (params) => {
         return (
-          <React.Fragment>
-            <Grid container rowSpacing={1}>
-              <React.Fragment>
-                <Grid item xs={6}>
-                  <Button
-                    variant="contained"
-                    color="warning"
-                    onClick={(event) => handleEditClick(event, params)}
-                    sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
-                  >
-                    <ArticleIcon />
-                  </Button>
-                </Grid>
-              </React.Fragment>
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  color="error"
-                  disabled={(checkUserWeb === 'admin' && params.row.nac_status !== 17) ? false : true}
-                  onClick={(event) => handleClickOpen(event, params)}
-                  sx={{ p: 0.8, pb: 0.5, pt: 0.5 }}
-                >
-                  <DeleteIcon />
-                </Button>
-              </Grid>
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Grid item xs={6}>
+              <Button
+                variant="contained"
+                color="warning"
+                onClick={(event) => handleEditClick(event, params)}
+              >
+                <ArticleIcon />
+              </Button>
             </Grid>
-          </React.Fragment>
+            <Grid item xs={6}>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={(event) => {
+                  if (checkUserWeb === 'admin' && params.row.nac_status === 17 || checkUserWeb === 'admin' && params.row.nac_status === 6) {
+                    swal('แจ้งเตือน', 'ไม่สามารถลบรายการนี้ได้', 'warning')
+                  } else {
+                    handleClickOpen(event, params)
+                  }
+                }}
+              >
+                <DeleteIcon />
+              </Button>
+            </Grid>
+          </Grid>
         );
       },
     },
