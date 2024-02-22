@@ -519,7 +519,7 @@ export default function Nac_Main() {
       const reqUpdateStatus = {
         usercode: data.UserCode,
         nac_code: nac_code,
-        nac_status: (approveData.filter((res) => res.limitamount < sendHeader[0].sumPrice).length > 1) ? 2 : 3,
+        nac_status: (approveData.filter((res) => res.limitamount < sendHeader[0].sumPrice).length === 0) ? 3 : 2,
         nac_type: sendHeader[0].nac_type,
         source: sendHeader[0].source,
         sourceDate: sendHeader[0].sourceDate,
@@ -586,7 +586,7 @@ export default function Nac_Main() {
       const reqUpdateStatus = {
         usercode: data.UserCode,
         nac_code: nac_code,
-        nac_status: approveData.filter((res) => res.approverid === data.UserCode && res.status === 0 && (res.status && res.limitamount < result))[0] ? 2 : 3,
+        nac_status: approveData.filter((res) => (res.approverid === data.UserCode) && res.status === 0 && (res.status && res.limitamount < result))[0] ? 2 : 3,
         nac_type: sendHeader[0].nac_type,
         source: sendHeader[0].source,
         sourceDate: sendHeader[0].sourceDate,
