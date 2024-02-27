@@ -577,6 +577,8 @@ export default function Nac_Main() {
     }
   };
 
+  console.log(approveData);
+
   const handleSubmit_To_Verify = async () => {
     if (!sendHeader[0].source || !sourceName || !sourceLastName) {
       swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
@@ -589,7 +591,7 @@ export default function Nac_Main() {
       const reqUpdateStatus = {
         usercode: data.UserCode,
         nac_code: nac_code,
-        nac_status: (approveData.filter((res) => res.limitamount < sendHeader[0].sumPrice).length === 0) ? 3 : 2,
+        nac_status: (approveData.filter((res) => (res.limitamount < sendHeader[0].sumPrice) && res[0].workflowlevel != 0).length === 0) ? 3 : 2,
         nac_type: sendHeader[0].nac_type,
         source: sendHeader[0].source,
         sourceDate: sendHeader[0].sourceDate,
