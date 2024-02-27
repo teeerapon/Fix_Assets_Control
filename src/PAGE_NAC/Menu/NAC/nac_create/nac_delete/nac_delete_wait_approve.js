@@ -577,8 +577,6 @@ export default function Nac_Main() {
     }
   };
 
-  console.log(approveData);
-
   const handleSubmit_To_Verify = async () => {
     if (!sendHeader[0].source || !sourceName || !sourceLastName) {
       swal("แจ้งเตือน", 'กรุณาระบุ (ผู้ส่งมอบ/ชื่อ-นามสกุล ผู้ส่งมอบ)', "error")
