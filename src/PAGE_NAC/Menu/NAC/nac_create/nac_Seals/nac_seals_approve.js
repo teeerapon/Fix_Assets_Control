@@ -606,7 +606,7 @@ export default function Nac_Main() {
       const reqUpdateStatus = {
         usercode: data.UserCode,
         nac_code: nac_code,
-        nac_status: (approveData.filter((res) => (res.limitamount < sendHeader[0].sumPrice) && res[0].workflowlevel != 0).length === 0) ? 3 : 2,
+        nac_status: (approveData.filter((res) => (res.limitamount < sendHeader[0].sumPrice) && res.workflowlevel != 0).length === 0) ? 3 : 2,
         nac_type: sendHeader[0].nac_type,
         source: sendHeader[0].source,
         sourceDate: sendHeader[0].sourceDate,
