@@ -1017,6 +1017,8 @@ export default function Nac_Main() {
     await Axios.get(config.http + '/getsUserForAssetsControl', { headers })
       .then((res) => {
         setUsers(res.data.data)
+      }).catch(function (error) {
+        console.log(error.response);
       })
 
     // รหัสทรัพย์สินทั้งหมด
@@ -1026,6 +1028,8 @@ export default function Nac_Main() {
           setDataAssets(res.data.data.filter((datain) => datain.Position === data.DepCode))
         }
         setDataAssets(res.data.data)
+      }).catch(function (error) {
+        console.log(error.response);
       })
 
     // กำหนด DTL
@@ -1052,6 +1056,8 @@ export default function Nac_Main() {
     await Axios.post(config.http + '/store_FA_control_execDocID', { user_source: sendHeader[0].source, nac_code: nac_code, }, { headers })
       .then((res) => {
         setApproveData(res.data.data);
+      }).catch(function (error) {
+        console.log(error.response);
       })
 
     // กำหนด Headers
@@ -1091,6 +1097,8 @@ export default function Nac_Main() {
         setSourceLastName(res.data.data[0].source_name ? res.data.data[0].source_name.split(' ')[1] : null)
         setDesName(res.data.data[0].des_name ? res.data.data[0].des_name.split(' ')[0] : null)
         setDesLastName(res.data.data[0].des_name ? res.data.data[0].des_name.split(' ')[1] : null)
+      }).catch(function (error) {
+        console.log(error.response);
       })
   }
 
