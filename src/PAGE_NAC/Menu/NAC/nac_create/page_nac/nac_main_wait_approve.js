@@ -65,7 +65,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     backgroundColor: theme.palette.action.white,
     color: theme.palette.common.black,
-    padding: '0px 10px 0px 10px',
+    padding: '5px',
     overflow: 'hidden',
     border: '1px solid',
   },
