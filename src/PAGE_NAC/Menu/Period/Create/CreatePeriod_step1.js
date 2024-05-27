@@ -312,7 +312,7 @@ export default function AddressForm() {
 
     Axios.get(config.http + '/Branch_ListAll', { headers })
       .then(response => {
-        setBranchAPIName((response.data.data).filter((res) => res.branchid <= 120 ||
+        setBranchAPIName((response.data.data).filter((res) => res.branchid <= 300 ||
           res.branchid === 1000001 || res.branchid === 1000002 || res.branchid === 1000003 || res.branchid === 1000004
         ));
       });
