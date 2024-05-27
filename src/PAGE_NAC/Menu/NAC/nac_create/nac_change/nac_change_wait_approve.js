@@ -2132,7 +2132,7 @@ export default function Nac_Main_wait() {
                                     (selectNAC === 2 && (CheckExamineApprove.includes(data.UserCode) !== false || ((permission_menuID ? permission_menuID.includes(10) : null) === true))) ? false :
                                       true
                                 }>
-                                Reply
+                                Redo
                               </Button>
                               <Button
                                 variant="contained"
@@ -2145,7 +2145,7 @@ export default function Nac_Main_wait() {
                                 className='scaled-480px-TableHeader'
                                 sx={{ m: 1 }}
                               >
-                                Cancel
+                                Reject
                               </Button>
                               <Button
                                 variant="contained"
@@ -2171,7 +2171,7 @@ export default function Nac_Main_wait() {
                                 sx={{ m: 1 }}
                                 disabled={((selectNAC === 4) && (data.UserCode === headers.des_userid || ((permission_menuID ? permission_menuID.includes(10) : null) === true)) && (!headers.des_date)) ? false : true}
                               //</Grid>onClick={handleSubmitComplete}>
-                              >Cancel
+                              >Reject
                               </Button>
                               <Button
                                 variant="contained"
@@ -2190,7 +2190,7 @@ export default function Nac_Main_wait() {
                                 className='scaled-480px-TableHeader'
                                 sx={{ m: 1 }}
                                 onClick={handleOpen_drop_NAC_byDes}>
-                                Cancel
+                                Reject
                               </Button>
                               <Button
                                 variant="contained"

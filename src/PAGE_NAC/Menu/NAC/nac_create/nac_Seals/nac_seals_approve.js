@@ -2062,7 +2062,7 @@ export default function Nac_Main() {
                                 className='scaled-480px-TableHeader'
                                 sx={{ m: 1 }}
                               >
-                                Reply
+                                Redo
                               </Button>
                             </Stack>
                           )
@@ -2134,7 +2134,7 @@ export default function Nac_Main() {
                                 className='scaled-480px-TableHeader'
                                 sx={{ m: 1 }}
                               >
-                                Cancel
+                                Reject
                               </Button>
                             </Stack>
                           )

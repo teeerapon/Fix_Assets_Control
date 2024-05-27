@@ -1937,7 +1937,7 @@ export default function Nac_Main() {
                                   className='scaled-480px-TableHeader'
 
                                 >
-                                  Reply
+                                  Redo
                                 </Button>
                               </Stack>
                             )
@@ -2004,7 +2004,7 @@ export default function Nac_Main() {
                                 className='scaled-480px-TableHeader'
 
                               >
-                                Cancel
+                                Reject
                               </Button>
                             </Stack>
                           )
