@@ -362,7 +362,7 @@ export default function Nac_Main() {
       list[index]['serialNo'] = ''
       list[index]['price'] = ''
       list[index]['bookValue'] = ''
-      list[index]['priceSeals'] =
+      list[index]['priceSeals'] = ''
         list[index]['profit'] = ''
       list[index]['date_asset'] = ''
       list[index]['BranchID'] = ''
