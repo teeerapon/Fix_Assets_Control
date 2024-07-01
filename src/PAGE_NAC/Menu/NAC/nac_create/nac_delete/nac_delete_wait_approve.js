@@ -190,14 +190,16 @@ export default function Nac_Main() {
     source_department: null,
     source_BU: null,
     source: null,
-    nameSource: `${sourceName} ${sourceLastName}`,
+    sourceFristName: `${sourceName}`,
+    sourceLastName: `${sourceLastName}`,
     sourceDate: dateNow,
     source_description: null,
     // ผู้รับ
     des_Department: null,
     des_BU: null,
     des_delivery: null,
-    desName: `${desName} ${desLastName}`,
+    desFristName: `${desName}`,
+    desLastNameName: `${desLastName}`,
     des_deliveryDate: null,
     des_Description: null,
 
@@ -363,7 +365,7 @@ export default function Nac_Main() {
       list[index]['price'] = ''
       list[index]['bookValue'] = ''
       list[index]['priceSeals'] = ''
-        list[index]['profit'] = ''
+      list[index]['profit'] = ''
       list[index]['date_asset'] = ''
       list[index]['BranchID'] = ''
       list[index]['OwnerCode'] = ''
@@ -1333,7 +1335,7 @@ export default function Nac_Main() {
                                   }}
                                   onChange={(e) => {
                                     const listHeader = [...sendHeader]
-                                    listHeader[0].nameSource = `${e.target.value} ${sourceLastName}`
+                                    listHeader[0].sourceFristName = `${e.target.value}`
                                     setSendHeader(listHeader)
                                     setSourceName(e.target.value)
                                   }}
@@ -1365,7 +1367,7 @@ export default function Nac_Main() {
                                   }}
                                   onChange={(e) => {
                                     const listHeader = [...sendHeader]
-                                    listHeader[0].nameSource = `${sourceName} ${e.target.value}`
+                                    listHeader[0].sourceLastName = `${e.target.value}`
                                     setSendHeader(listHeader)
                                     setSourceLastName(e.target.value)
                                   }}

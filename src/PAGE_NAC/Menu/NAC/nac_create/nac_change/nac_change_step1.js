@@ -171,6 +171,8 @@ export default function Nac_Main() {
 
   const data = JSON.parse(localStorage.getItem('data'));
   const [nameSource, setNmaeSource] = React.useState();
+  const [lastNameSource, setLastNmaeSource] = React.useState();
+
 
   const [serviceList, setServiceList] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", count: "", price: "" }]);
   const [serviceList_Main, setServiceList_Main] = React.useState([{ assetsCode: "", serialNo: "", name: "", date_asset: "", dtl: "", price: "" }])
@@ -382,6 +384,7 @@ export default function Nac_Main() {
       setSource_Department('')
       setSource_BU('')
       setNmaeSource('')
+      setLastNmaeSource('')
     } else {
       if (response.data[0].BranchID !== 901) {
         setSource_Department(response.data[0].DepCode)
@@ -393,15 +396,11 @@ export default function Nac_Main() {
     }
   };
 
-  const handleChangeSource_Name = (event) => {
-    event.preventDefault();
-    setNmaeSource(event.target.value);
-  };
 
   const handleNext = async () => {
-    if (!source || !source_Department || !source_BU || !sourceDate || !nameSource) {
+    if (!source || !source_Department || !source_BU || !sourceDate || !nameSource || !lastNameSource) {
       const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_Department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' :
-        !nameSource ? 'กรุณาลงชื่อผู้ส่งมอบ' : 'กรุณากรอกวันที่ของผู้ส่ง'
+        (!nameSource || !lastNameSource) ? 'กรุณาลงชื่อผู้ส่งมอบ' : 'กรุณากรอกวันที่ของผู้ส่ง'
       setAlert(true);
       setValueAlert(alert_value)
     } else {
@@ -415,21 +414,23 @@ export default function Nac_Main() {
         const sumPrice = result
         const nameDes = null
         const response = await Store_FA_control_create_doc({
-          usercode,
-          worktype,
-          des_Department,
-          des_BU,
-          des_delivery,
-          nameDes,
-          des_deliveryDate,
-          source_Department,
-          source_BU,
-          source,
-          nameSource,
-          sourceDate,
-          des_Description,
-          source_Description,
-          sumPrice,
+          usercode: usercode,
+          worktype: worktype,
+          des_Department: des_Department,
+          des_BU: des_BU,
+          des_delivery: des_delivery,
+          desFristName: null,
+          desLastNameName: null,
+          des_deliveryDate: des_deliveryDate,
+          source_Department: source_Department,
+          source_BU: source_BU,
+          source: source,
+          sourceFristName: nameSource,
+          sourceLastName: lastNameSource,
+          sourceDate: sourceDate,
+          des_Description: des_Description,
+          source_Description: source_Description,
+          sumPrice: sumPrice,
         });
         if ('data' in response) {
           for (let i = 0; i < serviceList.length; i++) {
@@ -596,84 +597,83 @@ export default function Nac_Main() {
                                   variant="standard"
                                 />
                               </Stack>
-                              {data.branchid === 901 ? (
-                                <React.Fragment>
-                                  <Autocomplete
-                                    autoHighlight
-                                    freeSolo
-                                    name='source'
-                                    id='source'
-                                    options={users_pureDep}
-                                    getOptionLabel={(option) => option.UserCode}
-                                    filterOptions={filterOptions2}
-                                    onChange={newValue}
-                                    value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
-                                    renderInput={(params) => (
-                                      <React.Fragment>
-                                        <TextField
-                                          {...params}
-                                          variant="standard"
-                                          label='ผู้ส่งมอบ'
-                                          fullWidth
-                                          error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
-                                          autoComplete="family-name"
-                                          sx={{ pt: 1 }}
-                                        />
-                                      </React.Fragment>
-                                    )}
-                                  />
+                              <Autocomplete
+                                autoHighlight
+                                freeSolo
+                                name='source'
+                                id='source'
+                                options={users_pureDep}
+                                getOptionLabel={(option) => option.UserCode}
+                                filterOptions={filterOptions2}
+                                onChange={newValue}
+                                value={UserForAssetsControl[resultIndex[0].indexOf(source)]}
+                                renderInput={(params) => (
+                                  <React.Fragment>
+                                    <TextField
+                                      {...params}
+                                      variant="standard"
+                                      label='ผู้ส่งมอบ'
+                                      fullWidth
+                                      error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
+                                      autoComplete="family-name"
+                                      sx={{ pt: 1 }}
+                                    />
+                                  </React.Fragment>
+                                )}
+                              />
+                              <Stack
+                                direction="row"
+                                justifyContent="space-evenly"
+                                alignItems="flex-start"
+                                spacing={1}
+                              >
+                                <Stack>
                                   <TextField
                                     variant="standard"
                                     fullWidth
                                     autoComplete="family-name"
                                     inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
-                                    onChange={handleChangeSource_Name}
+                                    onChange={(e) => {
+                                      setNmaeSource(e.target.value);
+                                    }}
                                     value={nameSource}
                                     error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                     InputProps={{
                                       startAdornment: (
                                         <InputAdornment position="start">
                                           <Typography color="black">
-                                            ลงชื่อผู้ส่งมอบ :
+                                            ชื่อจริง :
                                           </Typography>
                                         </InputAdornment>
                                       ),
                                     }}
                                     sx={{ pt: 1 }}
                                   />
-                                </React.Fragment>
-                              ) : (
-                                <React.Fragment>
-                                  <TextField
-                                    required
-                                    fullWidth
-                                    name='source'
-                                    id='source'
-                                    label='ผู้ส่งมอบ'
-                                    value={source}
-                                    sx={{ pt: 1 }}
-                                    variant="standard"
-                                  />
+                                </Stack>
+                                <Stack>
                                   <TextField
                                     variant="standard"
                                     fullWidth
                                     autoComplete="family-name"
                                     inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
-                                    onChange={handleChangeSource_Name}
-                                    value={nameSource}
+                                    onChange={(e) => {
+                                      setLastNmaeSource(e.target.value);
+                                    }}
+                                    value={lastNameSource}
+                                    error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                     InputProps={{
                                       startAdornment: (
                                         <InputAdornment position="start">
                                           <Typography color="black">
-                                            ลงชื่อผู้ส่งมอบ :
+                                            นามสกุล :
                                           </Typography>
                                         </InputAdornment>
                                       ),
                                     }}
                                     sx={{ pt: 1 }}
                                   />
-                                </React.Fragment>
-                              )}
+                                </Stack>
+                              </Stack>
                               <LocalizationProvider dateAdapter={DateAdapter}>
                                 <DatePicker
                                   inputFormat="yyyy-MM-dd"

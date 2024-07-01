@@ -190,14 +190,16 @@ export default function Nac_Main() {
     source_department: null,
     source_BU: null,
     source: null,
-    nameSource: `${sourceName} ${sourceLastName}`,
+    sourceFristName: `${sourceName}`,
+    sourceLastName: `${sourceLastName}`,
     sourceDate: dateNow,
     source_description: null,
     // ผู้รับ
     des_department: null,
     des_BU: null,
     des_delivery: null,
-    desName: `${desName} ${desLastName}`,
+    desFristName: `${desName}`,
+    desLastNameName: `${desLastName}`,
     des_deliveryDate: null,
     des_description: null,
 
@@ -1452,7 +1454,7 @@ export default function Nac_Main() {
                                   }}
                                   onChange={(e) => {
                                     const listHeader = [...sendHeader]
-                                    listHeader[0].nameSource = `${e.target.value} ${sourceLastName}`
+                                    listHeader[0].sourceFristName = `${e.target.value}`
                                     setSendHeader(listHeader)
                                     setSourceName(e.target.value)
                                   }}
@@ -1484,7 +1486,7 @@ export default function Nac_Main() {
                                   }}
                                   onChange={(e) => {
                                     const listHeader = [...sendHeader]
-                                    listHeader[0].nameSource = `${sourceName} ${e.target.value}`
+                                    listHeader[0].sourceLastName = `${e.target.value}`
                                     setSendHeader(listHeader)
                                     setSourceLastName(e.target.value)
                                   }}
@@ -1680,7 +1682,7 @@ export default function Nac_Main() {
                                   }}
                                   onChange={(e) => {
                                     const listHeader = [...sendHeader]
-                                    listHeader[0].desName = `${e.target.value} ${desLastName}`
+                                    listHeader[0].desFristName = `${e.target.value}`
                                     setSendHeader(listHeader)
                                     setDesName(e.target.value)
                                   }}
@@ -1714,7 +1716,7 @@ export default function Nac_Main() {
                                   }}
                                   onChange={(e) => {
                                     const listHeader = [...sendHeader]
-                                    listHeader[0].desName = `${desName} ${e.target.value}`
+                                    listHeader[0].desLastNameName = `${e.target.value}`
                                     setSendHeader(listHeader)
                                     setDesLastName(e.target.value)
                                   }}

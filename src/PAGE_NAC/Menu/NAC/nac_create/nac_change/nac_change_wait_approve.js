@@ -319,7 +319,6 @@ export default function Nac_Main_wait() {
   const [permission_menuID, setPermission_menuID] = React.useState();
 
   const data = JSON.parse(localStorage.getItem('data'));
-  const [nameSource, setNmaeSource] = React.useState();
 
   React.useEffect(async () => {
     // POST request using axios with set headers
@@ -433,14 +432,16 @@ export default function Nac_Main_wait() {
     source_department: null,
     source_BU: null,
     source: null,
-    nameSource: null,
+    sourceFristName: null,
+    sourceLastName: null,
     sourceDate: null,
     source_description: null,
     // ผู้รับ
     des_Department: null,
     des_BU: null,
     des_delivery: null,
-    nameDes: null,
+    desFristName: null,
+    desLastNameName: null,
     des_deliveryDate: null,
     des_Description: null,
 
@@ -516,7 +517,6 @@ export default function Nac_Main_wait() {
       setSource_Department(responseHeaders.data[0].source_dep_owner)
       setSource_BU(responseHeaders.data[0].source_bu_owner)
       setSource(responseHeaders.data[0].source_userid)
-      setNmaeSource(responseHeaders.data[0].source_name)
       setSourceDate(responseHeaders.data[0].source_date)
       setSource_Description(responseHeaders.data[0].source_remark)
       setSource_Approve(responseHeaders.data[0].source_approve_userid)
@@ -678,7 +678,8 @@ export default function Nac_Main_wait() {
       listHeader[0]['source_department'] = responseHeaders.data[0].source_dep_owner
       listHeader[0]['source_BU'] = responseHeaders.data[0].source_bu_owner
       listHeader[0]['sumPrice'] = responseHeaders.data[0].sum_price
-      listHeader[0]['nameSource'] = responseHeaders.data[0].source_name
+      listHeader[0]['sourceFristName'] = responseHeaders.data[0].source_name ? responseHeaders.data[0].source_name.split(' ')[0] : null
+      listHeader[0]['sourceLastName'] = responseHeaders.data[0].source_name ? responseHeaders.data[0].source_name.split(' ')[1] : null
       listHeader[0]['sourceDate'] = responseHeaders.data[0].source_date
       listHeader[0]['source_description'] = responseHeaders.data[0].source_remark
       listHeader[0]['create_by'] = responseHeaders.data[0].create_by
@@ -866,7 +867,6 @@ export default function Nac_Main_wait() {
     if (!UserCode) {
       setSource_Department('')
       setSource_BU('')
-      setNmaeSource('')
     } else {
       if (response.data[0].BranchID !== 901) {
         setSource_Department(response.data[0].DepCode)
@@ -876,11 +876,6 @@ export default function Nac_Main_wait() {
         setSource_BU('Center')
       }
     }
-  };
-
-  const handleChangeSource_Name = (event) => {
-    event.preventDefault();
-    setNmaeSource(event.target.value);
   };
 
   // Update Document||
@@ -895,25 +890,7 @@ export default function Nac_Main_wait() {
       const sumPrice = sum_price
       const nac_type = headers.nac_type
       const nameDes = null
-      const response = await store_FA_control_update_DTLandHeaders({
-        usercode,
-        nac_code,
-        nac_status,
-        sumPrice,
-        nac_type,
-        des_department,
-        des_BU,
-        des_delivery,
-        nameDes,
-        des_deliveryDate,
-        des_description,
-        source_department,
-        source_BU,
-        source,
-        nameSource,
-        sourceDate,
-        source_description,
-      });
+      const response = await store_FA_control_update_DTLandHeaders(sendHeader[0]);
       if ('data' in response) {
         for (let i = 0; i < serviceList.length; i++) {
           const dtl_id = serviceList[i].dtl_id
@@ -954,9 +931,9 @@ export default function Nac_Main_wait() {
   };
 
   const handleSubmit = async () => {
-    if (!source || !source_department || !source_BU || !sourceDate || !nameSource) {
+    if (!source || !source_department || !source_BU || !sourceDate || !sendHeader[0].sourceFristName || !sendHeader[0].sourceLastName) {
       const alert_value = !source ? 'กรุณากรอกข้อมูลผู้ส่ง' : !source_department ? 'กรุณากรอกข้อมูลแผนกของผู้ส่ง' :
-        !nameSource ? 'กรุณาลงชื่อผู้ส่งมอบ' : 'กรุณากรอกวันที่ของผู้ส่ง'
+        (!sendHeader[0].sourceFristName || !sendHeader[0].sourceLastName) ? 'กรุณาลงชื่อผู้ส่งมอบ' : 'กรุณากรอกวันที่ของผู้ส่ง'
       setAlert(true);
       setValueAlert(alert_value)
     } else {
@@ -980,7 +957,7 @@ export default function Nac_Main_wait() {
             const verify_by = bossApprove
             const verify_date = bossApproveDate
             const nac_type = headers.nac_type
-            const responseForUpdate = await store_FA_control_updateStatus({
+            await store_FA_control_updateStatus({
               usercode,
               nac_code,
               nac_status,
@@ -1547,34 +1524,39 @@ export default function Nac_Main_wait() {
                                     variant="standard"
                                   />
                                 </Stack>
-                                {data.branchid === 901 ? (
-                                  <React.Fragment>
-                                    <Autocomplete
-                                      autoHighlight
-                                      freeSolo
-                                      name='source'
-                                      id='source'
-                                      size="small"
-                                      disabled={data.branchid === 901 && (selectNAC === 1 || selectNAC === 7) ? false : true}
-                                      options={users_pureDep}
-                                      getOptionLabel={(option) => option.UserCode}
-                                      filterOptions={filterOptions2}
-                                      value={!source ? '' : UserForAssetsControl[resultIndex[0].indexOf(source)]}
-                                      onChange={(e, newValue, reason) => handleAutoSource_DeapartMent(e, newValue, reason)}
-                                      renderInput={(params) => (
-                                        <React.Fragment>
-                                          <TextField
-                                            {...params}
-                                            variant="standard"
-                                            label='ผู้ส่งมอบ'
-                                            error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
-                                            fullWidth
-                                            autoComplete="family-name"
-                                            sx={{ pt: 1 }}
-                                          />
-                                        </React.Fragment>
-                                      )}
-                                    />
+                                <Autocomplete
+                                  autoHighlight
+                                  freeSolo
+                                  name='source'
+                                  id='source'
+                                  size="small"
+                                  disabled={data.branchid === 901 && (selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  options={users_pureDep}
+                                  getOptionLabel={(option) => option.UserCode}
+                                  filterOptions={filterOptions2}
+                                  value={!source ? '' : UserForAssetsControl[resultIndex[0].indexOf(source)]}
+                                  onChange={(e, newValue, reason) => handleAutoSource_DeapartMent(e, newValue, reason)}
+                                  renderInput={(params) => (
+                                    <React.Fragment>
+                                      <TextField
+                                        {...params}
+                                        variant="standard"
+                                        label='ผู้ส่งมอบ'
+                                        error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
+                                        fullWidth
+                                        autoComplete="family-name"
+                                        sx={{ pt: 1 }}
+                                      />
+                                    </React.Fragment>
+                                  )}
+                                />
+                                <Stack
+                                  direction="row"
+                                  justifyContent="space-evenly"
+                                  alignItems="flex-start"
+                                  spacing={1}
+                                >
+                                  <Stack>
                                     <TextField
                                       variant="standard"
                                       fullWidth
@@ -1582,32 +1564,25 @@ export default function Nac_Main_wait() {
                                       error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                       //disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
-                                      onChange={handleChangeSource_Name}
-                                      value={nameSource}
+                                      onChange={(e) => {
+                                        const listHeader = [...sendHeader]
+                                        listHeader[0].sourceFristName = `${e.target.value}`
+                                        setSendHeader(listHeader)
+                                      }}
+                                      value={sendHeader[0].sourceFristName}
                                       InputProps={{
                                         startAdornment: (
                                           <InputAdornment position="start">
                                             <Typography color="black">
-                                              ลงชื่อผู้ส่งมอบ :
+                                              ชื่อจริง :
                                             </Typography>
                                           </InputAdornment>
                                         ),
                                       }}
                                       sx={{ pt: 1 }}
                                     />
-                                  </React.Fragment>
-                                ) : (
-                                  <React.Fragment>
-                                    <TextField
-                                      required
-                                      fullWidth
-                                      name='source'
-                                      id='source'
-                                      label='ผู้ส่งมอบ'
-                                      value={source}
-                                      sx={{ pt: 1 }}
-                                      variant="standard"
-                                    />
+                                  </Stack>
+                                  <Stack>
                                     <TextField
                                       variant="standard"
                                       fullWidth
@@ -1615,21 +1590,25 @@ export default function Nac_Main_wait() {
                                       error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
                                       //disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
                                       inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
-                                      onChange={handleChangeSource_Name}
-                                      value={nameSource}
+                                      onChange={(e) => {
+                                        const listHeader = [...sendHeader]
+                                        listHeader[0].sourceLastName = `${e.target.value}`
+                                        setSendHeader(listHeader)
+                                      }}
+                                      value={sendHeader[0].sourceLastName}
                                       InputProps={{
                                         startAdornment: (
                                           <InputAdornment position="start">
                                             <Typography color="black">
-                                              ลงชื่อผู้ส่งมอบ :
+                                              นามสกุล :
                                             </Typography>
                                           </InputAdornment>
                                         ),
                                       }}
                                       sx={{ pt: 1 }}
                                     />
-                                  </React.Fragment>
-                                )}
+                                  </Stack>
+                                </Stack>
                                 <LocalizationProvider dateAdapter={DateAdapter}>
                                   <DatePicker
                                     inputFormat="yyyy-MM-dd"
