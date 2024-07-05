@@ -380,7 +380,9 @@ export default function Nac_Main() {
       setSource_BU('')
       setNmaeSource('')
       setLastNmaeSource('')
+      setSource(null)
     } else {
+      setSource(newValue)
       setNmaeSource(UserForAssetsControl.filter((res) => res.UserCode === newValue)[0].fristName)
       setLastNmaeSource(UserForAssetsControl.filter((res) => res.UserCode === newValue)[0].lastName)
       setSource_Department(UserForAssetsControl.filter((res) => res.UserCode === newValue)[0].DepCode)

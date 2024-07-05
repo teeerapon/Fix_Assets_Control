@@ -859,22 +859,14 @@ export default function Nac_Main_wait() {
   };
 
   const handleAutoSource_DeapartMent = async (e, newValue, reason) => {
-    const UserCode = newValue
-    const response = await AutoDeapartMent({
-      UserCode
-    });
-    setSource(UserCode)
-    if (!UserCode) {
+    if (reason === 'clear' || !newValue) {
       setSource_Department('')
       setSource_BU('')
+      setSource(null)
     } else {
-      if (response.data[0].BranchID !== 901) {
-        setSource_Department(response.data[0].DepCode)
-        setSource_BU('Oil')
-      } else {
-        setSource_Department(response.data[0].DepCode)
-        setSource_BU('Center')
-      }
+      setSource(newValue)
+      setSource_Department(UserForAssetsControl.filter((res) => res.UserCode === newValue)[0].DepCode)
+      setSource_BU(UserForAssetsControl.filter((res) => res.UserCode === newValue)[0].BranchID === 901 ? `Center` : `Oil`)
     }
   };
 
