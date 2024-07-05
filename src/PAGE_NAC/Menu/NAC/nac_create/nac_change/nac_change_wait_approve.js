@@ -1311,33 +1311,31 @@ export default function Nac_Main_wait() {
 
   if (serviceList[0].assetsCode === '') {
     return (
-      <React.Fragment>
-        <Box
-          sx={{
-            marginTop: 30,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
+      <Box
+        sx={{
+          marginTop: 30,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
         >
-          <Grid
-            container
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            spacing={2}
-          >
-            <Grid item>
-              <CircularProgress disableShrink color="inherit" />
-            </Grid>
-            <Grid item>
-              <Typography sx={{ fontSize: '2rem !important', fontWeight: 'bold' }} color="inherit" >
-                Loading...
-              </Typography>
-            </Grid>
+          <Grid item>
+            <CircularProgress disableShrink color="inherit" />
           </Grid>
-        </Box>
-      </React.Fragment>
+          <Grid item>
+            <Typography sx={{ fontSize: '2rem !important', fontWeight: 'bold' }} color="inherit" >
+              Loading...
+            </Typography>
+          </Grid>
+        </Grid>
+      </Box>
     );
   } else if (headers.nac_type === '3' || headers.nac_type === 3) {
     return (
@@ -1466,209 +1464,201 @@ export default function Nac_Main_wait() {
                     <Table aria-label="customized table">
                       <TableHead>
                         <TableRow>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '40%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่ส่งมอบ</StyledTableCell>
-                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>หน่วยงานที่รับมอบ</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '30%' }}>ประเภทการเปลี่ยนแปลง</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '35%' }}>หน่วยงานที่ส่งมอบ</StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa", width: '35%' }}>หน่วยงานที่รับมอบ</StyledTableCell>
                         </TableRow>
                       </TableHead>
-                      <React.Fragment>
-                        <TableBody>
-                          <StyledTableRow>
-                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                              <FormGroup>
-                                <center>
-                                  <Typography variant='h4' color='primary' sx={{ fontWeight: 'bold !important', fontSize: '1.5rem !important' }}>
-                                    เปลี่ยนแปลงรายละเอียดทรัพย์สิน
-                                  </Typography>
-                                </center>
-                              </FormGroup>
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                              <React.Fragment>
-                                <Grid container>
-                                  <Grid xs={6}>
-                                    <Typography align='center' color="inherit" >
-                                      Department
-                                    </Typography>
-                                  </Grid>
-                                  <Grid xs={6}>
-                                    <Typography align='center' color="inherit" >
-                                      BU
-                                    </Typography>
-                                  </Grid>
-                                </Grid>
-                                <Stack
-                                  direction="row"
-                                  divider={<Divider orientation="vertical" flexItem />}
-                                  spacing={1}
-                                  sx={{ pt: 1, pb: 1 }}
-                                >
-                                  <TextField
-                                    required
-                                    fullWidth
-                                    disabled
-                                    name='source_department'
-                                    onChange={handleChangeSource_Department}
-                                    value={source_department}
-                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
-                                    variant="standard"
-                                  />
-                                  <TextField
-                                    required
-                                    fullWidth
-                                    disabled
-                                    onChange={handleChangeSource_BU}
-                                    name='source_BU'
-                                    value={source_BU}
-                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
-                                    variant="standard"
-                                  />
-                                </Stack>
-                                <Autocomplete
-                                  autoHighlight
-                                  freeSolo
-                                  name='source'
-                                  id='source'
-                                  size="small"
-                                  disabled={data.branchid === 901 && (selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  options={users_pureDep}
-                                  getOptionLabel={(option) => option.UserCode}
-                                  filterOptions={filterOptions2}
-                                  value={!source ? '' : UserForAssetsControl[resultIndex[0].indexOf(source)]}
-                                  onChange={(e, newValue, reason) => handleAutoSource_DeapartMent(e, newValue, reason)}
-                                  renderInput={(params) => (
-                                    <React.Fragment>
-                                      <TextField
-                                        {...params}
-                                        variant="standard"
-                                        label='ผู้ส่งมอบ'
-                                        error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
-                                        fullWidth
-                                        autoComplete="family-name"
-                                        sx={{ pt: 1 }}
-                                      />
-                                    </React.Fragment>
-                                  )}
-                                />
-                                <Stack
-                                  direction="row"
-                                  justifyContent="space-evenly"
-                                  alignItems="flex-start"
-                                  spacing={1}
-                                >
-                                  <Stack>
-                                    <TextField
-                                      variant="standard"
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
-                                      //disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
-                                      onChange={(e) => {
-                                        const listHeader = [...sendHeader]
-                                        listHeader[0].sourceFristName = `${e.target.value}`
-                                        setSendHeader(listHeader)
-                                      }}
-                                      value={sendHeader[0].sourceFristName}
-                                      InputProps={{
-                                        startAdornment: (
-                                          <InputAdornment position="start">
-                                            <Typography color="black">
-                                              ชื่อจริง :
-                                            </Typography>
-                                          </InputAdornment>
-                                        ),
-                                      }}
-                                      sx={{ pt: 1 }}
-                                    />
-                                  </Stack>
-                                  <Stack>
-                                    <TextField
-                                      variant="standard"
-                                      fullWidth
-                                      autoComplete="family-name"
-                                      error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
-                                      //disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
-                                      onChange={(e) => {
-                                        const listHeader = [...sendHeader]
-                                        listHeader[0].sourceLastName = `${e.target.value}`
-                                        setSendHeader(listHeader)
-                                      }}
-                                      value={sendHeader[0].sourceLastName}
-                                      InputProps={{
-                                        startAdornment: (
-                                          <InputAdornment position="start">
-                                            <Typography color="black">
-                                              นามสกุล :
-                                            </Typography>
-                                          </InputAdornment>
-                                        ),
-                                      }}
-                                      sx={{ pt: 1 }}
-                                    />
-                                  </Stack>
-                                </Stack>
-                                <LocalizationProvider dateAdapter={DateAdapter}>
-                                  <DatePicker
-                                    inputFormat="yyyy-MM-dd"
-                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                    onChange={handleChangeSource_deliveryDate}
-                                    name='sourceDate'
-                                    value={sourceDate}
-                                    InputProps={{
-                                      startAdornment: (
-                                        <InputAdornment position="start">
-                                          <Typography color="black">
-                                            วันที่ยืนยันรายการ :
-                                          </Typography>
-                                        </InputAdornment>
-                                      ),
-                                    }}
-                                    renderInput={(params) =>
-                                      <TextField
-                                        required
-                                        fullWidth
-                                        autoComplete="family-name"
-                                        sx={{ pt: 1 }}
-                                        variant="standard"
-                                        {...params} />}
-                                  />
-                                </LocalizationProvider>
+                      <TableBody>
+                        <StyledTableRow>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                            <FormGroup>
+                              <center>
+                                <Typography variant='h4' color='primary' sx={{ fontWeight: 'bold !important', fontSize: '1.5rem !important' }}>
+                                  เปลี่ยนแปลงรายละเอียดทรัพย์สิน
+                                </Typography>
+                              </center>
+                            </FormGroup>
+                          </StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                            <Grid container>
+                              <Grid xs={6}>
+                                <Typography align='center' color="inherit" >
+                                  Department
+                                </Typography>
+                              </Grid>
+                              <Grid xs={6}>
+                                <Typography align='center' color="inherit" >
+                                  BU
+                                </Typography>
+                              </Grid>
+                            </Grid>
+                            <Stack
+                              direction="row"
+                              divider={<Divider orientation="vertical" flexItem />}
+                              spacing={1}
+                              sx={{ pt: 1, pb: 1 }}
+                            >
+                              <TextField
+                                required
+                                fullWidth
+                                disabled
+                                name='source_department'
+                                onChange={handleChangeSource_Department}
+                                value={source_department}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
+                                variant="standard"
+                              />
+                              <TextField
+                                required
+                                fullWidth
+                                disabled
+                                onChange={handleChangeSource_BU}
+                                name='source_BU'
+                                value={source_BU}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center' } }}
+                                variant="standard"
+                              />
+                            </Stack>
+                            <Autocomplete
+                              autoHighlight
+                              freeSolo
+                              name='source'
+                              id='source'
+                              size="small"
+                              disabled={data.branchid === 901 && (selectNAC === 1 || selectNAC === 7) ? false : true}
+                              options={users_pureDep}
+                              getOptionLabel={(option) => option.UserCode}
+                              filterOptions={filterOptions2}
+                              value={!source ? '' : UserForAssetsControl[resultIndex[0].indexOf(source)]}
+                              onChange={(e, newValue, reason) => handleAutoSource_DeapartMent(e, newValue, reason)}
+                              renderInput={(params) => (
                                 <TextField
-                                  required
+                                  {...params}
+                                  variant="standard"
+                                  label='ผู้ส่งมอบ'
+                                  error={valueAlert === 'กรุณากรอกข้อมูลผู้ส่ง' ? true : false}
                                   fullWidth
-                                  onChange={handleChangeSource_Description}
-                                  value={source_description}
-                                  name='source_description'
+                                  autoComplete="family-name"
                                   sx={{ pt: 1 }}
+                                />
+                              )}
+                            />
+                            <Stack
+                              direction="row"
+                              justifyContent="space-evenly"
+                              alignItems="flex-start"
+                              spacing={1}
+                            >
+                              <Stack>
+                                <TextField
+                                  variant="standard"
+                                  fullWidth
+                                  autoComplete="family-name"
+                                  error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
+                                  //disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                  onChange={(e) => {
+                                    const listHeader = [...sendHeader]
+                                    listHeader[0].sourceFristName = `${e.target.value}`
+                                    setSendHeader(listHeader)
+                                  }}
+                                  value={sendHeader[0].sourceFristName}
                                   InputProps={{
                                     startAdornment: (
                                       <InputAdornment position="start">
                                         <Typography color="black">
-                                          หมายเหตุ :
+                                          ชื่อจริง :
                                         </Typography>
                                       </InputAdornment>
                                     ),
                                   }}
-                                  variant="standard"
+                                  sx={{ pt: 1 }}
                                 />
-                              </React.Fragment>
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                              <React.Fragment>
-                                <FormGroup>
-                                  <center>
-                                    <Typography variant='h4' color='#AAAAAA'>
-                                      none
+                              </Stack>
+                              <Stack>
+                                <TextField
+                                  variant="standard"
+                                  fullWidth
+                                  autoComplete="family-name"
+                                  error={valueAlert === 'กรุณาลงชื่อผู้ส่งมอบ' ? true : false}
+                                  //disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)' } }}
+                                  onChange={(e) => {
+                                    const listHeader = [...sendHeader]
+                                    listHeader[0].sourceLastName = `${e.target.value}`
+                                    setSendHeader(listHeader)
+                                  }}
+                                  value={sendHeader[0].sourceLastName}
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <Typography color="black">
+                                          นามสกุล :
+                                        </Typography>
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  sx={{ pt: 1 }}
+                                />
+                              </Stack>
+                            </Stack>
+                            <LocalizationProvider dateAdapter={DateAdapter}>
+                              <DatePicker
+                                inputFormat="yyyy-MM-dd"
+                                disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                onChange={handleChangeSource_deliveryDate}
+                                name='sourceDate'
+                                value={sourceDate}
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      <Typography color="black">
+                                        วันที่ยืนยันรายการ :
+                                      </Typography>
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                renderInput={(params) =>
+                                  <TextField
+                                    required
+                                    fullWidth
+                                    autoComplete="family-name"
+                                    sx={{ pt: 1 }}
+                                    variant="standard"
+                                    {...params} />}
+                              />
+                            </LocalizationProvider>
+                            <TextField
+                              required
+                              fullWidth
+                              onChange={handleChangeSource_Description}
+                              value={source_description}
+                              name='source_description'
+                              sx={{ pt: 1 }}
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <Typography color="black">
+                                      หมายเหตุ :
                                     </Typography>
-                                  </center>
-                                </FormGroup>
-                              </React.Fragment>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        </TableBody>
-                      </React.Fragment>
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="standard"
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                            <FormGroup>
+                              <center>
+                                <Typography variant='h4' color='#AAAAAA'>
+                                  NONE
+                                </Typography>
+                              </center>
+                            </FormGroup>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      </TableBody>
                     </Table>
                     <Table aria-label="customized table" >
                       <TableHead>
@@ -1706,191 +1696,189 @@ export default function Nac_Main_wait() {
                         </TableRow>
                       </TableHead>
                       {serviceList.map((singleService, index) => (
-                        <React.Fragment>
-                          <TableBody>
-                            <StyledTableRow>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                {(selectNAC === 1 && data.UserCode === headers.create_by) ? (
-                                  <React.Fragment>
-                                    <Autocomplete
-                                      autoHighlight
-                                      freeSolo
-                                      key={index}
-                                      disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                      name='assetsCode'
-                                      id='assetsCode'
-                                      sx={{
-                                        pt: 1, "& .MuiAutocomplete-input, & .MuiInputLabel-root": {
-                                          fontSize: 14
-                                        }
-                                      }}
-                                      ListboxProps={{
-                                        sx: { fontSize: 12 }
-                                      }}
-                                      options={AllAssetsControl}
-                                      getOptionLabel={(option) => option.Code || ''}
-                                      filterOptions={filterOptions}
-                                      onChange={(e, newValue, reason) => handleServiceChangeHeader(e, newValue, reason, index)}
-                                      value={!singleService.assetsCode ? singleService.assetsCode : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
-                                      renderInput={(params) => (
-                                        <TextField
-                                          {...params}
-                                          variant="standard"
-                                          name='assetsCode'
-                                          id='assetsCode'
-                                          key={index}
-                                          value={singleService.assetsCode}
-                                        //onChange={(e) => handleServiceChange(e, index)}
-                                        />
-                                      )}
-                                    />
-                                  </React.Fragment>
-                                ) : (
-                                  <React.Fragment>
-                                    <TextField
-                                      key={index}
-                                      fullWidth
-                                      disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                      variant="standard"
-                                      name='assetsCode'
-                                      id='assetsCode'
-                                      inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                      onChange={(e) => handleServiceChange(e, index)}
-                                      value={singleService.assetsCode}
-                                    />
-                                  </React.Fragment>
-                                )}
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  fullWidth
-                                  key={index}
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
-                                  disabled
-                                  value={serviceList_Main[index].serialNo}
-                                  variant="standard"
-                                />
-                                <TextField
-                                  key={index}
-                                  fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  name="serialNo"
-                                  id="serialNo"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  variant="standard"
-                                  onChange={(e) => handleServiceChange(e, index)}
-                                  value={singleService.serialNo}
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  fullWidth
-                                  key={index}
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', fontSize: 14 } }}
-                                  disabled
-                                  value={serviceList_Main[index].name}
-                                  variant="standard"
-                                />
-                                <TextField
-                                  key={index}
-                                  fullWidth
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  name="name"
-                                  id="name"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                  variant="standard"
-                                  onChange={(e) => handleServiceChange(e, index)}
-                                  value={singleService.name}
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  fullWidth
-                                  key={index}
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
-                                  disabled
-                                  value={!serviceList_Main[index].date_asset ? '' : serviceList_Main[index].date_asset.split('T')[0]}
-                                  variant="standard"
-                                />
-                                <TextField
-                                  fullWidth
-                                  key={index}
-                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  name="date_asset"
-                                  id="date_asset"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
-                                  value={!serviceList[index].date_asset ? '' : serviceList[index].date_asset.split('T')[0]}
-                                  variant="standard"
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <FormControl
-                                  variant="standard"
-                                  fullWidth
-                                  size="small"
-                                >
+                        <TableBody>
+                          <StyledTableRow>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              {(selectNAC === 1 && data.UserCode === headers.create_by) ? (
+                                <React.Fragment>
+                                  <Autocomplete
+                                    autoHighlight
+                                    freeSolo
+                                    key={index}
+                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                    name='assetsCode'
+                                    id='assetsCode'
+                                    sx={{
+                                      pt: 1, "& .MuiAutocomplete-input, & .MuiInputLabel-root": {
+                                        fontSize: 14
+                                      }
+                                    }}
+                                    ListboxProps={{
+                                      sx: { fontSize: 12 }
+                                    }}
+                                    options={AllAssetsControl}
+                                    getOptionLabel={(option) => option.Code || ''}
+                                    filterOptions={filterOptions}
+                                    onChange={(e, newValue, reason) => handleServiceChangeHeader(e, newValue, reason, index)}
+                                    value={!singleService.assetsCode ? singleService.assetsCode : AllAssetsControl[resultIndexAssets[0].indexOf(singleService.assetsCode)]}
+                                    renderInput={(params) => (
+                                      <TextField
+                                        {...params}
+                                        variant="standard"
+                                        name='assetsCode'
+                                        id='assetsCode'
+                                        key={index}
+                                        value={singleService.assetsCode}
+                                      //onChange={(e) => handleServiceChange(e, index)}
+                                      />
+                                    )}
+                                  />
+                                </React.Fragment>
+                              ) : (
+                                <React.Fragment>
                                   <TextField
                                     key={index}
                                     fullWidth
-                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', fontSize: 14 } }}
-                                    disabled
-                                    value={serviceList_Main[index].dtl}
-                                    variant="standard"
-                                  />
-                                  <Select
-                                    key={index}
-                                    name="dtl"
-                                    id="dtl"
-                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
-                                    value={singleService.dtl}
-                                    onChange={(e) => handleServiceChange(e, index)}
                                     disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  >
-                                    {/* <MenuItem value={'สภาพดี'}>สภาพดี</MenuItem>
+                                    variant="standard"
+                                    name='assetsCode'
+                                    id='assetsCode'
+                                    inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
+                                    onChange={(e) => handleServiceChange(e, index)}
+                                    value={singleService.assetsCode}
+                                  />
+                                </React.Fragment>
+                              )}
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
+                                fullWidth
+                                key={index}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
+                                disabled
+                                value={serviceList_Main[index].serialNo}
+                                variant="standard"
+                              />
+                              <TextField
+                                key={index}
+                                fullWidth
+                                disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                name="serialNo"
+                                id="serialNo"
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
+                                variant="standard"
+                                onChange={(e) => handleServiceChange(e, index)}
+                                value={singleService.serialNo}
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
+                                fullWidth
+                                key={index}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', fontSize: 14 } }}
+                                disabled
+                                value={serviceList_Main[index].name}
+                                variant="standard"
+                              />
+                              <TextField
+                                key={index}
+                                fullWidth
+                                disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                name="name"
+                                id="name"
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
+                                variant="standard"
+                                onChange={(e) => handleServiceChange(e, index)}
+                                value={singleService.name}
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
+                                fullWidth
+                                key={index}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'center', fontSize: 14 } }}
+                                disabled
+                                value={!serviceList_Main[index].date_asset ? '' : serviceList_Main[index].date_asset.split('T')[0]}
+                                variant="standard"
+                              />
+                              <TextField
+                                fullWidth
+                                key={index}
+                                disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                name="date_asset"
+                                id="date_asset"
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'center', fontSize: 14 } }}
+                                value={!serviceList[index].date_asset ? '' : serviceList[index].date_asset.split('T')[0]}
+                                variant="standard"
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="start" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              <FormControl
+                                variant="standard"
+                                fullWidth
+                                size="small"
+                              >
+                                <TextField
+                                  key={index}
+                                  fullWidth
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', fontSize: 14 } }}
+                                  disabled
+                                  value={serviceList_Main[index].dtl}
+                                  variant="standard"
+                                />
+                                <Select
+                                  key={index}
+                                  name="dtl"
+                                  id="dtl"
+                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', fontSize: 14 } }}
+                                  value={singleService.dtl}
+                                  onChange={(e) => handleServiceChange(e, index)}
+                                  disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                >
+                                  {/* <MenuItem value={'สภาพดี'}>สภาพดี</MenuItem>
                                     <MenuItem value={'ชำรุดรอซ่อม'}>ชำรุดรอซ่อม</MenuItem>
                                     <MenuItem value={'รอตัดชำรุด'}>รอตัดชำรุด</MenuItem> */}
-                                    <MenuItem value={'ชำรุด'}>ชำรุด</MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                <TextField
-                                  fullWidth
-                                  key={index}
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'right', fontSize: 14 } }}
-                                  disabled
-                                  value={!serviceList_Main[index].price ? serviceList_Main[index].price : (serviceList_Main[index].price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
-                                  variant="standard"
-                                />
-                                <TextField
+                                  <MenuItem value={'ชำรุด'}>ชำรุด</MenuItem>
+                                </Select>
+                              </FormControl>
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              <TextField
+                                fullWidth
+                                key={index}
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,0.5)', textAlign: 'right', fontSize: 14 } }}
+                                disabled
+                                value={!serviceList_Main[index].price ? serviceList_Main[index].price : (serviceList_Main[index].price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
+                                variant="standard"
+                              />
+                              <TextField
+                                disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
+                                key={index}
+                                fullWidth
+                                name="price"
+                                id="price"
+                                inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'right', fontSize: 14 } }}
+                                onChange={(e) => handleServiceChange(e, index)}
+                                type={valuesVisibility.showText ? "text" : "password"}
+                                value={!singleService.price ? singleService.price : (singleService.price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
+                                variant="standard"
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
+                              {serviceList.length !== 0 && (
+                                <IconButton
+                                  size="large"
                                   disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                  key={index}
-                                  fullWidth
-                                  name="price"
-                                  id="price"
-                                  inputProps={{ style: { '-webkit-text-fill-color': 'rgba(0,0,0,1)', textAlign: 'right', fontSize: 14 } }}
-                                  onChange={(e) => handleServiceChange(e, index)}
-                                  type={valuesVisibility.showText ? "text" : "password"}
-                                  value={!singleService.price ? singleService.price : (singleService.price).toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 0 })}
-                                  variant="standard"
-                                />
-                              </StyledTableCell>
-                              <StyledTableCell align="center" style={{ "borderWidth": "0.5px", 'borderColor': "#aaaaaa" }}>
-                                {serviceList.length !== 0 && (
-                                  <IconButton
-                                    size="large"
-                                    disabled={(selectNAC === 1 || selectNAC === 7) ? false : true}
-                                    aria-label="delete"
-                                    color="error"
-                                    onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
-                                  >
-                                    <DeleteIcon fontSize="inherit" />
-                                  </IconButton>
-                                )}
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          </TableBody>
-                        </React.Fragment>
+                                  aria-label="delete"
+                                  color="error"
+                                  onClick={serviceList.length === 1 ? false : () => handleServiceRemove(index)}
+                                >
+                                  <DeleteIcon fontSize="inherit" />
+                                </IconButton>
+                              )}
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        </TableBody>
                       ))}
                     </Table>
                     <Table aria-label="customized table" >
