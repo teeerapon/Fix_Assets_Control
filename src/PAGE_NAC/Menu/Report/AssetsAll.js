@@ -127,9 +127,7 @@ export default function Reported_of_assets() {
   const [selectMenu, setSelectMenu] = React.useState();
   const [reported_of_assets, setReported_of_assets] = React.useState();
   const data = JSON.parse(localStorage.getItem('data'));
-  const [description_value, setDescription_value] = React.useState('');
   const checkUserWeb = localStorage.getItem('sucurity');
-  const [value_status, setValue_status] = React.useState('');
   const [status_all] = React.useState(['none', 'สภาพดี', 'ชำรุดรอซ่อม', 'รอตัดขาย', 'รอตัดชำรุด', 'QR Code ไม่สมบูรณ์ (สภาพดี)', 'QR Code ไม่สมบูรณ์ (ชำรุดรอซ่อม)', 'QR Code ไม่สมบูรณ์ (รอตัดขาย)', 'QR Code ไม่สมบูรณ์ (รอตัดชำรุด)']);
   const [pageSize, setPageSize] = React.useState(10);
   const [progress, setProgress] = React.useState();
@@ -152,28 +150,6 @@ export default function Reported_of_assets() {
             setOpenDialog(false);
           }
         })
-        //   if (error.response) {
-        //     setOpenDialog(false);
-        //     swal("แจ้งเตือน", `หมดเวลาแล้ว`, "error").then((res) => {
-        //       reported_of_assets.forEach(function (x, index) {
-        //         if (x.Code === dialogComment.Code) {
-        //           const list = [...reported_of_assets]
-        //           list[index]['comment'] = ''
-        //           setReported_of_assets(list)
-        //           setOpenDialog(false);
-        //         }
-        //       })
-        //     })
-        //   }
-        // }).then((res) => {
-        //   reported_of_assets.forEach(function (x, index) {
-        //     if (x.Code === dialogComment.Code) {
-        //       const list = [...reported_of_assets]
-        //       list[index]['comment'] = dialogComment.comment
-        //       setReported_of_assets(list)
-        //       setOpenDialog(false);
-        //     }
-        //   })
       })
   };
 
@@ -334,17 +310,15 @@ export default function Reported_of_assets() {
         };
 
         return (
-          <React.Fragment>
-            <FormControl fullWidth size="small">
-              <Select
-                label={false}
-                value={!params.row.Reference ? 'none' : params.row.Reference}
-                onChange={(event) => handleChange_select(event, params)}
-              >
-                {status_all.map((status) => (<MenuItem value={status}>{status}</MenuItem>))}
-              </Select>
-            </FormControl>
-          </React.Fragment >
+          <FormControl fullWidth size="small">
+            <Select
+              label={false}
+              value={!params.row.Reference ? 'none' : params.row.Reference}
+              onChange={(event) => handleChange_select(event, params)}
+            >
+              {status_all.map((status) => (<MenuItem value={status}>{status}</MenuItem>))}
+            </Select>
+          </FormControl>
         )
       }
     },
@@ -399,31 +373,33 @@ export default function Reported_of_assets() {
     },
   ];
 
-  React.useEffect(async () => {
+  React.useEffect(() => {
     // POST request using axios with set headers
     const Description = { Description: '' }
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
-    await Axios.post(config.http + '/FA_Control_Report_All_Counted_by_Description', Description, { headers }).catch(function (error) {
-      if (error.toJSON().message === 'Request failed with status code 400') {
-        setProgress(1)
-      }
-    }).then(response => {
-      setSelectMenu((response.data.data).filter((value, index, self) =>
-        index === self.findIndex((t) => (
+    const fetData = async () => {
+      await Axios.post(config.http + '/FA_Control_Report_All_Counted_by_Description', Description, { headers }).catch(function (error) {
+        if (error.toJSON().message === 'Request failed with status code 400') {
+          setProgress(1)
+        }
+      }).then(response => {
+        setSelectMenu((response.data.data).filter((value, index, self) => index === self.findIndex((t) => (
           t.Description === value.Description
         ))
-      ))
-      setProgress(1)
-    });
+        ))
+        setProgress(1)
+      });
+    }
+    fetData();
   }, []);
 
   const handleChange = async (event) => {
     setProgress(0)
-    setDescription_value(event.target.innerText);
     const Description = { Description: event.target.innerText }
+    console.log(Description);
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
@@ -461,7 +437,7 @@ export default function Reported_of_assets() {
           </Toolbar>
         </AppBar>
         <AnimatedPage>
-          {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
+          {progress !== 1 ? <Box sx={{ width: '100%' }}><LinearProgress /></Box> : null}
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
               <Autocomplete

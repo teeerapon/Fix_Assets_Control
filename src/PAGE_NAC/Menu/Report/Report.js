@@ -118,11 +118,11 @@ export default function Report() {
   const [topicBranch, setTopicBranch] = React.useState();
 
   const handleChangeTopicBranch = (event) => {
-    if ((data.branchid === 901 && event.target.value === 1) || (data.branchid === 901 && event.target.value === 0)) {
+    if ((data.branchid == 901 && event.target.value == 1) || (data.branchid == 901 && event.target.value == 0)) {
       setTopicBranch(event.target.value);
       setShowResult(false)
       setPermission([])
-    } else if (data.branchid !== 901 && event.target.value === 0) {
+    } else if (data.branchid != 901 && event.target.value == 0) {
       setTopicBranch(event.target.value);
       setShowResult(false)
       setPermissionHO([])
@@ -162,9 +162,8 @@ export default function Report() {
         const response_data = await getPeriods({
           BranchID
         })
-        console.log(response_data);
-        if (response_data.filter((res) => (res.DepCode === data.DepCode || !res.DepCode) && (!res.personID || res.personID === data.UserCode)).length !== 0) {
-          setPeriodData2(response_data.filter((res) => (res.DepCode === data.DepCode || !res.DepCode) && (!res.personID || res.personID === data.UserCode)));
+        if (response_data.filter((res) => (res.DepCode === data.depcode || !res.DepCode) && (!res.personID || res.personID === data.UserCode)).length !== 0) {
+          setPeriodData2(response_data.filter((res) => (res.DepCode === data.depcode || !res.DepCode) && (!res.personID || res.personID === data.UserCode)));
           setShowResult(true)
         } else {
           setAlert(true)
@@ -172,12 +171,11 @@ export default function Report() {
           setShowResult(false)
         }
       } else {
-        const BranchID = 901
-        const response_data = await getPeriods({
-          BranchID
-        })
-        if (response_data.filter((res) => (res.DepCode === data.DepCode || !res.DepCode) && res.personID === data.UserCode).length !== 0) {
-          setPeriodData2(response_data.filter((res) => (res.DepCode === data.DepCode || !res.DepCode) && res.personID === data.UserCode));
+        const body = { BranchID: 901, depCode: data.depcode, personID: data.UserCode }
+        console.log(data);
+        const response_data = await getPeriods(body)
+        if (response_data.filter((res) => (res.DepCode === data.depcode || !res.DepCode) && (res.personID === data.UserCode || res.personID === data.name)).length !== 0) {
+          setPeriodData2(response_data.filter((res) => (res.DepCode === data.depcode || !res.DepCode) && (res.personID === data.UserCode || res.personID === data.name)));
           setShowResult(true)
         } else {
           setAlert(true)
@@ -229,180 +227,180 @@ export default function Report() {
               localStorage.setItem('Allaseets', JSON.stringify((response2).concat(response3, response.data)));
               navigate("/AssetPage")
             } else {
-              const array1 = response2.filter((res) => res.DepCodeMain === data.DepCode)
-              const array2 = response3.filter((res) => res.DepCodeMain === data.DepCode)
-              const array3 = (response.data).filter((res) => res.DepCodeMain === data.DepCode)
+              const array1 = response2.filter((res) => res.DepCodeMain === data.depcode)
+              const array2 = response3.filter((res) => res.DepCodeMain === data.depcode)
+              const array3 = (response.data).filter((res) => res.DepCodeMain === data.depcode)
               localStorage.setItem('Allaseets', JSON.stringify((array1).concat(array2, array3)));
               navigate("/AssetPage")
             }
           });
-      } else {
-        swal("แจ้งเตือน", "ไม่พบรายการบันทึกทรัพย์สิน", "error");
-      }
     } else {
-      swal("แจ้งเตือน", "กรุณากรอกข้อมูลในครบถ้วน", "warning");
+      swal("แจ้งเตือน", "ไม่พบรายการบันทึกทรัพย์สิน", "error");
     }
+  } else {
+    swal("แจ้งเตือน", "กรุณากรอกข้อมูลในครบถ้วน", "warning");
+}
   }
 
-  if (permission === 'ไม่พบสิทธิ์') {
-    swal("แจ้งเตือน", 'กรุณาติดต่อ Admin เพื่อขอสิทธิ์', "warning").then((value) => {
-      window.location.href = "/NAC_MAIN";
-    });
-  } else {
-    return (
-      <div>
-        <Stack spacing={2} sx={{ width: '100%' }}>
-          <Snackbar open={alert} autoHideDuration={4500} onClose={handleCloseAlert}>
-            <Alert onClose={handleCloseAlert} severity="warning" sx={{ width: '100%' }}>
-              {valueAlert}
-            </Alert>
-          </Snackbar>
-        </Stack>
-        <AppBar
-          position="absolute"
-          color="default"
-          elevation={0}
-          sx={{
-            position: 'relative',
-            borderBottom: (t) => `1px solid ${t.palette.divider}`,
-          }}
-        >
-          <Toolbar>
-            <AnimatedPage>
-              <Typography variant="h5" color="inherit" >
-                รายงานการตรวจนับ
-              </Typography>
-            </AnimatedPage>
-          </Toolbar>
-        </AppBar>
-        <AnimatedPage>
-          <Container component="main" maxWidth="sm" sx={{ mb: 4 }} >
-            <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-              <form className={classes.form} noValidate onSubmit={handleSubmit}>
-                <center className="pt-2">
-                  <Typography component="h1" variant="h4" align="center" className='font-sm-bold'>
-                    <b>PURE THAI ENERGY CO.,LTD.</b>
-                  </Typography>
-                  <Typography variant="h6" gutterBottom className='pt-5'>
-                    กรุณาเลือกคำตอบ
+if (permission === 'ไม่พบสิทธิ์') {
+  swal("แจ้งเตือน", 'กรุณาติดต่อ Admin เพื่อขอสิทธิ์', "warning").then((value) => {
+    window.location.href = "/NAC_MAIN";
+  });
+} else {
+  return (
+    <div>
+      <Stack spacing={2} sx={{ width: '100%' }}>
+        <Snackbar open={alert} autoHideDuration={4500} onClose={handleCloseAlert}>
+          <Alert onClose={handleCloseAlert} severity="warning" sx={{ width: '100%' }}>
+            {valueAlert}
+          </Alert>
+        </Snackbar>
+      </Stack>
+      <AppBar
+        position="absolute"
+        color="default"
+        elevation={0}
+        sx={{
+          position: 'relative',
+          borderBottom: (t) => `1px solid ${t.palette.divider}`,
+        }}
+      >
+        <Toolbar>
+          <AnimatedPage>
+            <Typography variant="h5" color="inherit" >
+              รายงานการตรวจนับ
+            </Typography>
+          </AnimatedPage>
+        </Toolbar>
+      </AppBar>
+      <AnimatedPage>
+        <Container component="main" maxWidth="sm" sx={{ mb: 4 }} >
+          <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+            <form className={classes.form} noValidate onSubmit={handleSubmit}>
+              <center className="pt-2">
+                <Typography component="h1" variant="h4" align="center" className='font-sm-bold'>
+                  <b>PURE THAI ENERGY CO.,LTD.</b>
+                </Typography>
+                <Typography variant="h6" gutterBottom className='pt-5'>
+                  กรุณาเลือกคำตอบ
+                </Typography>
+                <Box sx={{ minWidth: 120 }}>
+                  <Grid container spacing={3} className='pt-2'>
+                    <Grid item xs={12} sm={12}>
+                      <div>
+                        <FormControl fullWidth>
+                          <InputLabel id="demo-multiple-checkbox-label">เลือกงาน</InputLabel>
+                          <Select
+                            value={topicBranch}
+                            onChange={handleChangeTopicBranch}
+                            fullWidth
+                            input={<OutlinedInput label="เลือกงาน" />}
+                          >
+                            <MenuItem value={0}>CO</MenuItem>
+                            <MenuItem value={1}>HO</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </div>
+                    </Grid>
+                    {topicBranch === 0 ? (
+                      <Grid item xs={12} sm={12}>
+                        <FormControl fullWidth>
+                          <InputLabel id="demo-multiple-checkbox-label">เลือกสาขา</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={permissionData}
+                            label="Branch ID"
+                            onChange={handleChangeValue}
+                            input={<OutlinedInput label="เลือกสาขา" />}
+                          >
+                            {
+                              permission.filter((res) => res.BranchID !== 901).map((item) =>
+                                <MenuItem value={item.BranchID}>{
+                                  item.BranchID === 1000001 ? `สาขาที่ : CJ001` :
+                                    item.BranchID === 1000002 ? `สาขาที่ : CJ002` :
+                                      item.BranchID === 1000004 ? `สาขาที่ : CJ003` :
+                                        item.BranchID === 1000003 ? `สาขาที่ : PURE PARK` :
+                                          `สาขาที่ : ${item.BranchID}`
+                                }</MenuItem>
+                              )
+                            }
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    ) : null}
+                    {topicBranch === 1 ? (
+                      <Grid item xs={12} sm={12}>
+                        <FormControl fullWidth>
+                          <InputLabel id="demo-multiple-checkbox-label">เลือกคำตอบ</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={permissionDataHO}
+                            label="เลือกคำตอบ"
+                            onChange={handleChangeValueHO}
+                            input={<OutlinedInput label="เลือกคำตอบ" />}
+                          >
+                            <MenuItem value={1}>DEPARTMENT ({data.depcode})</MenuItem>
+                            <MenuItem value={2}>({data.UserCode})</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    ) : null}
+                  </Grid>
+                </Box>
+              </center>
+              {showResult ?
+                <center className="pt-5">
+                  <Typography variant="h6" gutterBottom>
+                    กรุณาเลือกรอบบันทึก
                   </Typography>
                   <Box sx={{ minWidth: 120 }}>
-                    <Grid container spacing={3} className='pt-2'>
-                      <Grid item xs={12} sm={12}>
-                        <div>
-                          <FormControl fullWidth>
-                            <InputLabel id="demo-multiple-checkbox-label">เลือกงาน</InputLabel>
-                            <Select
-                              value={topicBranch}
-                              onChange={handleChangeTopicBranch}
-                              fullWidth
-                              input={<OutlinedInput label="เลือกงาน" />}
-                            >
-                              <MenuItem value={0}>CO</MenuItem>
-                              <MenuItem value={1}>HO</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </div>
-                      </Grid>
-                      {topicBranch === 0 ? (
-                        <Grid item xs={12} sm={12}>
-                          <FormControl fullWidth>
-                            <InputLabel id="demo-multiple-checkbox-label">เลือกสาขา</InputLabel>
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={permissionData}
-                              label="Branch ID"
-                              onChange={handleChangeValue}
-                              input={<OutlinedInput label="เลือกสาขา" />}
-                            >
-                              {
-                                permission.filter((res) => res.BranchID !== 901).map((item) =>
-                                  <MenuItem value={item.BranchID}>{
-                                    item.BranchID === 1000001 ? `สาขาที่ : CJ001` :
-                                      item.BranchID === 1000002 ? `สาขาที่ : CJ002` :
-                                        item.BranchID === 1000004 ? `สาขาที่ : CJ003` :
-                                          item.BranchID === 1000003 ? `สาขาที่ : PURE PARK` :
-                                            `สาขาที่ : ${item.BranchID}`
-                                  }</MenuItem>
-                                )
-                              }
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                      ) : null}
-                      {topicBranch === 1 ? (
-                        <Grid item xs={12} sm={12}>
-                          <FormControl fullWidth>
-                            <InputLabel id="demo-multiple-checkbox-label">เลือกคำตอบ</InputLabel>
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={permissionDataHO}
-                              label="เลือกคำตอบ"
-                              onChange={handleChangeValueHO}
-                              input={<OutlinedInput label="เลือกคำตอบ" />}
-                            >
-                              <MenuItem value={1}>DEPARTMENT ({data.DepCode})</MenuItem>
-                              <MenuItem value={2}>({data.UserCode})</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                      ) : null}
-                    </Grid>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Period ID</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={periodData}
+                        label="Period ID"
+                        onChange={handleChangeValue2}
+                      >
+                        {
+                          periodData2.map((item) =>
+                            <MenuItem value={item.PeriodID}>
+                              วันที่ {item.BeginDate.split('T')[0]} - {item.EndDate.split('T')[0]} : {item.Description}
+                            </MenuItem>
+                          )
+                        }
+                      </Select>
+                    </FormControl>
                   </Box>
                 </center>
-                {showResult ?
-                  <center className="pt-5">
-                    <Typography variant="h6" gutterBottom>
-                      กรุณาเลือกรอบบันทึก
-                    </Typography>
-                    <Box sx={{ minWidth: 120 }}>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Period ID</InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={periodData}
-                          label="Period ID"
-                          onChange={handleChangeValue2}
-                        >
-                          {
-                            periodData2.map((item) =>
-                              <MenuItem value={item.PeriodID}>
-                                วันที่ {item.BeginDate.split('T')[0]} - {item.EndDate.split('T')[0]} : {item.Description}
-                              </MenuItem>
-                            )
-                          }
-                        </Select>
-                      </FormControl>
+                : null}
+              <center>
+                <div className='pt-5'>
+                  <React.Fragment>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      <Button
+                        type="submit"
+                        disabled={showResult ? false : true}
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                      >
+                        แสดงรายงาน
+                      </Button>
                     </Box>
-                  </center>
-                  : null}
-                <center>
-                  <div className='pt-5'>
-                    <React.Fragment>
-                      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button
-                          type="submit"
-                          disabled={showResult ? false : true}
-                          fullWidth
-                          variant="contained"
-                          color="primary"
-                          className={classes.submit}
-                        >
-                          แสดงรายงาน
-                        </Button>
-                      </Box>
-                    </React.Fragment>
-                  </div>
-                </center>
-              </form>
-            </Paper>
-            <Outlet />
-          </Container>
-        </AnimatedPage>
-      </div>
-    );
-  }
+                  </React.Fragment>
+                </div>
+              </center>
+            </form>
+          </Paper>
+          <Outlet />
+        </Container>
+      </AnimatedPage>
+    </div>
+  );
+}
 }

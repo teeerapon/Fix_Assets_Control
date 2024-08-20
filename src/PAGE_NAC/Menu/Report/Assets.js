@@ -20,7 +20,6 @@ import Grid from '@mui/material/Grid';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
-import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
@@ -247,7 +246,8 @@ async function Reported3(credentials) {
 }
 
 export default function Reported_of_assets() {
-  const [reported_of_assets, setReported_of_assets] = React.useState(JSON.parse(localStorage.getItem('Allaseets')));
+  const [reported_of_assets, setReported_of_assets] = React.useState([]);
+  console.log(reported_of_assets);
   const data = JSON.parse(localStorage.getItem('data'));
   const checkUserWeb = localStorage.getItem('sucurity');
   const [status_all] = React.useState(['none', 'สภาพดี', 'ชำรุดรอซ่อม', 'รอตัดขาย', 'รอตัดชำรุด', 'QR Code ไม่สมบูรณ์ (สภาพดี)', 'QR Code ไม่สมบูรณ์ (ชำรุดรอซ่อม)', 'QR Code ไม่สมบูรณ์ (รอตัดขาย)', 'QR Code ไม่สมบูรณ์ (รอตัดชำรุด)']);
@@ -376,41 +376,11 @@ export default function Reported_of_assets() {
     setUserForAssetsControl(UserForAssetsControl.data);
   };
 
-  const handleReloadingPage = async () => {
-    const RoundID = reported_of_assets ? reported_of_assets[0].RoundID : null;;
-    const BranchID = reported_of_assets ? reported_of_assets[0].BranchID : null;
-    const UserBranch = data.branchid;
-    const response = await Reported({
-      RoundID,
-      BranchID,
-      UserBranch
-    });
-    const response2 = await Reported2({
-      RoundID,
-      BranchID,
-      UserBranch
-    })
-    const response3 = await Reported3({
-      UserBranch,
-      BranchID,
-      RoundID
-    })
-    if ('data' in response || 'data' in response2 || 'data' in response3) {
-      if ((reported_of_assets ? reported_of_assets[0].BranchID : null) === 901) {
-        const array1 = response2.filter((res) => res.DepCodeMain === data.DepCode)
-        const array2 = response3.filter((res) => res.DepCodeMain === data.DepCode)
-        const array3 = (response.data).filter((res) => res.DepCodeMain === data.DepCode)
-        localStorage.setItem('Allaseets', JSON.stringify((array1).concat(array2, array3)));
-        setReported_of_assets((array1).concat(array2, array3))
-      } else {
-        localStorage.setItem('Allaseets', JSON.stringify((response2).concat(response3, response.data)));
-        setReported_of_assets((response2).concat(response3, response.data))
-      }
-    }
-  }
-
   React.useEffect(() => {
-    handleReloadingPage();
+    const dataAssets = JSON.parse(localStorage.getItem('Allaseets'))
+    if (dataAssets) {
+      setReported_of_assets(dataAssets)
+    }
     fetchUserForAssetsControl();
     // 👇️ disable the rule for a single line
 
