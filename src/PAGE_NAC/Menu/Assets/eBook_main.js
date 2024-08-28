@@ -432,7 +432,7 @@ export default function History_of_assets() {
                   }
                 }}
                 rows={dataHistory}
-                loading={!dataHistory}
+                loading={dataHistory.length === 0}
                 columns={columns}
                 getRowId={(dataHistory) => dataHistory.AssetID}
                 pageSize={pageSize}

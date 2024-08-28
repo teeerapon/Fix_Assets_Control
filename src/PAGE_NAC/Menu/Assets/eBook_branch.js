@@ -117,7 +117,7 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 
 export default function History_of_assets() {
 
-  const [dataHistory, setDataHistory] = React.useState();
+  const [dataHistory, setDataHistory] = React.useState([]);
   const data = JSON.parse(localStorage.getItem('data'));
   const checkUserWeb = localStorage.getItem('sucurity');
   const [pageSize, setPageSize] = React.useState(10);
@@ -416,8 +416,8 @@ export default function History_of_assets() {
                       }
                     }
                   }}
-                  rows={dataHistory ?? []}
-                  loading={!dataHistory}
+                  rows={dataHistory}
+                  loading={dataHistory.length === 0}
                   columns={columns}
                   getRowId={(dataHistory) => dataHistory.AssetID}
                   pageSize={pageSize}
