@@ -25,7 +25,6 @@ import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import swal from 'sweetalert';
 
 const ODD_OPACITY = 0.2;
 
@@ -125,7 +124,7 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 export default function Reported_of_assets() {
 
   const [selectMenu, setSelectMenu] = React.useState();
-  const [reported_of_assets, setReported_of_assets] = React.useState();
+  const [reported_of_assets, setReported_of_assets] = React.useState([]);
   const data = JSON.parse(localStorage.getItem('data'));
   const checkUserWeb = localStorage.getItem('sucurity');
   const [status_all] = React.useState(['none', 'สภาพดี', 'ชำรุดรอซ่อม', 'รอตัดขาย', 'รอตัดชำรุด', 'QR Code ไม่สมบูรณ์ (สภาพดี)', 'QR Code ไม่สมบูรณ์ (ชำรุดรอซ่อม)', 'QR Code ไม่สมบูรณ์ (รอตัดขาย)', 'QR Code ไม่สมบูรณ์ (รอตัดชำรุด)']);
@@ -201,8 +200,7 @@ export default function Reported_of_assets() {
       field: 'Date',
       headerName: 'วันที่ตรวจนับ',
       headerClassName: 'super-app-theme--header',
-      minWidth: 170,
-      flex: 1,
+      width: 130,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
@@ -229,8 +227,7 @@ export default function Reported_of_assets() {
       field: 'EndDate_Success',
       headerName: 'วันที่ทำ NAC ล่าสุด',
       headerClassName: 'super-app-theme--header',
-      minWidth: 170,
-      flex: 1,
+      width: 130,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
@@ -352,7 +349,7 @@ export default function Reported_of_assets() {
       headerAlign: 'center',
       align: 'center',
       headerClassName: 'super-app-theme--header',
-      minWidth: 130,
+      minWidth: 150,
       flex: 1,
       renderCell: (params) => {
         return (
@@ -477,7 +474,8 @@ export default function Reported_of_assets() {
                   }}
                   components={{ Toolbar: GridToolbar }}
                   componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
-                  rows={reported_of_assets ?? []}
+                  rows={reported_of_assets}
+                  loading={!reported_of_assets}
                   columns={columns}
                   getRowId={(reported_of_assets) => reported_of_assets.RowID}
                   pageSize={pageSize}

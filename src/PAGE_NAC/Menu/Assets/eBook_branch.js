@@ -417,6 +417,7 @@ export default function History_of_assets() {
                     }
                   }}
                   rows={dataHistory ?? []}
+                  loading={!dataHistory}
                   columns={columns}
                   getRowId={(dataHistory) => dataHistory.AssetID}
                   pageSize={pageSize}

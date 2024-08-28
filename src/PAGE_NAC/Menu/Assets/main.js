@@ -27,6 +27,10 @@ import config from '../../../config'
 import CircularProgress from '@mui/material/CircularProgress';
 import swal from 'sweetalert';
 import PropTypes from 'prop-types';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 function CircularProgressWithLabel(props) {
   return (
@@ -154,12 +158,11 @@ export default function History_of_assets() {
 
   const [dataHistory, setDataHistory] = React.useState();
   const data = JSON.parse(localStorage.getItem('data'));
-  const checkUserWeb = localStorage.getItem('sucurity');
   const [open, setOpen] = React.useState(false);
   const [code, setCode] = React.useState();
   const [name, setName] = React.useState();
   const [serialNo, setSerialNo] = React.useState();
-  const [create_Date, setCeate_Date] = React.useState(null);
+  const [createDate, setCreateDate] = React.useState(null);
   const [price, setPrice] = React.useState();
   const [details, setDetails] = React.useState();
   const [branchID, setBranchID] = React.useState();
@@ -175,75 +178,62 @@ export default function History_of_assets() {
   const [group_name, setGroup_name] = React.useState()
   const [ownerCode, setOwnerCode] = React.useState()
   const [position, setPosition] = React.useState()
-
-  React.useEffect(async () => {
-    // POST request using axios with set headers
-    const body = { Permission_TypeID: 1, userID: data.userid }
-    const headers = {
-      'Authorization': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    };
-    await Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers }).catch(function (error) {
-      if (error.toJSON().message === 'Request failed with status code 400') {
-        setProgress(1)
-      }
-    }).then(response => {
-      setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
-      setProgress(1)
-    });
-  }, []);
+  const [typeGroup, setTypeGroup] = React.useState()
 
   const fileSelected = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    var files = event.target.files, f = files[0];
-    var reader = new FileReader();
+    let files = event.target.files;
+    let f = files[0];
+    let reader = new FileReader();
     reader.onload = function (e) {
-      var data = e.target.result;
-      let readedData = XLSX.read(data, { type: 'binary', cellText: false, cellDates: true });
+      let data = new Uint8Array(e.target.result);
+      let readedData = XLSX.read(data, { type: 'array', cellText: false, cellDates: true });
       const wsname = readedData.SheetNames[0];
       const ws = readedData.Sheets[wsname];
 
-      /* Convert array to json*/
+      /* Convert array to json */
       const columnsHeader = XLSX.utils.sheet_to_json(ws, { header: 1, raw: false, dateNF: 'dd/mm/yyyy', rawNumbers: false });
       const dataParse = XLSX.utils.sheet_to_json(ws, { range: 1, header: columnsHeader[0], raw: false, dateNF: 'dd/mm/yyyy' });
-      const col = columnsHeader[0]
-      let arrayField = []
+      const col = columnsHeader[0];
+      let arrayField = [];
 
       for (let i = 0; i < col.length; i++) {
         if (col[i] === 'BranchID' || col[i] === 'Price' || col[i] === 'Position') {
           arrayField[i] = {
             field: col[i],
             width: 80,
-          }
+          };
         } else if (col[i] === 'Code' || col[i] === 'Name' || col[i] === 'Asset_group' || col[i] === 'Group_name') {
           arrayField[i] = {
             field: col[i],
             width: 160,
-          }
-        } else if (col[i] === 'CreateDate' || col[i] === 'OwnerCode') {
+          };
+        } else if (col[i] === 'CreateDate' || col[i] === 'OwnerCode' || col[i] === 'TypeGroup') {
           arrayField[i] = {
             field: col[i],
             width: 120,
-          }
+          };
         } else {
           arrayField[i] = {
             field: col[i],
             flex: 1,
-          }
+          };
         }
       }
+
       if (columnsHeader[0].indexOf('Code') >= 0) {
-        setField(arrayField)
-        setDataFile(dataParse)
-        setOpenXlsx(true)
-        setNameExcel(f.name)
+        setField(arrayField);
+        setDataFile(dataParse);
+        setOpenXlsx(true);
+        setNameExcel(f.name);
       } else {
-        swal("แจ้งเตือน", 'ไม่พบหัวข้อรหัสทรัพย์สิน (Code !)', "error")
+        swal("แจ้งเตือน", 'ไม่พบหัวข้อรหัสทรัพย์สิน (Code !)', "error");
       }
     };
-    reader.readAsBinaryString(f)
-  }
+    reader.readAsArrayBuffer(f);
+  };
+
 
   const handleCloseXlsx = () => {
     setOpenXlsx(false);
@@ -266,7 +256,8 @@ export default function History_of_assets() {
       field[8].field === 'CreateDate' &&
       field[9].field === 'CreateBy' &&
       field[10].field === 'Position' &&
-      field[11].field === 'Details'
+      field[11].field === 'Details' &&
+      field[12].field === 'TypeGroup'
     ) {
       await Axios.post(config.http + '/FA_Control_BPC_Running_NO', data, { headers })
         .then(async (resTAB) => {
@@ -285,6 +276,7 @@ export default function History_of_assets() {
               , CreateBy: dataFile[i].CreateBy
               , Position: dataFile[i].Position
               , Details: dataFile[i].Details
+              , TypeGroup: dataFile[i].TypeGroup
               , keyID: resTAB.data[0].TAB
             }
             await Axios.post(config.http + '/FA_Control_New_Assets_Xlsx', body, { headers })
@@ -297,7 +289,7 @@ export default function History_of_assets() {
                   setSerialNo(null)
                   setPrice(null)
                   setDetails(null)
-                  setCeate_Date(null)
+                  setCreateDate(null)
                   swal("แจ้งเตือน", response.data[0].res, "error")
                 } else {
                   setArraySubmit((i / (dataFile.length - 1)) * 100);
@@ -314,7 +306,7 @@ export default function History_of_assets() {
                             setSerialNo(null)
                             setPrice(null)
                             setDetails(null)
-                            setCeate_Date(null)
+                            setCreateDate(null)
                             window.location.href = '/FETCH_ASSETS';
                           })
                         } else if (response.data[0].response) {
@@ -354,14 +346,17 @@ export default function History_of_assets() {
       Position: position,
       BranchID: branchID,
       Details: details,
+      TypeGroup: typeGroup,
       SerialNo: serialNo,
       Price: price,
-      Create_Date: create_Date
+      Create_Date: createDate
     }
+
     const headers = {
       'Authorization': 'application/json; charset=utf-8',
       'Accept': 'application/json'
     };
+
     if (!code) {
       swal("แจ้งเตือน", 'กรุณากรอกรหัสทรัพย์สินให้ถูกต้อง', "error")
     } else if (!name) {
@@ -398,28 +393,6 @@ export default function History_of_assets() {
     }
 
   };
-
-  const handleChange_Code = (event) => {
-    setCode(event.target.value)
-  }
-  const handleChange_Name = (event) => {
-    setName(event.target.value)
-  }
-  const handleChange_SerialNo = (event) => {
-    setSerialNo(event.target.value)
-  }
-  const handleChange_Price = (event) => {
-    setPrice(event.target.value)
-  }
-  const handleChange_Details = (event) => {
-    setDetails(event.target.value)
-  }
-  const handleChange_Ceate_Date = (newValue) => {
-    setCeate_Date(!newValue.toISOString().split('T')[0] ? null : newValue.toISOString().split('T')[0])
-  }
-  const handleChange_BranchID = (event) => {
-    setBranchID(event.target.value)
-  }
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
@@ -480,26 +453,39 @@ export default function History_of_assets() {
     },
   ];
 
-  React.useEffect(async () => {
-    // POST request using axios with set headers
-    const userCode = { userCode: data.UserCode }
-    const headers = {
-      'Authorization': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    };
-
-    const bodyPermission = { Permission_TypeID: 1, userID: data.userid }
-    const permissionAssets = await Axios.post(config.http + '/select_Permission_Menu_NAC', bodyPermission, { headers })
-      .then(response => response.data.data.map((res) => res.Permission_MenuID));
-    await Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
-      .then(response => {
-        if (permissionAssets.includes(5) === true) {
-          setDataHistory(response.data.data.filter((res) => res.bac_status === 1))
-        } else {
-          setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
+  React.useEffect(() => {
+    const fetData = async () => {
+      // POST request using axios with set headers
+      const userCode = { userCode: data.UserCode }
+      const body = { Permission_TypeID: 1, userID: data.userid }
+      const headers = {
+        'Authorization': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
+      };
+      await Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers }).catch(function (error) {
+        if (error.toJSON().message === 'Request failed with status code 400') {
+          setProgress(1)
         }
+      }).then(response => {
+        setPermission_menuID(response.data.data.map((res) => res.Permission_MenuID))
+        setProgress(1)
       });
-  }, []);
+
+      const bodyPermission = { Permission_TypeID: 1, userID: data.userid }
+      const permissionAssets = await Axios.post(config.http + '/select_Permission_Menu_NAC', bodyPermission, { headers })
+        .then(response => response.data.data.map((res) => res.Permission_MenuID));
+      await Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
+        .then(response => {
+          if (permissionAssets.includes(5) === true) {
+            setDataHistory(response.data.data.filter((res) => res.bac_status === 1))
+          } else {
+            setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
+          }
+        });
+
+    }
+    fetData();
+  }, [data.UserCode, data.userid]);
 
   return (
     <React.Fragment>
@@ -521,7 +507,7 @@ export default function History_of_assets() {
         </Toolbar>
       </AppBar>
       <AnimatedPage>
-        {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
+        {progress !== 1 ? <Box sx={{ width: '100%' }}><LinearProgress /></Box> : null}
         <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
           <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
             <Grid
@@ -532,13 +518,13 @@ export default function History_of_assets() {
               spacing={2}
             >
               <Grid item>
-                <Button variant="contained" disabled={(permission_menuID ? permission_menuID.includes(6) : null) === true ? false : true} color='success' component="label">
-                  Upload XLSX
+                <Button variant="contained" disabled={!(permission_menuID ? permission_menuID.includes(6) : null)} color='success' component="label">
+                  <div>Upload XLSX</div>
                   <input hidden multiple type="file" onChange={fileSelected} />
                 </Button>
               </Grid>
               <Grid item>
-                <Button variant="contained" color='success' disabled={(permission_menuID ? permission_menuID.includes(6) : null) === true ? false : true} onClick={handleClickOpen}>
+                <Button variant="contained" color='success' disabled={!(permission_menuID ? permission_menuID.includes(6) : null)} onClick={handleClickOpen}>
                   เพิ่มทรัพย์สิน
                 </Button>
               </Grid>
@@ -568,6 +554,7 @@ export default function History_of_assets() {
                 pageSize={pageSize}
                 onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                 pagination
+                loading={!dataHistory}
                 getRowHeight={() => 'auto'}
                 rowsPerPageOptions={[10, 20, 50, 100]}
                 autoHeight
@@ -596,7 +583,9 @@ export default function History_of_assets() {
                           autoComplete="given-name"
                           name="Code"
                           value={code}
-                          onChange={(event) => handleChange_Code(event)}
+                          onChange={(event) => {
+                            setCode(event.target.value)
+                          }}
                           required
                           fullWidth
                           label="รหัสทรัพย์สิน"
@@ -609,7 +598,9 @@ export default function History_of_assets() {
                           autoComplete="given-name"
                           name="Name"
                           value={name}
-                          onChange={(event) => handleChange_Name(event)}
+                          onChange={(event) => {
+                            setName(event.target.value)
+                          }}
                           required
                           fullWidth
                           label="ชื่อ"
@@ -622,7 +613,9 @@ export default function History_of_assets() {
                           autoComplete="given-name"
                           name="branchID"
                           value={branchID}
-                          onChange={(event) => handleChange_BranchID(event)}
+                          onChange={(event) => {
+                            setBranchID(event.target.value)
+                          }}
                           required
                           fullWidth
                           type='number'
@@ -636,7 +629,9 @@ export default function History_of_assets() {
                           autoComplete="given-name"
                           name="Asset_group"
                           value={asset_group}
-                          onChange={(event) => setAsset_group(event.target.value)}
+                          onChange={(event) => {
+                            setAsset_group(event.target.value)
+                          }}
                           required
                           fullWidth
                           label="Asset Group"
@@ -649,7 +644,9 @@ export default function History_of_assets() {
                           autoComplete="given-name"
                           name="group_name"
                           value={group_name}
-                          onChange={(event) => setGroup_name(event.target.value)}
+                          onChange={(event) => {
+                            setGroup_name(event.target.value)
+                          }}
                           required
                           fullWidth
                           label="Group_name"
@@ -662,7 +659,9 @@ export default function History_of_assets() {
                           autoComplete="OwerCode"
                           name="OwerCode"
                           value={ownerCode}
-                          onChange={(event) => setOwnerCode(event.target.value)}
+                          onChange={(event) => {
+                            setOwnerCode(event.target.value)
+                          }}
                           required
                           fullWidth
                           label="OwerCode"
@@ -675,7 +674,9 @@ export default function History_of_assets() {
                           autoComplete="Position"
                           name="Position"
                           value={position}
-                          onChange={(event) => setPosition(event.target.value)}
+                          onChange={(event) => {
+                            setPosition(event.target.value)
+                          }}
                           required
                           fullWidth
                           label="Position"
@@ -686,8 +687,10 @@ export default function History_of_assets() {
                         <LocalizationProvider dateAdapter={DateAdapter}>
                           <DatePicker
                             label="วันที่ขึ้นทะเบียน"
-                            value={create_Date}
-                            onChange={handleChange_Ceate_Date}
+                            value={createDate}
+                            onChange={(newValue) => {
+                              setCreateDate(!newValue.toISOString().split('T')[0] ? null : newValue.toISOString().split('T')[0])
+                            }}
                             inputFormat="yyyy-MM-dd"
                             renderInput={(params) =>
                               <TextField
@@ -705,23 +708,50 @@ export default function History_of_assets() {
                           autoComplete="given-name"
                           name="SerialNo"
                           value={serialNo}
-                          onChange={(event) => handleChange_SerialNo(event)}
+                          onChange={(event) => {
+                            setSerialNo(event.target.value)
+                          }}
                           fullWidth
                           label="SerialNo"
                           autoFocus
                         />
                       </Grid>
                       <Grid item xs={12}>
-                        <TextField
-                          size="small"
-                          autoComplete="given-name"
-                          name="Details"
-                          value={details}
-                          onChange={(event) => handleChange_Details(event)}
-                          fullWidth
-                          label="รายะลเอียดทรัพย์สิน"
-                          autoFocus
-                        />
+                        <FormControl fullWidth size="small">
+                          <InputLabel id="demo-simple-select-label">รายละเอียดทรัพย์สิน</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={details}
+                            label="รายละเอียดทรัพย์สิน"
+                            onChange={(event) => {
+                              setDetails(event.target.value)
+                            }}
+                          >
+                            <MenuItem value="สภาพดี">สภาพดี</MenuItem>
+                            <MenuItem value="ชำรุดรอซ่อม">ชำรุดรอซ่อม</MenuItem>
+                            <MenuItem value="รอตัดขาย">รอตัดขาย</MenuItem>
+                            <MenuItem value="รอตัดชำรุด">รอตัดชำรุด</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <FormControl fullWidth size="small">
+                          <InputLabel id="demo-simple-select-label">Type Group</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={typeGroup}
+                            label="Type Group"
+                            onChange={(event) => {
+                              setTypeGroup(event.target.value)
+                            }}
+                          >
+                            <MenuItem value="PTEC">PTEC</MenuItem>
+                            <MenuItem value="BAC">BAC</MenuItem>
+                            <MenuItem value="BANGCHAK">BANGCHAK</MenuItem>
+                          </Select>
+                        </FormControl>
                       </Grid>
                       <Grid item xs={12}>
                         <TextField
@@ -729,7 +759,9 @@ export default function History_of_assets() {
                           autoComplete="given-name"
                           name="Price"
                           value={price}
-                          onChange={(event) => handleChange_Price(event)}
+                          onChange={(event) => {
+                            setPrice(event.target.value)
+                          }}
                           required
                           fullWidth
                           type='number'
@@ -756,79 +788,69 @@ export default function History_of_assets() {
             >
               {
                 !arraySubmit ?
-                  <React.Fragment>
-                    <DialogTitle>
-                      ต้องการอัปโหลดไฟล์ {nameExcel} ไปที่ข้อมูลหลักใช่หรือไม่ ?
-                    </DialogTitle>
-                  </React.Fragment>
+                  <DialogTitle>
+                    ต้องการอัปโหลดไฟล์ {nameExcel} ไปที่ข้อมูลหลักใช่หรือไม่ ?
+                  </DialogTitle>
                   :
-                  <React.Fragment>
-                    <DialogTitle>
-                      กำลังอัปโหลดข้อมูล กรุณาอย่าปิดหน้าจอนี้ !!
-                    </DialogTitle>
-                  </React.Fragment>
+                  <DialogTitle>
+                    กำลังอัปโหลดข้อมูล กรุณาอย่าปิดหน้าจอนี้ !!
+                  </DialogTitle>
               }
               <DialogContent>
                 {
                   !arraySubmit ?
-                    <React.Fragment>
-                      <StripedDataGrid
-                        sx={{
-                          mt: 1,
-                          pl: 2,
-                          pr: 2,
-                          pt: 2,
-                          boxShadow: 1,
-                          [`& .${gridClasses.cell}`]: {
-                            py: 1,
-                          },
-                        }}
-                        components={{ Toolbar: GridToolbar }}
-                        componentsProps={{
-                          toolbar: {
-                            csvOptions: {
-                              utf8WithBom: true,
-                              fileName: `ทะเบียนทรัพย์สินทั้งหมด`,
+                    <StripedDataGrid
+                      sx={{
+                        mt: 1,
+                        pl: 2,
+                        pr: 2,
+                        pt: 2,
+                        boxShadow: 1,
+                        [`& .${gridClasses.cell}`]: {
+                          py: 1,
+                        },
+                      }}
+                      components={{ Toolbar: GridToolbar }}
+                      componentsProps={{
+                        toolbar: {
+                          csvOptions: {
+                            utf8WithBom: true,
+                            fileName: `ทะเบียนทรัพย์สินทั้งหมด`,
 
-                            }
                           }
-                        }}
-                        rows={dataFile}
-                        columns={field}
-                        getRowId={(row) => row?.Code}
-                        pageSize={10}
-                        autoHeight
-                        disableColumnMenu
-                        disableSelectionOnClick
-                        {...other}
-                      />
-                    </React.Fragment>
+                        }
+                      }}
+                      rows={dataFile}
+                      columns={field}
+                      getRowId={(row) => row?.Code}
+                      pageSize={10}
+                      autoHeight
+                      disableColumnMenu
+                      disableSelectionOnClick
+                      {...other}
+                    />
                     :
-                    <React.Fragment>
-                      <Box
-                        sx={{
-                          mt: 10,
-                          mb: 10,
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <CircularProgressWithLabel value={arraySubmit} />
-                      </Box>
-                    </React.Fragment>
+                    <Box
+                      sx={{
+                        mt: 10,
+                        mb: 10,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <CircularProgressWithLabel value={arraySubmit} />
+                    </Box>
                 }
               </DialogContent>
               {
                 !arraySubmit ?
-                  <React.Fragment>
-                    <DialogActions>
-                      <Button onClick={handleSubmitXlsx} variant='contained'>Submit</Button>
-                      <Button onClick={handleCloseXlsx} variant='contained' color='error' autoFocus>
-                        Cancel
-                      </Button>
-                    </DialogActions>
-                  </React.Fragment>
+                  <DialogActions>
+                    <Button onClick={handleSubmitXlsx} variant='contained'>Submit</Button>
+                    <Button onClick={handleCloseXlsx} variant='contained' color='error' autoFocus>
+                      Cancel
+                    </Button>
+                  </DialogActions>
                   : null
               }
             </Dialog>

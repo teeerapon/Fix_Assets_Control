@@ -5,36 +5,25 @@ import Typography from '@mui/material/Typography';
 import AnimatedPage from '../../../AnimatedPage';
 import React from 'react';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
 import Axios from "axios"
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateAdapter from '@mui/lab/AdapterDateFns';
-import DatePicker from '@mui/lab/DatePicker';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import * as XLSX from 'xlsx';
 import LinearProgress from '@mui/material/LinearProgress';
-import Badge from '@mui/material/Badge';
-import ImageIcon from '@mui/icons-material/Image';
-import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
 import config from '../../../config'
 import swal from 'sweetalert';
+import { createSvgIcon } from '@mui/material/utils';
 
+
+const ExportIcon = createSvgIcon(
+  <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z" />,
+  'SaveAlt',
+);
 
 
 const ODD_OPACITY = 0.2;
@@ -124,29 +113,18 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
   },
 }));
 
+const buttonBaseProps = {
+  color: 'primary',
+  size: 'small',
+  startIcon: <ExportIcon />,
+};
+
 export default function History_of_assets() {
 
-  const [dataHistory, setDataHistory] = React.useState();
+  const [dataHistory, setDataHistory] = React.useState([]);
   const data = JSON.parse(localStorage.getItem('data'));
   const [pageSize, setPageSize] = React.useState(10);
-  const checkUserWeb = localStorage.getItem('sucurity');
   const [progress, setProgress] = React.useState();
-
-  React.useEffect(async () => {
-    // POST request using axios with set headers
-    const body = { Permission_TypeID: 1, userID: data.userid }
-    const headers = {
-      'Authorization': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    };
-    await Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers }).catch(function (error) {
-      if (error.toJSON().message === 'Request failed with status code 400') {
-        setProgress(1)
-      }
-    }).then(response => {
-      setProgress(1)
-    });
-  }, []);
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
@@ -254,35 +232,33 @@ export default function History_of_assets() {
         }
 
         return (
-          <React.Fragment>
-            <ImageListItem key={params.row.ImagePath}>
-              <img
-                src={`${params.row.ImagePath}?w=248&fit=crop&auto=format`}
-                srcSet={`${params.row.ImagePath}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                alt={params.row.Name}
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null; // prevents looping
-                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
-                }}
-                loading="lazy"
-              />
-              <ImageListItemBar
-                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
-                position="below"
-                title={<span>&nbsp; &nbsp;{params.row.Code}_1</span>}
-                actionIcon={
-                  <IconButton
-                    sx={{ color: 'rgba(255, 255, 255, 1)' }}
-                    aria-label={`info about ${params.row.Code}`}
-                    component="label"
-                  >
-                    <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e, params)} />
-                    <FilePresentIcon sx={{ fontSize: 20 }} />
-                  </IconButton>
-                }
-              />
-            </ImageListItem>
-          </React.Fragment>
+          <ImageListItem key={params.row.ImagePath}>
+            <img
+              src={`${params.row.ImagePath}?w=248&fit=crop&auto=format`}
+              srcSet={`${params.row.ImagePath}?w=248&fit=crop&auto=format&dpr=2 2x`}
+              alt={params.row.Name}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null; // prevents looping
+                currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
+              }}
+              loading="lazy"
+            />
+            <ImageListItemBar
+              sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+              position="below"
+              title={<span>&nbsp; &nbsp;{params.row.Code}_1</span>}
+              actionIcon={
+                <IconButton
+                  sx={{ color: 'rgba(255, 255, 255, 1)' }}
+                  aria-label={`info about ${params.row.Code}`}
+                  component="label"
+                >
+                  <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e, params)} />
+                  <FilePresentIcon sx={{ fontSize: 20 }} />
+                </IconButton>
+              }
+            />
+          </ImageListItem>
         )
       }
     },
@@ -339,60 +315,72 @@ export default function History_of_assets() {
         }
 
         return (
-          <React.Fragment>
-            <ImageListItem key={params.row.ImagePath_2}>
-              <img
-                src={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format`}
-                srcSet={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                alt={params.row.Name}
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null; // prevents looping
-                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
-                }}
-                loading="lazy"
-              />
-              <ImageListItemBar
-                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
-                position="below"
-                title={<span>&nbsp; &nbsp;{params.row.Code}_2</span>}
-                actionIcon={
-                  <IconButton
-                    sx={{ color: 'rgba(255, 255, 255, 1)' }}
-                    aria-label={`info about ${params.row.Code}`}
-                    component="label"
-                  >
-                    <input hidden type="file" name='file' onChange={(e) => handleUploadFile_2(e, params)} />
-                    <FilePresentIcon sx={{ fontSize: 20 }} />
-                  </IconButton>
-                }
-              />
-            </ImageListItem>
-          </React.Fragment>
+          <ImageListItem key={params.row.ImagePath_2}>
+            <img
+              src={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format`}
+              srcSet={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format&dpr=2 2x`}
+              alt={params.row.Name}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null; // prevents looping
+                currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
+              }}
+              loading="lazy"
+            />
+            <ImageListItemBar
+              sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+              position="below"
+              title={<span>&nbsp; &nbsp;{params.row.Code}_2</span>}
+              actionIcon={
+                <IconButton
+                  sx={{ color: 'rgba(255, 255, 255, 1)' }}
+                  aria-label={`info about ${params.row.Code}`}
+                  component="label"
+                >
+                  <input hidden type="file" name='file' onChange={(e) => handleUploadFile_2(e, params)} />
+                  <FilePresentIcon sx={{ fontSize: 20 }} />
+                </IconButton>
+              }
+            />
+          </ImageListItem>
         )
       }
     },
   ];
 
-  React.useEffect(async () => {
-    // POST request using axios with set headers
-    const userCode = { userCode: data.UserCode }
-    const headers = {
-      'Authorization': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    };
-    const bodyPermission = { Permission_TypeID: 1, userID: data.userid }
-    const permission = await Axios.post(config.http + '/select_Permission_Menu_NAC', bodyPermission, { headers })
-      .then(response => response.data.data.map((res) => res.Permission_MenuID));
-
-    await Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
-      .then(response => {
-        if (permission.includes(5) === true) {
-          setDataHistory(response.data.data.filter((res) => res.bac_status === 1))
-        } else {
-          setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
+  React.useEffect(() => {
+    const fetData = async () => {
+      // POST request using axios with set headers
+      const body = { Permission_TypeID: 1, userID: data.userid }
+      const headers = {
+        'Authorization': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
+      };
+      await Axios.post(config.http + '/select_Permission_Menu_NAC', body, { headers }).catch(function (error) {
+        if (error.toJSON().message === 'Request failed with status code 400') {
+          setProgress(1)
         }
+      }).then(() => {
+        setProgress(1)
       });
-  }, []);
+
+      // POST request using axios with set headers
+      const userCode = { userCode: data.UserCode }
+      const bodyPermission = { Permission_TypeID: 1, userID: data.userid }
+      const permission = await Axios.post(config.http + '/select_Permission_Menu_NAC', bodyPermission, { headers })
+        .then(response => response.data.data.map((res) => res.Permission_MenuID));
+
+      await Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
+        .then(response => {
+          if (permission.includes(5) === true) {
+            setDataHistory(response.data.data.filter((res) => res.bac_status === 1))
+          } else {
+            setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
+          }
+        });
+    }
+    fetData()
+  }, [data.UserCode, data.userid]);
+
 
   return (
     <React.Fragment>
@@ -414,7 +402,7 @@ export default function History_of_assets() {
         </Toolbar>
       </AppBar>
       <AnimatedPage>
-        {progress !== 1 ? <React.Fragment><Box sx={{ width: '100%' }}><LinearProgress /></Box></React.Fragment> : null}
+        {progress !== 1 ? <Box sx={{ width: '100%' }}><LinearProgress /></Box> : null}
         <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
           <Container maxWidth="1000px" sx={{ pt: 3, pb: 3 }}>
             <Box
@@ -440,11 +428,11 @@ export default function History_of_assets() {
                     csvOptions: {
                       utf8WithBom: true,
                       fileName: `ทะเบียนทรัพย์สินอิเล็กทรอนิกทุกสาขา}`,
-
                     }
                   }
                 }}
-                rows={dataHistory ?? []}
+                rows={dataHistory}
+                loading={!dataHistory}
                 columns={columns}
                 getRowId={(dataHistory) => dataHistory.AssetID}
                 pageSize={pageSize}
