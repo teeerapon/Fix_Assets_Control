@@ -31,6 +31,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 function CircularProgressWithLabel(props) {
   return (
@@ -156,7 +158,7 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 
 export default function History_of_assets() {
 
-  const [dataHistory, setDataHistory] = React.useState();
+  const [dataHistory, setDataHistory] = React.useState([]);
   const data = JSON.parse(localStorage.getItem('data'));
   const [open, setOpen] = React.useState(false);
   const [code, setCode] = React.useState();
@@ -179,6 +181,9 @@ export default function History_of_assets() {
   const [ownerCode, setOwnerCode] = React.useState()
   const [position, setPosition] = React.useState()
   const [typeGroup, setTypeGroup] = React.useState()
+  const [typeGroupBotton, setTypeGroupBotton] = React.useState("PTEC");
+  const [filteredData, setFilteredData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   const fileSelected = (event) => {
     event.preventDefault();
@@ -382,8 +387,10 @@ export default function History_of_assets() {
                 .then(response => {
                   if (permission.includes(5) === true) {
                     setDataHistory(response.data.data.filter((res) => res.bac_status === 1))
+                    setFilteredData(response.data.data.filter((res) => res.bac_status === 1))
                   } else {
                     setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
+                    setFilteredData(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
                   }
                   setOpen(false);
                 });
@@ -478,14 +485,18 @@ export default function History_of_assets() {
         .then(response => {
           if (permissionAssets.includes(5) === true) {
             setDataHistory(response.data.data.filter((res) => res.bac_status === 1))
+            setFilteredData(response.data.data.filter((res) => res.bac_status === 1))
+            setLoading(false);
           } else {
             setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
+            setFilteredData(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
+            setLoading(false);
           }
         });
 
     }
     fetData();
-  }, [data.UserCode, data.userid]);
+  }, [data.UserCode, data.userid, dataHistory, typeGroupBotton]);
 
   return (
     <React.Fragment>
@@ -533,11 +544,30 @@ export default function History_of_assets() {
               sx={{
                 height: 683,
                 width: '100%',
+                mt: 1,
               }}
             >
+              <ToggleButtonGroup
+                color="primary"
+                value={typeGroupBotton}
+                exclusive
+                onChange={(e) => {
+                  setTypeGroupBotton(e.target.value)
+                  // จำลองการโหลดข้อมูล
+                  setLoading(true);
+                  setTimeout(() => {
+                    const filteredData = dataHistory.filter(item => (e.target.value).includes(item.type_group));
+                    setFilteredData(filteredData);
+                    setLoading(false);
+                  }, 1000);
+                }}
+                aria-label="Platform"
+              >
+                <ToggleButton value="PTEC">PTEC</ToggleButton>
+                <ToggleButton value="BANGCHAK">BANGCHAK</ToggleButton>
+              </ToggleButtonGroup>
               <StripedDataGrid
                 sx={{
-                  mt: 1,
                   pl: 2,
                   pr: 2,
                   pt: 2,
@@ -548,13 +578,13 @@ export default function History_of_assets() {
                 }}
                 components={{ Toolbar: GridToolbar }}
                 componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
-                rows={dataHistory ?? []}
+                rows={filteredData}
+                loading={loading}
                 columns={columns}
                 getRowId={(dataHistory) => dataHistory.AssetID}
                 pageSize={pageSize}
                 onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                 pagination
-                loading={!dataHistory}
                 getRowHeight={() => 'auto'}
                 rowsPerPageOptions={[10, 20, 50, 100]}
                 autoHeight

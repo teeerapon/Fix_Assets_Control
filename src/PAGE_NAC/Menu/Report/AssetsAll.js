@@ -25,6 +25,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 const ODD_OPACITY = 0.2;
 
@@ -132,6 +134,11 @@ export default function Reported_of_assets() {
   const [progress, setProgress] = React.useState();
   const [openDialog, setOpenDialog] = React.useState(false);
   const [dialogComment, setDialogComment] = React.useState({ Code: '', BranchID: '', RoundID: '', UserID: '', comment: '', personID: '', depCode: '' });
+  const [typeGroup, setTypeGroup] = React.useState("PTEC");
+  const [filteredData, setFilteredData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  console.log(reported_of_assets.find(res => res.type_group === typeGroup));
 
   const handleSumbitComment = async () => {
     const body = dialogComment
@@ -146,6 +153,7 @@ export default function Reported_of_assets() {
             const list = [...reported_of_assets]
             list[index]['comment'] = dialogComment.comment
             setReported_of_assets(list)
+            setFilteredData(list)
             setOpenDialog(false);
           }
         })
@@ -301,6 +309,8 @@ export default function Reported_of_assets() {
                 list[index]['remarker'] = event.target.value !== 'none' && data.UserCode === params.row.OwnerID ? 'ตรวจนับแล้ว' :
                   'ต่างสาขา'
               setReported_of_assets(list)
+              setFilteredData(list)
+              
             }
           })
 
@@ -383,10 +393,8 @@ export default function Reported_of_assets() {
           setProgress(1)
         }
       }).then(response => {
-        setSelectMenu((response.data.data).filter((value, index, self) => index === self.findIndex((t) => (
-          t.Description === value.Description
-        ))
-        ))
+        setSelectMenu((response.data.data).filter((value, index, self) => index === self.findIndex((t) => (t.Description === value.Description))))
+        setLoading(false);
         setProgress(1)
       });
     }
@@ -408,6 +416,8 @@ export default function Reported_of_assets() {
     }).then(response => {
       setReported_of_assets(response.data.data)
       setProgress(1)
+      setFilteredData(response.data.data)
+      setLoading(false)
     });
   };
 
@@ -459,11 +469,30 @@ export default function Reported_of_assets() {
                 sx={{
                   height: 683,
                   width: '100%',
+                  mt: 3,
                 }}
               >
+                <ToggleButtonGroup
+                  color="primary"
+                  value={typeGroup}
+                  exclusive
+                  onChange={(e) => {
+                    setTypeGroup(e.target.value)
+                    // จำลองการโหลดข้อมูล
+                    setLoading(true);
+                    setTimeout(() => {
+                      const filteredData = reported_of_assets.filter(item => (e.target.value).includes(item.type_group));
+                      setFilteredData(filteredData);
+                      setLoading(false);
+                    }, 1000);
+                  }}
+                  aria-label="Platform"
+                >
+                  <ToggleButton value="PTEC">PTEC</ToggleButton>
+                  <ToggleButton value="BANGCHAK">BANGCHAK</ToggleButton>
+                </ToggleButtonGroup>
                 <StripedDataGrid
                   sx={{
-                    mt: 3,
                     pl: 2,
                     pr: 2,
                     pt: 2,
@@ -474,8 +503,8 @@ export default function Reported_of_assets() {
                   }}
                   components={{ Toolbar: GridToolbar }}
                   componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
-                  rows={reported_of_assets}
-                  loading={!reported_of_assets}
+                  rows={filteredData}
+                  loading={loading}
                   columns={columns}
                   getRowId={(reported_of_assets) => reported_of_assets.RowID}
                   pageSize={pageSize}

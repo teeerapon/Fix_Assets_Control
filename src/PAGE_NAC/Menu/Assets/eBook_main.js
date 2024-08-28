@@ -18,6 +18,8 @@ import FilePresentIcon from '@mui/icons-material/FilePresent';
 import config from '../../../config'
 import swal from 'sweetalert';
 import { createSvgIcon } from '@mui/material/utils';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 
 const ExportIcon = createSvgIcon(
@@ -125,6 +127,9 @@ export default function History_of_assets() {
   const data = JSON.parse(localStorage.getItem('data'));
   const [pageSize, setPageSize] = React.useState(10);
   const [progress, setProgress] = React.useState();
+  const [typeGroup, setTypeGroup] = React.useState("PTEC");
+  const [filteredData, setFilteredData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
@@ -373,8 +378,12 @@ export default function History_of_assets() {
         .then(response => {
           if (permission.includes(5) === true) {
             setDataHistory(response.data.data.filter((res) => res.bac_status === 1))
+            setFilteredData(response.data.data.filter((res) => res.bac_status === 1))
+            setLoading(false);
           } else {
             setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
+            setFilteredData(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
+            setLoading(false);
           }
         });
     }
@@ -409,11 +418,30 @@ export default function History_of_assets() {
               sx={{
                 height: 683,
                 width: '100%',
+                mt: 1,
               }}
             >
+              <ToggleButtonGroup
+                color="primary"
+                value={typeGroup}
+                exclusive
+                onChange={(e) => {
+                  setTypeGroup(e.target.value)
+                  // จำลองการโหลดข้อมูล
+                  setLoading(true);
+                  setTimeout(() => {
+                    const filteredData = dataHistory.filter(item => (e.target.value).includes(item.type_group));
+                    setFilteredData(filteredData);
+                    setLoading(false);
+                  }, 1000);
+                }}
+                aria-label="Platform"
+              >
+                <ToggleButton value="PTEC">PTEC</ToggleButton>
+                <ToggleButton value="BANGCHAK">BANGCHAK</ToggleButton>
+              </ToggleButtonGroup>
               <StripedDataGrid
                 sx={{
-                  mt: 1,
                   pl: 2,
                   pr: 2,
                   pt: 2,
@@ -431,8 +459,8 @@ export default function History_of_assets() {
                     }
                   }
                 }}
-                rows={dataHistory}
-                loading={dataHistory.length === 0}
+                rows={filteredData}
+                loading={loading}
                 columns={columns}
                 getRowId={(dataHistory) => dataHistory.AssetID}
                 pageSize={pageSize}

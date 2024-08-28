@@ -10,22 +10,9 @@ import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
 import Axios from "axios"
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import LinearProgress from '@mui/material/LinearProgress';
-import Badge from '@mui/material/Badge';
-import ImageIcon from '@mui/icons-material/Image';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import IconButton from '@mui/material/IconButton';
-import FilePresentIcon from '@mui/icons-material/FilePresent';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
 import swal from 'sweetalert';
-
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import config from '../../../config'
 
 
@@ -118,107 +105,14 @@ const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
 
 export default function History_of_assets() {
 
-  const [dataHistory, setDataHistory] = React.useState();
+  const [dataHistory, setDataHistory] = React.useState([]);
   const data = JSON.parse(localStorage.getItem('data'));
   const checkUserWeb = localStorage.getItem('sucurity');
   const [pageSize, setPageSize] = React.useState(10);
   const [progress, setProgress] = React.useState();
-  const [openImage, setOpenImage] = React.useState(false);
-  const [imageData, setImageData] = React.useState({ Code: '', Name: '', image_1: '', image_2: '' })
-
-  const handleUploadFile_1 = async (e, index) => {
-    e.preventDefault();
-
-    const headers = {
-      'Authorization': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    };
-
-    if (['jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.').pop()) > -1) {
-
-      const formData_1 = new FormData();
-      formData_1.append("file", e.target.files[0]);
-      formData_1.append("fileName", e.target.files[0].name);
-
-      await Axios.post(config.http + "/check_files_NewNAC", formData_1, { headers })
-        .then(async (res) => {
-          const Code = imageData.Code
-          const image_1 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
-
-          const body = { Code: Code, image_1: image_1 }
-
-          await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
-            .then(async (res) => {
-              if (res.data) {
-                setImageData({
-                  Code: res.data[0].Code
-                  , Name: res.data[0].Name
-                  , image_1: res.data[0].ImagePath
-                  , image_2: res.data[0].ImagePath_2
-                })
-              }
-              swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ ', "success", { buttons: false, timer: 2000 })
-            })
-        })
-
-    } else {
-      swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error")
-    }
-  }
-
-  const handleUploadFile_2 = async (e, index) => {
-    e.preventDefault();
-
-    const headers = {
-      'Authorization': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    };
-
-    if (['csv', 'xls', 'txt', 'ppt', 'doc', 'pdf', 'jpg', 'png', 'gif'].indexOf((e.target.files[0].name).split('.').pop()) > -1) {
-
-      const formData_2 = new FormData();
-      formData_2.append("file", e.target.files[0]);
-      formData_2.append("fileName", e.target.files[0].name);
-
-      await Axios.post(config.http + "/check_files_NewNAC", formData_2, { headers })
-        .then(async (res) => {
-          const Code = imageData.Code
-          const image_1 = 'http://vpnptec.dyndns.org:33080/NEW_NAC/' + res.data.attach[0].ATT + '.' + e.target.files[0].name.split('.').pop();
-
-          const body = { Code: Code, image_1: image_1 }
-
-          await Axios.post(config.http + "/FA_Control_Edit_EBook", body, { headers })
-            .then(async (res) => {
-              if (res.data) {
-                setImageData({
-                  Code: res.data[0].Code
-                  , Name: res.data[0].Name
-                  , image_1: res.data[0].ImagePath
-                  , image_2: res.data[0].ImagePath_2
-                })
-                swal("แจ้งเตือน", 'เปลี่ยนแปลงรูปภาพที่ 1 สำเร็จ', "success", { buttons: false, timer: 2000 })
-              }
-            })
-        })
-
-    } else {
-      swal("แจ้งเตือน", 'ไฟล์ประเภทนี้ไม่ได้รับอนุญาติให้ใช้งานในระบบ \nใช้ได้เฉพาะ .csv, .xls, .txt, .ppt, .doc, .pdf, .jpg, .png, .gif', "error")
-    }
-  }
-
-  const handleClickOpenImage = (event, params) => {
-    setOpenImage(true);
-    setImageData({
-      Code: params.row.Code
-      , Name: params.row.Name
-      , image_1: params.row.ImagePath
-      , image_2: params.row.ImagePath_2
-    })
-  };
-
-  const handleCloseImage = () => {
-    setOpenImage(false);
-  };
+  const [typeGroup, setTypeGroup] = React.useState("PTEC");
+  const [filteredData, setFilteredData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
@@ -298,22 +192,27 @@ export default function History_of_assets() {
     // },
   ];
 
-  React.useEffect(async () => {
+  React.useEffect(() => {
     // POST request using axios with set headers
-    const userCode = { userCode: data.UserCode }
-    const headers = {
-      'Authorization': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    };
-    await Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers }).catch(function (error) {
-      if (error.toJSON().message === 'Request failed with status code 400') {
+    const fatData = async () => {
+      const userCode = { userCode: data.UserCode }
+      const headers = {
+        'Authorization': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
+      };
+      await Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers }).catch(function (error) {
+        if (error.toJSON().message === 'Request failed with status code 400') {
+          setProgress(1)
+        }
+      }).then(response => {
+        setDataHistory((response.data.data).filter((res) => res.BranchID === data.branchid && res.bac_status === 1));
         setProgress(1)
-      }
-    }).then(response => {
-      setDataHistory((response.data.data).filter((res) => res.BranchID === data.branchid && res.bac_status === 1));
-      setProgress(1)
-    });
-  }, []);
+        setFilteredData((response.data.data).filter((res) => res.BranchID === data.branchid && res.bac_status === 1));
+        setLoading(false)
+      });
+    }
+    fatData();
+  }, [data.UserCode, data.branchid]);
 
   if (checkUserWeb !== 'null') {
     window.location.href = '/NAC_MAIN';
@@ -344,11 +243,30 @@ export default function History_of_assets() {
                 sx={{
                   height: 683,
                   width: '100%',
+                  mt: 1,
                 }}
               >
+                <ToggleButtonGroup
+                  color="primary"
+                  value={typeGroup}
+                  exclusive
+                  onChange={(e) => {
+                    setTypeGroup(e.target.value)
+                    // จำลองการโหลดข้อมูล
+                    setLoading(true);
+                    setTimeout(() => {
+                      const filteredData = dataHistory.filter(item => (e.target.value).includes(item.type_group));
+                      setFilteredData(filteredData);
+                      setLoading(false);
+                    }, 1000);
+                  }}
+                  aria-label="Platform"
+                >
+                  <ToggleButton value="PTEC">PTEC</ToggleButton>
+                  <ToggleButton value="BANGCHAK">BANGCHAK</ToggleButton>
+                </ToggleButtonGroup>
                 <StripedDataGrid
                   sx={{
-                    mt: 1,
                     pl: 2,
                     pr: 2,
                     pt: 2,
@@ -367,8 +285,8 @@ export default function History_of_assets() {
                       }
                     }
                   }}
-                  rows={dataHistory ?? []}
-                  loading={!dataHistory}
+                  rows={filteredData}
+                  loading={loading}
                   columns={columns}
                   getRowId={(dataHistory) => dataHistory.AssetID}
                   pageSize={pageSize}

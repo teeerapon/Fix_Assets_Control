@@ -10,22 +10,14 @@ import { alpha, styled } from '@mui/material/styles';
 import { DataGrid, gridClasses, GridToolbar } from '@mui/x-data-grid';
 import Axios from "axios"
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import LinearProgress from '@mui/material/LinearProgress';
-import Badge from '@mui/material/Badge';
-import ImageIcon from '@mui/icons-material/Image';
-import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
 import config from '../../../config'
 import swal from 'sweetalert';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 
 const ODD_OPACITY = 0.2;
@@ -122,6 +114,9 @@ export default function History_of_assets() {
   const checkUserWeb = localStorage.getItem('sucurity');
   const [pageSize, setPageSize] = React.useState(10);
   const [progress, setProgress] = React.useState();
+  const [typeGroup, setTypeGroup] = React.useState("PTEC");
+  const [filteredData, setFilteredData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   const columns = [
     { field: 'Code', headerName: 'รหัสทรัพย์สิน', headerClassName: 'super-app-theme--header', minWidth: 150, flex: 1 },
@@ -228,35 +223,33 @@ export default function History_of_assets() {
         }
 
         return (
-          <React.Fragment>
-            <ImageListItem key={params.row.ImagePath}>
-              <img
-                src={`${params.row.ImagePath}?w=248&fit=crop&auto=format`}
-                srcSet={`${params.row.ImagePath}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                alt={params.row.Name}
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null; // prevents looping
-                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
-                }}
-                loading="lazy"
-              />
-              <ImageListItemBar
-                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
-                position="below"
-                title={<span>&nbsp; &nbsp;{params.row.Code}_1</span>}
-                actionIcon={
-                  <IconButton
-                    sx={{ color: 'rgba(255, 255, 255, 1)' }}
-                    aria-label={`info about ${params.row.Code}`}
-                    component="label"
-                  >
-                    <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e, params)} />
-                    <FilePresentIcon sx={{ fontSize: 20 }} />
-                  </IconButton>
-                }
-              />
-            </ImageListItem>
-          </React.Fragment>
+          <ImageListItem key={params.row.ImagePath}>
+            <img
+              src={`${params.row.ImagePath}?w=248&fit=crop&auto=format`}
+              srcSet={`${params.row.ImagePath}?w=248&fit=crop&auto=format&dpr=2 2x`}
+              alt={params.row.Name}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null; // prevents looping
+                currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
+              }}
+              loading="lazy"
+            />
+            <ImageListItemBar
+              sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+              position="below"
+              title={<span>&nbsp; &nbsp;{params.row.Code}_1</span>}
+              actionIcon={
+                <IconButton
+                  sx={{ color: 'rgba(255, 255, 255, 1)' }}
+                  aria-label={`info about ${params.row.Code}`}
+                  component="label"
+                >
+                  <input hidden type="file" name='file' onChange={(e) => handleUploadFile_1(e, params)} />
+                  <FilePresentIcon sx={{ fontSize: 20 }} />
+                </IconButton>
+              }
+            />
+          </ImageListItem>
         )
       }
     },
@@ -313,56 +306,59 @@ export default function History_of_assets() {
         }
 
         return (
-          <React.Fragment>
-            <ImageListItem key={params.row.ImagePath_2}>
-              <img
-                src={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format`}
-                srcSet={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                alt={params.row.Name}
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null; // prevents looping
-                  currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
-                }}
-                loading="lazy"
-              />
-              <ImageListItemBar
-                sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
-                position="below"
-                title={<span>&nbsp; &nbsp;{params.row.Code}_2</span>}
-                actionIcon={
-                  <IconButton
-                    sx={{ color: 'rgba(255, 255, 255, 1)' }}
-                    aria-label={`info about ${params.row.Code}`}
-                    component="label"
-                  >
-                    <input hidden type="file" name='file' onChange={(e) => handleUploadFile_2(e, params)} />
-                    <FilePresentIcon sx={{ fontSize: 20 }} />
-                  </IconButton>
-                }
-              />
-            </ImageListItem>
-          </React.Fragment>
+          <ImageListItem key={params.row.ImagePath_2}>
+            <img
+              src={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format`}
+              srcSet={`${params.row.ImagePath_2}?w=248&fit=crop&auto=format&dpr=2 2x`}
+              alt={params.row.Name}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null; // prevents looping
+                currentTarget.src = "http://vpnptec.dyndns.org:10280/OPS_Fileupload/ATT_230400022.jpg";
+              }}
+              loading="lazy"
+            />
+            <ImageListItemBar
+              sx={{ backgroundColor: 'rgba(0, 0, 0, 1)', color: 'rgba(255, 255, 255, 1)' }}
+              position="below"
+              title={<span>&nbsp; &nbsp;{params.row.Code}_2</span>}
+              actionIcon={
+                <IconButton
+                  sx={{ color: 'rgba(255, 255, 255, 1)' }}
+                  aria-label={`info about ${params.row.Code}`}
+                  component="label"
+                >
+                  <input hidden type="file" name='file' onChange={(e) => handleUploadFile_2(e, params)} />
+                  <FilePresentIcon sx={{ fontSize: 20 }} />
+                </IconButton>
+              }
+            />
+          </ImageListItem>
         )
       }
     },
   ];
 
-  React.useEffect(async () => {
+  React.useEffect(() => {
     // POST request using axios with set headers
-    const userCode = { userCode: data.UserCode }
-    const headers = {
-      'Authorization': 'application/json; charset=utf-8',
-      'Accept': 'application/json'
-    };
-    await Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers }).catch(function (error) {
-      if (error.toJSON().message === 'Request failed with status code 400') {
+    const fatData = async () => {
+      const userCode = { userCode: data.UserCode }
+      const headers = {
+        'Authorization': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
+      };
+      await Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers }).catch(function (error) {
+        if (error.toJSON().message === 'Request failed with status code 400') {
+          setProgress(1)
+        }
+      }).then(response => {
+        setDataHistory((response.data.data).filter((res) => res.BranchID === data.branchid && res.bac_status === 1));
+        setFilteredData((response.data.data).filter((res) => res.BranchID === data.branchid && res.bac_status === 1));
+        setLoading(false)
         setProgress(1)
-      }
-    }).then(response => {
-      setDataHistory((response.data.data).filter((res) => res.BranchID === data.branchid && res.bac_status === 1));
-      setProgress(1)
-    });
-  }, []);
+      });
+    }
+    fatData();
+  }, [data.UserCode, data.branchid]);
 
   if (checkUserWeb !== 'null') {
     window.location.href = '/NAC_MAIN';
@@ -393,11 +389,30 @@ export default function History_of_assets() {
                 sx={{
                   height: 683,
                   width: '100%',
+                  mt: 3,
                 }}
               >
+                <ToggleButtonGroup
+                  color="primary"
+                  value={typeGroup}
+                  exclusive
+                  onChange={(e) => {
+                    setTypeGroup(e.target.value)
+                    // จำลองการโหลดข้อมูล
+                    setLoading(true);
+                    setTimeout(() => {
+                      const filteredData = dataHistory.filter(item => (e.target.value).includes(item.type_group));
+                      setFilteredData(filteredData);
+                      setLoading(false);
+                    }, 1000);
+                  }}
+                  aria-label="Platform"
+                >
+                  <ToggleButton value="PTEC">PTEC</ToggleButton>
+                  <ToggleButton value="BANGCHAK">BANGCHAK</ToggleButton>
+                </ToggleButtonGroup>
                 <StripedDataGrid
                   sx={{
-                    mt: 1,
                     pl: 2,
                     pr: 2,
                     pt: 2,
@@ -416,8 +431,8 @@ export default function History_of_assets() {
                       }
                     }
                   }}
-                  rows={dataHistory}
-                  loading={dataHistory.length === 0}
+                  rows={filteredData}
+                  loading={loading}
                   columns={columns}
                   getRowId={(dataHistory) => dataHistory.AssetID}
                   pageSize={pageSize}
