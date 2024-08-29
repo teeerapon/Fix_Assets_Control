@@ -209,7 +209,7 @@ export default function History_of_assets() {
             field: col[i],
             width: 80,
           };
-        } else if (col[i] === 'Code' || col[i] === 'Name' || col[i] === 'Asset_group' || col[i] === 'Group_name') {
+        } else if (col[i] === 'Code' || col[i] === 'Name' || col[i] === 'Asset_group' || col[i] === 'Group_name' || col[i] === 'Details') {
           arrayField[i] = {
             field: col[i],
             width: 160,
@@ -386,11 +386,11 @@ export default function History_of_assets() {
               Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
                 .then(response => {
                   if (permission.includes(5) === true) {
-                    setDataHistory(response.data.data.filter((res) => res.bac_status === 1))
-                    setFilteredData(response.data.data.filter((res) => res.bac_status === 1))
+                    setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
+                    setFilteredData(response.data.data.filter((res) => res.bac_status === 1 && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
                   } else {
-                    setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
-                    setFilteredData(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
+                    setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
+                    setFilteredData(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
                   }
                   setOpen(false);
                 });
@@ -484,12 +484,12 @@ export default function History_of_assets() {
       await Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
         .then(response => {
           if (permissionAssets.includes(5) === true) {
-            setDataHistory(response.data.data.filter((res) => res.bac_status === 1))
-            setFilteredData(response.data.data.filter((res) => res.bac_status === 1))
+            setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
+            setFilteredData(response.data.data.filter((res) => res.bac_status === 1 && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
             setLoading(false);
           } else {
-            setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
-            setFilteredData(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
+            setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
+            setFilteredData(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
             setLoading(false);
           }
         });

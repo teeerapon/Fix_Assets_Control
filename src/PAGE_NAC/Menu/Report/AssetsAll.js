@@ -414,6 +414,9 @@ export default function Reported_of_assets() {
         setProgress(1)
       }
     }).then(response => {
+      const filteredData = response.data.data.filter(item =>
+        typeGroup.toLowerCase().includes(item.type_group.toLowerCase())
+      );
       setReported_of_assets(filteredData)
       setProgress(1)
       setFilteredData(filteredData)
