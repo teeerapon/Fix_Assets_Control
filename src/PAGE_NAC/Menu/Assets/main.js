@@ -386,10 +386,10 @@ export default function History_of_assets() {
               Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
                 .then(response => {
                   if (permission.includes(5) === true) {
-                    setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
+                    setDataHistory(response.data.data.filter((res) => res.bac_status === 1))
                     setFilteredData(response.data.data.filter((res) => res.bac_status === 1 && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
                   } else {
-                    setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
+                    setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
                     setFilteredData(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
                   }
                   setOpen(false);
@@ -484,11 +484,11 @@ export default function History_of_assets() {
       await Axios.post(config.http + '/store_FA_control_fetch_assets', userCode, { headers })
         .then(response => {
           if (permissionAssets.includes(5) === true) {
-            setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
+            setDataHistory(response.data.data.filter((res) => res.bac_status === 1))
             setFilteredData(response.data.data.filter((res) => res.bac_status === 1 && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
             setLoading(false);
           } else {
-            setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
+            setDataHistory(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode))
             setFilteredData(response.data.data.filter((res) => res.bac_status === 1 && res.OwnerID === data.UserCode && typeGroupBotton.toLowerCase().includes(res.type_group.toLowerCase())))
             setLoading(false);
           }
@@ -496,7 +496,7 @@ export default function History_of_assets() {
 
     }
     fetData();
-  }, [data.UserCode, data.userid]);
+  }, [data.UserCode, data.userid, typeGroupBotton]);
 
   return (
     <React.Fragment>

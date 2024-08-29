@@ -205,14 +205,14 @@ export default function History_of_assets() {
           setProgress(1)
         }
       }).then(response => {
-        setDataHistory((response.data.data).filter((res) => res.BranchID === data.branchid && res.bac_status === 1 && typeGroup.toLowerCase().includes(res.type_group.toLowerCase())));
+        setDataHistory((response.data.data).filter((res) => res.BranchID === data.branchid && res.bac_status === 1));
         setProgress(1)
         setFilteredData((response.data.data).filter((res) => res.BranchID === data.branchid && res.bac_status === 1 && typeGroup.toLowerCase().includes(res.type_group.toLowerCase())));
         setLoading(false)
       });
     }
     fatData();
-  }, [data.UserCode, data.branchid]);
+  }, [data.UserCode, data.branchid, typeGroup]);
 
   if (checkUserWeb !== 'null') {
     window.location.href = '/NAC_MAIN';
