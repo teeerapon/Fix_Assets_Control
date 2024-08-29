@@ -310,7 +310,7 @@ export default function Reported_of_assets() {
                   'ต่างสาขา'
               setReported_of_assets(list)
               setFilteredData(list)
-              
+
             }
           })
 
@@ -414,9 +414,10 @@ export default function Reported_of_assets() {
         setProgress(1)
       }
     }).then(response => {
-      setReported_of_assets(response.data.data)
+      const filteredData = response.data.data.filter(item => typeGroup.includes(item.type_group));
+      setReported_of_assets(filteredData)
       setProgress(1)
-      setFilteredData(response.data.data)
+      setFilteredData(filteredData)
       setLoading(false)
     });
   };

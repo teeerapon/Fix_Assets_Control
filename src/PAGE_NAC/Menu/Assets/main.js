@@ -496,7 +496,7 @@ export default function History_of_assets() {
 
     }
     fetData();
-  }, [data.UserCode, data.userid, dataHistory, typeGroupBotton]);
+  }, [data.UserCode, data.userid]);
 
   return (
     <React.Fragment>
