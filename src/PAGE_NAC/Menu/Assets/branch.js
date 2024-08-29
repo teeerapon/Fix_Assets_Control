@@ -255,7 +255,9 @@ export default function History_of_assets() {
                     // จำลองการโหลดข้อมูล
                     setLoading(true);
                     setTimeout(() => {
-                      const filteredData = dataHistory.filter(item => (e.target.value).includes(item.type_group));
+                      const filteredData = dataHistory.filter(item =>
+                        e.target.value.toLowerCase().includes(item.type_group.toLowerCase())
+                      );
                       setFilteredData(filteredData);
                       setLoading(false);
                     }, 1000);
