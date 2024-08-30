@@ -43,6 +43,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import swal from 'sweetalert';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 const ODD_OPACITY = 0.2;
 
@@ -262,6 +264,10 @@ export default function Reported_of_assets() {
   const seconds = ((d.getSeconds()) + 100).toString().slice(-2);
   const datenow = `${year}-${month}-${date}T${hours}:${mins}:${seconds}.000Z`;
 
+  const [typeGroup, setTypeGroup] = React.useState("PTEC");
+  const [filteredData, setFilteredData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState();
   const dataDepID = data.depid
@@ -299,6 +305,7 @@ export default function Reported_of_assets() {
                 const list = [...reported_of_assets]
                 list[index]['comment'] = ''
                 setReported_of_assets(list)
+                setFilteredData(list)
                 setOpenDialog(false);
               }
             })
@@ -310,6 +317,7 @@ export default function Reported_of_assets() {
             const list = [...reported_of_assets]
             list[index]['comment'] = dialogComment.comment
             setReported_of_assets(list)
+            setFilteredData(list)
             setOpenDialog(false);
           }
         })
@@ -378,7 +386,12 @@ export default function Reported_of_assets() {
   React.useEffect(() => {
     const dataAssets = JSON.parse(localStorage.getItem('Allaseets'))
     if (dataAssets) {
+      const filteredData = dataAssets.filter(item =>
+        typeGroup.toLowerCase().includes(item.type_group.toLowerCase())
+      );
       setReported_of_assets(dataAssets)
+      setFilteredData(filteredData)
+      setLoading(false)
     }
     fetchUserForAssetsControl();
     // 👇️ disable the rule for a single line
@@ -946,6 +959,27 @@ export default function Reported_of_assets() {
                 width: '100%',
               }}
             >
+              <ToggleButtonGroup
+                color="primary"
+                value={typeGroup}
+                exclusive
+                onChange={(e) => {
+                  setTypeGroup(e.target.value)
+                  // จำลองการโหลดข้อมูล
+                  setLoading(true);
+                  setTimeout(() => {
+                    const filteredData = reported_of_assets.filter(item =>
+                      e.target.value.toLowerCase().includes(item.type_group.toLowerCase())
+                    );
+                    setFilteredData(filteredData);
+                    setLoading(false);
+                  }, 1000);
+                }}
+                aria-label="Platform"
+              >
+                <ToggleButton value="PTEC">PTEC</ToggleButton>
+                <ToggleButton value="PARTNER">PARTNER</ToggleButton>
+              </ToggleButtonGroup>
               <StripedDataGrid
                 sx={{
                   pl: 2,
@@ -957,9 +991,9 @@ export default function Reported_of_assets() {
                   },
                 }}
                 components={{ Toolbar: GridToolbar }}
-                loading={!reported_of_assets}
+                loading={loading}
                 componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
-                rows={reported_of_assets}
+                rows={filteredData}
                 columns={columns}
                 getRowId={(reported_of_assets) => reported_of_assets.Code}
                 pageSize={pageSize}

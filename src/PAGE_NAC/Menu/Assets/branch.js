@@ -265,7 +265,7 @@ export default function History_of_assets() {
                   aria-label="Platform"
                 >
                   <ToggleButton value="PTEC">PTEC</ToggleButton>
-                  <ToggleButton value="BANGCHAK">BANGCHAK</ToggleButton>
+                  <ToggleButton value="PARTNER">PARTNER</ToggleButton>
                 </ToggleButtonGroup>
                 <StripedDataGrid
                   sx={{
